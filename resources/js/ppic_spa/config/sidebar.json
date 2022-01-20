@@ -1,0 +1,70 @@
+[
+    {
+        "header": "General",
+        "menu": [
+            {
+                "text": "Dashboard",
+                "icon": "fas fa-home",
+                "url": "/ppic"
+            }
+        ]
+    },
+    {
+        "header": "Data",
+        "menu": [
+            {
+                "text": "Stok",
+                "icon": "fas fa-boxes",
+                "submenu": [
+                    {
+                        "text": "GBJ",
+                        "url": "/ppic/gbj"
+                    },
+                    {
+                        "text": "GK",
+                        "url": "/ppic/gk"
+                    }
+                ]
+            },
+            {
+                "text": "Perakitan",
+                "icon": "fas fa-table",
+                "url": "/ppic/perakitan"
+            },
+            {
+                "text": "Sales Order",
+                "icon": "fas fa-database",
+                "url": "/ppic/so"
+            },
+            {
+                "text": "Laporan Pesanan",
+                "icon": "fas fa-book-open",
+                "url": "/ppic/laporan_pesanan"
+            },
+            {
+                "text": "Proses Pesanan",
+                "icon": "fas fa-sort-amount-up-alt",
+                "url": "/ppic/proses_pesanan"
+            }
+        ]
+    },
+    {
+        "header": "Fitur",
+        "menu": [
+            {
+                "text": "Jadwal Perakitan",
+                "icon": "fas fa-calendar-alt",
+                "submenu": [
+                    {
+                        "text": "Perencanaan",
+                        "url": "/ppic/jadwal_perencanaan"
+                    },
+                    {
+                        "text": "Pelaksanaan",
+                        "url": "/ppic/jadwal_pelaksanaan"
+                    }
+                ]
+            }
+        ]
+    }
+]

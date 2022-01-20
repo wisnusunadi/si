@@ -13,6 +13,9 @@
                 @if(Auth::user()->divisi_id == "26" || Auth::user()->divisi_id == "8")
                 <li class="breadcrumb-item"><a href="{{route('penjualan.dashboard')}}">Beranda</a></li>
                 <li class="breadcrumb-item active">Lacak</li>
+                @elseif(Auth::user()->divisi_id == "15")
+                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Lacak</li>
                 @elseif(Auth::user()->divisi_id == "2")
                 <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
                 <li class="breadcrumb-item active">Lacak</li>
@@ -33,14 +36,8 @@
         display: none !important;
     }
 
-    .urgent {
-        color: #dc3545;
-        font-weight: 600;
-    }
-
-    .success {
-        color: #008000;
-        font-weight: 600;
+    .nowraps {
+        white-space: nowrap;
     }
 
     @media screen and (min-width: 1440px) {
@@ -80,18 +77,20 @@
                             <div class="col-12">
                                 <div class="form-horizontal">
                                     <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Masukkan Data</label>
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Lacak</label>
                                         <div class="col-4">
-                                            <input type="text" class="form-control col-form-label @error('data') is-invalid @enderror" id="data" name="data" />
+                                            <input type="text" class="form-control col-form-label @error('data') is-invalid @enderror" id="data" name="data" placeholder="Masukkan data" />
                                             <div class="invalid-feedback" id="msgdata">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Data Lacak</label>
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Pilih</label>
                                         <div class="col-4">
                                             <select name="pilih_data" id="pilih_data" class="select2 select-info form-control custom-select col-form-label pilih_data" placeholder="Pilih Data" disabled>
                                                 <option value=""></option>
+                                                <option value="produk">Produk</option>
+                                                <option value="customer">Distributor / Customer / Satuan Kerja / Instansi</option>
                                                 <option value="no_po">No Purchase Order</option>
                                                 <option value="no_akn">No AKN</option>
                                                 <option value="no_seri">No Seri</option>
@@ -124,9 +123,58 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>No SO</th>
                                         <th>No PO</th>
-                                        <th>Tanggal</th>
+                                        <th>Tanggal PO</th>
                                         <th>Customer</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card hide" id="customer">
+                    <div class="card-body">
+                        <h4>Hasil Pencarian Distributor/Customer/Satuan Kerja/Instansi</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="customertable" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>No Seri</th>
+                                        <th>No SO</th>
+                                        <th>Customer</th>
+                                        <th>Nama Produk</th>
+                                        <th>Tanggal Uji</th>
+                                        <th>No SJ</th>
+                                        <th>Tanggal Kirim</th>
+                                        <th>Status</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card hide" id="produk">
+                    <div class="card-body">
+                        <h4>Hasil Pencarian Produk</h4>
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="produktable" style="width:100%">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>No Seri</th>
+                                        <th>No SO</th>
+                                        <th>Customer</th>
+                                        <th>Nama Produk</th>
+                                        <th>Tanggal Uji</th>
+                                        <th>No SJ</th>
+                                        <th>Tanggal Kirim</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -146,8 +194,12 @@
                                         <th>No</th>
                                         <th>No Seri</th>
                                         <th>No SO</th>
-                                        <th>Tanggal</th>
-                                        <th>Divisi</th>
+                                        <th>Customer</th>
+                                        <th>Nama Produk</th>
+                                        <th>Tanggal Uji</th>
+                                        <th>No SJ</th>
+                                        <th>Tanggal Kirim</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -165,8 +217,11 @@
                                     <tr>
                                         <th>No</th>
                                         <th>No AKN</th>
-                                        <th>No PO</th>
-                                        <th>Tanggal</th>
+                                        <th>No SO</th>
+                                        <th>Tgl Buat</th>
+                                        <th>Batas Kontrak</th>
+                                        <th>Distributor</th>
+                                        <th>Instansi</th>
                                         <th>Posisi</th>
                                         <th>Status</th>
                                     </tr>
@@ -187,9 +242,10 @@
                                         <th>No</th>
                                         <th>No SO</th>
                                         <th>No PO</th>
-                                        <th>Jenis</th>
-                                        <th>Tanggal</th>
-                                        <th>Posisi</th>
+                                        <th>Tanggal PO</th>
+                                        <th>Tanggal Kirim</th>
+                                        <th>Customer</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -208,7 +264,8 @@
                                         <th>No</th>
                                         <th>No SO</th>
                                         <th>No Surat Jalan</th>
-                                        <th>No PO</th>
+                                        <th>No SO</th>
+                                        <th>Customer</th>
                                         <th>Tanggal Kirim</th>
                                         <th>Status</th>
                                     </tr>
@@ -234,10 +291,16 @@
         });
 
         $('#potable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/penjualan/lacak/data/no_po/0',
+                'dataType': 'json',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -245,31 +308,37 @@
             columns: [{
                 data: 'DT_RowIndex',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                className: 'nowraps'
+            }, {
+                data: 'so',
+                className: 'nowraps'
             }, {
                 data: 'no_po',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
             }, {
                 data: 'tgl_po',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
             }, {
                 data: 'nama_customer',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
             }, {
                 data: 'log',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
             }, ]
         });
 
         $('#nosotable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/penjualan/lacak/data/no_so/0',
+                'dataType': 'json',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -277,27 +346,39 @@
             columns: [{
                 data: 'DT_RowIndex',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                className: 'nowraps'
             }, {
                 data: 'so',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
+            }, {
+                data: 'no_po',
+                className: 'nowraps'
             }, {
                 data: 'tgl_po',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
+            }, {
+                data: 'tgl_kirim',
+                className: 'nowraps'
+            }, {
+                data: 'nama_customer',
             }, {
                 data: 'log',
-                orderable: false,
-                searchable: false
+                className: 'nowraps'
             }, ]
         });
 
         $('#noakntable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/penjualan/lacak/data/no_akn/0',
+                'dataType': 'json',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -305,96 +386,245 @@
             columns: [{
                     data: 'DT_RowIndex',
                     orderable: false,
-                    searchable: false
+                    searchable: false,
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_paket',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'so',
+                    className: 'nowraps'
                 },
                 {
                     data: 'tgl_buat',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
+                },
+                {
+                    data: 'tgl_kontrak',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'customer',
+                },
+                {
+                    data: 'instansi',
                 },
                 {
                     data: 'log',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
                 },
                 {
                     data: 'status',
-                    orderable: false,
-                    searchable: false
+                    className: 'nowraps'
                 }
             ]
         });
-
-        $('#nosjtable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '/api/penjualan/lacak/data/no_sj/0',
-            },
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'no_so',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'nosurat',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'po',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'tgl_kirim',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'log',
-                    orderable: false,
-                    searchable: false
-                },
-            ]
-        });
-
         $('#noseritable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
                 'url': '/api/penjualan/lacak/data/no_seri/0',
+                'dataType': 'json',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
             columns: [{
-                data: 'DT_RowIndex',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'noseri',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'no_so',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'tanggal',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'divisi_id',
-                orderable: false,
-                searchable: false
-            }]
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'noseri',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_so',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'nama_customer',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'nama_produk',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'tgl_uji',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_sj',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'tgl_kirim',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'status',
+                    className: 'nowraps'
+                }
+            ]
         });
-
+        $('#customertable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/lacak/data/customer/0',
+                'dataType': 'json',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'noseri',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_so',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'nama_customer',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'nama_produk',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'tgl_uji',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_sj',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'tgl_kirim',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'status',
+                    className: 'nowraps'
+                }
+            ]
+        });
+        $('#produktable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/lacak/data/customer/0',
+                'dataType': 'json',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'noseri',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_so',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'nama_customer',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'nama_produk',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'tgl_uji',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_sj',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'tgl_kirim',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'status',
+                    className: 'nowraps'
+                }
+            ]
+        });
+        $('#nosjtable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan/lacak/data/no_sj/0',
+                'dataType': 'json',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false,
+                    className: 'nowraps'
+                },
+                {
+                    data: 'nosurat',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'no_so',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'customer'
+                },
+                {
+                    data: 'tgl_kirim',
+                    className: 'nowraps'
+                },
+                {
+                    data: 'status',
+                    className: 'nowraps'
+                }
+            ]
+        });
         $('#data').on('keyup change', function() {
             if ($(this).val() != "") {
                 $('.pilih_data').removeAttr('disabled');
@@ -423,44 +653,80 @@
         $('#btncari').on('click', function() {
             if ($('.pilih_data').val() == "no_seri") {
                 var data = $('#data').val();
-                $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
+                $('#noseritable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
                 $('#noseri').removeClass('hide');
+                $('#customer').addClass('hide');
                 $('#nopo').addClass('hide');
                 $('#noakn').addClass('hide');
                 $('#noso').addClass('hide');
                 $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
+            } else if ($('.pilih_data').val() == "produk") {
+                var data = $('#data').val();
+                $('#produktable').DataTable().ajax.url('/api/penjualan/lacak/data/produk/' + data).load();
+                $('#produk').removeClass('hide');
+                $('#nopo').addClass('hide');
+                $('#nopo').addClass('hide');
+                $('#noakn').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#nosj').addClass('hide');
+                $('#customer').addClass('hide');
+
+            } else if ($('.pilih_data').val() == "customer") {
+                var data = $('#data').val();
+                $('#customertable').DataTable().ajax.url('/api/penjualan/lacak/data/customer/' + data).load();
+                $('#customer').removeClass('hide');
+                $('#nopo').addClass('hide');
+                $('#nopo').addClass('hide');
+                $('#noakn').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
+
             } else if ($('.pilih_data').val() == "no_po") {
                 var data = $('#data').val();
                 $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
                 $('#nopo').removeClass('hide');
                 $('#noseri').addClass('hide');
                 $('#noakn').addClass('hide');
+                $('#customer').addClass('hide');
                 $('#noso').addClass('hide');
                 $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
             } else if ($('.pilih_data').val() == "no_akn") {
                 var data = $('#data').val();
                 $('#noakntable').DataTable().ajax.url('/api/penjualan/lacak/data/no_akn/' + data).load();
                 $('#noakn').removeClass('hide');
+                $('#customer').addClass('hide');
                 $('#noseri').addClass('hide');
                 $('#nopo').addClass('hide');
                 $('#noso').addClass('hide');
                 $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
             } else if ($('.pilih_data').val() == "no_so") {
                 var data = $('#data').val();
+                var p = 'O';
+                var xxx = data.replace('/' + p + '/g', ':');
+                console.log(data);
+                console.log(xxx);
                 $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_so/' + data).load();
+                $('#customer').addClass('hide');
                 $('#noakn').addClass('hide');
                 $('#noseri').addClass('hide');
                 $('#nopo').addClass('hide');
                 $('#noso').removeClass('hide');
                 $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
             } else if ($('.pilih_data').val() == "no_sj") {
                 var data = $('#data').val();
                 $('#nosjtable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
                 $('#nosj').removeClass('hide');
+                $('#customer').addClass('hide');
                 $('#noseri').addClass('hide');
                 $('#nopo').addClass('hide');
                 $('#noso').addClass('hide');
                 $('#noakn').addClass('hide');
+                $('#produk').addClass('hide');
             }
             // $('#btncari').attr("disabled", true);
             // $('.pilih_data').attr("disabled", true);

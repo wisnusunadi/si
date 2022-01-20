@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0  text-dark">Sales Order QC</h1>
+            <h1 class="m-0  text-dark">Sales Order</h1>
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -146,7 +146,6 @@
                                             <th>No PO</th>
                                             <th>Batas Pengujian</th>
                                             <th>Customer</th>
-                                            <th>Keterangan</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </thead>
@@ -175,7 +174,7 @@
                                                 <td>
                                                     <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                                                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                                 
+
                                                     </div>
                                                     <a href="">
                                                         <div><i class="fas fa-eye"></i></div><small>Detail</small>
@@ -232,7 +231,8 @@
             serverSide: true,
             ajax: {
                 'url': '/api/qc/so/data/semua',
-
+                'type': 'POST',
+                'datatype': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -261,11 +261,6 @@
                 data: 'nama_customer',
 
             }, {
-                data: 'ket',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
-            }, {
                 data: 'status',
                 className: 'nowrap-text align-center',
                 orderable: false,
@@ -277,8 +272,6 @@
                 searchable: false
             }]
         })
-
-
         $('#filter').submit(function() {
             var values = [];
             $("input:checked").each(function() {
@@ -291,7 +284,7 @@
                 var x = ['semua']
             }
             console.log(x);
-            $('#showtable').DataTable().ajax.url(' /api/qc/so/data/' + x).load();
+            $('#showtable').DataTable().ajax.url('/api/qc/so/data/' + x).load();
             return false;
         });
     })

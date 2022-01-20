@@ -13,7 +13,7 @@ class TFProduksi extends Model
 
     protected $table = 't_gbj';
 
-    protected $fillable = ['ke', 'deskripsi'];
+    protected $fillable = ['ke', 'deskripsi', 'status_id'];
 
     function detail()
     {
@@ -38,5 +38,20 @@ class TFProduksi extends Model
     function pesanan()
     {
         return $this->belongsTo(Pesanan::class, 'pesanan_id');
+    }
+
+    function bagian()
+    {
+        return $this->belongsTo(User::class, 'created_by');
+    }
+
+    function getJumlahKirim() {
+        $id = $this->id;
+        $detail = TFProduksiDetail::where('t_gbj_id', $id)->get();
+        $jumlah = 0;
+        foreach($detail as $d) {
+            $jumlah += $d->qty;
+        }
+        return $jumlah;
     }
 }

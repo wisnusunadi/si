@@ -3,11 +3,16 @@
 @section('title', 'ERP')
 
 @section('content')
-<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
+<div class="content-header">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Produk dari Perakitan</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
 <div class="card">
-    <div class="card-header">
-        <h3 class="card-title">Produk dari Perakitan </h3>
-    </div>
     <!-- /.card-header -->
     <div class="card-body">
         <table class="table table-bordered dalam-perakitan">
@@ -21,54 +26,19 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td>1</td>
-                    <td>10-11-2021</td>
-                    <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                    <td>100 Unit</td>
-                    <td>
-                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <div class="dropdown-menu">
-                                <button type="button" class="dropdown-item terimaProduk" onclick="openModalTerima()">
-                                    <i class="far fa-edit"></i>&nbsp;Terima
-                                </button>
-                                <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
-                                    <i class="far fa-eye"></i>&nbsp;Detail
-                                </button>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>11-11-2021</td>
-                    <td>AMBULATORY BLOOD PRESSURE TESTING</td>
-                    <td>100</td>
-                    <td>
-                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false">
-                            <i class="fas fa-ellipsis-v"></i>
-                            <div class="dropdown-menu">
-                                <button type="button" class="dropdown-item terimaProduk" onclick="openModalTerima()">
-                                    <i class="far fa-edit"></i>&nbsp;Terima
-                                </button>
-                                <button type="button" class="dropdown-item detailProduk" onclick="openModalView()">
-                                    <i class="far fa-eye"></i>&nbsp;Detail
-                                </button>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
+
             </tbody>
         </table>
     </div>
 </div>
 <!-- Modal Detail-->
 <div class="modal fade terima-produk" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk <span id="title">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
+                <h5 class="modal-title"><b>Detail Produk <span id="title">AMBULATORY BLOOD PRESSURE MONITOR</span></b>
+                </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -83,42 +53,44 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="1"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="3"></td>
-                            <td>36541654654654564</td>
-                            <td><select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select></td>
-                        </tr>
+
                     </tbody>
                 </table>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary" id="simpanseri">Simpan</button>
             </div>
         </div>
     </div>
 </div>
+<div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"><b>Detail Produk <span id="titlee">AMBULATORY BLOOD PRESSURE MONITOR</span></b>
+                </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-seri">
+                    <thead>
+                        <tr>
+                            <th>No Seri</th>
+                            <th>Layout</th>
+                        </tr>
+                    </thead>
+                    <tbody>
 
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 <!-- Modal Ubah Layout-->
 <div class="modal fade" id="ubah-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -133,8 +105,9 @@
                 <div class="form-group">
                     <label for="">Layout</label>
                     <select name="" id="change-layout" class="form-control">
-                        <option value="1">Layout 1</option>
-                        <option value="2">Layout 2</option>
+                        @foreach ($layout as $l)
+                        <option value="{{ $l->id }}">{{ $l->ruang }}</option>
+                        @endforeach
                     </select>
                 </div>
             </div>
@@ -145,115 +118,107 @@
         </div>
     </div>
 </div>
-
 <!-- Modal -->
-<div class="modal fade detail-layout" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk <span id="titlee">AMBULATORY BLOOD PRESSURE MONITOR</span></b></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-seri">
-                    <thead>
-                        <tr>
-                            <th>No Seri</th>
-                            <th>Layout</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>654165654</td>
-                            <td>Layout 1</td>
-                        </tr>
-                        <tr>
-                            <td>654165654</td>
-                            <td>Layout 1</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
+
 @stop
 
 @section('adminlte_js')
 <script>
-    $('.table-seri').DataTable({
-        "oLanguage": {
-            "sSearch": "Cari:"
-        }
-    });
+    // $.ajax({
+    //     url: '/api/tfp/rakit',
+    //     success: function(res) {
+    //         console.log(res);
+    //     }
+    // })
     $('.dalam-perakitan').DataTable({
-        "oLanguage": {
-            "sSearch": "Cari:"
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: '/api/tfp/rakit',
         },
-        "columnDefs": [{
-            "targets": [4],
-            "visible": document.getElementById('auth').value == '2' ? false : true
-        }]
-    });
-    $('.scan-produk').DataTable({
-        "oLanguage": {
-            "sSearch": "Cari:"
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex'
+            },
+            {
+                data: 'tgl_masuk'
+            },
+            {
+                data: 'product'
+            },
+            {
+                data: 'jumlah'
+            },
+            {
+                data: 'action'
+            }
+        ],
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
     });
 
 
-    $(document).ready(function() {
-        $('.terimaProduk').click(function(e) {
+    $(document).ready(function () {
+        $('#head-cb').prop('checked', false);
+        $('.terimaProduk').click(function (e) {
             $('.terima-produk').modal('show');
         });
 
-        $("#head-cb").on('click', function() {
+        $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk').DataTable()
+                .column(0)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
     });
 
     function ubahData() {
-        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let checkbox_terpilih = $('.scan-produk').DataTable().column(0).nodes()
+                .to$().find('input[type=checkbox]:checked');
         let layout = $('#change-layout').val();
-        $.each(checkbox_terpilih, function(index, elm) {
+        $.each(checkbox_terpilih, function (index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
         $('#ubah-layout').modal('hide');
     }
 
-    $(document).on('click', '.editmodal', function() {
+    $(document).on('click', '.editmodal', function () {
         var id = $(this).data('id');
+        var nama = $(this).data('produk');
+        var tipe = $(this).data('var');
+        var tgl = $(this).data('tgl');
+        var brgid = $(this).data('brgid');
         console.log(id);
-
-        $.ajax({
-            url: '/api/tfp/rakit-terima/' + id,
-            success: function(res) {
-                console.log(res.data[0].title);
-                $('span#title').text(res.data[0].title);
-            }
-        })
+        $('span#title').text(nama.concat(' ', tipe));
 
         $('.scan-produk').DataTable().destroy();
         $('.scan-produk').DataTable({
-            serverSide: true,
+            serverSide: false,
+            autoWidth: false,
+            processing: true,
+            "ordering": false,
+            stateSave: true,
+            'bPaginate': true,
             ajax: {
-                url: '/api/tfp/rakit-terima/' + id,
+                url: '/api/tfp/rakit-terima/' + brgid + '/' + tgl,
             },
             columns: [{
                     data: 'checkbox'
                 },
                 {
-                    data: 'seri'
+                    data: 'noserii'
                 },
                 {
                     data: 'layout'
                 },
             ],
-            "oLanguage": {
-                "sSearch": "Cari:"
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
 
@@ -261,13 +226,13 @@
             url: '/api/gbj/sel-layout',
             type: 'GET',
             dataType: 'json',
-            success: function(res) {
+            success: function (res) {
                 if (res) {
                     console.log(res);
                     $("#layout_id").empty();
-                    // $("#divisi").append('<option value="">All</option>');
-                    $.each(res, function(key, value) {
-                        $("#layout_id").append('<option value="' + value.id + '">' + value.ruang + '</option');
+                    $.each(res, function (key, value) {
+                        $("#layout_id").append('<option value="' + value.id + '">' + value
+                            .ruang + '</option');
                     });
                 } else {
                     $("#layout_id").empty();
@@ -278,34 +243,32 @@
         openModalTerima();
     });
 
-    $(document).on('click', '.detailmodal', function() {
+    $(document).on('click', '.detailmodal', function () {
         var id = $(this).data('id');
-        console.log(id);
-
-        $.ajax({
-            url: '/api/tfp/rakit-noseri/' + id,
-            success: function(res) {
-                console.log(res.data[0].title);
-                $('span#titlee').text(res.data[0].title);
-            }
-        })
+        var nama = $(this).data('produk');
+        var tipe = $(this).data('var');
+        var tgl = $(this).data('tgl');
+        var brgid = $(this).data('brgid');
+        console.log(tgl);
+        $('span#titlee').text(nama.concat(' ', tipe));
 
         $('.table-seri').DataTable().destroy();
         $('.table-seri').DataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
-                url: '/api/tfp/rakit-noseri/' + id,
+                url: '/api/tfp/rakit-noseri/' + brgid + '/' + tgl,
             },
             columns: [{
-                    data: 'seri'
+                    data: 'noserii'
                 },
                 {
                     data: 'layout'
                 },
             ],
-            "oLanguage": {
-                "sSearch": "Cari:"
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
 
@@ -319,5 +282,76 @@
     function openModalView() {
         $('.detail-layout').modal('show');
     }
+
+    // submit
+    $('#form-terima').on('submit', function(e) {
+        console.log('test');
+    })
+    $(document).on('click', '#simpanseri', function () {
+        let no_seri = [];
+        let layout = [];
+        let a = $('.scan-produk').DataTable().column(0).nodes()
+            .to$().find('input[type=checkbox]:checked');
+        $(a).each(function (index, elm) {
+            no_seri.push($(elm).val());
+            layout.push($(elm).parent().next().next().children().val());
+        });
+
+        if (no_seri == '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'No Seri tidak boleh kosong!',
+            });
+        } else if (layout == '') {
+           Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Layout tidak boleh kosong!',
+            });
+        } else {
+            Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Produk yang anda terima akan diubah layoutnya",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Terima!'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    url: "/api/prd/terimaseri",
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        userid: $('#userid').val(),
+                        seri: no_seri,
+                        layout: layout,
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        if (res.msg == 'Successfully') {
+                            Swal.fire(
+                                'Terima!',
+                                'Produk berhasil diterima',
+                                'success'
+                            )
+                            $('.terima-produk').modal('hide');
+                            location.reload();
+                        } else {
+                            Swal.fire(
+                                'Gagal!',
+                                'Produk gagal diterima',
+                                'error'
+                            )
+                        }
+                    }
+                })
+            }
+        })
+        }
+    })
+
 </script>
 @stop

@@ -35,12 +35,19 @@ return [
             'key' => env('PUSHER_APP_KEY'),
             'secret' => env('PUSHER_APP_SECRET'),
             'app_id' => env('PUSHER_APP_ID'),
+            // option for laravel websocket
+            // 'options' => [
+            //     'cluster' => env('PUSHER_APP_CLUSTER'),
+            //     'encrypted' => true,
+            //     'host' => '127.0.0.1',
+            //     'port' => 6001,
+            //     'scheme' => 'http'
+            // ],
+
+            // option for pusher
             'options' => [
                 'cluster' => env('PUSHER_APP_CLUSTER'),
-                'encrypted' => true,
-                'host' => '127.0.0.1',
-                'port' => 6001,
-                'scheme' => 'http'
+                'useTLS' => true,
             ],
         ],
 

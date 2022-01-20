@@ -88,7 +88,7 @@
                                             <div class="text-muted">Status</div>
                                             <div>
                                                 <b id="status">
-                                                    <span class="badge 
+                                                    <span class="badge
                                                     @if($ekatalog->status == 'batal')
                                                         red-text
                                                     @elseif($ekatalog->status == 'negosiasi')

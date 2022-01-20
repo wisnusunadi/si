@@ -30,19 +30,21 @@
     }
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Daftar Sales Order</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <div class="row">
     <div class="col-12">
         <div class="row">
             <div class="col-lg-12">
                 <!-- Card -->
                 <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-8">
-                                <h3 class="card-title">Daftar SO Produksi</h3>
-                            </div>
-                        </div>
-                    </div>
                     <div class="card-body">
                         <table class="table table-bordered" id="gudang-barang">
                             <thead>
@@ -56,28 +58,7 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>2</td>
-                                    <td>8457938475938475</td>
-                                    <td>Rumah Sakit Dr. Soetomo</td>
-                                    <td>10 Oktober 2021</td>
-                                    {{-- Menggunakan Perkondisian Jika Data Sudah Dicek Maka Tampil Seperti ini --}}
-                                    <td><span class="badge badge-primary">Pengecekan di QC</span></td>
-                                    <td>
-                                        <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>8457938475938475</td>
-                                    <td>Rumah Sakit Dr. Soetomo</td>
-                                    <td>10 Oktober 2021</td>
-                                    {{-- Menggunakan Perkondisian Jika Data Belum Dicek Maka Tampil Seperti ini --}}
-                                    <td><span class="badge badge-warning">Pengecekan di Gudang</span></td>
-                                    <td>
-                                        <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-                                    </td>
-                                </tr>
+
                             </tbody>
                         </table>
                     </div>
@@ -109,7 +90,7 @@
                                     <div class="col"> <label for="">Nomor SO</label>
                                         <div class="card nomor-so">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="so">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -117,7 +98,7 @@
                                     <div class="col"> <label for="">Nomor AKN</label>
                                         <div class="card nomor-akn">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="akn">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -125,7 +106,7 @@
                                     <div class="col"> <label for="">Nomor PO</label>
                                         <div class="card nomor-po">
                                             <div class="card-body">
-                                                89798797856456
+                                                <span id="po">89798797856456</span>
                                             </div>
                                         </div>
                                     </div>
@@ -133,7 +114,7 @@
                                     <div class="col"> <label for="">Customer</label>
                                         <div class="card instansi">
                                             <div class="card-body">
-                                                RS. Dr. Soetomo
+                                                <span id="instansi">RS. Dr. Soetomo</span>
                                             </div>
                                         </div>
                                     </div>
@@ -143,28 +124,17 @@
                                 <table class="table table-striped" id="view-produk">
                                     <thead>
                                         <tr>
+                                            <th>x</th>
+                                            <th>Paket</th>
                                             <th>Nama Produk</th>
                                             <th>Jumlah</th>
-                                            <th>Tipe</th>
+                                            {{-- <th>Tipe</th> --}}
                                             <th>Merk</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
-                                            <td>ABPM50</td>
-                                            <td>ELITECH</td>
-                                            <td><span class="badge badge-success">Sudah di cek</span></td>
-                                        </tr>
-                                        <tr>
-                                            <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                            <td>100</td>
-                                            <td>RGB</td>
-                                            <td>ELITECH</td>
-                                            <td><span class="badge badge-danger">Belum di cek</span></td>
-                                        </tr>
+
                                     </tbody>
                                 </table>
                             </div>
@@ -180,13 +150,92 @@
 @section('adminlte_js')
 <script>
     $(document).ready(function () {
-        $('.addProduk').click(function (e) {
-            $('#addProdukModal').modal('show');
-        });
-        $('.viewProduk').click(function (e) {
-            $('#viewProdukModal').modal('show');
+
+        $('#gudang-barang').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: '/api/prd/so',
+                type: 'post',
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'so', name: 'so'},
+                { data: 'nama_customer', name: 'nama_customer'},
+                { data: 'batas_out', name: 'batas_out'},
+                { data: 'status_prd', name: 'status_prd'},
+                { data: 'button_prd', name: 'button_prd'},
+            ],
+            "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
         });
     });
+
+    $(document).on('click', '.detailproduk', function() {
+        var x = $(this).data('value');
+        console.log(x);
+        var id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+                url: "/api/tfp/header-so/" +id+"/"+x,
+                success: function(res) {
+                    console.log(res);
+                    $('span#so').text(res.so);
+                    $('span#po').text(res.po);
+                    $('span#akn').text(res.akn);
+                    $('span#instansi').text(res.customer);
+                }
+        });
+
+        $('#view-produk').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            autoWidth: false,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id+"/"+x,
+            },
+            columns: [
+                {data: 'detail_pesanan_id'},
+                { data: 'paket'},
+                { data: 'produk', name: 'produk'},
+                { data: 'jumlah', name: 'jumlah'},
+                // { data: 'tipe', name: 'tipe'},
+                { data: 'merk', name: 'merk'},
+                { data: 'status_prd', name: 'status_prd'},
+            ],
+            "drawCallback": function ( settings ) {
+                var api = this.api();
+                var rows = api.rows( {page:'current'} ).nodes();
+                var last=null;
+
+                api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                    if (last !== group) {
+                        var rowData = api.row(i).data();
+
+                        $(rows).eq(i).before(
+                        '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="4">' + rowData.paket + '</td></tr>'
+                    );
+                        last = group;
+                    }
+                });
+            },
+            "columnDefs":[
+                    {"targets": [0], "visible": false},
+                    {"targets": [1], "visible": false},
+                ],
+            "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+        });
+
+        $('#viewProdukModal').modal('show');
+    })
+
 
     $('.add-produk').DataTable({
         'columnDefs': [{
@@ -205,20 +254,7 @@
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
     });
-    $('#view-produk').DataTable({
-        "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-    });
-    $('#gudang-barang').DataTable({
-        "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            },
-            "columnDefs": [
-        {
-            "targets": [5],
-            "visible": document.getElementById('auth').value == '2' ? false : true
-        }]
-    });
+
+
 </script>
 @stop

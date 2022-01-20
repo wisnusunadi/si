@@ -1,4 +1,4 @@
-<form action="/api/logistik/so/create/{{$id}}/{{$id_produk}}" method="POST" id="form-logistik-create">
+<form action="/api/logistik/so/create/{{$prd_array}}/{{$part_array}}/{{$jenis}}" method="POST" id="form-logistik-create">
     @method('PUT')
     @csrf
     <div class="content">
@@ -15,7 +15,13 @@
                                         <div class="col-6">
                                             <div class="input-group mb-3">
                                                 <div class="input-group-prepend">
-                                                    <span class="input-group-text">SPA-</span>
+
+                                                    <span class="input-group-text">
+                                                        @if($jenis != "SPB")
+                                                        SPA-
+                                                        @else
+                                                        B.
+                                                        @endif</span>
                                                 </div>
                                                 <input type="text" class="form-control col-form-label" name="no_invoice" id="no_invoice">
                                                 <div class="invalid-feedback" id="msgnoinvoice"></div>
@@ -94,16 +100,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>MTB 2 MTR</td>
-                                                    <td>10</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>CENTRAL MONITOR PM-9000+ + PC + INSTALASI</td>
-                                                    <td>1</td>
-                                                </tr> -->
                                                 </tbody>
                                             </table>
                                         </div>
@@ -124,4 +120,7 @@
             </div>
         </div>
     </div>
+    <!-- {{$prd_array}}
+    {{$part_array}} -->
+
 </form>

@@ -190,45 +190,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>CMS-600 PLUS + PRINTER + LINEAR PROBE + TROLLEY + UPS</td>
-                                                <td>26-10-2021</td>
-                                                <td>29-10-2021</td>
-                                                <td>2</td>
-                                                <td>
-                                                    <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
-                                                        <div><i class="fas fa-search"></i></div>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>ELITECH MINI/MEDICAL COMPRESSOR NEBULIZER PROMIST 2</td>
-                                                <td>28-10-2021</td>
-                                                <td>30-10-2021</td>
-                                                <td>1</td>
-                                                <td>
-                                                    <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
-                                                        <div><i class="fas fa-search"></i></div>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>ELITECH ULTRASONIC POCKET DOPPLER</td>
-                                                <td>29-10-2021</td>
-                                                <td>29-10-2021</td>
-                                                <td>1</td>
-                                                <td>
-                                                    <a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="" data-id="1" id="detmodal">
-                                                        <div><i class="fas fa-search"></i></div>
-                                                    </a>
-                                                </td>
-                                            </tr>
+
                                         </tbody>
                                     </table>
                                 </div>
@@ -261,9 +223,12 @@
 <script>
     $(function() {
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
                 'url': '/api/qc/so/riwayat/data',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -299,13 +264,15 @@
             ]
         })
 
-        function noseritable(id) {
+        function noseritable(id, jenis) {
             $('#noseritable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/qc/so/riwayat/detail/' + id,
+                    'type': 'POST',
+                    'datatype': 'JSON',
+                    'url': '/api/qc/so/riwayat/detail/' + id + '/' + jenis,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -320,16 +287,30 @@
                         searchable: false
                     },
                     {
-                        data: 'no_seri'
+                        data: 'no_seri',
+                        visible: jenis == "produk" ? true : false
                     },
                     {
-                        data: 'hasil'
+                        data: 'hasil',
+                        visible: jenis == "produk" ? true : false
+                    },
+                    {
+                        data: 'tanggal_uji',
+                        visible: jenis == "part" ? true : false
+                    },
+                    {
+                        data: 'jumlah_ok',
+                        visible: jenis == "part" ? true : false
+                    },
+                    {
+                        data: 'jumlah_nok',
+                        visible: jenis == "part" ? true : false
                     }
                 ]
             })
         }
 
-        function select_produk(id) {
+        function select_produk(id, jenis) {
             $('.detail_produk').select2({
                 placeholder: 'Pilih Produk',
                 ajax: {
@@ -358,16 +339,19 @@
                 }
             }).change(function() {
                 var ids = $(this).val();
-                noseritable(ids);
+                noseritable(ids, jenis);
             });
         }
 
         $(document).on('click', '.detailmodal', function(event) {
             event.preventDefault();
             var penjualan_produk_id = $(this).attr('data-attr');
+            var produk_count = $(this).attr('data-count');
+            var produk_id = $(this).attr('data-produk');
+            var produk_jenis = $(this).attr('data-jenis');
             var id = $(this).attr('data-id');
             $.ajax({
-                url: "/api/qc/so/riwayat/detail_modal/" + id,
+                url: "/api/qc/so/riwayat/detail_modal/" + id + "/" + produk_jenis,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -377,8 +361,15 @@
                     $('#detail').html(result).show();
                     console.log("data " + id);
                     // $("#editform").attr("action", href);
-
-                    select_produk(id);
+                    if (produk_jenis == "produk") {
+                        if (produk_count <= 1) {
+                            noseritable(produk_id, produk_jenis);
+                        } else {
+                            select_produk(id, produk_jenis);
+                        }
+                    } else {
+                        noseritable(id, produk_jenis);
+                    }
                 },
                 complete: function() {
                     $('#loader').hide();

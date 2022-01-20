@@ -81,8 +81,18 @@
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
+
+
     @media screen and (max-width: 1440px) {
-        #pengirimantable {
+        #pengujianterbarutable {
+            font-size: 12px;
+        }
+
+        #belumdiujitable {
+            font-size: 12px;
+        }
+
+        #lewatbatasujitable {
             font-size: 12px;
         }
 
@@ -92,6 +102,40 @@
 
         #detailmodal {
             font-size: 12px;
+        }
+
+        .so-title {
+            font-size: 12px;
+        }
+
+        section {
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (min-width: 1440px) {
+        #pengujianterbarutable {
+            font-size: 14px;
+        }
+
+        #belumdiujitable {
+            font-size: 14px;
+        }
+
+        #lewatbatasujitable {
+            font-size: 14px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        section {
+            font-size: 14px;
         }
     }
 </style>
@@ -109,7 +153,7 @@
                                 <h4>Outgoing 2021</h4>
                                 <div class="row">
 
-                                    <div class="col-lg-4 col-6">
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="small-box bg-success">
                                             <div class="inner">
                                                 <h3>{{$terbaru}}</h3>
@@ -121,7 +165,7 @@
                                             <a class="small-box-footer active" id="pengujianterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-6">
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="small-box warning-bg">
                                             <div class="inner">
                                                 <h3>{{$hasil}}</h3>
@@ -133,7 +177,7 @@
                                             <a class="small-box-footer" id="belumdiuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-6">
+                                    <div class="col-lg-4 col-md-4 col-sm-12">
                                         <div class="small-box bg-danger">
                                             <div class="inner">
                                                 <h3>{{$lewat_batas}}</h3>
@@ -372,7 +416,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/qc/dashboard/data/belum_uji',
-
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -419,7 +464,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/qc/dashboard/data/terbaru',
-
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
@@ -472,7 +518,8 @@
                 serverSide: true,
                 ajax: {
                     'url': '/api/qc/dashboard/data/lewat_uji',
-
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }

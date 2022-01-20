@@ -133,7 +133,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="darat" id="status1" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="darat" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status1">
                                                         Darat
                                                     </label>
@@ -141,7 +141,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="laut" id="status2" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="laut" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status2">
                                                         Laut
                                                     </label>
@@ -149,7 +149,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="udara" id="status3" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="udara" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status3">
                                                         Udara
                                                     </label>
@@ -157,7 +157,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="checkbox" value="lain" id="status4" name="jalur" />
+                                                    <input class="form-check-input" type="checkbox" value="lain" id="jalur" name="jalur" />
                                                     <label class="form-check-label" for="status4">
                                                         Lain
                                                     </label>
@@ -184,7 +184,7 @@
                                             </div>
                                             <div class="form-group">
                                                 <div class="form-check">
-                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="0" name='jurusan' />
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="semua" name='jurusan' />
                                                     <label class="form-check-label" for="dropdownStatus3">
                                                         Semua
                                                     </label>
@@ -248,13 +248,64 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $(document).on('submit', '#form-ekspedisi-update', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('data-attr');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-ekspedisi-update').serialize(),
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan ubah data Ekspedisi',
+                            'success'
+                        );
+                        $("#editmodal").modal('hide');
+                        $('#showtable').DataTable().ajax.reload();
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan ubah data Ekspedisi',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    swal.fire(
+                        'Gagal',
+                        'Gagal melakukan ubah data Ekspedisi',
+                        'error'
+                    );
+                }
+            });
+            return false;
+        });
+
+
+
+
+
+
+
+
+
+
+
+
 
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/logistik/ekspedisi/data/',
-
+                'url': '/logistik/ekspedisi/data/semua/semua',
+                'dataType': 'json',
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -290,7 +341,7 @@
             }, {
                 data: 'jurusan',
                 orderable: false,
-                searchable: false
+                searchable: true
 
             }, {
                 data: 'ket',
@@ -315,6 +366,16 @@
         }
 
 
+        function check_jalur() {
+            $('input[type="checkbox"][name="jalur[]"]').on('change', function() {
+                if ($(":checkbox:checked").length == 0) {
+                    $('#btnsimpan').attr("disabled", true);
+                } else {
+                    $('#btnsimpan').attr("disabled", false);
+                }
+            })
+        }
+
         function checkvalueprovinsi(k) {
             if (k != 35) {
                 $('#provinsi_select').removeClass('hide');
@@ -325,14 +386,16 @@
             }
         }
 
+
         $(document).on('click', '.editmodal', function(event) {
             var k = "provinsi";
             var g = $(this).data().value;
             var h = $(this).data().provinsi;
             var h_str = h.toString();
+            var g_str = g.toString();
             var jurusan_arr = new Array();
             var prov_arr = new Array();
-            jurusan_arr = g.split(",");
+            jurusan_arr = g_str.split(",");
             prov_arr = h_str.split(",");
 
             //console.log(prov_arr);
@@ -353,16 +416,12 @@
                     // $("#editform").attr("action", href);
                     checkvalue(jurusan_arr);
                     checkvalueprovinsi(prov_arr);
-                    provinsi();
+                    check_jalur();
 
-                    // $('.provinsi').val(['1']).trigger('change');
-                    // $(".provinsi").select2().select2('1');
-                    // provinsi_selected(prov_arr);
-                    // $('.provinsi').val([prov_arr]);
-                    // $('.provinsi').trigger('change');
-                    // $('.provinsi').select2().select2('val', prov_arr);
+                    for (i = 0; i < 10; i++) {
+                        provinsi(i);
+                    }
 
-                    // $('.provinsi').select2('val', prov_arr);
 
                 },
                 complete: function() {
@@ -437,8 +496,10 @@
 
             if ($(this).val() != "") {
                 if ($(this).val() == "provinsi") {
+                    $("#createtable tbody").empty();
                     $('#provinsi_select').removeClass('hide');
                 } else if ($(this).val() == "indonesia") {
+                    $("#createtable tbody").empty();
                     $('#provinsi_select').addClass('hide');
                 }
                 $('#msgjurusan').text("");
@@ -493,10 +554,42 @@
             }
         })
 
-        function provinsi() {
-            $('.provinsi').select2({
+        function numberRows($t) {
+            var c = 0 - 2;
+            $t.find("tr").each(function(ind, el) {
+                $(el).find("td:eq(0)").html(++c);
+                var j = c - 1;
+                $(el).find('.provinsi_id').attr('name', 'provinsi_id[' + j + ']');
+                $(el).find('.provinsi_id').attr('id', j);
+                provinsi(j);
+            });
+        }
+
+        $(document).on('click', '#addrow', function() {
+            $('#createtable tr:last').after(`<tr>
+            <td></td>
+            <td>
+                <div class="form-group">
+                    <select class="select-info form-control  provinsi_id" name="provinsi_id[]" id="0" style="width:100%" >
+                    </select>
+                </div>
+            </td>
+            <td>
+                <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
+            </td>
+            </tr>`);
+            numberRows($("#createtable"));
+        });
+
+        $(document).on('click', '#createtable #removerow', function(e) {
+            $(this).closest('tr').remove();
+            numberRows($("#createtable"));
+        });
+
+        function provinsi(id) {
+            $('#' + id).select2({
                 placeholder: "Pilih Provinsi",
-                multiple: true,
+
                 ajax: {
                     minimumResultsForSearch: 20,
                     dataType: 'json',
@@ -523,11 +616,10 @@
             });
             $('.provinsi').val('1').trigger("change");
         }
-
-
         $('#filter').submit(function() {
             var jalur = [];
             var jurusan = [];
+
             $("input[name=jalur]:checked").each(function() {
                 jalur.push($(this).val());
             });
@@ -546,7 +638,9 @@
             } else {
                 var x = ['kosong']
             }
+            console.log(x);
             console.log(y);
+            $('#showtable').DataTable().ajax.url('/logistik/ekspedisi/data/' + x + '/' + y).load();
 
             return false;
         });

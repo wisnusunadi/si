@@ -126,6 +126,31 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        <label for="pic" class="col-4 col-form-label" style="text-align:right;">PIC</label>
+                                        <div class="col-5">
+                                            <input type="text" class="form-control @error('pic') is-invalid @enderror" placeholder="Nama PIC" id="pic" name="pic" />
+                                            <div class="invalid-feedback" id="msgpic">
+                                                @if($errors->has('pic'))
+                                                {{ $errors->first('pic')}}
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="batas" class="col-form-label col-4" style="text-align: right">Batas Pembayaran</label>
+                                        <div class="col-2 input-group">
+                                            <input type="text" class="form-control col-form-label @error('batas') is-invalid @enderror" name="batas" id="batas" aria-label="batas" placeholder="Batas hari pembayaran" />
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text" id="ket_no_paket">Hari</span>
+                                            </div>
+                                            <div class="invalid-feedback" id="msgno_batas">
+                                                @if($errors->has('batas'))
+                                                {{ $errors->first('batas')}}
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label for="telepon" class="col-4 col-form-label" style="text-align:right;">Keterangan</label>
                                         <div class="col-5">
                                             <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
@@ -159,9 +184,13 @@
 @stop
 
 @section('adminlte_js')
+<script type="text/javascript" src="{{ asset('vendor/masking/masking.js') }}"></script>
 <script>
     $(function() {
+        $('#npwp').mask('00.000.000.0-000.000');
+
         $('input[name="nama_customer"]').on('keyup change', function() {
+            var val = $(this).val();
             if ($(this).val() == "") {
                 $("#msgnama_customer").text("Nama tidak boleh kosong");
                 $('#nama_customer').addClass('is-invalid');
@@ -169,9 +198,9 @@
                 $.ajax({
                     type: 'GET',
                     dataType: 'json',
-                    url: '/api/customer/nama/0/' + $(this).val(),
+                    url: '/api/customer/nama/0/' + val,
                     success: function(data) {
-                        if (data.data >= 1) {
+                        if (data >= 1) {
                             $("#msgnama_customer").text("Nama sudah terpakai");
                             $('#nama_customer').addClass('is-invalid');
                             $("#btnsimpan").attr("disabled", true);
@@ -186,6 +215,7 @@
                         }
                     }
                 });
+
             }
         });
 
@@ -212,7 +242,7 @@
                     $("#msgtelepon").text("");
                     $("#telepon").removeClass('is-invalid');
                     $("#btntambah").removeAttr('disabled');
-                    if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
+                    if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#alamat").val() != "" && $('.provinsi').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     } else {
                         $("#btntambah").attr('disabled', true);
@@ -225,7 +255,7 @@
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");
-                if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#telepon").val() != "" && $('.provinsi').val() != "") {
+                if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $('.provinsi').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 } else {
                     $("#btntambah").attr('disabled', true);
@@ -258,7 +288,7 @@
                 } else {
                     $("#msgnpwp").text("");
                     $('#npwp').removeClass('is-invalid');
-                    if ($('#telepon').val() != "" && $('#nama_customer').val() != "" && $('#alamat').val() != "" && $('.provinsi').val() != "") {
+                    if ($('#telepon').val() != "" && ($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && $('#alamat').val() != "" && $('.provinsi').val() != "") {
                         $("#btntambah").removeAttr("disabled");
                     } else {
                         $("#btntambah").attr("disabled", true);
@@ -277,14 +307,14 @@
                 } else {
                     $('#msgemail').text("");
                     $('#email').removeClass("is-invalid");
-                    if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
+                    if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
                         $("#btntambah").removeAttr('disabled');
                     }
                 }
             } else {
                 $('#msgemail').text("");
                 $('#email').removeClass("is-invalid");
-                if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
+                if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
                     $("#btntambah").removeAttr('disabled');
                 }
             }

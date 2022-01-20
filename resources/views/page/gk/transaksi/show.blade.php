@@ -59,57 +59,63 @@
         /* Jika Gambar Diatas */
         /* width: 100px; */
     }
-
+    #DataTables_Table_0_filter{
+        display: none;
+    }
 </style>
 <section class="content">
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-5">
+                @foreach ($d as $p)
+                @if ($p->sparepart_id != null)
+                <input type="hidden" name="" id="id" value="{{ $p->sparepart_id  }}">
+                @else
+                <input type="hidden" name="" id="id" value="{{ $p->gbj_id  }}">
+                @endif
+                @endforeach
                 <div class="card mb-3">
                     <div class="row no-gutters">
                         <div class="col-md-4">
-                            <img src="https://images.unsplash.com/photo-1526930382372-67bf22c0fce2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80"
-                                alt="...">
+                            {{-- <img src="https://images.unsplash.com/photo-1526930382372-67bf22c0fce2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80"
+                                alt="..."> --}}
                         </div>
                         <div class="col-md-8">
                             <div class="card-body ml-5">
                                 <div class="card-title">
-                                    <h2 class="text-bold">Nama Produk</h2>
-                                    <h6 class="text-muted">Kode Produk</h6>
+                                    <h2 class="text-bold" id="nama">-</h2>
+                                    <h6 class="text-muted" id="kode">-</h6>
                                 </div>
                                 <h5 class="card-text text-bold pt-2">Deskripsi</h5>
-                                <p class="card-text">Lorem ipsum dolor sit amet, consectetur adipiscing elit ut aliquam,
-                                    purus sit
-                                    amet luctus venenatis, lectus magna fringilla urna, porttitor rhoncus dolor
-                                    purus non enim praesent elementum facilisis leo, vel fringilla est ullamcorper
-                                    eget nulla facilisi etiam dignissim diam quis enim lobortis scelerisque
-                                    fermentum dui faucibus in ornare quam viverra</p>
+                                <p class="card-text" id="desk">-</p>
                                 <h5 class="card-text text-bold pt-1">Dimensi</h5>
                                 <p class="text-bold" style="margin-bottom: 0">Panjang x Lebar x Tinggi</p>
-                                <p><span class="panjang">50</span> x <span class="lebar">10</span> x <span
-                                        class="tinggi">10</span></p>
+                                <p><span class="panjang">-</span> x <span class="lebar">-</span> x <span
+                                        class="tinggi">-</span></p>
                             </div>
                         </div>
                     </div>
                 </div>
+                {{-- @endforeach --}}
                 <div class="card">
                     <div class="card-header">
                         <h3 class="card-title">
                             <i class="fas fa-chart-pie mr-1"></i>
-                            Grafik Jumlah Terima / Transfer (Nama Produk) Per Tahun
+                            Grafik Jumlah Terima / Transfer
+                            <i></i>
+                            (<span id="nama_p">Nama Produk</span>)
+                            <i></i>
+                            Per Tahun
                         </h3>
                         <div class="card-tools">
-                            <div class="form-group row">
-                                <label for="years" class="col-md-5 col-form-label">Tahun</label>
-                                <div class="col-md-7">
-                                    <select name="" id="" class="form-control">
-                                        <option value="">2020</option>
-                                        <option value="">2021</option>
-                                        <option value="">2022</option>
-                                        <option value="">2023</option>
+                                    <select name="tahun" id="tahun" class="form-control">
+                                        <option value="" selected>Pilih Tahun</option>
+                                        @foreach ($data as $k => $v)
+                                            @if ($k != null)
+                                                <option value="{{ $k }}">{{ $k }}</option>
+                                            @endif
+                                        @endforeach
                                     </select>
-                                </div>
-                            </div>
                         </div>
                     </div>
                     <div class="card-body">
@@ -118,6 +124,7 @@
                 </div>
             </div>
             <div class="col-xl-7">
+
                 <div class="card">
                     <div class="card-title">
                         <div class="ml-3 mr-3">
@@ -136,11 +143,8 @@
                                         <div class="col-md-4">
                                             <div class="d-flex align-items-center">
                                                 <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
-                                                <input type="text" name="" id="tanggalmasuk" class="form-control">
+                                                <input type="text" name="" id="datetimepicker1" class="form-control">
                                             </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <a href="#" class="btn btn-outline-primary">Search</a>
                                         </div>
                                     </div>
                                 </div>
@@ -172,88 +176,7 @@
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-success">10-04-2022</span></td>
-                                        <td><span class="badge badge-success">Divisi IT</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                    <tr>
-                                        <td><span class="badge badge-info">23-09-2022</span></td>
-                                        <td><span class="badge badge-info">Divisi RnD</span> </td>
-                                        <td>Untuk Uji Coba</td>
-                                        <td>100 Unit</td>
-                                        <td><button type="button" class="btn btn-outline-info"
-                                                onclick="detailProduk()"><i class="far fa-eye"> Detail</i></button></td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -267,7 +190,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Produk Ambulatory</h5>
+                <h5 class="modal-title">Produk <span id="produkk">Ambulatory</span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -279,26 +202,12 @@
                             <th>No</th>
                             <th>Nomor Seri</th>
                             <th>Kerusakan</th>
+                            <th>Perbaikan</th>
                             <th>Tingkat Kerusakan</th>
-                            <th>Layout</th>
+                            <th>Posisi Barang</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td scope="row">1</td>
-                            <td>54131313151</td>
-                            <td>Kerusakan Panel</td>
-                            <td>Level 3</td>
-                            <td>Layout 1</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">2</td>
-                            <td>54131313151</td>
-                            <td>Kerusakan Panel</td>
-                            <td>Level 3</td>
-                            <td>Layout 1</td>
-                        </tr>
-                    </tbody>
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -307,18 +216,116 @@
 @stop
 @section('adminlte_js')
 <script>
-    $('.table-seri').DataTable({
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+     var id = $('#id').val();
+     var getUrlParameter = function getUrlParameter(sParam) {
+        var sPageURL = window.location.search.substring(1),
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
+
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+        return false;
+    };
+
+     var value = getUrlParameter('jenis');
+    //  console.log(value);
+
+    // console.log(id);
+
+    $.ajax({
+        url: "/api/gk/transaksi/header/" + id,
+        type: "get",
+        success: function(res) {
+            console.log(res);
+            $('h2#nama').text(res.nama);
+            $('span#nama_p').text(res.nama);
+            $('span#produkk').text(res.nama);
+            $('h6#kode').text(res.kode);
+            $('p#desk').text(res.desk);
+            $('span#panjang').text(res.panjang);
+            $('span#lebar').text(res.lebar);
+            $('span#tinggi').text(res.tinggi);
         }
     });
-    $('.tableProdukView').DataTable({
-        searching: false,
+
+
+
+    var start_date;
+    var end_date;
+    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
+
+        var evalDate = parseDateValue(aData[0]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+    let table = $('.tableProdukView').DataTable({
+        destroy: true,
         "lengthChange": false,
+        destroy: true,
+        processing: true,
+        ajax: {
+            url: "/api/gk/transaksi/history/" + id,
+        },
+        columns: [
+            {data: 'tanggal'},
+            {data: 'divisi'},
+            {data: 'tujuan'},
+            {data: 'jml'},
+            {data: 'aksi'},
+        ],
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
+        },
+        columnDefs:[{
+            targets: [4],
+            searching: false,
+        }]
     });
+
+    $('#kt_datatable_search_query').on('keyup', function() {
+        table.search($(this).val()).draw();
+    });
+
+    $('#datetimepicker1').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('#datetimepicker1').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date = picker.startDate.format('DD-MM-YYYY');
+            end_date = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            table.draw();
+        });
+
+        $('#datetimepicker1').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            table.draw();
+        });
     $('#nav-deskripsi-tab').click(function (e) {
         e.preventDefault();
         $('.is-active').addClass('font-weight-bold');
@@ -333,20 +340,48 @@
         $('.is-disable').removeClass('font-weight-light');
         $('.is-disable').addClass('font-weight-bold');
     });
-    $('#tanggalmasuk').daterangepicker({});
+    // $('#tanggalmasuk').daterangepicker({});
 
     function detailProduk() {
         $('.modalDetail').modal('show');
     }
 
+    $(document).on('click', '#btnDetail', function() {
+        var idd = $(this).data('id');
+        console.log(idd);
+        // console.log('ok');
+        $('.table-seri').DataTable({
+            autoWidth: false,
+            destroy: true,
+            processing: true,
+            ajax: {
+                url: "/api/gk/transaksi/noseri/" + idd,
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'noser'},
+                {data: 'rusak'},
+                {data: 'repair'},
+                {data: 'tingkat'},
+                {data: 'layout'},
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+        detailProduk();
+    })
+
     const ctx = document.getElementById('myChart').getContext('2d');
-const myChart = new Chart(ctx, {
+    const myChart = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
-        datasets: [{
+        // labels: ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'],
+        labels: [],
+        datasets: [
+            {
             label: 'Terima',
-            data: [15, 20, 30, 15, 29, 38, 35, 15, 18, 34, 10, 45],
+            data: [],
             backgroundColor: [
                 'rgba(255, 159, 64, 0.2)',
             ],
@@ -354,7 +389,7 @@ const myChart = new Chart(ctx, {
         },
         {
             label: 'Transfer',
-            data: [11, 15, 20, 10, 25, 30, 20, 15, 20, 30, 13, 25],
+            data: [],
             backgroundColor: [
                 'rgba(255, 99, 132, 0.2)',
             ],
@@ -365,10 +400,38 @@ const myChart = new Chart(ctx, {
     options: {
         scales: {
             y: {
-                beginAtZero: false
+                beginAtZero: true
             }
         }
     }
+});
+$('#tahun').change(function (e) {
+    $.ajax({
+        type: "post",
+        url: "/api/gk/transaksi/grafik-trf",
+        data: {
+            id: id,
+            tahun: this.value,
+        },
+        success: function (res) {
+            console.log(res);
+            if (res.masuk && res.data != null) {
+                myChart.data.labels = res.masuk.map(r => res.masuk[0].bulan);
+                myChart.data.datasets[0].data = res.masuk.map(r => res.masuk[0].jumlah);
+                myChart.data.datasets[1].data = res.data.map(r => res.data[0].jumlah);
+                myChart.update();
+            }
+            else if (res.masuk != null) {
+                myChart.data.labels = res.masuk.map(r => res.masuk[0].bulan);
+                myChart.data.datasets[0].data = res.masuk.map(r => res.masuk[0].jumlah);
+                myChart.update();
+            }else if (res.data != null) {
+                myChart.data.labels = res.data.map(r => res.data[0].bulan);
+                myChart.data.datasets[1].data = res.data.map(r => res.data[0].jumlah);
+                myChart.update();
+            }
+        }
+    });
 });
 
 </script>

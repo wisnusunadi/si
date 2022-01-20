@@ -11,6 +11,8 @@ class TFProduksiDetail extends Model
 
     protected $table = 't_gbj_detail';
 
+    protected $fillable = ['status_id', 'state_id', 'gdg_brg_jadi_id', 'detail_pesanan_produk_id'];
+
     function header()
     {
         return $this->belongsTo(TFProduksi::class, 't_gbj_id');
@@ -22,5 +24,48 @@ class TFProduksiDetail extends Model
     function seri()
     {
         return $this->hasMany(NoseriTGbj::class, 't_gbj_detail_id');
+    }
+
+    function noseri()
+    {
+        return $this->hasMany(NoseriTGbj::class, 't_gbj_detail_id');
+    }
+
+    function paket()
+    {
+        return $this->belongsTo(DetailPesananProduk::class, 'detail_pesanan_produk_id');
+    }
+
+    function getseriditerima()
+    {
+        $tgl = $this->tgl_masuk;
+        $prd = $this->prd;
+        $jumlah = NoseriTGbj::whereHas('detail.header', function ($q) use ($tgl) {
+            $q->where('dari', 17);
+            $q->where('tgl_masuk', $tgl);
+        })
+            ->whereHas('detail', function ($qq) use ($prd) {
+                $qq->where('gdg_brg_jadi_id', $prd);
+            })
+            ->where('status_id', 3)
+            ->with('detail.header')
+            ->get();
+        return $jumlah;
+    }
+
+    function getserisemua()
+    {
+        $tgl = $this->tgl_masuk;
+        $prd = $this->prd;
+        $jumlah = NoseriTGbj::whereHas('detail.header', function ($q) use ($tgl) {
+            $q->where('dari', 17);
+            $q->where('tgl_masuk', $tgl);
+        })
+            ->whereHas('detail', function ($qq) use ($prd) {
+                $qq->where('gdg_brg_jadi_id', $prd);
+            })
+            ->with('detail.header')
+            ->get();
+        return $jumlah;
     }
 }

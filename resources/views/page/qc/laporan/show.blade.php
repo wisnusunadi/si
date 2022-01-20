@@ -75,6 +75,30 @@
                                 <!-- <form method="POST" action="/api/qc/so/laporan/create"> -->
                                 <div class="form-horizontal">
                                     <div class="form-group row">
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Cari Pengujian</label>
+                                        <div class="col-5 col-form-label">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="cari" id="cari1" value="produk" />
+                                                <label class="form-check-label" for="cari1">Produk</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input" type="radio" name="cari" id="cari2" value="part" />
+                                                <label class="form-check-label" for="cari2">Part</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row hide" id="prt_id">
+                                        <label for="" class="col-form-label col-5" style="text-align: right">Part</label>
+                                        <div class="col-4">
+                                            <select class="select2 select-info form-control part_id" name="part_id" id="part_id">
+                                                <option value=""></option>
+                                            </select>
+                                            <div class="feedback" id="msgpart_id">
+                                                <small class="text-muted">Part boleh dikosongi</small>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row hide" id="prd_id">
                                         <label for="" class="col-form-label col-5" style="text-align: right">Produk</label>
                                         <div class="col-4">
                                             <select class="select2 select-info form-control produk_id" name="produk_id" id="produk_id">
@@ -85,16 +109,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">No SO</label>
-                                        <div class="col-4">
-                                            <input type="text" class="form-control no_so" id="no_so" name="no_so" placeholder="Masukkan Nomor SO">
-                                            <div class="feedback" id="msgno_so">
-                                                <small class="text-muted">No SO boleh dikosongi</small>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
+                                    <div class="form-group row hide" id="prd_uji">
                                         <label for="" class="col-form-label col-5" style="text-align: right">Hasil Pengujian</label>
                                         <div class="col-5 col-form-label">
                                             <div class="form-check form-check-inline">
@@ -111,6 +126,16 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-form-label col-5" style="text-align: right">No SO</label>
+                                        <div class="col-4">
+                                            <input type="text" class="form-control no_so" id="no_so" name="no_so" placeholder="Masukkan Nomor SO">
+                                            <div class="feedback" id="msgno_so">
+                                                <small class="text-muted">No SO boleh dikosongi</small>
+                                            </div>
+                                        </div>
+                                    </div>
+
                                     <div class="form-group row">
                                         <label for="tanggal_mulai" class="col-form-label col-5" style="text-align: right">Tanggal Awal</label>
                                         <div class="col-2">
@@ -151,12 +176,17 @@
                             <table class="table table-hover" id="qctable" style="width:100%">
                                 <thead style="text-align: center;">
                                     <tr>
-                                        <th>No</th>
-                                        <th>No SO</th>
-                                        <th>Nama Produk</th>
-                                        <th>No Seri</th>
-                                        <th>Tanggal Uji</th>
-                                        <th>Hasil</th>
+                                        <th rowspan="2">No</th>
+                                        <th rowspan="2">No SO</th>
+                                        <th rowspan="2">Nama Produk</th>
+                                        <th rowspan="2">No Seri</th>
+                                        <th rowspan="2">Tanggal Uji</th>
+                                        <th rowspan="2">Hasil</th>
+                                        <th colspan="2">Jumlah</th>
+                                    </tr>
+                                    <tr>
+                                        <th>OK</th>
+                                        <th>NOK</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -173,16 +203,17 @@
 @endsection
 
 @section('adminlte_js')
-<script src="https://cdn.datatables.net/rowgroup/1.1.3/js/dataTables.rowGroup.min.js"></script>
-<link rel="stylesheet" href="https://cdn.datatables.net/rowgroup/1.1.3/css/rowGroup.bootstrap4.min.css">
+<script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}">
 
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/dataTables.buttons.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.html5.min.js"></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/js/buttons.print.min.js "></script>
-<script src="https://cdn.datatables.net/buttons/1.7.1/css/buttons.bootstrap4.min.css "></script>
+<script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('assets/button/jszip.min.js') }}"></script>
+<script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
+<script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
+<script src="{{ asset('assets/button/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('assets/button/buttons.print.min.js') }} "></script>
+<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}">
+
 <script>
     $(function() {
         var today = new Date();
@@ -195,10 +226,9 @@
         $("#tanggal_mulai").attr("max", today);
         $("#tanggal_akhir").attr("max", today);
 
-        $('.produk_id').on('keyup change', function() {
+        $('.part_id').on('keyup change', function() {
             if ($(this).val() != "") {
-                $('input[type="radio"][name="hasil_uji"]').removeAttr('disabled');
-                if ($('input[type="radio"][name="hasil_uji"]').val() != '' && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
+                if ($('input[type="radio"][name="cari"]').val() == 'part' && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
                     $("#btncetak").attr('disabled', true);
@@ -208,10 +238,52 @@
             }
         });
 
+        $('.produk_id').on('keyup change', function() {
+            if ($(this).val() != "") {
+                $('input[type="radio"][name="hasil_uji"]').removeAttr('disabled');
+                if ($('input[type="radio"][name="cari"]:checked').val() == 'produk' && $('input[type="radio"][name="hasil_uji"]').val() != '' && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
+                    $("#btncetak").removeAttr('disabled');
+                } else {
+                    $("#btncetak").attr('disabled', true);
+                }
+            } else {
+                $("#btncetak").attr('disabled', true);
+            }
+        });
+
+        $('input[type="radio"][name="cari"]').on('change', function() {
+            if ($(this).val() != "") {
+                if ($('input[type="radio"][name="cari"]:checked').val() == "produk") {
+                    $('#prt_id').addClass('hide');
+                    $('#prd_id').removeClass('hide');
+                    $('#prd_uji').removeClass('hide');
+
+                    if ($('input[type="radio"][name="cari"]:checked').val() == 'produk' && $('input[type="radio"][name="hasil_uji"]').val() != '' && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
+                        $("#btncetak").removeAttr('disabled');
+                    } else {
+                        $("#btncetak").attr('disabled', true);
+                    }
+                } else if ($('input[type="radio"][name="cari"]:checked').val() == "part") {
+                    $('#tanggal_mulai').removeAttr('readonly');
+                    $('#prt_id').removeClass('hide');
+                    $('#prd_id').addClass('hide');
+                    $('#prd_uji').addClass('hide');
+
+                    if ($('input[type="radio"][name="cari"]:checked').val() == 'part' && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
+                        $("#btncetak").removeAttr('disabled');
+                    } else {
+                        $("#btncetak").attr('disabled', true);
+                    }
+                }
+            } else {
+                $("#btncetak").attr('disabled', true);
+            }
+        });
+
         $('input[type="radio"][name="hasil_uji"]').on('change', function() {
             if ($(this).val() != "") {
                 $('#tanggal_mulai').removeAttr('readonly');
-                if ($('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
+                if ($('input[type="radio"][name="cari"]:checked').val() == 'produk' && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
                     $("#btncetak").attr('disabled', true);
@@ -227,7 +299,7 @@
             if ($(this).val() != "") {
                 $('#tanggal_akhir').removeAttr('readonly');
                 $("#tanggal_akhir").attr("min", $(this).val())
-                if ($('input[type="radio"][name="hasil_uji"]').val() != '' && $('#tanggal_akhir').val() != "") {
+                if ($('input[type="radio"][name="cari"]').val() != "" && $('input[type="radio"][name="hasil_uji"]').val() != '' && $('#tanggal_akhir').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
 
@@ -241,7 +313,7 @@
 
         $('#tanggal_akhir').on('keyup change', function() {
             if ($(this).val() != "") {
-                if ($('input[type="radio"][name="hasil_uji"]').val() != '' && $('#tanggal_mulai').val() != "") {
+                if ($('input[type="radio"][name="cari"]').val() != "" && $('input[type="radio"][name="hasil_uji"]').val() != '' && $('#tanggal_mulai').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
                     $("#btncetak").attr('disabled', true);
@@ -259,8 +331,37 @@
                 dataType: 'json',
                 delay: 250,
                 type: 'GET',
-                url: '/api/penjualan_produk/select/',
+                url: '/api/penjualan_produk/select',
                 processResults: function(data) {
+                    //console.log(data);
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        });
+
+        $('.part_id').select2({
+            placeholder: "Pilih Part",
+            ajax: {
+                minimumResultsForSearch: 20,
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'POST',
+                url: '/api/gk/sel-m-spare',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+
                     //console.log(data);
                     return {
                         results: $.map(data, function(obj) {
@@ -277,8 +378,13 @@
         $("#btnbatal").on('click', function() {
             $("#btncetak").attr('disabled', true);
             $(".produk_id").val(null).trigger("change");
+            $(".part_id").val(null).trigger("change");
             $(".no_so").val("");
+            $('#prt_id').addClass('hide');
+            $('#prd_id').addClass('hide');
+            $('#prd_uji').addClass('hide');
             $('input[type="radio"][name="hasil_uji"]').prop('checked', false);
+            $('input[type="radio"][name="cari"]').prop('checked', false);
             $('#tanggal_mulai').val('');
             $('#tanggal_mulai').attr('readonly', true);
             $('#tanggal_akhir').val('');
@@ -289,13 +395,21 @@
         $("#btncetak").on('click', function() {
             $("#btncetak").attr('disabled', true);
             $('#lapform').removeClass('hide');
+
+            var hasil = "";
             var produk = "";
             if ($(".produk_id").val() != "") {
                 produk = $(".produk_id").val();
-            } else {
+            } else if ($(".produk_id").val() == "") {
                 produk = "0";
+
             }
 
+            if ($(".part_id").val() != "") {
+                produk = $(".part_id").val();
+            } else if ($(".part_id").val() == "") {
+                produk = "0";
+            }
             var so = "";
             if ($(".no_so").val() != "") {
                 var sos = $(".no_so").val();
@@ -303,15 +417,20 @@
             } else {
                 so = "0";
             }
-            var hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
+            var jenis = $('input[type="radio"][name="cari"]:checked').val();
+            if (jenis == "produk") {
+                hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
+            } else {
+                hasil = "0";
+            }
+
             var tgl_awal = $('#tanggal_mulai').val();
             var tgl_akhir = $('#tanggal_akhir').val();
-            table(produk, so, hasil, tgl_awal, tgl_akhir);
+            table(jenis, produk, so, hasil, tgl_awal, tgl_akhir);
         });
 
 
-        function table(produk, so, hasil, tgl_awal, tgl_akhir) {
-            //console.log('/api/laporan/qc/' + produk + '/' + so + '/' + hasil + '/' + tgl_awal + '/' + tgl_akhir);
+        function table(jenis, produk, so, hasil, tgl_awal, tgl_akhir) {
             $('#qctable').DataTable({
                 destroy: true,
                 processing: true,
@@ -321,24 +440,19 @@
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 ajax: {
-                    'url': '/api/laporan/qc/' + produk + '/' + so + '/' + hasil + '/' + tgl_awal + '/' + tgl_akhir,
+                    'type': 'POST',
+                    'datatype': 'JSON',
+                    'url': '/api/laporan/qc/' + jenis + '/' + produk + '/' + so + '/' + hasil + '/' + tgl_awal + '/' + tgl_akhir,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
                 },
                 buttons: [{
-                        extend: 'excel',
-                        title: 'Laporan QC Outgoing',
-                        text: '<i class="far fa-file-excel"></i> Export',
-                        className: "btn btn-info"
-                    },
-                    {
-                        extend: 'print',
-                        title: 'Laporan QC Outgoing',
-                        text: '<i class="fas fa-print"></i> Cetak',
-                        className: "btn btn-primary"
-                    },
-                ],
+                    extend: 'excel',
+                    title: 'Laporan QC Outgoing',
+                    text: '<i class="far fa-file-excel"></i> Export',
+                    className: "btn btn-info"
+                }, ],
                 columns: [{
                         data: 'DT_RowIndex',
                         className: 'nowrap-text align-center'
@@ -352,7 +466,8 @@
                     },
                     {
                         data: 'noseri',
-                        className: 'nowrap-text align-center'
+                        className: 'nowrap-text align-center',
+                        visible: jenis == "produk" ? true : false
                     },
                     {
                         data: 'tgl_uji',
@@ -360,7 +475,18 @@
                     },
                     {
                         data: 'status',
-                        className: 'nowrap-text align-center'
+                        className: 'nowrap-text align-center',
+                        visible: jenis == "produk" ? true : false
+                    },
+                    {
+                        data: 'jumlah_ok',
+                        className: 'nowrap-text align-center',
+                        visible: jenis == "part" ? true : false
+                    },
+                    {
+                        data: 'jumlah_nok',
+                        className: 'nowrap-text align-center',
+                        visible: jenis == "part" ? true : false
                     },
                 ],
             });

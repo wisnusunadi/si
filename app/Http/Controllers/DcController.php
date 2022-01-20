@@ -4,13 +4,17 @@ namespace App\Http\Controllers;
 
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
+use App\Models\DetailPesananProduk;
+use App\Models\Ekatalog;
 use App\Models\Logistik;
 use App\Models\NoseriCoo;
 use App\Models\NoseriDetailLogistik;
+use App\Models\NoseriDetailPesanan;
 use Illuminate\Http\Request;
 use PDF;
 use App\Models\Pesanan;
-use Ekatalog;
+use App\Models\Produk;
+
 use Illuminate\Support\Carbon;
 
 class DcController extends Controller
@@ -21,25 +25,52 @@ class DcController extends Controller
         $pdf = PDF::loadView('page.dc.coo.pdf_semua', ['data' => $data])->setPaper('A4');
         return $pdf->stream('');
     }
-    public function pdf_semua_coo($id)
+    public function pdf_semua_coo($id, $value, $jenis)
     {
-        $data = NoseriCoo::whereHas('Noserilogistik', function ($q) use ($id) {
+
+        $data = NoseriCoo::whereHas('NoseriDetailLogistik', function ($q) use ($id) {
             $q->where('detail_logistik_id', $id);
         })->get();
         $count = $data->count();
-        $pdf = PDF::loadView('page.dc.coo.pdf_semua', ['data' => $data, 'count' => $count])->setPaper('A4');
+
+        if ($value == 'ekatalog') {
+            $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat', ['data' => $data, 'count' => $count, 'jenis' => $jenis])->setPaper('A4');
+        } else {
+            $pdf = PDF::loadView('page.dc.coo.pdf_semua_spa', ['data' => $data, 'count' => $count, 'jenis' => $jenis])->setPaper('A4');
+        }
         return $pdf->stream('');
     }
-    public function pdf_seri_coo($id)
+    public function pdf_semua_so_coo($id, $value, $jenis)
+    {
+
+        $data = NoseriCoo::whereHas('NoseriDetailLogistik.DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($id) {
+            $q->where('pesanan.id', $id);
+        })->get();
+        $count = $data->count();
+
+
+        if ($value == 'ekatalog') {
+            $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_so', ['data' => $data, 'count' => $count, 'jenis' => $jenis])->setPaper('A4');
+        } else {
+            $pdf = PDF::loadView('page.dc.coo.pdf_semua_spa_so', ['data' => $data, 'count' => $count, 'jenis' => $jenis])->setPaper('A4');
+        }
+        return $pdf->stream('');
+    }
+    public function pdf_seri_coo($id, $value, $jenis)
     {
         $data = NoseriCoo::where('noseri_logistik_id', $id)->first();
-        $tgl_sj = $data->Noserilogistik->DetailLogistik->logistik->tgl_kirim;
+        $tgl_sj = $data->NoseriDetailLogistik->DetailLogistik->logistik->tgl_kirim;
         $bulan =  Carbon::createFromFormat('Y-m-d', $tgl_sj)->format('m');
         $tahun =  Carbon::createFromFormat('Y-m-d', $tgl_sj)->format('Y');
         $romawi = $this->toRomawi($bulan);
         $footer = Carbon::createFromFormat('Y-m-d', $tgl_sj)->isoFormat('D MMMM Y');
 
-        $pdf = PDF::loadView('page.dc.coo.pdf', ['data' => $data, 'romawi' => $romawi, 'tahun' => $tahun, 'footer' => $footer])->setPaper('A4');
+        if ($value == 'ekatalog') {
+            $pdf = PDF::loadView('page.dc.coo.pdf_ekat', ['data' => $data, 'romawi' => $romawi, 'tahun' => $tahun, 'footer' => $footer, 'jenis' => $jenis])->setPaper('A4');
+        } else {
+            $pdf = PDF::loadView('page.dc.coo.pdf_spa', ['data' => $data, 'romawi' => $romawi, 'tahun' => $tahun, 'footer' => $footer, 'jenis' => $jenis])->setPaper('A4');
+        }
+
         return $pdf->stream('');
     }
     public function get_data_coo()
@@ -51,52 +82,95 @@ class DcController extends Controller
                 return '-';
             })
             ->addColumn('seri', function ($data) {
-                return $data->Noserilogistik->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri;
+                return $data->NoseriDetailLogistik->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri;
             })
             ->addColumn('so', function ($data) {
-                return $data->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                return $data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
             })
             ->addColumn('no_paket', function ($data) {
-                return $data->Noserilogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->no_paket;
+
+                if (isset($data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->no_paket)) {
+                    return $data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->no_paket;
+                } else {
+                    return '';
+                }
             })
             ->addColumn('nama_produk', function ($data) {
-                if ($data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo != '') {
-                    return $data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo;
+                if ($data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo != '') {
+                    return $data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->nama_coo;
                 } else {
                     return '';
                 }
             })
             ->addColumn('noakd', function ($data) {
-                if ($data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd != '') {
-                    return $data->Noserilogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd;
+                if ($data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd != '') {
+                    return $data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->GudangBarangJadi->Produk->no_akd;
                 } else {
                     return '';
                 }
             })
             ->addColumn('bulan', function ($data) {
-                $bulan =  Carbon::createFromFormat('Y-m-d', $data->Noserilogistik->DetailLogistik->logistik->tgl_kirim)->format('m');
+                $bulan =  Carbon::createFromFormat('Y-m-d', $data->NoseriDetailLogistik->DetailLogistik->logistik->tgl_kirim)->format('m');
                 $romawi = $this->toRomawi($bulan);
                 return $romawi;
             })
             ->addColumn('tgl_sj', function ($data) {
-                return  $data->Noserilogistik->DetailLogistik->logistik->tgl_kirim;
+                return  $data->NoseriDetailLogistik->DetailLogistik->logistik->tgl_kirim;
             })
             ->addColumn('laporan', function ($data) {
-                return '
-                    <a href="' . route('dc.seri.coo.pdf', $data->Noserilogistik->id) . '" target="_blank">
-                    <i class="fas fa-file"></i>
-                                                        </a>
-                  ';
+
+                $name = explode('/', $data->NoseriDetailLogistik->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    $x = 'ekatalog';
+                } else {
+                    $x = 'spa';
+                }
+                return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                      <a href="' . route('dc.seri.coo.pdf', [$data->NoseriDetailLogistik->id, $x, "kosong"]) . '" target="_blank">
+                      <button class="dropdown-item" type="button">
+                          <i class="fas fa-file"></i>
+                          Coo
+                      </button>
+                  </a>
+                      <a href="' . route('dc.seri.coo.pdf', [$data->NoseriDetailLogistik->id, $x, "back"]) . '" target="_blank">
+                          <button class="dropdown-item" type="button">
+                              <i class="fas fa-file"></i>
+                              Coo + Background
+                          </button>
+                      </a>
+                      <a href="' . route('dc.seri.coo.pdf', [$data->NoseriDetailLogistik->id, $x, "ttd"]) . '" target="_blank">
+                      <button class="dropdown-item" type="button">
+                          <i class="fas fa-file"></i>
+                          Coo + Background + Ttd
+                      </button>
+                  </a>
+                  </div>';
             })
             ->rawColumns(['laporan'])
             ->make(true);
     }
-    public function get_data_so()
+    public function get_data_so($value)
     {
-        $Ekatalog = collect(Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->Has('Ekatalog')->get());
-        $Spa = collect(Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->Has('Spa')->get());
-        $Spb = collect(Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->Has('Spb')->get());
-        $data = $Ekatalog->merge($Spa)->merge(($Spb));
+        $array_id = array();
+        $x = explode(',', $value);
+        $datas = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->get();
+
+        foreach ($datas as $d) {
+            if ($value == 'semua') {
+                $array_id[] = $d->id;
+            } else if ($value == 'belum_diproses') {
+                if ($d->getJumlahCoo() == 0) {
+                    $array_id[] = $d->id;
+                }
+            } else {
+                if ($d->getJumlahCoo() < $d->getJumlahPaketPesanan() && $d->getJumlahCoo() != 0) {
+                    $array_id[] = $d->id;
+                }
+            }
+        }
+
+        $data = Pesanan::DoesntHave('Spb')->whereIn('id', $array_id)->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('no_paket', function ($data) {
@@ -107,17 +181,107 @@ class DcController extends Controller
                     return '';
                 }
             })
-            ->addColumn('batas_paket', function () {
-                return '';
+            ->addColumn('batas_paket', function ($data) {
+
+                if (isset($data->tgl_kontrak)) {
+                    $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                    $tgl_parameter = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status)->format('Y-m-d');
+
+                    if (isset($data->Pesanan->so)) {
+                        if ($data->Pesanan->getJumlahPesanan() == $data->Pesanan->getJumlahKirim()) {
+                            return $tgl_parameter;
+                        } else {
+                            if ($tgl_sekarang < $tgl_parameter) {
+                                $to = Carbon::now();
+                                $from = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status);
+                                $hari = $to->diffInDays($from);
+                                if ($hari > 7) {
+                                    return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                      <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                } else if ($hari > 0 && $hari <= 7) {
+                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                } else {
+                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                                }
+                            } else if ($tgl_sekarang == $tgl_parameter) {
+                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                            } else {
+                                $to = Carbon::now();
+                                $from = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status);
+                                $hari = $to->diffInDays($from);
+                                return '<div id="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
+                            }
+                        }
+                    } else {
+                        if ($tgl_sekarang < $tgl_parameter) {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status);
+                            $hari = $to->diffInDays($from);
+                            if ($hari > 7) {
+                                return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else {
+                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                            }
+                        } else if ($tgl_sekarang == $tgl_parameter) {
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                        } else {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->tgl_kontrak, $data->provinsi->status);
+                            $hari = $to->diffInDays($from);
+                            return '<div id="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
+                        }
+                    }
+                } else {
+                    return '';
+                }
+                // $name = explode('/', $data->so);
+                // if ($name[1] == 'EKAT') {
+
+                //     $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                //     $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+
+
+                //     if ($tgl_sekarang < $tgl_parameter) {
+                //         $to = Carbon::now();
+                //         $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                //         $hari = $to->diffInDays($from);
+
+                //         if ($hari > 7) {
+                //             return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
+                //         } else if ($hari > 0 && $hari <= 7) {
+                //             return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $hari . ' Hari</small>';
+                //         } else {
+                //             return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
+                //         }
+                //     } elseif ($tgl_sekarang == $tgl_parameter) {
+                //         return  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                //     } else {
+                //         $to = Carbon::now();
+                //         $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                //         $hari = $to->diffInDays($from);
+                //         return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                //     }
+                // } else {
+                //     return '';
+                // }
             })
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
                     return $data->ekatalog->customer->nama;
-                } else if ($name[1] == 'SPA') {
-                    return $data->spa->customer->nama;
                 } else {
-                    return $data->spb->customer->nama;
+                    return $data->spa->customer->nama;
                 }
             })
             ->addColumn('instansi', function ($data) {
@@ -129,25 +293,121 @@ class DcController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                return '';
+
+                if ($data->getJumlahPaketPesanan() == $data->getJumlahCoo()) {
+                    return ' <span class="badge green-text">Sudah Diproses</span>';
+                } else {
+                    if ($data->getJumlahCoo() == 0) {
+                        return  '<span class="badge red-text">Belum Diproses</span>';
+                    } else {
+                        return '<span class="badge yellow-text">Sebagian Diproses</span>';
+                    }
+                }
             })
             ->addColumn('button', function ($data) {
                 $name = explode('/', $data->so);
-                if ($name[1] == 'EKAT') {
-                    return '<a href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
-                    <i class="fas fa-search"></i>
-                </a>';
-                } else if ($name[1] == 'SPA') {
-                    return '<a href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
-                    <i class="fas fa-search"></i>
-                </a>';
+                $x = array();
+
+                $jumlah = 0;
+                foreach ($data->detailpesanan as $d) {
+                    $x[] = $d->id;
+                    $jumlah += $d->jumlah;
+                }
+
+                $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
+
+                $y = array();
+
+                foreach ($detail_pesanan_produk as $d) {
+                    $y[] = $d->id;
+                }
+
+                $noseri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get();
+
+
+                $r = array();
+                foreach ($noseri as $j) {
+
+                    $r[] = $j->id;
+                }
+                $logistik = NoseriDetailLogistik::whereIN('noseri_detail_pesanan_id', $r)->get();
+
+                $d = array();
+
+                foreach ($logistik as $l) {
+                    $d[] =  $l->id;
+                }
+
+                $coo = NoseriCoo::whereIN('noseri_logistik_id', $d)->get()->count();
+
+
+                if ($jumlah == $coo) {
+                    $class = '';
                 } else {
-                    return '<a href="' . route('dc.so.detail', [$data->id, 'spb']) . '">
-                    <i class="fas fa-search"></i>
-                </a>';
+                    if ($coo == 0) {
+
+                        $class = 'd-none';
+                    } else {
+                        $class = '';
+                    }
+                }
+
+                if ($name[1] == 'EKAT') {
+                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
+                        <i class="fas fa-search"></i>
+                            Detail
+                        </a>
+                        <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'kosong']) . '" target="_blank" class="' . $class . '">
+                        <button class="dropdown-item" type="button">
+                        <i class="fas fa-file"></i>
+                        Coo
+                    </button>
+                            </a>
+                        <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'back']) . '" target="_blank" class="' . $class . '">
+                        <button class="dropdown-item" type="button">
+                        <i class="fas fa-file"></i>
+                        Coo + Background
+                    </button>
+                            </a>
+                        <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'ttd']) . '" target="_blank" class="' . $class . '">
+                        <button class="dropdown-item" type="button">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd
+                    </button>
+                            </a>
+                    </div>';
+                } else {
+                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
+                        <i class="fas fa-search"></i>
+                            Detail
+                        </a>
+                        <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'kosong']) . '" target="_blank" class="' . $class . '">
+                                <button class="dropdown-item" type="button">
+                                    <i class="fas fa-file"></i>
+                                    Coo
+                                </button>
+                            </a>
+                        <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'back']) . '" target="_blank" class="' . $class . '">
+                                <button class="dropdown-item" type="button">
+                                    <i class="fas fa-file"></i>
+                                    Coo + Background
+                                </button>
+                            </a>
+                        <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'ttd']) . '" target="_blank" class="' . $class . '">
+                                <button class="dropdown-item" type="button">
+                                    <i class="fas fa-file"></i>
+                                    Coo + Background + Ttd
+                                </button>
+                            </a>
+
+                    </div>';
                 }
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button', 'status', 'batas_paket'])
             ->make(true);
     }
     public function get_data_detail_so($id)
@@ -191,13 +451,24 @@ class DcController extends Controller
                 }
                 $coo = NoseriCoo::whereIN('noseri_logistik_Id', $value)->get()->count();
 
-                if ($coo == 0) {
-                    return '<span class="badge red-text">Belum Tersedia</span>';
+                if ($data->DetailPesananProduk->GudangBarangJadi->Produk->coo == '0') {
+                    return '<span class="badge red-text">Bukan Produk Utama</span>';
                 } else {
-                    return ' <span class="badge green-text">Tersedia</span>';
+                    if ($coo == 0) {
+                        return '<span class="badge red-text">Belum Tersedia</span>';
+                    } else {
+                        return ' <span class="badge green-text">Tersedia</span>';
+                    }
                 }
             })
             ->addColumn('button', function ($data) {
+
+                $name = explode('/', $data->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    $x = 'ekatalog';
+                } else {
+                    $x = 'spa';
+                }
 
                 $value = array();
                 $get = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->get();
@@ -205,27 +476,48 @@ class DcController extends Controller
                     $value[] = $d->id;
                 }
                 $coo = NoseriCoo::whereIN('noseri_logistik_Id', $value)->get()->count();
+                $count_trf = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
+
+                if ($count_trf == $coo) {
+                    $c = 0;
+                } else {
+                    $c = 1;
+                }
+
                 if ($coo == 0) {
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '">
+                        <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '" data-count="' . $c . '">
                             <i class="fas fa-eye"></i>
                             Detail
                         </a>
                     </div>';
                 } else {
+
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '">
+                        <a class="noserishow dropdown-item" type="button" data-id="' . $data->id . '" data-count="' . $c . '">
                             <i class="fas fa-eye"></i>
                             Detail
                         </a>
-                        <a href="' . route('dc.coo.semua.pdf', [$data->id]) . '">
+                        <a href="' . route('dc.coo.semua.pdf', [$data->id, $x, "kosong"]) . '" target="_blank">
+                        <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo
+                        </button>
+                    </a>
+                        <a href="' . route('dc.coo.semua.pdf', [$data->id, $x, "back"]) . '" target="_blank">
                             <button class="dropdown-item" type="button">
                                 <i class="fas fa-file"></i>
-                                Laporan PDF
+                                Coo + Background
                             </button>
                         </a>
+                        <a href="' . route('dc.coo.semua.pdf', [$data->id, $x, "ttd"]) . '" target="_blank">
+                        <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo + Background + Ttd
+                        </button>
+                    </a>
                     </div>';
                 }
             })
@@ -238,40 +530,62 @@ class DcController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
-                $get = NoseriCoo::where('noseri_logistik_id', $data->id)->get()->count();
-
-                if ($get == 0) {
-                    return '  <div class="form-check">
-                    <input class=" form-check-input yet nosericheck" type="checkbox" data-value="' . $data->detail_logistik_id . '" data-id="' . $data->id . '" />
-                    </div>';
-                } else {
+                if (isset($data->NoseriCoo)) {
                     return '';
+                } else {
+                    return '  <div class="form-check">
+                    <input class=" form-check-input  nosericheck" type="checkbox" data-value="' . $data->detail_logistik_id . '" data-id="' . $data->id . '" />
+                    </div>';
                 }
             })
             ->addColumn('noseri', function ($data) {
                 return  $data->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri;
             })
-            ->addColumn('nocoo', function ($data) {
-                return '';
+            ->addColumn('tgl', function ($data) {
+                if (isset($data->NoseriCoo->tgl_kirim)) {
+                    return $data->NoseriCoo->tgl_kirim;
+                } else {
+                    return '';
+                }
             })
-            ->addColumn('diket', function ($data) {
-                return '';
+            ->addColumn('ket', function ($data) {
+                if (isset($data->NoseriCoo->catatan)) {
+                    return $data->NoseriCoo->catatan;
+                } else {
+                    return '';
+                }
             })
             ->addColumn('laporan', function ($data) {
                 $get = NoseriCoo::where('noseri_logistik_id', $data->id)->get()->count();
-
-                if ($get == 0) {
-                    return '
-                    <a >
-                    <i class="fas fa-file" style="color: grey"></i>
-                                                        </a>
-                  ';
+                $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                if ($name[1] == 'EKAT') {
+                    $x = 'ekatalog';
                 } else {
-                    return '
-                    <a href="' . route('dc.seri.coo.pdf', $data->id) . '" target="_blank">
-                    <i class="fas fa-file"></i>
-                                                        </a>
-                  ';
+                    $x = 'spa';
+                }
+
+                if ($get != 0) {
+                    return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a href="' . route('dc.seri.coo.pdf', [$data->id, $x, "kosong"]) . '" target="_blank">
+                    <button class="dropdown-item" type="button">
+                        <i class="fas fa-file"></i>
+                        Coo
+                    </button>
+                </a>
+                    <a href="' . route('dc.seri.coo.pdf', [$data->id, $x, "back"]) . '" target="_blank">
+                        <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo + Background
+                        </button>
+                    </a>
+                    <a href="' . route('dc.seri.coo.pdf', [$data->id, $x, "ttd"]) . '" target="_blank">
+                    <button class="dropdown-item" type="button">
+                        <i class="fas fa-file"></i>
+                        Coo + Background + Ttd
+                    </button>
+                </a>
+                </div>';
                 }
             })
             ->rawColumns(['checkbox', 'laporan'])
@@ -281,7 +595,7 @@ class DcController extends Controller
     {
         $array_seri = explode(',', $id);
         if ($id == 0) {
-            $data =  NoseriDetailLogistik::where('detail_logistik_id', $value)->get();
+            $data =  NoseriDetailLogistik::DoesntHave('NoseriCoo')->where('detail_logistik_id', $value)->get();
         } else {
             $data =  NoseriDetailLogistik::whereIN('id', $array_seri)->get();
         }
@@ -299,9 +613,101 @@ class DcController extends Controller
         if ($value == 'ekatalog') {
             $data = Pesanan::find($id);
 
-            return view('page.dc.so.detail_ekatalog', ['data' => $data]);
+
+
+            $x = array();
+
+            $jumlah = 0;
+            foreach ($data->detailpesanan as $d) {
+                $x[] = $d->id;
+                $jumlah += $d->jumlah;
+            }
+
+            $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
+
+            $y = array();
+
+            foreach ($detail_pesanan_produk as $d) {
+                $y[] = $d->id;
+            }
+
+            $noseri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get();
+
+
+            $r = array();
+            foreach ($noseri as $j) {
+
+                $r[] = $j->id;
+            }
+            $logistik = NoseriDetailLogistik::whereIN('noseri_detail_pesanan_id', $r)->get();
+
+            $d = array();
+
+            foreach ($logistik as $l) {
+                $d[] =  $l->id;
+            }
+
+            $coo = NoseriCoo::whereIN('noseri_logistik_id', $d)->get()->count();
+
+            if ($jumlah == $coo) {
+                $status = ' <span class="badge green-text">Sudah Diproses</span>';
+            } else {
+                if ($coo == 0) {
+                    $status =  '<span class="badge red-text">Belum Diproses</span>';
+                } else {
+                    $status = '<span class="badge yellow-text">Sebagian Diproses</span>';
+                }
+            }
+
+            return view('page.dc.so.detail_ekatalog', ['data' => $data, 'status' => $status]);
         } else {
-            return view('page.dc.so.detail_spa');
+            $data = Pesanan::find($id);
+
+
+            $x = array();
+
+            $jumlah = 0;
+            foreach ($data->detailpesanan as $d) {
+                $x[] = $d->id;
+                $jumlah += $d->jumlah;
+            }
+
+            $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
+
+            $y = array();
+
+            foreach ($detail_pesanan_produk as $d) {
+                $y[] = $d->id;
+            }
+
+            $noseri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get();
+
+
+            $r = array();
+            foreach ($noseri as $j) {
+
+                $r[] = $j->id;
+            }
+            $logistik = NoseriDetailLogistik::whereIN('noseri_detail_pesanan_id', $r)->get();
+
+            $d = array();
+
+            foreach ($logistik as $l) {
+                $d[] =  $l->id;
+            }
+
+            $coo = NoseriCoo::whereIN('noseri_logistik_id', $d)->get()->count();
+
+            if ($jumlah == $coo) {
+                $status = ' <span class="badge green-text">Sudah Diproses</span>';
+            } else {
+                if ($coo == 0) {
+                    $status =  '<span class="badge red-text">Belum Diproses</span>';
+                } else {
+                    $status = '<span class="badge yellow-text">Sebagian Diproses</span>';
+                }
+            }
+            return view('page.dc.so.detail_spa', ['data' => $data, 'status' => $status]);
         }
     }
     public function edit_coo($id, $value)
@@ -332,14 +738,18 @@ class DcController extends Controller
     }
     public function create_coo(Request $request, $value)
     {
-
         if ($request->diketahui == 'spa') {
             $nama = NULL;
             $jabatan = NULL;
+            $ket = 'spa';
+        } elseif ($request->diketahui == 'emiindo') {
+            $nama = NULL;
+            $jabatan = NULL;
+            $ket = 'emiindo';
         } else {
-
             $nama = $request->nama;
             $jabatan = $request->jabatan;
+            $ket = NULL;
         }
         $replace_array_seri = strtr($value, array('[' => '', ']' => ''));
         $array_seri = explode(',', $replace_array_seri);
@@ -348,7 +758,10 @@ class DcController extends Controller
             $c = NoseriCoo::create([
                 'nama' => $nama,
                 'jabatan' => $jabatan,
+                'ket' => $ket,
                 'noseri_logistik_id' => $array_seri[$i],
+                'tgl_kirim' => $request->tgl_kirim,
+                'catatan' => $request->keterangan,
             ]);
             if (!$c) {
                 $bool = false;
@@ -362,10 +775,496 @@ class DcController extends Controller
     }
     public function dashboard()
     {
-        $daftar_so = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->get()->count();
-        return view('page.dc.dashboard', ['daftar_so' => $daftar_so]);
+        $daftar_so = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->DoesntHave('Spb')->get()->count();
+        $belum_coo = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik.NoseriCoo')->DoesntHave('Spb')->get()->count();
+        $lewat_batas_data = Ekatalog::Has('Pesanan.DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->get();
+
+        $tgl_sekarang = Carbon::now()->format('Y-m-d');
+        $lewat_batas = 0;
+        foreach ($lewat_batas_data as $l) {
+            $tgl_parameter = $this->getHariBatasKontrak($l->tgl_kontrak, $l->provinsi->status)->format('Y-m-d');
+            if ($tgl_sekarang > $tgl_parameter) {
+                $p = Pesanan::where('id', $l->pesanan_id)->first();
+                if ($p->getJumlahCek() > $p->getJumlahKirim()) {
+                    $lewat_batas++;
+                }
+            }
+        }
+        return view('page.dc.dashboard', ['daftar_so' => $daftar_so, 'belum_coo' => $belum_coo, 'lewat_batas' => $lewat_batas]);
     }
-    //Another 
+    public function dashboard_data($value)
+    {
+        if ($value == 'pengirimansotable') {
+            $data = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->DoesntHave('Spb')->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('so', function ($data) {
+                    return  $data->so;
+                })
+                ->addColumn('status', function ($data) {
+
+                    $x = array();
+
+                    $jumlah = 0;
+                    foreach ($data->detailpesanan as $d) {
+                        $x[] = $d->id;
+                        $jumlah += $d->jumlah;
+                    }
+
+                    $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
+
+                    $y = array();
+
+                    foreach ($detail_pesanan_produk as $d) {
+                        $y[] = $d->id;
+                    }
+
+                    $noseri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get();
+
+
+                    $r = array();
+                    foreach ($noseri as $j) {
+
+                        $r[] = $j->id;
+                    }
+                    $logistik = NoseriDetailLogistik::whereIN('noseri_detail_pesanan_id', $r)->get();
+
+                    $d = array();
+
+                    foreach ($logistik as $l) {
+                        $d[] =  $l->id;
+                    }
+
+                    $coo = NoseriCoo::whereIN('noseri_logistik_id', $d)->get()->count();
+
+                    if ($jumlah == $coo) {
+                        return ' <span class="badge green-text">Sudah Diproses</span>';
+                    } else {
+                        if ($coo == 0) {
+                            return  '<span class="badge red-text">Belum Diproses</span>';
+                        } else {
+                            return '<span class="badge yellow-text">Sebagian Diproses</span>';
+                        }
+                    }
+                })
+                ->addColumn('batas_kontrak', function ($data) {
+                    $name = explode('/', $data->so);
+                    if ($name[1] == 'EKAT') {
+
+                        $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                        $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+
+
+                        if ($tgl_sekarang < $tgl_parameter) {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+
+                            if ($hari > 7) {
+                                return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $hari . ' Hari</small>';
+                            } else {
+                                return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
+                            }
+                        } elseif ($tgl_sekarang == $tgl_parameter) {
+                            return  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                        } else {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+                            return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                        }
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('button', function ($data) {
+                    $name = explode('/', $data->so);
+                    $x = array();
+
+                    $jumlah = 0;
+                    foreach ($data->detailpesanan as $d) {
+                        $x[] = $d->id;
+                        $jumlah += $d->jumlah;
+                    }
+
+                    $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
+
+                    $y = array();
+
+                    foreach ($detail_pesanan_produk as $d) {
+                        $y[] = $d->id;
+                    }
+
+                    $noseri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get();
+
+
+                    $r = array();
+                    foreach ($noseri as $j) {
+
+                        $r[] = $j->id;
+                    }
+                    $logistik = NoseriDetailLogistik::whereIN('noseri_detail_pesanan_id', $r)->get();
+
+                    $d = array();
+
+                    foreach ($logistik as $l) {
+                        $d[] =  $l->id;
+                    }
+
+                    $coo = NoseriCoo::whereIN('noseri_logistik_id', $d)->get()->count();
+
+
+                    if ($jumlah == $coo) {
+                        $class = '';
+                    } else {
+                        if ($coo == 0) {
+
+                            $class = 'd-none';
+                        } else {
+                            $class = '';
+                        }
+                    }
+
+                    if ($name[1] == 'EKAT') {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
+                            <i class="fas fa-search"></i>
+                                Detail
+                            </a>
+                                <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'kosong']) . '" target="_blank" class="' . $class . '">
+                                <button class="dropdown-item" type="button">
+                                <i class="fas fa-file"></i>
+                                Coo
+                            </button>
+                                    </a>
+                                <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'back']) . '" target="_blank" class="' . $class . '">
+                                <button class="dropdown-item" type="button">
+                                <i class="fas fa-file"></i>
+                                Coo + Background
+                            </button>
+                                    </a>
+                                <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'ttd']) . '" target="_blank" class="' . $class . '">
+                                <button class="dropdown-item" type="button">
+                                <i class="fas fa-file"></i>
+                                Coo + Background + Ttd
+                            </button>
+                                    </a>
+
+                        </div>';
+                    } else {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
+                            <i class="fas fa-search"></i>
+                                Detail
+                            </a>
+                            <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'kosong']) . '" target="_blank" class="' . $class . '">
+                            <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo
+                        </button>
+                                </a>
+                            <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'back']) . '" target="_blank" class="' . $class . '">
+                            <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo + Background
+                        </button>
+                                </a>
+                            <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'ttd']) . '" target="_blank" class="' . $class . '">
+                            <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo + Background + Ttd
+                        </button>
+                                </a>
+                        </div>';
+                    }
+                })
+                ->rawColumns(['batas_kontrak', 'status', 'button'])
+                ->make(true);
+        } else if ($value == 'sotanpacootable') {
+            $data = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->DoesntHave('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik.NoseriCoo')->DoesntHave('Spb')->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('so', function ($data) {
+                    return  $data->so;
+                })
+                ->addColumn('status', function ($data) {
+
+                    $x = array();
+
+                    $jumlah = 0;
+                    foreach ($data->detailpesanan as $d) {
+                        $x[] = $d->id;
+                        $jumlah += $d->jumlah;
+                    }
+
+                    $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
+
+                    $y = array();
+
+                    foreach ($detail_pesanan_produk as $d) {
+                        $y[] = $d->id;
+                    }
+
+                    $noseri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get();
+
+
+                    $r = array();
+                    foreach ($noseri as $j) {
+
+                        $r[] = $j->id;
+                    }
+                    $logistik = NoseriDetailLogistik::whereIN('noseri_detail_pesanan_id', $r)->get();
+
+                    $d = array();
+
+                    foreach ($logistik as $l) {
+                        $d[] =  $l->id;
+                    }
+
+                    $coo = NoseriCoo::whereIN('noseri_logistik_id', $d)->get()->count();
+
+                    if ($jumlah == $coo) {
+                        return ' <span class="badge green-text">Sudah Diproses</span>';
+                    } else {
+                        if ($coo == 0) {
+                            return  '<span class="badge red-text">Belum Diproses</span>';
+                        } else {
+                            return '<span class="badge yellow-text">Sebagian Diproses</span>';
+                        }
+                    }
+                })
+                ->addColumn('batas_kontrak', function ($data) {
+                    $name = explode('/', $data->so);
+                    if ($name[1] == 'EKAT') {
+
+                        $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                        $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+
+
+                        if ($tgl_sekarang < $tgl_parameter) {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+
+                            if ($hari > 7) {
+                                return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $hari . ' Hari</small>';
+                            } else {
+                                return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
+                            }
+                        } elseif ($tgl_sekarang == $tgl_parameter) {
+                            return  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                        } else {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+                            return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                        }
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('button', function ($data) {
+                    $name = explode('/', $data->so);
+                    $x = array();
+
+                    $jumlah = 0;
+                    foreach ($data->detailpesanan as $d) {
+                        $x[] = $d->id;
+                        $jumlah += $d->jumlah;
+                    }
+
+                    $detail_pesanan_produk  = DetailPesananProduk::whereIN('detail_pesanan_id', $x)->get();
+
+                    $y = array();
+
+                    foreach ($detail_pesanan_produk as $d) {
+                        $y[] = $d->id;
+                    }
+
+                    $noseri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $y)->get();
+
+
+                    $r = array();
+                    foreach ($noseri as $j) {
+
+                        $r[] = $j->id;
+                    }
+                    $logistik = NoseriDetailLogistik::whereIN('noseri_detail_pesanan_id', $r)->get();
+
+                    $d = array();
+
+                    foreach ($logistik as $l) {
+                        $d[] =  $l->id;
+                    }
+
+                    $coo = NoseriCoo::whereIN('noseri_logistik_id', $d)->get()->count();
+
+
+                    if ($jumlah == $coo) {
+                        $class = '';
+                    } else {
+                        if ($coo == 0) {
+
+                            $class = 'd-none';
+                        } else {
+                            $class = '';
+                        }
+                    }
+
+                    if ($name[1] == 'EKAT') {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
+                            <i class="fas fa-search"></i>
+                                Detail
+                            </a>
+                            <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'kosong']) . '" target="_blank" class="' . $class . '">
+                            <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo
+                        </button>
+                                </a>
+                            <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'back']) . '" target="_blank" class="' . $class . '">
+                            <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo + Background
+                        </button>
+                                </a>
+                            <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'ttd']) . '" target="_blank" class="' . $class . '">
+                            <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo + Background + Ttd
+                        </button>
+                                </a>
+
+                        </div>';
+                    } else {
+                        return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
+                            <i class="fas fa-search"></i>
+                                Detail
+                            </a>
+                            <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'kosong']) . '" target="_blank" class="' . $class . '">
+                            <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo
+                        </button>
+                                </a>
+                            <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'back']) . '" target="_blank" class="' . $class . '">
+                            <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo + Background
+                        </button>
+                                </a>
+                            <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'ttd']) . '" target="_blank" class="' . $class . '">
+                            <button class="dropdown-item" type="button">
+                            <i class="fas fa-file"></i>
+                            Coo + Background + Ttd
+                        </button>
+                                </a>
+
+                        </div>';
+                    }
+                })
+                ->rawColumns(['batas_kontrak', 'status', 'button'])
+                ->make(true);
+        } else {
+            $lewat_batas_data = Ekatalog::Has('Pesanan.DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->get();
+            $tgl_sekarang = Carbon::now()->format('Y-m-d');
+            $id = array();
+            foreach ($lewat_batas_data as $l) {
+                $tgl_parameter = $this->getHariBatasKontrak($l->tgl_kontrak, $l->provinsi->status)->format('Y-m-d');
+                if ($tgl_sekarang > $tgl_parameter) {
+                    $p = Pesanan::where('id', $l->pesanan_id)->first();
+                    if ($p->getJumlahCek() > $p->getJumlahKirim()) {
+                        $id[] = $l->pesanan->id;
+                    }
+                }
+            }
+            $data = Pesanan::whereIN('id', $id)->get();
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('so', function ($data) {
+                    return $data->so;
+                })
+                ->addColumn('batas_kontrak', function ($data) {
+                    $name = explode('/', $data->so);
+                    if ($name[1] == 'EKAT') {
+                        $x =  'ekatalog';
+                        $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                        $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+
+                        if ($tgl_sekarang < $tgl_parameter) {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+
+                            if ($hari > 7) {
+                                return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i>Batas Sisa ' . $hari . ' Hari</small>';
+                            } else {
+                                return '' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<br><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                            }
+                        } elseif ($tgl_sekarang == $tgl_parameter) {
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                        } else {
+                            $to = Carbon::now();
+                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                            $hari = $to->diffInDays($from);
+                            return '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                        }
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('status', function ($data) {
+                    $y = array();
+                    $count = 0;
+                    foreach ($data->detailpesanan as $d) {
+                        foreach ($d->detailpesananproduk as $e) {
+                            $y[] = $e->id;
+                            $count++;
+                        }
+                    }
+                    $detail_logistik  = DetailLogistik::whereIN('detail_pesanan_produk_id', $y)->get()->Count();
+
+                    if ($count == $detail_logistik) {
+                        return  '<span class="badge green-text">Sudah Dikirim</span>';
+                    } else {
+                        if ($detail_logistik == 0) {
+                            return ' <span class="badge red-text">Belum Dikirim</span>';
+                        } else {
+                            return  '<span class="badge yellow-text">Sebagian Dikirim</span>';
+                        }
+                    }
+                })
+                ->addColumn('button', function ($data) {
+                    $name = explode('/', $data->so);
+                    $x = $name[1];
+                    if ($x == 'EKAT') {
+                        $y = $data->ekatalog->id;
+                    } elseif ($x == 'SPA') {
+                        $y = $data->spa->id;
+                    } else {
+                        $y = $data->spb->id;
+                    }
+                    return '<a href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
+                    <i class="fas fa-search"></i>
+                    </a>';
+                })
+                ->rawColumns(['batas_kontrak', 'status', 'button'])
+                ->make(true);
+        }
+    }
+    //Another
     public function bulan_romawi($value)
     {
         $bulan =  Carbon::createFromFormat('Y-m-d', $value)->format('m');
@@ -397,5 +1296,15 @@ class DcController extends Controller
             }
         }
         return $returnValue;
+    }
+
+    public function getHariBatasKontrak($value, $limit)
+    {
+        if ($limit == 2) {
+            $days = '28';
+        } else {
+            $days = '35';
+        }
+        return Carbon::parse($value)->subDays($days);
     }
 }

@@ -197,6 +197,36 @@
                             </div>
                         </div>
                     </div>
+                    <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
+                        <div class="modal-dialog modal-lg" role="document">
+                            <div class="modal-content" style="margin: 10px">
+                                <div class="modal-header yellow-bg">
+                                    <h4 class="modal-title"><b>Hapus</b></h4>
+                                </div>
+                                <div class="modal-body" id="hapus">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <form method="post" action="" id="form-hapus" data-target="">
+                                                @method('DELETE')
+                                                @csrf
+                                                <div class="card">
+                                                    <div class="card-body">Apakah Anda yakin ingin menghapus data ini?</div>
+                                                    <div class="card-footer">
+                                                        <span class="float-left">
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                        </span>
+                                                        <span class="float-right">
+                                                            <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -205,8 +235,11 @@
 @stop
 
 @section('adminlte_js')
+<script type="text/javascript" src="{{ asset('vendor/masking/masking.js') }}"></script>
 <script>
     $(function() {
+
+        var divisi_id = "{{Auth::user()->divisi_id}}";
         $(document).on('submit', '#form-customer-update', function(e) {
             e.preventDefault();
             var action = $(this).attr('data-attr');
@@ -242,10 +275,13 @@
         });
 
         var showtable = $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/penjualan/customer/data/' + 0,
+                'url': '/api/customer/data/' + divisi_id + '/' + 0,
+                "dataType": "json",
+                'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -306,9 +342,6 @@
                 }
             ]
         });
-
-
-
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
@@ -323,12 +356,10 @@
 
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
+                    $('#npwp').mask('00.000.000.0-000.000');
                     console.log(id);
                     // $("#editform").attr("action", href);
-
                     select_data();
-
-
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -342,9 +373,56 @@
             })
         });
 
+        $(document).on('click', '.hapusmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data("id");
+            $('#hapusmodal').modal("show");
+            $('#hapusmodal').find('form').attr('action', '/api/customer/delete/' + id);
+        });
+
+        $(document).on('submit', '#form-hapus', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            console.log(action);
+            $.ajax({
+                url: action,
+                type: 'delete',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan Hapus Data',
+                            'success'
+                        );
+                        $('#showtable').DataTable().ajax.reload();
+
+                        $("#hapusmodal").modal('hide');
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Penambahan Data Pengujian',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    swal.fire(
+                        'Error',
+                        'Data telah digunakan dalam Transaksi Lain',
+                        'warning'
+                    );
+                }
+            });
+            return false;
+        });
 
         $(document).on('keyup change', 'input[name="nama_customer"]', function() {
             var id = $('#form-customer-update').attr('data-id');
+            var val = $(this).val();
             if ($(this).val() == "") {
                 $("#msgnama_customer").text("Nama tidak boleh kosong");
                 $('#nama_customer').addClass('is-invalid');
@@ -352,9 +430,10 @@
                 $.ajax({
                     type: 'GET',
                     dataType: 'json',
-                    url: '/api/customer/nama/' + id + '/' + $(this).val(),
+                    async: false,
+                    url: '/api/customer/nama/' + id + '/' + val,
                     success: function(data) {
-                        if (data.data >= 1) {
+                        if (data >= 1) {
                             $("#msgnama_customer").text("Nama sudah terpakai");
                             $('#nama_customer').addClass('is-invalid');
                             $("#btnsimpan").attr("disabled", true);
@@ -371,12 +450,8 @@
                 });
             }
         })
-
-        $('input[name="nama_customer"]').on('keyup change', function() {
-
-        });
-
         $(document).on('keyup change', 'input[name="telepon"]', function() {
+            var id = $('#form-customer-update').attr('data-id');
             if ($(this).val() == "") {
                 $("#msgtelepon").text("Telepon tidak boleh kosong");
                 $("#telepon").addClass('is-invalid');
@@ -399,7 +474,7 @@
                     $("#msgtelepon").text("");
                     $("#telepon").removeClass('is-invalid');
                     $("#btnsimpan").removeAttr('disabled');
-                    if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#alamat").val() != "") {
+                    if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#alamat").val() != "") {
                         $("#btnsimpan").removeAttr('disabled');
                     } else {
                         $("#btnsimpan").attr('disabled', true);
@@ -412,7 +487,7 @@
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");
-                if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#telepon").val() != "") {
+                if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "") {
                     $("#btnsimpan").removeAttr('disabled');
                 } else {
                     $("#btnsimpan").attr('disabled', true);
@@ -445,7 +520,7 @@
                 } else {
                     $("#msgnpwp").text("");
                     $('#npwp').removeClass('is-invalid');
-                    if ($('#telepon').val() != "" && $('#nama_customer').val() != "" && $('#alamat').val() != "") {
+                    if ($('#telepon').val() != "" && ($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && $('#alamat').val() != "") {
                         $("#btnsimpan").removeAttr("disabled");
                     } else {
                         $("#btnsimpan").attr("disabled", true);
@@ -453,7 +528,6 @@
                 }
             }
         });
-
         $(document).on('keyup change', 'input[name="email"]', function() {
             var errorhandling = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
             if ($(this).val() != "") {
@@ -464,14 +538,14 @@
                 } else {
                     $('#msgemail').text("");
                     $('#email').removeClass("is-invalid");
-                    if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "") {
+                    if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "") {
                         $("#btnsimpan").removeAttr('disabled');
                     }
                 }
             } else {
                 $('#msgemail').text("");
                 $('#email').removeClass("is-invalid");
-                if ($("#nama_customer").val() != "" && $("#npwp").val() != "" && $("#telepon").val() != "" && $("#alamat").val() != "") {
+                if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "") {
                     $("#btnsimpan").removeAttr('disabled');
                 }
             }
@@ -505,7 +579,6 @@
                 }
             })
         }
-
         $('#filter').submit(function() {
             var values = [];
             $("input:checked").each(function() {
@@ -518,7 +591,7 @@
                 var x = ['kosong']
             }
             console.log(x);
-            $('#showtable').DataTable().ajax.url(' /api/customer/data/' + x).load();
+            $('#showtable').DataTable().ajax.url('/api/customer/data/' + divisi_id + '/' + x).load();
             return false;
         });
     })

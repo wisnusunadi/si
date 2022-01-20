@@ -100,7 +100,11 @@
                                             </div>
                                             <div id="instansi" class="margin"><b>{{$e->instansi}}</b></div>
                                             <div id="satuan_kerja" class="margin"><b>{{$e->satuan}}</b></div>
-                                            <div id="alamat" class="margin"><b>{{$e->Provinsi->nama}}</b></div>
+                                            <div id="alamat" class="margin"><b>
+                                                    @if(!empty($e->Provinsi))
+                                                    {{$e->Provinsi->nama}}
+                                                    @endif
+                                                </b></div>
                                         </div>
                                         <div class="margin-top">
                                             <div class="margin">
@@ -108,7 +112,14 @@
                                             </div>
                                             <div id="nama_distributor" class="margin"><b>{{$e->customer->nama}}</b></div>
                                             <div id="alamat" class="margin"><b>{{$e->customer->alamat}}</b></div>
-                                            <div id="alamat" class="margin"><b>{{$e->Customer->Provinsi->nama}}</b></div>
+                                            <div id="alamat" class="margin"><b>
+                                                    @if(!empty($e->Customer->Provinsi))
+                                                    @if($e->Customer->nama != 'Belum diketahui')
+                                                    {{$e->Customer->Provinsi->nama}}
+                                                    @endif
+                                                    @endif
+
+                                                </b></div>
                                             <div id="alamat" class="margin"><b>{{$e->Customer->telp}}</b></div>
                                         </div>
                                     </div>
@@ -136,7 +147,13 @@
                                         <div class="margin">
                                             <div><small class="text-muted">Tanggal Batas Kontrak</small>
                                             </div>
-                                            <div><b>{{date('d-m-Y', strtotime($e->tgl_kontrak))}}</b></div>
+                                            <div><b>
+                                                    @if(!empty($e->tgl_kontrak))
+                                                    {{date('d-m-Y', strtotime($e->tgl_kontrak))}}
+                                                    @else
+                                                    -
+                                                    @endif
+                                                </b></div>
                                         </div>
                                         <div class="margin">
                                             <div><small class="text-muted">Status</small></div>
@@ -146,7 +163,7 @@
                                             <div class="badge yellow-text">Negosiasi</div>
                                             @elseif($e->status == 'sepakat')
                                             <div class="margin-top"><b><span class="green-text">Sepakat</span></b></div>
-                                            @elseif($e->status == 'negosiasi')
+                                            @elseif($e->status == 'draft')
                                             <div class="badge blue-text">Draft</div>
                                             @endif
                                         </div>
@@ -235,7 +252,25 @@
                                             <div class="card-body">
                                                 <div class="form-horizontal">
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer / Distributor</label>
+                                                        <div class="col-5 col-form-label">
+                                                            <div class="form-check form-check-inline " id="sudah_dsb">
+                                                                <input class="form-check-input" type="radio" name="namadistributor" id="namadistributor1" value="sudah" />
+                                                                <label class="form-check-label" for="namadistributor1">Sudah Diketahui</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline " id="belum_dsb">
+                                                                <input class="form-check-input" type="radio" name="namadistributor" id="namadistributor2" value="belum" />
+                                                                <label class="form-check-label" for="namadistributor2">Belum Diketahui</label>
+                                                            </div>
+                                                            <div class="invalid-feedback" id="msgnamadistributor">
+                                                                @if($errors->has('namadistributor'))
+                                                                {{ $errors->first('namadistributor')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right"></label>
                                                         <div class="col-5">
                                                             <select name="customer_id" id="customer_id" class="form-control customer_id custom-select @error('customer_id') is-invalid @enderror">
                                                                 <option value="{{$e->customer_id}}" selected>{{$e->customer->nama}}</option>
@@ -275,10 +310,10 @@
                                                         <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
 
                                                         <div class="col-5 col-form-label">
-                                                            <div class="form-check form-check-inline">
+                                                            <!-- <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
                                                                 <label class="form-check-label" for="status_akn4">Draft</label>
-                                                            </div>
+                                                            </div> -->
                                                             <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio" name="status_akn" id="status_akn1" value="sepakat" />
                                                                 <label class="form-check-label" for="status_akn1">Sepakat</label>
@@ -290,6 +325,10 @@
                                                             <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="batal" />
                                                                 <label class="form-check-label" for="status_akn3">Batal</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="draft" />
+                                                                <label class="form-check-label" for="status_akn3">Draft</label>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -319,7 +358,9 @@
                                                         <label for="" class="col-form-label col-5" style="text-align: right">Provinsi</label>
                                                         <div class="col-7">
                                                             <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
+                                                                @if(!empty($e->provinsi_id))
                                                                 <option value="{{$e->provinsi_id}}" selected>{{$e->provinsi->nama}}</option>
+                                                                @endif
                                                             </select>
                                                         </div>
                                                     </div>
@@ -330,6 +371,17 @@
                                                             <div class=" invalid-feedback" id="msgsatuan_kerja">
                                                                 @if($errors->has('satuan_kerja'))
                                                                 {{ $errors->first('satuan_kerja')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Delivery</label>
+                                                        <div class="col-4">
+                                                            <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" value="{{$e->tgl_kontrak}}" />
+                                                            <div class="invalid-feedback" id="msgbatas_kontrak">
+                                                                @if($errors->has('batas_kontrak'))
+                                                                {{ $errors->first('batas_kontrak')}}
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -377,9 +429,10 @@
                                                                     <tr>
                                                                         <th width="5%">No</th>
                                                                         <th width="35%">Nama Paket</th>
-                                                                        <th width="15%">Jumlah</th>
-                                                                        <th width="20%">Harga</th>
-                                                                        <th width="20%">Subtotal</th>
+                                                                        <th width="10%">Jumlah</th>
+                                                                        <th width="15%">Harga</th>
+                                                                        <th width="15%">Ongkir</th>
+                                                                        <th width="15%">Subtotal</th>
                                                                         <th width="5%">Aksi</th>
                                                                     </tr>
                                                                 </thead>
@@ -408,7 +461,6 @@
                                                                                             <h6>{{$g->GudangBarangJadi->Produk->nama}}</h6>
                                                                                             <select class="form-control variasi" name="variasi[{{$produkpenjualan}}][{{$variasi}}]" id="variasi{{$produkpenjualan}}{{$variasi}}" style="width:100%;" data-attr="variasi{{$variasi}}" data-id="{{$variasi}}">
                                                                                                 <option value="{{$g->GudangBarangJadi->id}}">
-
                                                                                                     @if(!empty($g->GudangBarangJadi->nama))
                                                                                                     {{$g->GudangBarangJadi->Produk->nama}} {{$g->GudangBarangJadi->nama}}
                                                                                                     @else
@@ -430,27 +482,27 @@
                                                                             <div class="form-group d-flex justify-content-center">
                                                                                 <div class="input-group">
                                                                                     <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[{{$produkpenjualan}}]" id="produk_jumlah{{$produkpenjualan}}" style="width:100%;" value="{{$f->jumlah}}">
-                                                                                    <div class="input-group-append">
-                                                                                        <span class="input-group-text" id="produk_satuan">pcs</span>
-                                                                                    </div>
+
                                                                                 </div>
                                                                                 <small id="produk_ketersediaan"></small>
                                                                             </div>
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group d-flex justify-content-center">
-                                                                                <div class="input-group-prepend">
-                                                                                    <span class="input-group-text" id="prdhrg">Rp</span>
-                                                                                </div>
+
                                                                                 <input type="text" class="form-control produk_harga" name="produk_harga[{{$produkpenjualan}}]" id="produk_harga{{$produkpenjualan}}" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="{{number_format($f->harga,0,',','.')}}" />
                                                                             </div>
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group d-flex justify-content-center">
-                                                                                <div class="input-group-prepend">
-                                                                                    <span class="input-group-text" id="prdsub">Rp</span>
-                                                                                </div>
-                                                                                <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[{{$produkpenjualan}}]" id=" produk_subtotal{{$produkpenjualan}}" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format($f->harga*$f->jumlah,0,',','.')}}" aria-describedby="prdsub" readonly />
+
+                                                                                <input type="text" class="form-control produk_ongkir" name="produk_ongkir[{{$produkpenjualan}}]" id="produk_ongkir{{$produkpenjualan}}" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdong" value="{{number_format($f->ongkir,0,',','.')}}" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group d-flex justify-content-center">
+
+                                                                                <input type="text" class="form-control produk_subtotal" name="produk_subtotal[{{$produkpenjualan}}]" id="produk_subtotal{{$produkpenjualan}}" placeholder="Masukkan Subtotal" style="width:100%;" value="{{number_format(($f->harga*$f->jumlah)+$f->ongkir,0,',','.')}}" aria-describedby="prdsub" readonly />
                                                                             </div>
                                                                         </td>
                                                                         <td>
@@ -476,27 +528,27 @@
                                                                             <div class="form-group d-flex justify-content-center">
                                                                                 <div class="input-group">
                                                                                     <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;" value="">
-                                                                                    <div class="input-group-append">
-                                                                                        <span class="input-group-text" id="produk_satuan">pcs</span>
-                                                                                    </div>
+
                                                                                 </div>
                                                                                 <small id="produk_ketersediaan"></small>
                                                                             </div>
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group d-flex justify-content-center">
-                                                                                <div class="input-group-prepend">
-                                                                                    <span class="input-group-text" id="prdhrg">Rp</span>
-                                                                                </div>
+
                                                                                 <input type="text" class="form-control produk_harga" name="produk_harga[0]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="" />
                                                                             </div>
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group d-flex justify-content-center">
-                                                                                <div class="input-group-prepend">
-                                                                                    <span class="input-group-text" id="prdsub">Rp</span>
-                                                                                </div>
-                                                                                <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[0]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
+
+                                                                                <input type="text" class="form-control produk_ongkir" name="produk_ongkir[0]" id="produk_ongkir0" placeholder="Masukkan Ongkir" style="width:100%;" aria-describedby="prdhrg" value="" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group d-flex justify-content-center">
+
+                                                                                <input type="text" class="form-control produk_subtotal" name="produk_subtotal[0]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
                                                                             </div>
                                                                         </td>
                                                                         <td>
@@ -521,27 +573,27 @@
                                                                             <div class="form-group d-flex justify-content-center">
                                                                                 <div class="input-group">
                                                                                     <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[0]" id="produk_jumlah0" style="width:100%;" value="">
-                                                                                    <div class="input-group-append">
-                                                                                        <span class="input-group-text" id="produk_satuan">pcs</span>
-                                                                                    </div>
+
                                                                                 </div>
                                                                                 <small id="produk_ketersediaan"></small>
                                                                             </div>
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group d-flex justify-content-center">
-                                                                                <div class="input-group-prepend">
-                                                                                    <span class="input-group-text" id="prdhrg">Rp</span>
-                                                                                </div>
+
                                                                                 <input type="text" class="form-control produk_harga" name="produk_harga[0]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="" />
                                                                             </div>
                                                                         </td>
                                                                         <td>
                                                                             <div class="form-group d-flex justify-content-center">
-                                                                                <div class="input-group-prepend">
-                                                                                    <span class="input-group-text" id="prdsub">Rp</span>
-                                                                                </div>
-                                                                                <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[0]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
+
+                                                                                <input type="text" class="form-control produk_ongkir" name="produk_ongkir[0]" id="produk_ongkir0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="" />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group d-flex justify-content-center">
+
+                                                                                <input type="text" class="form-control produk_subtotal" name="produk_subtotal[0]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
                                                                             </div>
                                                                         </td>
                                                                         <td>
@@ -552,13 +604,13 @@
                                                                 </tbody>
                                                                 <tfoot>
                                                                     <tr>
-                                                                        <th colspan="4" style="text-align:right;">Total Harga</th>
+                                                                        <th colspan="5" style="text-align:right;">Total Harga</th>
                                                                         <th id="totalhargaprd" class="align-right">Rp.
                                                                             @if(isset($e->pesanan))
                                                                             @if(isset($e->pesanan->detailpesanan))
                                                                             <?php $x = 0;
                                                                             foreach ($e->pesanan->detailpesanan as $f) {
-                                                                                $x += $f->harga * $f->jumlah;
+                                                                                $x += ($f->harga * $f->jumlah) + $f->ongkir;
                                                                             }
                                                                             ?>
                                                                             {{number_format($x,0,',','.')}}
@@ -575,20 +627,24 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <span>
-                                                    <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
-                                                        Batal
-                                                    </a>
-                                                </span>
-                                                <span class="float-right">
-                                                    <button type="submit" class="btn btn-warning" id="btnsimpan">
-                                                        Simpan
-                                                    </button>
-                                                </span>
-                                            </div>
-                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="row d-flex justify-content-center">
+                                    <div class="col-10">
+                                        <span>
+                                            <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
+                                                Batal
+                                            </a>
+                                        </span>
+                                        <span class="float-right">
+                                            <button type="submit" class="btn btn-warning" id="btnsimpan">
+                                                Simpan
+                                            </button>
+                                        </span>
+                                    </div>
+                                </div>
 
                             </form>
 
@@ -610,8 +666,8 @@
 <script>
     $(function() {
 
-
         loop();
+        load_variasi();
 
         function loop() {
             for (i = 0; i < 20; i++) {
@@ -619,8 +675,128 @@
             }
         }
 
+        function cek_stok(id) {
+            var jumlah = 0;
+            $.ajax({
+                type: 'POST',
+                dataType: 'json',
+                async: false,
+                url: '/api/produk/variasi_stok/' + id,
+                success: function(data) {
+                    jumlah = data;
+                },
+                error: function(data) {
+                    jumlah = data;
+                }
+            });
+            return jumlah;
+        }
+
+        $('#customer_id').select2({
+            ajax: {
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Customer",
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'GET',
+                url: '/api/customer/select',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        }).change(function() {
+            var id = $(this).val();
+            $.ajax({
+                url: '/api/customer/select/' + id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(data) {
+                    $('#alamat_customer').val(data[0].alamat);
+                    $('#telepon_customer').val(data[0].telp);
+                }
+            });
+        });
+
+        $('.provinsi').select2({
+            ajax: {
+                minimumResultsForSearch: 20,
+                placeholder: "Pilih Produk",
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'GET',
+                url: '/api/provinsi/select',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        })
+
+        if ('{{$e->customer_id}}' == 484) {
+            var cust_id = 'belum';
+            $("#customer_id").attr('disabled', true);
+            $("#customer_id").empty().trigger('change');
+            $("#provinsi").attr('disabled', true);
+            $("#provinsi").empty().trigger('change');
+            $("#alamat").val("");
+            $("#telepon").val("");
+        } else {
+            var cust_id = 'sudah';
+        }
+        if ('{{$e->status}}' != 'sepakat') {
+            if ('{{$e->status}}' == 'draft') {
+                $("#dataproduk").addClass("hide");
+            }
+            $("#provinsi").attr('disabled', true);
+            $("#provinsi").empty().trigger('change')
+            $("#batas_kontrak").attr('disabled', true);
+        }
+
+        $('input[type="radio"][name="namadistributor"]').on('change', function() {
+            if ($(this).val() != "") {
+                if ($(this).val() == "sudah") {
+                    $("#customer_id").attr('disabled', false);
+                } else {
+                    $("#customer_id").attr('disabled', true);
+                    $("#customer_id").empty().trigger('change')
+                    $("#alamat").val("");
+                    $("#telepon").val("");
+                }
+                checkvalidasi();
+            } else {
+                $("#msgstatus").text("Status Harus dipilih");
+                $("#status").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
+            }
+        });
 
         $('input[name="status_akn"][value={{$e->status}}]').attr('checked', 'checked');
+        $('input[name="namadistributor"][value=' + cust_id + ']').attr('checked', 'checked');
         $('#customer_id').on('keyup change', function() {
             if ($(this).val() != "") {
                 $('#msgcustomer_id').text("");
@@ -633,14 +809,29 @@
 
         $('input[type="radio"][name="status_akn"]').on('change', function() {
             if ($(this).val() != "") {
-                if ($(this).val() == "draft") {
-                    $("#produktable tbody").empty();
-                    $('#produktable tbody').append(trproduktable());
+                if ($(this).val() == "sepakat") {
+                    $("#dataproduk").removeClass("hide");
+                    $("#batas_kontrak").attr('disabled', false);
+                    $("#provinsi").attr('disabled', false);
+                    // $("#produktable tbody").empty();
+                    // $('#produktable tbody').append(trproduktable());
                     numberRowsProduk($("#produktable"));
+                } else if ($(this).val() == "draft") {
+                    $("#produktable tbody").empty();
                     $("#totalhargaprd").text("Rp. 0");
                     $("#dataproduk").addClass("hide");
+                    $("#batas_kontrak").attr('disabled', true);
+                    $("#provinsi").attr('disabled', true);
+                    $("#provinsi").empty().trigger('change')
                 } else {
+                    //$("#produktable tbody").empty();
+                    //$('#produktable tbody').append(trproduktable());
+                    numberRowsProduk($("#produktable"));
+                    $("#batas_kontrak").val("");
+                    $("#batas_kontrak").attr('disabled', true);
                     $("#dataproduk").removeClass("hide");
+                    $("#provinsi").attr('disabled', true);
+                    $("#provinsi").empty().trigger('change')
                 }
             } else {
                 $("#msgstatus").text("Status Harus dipilih");
@@ -737,8 +928,6 @@
             $('#produktable').find('tr .produk_subtotal').each(function() {
                 var subtotal = replaceAll($(this).val(), '.', '');
                 totalharga = parseInt(totalharga) + parseInt(subtotal);
-                console.log("subtotal " + subtotal);
-                console.log("total harga " + totalharga)
                 $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
             })
         }
@@ -752,20 +941,20 @@
                 $(el).find('.penjualan_produk_id').attr('id', j);
                 var variasi = $(el).find('.variasi');
                 for (var k = 0; k < variasi.length; k++) {
-                    // var id = $(el).find('.variasi').attr('id');
-                    // $(el).find(id).attr('name', 'variasi[' + j + '][]');
-                    // $(el).find('input[name="variasi[' + j + '][]"]').attr('id', 'variasi' + j + '' + k);
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('name', 'variasi[' + j + '][' + k + ']');
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('id', 'variasi' + j + '' + k);
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('name', 'ketstok[' + j + '][' + k + ']');
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k);
-
                 }
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
-                $(el).find('.produk_harga').attr('name', 'produk_harga[' + j + ']');
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
-                $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.produk_harga').attr('name', 'produk_harga[' + j + ']');
+                $(el).find('.produk_ongkir').attr('id', 'produk_ongkir' + j);
+                $(el).find('.produk_ongkir').attr('name', 'produk_ongkir[' + j + ']');
                 $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
+                $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
+                $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
                 $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
                 select_data($(el).find('.penjualan_produk_id').attr('id'));
             });
@@ -774,11 +963,13 @@
         $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
+            var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
 
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
-                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                var ongkircvrt = replaceAll(ongkir, '.', '');
+                subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
                 totalhargaprd();
             } else {
                 subtotal.val(formatmoney("0"));
@@ -789,21 +980,29 @@
         $("#produktable").on('keyup change', '.produk_jumlah', function() {
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
+            var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
             var ketstok = $(this).closest('tr').find('.ketstok');
             var variasi = $(this).closest('tr').find('.variasi');
             var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr('id');
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
-                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                var ongkircvrt = replaceAll(ongkir, '.', '');
+                subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
                 totalhargaprd();
                 for (var i = 0; i < variasi.length; i++) {
                     var variasires = $('select[name="variasi[' + ppid + '][' + i + ']"]').select2('data')[0];
                     var kebutuhan = jumlah * variasires.jumlah;
-                    if (variasires.qt < kebutuhan) {
+                    if (cek_stok(variasires.id) < kebutuhan) {
+                        var jumlah_kekurangan = 0;
+                        if (cek_stok(variasires.id) < 0) {
+                            jumlah_kekurangan = kebutuhan;
+                        } else {
+                            jumlah_kekurangan = Math.abs(cek_stok(variasires.id) - kebutuhan);
+                        }
                         $('select[name="variasi[' + ppid + '][' + i + ']"]').addClass('is-invalid');
-                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang dari Permintaan');
-                    } else if (variasires.qt >= kebutuhan) {
+                        $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('Jumlah Kurang ' + jumlah_kekurangan + ' dari Permintaan');
+                    } else if (cek_stok(variasires.id) >= kebutuhan) {
                         $('select[name="variasi[' + ppid + '][' + i + ']"]').removeClass('is-invalid');
                         $('span[name="ketstok[' + ppid + '][' + i + ']"]').text('');
                     }
@@ -825,10 +1024,16 @@
             id = $('select[name="' + name + '"]').attr('data-id');
             vals = $('select[name="' + name + '"]').select2('data')[0];
             var kebutuhan = jumlah * vals.jumlah;
-            if (vals.qt < kebutuhan) {
+            if (cek_stok(vals.id) < kebutuhan) {
+                var jumlah_kekurangan = 0;
+                if (cek_stok(vals.id) < 0) {
+                    jumlah_kekurangan = kebutuhan;
+                } else {
+                    jumlah_kekurangan = Math.abs(cek_stok(vals.id) - kebutuhan);
+                }
                 $('select[name="variasi[' + ppid + '][' + id + ']"]').addClass('is-invalid');
-                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang dari Permintaan');
-            } else if (vals.qt >= kebutuhan) {
+                $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('Jumlah Kurang ' + jumlah_kekurangan + ' dari Permintaan');
+            } else if (cek_stok(vals.id) >= kebutuhan) {
                 $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
                 $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
             }
@@ -840,10 +1045,29 @@
             $(this).val(result);
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
+            var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
-                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                var ongkircvrt = replaceAll(ongkir, '.', '');
+                subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
+                totalhargaprd();
+            } else {
+                subtotal.val(formatmoney("0"));
+                totalhargaprd();
+            }
+        });
+        $("#produktable").on('keyup change', '.produk_ongkir', function() {
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var harga = $(this).closest('tr').find('.produk_harga').val();
+            var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
+            var subtotal = $(this).closest('tr').find('.produk_subtotal');
+            if (jumlah != "" && harga != "") {
+                var hargacvrt = replaceAll(harga, '.', '');
+                var ongkircvrt = replaceAll(ongkir, '.', '');
+                subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
                 totalhargaprd();
             } else {
                 subtotal.val(formatmoney("0"));
@@ -857,42 +1081,38 @@
                 <td>
                     <div class="form-group">
                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                            <option value=""></option>
                         </select>
+                        <div class="detailjual" id="tes0">
+                        </div>
                     </div>
-                    <div class="detail_produk" id="detail_produk0">
-                    </div>
-                    <div class="detailjual" id="tes0">
-                    </div>
+                    <div id="detail_produk" class="detail_produk"></div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
                         <div class="input-group">
-                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;" value="">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="produk_satuan">pcs</span>
-                            </div>
+                            <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;">
                         </div>
                         <small id="produk_ketersediaan"></small>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="prdhrg">Rp</span>
-                        </div>
-                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="" />
+                        <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;"/>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="prdsub">Rp</span>
-                        </div>
-                        <input type="text" class="form-control produk_subtotal" name=" produk_subtotal[]" id=" produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" value="" aria-describedby="prdsub" readonly />
+                        <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Harga" style="width:100%;"/>
                     </div>
                 </td>
                 <td>
-                    <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
+                    </div>
+                </td>
+                <td>
+                    <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                 </td>
             </tr>`;
             return data;
@@ -917,75 +1137,6 @@
             }
         });
 
-
-        $('#customer_id').select2({
-            ajax: {
-                minimumResultsForSearch: 20,
-                placeholder: "Pilih Customer",
-                dataType: 'json',
-                theme: "bootstrap",
-                delay: 250,
-                type: 'GET',
-                url: '/api/customer/select',
-                data: function(params) {
-                    return {
-                        term: params.term
-                    }
-                },
-                processResults: function(data) {
-                    console.log(data);
-                    return {
-                        results: $.map(data, function(obj) {
-                            return {
-                                id: obj.id,
-                                text: obj.nama
-                            };
-                        })
-                    };
-                },
-            }
-        }).change(function() {
-            var id = $(this).val();
-            $.ajax({
-                url: '/api/customer/select/' + id,
-                type: 'GET',
-                dataType: 'json',
-                success: function(data) {
-                    console.log(data);
-                    $('#alamat_customer').val(data[0].alamat);
-                    $('#telepon_customer').val(data[0].telp);
-                }
-            });
-        });
-
-        $('.provinsi').select2({
-            ajax: {
-                minimumResultsForSearch: 20,
-                placeholder: "Pilih Produk",
-                dataType: 'json',
-                theme: "bootstrap",
-                delay: 250,
-                type: 'GET',
-                url: '/api/provinsi/select',
-                data: function(params) {
-                    return {
-                        term: params.term
-                    }
-                },
-                processResults: function(data) {
-                    console.log(data);
-                    return {
-                        results: $.map(data, function(obj) {
-                            return {
-                                id: obj.id,
-                                text: obj.nama
-                            };
-                        })
-                    };
-                },
-            }
-        })
-
         function select_data(i) {
             $('#' + i).select2({
                 ajax: {
@@ -1000,7 +1151,6 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -1014,15 +1164,14 @@
             }).change(function(i) {
                 var index = $(this).attr('id');
                 var id = $(this).val();
-                console.log(index);
-                console.log(id);
                 $.ajax({
                     url: '/api/penjualan_produk/select/' + id,
                     type: 'GET',
                     dataType: 'json',
                     success: function(res) {
                         $('#produk_harga' + index).val(formatmoney(res[0].harga));
-                        console.log(res);
+                        $('#produk_subtotal' + index).val(formatmoney(res[0].harga * $('#produk_jumlah' + index).val()));
+                        totalhargaprd();
                         var tes = $('#detail_produk' + index);
                         tes.empty();
                         var datas = "";
@@ -1040,7 +1189,7 @@
                                     id: res[0].produk[x].gudang_barang_jadi[0].id,
                                     text: res[0].produk[x].nama,
                                     jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: res[0].produk[x].gudang_barang_jadi[0].stok
+                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
                                 });
                             } else {
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
@@ -1048,11 +1197,10 @@
                                         id: res[0].produk[x].gudang_barang_jadi[y].id,
                                         text: res[0].produk[x].gudang_barang_jadi[y].nama,
                                         jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: res[0].produk[x].gudang_barang_jadi[y].stok
+                                        qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
                                     });
                                 }
                             }
-                            console.log(data);
                             $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
                                 placeholder: 'Pilih Variasi',
                                 data: data,
@@ -1074,7 +1222,7 @@
                 });
             });
         }
-        load_variasi();
+
 
         function load_variasi() {
             produk = [];
@@ -1105,7 +1253,7 @@
                                         id: res[0].produk[x].gudang_barang_jadi[0].id,
                                         text: res[0].produk[x].nama,
                                         jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: res[0].produk[x].gudang_barang_jadi[0].stok
+                                        qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
                                     });
                                 } else {
                                     for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
@@ -1113,7 +1261,7 @@
                                             id: res[0].produk[x].gudang_barang_jadi[y].id,
                                             text: res[0].produk[x].gudang_barang_jadi[y].nama,
                                             jumlah: res[0].produk[x].pivot.jumlah,
-                                            qt: res[0].produk[x].gudang_barang_jadi[y].stok
+                                            qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
                                         });
                                     }
                                 }

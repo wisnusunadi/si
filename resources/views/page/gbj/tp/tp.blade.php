@@ -28,31 +28,32 @@
     .card-center {
         left: 20%;
     }
-    .nomor-so{
-        background-color: #717FE1;
-        color: #fff;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: 18px
+    .history_filter{
+        display: block;
     }
-    .nomor-akn{
-        background-color: #DF7458;
-        color: #fff;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: 18px
+    #gudang-salesorder_filter{
+        display: none;
     }
-    .nomor-po{
-        background-color: #85D296;
-        color: #fff;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: 18px
+    .dropdown-menu {
+    width: 500px !important;
     }
-    .instansi{
-        background-color: #36425E;
-        color: #fff;
-        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        font-size: 18px
+    th.prev.available{
+        visibility: hidden;
+    }
+    th.next.available{
+        visibility: hidden;
     }
 </style>
+<div class="content-header">
+    <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id; }}">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-6">
+          <h1 class="m-0">Riwayat Transaksi</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -60,11 +61,15 @@
                 <ul class="nav nav-tabs" id="myTab" role="tabList">
                     <li class="nav-item" role="presentation">
                         <a href="#semua-produk" class="nav-link active" id="semua-produk-tab" data-toggle="tab"
-                            role="tab" aria-controls="semua-produk" aria-selected="true">Semua Riwayat Transaksi</a>
+                            role="tab" aria-controls="semua-produk" aria-selected="true">Per Tanggal</a>
                     </li>
                     <li class="nav-item" role="presentation">
                         <a href="#produk" class="nav-link" id="produk-tab" data-toggle="tab" role="tab"
                             aria-controls="produk" aria-selected="true">Per Produk</a>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="#salesorder" class="nav-link" id="salesorder-tab" data-toggle="tab" role="tab"
+                            aria-controls="salesorder" aria-selected="true">Per Sales Order</a>
                     </li>
                 </ul>
                 <div class="tab-content card" id="myTabContent">
@@ -87,25 +92,37 @@
                                             <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Dari</label>
-                                                    <select name="" id="divisi" class="form-control">
+                                                    <select name="" id="divisi" class="form-control ">
                                                         <option value="">All</option>
-                                                        <option value="">Divisi IT</option>
-                                                        <option value="">Divisi QC</option>
-                                                        <option value="">Divisi SO</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
-                                                    <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
-                                                    <input type="text" name="" id="datetimepicker1"
-                                                        class="form-control">
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-expanded="false">
+                                                          Filter Tanggal
+                                                        </button>
+                                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                                            <div class="row m-0">
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="kt_datepicker_1">Tanggal Masuk</label>
+                                                                        <input type="text" class="form-control" id="kt_datepicker_1">
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-md-6">
+                                                                    <div class="form-group">
+                                                                        <label for="kt_datepicker_2">Tanggal Keluar</label>
+                                                                        <input type="text" class="form-control" id="kt_datepicker_2">
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                      </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-                                        <a href="#" class="btn btn-outline-primary">Search</a>
                                     </div>
                                 </div>
                             </div>
@@ -126,7 +143,6 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="table-responsive">
-                                    {{-- Tanggal Masuk dan Tanggal Keluar --}}
                                     <table class="table table-hover pertanggal" width="100%" id="history">
                                         <thead>
                                             <tr>
@@ -135,29 +151,12 @@
                                                 <th>Dari/Ke</th>
                                                 <th>Tujuan</th>
                                                 <th>Nomor SO</th>
+                                                <th>Produk</th>
+                                                <th>Jumlah</th>
                                                 <td>Aksi</td>
                                             </tr>
                                         </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>10-09-2022</td>
-                                                <td>10-09-2022</td>
-                                                <td><span class="badge badge-success">Divisi IT</span><br><span class="badge badge-info">Divisi QC</span></td>
-                                                <td>Uji Coba Produk</td>
-                                                <td>641311666541</td>
-                                                <td><button class="btn btn-info" onclick="detailprodukriwayat()"><i
-                                                            class="far fa-eye"></i> Detail</button></td>
-                                            </tr>
-                                            <tr>
-                                                <td>10-09-2022</td>
-                                                <td>10-09-2022</td>
-                                                <td><span class="badge badge-info">Divisi IT</span></td>
-                                                <td>Uji Coba Produk</td>
-                                                <td>641311666541</td>
-                                                <td><button class="btn btn-info" onclick="detailprodukriwayat()"><i
-                                                            class="far fa-eye"></i> Detail</button></td>
-                                            </tr>
-                                        </tbody>
+                                        <tbody></tbody>
                                     </table>
                                 </div>
                             </div>
@@ -172,267 +171,63 @@
                                         <th>Kode Produk</th>
                                         <th>Produk</th>
                                         <th>Stok Gudang</th>
-                                        <th>Stok</th>
+                                        <th>Stok Penjualan</th>
                                         <th>Kelompok</th>
-                                        <th>Action</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ZTP80AS-UPGRADE</td>
-                                        <td>STERILISATOR KERING</td>
-                                        <td>100 Unit</td>
-                                        <td>80 Unit</td>
-                                        <td>Alat Kesehatan</td>
-                                        <td><a class="btn btn-info" href="{{ url('gbj/tp/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ZTP80AS-UPGRADE</td>
-                                        <td>STERILISATOR KERING</td>
-                                        <td>100 Unit</td>
-                                        <td>80 Unit</td>
-                                        <td>Alat Kesehatan</td>
-                                        <td><a class="btn btn-info" href="{{ url('gbj/tp/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
+
                                 </tbody>
                             </table>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-<<<<<<< HEAD
-<<<<<<< HEAD:resources/views/page/gbj/tp.blade.php
-=======
->>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
-<div class="row produk-show hidden-product">
-    <div class="col-md-4">
-        <div class="card">
-            <div class="card mt-2 ml-5 mr-5 card-center" style="width: 13rem;">
-                <img class="card-img-top"
-                    src="https://images.unsplash.com/photo-1526930382372-67bf22c0fce2?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&amp;ixlib=rb-1.2.1&amp;auto=format&amp;fit=crop&amp;w=687&amp;q=80"
-                    alt="">
-            </div>
-            <div class="card" style="background-color: #786FC4; color: white;">
-                <div class="card-body">
-                    <h5 class="card-text pb-2"><b>Kode Produk</b></h5>
-                    <p class="card-text" id="kode_produk">5415313</p>
-                    <h5 class="card-text pb-2"><b>Nama Produk</b></h5>
-                    <p class="card-text" id="nama_produk">Ambulatory</p>
-                    <h5 class="card-text pb-2"><b>Deskripsi</b></h5>
-                    <p class="card-text" id="deskripsi">Produk Inovatif dan Kreatif</p>
-                    <h5 class="card-text pb-2"><b>Dimensi</b></h5>
-                    <div class="row">
-                        <div class="col-sm">
-                            <p>Panjang</p>
-                        </div>
-                        <div class="col-sm">
-                            <p>Lebar</p>
-                        </div>
-                        <div class="col-sm">
-                            <p>Tinggi</p>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-sm">
-                            <p id="panjang">12 mm</p>
-                        </div>
-                        <div class="col-sm">
-                            <p id="lebar">13 mm</p>
-                        </div>
-                        <div class="col-sm">
-                            <p id="tinggi">14 mm</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div class="col-md-8">
-        <div class="card">
-            <div class="card-title">
-                <div class="mb-7 mt-5 ml-3">
-                    <div class="row align-items-center">
-                        <div class="col-lg-9 col-xl-8">
-                            <div class="row align-items-center">
-                                <div class="col-md-4 my-2 my-md-0">
-                                    <div class="input-icon">
-                                        <input type="text" class="form-control" placeholder="Cari..."
-                                            id="kt_datatable_search_query">
-                                        <span>
-                                            <i class="flaticon2-search-1 text-muted"></i>
-                                        </span>
-                                    </div>
-                                </div>
-                                <div class="col-md-4 my-2 my-md-0">
-                                    <div class="d-flex align-items-center">
-                                        <label class="mr-3 mb-0 d-none d-md-block" for="">Tanggal</label>
-                                        <input type="text" name="" id="tanggalmasuk" class="form-control">
-                                    </div>
-                                </div>
-                                <div class="col-md-4 my-2 my-md-0">
-                                    <a href="#" class="btn btn-outline-primary">Search</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
-                                    <p class="card-text">
-                                        <div class="foo green"></div> : Dari
-                                    </p>
-                                    <p class="card-text">
-                                        <div class="foo blue"></div> : Ke
-                                    </p>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="card-body">
-                <div class="mb-7">
-                    <table class="table" id="datatable">
-                        <thead>
-                            <tr>
-                                <th>Nomor SO</th>
-                                <th>Tanggal Masuk</th>
-                                <th>Tanggal Keluar</th>
-                                <th>Dari/Ke</th>
-                                <th>Tujuan</th>
-                                <th>Jumlah</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>652146416541654</td>
-                                <td scope="row">10-04-2021</td>
-                                <td>23-09-2021</td>
-                                <td><span class="badge badge-success">Divisi IT</span></td>
-                                <td>Untuk Uji Coba</td>
-                                <td>100 Unit</td>
-                                <td><button type="button" class="btn btn-outline-info" onclick="detailProduk()"><i
-                                            class="far fa-eye"> Detail</i></button></td>
-                            </tr>
-                            <tr>
-                                <td>652146416541654</td>
-                                <td scope="row">10-04-2021</td>
-                                <td>23-09-2021</td>
-                                <td><span class="badge badge-info">Divisi QC</span></td>
-                                <td>Untuk Uji Coba</td>
-                                <td>100 Unit</td>
-                                <td><button type="button" class="btn btn-outline-info" onclick="detailProduk()"><i
-                                            class="far fa-eye"> Detail</i></button></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <div class="card-footer clearfix">
-                <ul class="pagination pagination-sm m-0 float-right">
-                    <li class="page-item"><a class="page-link" href="#">«</a></li>
-                    <li class="page-item"><a class="page-link" href="#">1</a></li>
-                    <li class="page-item"><a class="page-link" href="#">2</a></li>
-                    <li class="page-item"><a class="page-link" href="#">3</a></li>
-                    <li class="page-item"><a class="page-link" href="#">»</a></li>
-                </ul>
-            </div>
-        </div>
-    </div>
-</div>
-<<<<<<< HEAD
-=======
->>>>>>> 993c403b85758d6690fe1ade67e173cb80a9ff68:resources/views/page/gbj/tp/tp.blade.php
-=======
->>>>>>> 05f6ec0bc9795de2021471141f7ed12cf5f5cc51
-
-
-
-<!-- Modal -->
-<div class="modal fade modalProduk" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content ">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row row-cols-2">
-                            {{-- col --}}
-                            <div class="col"> <label for="">Tanggal Masuk</label>
-                                <div class="card nomor-so">
-                                    <div class="card-body">
-                                        10-04-2022
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- col --}}
-                            <div class="col"> <label for="">Tanggal Keluar</label>
-                                <div class="card nomor-akn">
-                                    <div class="card-body">
-                                        23-09-2022
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- col --}}
-                            <div class="col"> <label for="">Nomor SO</label>
-                                <div class="card nomor-po">
-                                    <div class="card-body">
-                                        89798797856456
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- col --}}
-                            <div class="col"> <label for="">Jumlah Produk</label>
-                                <div class="card instansi">
-                                    <div class="card-body">
-                                        5 Produk
+                    <div class="tab-pane fade card-body" id="salesorder" role="tabpanel" aria-labelledby="salesorder-tab">
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-9 col-xl-8">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4 my-2 my-md-0">
+                                                <div class="input-icon">
+                                                    <input type="text" class="form-control" placeholder="Cari..."
+                                                        id="gudang-salesorder-search">
+                                                    <span>
+                                                        <i class="flaticon2-search-1 text-muted"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 my-2 my-md-0">
+                                                <div class="d-flex align-items-center">
+                                                    <label class="mr-3 mb-0 d-none d-md-block" for="">Batas Transfer</label>
+                                                    <input type="text" name="" id="daterange1" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-striped add-produk">
-                            <thead>
-                                <tr>
-                                    <th>Nama Produk</th>
-                                    <th>Jumlah</th>
-                                    <th>Tipe</th>
-                                    <th>Merk</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                    <td>100 Unit</td>
-                                    <td>ABPM50</td>
-                                    <td>ELITECH</td>
-                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
-                                </tr>
-                                <tr>
-                                    <td>AMBULATORY BLOOD PRESSURE MONITOR</td>
-                                    <td>100 Unit</td>
-                                    <td>RGB</td>
-                                    <td>ELITECH</td>
-                                    <td><button class="btn btn-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button> </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <div class="row mt-2">
+                            <div class="col-lg-12">
+                                <div class="table-salesorder">
+                                    <table class="table table-bordered" id="gudang-salesorder">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nomor SO</th>
+                                                <th>Nomor PO</th>
+                                                <th>Customer</th>
+                                                <th>Batas Transfer</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -445,7 +240,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Produk Ambulatory</h5>
+                <h5 class="modal-title"><span id="title">Produk Ambulatory</span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -459,14 +254,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td scope="row">65465465465</td>
-                            <td>Layout 1</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">65465465465</td>
-                            <td>Layout 2</td>
-                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -474,52 +261,10 @@
     </div>
 </div>
 
-<<<<<<< HEAD:resources/views/page/gbj/tp.blade.php
-<!-- Modal -->
-<div class="modal fade modalDetail" id="" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Produk <span id="title">Ambulatory</span></h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-seri">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Nomor Seri</th>
-                            <th>Layout</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td scope="row">1</td>
-                            <td>54131313151</td>
-                            <td>Layout 1</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">2</td>
-                            <td>54131313151</td>
-                            <td>Layout 1</td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-</div>
-=======
-
->>>>>>> 993c403b85758d6690fe1ade67e173cb80a9ff68:resources/views/page/gbj/tp/tp.blade.php
 @stop
 
 @section('adminlte_js')
 <script>
-    $('#datetimepicker1').daterangepicker({});
-
     $.ajax({
         url: '/api/gbj/sel-divisi',
         type: 'GET',
@@ -530,7 +275,7 @@
                 $("#divisi").empty();
                 $("#divisi").append('<option value="">All</option>');
                 $.each(res, function(key, value) {
-                    $("#divisi").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    $("#divisi").append('<option value="'+value.nama+'">'+value.nama+'</option');
                 });
             } else {
                 $("#divisi").empty();
@@ -538,12 +283,194 @@
         }
     });
 
-    $('#divisi').on('change', function(e) {
-        var id = $(this).data('id');
-        console.log(id);
-    })
+    function detailtanggal() {
+        $('#modal-per-tanggal').modal('show');
+    }
 
-    // function date_filter()
+    function detailProduk() {
+        $('.modalDetail').modal('show');
+    }
+
+        // Tanggal Masuk
+    var start_date;
+    var end_date;
+    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
+
+        var evalDate = parseDateValue(aData[0]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
+    // Tanggal Keluar
+    var start_date2;
+    var end_date2;
+    var DateFilterFunction2 = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue2(start_date2);
+        var dateEnd = parseDateValue2(end_date2);
+
+        var evalDate = parseDateValue2(aData[1]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue2(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
+    // Tanggal Sales Order
+    var start_date3;
+    var end_date3;
+    var DateFilterFunction3 = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue3(start_date3);
+        var dateEnd = parseDateValue3(end_date3);
+        var evalDate = parseDateValue3(aData[3]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue3(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
+    var $dTable = $('#history').DataTable({
+            destroy: true,
+            processing: true,
+            autoWidth: false,
+            ajax: {
+                url: "/api/transaksi/all",
+            },
+            columns: [
+                { data: 'date_in', name: 'date_in'},
+                { data: 'date_out', name: 'date_out'},
+                { data: 'divisi', name: 'divisi'},
+                { data: 'tujuan', name: 'tujuan'},
+                { data: 'so', name: 'so'},
+                { data: 'product', name: 'product'},
+                { data: 'jumlah', name: 'jumlah'},
+                { data: 'action', name: 'action'},
+            ],
+            dom: 'Bfrtip',
+            "language": {
+                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
+        });
+     // Tanggal Masuk
+     $('#kt_datepicker_1').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('#kt_datepicker_1').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date = picker.startDate.format('DD-MM-YYYY');
+            end_date = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            $dTable.draw();
+        });
+
+        $('#kt_datepicker_1').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            $dTable.draw();
+        });
+
+        // Tanggal Keluar
+        $('#kt_datepicker_2').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('#kt_datepicker_2').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date2 = picker.startDate.format('DD-MM-YYYY');
+            end_date2 = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction2);
+            $dTable.draw();
+        });
+
+        $('#kt_datepicker_2').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date2 = '';
+            end_date2 = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
+            $dTable.draw();
+        });
+
+
+        $("#divisi").on("change", function () {
+            $dTable.columns(2).search($(this).val()).draw();
+        });
+
+        $("#kt_datatable_search_query").on("keyup", function () {
+            $dTable.search($(this).val()).draw();
+        });
+    $(document).ready(function () {
+
+        var gudangbarang = $('#gudang-barang').dataTable({
+            destroy: true,
+            processing: true,
+            responsive: true,
+            autoWidth: false,
+            ajax: {
+                url: "/api/transaksi/history",
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'kode_produk', name: 'kode_produk'},
+                { data: 'product', name: 'product'},
+                { data: 'stock', name: 'stock'},
+                { data: 'stok_jual', name: 'stok_jual'},
+                { data: 'kelompok', name: 'kelompok'},
+                { data: 'action', name: 'action'},
+            ],
+            "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
+        });
+        $(document).on("click", "#semua-produk-tab", function () {
+            $('.produk-show').addClass('hidden-product');
+        });
+        $(document).on("click", "#produk-tab", function () {
+            $('.produk-show').addClass('hidden-product');
+        });
+
+    });
+
+    function detailProdukModal() {
+        $('.produk-show').removeClass('hidden-product');
+    }
 
     $(document).on('click', '.editmodal', function() {
         var id = $(this).data('id');
@@ -556,162 +483,86 @@
                 $('span#title').text(res.data[0].title);
             }
         });
-
         $('.table-seri').DataTable().destroy();
         $('.table-seri').dataTable({
             processing: true,
             serverSide: true,
+            autoWidth: false,
             ajax: {
                 url: "/api/transaksi/all-detail/" + id,
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
             },
             columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 { data: 'seri', name: 'seri'},
                 { data: 'layout', name: 'layout'},
             ],
-        })
-
-        detailProduk();
-    })
-
-
-    function detailtanggal() {
-        $('#modal-per-tanggal').modal('show');
-    }
-
-    function detailProduk() {
-        $('.modalDetail').modal('show');
-    }
-
-    function detailprodukriwayat() { 
-        $('.modalProduk').modal('show');
-     }
-
-    $(document).ready(function () {
-        $('.pertanggal').dataTable({
-            bFilter: false,
-            responsive: true
-        });
-
-        $('#history').DataTable().destroy();
-        $('#history').dataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                url: "/api/transaksi/all",
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
-            },
-            columns: [
-                // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                { data: 'date_in', name: 'date_in'},
-                { data: 'date_out', name: 'date_out'},
-                { data: 'divisi', name: 'divisi'},
-                { data: 'tujuan', name: 'tujuan'},
-                { data: 'so', name: 'so'},
-                { data: 'product', name: 'product'},
-                { data: 'jumlah', name: 'jumlah'},
-                { data: 'action', name: 'action'},
-            ],
             "oLanguage": {
                 "sSearch": "Cari:"
             }
         });
 
-        $('#gudang-barang').dataTable({
-            processing: true,
-            serverSide: true,
-            responsive: true,
-            ajax: {
-                url: "/api/transaksi/history",
-                // data: {id: id},
-                // type: "post",
-                // dataType: "json",
-            },
-            columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                { data: 'kode_produk', name: 'kode_produk'},
-                { data: 'product', name: 'product'},
-                { data: 'stock', name: 'stock'},
-                { data: 'stock', name: 'stock'},
-                { data: 'kelompok', name: 'kelompok'},
-                { data: 'action', name: 'action'},
-            ],
-            "oLanguage": {
-                "sSearch": "Cari:"
-            }
-        });
-        $('.add-produk').dataTable({
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-        });
-        $(document).on("click", "#semua-produk-tab", function () {
-            $('.produk-show').addClass('hidden-product');
-        });
-        $(document).on("click", "#produk-tab", function () {
-            $('.produk-show').addClass('hidden-product');
-        });
-        $('.table-seri').dataTable({
-            "oLanguage": {
-                "sSearch": "Cari:"
-            }
-        });
+        detailtanggal();
     });
 
-    function detailProdukModal() {
-        $('.produk-show').removeClass('hidden-product');
-    }
+    var userid = $('#authid').val();
+    console.log(userid);
+    var soTable = $('#gudang-salesorder').DataTable({
+        destroy: true,
+        processing: true,
+        responsive: true,
+        autoWidth: false,
+        lengthChange: false,
+        ordering: false,
+        "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        },
+        ajax: {
+            url: "/api/gbj/data-so",
+            type: "post",
+        },
+        columns:[
+            {data: 'DT_RowIndex'},
+            {data: 'noso'},
+            {data: 'nopo'},
+            {data: 'customer'},
+            {data: 'tgl_kontrak'},
+            {data: function(data) {
+                if (userid != 2) {
+                    // console.log(data)
+                    // return
+                    return `<td><a href="export_spb/`+data.pesanan.id+`">
+                        <button class="btn btn-outline-primary"><i class="fas fa-print"></i> Cetak</button>
+                        </a></td>`
+                } else {
+                    return '';
+                }
 
-    $(document).on('click', '.detailmodal', function() {
-        var id = $(this).data('id');
-        console.log(id);
+            }}
+        ],
+    });
+    // Sales Order Cetak
+    $('#gudang-salesorder-search').on('keyup', function() {
+        soTable.search(this.value).draw();
+    });
+    $('#daterange1').daterangepicker({
+        autoUpdateInput: false
+    });
 
-        $.ajax({
-            url: "/api/transaksi/history-detail/" + id,
-            type: "get",
-            dataType: "json",
-            success: function(res) {
-                console.log(res);
-                $('p#kode_produk').text(res.header[0].kode);
-                $('p#nama_produk').text(res.header[0].nama);
-                $('p#deskripsi').text(res.header[0].deskripsi);
-                $('p#panjang').text(res.header[0].panjang);
-                $('p#lebar').text(res.header[0].lebar);
-                $('p#tinggi').text(res.header[0].tinggi);
-            }
+        $('#daterange1').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date3 = picker.startDate.format('DD-MM-YYYY');
+            end_date3 = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction3);
+            soTable.draw();
         });
 
-        $('#datatable').dataTable({
-            // processing: true,
-            // serverSide: true,
-            // responsive: true,
-            // ajax: {
-            //     url: "/api/transaksi/history-detail/" + id,
-            //     // data: {id: id},
-            //     // type: "post",
-            //     // dataType: "json",
-            // },
-            // columns: [
-            //     // { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            //     { data: 'so', name: 'so'},
-            //     { data: 'date_in', name: 'date_in'},
-            //     { data: 'date_out', name: 'date_out'},
-            //     { data: 'divisi', name: 'divisi'},
-            //     { data: 'tujuan', name: 'tujuan'},
-            //     { data: 'jumlah', name: 'jumlah'},
-            //     { data: 'action', name: 'action'},
-            // ],
-            "oLanguage": {
-                "sSearch": "Cari:"
-            }
+        $('#daterange1').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date3 = '';
+            end_date3 = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction3, 1));
+            soTable.draw();
         });
-        $('.produk-show').removeClass('hidden-product');
-    })
 
 </script>
 @stop

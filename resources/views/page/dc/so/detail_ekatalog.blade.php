@@ -138,7 +138,7 @@
                                 </div>
                                 <div class="filter">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div><b><span class="badge yellow-text">Sebagian Diproses</span></b></div>
+                                    <div><b>{!!$status!!}</b></div>
                                 </div>
                             </div>
                         </div>
@@ -238,9 +238,9 @@
                                             </label>
                                         </div>
                                     </th>
-                                    <th>No COO</th>
                                     <th>No Seri</th>
-                                    <th>Diketahui Oleh</th>
+                                    <th>Tgl Kirim</th>
+                                    <th>Ket</th>
                                     <th>Laporan</th>
                                 </tr>
                             </thead>
@@ -316,10 +316,13 @@
 <script>
     $(function() {
         $('#showtable').DataTable({
+            destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/dc/so/detail/1',
+                'type': 'POST',
+                'datatype': 'JSON',
+                'url': '/api/dc/so/detail/{{$data->id}}',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -352,19 +355,17 @@
                 }
             ]
         });
-
-
         $('#noseritable').DataTable({
             destroy: true,
             processing: true,
             serverSide: true,
             ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
                 'url': '/api/dc/so/detail/seri/' + 0,
-
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
-
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -375,13 +376,13 @@
                 orderable: false,
                 searchable: false
             }, {
-                data: 'nocoo',
-
-            }, {
                 data: 'noseri',
 
             }, {
-                data: 'diket',
+                data: 'tgl',
+
+            }, {
+                data: 'ket',
 
             }, {
                 data: 'laporan',
@@ -390,11 +391,13 @@
         });
 
         function listnoseri(seri_id, data) {
-
             $('#listnoseri').DataTable({
+                destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
                     'url': '/api/dc/so/detail/seri/select/' + seri_id + '/' + data,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -428,6 +431,7 @@
         });
 
         $('#noseritable ').on('click', '.nosericheck', function() {
+            $('#check_all').prop('checked', false);
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 checkedAry = [];
@@ -441,14 +445,21 @@
 
         $('#showtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
+            var datacount = $(this).attr('data-count');
+            console.log(datacount);
+            if (datacount == 0) {
+                // $('.sericheckbox').addClass("hide");
+                $('#noseritable').DataTable().column(0).visible(false);
+            } else {
+                // $('.sericheckbox').removeClass("hide");
+                $('#noseritable').DataTable().column(0).visible(true);
+            }
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseri').removeClass('hide');
             $('#noseritable').DataTable().ajax.url('/api/dc/so/detail/seri/' + data).load();
             //  console.log(data);
         });
-
-
         $(document).on('submit', '#form-create-coo', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>JSDoc: Module: Table</title>
+
+    <script src="scripts/prettify/prettify.js"> </script>
+    <script src="scripts/prettify/lang-css.js"> </script>
+    <!--[if lt IE 9]>
+      <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <link type="text/css" rel="stylesheet" href="styles/prettify-tomorrow.css">
+    <link type="text/css" rel="stylesheet" href="styles/jsdoc-default.css">
+</head>
+
+<body>
+
+<div id="main">
+
+    <h1 class="page-title">Module: Table</h1>
+
+    
+
+
+
+
+<section>
+
+<header>
+    
+        
+            
+        
+    
+</header>
+
+<article>
+    <div class="container-overview">
+    
+        
+            <div class="description"></p></div></div> 
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-props">Props</h3>
+<table data-jsdoc-vuejs="table-props">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Required?</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>events</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td><b>Yes</b></td>
+        <td>array of schedule data</td>
+    </tr><tr>
+        <td><code>status</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td><b>Yes</b></td>
+        <td>status string</td>
+    </tr></tbody>
+</table>
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-data">Data</h3>
+<table data-jsdoc-vuejs="table-data">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Default value</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>last_date</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>variable to store last date of the month</td>
+    </tr><tr>
+        <td><code>month</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>variable to store month number</td>
+    </tr><tr>
+        <td><code>year</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>variable to store year number</td>
+    </tr><tr>
+        <td><code>weekend_date</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>Array of date of weekend</td>
+    </tr><tr>
+        <td><code>addProdukModal</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>flag to show or hide modal to add product to schedule</td>
+    </tr><tr>
+        <td><code>deleteProdukModal</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>flag to show or hide modal to delete product from schedule</td>
+    </tr><tr>
+        <td><code>editProdukModal</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>flag to show or hide modal to edit product schedule</td>
+    </tr><tr>
+        <td><code>komentarModal</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>flag to show or hide komentar modal</td>
+    </tr><tr>
+        <td><code>hiddenAction</code></td>
+        <td>Boolean</td>
+        <td><code>false</code></td>
+        <td>flag to show or hide acttion button from table</td>
+    </tr><tr>
+        <td><code>data_komentar</code></td>
+        <td>Array</td>
+        <td><code>[]</code></td>
+        <td>Array to store list of komentar getted from API (url = '/api/ppic/data/komentar')</td>
+    </tr><tr>
+        <td><code>updated_events</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>Object to store data of product that want to update in schedule</td>
+    </tr><tr>
+        <td><code>deleted_events</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>Array of schedule item from product that want to deleted</td>
+    </tr><tr>
+        <td><code>start_date</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>string of start date</td>
+    </tr><tr>
+        <td><code>end_date</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>string of end date</td>
+    </tr><tr>
+        <td><code>product</code></td>
+        <td>Object</td>
+        <td>-</td>
+        <td>object data of selected product when adding product to schedule</td>
+    </tr><tr>
+        <td><code>jumlah</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>number of product that want to add to schedule</td>
+    </tr><tr>
+        <td><code>action</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>string as flag to decide what action to implement at submit button</td>
+    </tr><tr>
+        <td><code>data_produk</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>array of list products get from API (url = '/api/ppic/data/gbj')</td>
+    </tr><tr>
+        <td><code>gk_stok</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>number of selected product in gk</td>
+    </tr><tr>
+        <td><code>gbj_stok</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>number of selected product in gbj</td>
+    </tr><tr>
+        <td><code>rencana_jadwal</code></td>
+        <td>Array</td>
+        <td>-</td>
+        <td>schedule planning from previous planning</td>
+    </tr><tr>
+        <td><code>table_header_length</code></td>
+        <td>Number</td>
+        <td>-</td>
+        <td>count number of row used for header of table</td>
+    </tr><tr>
+        <td><code>table_header_title</code></td>
+        <td>String</td>
+        <td>-</td>
+        <td>title of table header</td>
+    </tr></tbody>
+</table>
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-computed">Computed</h3>
+<table data-jsdoc-vuejs="table-computed">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>options</code></td>
+        <td>Array</td>
+        <td>computed options for vue-select</td>
+    </tr><tr>
+        <td><code>format_events</code></td>
+        <td>Array</td>
+        <td>change structure of schedule to fit table</td>
+    </tr><tr>
+        <td><code>format_jadwal_rencana</code></td>
+        <td>Array</td>
+        <td>change structure of schedule planning to fit table</td>
+    </tr></tbody>
+</table>
+<h3 class="subsection-title" style="margin-top: 1em" data-jsdoc-vuejs="section-event">Events</h3>
+<table data-jsdoc-vuejs="table-event">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Payload Type</th>
+        <th>Description</th>
+    </tr>
+    </thead>
+    <tbody><tr>
+        <td><code>isDate</code></td>
+        <td>Boolean</td>
+        <td>check wheater date in date range given</td>
+    </tr><tr>
+        <td><code>changeProduk</code></td>
+        <td>Number</td>
+        <td>show gbj and gk stok of produk</td>
+    </tr><tr>
+        <td><code>handleSubmit</code></td>
+        <td>Object</td>
+        <td>handle submit button for modal</td>
+    </tr><tr>
+        <td><code>showAddProdukModal</code></td>
+        <td>Boolean</td>
+        <td>show modal to add schedule</td>
+    </tr><tr>
+        <td><code>updateEvent</code></td>
+        <td>Boolean</td>
+        <td>show modal to change schedule</td>
+    </tr><tr>
+        <td><code>deleteEvent</code></td>
+        <td>Boolean</td>
+        <td>show modal to delete schedule</td>
+    </tr><tr>
+        <td><code>deleteSingleEvent</code></td>
+        <td>Object</td>
+        <td>function to delete single event</td>
+    </tr><tr>
+        <td><code>sendEvent</code></td>
+        <td>Object</td>
+        <td>sending schedule to get acceptable from manager</td>
+    </tr><tr>
+        <td><code>convertToExcel</code></td>
+        <td>File</td>
+        <td>function to export table to excel file</td>
+    </tr><tr>
+        <td><code>resetData</code></td>
+        <td>Object</td>
+        <td>function to reset data after submiting form</td>
+    </tr><tr>
+        <td><code>dateFormatter</code></td>
+        <td>String</td>
+        <td>change date format to string</td>
+    </tr><tr>
+        <td><code>getMonthYear</code></td>
+        <td>String</td>
+        <td>get current month and year in string form</td>
+    </tr></tbody>
+</table>
+<div class="container-overview"><div><p></div>
+        
+
+        
+            
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
+
+
+
+
+</div>
+
+<nav>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="module-Calendar.html">Calendar</a></li><li><a href="module-Chart.html">Chart</a></li><li><a href="module-GudangBarangJadi.html">GudangBarangJadi</a></li><li><a href="module-GudangKarantina.html">GudangKarantina</a></li><li><a href="module-Home.html">Home</a></li><li><a href="module-Jadwal.html">Jadwal</a></li><li><a href="module-LaporanPesanan.html">LaporanPesanan</a></li><li><a href="module-Perakitan.html">Perakitan</a></li><li><a href="module-ProsesPesanan.html">ProsesPesanan</a></li><li><a href="module-SalesOrder.html">SalesOrder</a></li><li><a href="module-Table.html">Table</a></li></ul><h3>Namespaces</h3><ul><li><a href="Config.html">Config</a></li><li><a href="Mixins.html">Mixins</a></li><li><a href="Plugin.html">Plugin</a></li><li><a href="Router.html">Router</a></li><li><a href="Store.html">Store</a></li></ul><h3>Global</h3><ul><li><a href="global.html#api_token">api_token</a></li><li><a href="global.html#csrf_token">csrf_token</a></li><li><a href="global.html#Index">Index</a></li></ul>
+</nav>
+
+<br class="clear">
+
+<footer>
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 3.6.7</a> on Fri Jan 14 2022 08:36:34 GMT+0700 (Western Indonesia Time)
+</footer>
+
+<script> prettyPrint(); </script>
+<script src="scripts/linenumber.js"> </script>
+</body>
+</html>

@@ -11,20 +11,16 @@
         margin: 5px;
         border: 1px solid rgba(0, 0, 0, .2);
     }
-
     .green {
         background: #28A745;
     }
-
     .blue {
         background: #17A2B8;
     }
-
     .gambar-resize {
         width: 250px;
         height: 250px;
     }
-
     .card-center {
         left: 20%;
     }
@@ -55,7 +51,20 @@
     .filter{
         margin: 5px;
     }
+    .dataTables_filter{
+        display: none;
+    }
 </style>
+
+<div class="content-header">
+    <div class="container-fluid">
+      <div class="row mb-2">
+        <div class="col-sm-12">
+          <h1 class="m-0">Riwayat Transaksi</h1>
+        </div><!-- /.col -->
+      </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+  </div>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -88,28 +97,22 @@
                                             <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Dari / Ke</label>
-                                                    <select name="" id="" class="form-control">
+                                                    <select name="" id="divisi" class="form-control">
                                                         <option value="">All</option>
-                                                        <option value="">Divisi IT</option>
-                                                        <option value="">Divisi QC</option>
-                                                        <option value="">Divisi SO</option>
                                                     </select>
                                                 </div>
                                             </div>
                                             <div class="col-md-4 my-2 my-md-0">
                                                 <div class="d-flex align-items-center">
                                                     <label class="mr-3 mb-0 d-none d-md-block" for="">Jenis Produk</label>
-                                                    <select name="" id="" class="form-control">
+                                                    <select name="" id="jenis" class="form-control">
                                                         <option value="">All</option>
-                                                        <option value="">Sparepart</option>
-                                                        <option value="">Unit</option>
+                                                        <option value="Sparepart">Sparepart</option>
+                                                        <option value="Unit">Unit</option>
                                                     </select>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-3 col-xl-4 mt-5 mt-lg-0">
-                                        <a href="#" class="btn btn-outline-primary">Search</a>
                                     </div>
                                 </div>
                             </div>
@@ -129,6 +132,13 @@
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
+                                <div class="row">
+                                    <div class="col-md-12">
+                                        <div class="d-flex justify-content-end">
+                                            <a href="{{ route('gk.export') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Export</a>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="table-responsive">
                                     {{-- Tanggal Masuk dan Tanggal Keluar --}}
                                     <table class="table table-bordered pertanggal" width="100%">
@@ -140,31 +150,11 @@
                                                 <th>Produk</th>
                                                 <th>Unit</th>
                                                 <th>Jumlah</th>
-                                                <th>Tujuan</th>
+                                                <th>Keterangan</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
-                                                <td><span class="badge badge-success">10-04-2022</span></span></td>
-                                                <td><span class="badge badge-success">Divisi IT</span></span></td>
-                                                <td>Sparepart</td>
-                                                <td>Produk 1</td>
-                                                <td>Unit 1</td>
-                                                <td>100 Unit</td>
-                                                <td>Uji Coba</td>
-                                                <td><button class="btn btn-outline-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button></td>
-                                            </tr>
-                                            <tr>
-                                                <td><span class="badge badge-info">23-09-2022</span></span></td>
-                                                <td><span class="badge badge-info">Divisi QC</span></span></td>
-                                                <td>Sparepart</td>
-                                                <td>Produk 1</td>
-                                                <td>Unit 1</td>
-                                                <td>100 Unit</td>
-                                                <td>Uji Coba</td>
-                                                <td><button class="btn btn-outline-info" onclick="detailtanggal()"><i class="far fa-eye"></i> Detail</button></td>
-                                            </tr>
                                         </tbody>
                                     </table>
                                 </div>
@@ -184,15 +174,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
-                                                <label class="form-check-label" for="jenis1">
-                                                    All
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
+                                                <input class="form-check-input" type="checkbox" value="Sparepart" id="sparepart" />
                                                 <label class="form-check-label" for="jenis1">
                                                     Sparepart
                                                 </label>
@@ -200,7 +182,7 @@
                                         </div>
                                         <div class="form-group">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" value="spa" id="jenis2" />
+                                                <input class="form-check-input" type="checkbox" value="Unit" id="unit" />
                                                 <label class="form-check-label" for="jenis2">
                                                     Unit
                                                 </label>
@@ -211,7 +193,7 @@
                             </span>
                         </div>
                         <div class="table-produk">
-                            <table class="table table-bordered" id="gudang-barang">
+                            <table class="table table-bordered" id="gudang_barang">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -221,26 +203,7 @@
                                         <th>Action</th>
                                     </tr>
                                 </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ZTP80AS-UPGRADE</td>
-                                        <td>STERILISATOR KERING</td>
-                                        <td>Sparepart</td>
-                                        <td><a class="btn btn-info" href="{{ url('gk/transaksi/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>1</td>
-                                        <td>ZTP80AS-UPGRADE</td>
-                                        <td>STERILISATOR KERING</td>
-                                        <td>Unit</td>
-                                        <td><a class="btn btn-info" href="{{ url('gk/transaksi/1') }}"><i
-                                                    class="far fa-eye"></i> Detail</a>
-                                        </td>
-                                    </tr>
-                                </tbody>
+                                <tbody></tbody>
                             </table>
                         </div>
                     </div>
@@ -257,7 +220,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Produk Ambulatory</h5>
+                <h5 class="modal-title">Produk <span id="produkk">Ambulatory</span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -268,25 +231,13 @@
                         <tr>
                             <th>No Seri</th>
                             <th>Kerusakan</th>
+                            <th>Perbaikan</th>
                             <th>Tingkat Kerusakan</th>
-                            <th>Layout</th>
+                            <th>Posisi Barang</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td scope="row">65465465465</td>
-                            <td>Kerusakan Komponen</td>
-                            <td>Level 1</td>
-                            <td>Layout 1</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">65465465465</td>
-                            <td>Kerusakan Komponen</td>
-                            <td>Level 1</td>
-                            <td>Layout 1</td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <tbody></tbody>
+                </table> 
             </div>
         </div>
     </div>
@@ -297,36 +248,118 @@
 
 @section('adminlte_js')
 <script>
-    $('#datetimepicker1').daterangepicker({});
-
-
-    function detailtanggal() {
+     function detailtanggal() {
         $('#modal-per-tanggal').modal('show');
+    }
+    var start_date;
+    var end_date;
+    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
+
+        var evalDate = parseDateValue(aData[0]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
     }
 
     $(document).ready(function () {
-        $('.pertanggal').dataTable({
+        var $dTable = $('.pertanggal').DataTable({
             "lengthChange": false,
-            "searching": false,
+            ajax: {
+            url: "/api/gk/transaksi/all",
+            type: "post",
+            },
+            columns: [
+                {data: 'tanggal'},
+                {data: 'divisi'},
+                {data: 'jenis'},
+                {data: 'produk'},
+                {data: 'unitt'},
+                {data: 'jumlah'},
+                {data: 'tujuan'},
+                {data: 'aksi'},
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
+            columnDefs: [
+                {
+                    targets: [4],
+                    visible: false,
+                },
+            ],
+        });
+
+        $('#datetimepicker1').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('#datetimepicker1').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date = picker.startDate.format('DD-MM-YYYY');
+            end_date = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            $dTable.draw();
+        });
+
+        $('#datetimepicker1').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            $dTable.draw();
+        });
+
+        $("#sparepart, #unit").on("click", function () {
+            if ($("#sparepart").is(":checked") && $("#unit").is(":checked")) {
+                gudang_barang.columns(3).search("").draw();
+            } else if ($("#sparepart").is(":checked") && !$("#unit").is(":checked")) {
+                gudang_barang.columns(3).search("Sparepart").draw();
+            } else if (!$("#sparepart").is(":checked") && $("#unit").is(":checked")) {
+                gudang_barang.columns(3).search("Unit").draw();
+            } else {
+                gudang_barang.columns(3).search("").draw();
+            }
+        });
+        var gudang_barang = $('#gudang_barang').DataTable({
+            destroy: true,
+            "lengthChange": false,
             "ordering": true,
             "info": true,
             "autoWidth": false,
             "responsive": true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                url: "/api/gk/transaksi/by-product",
+                type: "post",
+
+            },
+            columns: [
+                {data: 'DT_RowIndex'},
+                {data: 'kode'},
+                {data: 'produk'},
+                {data: 'jenis'},
+                {data: 'aksi'},
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-        $('#gudang-barang').dataTable({
-            "lengthChange": false,
-            "searching": false,
-            "ordering": true,
-            "info": true,
-            "autoWidth": false,
-            "responsive": true,
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-        });
+
         $('.add-produk').dataTable({
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
@@ -338,16 +371,64 @@
         $(document).on("click", "#produk-tab", function () {
             $('.produk-show').addClass('hidden-product');
         });
-        $('.table-seri').dataTable({
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
+        $("#divisi").select2();
+
+
+        $("#divisi").on("change", function () {
+            $dTable.columns(1).search($(this).val()).draw();
         });
+        $("#jenis").on("change", function () {
+            $dTable.columns(2).search($(this).val()).draw();
+        });
+
+        $(document).on('click', '.detailModal', function() {
+            var id = $(this).data('id');
+            var prd = $(this).data('produk');
+            $('span#produkk').text(prd);
+
+            $('.table-seri').dataTable({
+                autoWidth: false,
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    url: "/api/gk/transaksi/noseri/" + id,
+                },
+                columns: [
+                    {data: 'noser'},
+                    {data: 'rusak'},
+                    {data: 'repair'},
+                    {data: 'tingkat'},
+                    {data: 'layout'},
+                    
+                ],
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                }
+            });
+            detailtanggal();
+        })
     });
+
 
     function detailProdukModal() {
         $('.produk-show').removeClass('hidden-product');
     }
-
+    $.ajax({
+        url: '/api/gbj/sel-divisi',
+        type: 'GET',
+        dataType: 'json',
+        success: function(res) {
+            if(res) {
+                $("#divisi").empty();
+                $("#divisi").append('<option value="">All</option>');
+                $.each(res, function(key, value) {
+                    $("#divisi").append('<option value="'+value.nama+'">'+value.nama+'</option');
+                });
+            } else {
+                $("#divisi").empty();
+            }
+        }
+    });
 </script>
 @stop

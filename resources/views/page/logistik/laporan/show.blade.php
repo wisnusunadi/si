@@ -3,8 +3,26 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Laporan</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Laporan</h1>
+        </div>
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "15")
+                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                @elseif(Auth::user()->divisi_id == "2")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+                @endif
+                <li class="breadcrumb-item active">Laporan</li>
+
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
 @stop
+
 
 @section('adminlte_css')
 <style>
@@ -148,6 +166,18 @@
 @endsection
 
 @section('adminlte_js')
+<script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
+<link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}">
+
+<script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
+<script src="{{ asset('assets/button/jszip.min.js') }}"></script>
+<script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
+<script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
+<script src="{{ asset('assets/button/buttons.html5.min.js') }}"></script>
+<script src="{{ asset('assets/button/buttons.print.min.js') }} "></script>
+<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}">
+
+
 <script>
     $(function() {
         var today = new Date();
@@ -174,29 +204,28 @@
                 },
                 ajax: {
                     'url': '/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir,
+                    'dataType': 'json',
+                    'type': 'POST',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
                 },
                 buttons: [{
-                        extend: 'excel',
-                        title: 'Laporan Pengiriman',
-                        text: '<i class="far fa-file-excel"></i> Export',
-                        className: "btn btn-info"
-                    },
-                    {
-                        extend: 'print',
-                        title: 'Laporan Pengiriman',
-                        text: '<i class="fas fa-print"></i> Cetak',
-                        className: "btn btn-primary"
-                    },
-                ],
+                    extend: 'excel',
+                    title: 'Laporan Pengiriman',
+                    text: '<i class="far fa-file-excel"></i> Export',
+                    className: "btn btn-info"
+                }],
                 columns: [{
                         data: 'DT_RowIndex',
                         className: 'nowrap-text align-center'
                     },
                     {
                         data: 'so',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'no_po',
                         className: 'nowrap-text align-center'
                     },
                     {
@@ -263,7 +292,7 @@
                     dataType: 'json',
                     delay: 250,
                     type: 'GET',
-                    url: '/api/logistik/ekspedisi/select',
+                    url: '/api/logistik/ekspedisi/select/0',
                     data: function(params) {
                         return {
                             term: params.term

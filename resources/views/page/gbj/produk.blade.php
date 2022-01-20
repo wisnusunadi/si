@@ -3,7 +3,16 @@
 @section('title', 'ERP')
 
 @section('content')
-<input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
+<div class="content-header">
+    <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Produk Gudang Barang Jadi</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
+</div>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -12,51 +21,45 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-8">
-                                <h3 class="card-title">Produk Gudang Barang Jadi</h3>
                             </div>
-                            <div class="col-4 d-flex justify-content-end">
+                            <div class="col-4">
                                 <div class="row">
                                     <div class="col-lg-12">
-                                        @if (Auth::user()->divisi_id == 13)
+                                        @if (Auth::user()->divisi->id != 2)
                                         <span class="float-right">
-                                            <button type="button" class="btn btn-info" data-toggle="modal"
-                                                data-target="#modal-create" id="create">
+                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-create" id="create">
                                                 <i class="fas fa-plus"></i>&nbsp;Tambah
                                             </button>
                                         </span>
                                         @endif
-                                        <span class="float-right filter">
-                                            <button class="btn btn-outline-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="fas fa-filter"></i> Filter Kelompok
+                                        <span class="float-right mr-1">
+                                            <button class="btn btn-outline-info dropdown-toggle" type="button" id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
+                                                Filter
                                             </button>
-                                            <div class="dropdown-menu">
-                                                <div class="px-3 py-3">
-                                                    <div class="form-group">
-                                                        <label for="jenis_penjualan">Kelompok</label>
+                                            <div class="dropdown-menu p-3 text-nowrap" aria-labelledby="semuaprodukfilter">
+                                                <div class="dropdown-header">Kelompok Produk</div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="alkes" value="Alat Kesehatan" />
+                                                        <label class="form-check-label" for="sp_kelompok">
+                                                            Alat Kesehatan
+                                                        </label>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
-                                                            <label class="form-check-label" for="jenis1">
-                                                                All
-                                                            </label>
-                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="sarkes" value="Sarana Kesehatan" />
+                                                        <label class="form-check-label" for="sp_kelompok">
+                                                            Sarana Kesehatan
+                                                        </label>
                                                     </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="ekatalog" id="jenis1" />
-                                                            <label class="form-check-label" for="jenis1">
-                                                                Alat Kesehatan
-                                                            </label>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="spa" id="jenis2" />
-                                                            <label class="form-check-label" for="jenis2">
-                                                                Sarana Kesehatan
-                                                            </label>
-                                                        </div>
+                                                </div>
+                                                <div class="form-group">
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="water" value="Water Treatment" />
+                                                        <label class="form-check-label" for="sp_kelompok">
+                                                            Water Treatment
+                                                        </label>
                                                     </div>
                                                 </div>
                                             </div>
@@ -75,63 +78,11 @@
                                     <th>Kode Produk</th>
                                     <th>Nama Produk</th>
                                     <th>Stok Gudang</th>
-                                    <th>Stok</th>
+                                    <th>Stok Penjualan</th>
                                     <th>Kelompok</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
-                            {{-- <tbody>
-                                <tr>
-                                    <td>1</td>
-                                    <td>ZTP80AS-UPGRADE</td>
-                                    <td>STERILISATOR KERING</td>
-                                    <td>100 Unit</td>
-                                    <td>80 Unit</td>
-                                    <td>Alat Kesehatan</td>
-                                    <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item editProduk">
-                                                    <i class="far fa-edit"></i>&nbsp;Edit
-                                                </button>
-                                                <button type="button" class="dropdown-item viewProduk">
-                                                    <i class="far fa-eye"></i>&nbsp;Detail
-                                                </button>
-                                                <button type="button" class="dropdown-item stokProduct">
-                                                    <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>1</td>
-                                    <td>ZTP80AS-UPGRADE</td>
-                                    <td>STERILISATOR KERING</td>
-                                    <td>100 Unit</td>
-                                    <td>80 Unit</td>
-                                    <td>Alat Kesehatan</td>
-                                    <td>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton"
-                                            aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v"></i>
-                                            <div class="dropdown-menu">
-                                                <button type="button" class="dropdown-item editProduk">
-                                                    <i class="far fa-edit"></i>&nbsp;Edit
-                                                </button>
-                                                <button type="button" class="dropdown-item viewProduk">
-                                                    <i class="far fa-eye"></i>&nbsp;Detail
-                                                </button>
-                                                <button type="button" class="dropdown-item stokProduct">
-                                                    <i class="fas fa-cubes"></i>&nbsp;Daftar Stok
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody> --}}
                         </table>
                     </div>
                 </div>
@@ -154,75 +105,76 @@
                 </button>
             </div>
             <div class="modal-body">
-            <form action="" id="produkForm" name="produkForm" enctype="multipart/form-data">
-                <input type="hidden" name="id" id="id">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="">Produk</label>
-                            <select name="produk_id" id="produk_id" class="form-control produk-add">
-                                <option value="">Buku</option>
-                                <option value="">Bolpoin</option>
+                <form action="" id="produkForm" name="produkForm" enctype="multipart/form-data">
+                    <input type="hidden" name="id" id="id">
+                    <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label for="">Produk</label>
+                                <input type="hidden" name="produk_id" id="produk_idd">
+                                <select name="produk_id" id="produk_id" class="form-control produk-add">
+                                    <option value="">Buku</option>
+                                    <option value="">Bolpoin</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="">Nama Variasi</label>
+                            <input type="text" name="nama" id="nama" class="form-control @error('title') is-invalid @enderror" placeholder="Nama Variasi Produk">
+                            @error('title')
+                            <span class="invalid-feedback">Silahkan isi Nama Produk</span>
+                            @enderror
+                        </div>
+                        <div class="col">
+                            <label for="">Satuan</label>
+                            <select name="satuan_id" id="satuan_id" class="form-control">
+                                <option value="">mm</option>
+                                <option value="">unit</option>
                             </select>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="">Nama Produk</label>
-                        <input type="text" name="nama" id="nama" class="form-control @error('title') is-invalid @enderror"
-                            placeholder="Nama Produk">
-                        @error('title')
-                        <span class="invalid-feedback">Silahkan isi Nama Produk</span>
-                        @enderror
+                    <div class="form-group">
+                        <label for="">Deskripsi</label>
+                        <textarea class="form-control" id="deskripsi" name="deskripsi" cols="5" rows="5"></textarea>
                     </div>
-                    <div class="col">
-                        <label for="">Satuan</label>
-                       <select name="satuan_id" id="satuan_id" class="form-control">
-                           <option value="">mm</option>
-                           <option value="">unit</option>
-                       </select>
+                    <div class="form-group">
+                        <label for="">Dimensi</label>
+                        <div class="d-flex justify-content-between">
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="dim_p" id="dim_p" placeholder="Panjang">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">mm</div>
+                                </div>
+                            </div>&nbsp;
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="dim_l" id="dim_l" placeholder="Lebar">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">mm</div>
+                                </div>
+                            </div>&nbsp;
+                            <div class="input-group mb-2">
+                                <input type="text" class="form-control" name="dim_t" id="dim_t" placeholder="Tinggi">
+                                <div class="input-group-prepend">
+                                    <div class="input-group-text">mm</div>
+                                </div>
+                            </div>&nbsp;
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <label for="">Deskripsi</label>
-                    <textarea class="form-control" id="deskripsi" name="deskripsi" cols="5" rows="5"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="">Dimensi</label>
-                    <div class="d-flex justify-content-between">
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" name="dim_p" id="dim_p" placeholder="Panjang">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
-                            </div>
-                        </div>&nbsp;
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" name="dim_l" id="dim_l" placeholder="Lebar">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
-                            </div>
-                        </div>&nbsp;
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" name="dim_t" id="dim_t" placeholder="Tinggi">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
-                            </div>
-                        </div>&nbsp;
+                    <div class="form-group">
+                        <div class="custom-file">
+                            <input type="file" name="gambar" class="custom-file-input gambar" id="inputGroupFile02" />
+                            <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    <div class="custom-file">
-                        <input type="file" name="gambar" class="custom-file-input gambar" id="inputGroupFile02" />
-                        <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
-                    </div>
-                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
                 <button type="submit" class="btn btn-primary" id="Submitmodalcreate">Kirim</button>
             </div>
-        </form>
+            </form>
         </div>
     </div>
 </div>
@@ -259,10 +211,10 @@
                     </div>
                     <div class="col">
                         <label for="">Satuan</label>
-                       <select name="" id="" class="form-control satuan-edit">
-                           <option value="">mm</option>
-                           <option value="">unit</option>
-                       </select>
+                        <select name="" id="" class="form-control satuan-edit">
+                            <option value="">mm</option>
+                            <option value="">unit</option>
+                        </select>
                     </div>
                 </div>
                 <div class="form-group">
@@ -356,102 +308,84 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Daftar Stok Produk</h5>
+                <h5 class="modal-title">Daftar Stok <span id="nm_produk"><b></b></span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
+                <div class="card">
+                    <div class="card-body">
+                        <input type="text" name="" class="seri_id" hidden>
+                        <input type="text" class="created_by" name="" id="" value="{{ Auth::user()->id }}" hidden>
+                    <div class="row">
+                        <div class="col">
+                            <label for="">Tambah Data No Seri</label>
+                            <input type="text" class="form-control number" id="jumlah_noseri" placeholder="Jumlah No Seri">
+                        </div>
+                        <div class="col">
+                            <label for="">Dari</label>
+                            <select name="" id="" class="form-control dari"></select>
+                        </div>
+                    </div>
+                    <button class=" btn btn-primary tambah_noseri mt-2">Tambah</button>
+                    </div>
+                </div>
                 <form action="" id="noseriForm" name="noseriForm">
-                <table class="table scan-produk">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" id="head-cb"></th>
-                            <th>No. Seri</th>
-                            <th>Layout</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="1"></td>
-                            <td>5474598674958698645</td>
-                            <td>
-                                <select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select>
-                            </td>
-                            <td>
-                                    <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child" value="2"></td>
-                            <td>5474598674958698645</td>
-                            <td>
-                                <select name="" id="" class="form-control">
-                                    <option value="1">Layout 1</option>
-                                    <option value="2">Layout 2</option>
-                                </select>
-                            </td>
-                            <td>
-                                <button class="btn btn-info viewStock"><i class="far fa-eye"></i> View</button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+                    <table class="table scan-produk">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="head-cb"></th>
+                                <th>No. Seri</th>
+                                <th>Layout</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+
+                    </table>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="ubahSeri">Simpan</button>
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah Layout</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
             </div>
-        </form>
+            </form>
         </div>
     </div>
 </div>
 
 <!-- Modal Detail-->
 <div class="modal fade modalViewStock" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
                     <div class="row">
                         <div class="col">
-                            <b>Produk</b><p>Ambulatory</p>
+                            <b>Produk</b><p id="namaa">Ambulatory</p>
                         </div>
-                        <div class="col">
+                        {{-- <div class="col">
                             <b>Nomor SO</b><p>8457938475938475</p>
-                        </div>
+                        </div> --}}
                     </div>
                 </h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
 
-                <table class="table view-produk">
+                <table class="table view_produk">
                     <thead>
                         <tr>
                             <th>Tanggal Masuk</th>
                             <th>Dari</th>
-                            <th>Tujuan</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {{-- <tr>
-                            <td scope="row">10-04-2022</td>
-                            <td>Divisi IT</td>
-                            <td>Uji Coba</td>
-                        </tr>
-                        <tr>
-                            <td scope="row">10-04-2022</td>
-                            <td>Divisi IT</td>
-                            <td>Uji Coba</td>
-                        </tr> --}}
                     </tbody>
                 </table>
             </div>
@@ -465,17 +399,15 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Ubah Layout</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
                     <label for="">Layout</label>
                     <select name="" id="change_layout" class="form-control">
-                      {{-- <option value="1">Layout 1</option>
-                      <option value="2">Layout 2</option> --}}
-                  </select>
+                    </select>
                 </div>
             </div>
             <div class="modal-footer">
@@ -485,76 +417,113 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade tambah_seri" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Tambah Data No Seri</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <table class="table tambah_noseri_tableee">
+                    <thead>
+                        <tr>
+                            <th>No Seri</th>
+                            <th>Layout</th>
+                        </tr>
+                    </thead>
+                    <tbody class="tambah_noseri_table">
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary" id="save_data">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
 <style>
     img {
         width: 100%;
     }
-
 </style>
 @stop
 
 @section('adminlte_js')
 {{-- <script src="{{ asset('native/js/gbj/produk.js') }}"></script> --}}
 <script>
-    $('.scan-produk').DataTable({
-            "ordering":false,
-            "autoWidth": false,
-            searching: false,
-            "lengthChange": false,
-            "columnDefs": [
-                { "width": "5%", "targets": 0},
-            ]
-    });
-    $('#gudang-barang').DataTable({
-        "columnDefs": [
-        {
-            "targets": [6],
-            "visible": document.getElementById('auth').value == '2' ? false : true
-        }]
-    })
+    let layout = [];
+    $("#head-cb").prop('checked', false);
     $('#inputGroupFile02').on('change', function () {
         //get the file name
         var fileName = $(this).val();
         //replace the "Choose a file" label
         $(this).next('.custom-file-label').html(fileName);
     });
-    $('.editProduk').click(function (e) {
+    $('.editProduk').click(function(e) {
         $('.modal-edit').modal('show');
         $('.produk-edit ').select2();
         $('.satuan-edit').select2();
         $('.layout-edit').select2();
     });
-    $('.viewProduk').click(function (e) {
+    $('.viewProduk').click(function(e) {
         $('.modal-view').modal('show');
     });
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('.produk-add ').select2();
         $('.layout-add').select2();
 
-        $("#head-cb").on('click', function () {
+        $("#head-cb").on('click', function() {
             var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk').DataTable()
+                .column(0)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
         });
+
+         $.ajax({
+        url: '/api/gbj/sel-divisi',
+        type: 'GET',
+        dataType: 'json',
+        success: function (res) {
+            // ii++;
+            console.log(res);
+            $.each(res, function (key, value) {
+                $('.dari').append(
+                    '<option value="' + value.id + '">' + value.nama + '</option>'
+                );
+            });
+        }
+    });
     });
 
     function ubahData() {
-        let checkbox_terpilih = $('.scan-produk tbody .cb-child:checked');
+        let checkbox_terpilih = $('.scan-produk').DataTable().column(0).nodes()
+                .to$().find('input[type=checkbox]:checked');
         let layout = $('#change_layout').val();
-        $.each(checkbox_terpilih, function (index, elm) {
+        $.each(checkbox_terpilih, function(index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
         $('.edit-stok').modal('hide');
     }
 
-    $('.stokProduct').click(function (e) {
+    $('.stokProduct').click(function(e) {
         $('.daftar-stok').modal('show');
     });
 
-    $('.editStok').click(function (e) {
+    $('.editStok').click(function(e) {
         $('.edit-stok').modal('show');
     });
 
-    $('.viewStock').click(function (e) {
+    $('.viewStock').click(function(e) {
         $('.modalViewStock').modal('show');
     });
     $('#satuan_id').select2();
@@ -562,6 +531,7 @@
 
 {{-- data --}}
 <script type="text/javascript">
+var authid = $('#authid').val();
     // initial
     $.ajaxSetup({
         headers: {
@@ -569,22 +539,99 @@
         }
     });
 
+    $('#alkes').click(function() {
+        if ($(this).prop('checked') == true) {
+            datatable.column(5).search($(this).val()).draw();
+        } else {
+            datatable.column(5).search('').draw();
+        }
+    })
+
+    $('#sarkes').click(function() {
+        if ($(this).prop('checked') == true) {
+            datatable.column(5).search($(this).val()).draw();
+        } else {
+            datatable.column(5).search('').draw();
+        }
+    })
+
+    $('#water').click(function() {
+        if ($(this).prop('checked') == true) {
+            datatable.column(5).search($(this).val()).draw();
+        } else {
+            datatable.column(5).search('').draw();
+        }
+    })
+
     // load data
     var datatable = $('#gudang-barang').DataTable({
         processing: true,
-        serverSide: true,
         ajax: {
-            url: '/api/gbj/data',
+            'type': 'POST',
+            'datatype': 'JSON',
+            'url': '/api/gbj/data',
+            'headers': {
+                'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
         },
-        columns: [
-            { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-            { data: 'kode_produk', name: 'kode_produk'},
-            { data: 'nama_produk', name: 'nama_produk'},
-            { data: 'jumlah'},
-            { data: 'jumlah'},
-            { data: 'kelompok'},
-            { data: 'action'}
-        ]
+        columns: [{
+                data: 'DT_RowIndex',
+                name: 'DT_RowIndex'
+            },
+            {
+                data: 'kode_produk',
+                name: 'kode_produk'
+            },
+            {
+                data: 'nama_produk',
+                name: 'nama_produk'
+            },
+            {
+                data: 'jumlah'
+            },
+            {
+                data: 'jumlah1'
+            },
+            {
+                data: 'kelompok'
+            },
+            // {
+            //     data: 'action'
+            // }
+            {data: function(data) {
+                if (authid != 2) {
+                    // console.log(data)
+                    // return
+                    return `<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id=`+data.id+`>
+                            <button class="btn btn-outline-success btn-sm" type="button" >
+                            <i class="far fa-edit"></i>&nbsp;Edit
+                            </button>
+                        </a>
+
+                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id=`+data.id+`>
+                            <button class="btn btn-outline-info btn-sm" type="button" >
+                            <i class="far fa-eye"></i>&nbsp;Detail
+                            </button>
+                        </a>
+
+                        <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id=`+data.id+`>
+                            <button class="btn btn-outline-warning btn-sm" type="button" >
+                            <i class="far fa-eye"></i>&nbsp;Daftar Stok
+                            </button>
+                        </a>`
+                } else {
+                    return `<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id=`+data.id+`>
+                                <button class="btn btn-outline-info btn-sm" type="button" >
+                                <i class="far fa-eye"></i>&nbsp;Detail
+                                </button>
+                            </a>`;
+                }
+
+            }}
+        ],
+        language: {
+            search: "Cari:"
+        }
     });
 
     // load produk
@@ -593,12 +640,12 @@
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            if(res) {
+            if (res) {
                 console.log(res);
                 $("#produk_id").empty();
                 $("#produk_id").append('<option value="">Pilih Item</option>');
                 $.each(res, function(key, value) {
-                    $("#produk_id").append('<option value="'+value.id+'">'+value.product.nama+' '+value.nama+'</option');
+                    $("#produk_id").append('<option value="'+value.id+'">'+value.nama+'</option');
                 });
             } else {
                 $("#produk_id").empty();
@@ -612,12 +659,12 @@
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            if(res) {
+            if (res) {
                 console.log(res);
                 $("#satuan_id").empty();
                 $("#satuan_id").append('<option value="">Pilih Item</option>');
                 $.each(res, function(key, value) {
-                    $("#satuan_id").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    $("#satuan_id").append('<option value="' + value.id + '">' + value.nama + '</option');
                 });
             } else {
                 $("#satuan_id").empty();
@@ -629,23 +676,25 @@
     $('#create').click(function(e) {
         $('#Submitmodalcreate').val('create-product');
         $('#produkForm').trigger("reset");
-        $('#exampleModalLabel').html('Tambah Produk');
+        $('#exampleModalLabel').html('Tambah Variasi Produk');
         $('#modal-create').modal('show');
     });
 
     // load modal edit
     $(document).on('click', '.editmodal', function() {
-    var id = $(this).data('id');
+        var id = $(this).data('id');
         console.log(id);
         // ajax
         $.ajax({
-            type:"POST",
+            type: "POST",
             url: '/api/gbj/get',
-            data: { id: id },
+            data: {
+                id: id
+            },
             dataType: 'json',
-            success: function(res){
+            success: function(res) {
                 console.log(res);
-                $('#exampleModalLabel').html('Edit Produk ' + '<b>' + res.data[0].nama + '</b>');
+                $('#exampleModalLabel').html('Edit Produk ' + '<b>' + res.nama_produk[0].nama + '</b>' + ' variasi ' + '<b>' + res.data[0].nama + '</b>');
                 $('#Submitmodalcreate').val('edit-product');
                 $('#modal-create').modal('show');
                 $('#id').val(res.data[0].id);
@@ -658,10 +707,11 @@
                 $('#satuan_id').val(res.data[0].satuan_id);
                 $('#satuan_id').select2().trigger('change');
                 $('#produk_id').val(res.data[0].produk_id);
+                $('#produk_idd').val(res.data[0].produk_id);
                 $('#produk_id').select2().trigger('change');
-                $('#produk_id').select2({disabled: 'readonly'});
-                // var newOption = $('<option selected="selected"></option>').val(res.data[0].produk_id).text(res.nama_produk[0].product.tipe + ' ' + res.nama_produk[0].nama);
-                // $('#produk_id').append(newOption).trigger('change');
+                $('#produk_id').select2({
+                    disabled: 'readonly'
+                });
                 $('#inputGroupFile02').val(res.data[0].gambar);
             }
         });
@@ -669,18 +719,20 @@
 
     // detail
     $(document).on('click', '.detailmodal', function() {
-    var id = $(this).data('id');
+        var id = $(this).data('id');
         console.log(id);
         // ajax
         $.ajax({
-            type:"POST",
+            type: "POST",
             url: '/api/gbj/get',
-            data: { id: id },
+            data: {
+                id: id
+            },
             dataType: 'json',
-            success: function(res){
+            success: function(res) {
                 console.log(res);
 
-                $('#header_data').html('Detail Produk ' + '<b>' + res.data[0].nama + '</b>');
+                $('#header_data').html('Detail Produk ' + '<b>' + res.nama_produk[0].nama + '</b>' + ' variasi ' + '<b>' + res.data[0].nama + '</b>');
                 $('p#nama').text(res.data[0].nama);
                 $('p#deskripsi').text(res.data[0].deskripsi);
                 $('span#panjang').text(res.data[0].dim_p);
@@ -694,7 +746,7 @@
     });
 
     // proses submit
-    $('body').on('submit', '#produkForm', function (e) {
+    $('body').on('submit', '#produkForm', function(e) {
         e.preventDefault();
         var actionType = $('#Submitmodalcreate').val();
         $('#Submitmodalcreate').html('Sending..');
@@ -703,7 +755,7 @@
             type: 'POST',
             url: "/api/gbj/create",
             data: formData,
-            cache:false,
+            cache: false,
             contentType: false,
             processData: false,
             success: (data) => {
@@ -711,76 +763,87 @@
                 $('#modal-create').modal('hide');
                 $('#Submitmodalcreate').html('Kirim');
                 Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Your data has been saved',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
+                    position: 'center',
+                    icon: 'success',
+                    title: 'Your data has been saved',
+                    showConfirmButton: false,
+                    timer: 1500
+                });
                 $('.datatable').DataTable().ajax.reload();
                 location.reload();
             }
         });
     });
-    // var ii = 0;
+
    function select_layout() {
     $.ajax({
         url: '/api/gbj/sel-layout',
         type: 'GET',
         dataType: 'json',
         success: function(res) {
-            // ii++;
-            console.log(res);
             $.each(res, function(key, value) {
-                // $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
                 $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
             });
         }
     });
    }
-
+    var title = $(this).parent().prev().prev().prev().prev().html();
     // modal noseri
     $(document).on('click', '.stokmodal', function() {
         var id = $(this).data('id');
+        $('.seri_id').val(id);
         console.log(id);
-        var i = 0;
-        var b = '';
+        $('span#nm_produk').text($(this).parent().prev().prev().prev().prev().html());
 
-        $.ajax({
-            url: '/api/gbj/noseri/' + id,
-            dataType: 'json',
-            success: function(data) {
-                console.log(data);
-                $.each(data, function(key, value) {
-                    i++;
-                    b = "<tr ><td><input type='checkbox' class='cb-child' value="+value.id+"></td><td>"+value.noseri+"<input type='hidden' name='noseri[]' value="+value.noseri+"><input type='hidden' name='gdg_brg_jadi_id' value="+value.gdg_barang_jadi_id+"></td><td><select name='layout_id[]' id='layout_id' class='form-control'>"+select_layout()+"</select></td><td><button class='btn btn-info viewStock' data-id='"+value.id+"'><i class='far fa-eye'></i> View</button></td></tr>";
-                    $(".scan-produk").append(b);
-                })
-
-            }
+        $('.scan-produk').DataTable({
+                destroy: true,
+                "ordering":false,
+                "autoWidth": false,
+                searching: false,
+                "lengthChange": false,
+                processing: true,
+                serverSide: false,
+                ajax: {
+                    url: '/api/gbj/noseri/' + id,
+                },
+                columns: [
+                    {data: 'ids'},
+                    {data: 'seri'},
+                    {data: 'Layout'},
+                    {data: 'aksi'}
+                ],
+                // "columnDefs": [
+                //     { "width": "5%", "targets": 0},
+                // ],
         });
+
         $('.daftar-stok').modal('show');
     });
 
     // modal history
-    $(document).on('focus', '.viewStock', function() {
-        var id = $(this).data('id');
+    $(document).on('click', '.viewStock', function() {
+        var id = $(this).parent().prev().prev().text();
+        let judul_detail = $('#nm_produk').text();
+        $('p#namaa').text(judul_detail);
         console.log(id);
         var i = 0;
+        $('.view_produk').DataTable().destroy();
+        $('view_produk tbody').empty();
+        $('.view_produk').DataTable({
+            destroy: true,
+            "ordering":false,
+            "autoWidth": false,
+            "lengthChange": false,
+            processing: true,
+            ajax: {
+                url: '/api/gbj/history/' + id,
+            },
+            columns: [
+                {data: 'tanggal'},
+                {data: 'dari'},
+            ],
+        });
 
-        $.ajax({
-            url: '/api/gbj/history/' + id,
-            dataType: 'json',
-            success: function(data) {
-                console.log(data);
-                var a = '';
-
-                $.each(data, function(key, value) {
-                    a = "<tr><td>"+new Date(value.created_at).toLocaleDateString()+"</td><td>"+value.from.nama+"</td><td>"+value.to.nama+"</td></tr>";
-                });
-                $(".view-produk tbody").html(a);
-            }
-        })
         $('.modalViewStock').modal('show');
     });
 
@@ -793,8 +856,8 @@
             console.log(res);
             $("#change_layout").empty();
             $.each(res, function(key, value) {
-                $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
-                // $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
+                layout.push([value.id, value.ruang]);
+                $("#change_layout").append('<option value="' + value.id + '">' + value.ruang + '</option');
             });
         }
     });
@@ -806,41 +869,122 @@
 
     $(document).ready(function() {
         $('#ubahSeri').on('click', function() {
-            // console.log('ok');
-
+            // console.log('test');
             const cekid = [];
-            const noseri = [];
             const layout = [];
-
-            $('.cb-child').each(function() {
-                if($(this).is(":checked")) {
-                    cekid.push($(this).val());
-                }
-            });
-
-            $('input[name^="gdg_brg_jadi_id"]').each(function() {
-                noseri.push($(this).val());
-            });
-
-            $('select[name^="layout_id"]').each(function() {
-                layout.push($(this).val());
+            let a = $('.scan-produk').DataTable().column(0).nodes()
+                .to$().find('input[type=checkbox]:checked');
+            $(a).each(function (index, elm) {
+                cekid.push($(elm).val());
+                layout.push($(elm).parent().next().next().children().val());
             });
             // console.log(cekid);
 
-            $.ajax({
-                url: '/api/gbj/noseri/' + noseri,
-                type: 'post',
-                data: {
-                    "_token": "{{ csrf_token() }}",
-                    cekid : cekid,
-                    // noseri : noseri,
-                    layout : layout,
-                },
-                success: function(res) {
-                    console.log(res);
-                }
-            })
+            Swal.fire({
+            title: 'Apakah anda yakin?',
+            text: "Merubah Layout",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Ya, Terima!'
+            }).then((result) => {
+            if (result.value) {
+                Swal.fire(
+                    'Sukses!',
+                    'Layout berhasil dirubah',
+                    'success'
+                )
+                $.ajax({
+                    url: '/api/gbj/ubahseri',
+                    type: 'post',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        cekid : cekid,
+                        layout : layout,
+                    },
+                    success: function(res) {
+                        console.log(res);
+                    }
+                })
+                location.reload();
+            }
         })
+
+        })
+    })
+
+    $(document).on('click','.tambah_noseri', function () {
+        $('.tambah_noseri_tableee').DataTable().destroy();
+        $('.tambah_noseri_table').empty();
+        let jumlah = $('#jumlah_noseri').val();
+        let table = '<tr><td><input type="text" name="" id="" class="form-control no_seri" style="text-transform:uppercase"></td><td><select name="" id="" class="form-control layout_seri"></select></td></tr>';
+        for (let i = 0; i < jumlah; i++) {
+            $('.tambah_noseri_table').append(table);
+        }
+        $.each(layout, function (index, value) {
+             $('.layout_seri').append('<option value="'+value[0]+'">'+value[1]+'</option');
+        });
+        $('.tambah_noseri_tableee').DataTable({
+            destroy: true,
+            searching: false,
+        });
+        $('.tambah_seri').modal('show');
+    });
+
+    $(document).on('click', '#save_data', function () {
+    let no_seri = $('.tambah_noseri_tableee').DataTable().column(0).nodes().to$().find('input[type=text]').map(function (index, elm) {
+        return $(elm).val();
+    }).get();
+    let layout = $('.tambah_noseri_tableee').DataTable().column(1).nodes().to$().find('select').map(function (index, elm) {
+        return $(elm).val();
+    }).get();
+    let id = $('.seri_id').val();
+    let dari = $('.dari').val();
+    let created_by = $('.created_by').val();
+
+    $.ajax({
+        url: '/api/gbj/ceknoseri',
+        type: 'post',
+        data: {noseri: no_seri},
+        success: function(res) {
+            if(res.msg) {
+                $.ajax({
+                    type: 'post',
+                    url: '/api/gbj/addSeri',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        no_seri : no_seri,
+                        layout: layout,
+                        id: id,
+                        dari: dari,
+                        created_by: created_by,
+                    },
+                    success: function(res) {
+                        console.log(res);
+                        if (res.success) {
+                            Swal.fire(
+                                'Sukses!',
+                                'Data berhasil ditambahkan',
+                                'success'
+                            )
+                            setTimeout(() => {
+                                location.reload();
+                            }, 1000);
+                        }
+                    }
+                });
+            } else {
+                Swal.fire(
+                    'Oops',
+                    res.error,
+                    'error'
+                )
+            }
+        }
+    })
+
+
     })
 </script>
 @stop

@@ -79,7 +79,15 @@
     }
 
     @media screen and (max-width: 1440px) {
-        #pengirimantable {
+        #pengirimansotable {
+            font-size: 12px;
+        }
+
+        #sotanpacootable {
+            font-size: 12px;
+        }
+
+        #lewatbataskontraktable {
             font-size: 12px;
         }
 
@@ -89,6 +97,36 @@
 
         #detailmodal {
             font-size: 12px;
+        }
+
+        .so-title {
+            font-size: 12px;
+        }
+    }
+
+    @media screen and (min-width: 1440px) {
+        #pengirimansotable {
+            font-size: 14px;
+        }
+
+        #sotanpacootable {
+            font-size: 14px;
+        }
+
+        #lewatbataskontraktable {
+            font-size: 14px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        section {
+            font-size: 14px;
         }
     }
 </style>
@@ -120,7 +158,7 @@
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box warning-bg">
                                             <div class="inner">
-                                                <h3>4</h3>
+                                                <h3>{{$belum_coo}}</h3>
                                                 <p>Belum memiliki COO</p>
                                             </div>
                                             <div class="icon">
@@ -132,7 +170,7 @@
                                     <div class="col-lg-4 col-6">
                                         <div class="small-box bg-danger">
                                             <div class="inner">
-                                                <h3>3</h3>
+                                                <h3>{{$lewat_batas}}</h3>
                                                 <p>Lewat Batas Kontrak</p>
                                             </div>
                                             <div class="icon">
@@ -326,7 +364,11 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        pengirimansotable();
         $('#pengirimanso').on('click', function() {
+            pengirimansotable();
+            sotanpacootable_destroy()
+            lewatbataskontraktable_destroy();
             $('#pengirimanso').addClass('active');
             $('#pengirimansotable').removeClass('hide');
 
@@ -338,6 +380,9 @@
         })
 
         $('#sotanpacoo').on('click', function() {
+            sotanpacootable();
+            pengirimansotable_destroy();
+            lewatbataskontraktable_destroy();
             $('#sotanpacoo').addClass('active');
             $('#sotanpacootable').removeClass('hide');
 
@@ -349,6 +394,9 @@
         })
 
         $('#lewatbataskontrak').on('click', function() {
+            lewatbataskontraktable();
+            pengirimansotable_destroy();
+            sotanpacootable_destroy();
             $('#lewatbataskontrak').addClass('active');
             $('#lewatbataskontraktable').removeClass('hide');
 
@@ -359,57 +407,159 @@
             $('#pengirimansotable').addClass('hide');
         })
 
-        var pengirimantable = $('#table').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '/api/ekatalog/pengiriman/data/',
-                'type': 'POST',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
+        function pengirimansotable_destroy() {
+            $('#pengirimansotable').DataTable().clear().destroy();
+        }
 
-            },
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
+        function pengirimansotable() {
+            var pengirimansotable = $('#pengirimansotable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/dc/dashboard/data/pengirimansotable',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
                 },
-                {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
-                {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'batas_kontrak',
-                    className: 'nowrap-text align-center',
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'so',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'batas_kontrak',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'status',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            })
+        }
 
+        function sotanpacootable_destroy() {
+            $('#sotanpacootable').DataTable().clear().destroy();
+        }
+
+        function sotanpacootable() {
+            var sotanpacootable = $('#sotanpacootable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/dc/dashboard/data/sotanpacootable',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
                 },
-                {
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
-            ]
-        })
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'so',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'batas_kontrak',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+
+                    {
+                        data: 'button',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            })
+        }
+
+        function lewatbataskontraktable_destroy() {
+            $('#lewatbataskontraktable').DataTable().clear().destroy();
+        }
+
+        function lewatbataskontraktable() {
+            var lewatbataskontraktable = $('#lewatbataskontraktable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/dc/dashboard/data/lewatbataskontraktable',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'so',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'batas_kontrak',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'status',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            })
+        }
     })
 </script>
 <script>

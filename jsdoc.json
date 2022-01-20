@@ -1,0 +1,16 @@
+{
+    "source": {
+        "includePattern": ".+.(js|vue)$",   
+        "include": ["./resources/js/ppic_spa"]
+    },
+    "plugins": [
+        "node_modules/jsdoc-vuejs",
+        "plugins/markdown"
+    ],
+    "recurseDepth": 10,                         
+    "opts": {
+        "destination": "./resources/js/ppic_spa/docs",               
+        "recurse": true,
+        "readme": "./resources/js/ppic_spa/readme.md"
+    }
+}

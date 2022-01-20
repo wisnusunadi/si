@@ -1,142 +1,165 @@
 <div class="row filter">
     <div class="col-12">
-        <div class="row filter">
-            <div class="col-5">
-                <h5>Info</h5>
+        <div class="row">
+            <div class="col-4">
                 <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Info Customer</h5>
+                    </div>
                     <div class="card-body">
-                        <ul class="list-group">
-                            <li class="list-group-item bordertopnone">
-                                <a>Nama Customer</a>
-                                <b class="float-right" id="nama_customer">{{$data->customer->nama}}</b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>No PO</a>
-                                <b class="float-right" id="no_po">
-                                    @if ($data->Pesanan)
-                                    {{ $data->Pesanan->no_po}}
-                                    @endif
-                                </b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>Tanggal PO</a>
-                                <b class="float-right" id="tanggal_pemesanan">
-                                    @if ($data->Pesanan)
-                                    {{ $data->Pesanan->tgl_po}}
-                                    @endif
-                                </b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a>Status</a>
-                                <b class="float-right" id="status">@if ($data->log == "penjualan")
-                                    <span class="red-text badge">{{ucfirst($data->log)}}</span>
-                                    @elseif($data->log == "po")
-                                    <span class="purple-text badge">{{ucfirst($data->log)}}</span>
-                                    @elseif($data->log == "gudang")
-                                    <span class="orange-text badge">{{ucfirst($data->log)}}</span>
-                                    @elseif($data->log == "qc")
-                                    <span class="yellow-text badge">{{ucfirst($data->log)}}</span>
-                                    @elseif($data->log == "logistik")
-                                    <span class="blue-text badge">{{ucfirst($data->log)}}</span>
-                                    @elseif($data->log == "selesai")
-                                    <span class="green-text badge">{{ucfirst($data->log)}}</span>
-                                    @endif</b>
-                            </li>
-                            <li class="list-group-item bordertopnone">
-                                <a class="text-muted" id="keterangan">{{$data->ket}}</a>
-                            </li>
-                        </ul>
+                        <div class="row">
+                            <div class="col-12 align-center">
+                                <!-- <div id="profileImage" class="center margin-all"></div> -->
+                                <div>
+                                    <h6><b>{{$data->Customer->nama}}</b></h6>
+                                </div>
+                                <div><b>{{$data->Customer->alamat}}</b></div>
+                                <div><b>{{$data->Customer->Provinsi->nama}}</b></div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="card-title">Info Penjualan</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="margin">
+                            <a class="text-muted">No SO</a>
+                            <b class="float-right">@if ($data->Pesanan->so)
+                                {{ $data->Pesanan->so}}
+                                @else
+                                -
+                                @endif</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">No PO</a>
+                            <b class="float-right">
+                                @if ($data->Pesanan->no_po)
+                                {{ $data->Pesanan->no_po}}
+                                @else
+                                -
+                                @endif</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">Tanggal PO</a>
+                            <b class="float-right">@if ($data->Pesanan->tgl_po != "" && $data->Pesanan->tgl_po != "0000-00-00")
+                                {{ date('d-m-Y', strtotime($data->Pesanan->tgl_po)) }}
+                                @else
+                                -
+                                @endif</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">Status</a>
+                            <b class="float-right" id="status">
+                                @if (!empty($data->Pesanan->log_id))
+                                @if ($data->Pesanan->State->nama == "Penjualan")
+                                <span class="red-text badge">
+                                    @elseif ($data->Pesanan->State->nama == "PO")
+                                    <span class="purple-text badge">
+                                        @elseif ($data->Pesanan->State->nama == "Gudang")
+                                        <span class="orange-text badge">
+                                            @elseif ($data->Pesanan->State->nama == "QC")
+                                            <span class="yellow-text badge">
+                                                @elseif ($data->Pesanan->State->nama == "Terkirim Sebagian")
+                                                <span class="blue-text badge">
+                                                    @elseif ($data->Pesanan->State->nama == "Kirim")
+                                                    <span class="green-text badge">
+                                                        @endif
+                                                        {{ucfirst($data->Pesanan->State->nama)}}</span>
+                                                    @else
+                                                    -
+                                                    @endif
+                            </b>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-7">
+            <div class="col-8">
                 <h5>Detail Pemesanan</h5>
                 <div class="card overflowy" id="detailspb">
                     <div class="card-body">
                         <div class="table-responsive">
+                            <!-- <div class="form-horizontal"> -->
                             <?php $totalharga = 0; ?>
+                            <?php $no = 0; ?>
                             @if(isset($data->Pesanan))
-                            @foreach($data->pesanan->detailpesanan as $e)
                             <div class="card removeshadow">
                                 <div class="card-body">
-                                    <h6>{{$e->PenjualanProduk->nama}}</h6>
-                                    <div class="row align-center">
-                                        <div class="col-4">
-                                            <div class="text-muted">Harga</div>
-                                            <div><b>@currency($e->harga)</b></div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="text-muted">Jumlah</div>
-                                            <div><b>{{$e->jumlah}}</b></div>
-                                        </div>
-                                        <div class="col-4">
-                                            <div class="text-muted">Subtotal</div>
-                                            <div><b>@currency($e->harga * $e->jumlah)</b></div>
-                                            <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
-                                        </div>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="text-muted">Variasi</div>
-                                            <ul class="list-group">
-                                                @isset($e->DetailPesananProduk)
-                                                @foreach($e->DetailPesananProduk as $l)
-                                                <li class="list-group-item">
+                                    <table class="table" style="max-width:100%; overflow-x: hidden; background-color:white;" id="tabledetailpesan">
+                                        <thead>
+                                            <tr>
+                                                <th rowspan="2">No</th>
+                                                <th rowspan="2">Produk</th>
+                                                <th colspan="2">Qty</th>
+                                                <th rowspan="2">Harga</th>
+                                                <th rowspan="2">Subtotal</th>
+                                            </tr>
+                                            <tr>
+                                                <th><i class="fas fa-shopping-cart"></i></th>
+                                                <th><i class="fas fa-truck"></i></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            @if(isset($data->Pesanan->detailpesanan))
+                                            @foreach($data->pesanan->detailpesanan as $e)
+                                            <?php $no = $no + 1; ?>
+                                            <tr>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">{{$no}}</td>
+                                                <td><b class="wb">{{$e->PenjualanProduk->nama}}</b></td>
+                                                <td colspan="2" class="nowraptxt">{{$e->jumlah}}</td>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency($e->harga)</td>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency($e->harga * $e->jumlah)</td>
+                                                <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
+                                            </tr>
+                                            @if(isset($e->DetailPesananProduk))
+                                            @foreach($e->DetailPesananProduk as $l)
+                                            <tr>
+                                                <td><span class="text-muted">@if(!empty($l->GudangBarangJadi->nama))
+                                                        {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
+                                                        @else
+                                                        {{$l->GudangBarangJadi->Produk->nama}}
+                                                        @endif</span>
+                                                </td>
+                                                <td>
+                                                    {{$l->getJumlahPesanan()}}
+                                                </td>
+                                                <td>{{$l->getJumlahKirim()}}</td>
+                                            </tr>
+                                            @endforeach
+                                            @endif
+                                            @endforeach
+                                            @endif
 
-                                                    @if(!empty($l->GudangBarangJadi->nama))
-                                                    {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
-                                                    @else
-                                                    {{$l->GudangBarangJadi->Produk->nama}}
-                                                    @endif
-                                                </li>
-                                                @endforeach
-                                                @endif
-                                            </ul>
-                                        </div>
-                                    </div>
+                                            @if(isset($data->Pesanan->detailpesananpart))
+                                            @foreach($data->pesanan->detailpesananpart as $e)
+                                            <?php $no = $no + 1; ?>
+                                            <tr>
+                                                <td>{{$no}}</td>
+                                                <td class="wb"><b>{{$e->Sparepart->nama}}</b></td>
+                                                <td class="nowraptxt"><span class="text-muted">{{$e->jumlah}}</span></td>
+                                                <td class="nowraptxt">@if(isset($e->detaillogistikpart)) {{$e->jumlah}} @else 0 @endif</td>
+                                                <td class="nowraptxt">@currency($e->harga)</td>
+                                                <td class="nowraptxt">@currency($e->harga * $e->jumlah)</td>
+                                                <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
+                                            </tr>
+                                            @endforeach
+                                            @endif
+                                        </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="5">Total Harga</td>
+                                                <td>@currency($totalharga)</td>
+                                            </tr>
+                                        </tfoot>
+
+                                    </table>
                                 </div>
                             </div>
-                            @endforeach
-
-                            <div style="font-size:16px;" class="filter"><span><b>Total Harga</b></span><span class="float-right"><b>@currency($totalharga)</b></span></div>
                             @else
                             <div class="align-center"><i>Detail Pesanan Belum Tersedia</i></div>
                             @endif
-
-                            <!-- <table class="table" id="detailtabel_spb">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Produk</th>
-                                        <th>Harga</th>
-                                        <th>Jumlah</th>
-                                        <th>Subtotal</th>
-                                        <th>No Seri</th>
-                                    </tr>
-                                </thead>
-                                <tbody> -->
-                            <!-- <tr>
-                                    <td>1</td>
-                                    <td>FOX-BABY Yellow</td>
-                                    <td>5</td>
-                                    <td>Rp. 15.000</td>
-                                    <td><i class="fas fa-search"></i></td>
-                                </tr> -->
-                            <!-- </tbody> -->
-                            <!-- <tfoot>
-                                <tr>
-                                    <th colspan="3" style="text-align:right;">Total Harga</th>
-                                    <th id="totalharga" style="text-align:center;">Rp. 15.000</th>
-                                    <th></th>
-                                </tr>
-                            </tfoot> -->
-                            <!-- <tfoot>
-                                <tr>
-                                    <th width="15%" colspan="4">Total</th>
-                                    <th width="15%" colspan="2"><input type="text" placeholder="Sub Total" class="form-control" id="subtotal" readonly></th>
-                                </tr>
-                            </tfoot>
-                            </table> -->
                         </div>
                     </div>
                 </div>

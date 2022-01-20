@@ -67,8 +67,157 @@
         }
     }
 </style>
-@stop
+<style>
+    .filter {
+        margin: 5px;
+    }
 
+    thead {
+        text-align: center;
+    }
+
+    td {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    #urgent {
+        color: #dc3545;
+        font-weight: 600;
+    }
+
+    #warning {
+        color: #FFC700;
+        font-weight: 600;
+    }
+
+    #info {
+        color: #3a7bb0;
+        font-weight: 600;
+    }
+
+    .minimizechar {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 13ch;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .dropdown-toggle:hover {
+        color: #4682B4;
+    }
+
+    .dropdown-toggle:active {
+        color: #C0C0C0;
+    }
+
+    td.details-control {
+        content: "\f055";
+        font-family: FontAwesome;
+        left: -5px;
+        position: absolute;
+        top: 0;
+    }
+
+    tr.details td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+
+    #detailekat {
+        background-color: #E9DDE5;
+
+    }
+
+    #detailspa {
+        background-color: #FFE6C9;
+    }
+
+    #detailspb {
+        background-color: #E1EBF2;
+        /* color: #7D6378; */
+
+    }
+
+
+
+    .removeshadow {
+        box-shadow: none;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
+    .bordertopnone {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        vertical-align: top;
+    }
+
+    .margin {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        section {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .overflowy {
+            max-height: 550px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+
+        label,
+        .row {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .overflowy {
+            max-height: 450px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
+        }
+    }
+</style>
+@stop
 @section('content')
 <div class="content">
     <div class="row">
@@ -84,7 +233,6 @@
                                         <canvas id="myChart" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -145,7 +293,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-6">
+                <div class="col-12">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -163,7 +311,7 @@
                                                     <th>No SO</th>
                                                     <th>No PO</th>
                                                     <th>Status</th>
-                                                    <th>Batas Pengiriman</th>
+                                                    <th>Tanggal Delivery</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -202,7 +350,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6">
+                <!-- <div class="col-6">
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
@@ -251,7 +399,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
@@ -277,12 +425,11 @@
             processing: true,
             serverSide: true,
             ajax: {
-                'url': '/api/ekatalog/pengiriman/data/',
+                'url': '/api/ekatalog/pengiriman/data',
                 'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
-
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -314,7 +461,6 @@
                 {
                     data: 'batas_kontrak',
                     className: 'nowrap-text align-center',
-
                 },
                 {
                     data: 'button',
@@ -329,12 +475,10 @@
 <script>
     $(function() {
         $(document).on('click', '.detailmodal', function(event) {
-
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data("id");
             var label = $(this).data("target");
-
             $.ajax({
                 url: href,
                 beforeSend: function() {
@@ -351,7 +495,6 @@
                     } else {
                         detailtabel_spb(id);
                     }
-
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -383,7 +526,6 @@
                     },
                     {
                         data: 'nama_produk',
-
                     },
                     {
                         data: 'harga',
@@ -420,14 +562,14 @@
                             typeof i === 'number' ?
                             i : 0;
                     };
-                    // computing column Total of the complete result 
+                    // computing column Total of the complete result
                     var jumlah_pesanan = api
                         .column(3)
                         .data()
                         .reduce(function(a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
-                    // computing column Total of the complete result 
+                    // computing column Total of the complete result
                     var total_pesanan = api
                         .column(4)
                         .data()
@@ -442,7 +584,6 @@
                 },
             })
         }
-
     });
 </script>
 <script>
@@ -478,15 +619,6 @@
                         ]
                     },
                     options: {
-                        animations: {
-                            tension: {
-                                duration: 4000,
-                                easing: 'linear',
-                                from: 1,
-                                to: 0,
-                                loop: true
-                            }
-                        },
                         plugins: {
                             title: {
                                 display: true,
@@ -494,7 +626,6 @@
                             }
                         },
                         scales: {
-
                             // y: { // defining min and max so hiding the dataset does not change scale range
                             //     min: 0,
                             //     max: 2,
@@ -512,8 +643,4 @@
         });
     });
 </script>
-<script>
-
-</script>
-
 @stop

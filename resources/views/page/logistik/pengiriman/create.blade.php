@@ -171,7 +171,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <tr>
+                                                <!-- <tr>
                                                     <td>1</td>
                                                     <td>MTB 2 MTR</td>
                                                     <td>10</td>
@@ -182,7 +182,7 @@
                                                     <td>CENTRAL MONITOR PM-9000+ + PC + INSTALASI</td>
                                                     <td>1</td>
                                                     <td><a href="#" id="remove"><i class="fas fa-minus nok"></i></a></td>
-                                                </tr>
+                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -239,7 +239,6 @@
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
-            console.log(data);
         })
 
         function load_noseritable(id) {
@@ -267,7 +266,6 @@
                 success: function(result) {
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    console.log(id);
                     ekspedisi_select();
                     // $("#editform").attr("action", href);
                 },

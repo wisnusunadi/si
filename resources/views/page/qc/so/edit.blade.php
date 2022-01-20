@@ -1,7 +1,42 @@
-<form method="POST" action="/api/qc/so/create/{{$id}}/{{$tfgbj_id}}/{{$pesanan_id}}/{{$produk_id}}" id="form-pengujian-update">
+<form method="POST" action="/api/qc/so/create/{{$jenis}}/{{$pesanan_id}}/{{$produk_id}}" id="form-pengujian-update">
+    @method('PUT')
     @csrf
     <div class="row d-flex justify-content-center">
-        <div class="col-11">
+        <div class="col-lg-4 col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title">Info Produk</h5>
+                </div>
+                @if($jenis == "produk")
+                <div class="card-body">
+                    <div class="margin">
+                        <div><small class="text-muted">Nama Produk</small></div>
+                        <div><b>{{$data->GudangBarangJadi->Produk->nama}} {{$data->GudangBarangJadi->nama}}</b></div>
+                    </div>
+                    <div class="margin">
+                        <div><small class="text-muted">No SO</small></div>
+                        <div><b>{{$data->DetailPesanan->Pesanan->so}}</b></div>
+                    </div>
+                </div>
+                @elseif($jenis == "part")
+                <div class="card-body">
+                    <div class="margin">
+                        <div><small class="text-muted">Nama Part</small></div>
+                        <div><b>{{$data->Sparepart->nama}}</b></div>
+                    </div>
+                    <div class="margin">
+                        <div><small class="text-muted">No SO</small></div>
+                        <div><b>{{$data->Pesanan->so}}</b></div>
+                    </div>
+                    <div class="margin">
+                        <div><small class="text-muted">Jumlah</small></div>
+                        <div><b>{{$data->jumlah}}</b></div>
+                    </div>
+                </div>
+                @endif
+            </div>
+        </div>
+        <div class="col-lg-8 col-12">
             <div class="card">
                 <div class="card-body">
                     <div class="form-horizontal">
@@ -28,6 +63,7 @@
                                 <input type="date" class="form-control  col-form-label" name="tanggal_uji" id="tanggal_uji">
                             </div>
                         </div>
+                        @if($jenis == "produk")
                         <div class="form-group row">
                             <label for="" class="col-form-label col-5" style="text-align: right">Hasil Cek</label>
                             <div class="col-5 col-form-label">
@@ -44,11 +80,13 @@
                         <h5>No Seri </h5>
                         <div class="form-group row">
                             <div class="table-responsive">
-                                <table class="table table-striped align-center" id="listnoseri">
+                                <table class="table table-striped align-center" id="listnoseri" style="width:100%;">
                                     <thead>
                                         <tr>
                                             <th>No</th>
                                             <th>No Seri</th>
+                                            <th>No Seri ID</th>
+                                            <th>No Detail Produk ID</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -64,6 +102,22 @@
                                 </table>
                             </div>
                         </div>
+                        @else
+                        <div class="form-group row">
+                            <label for="" class="col-form-label col-5" style="text-align: right">Jumlah OK</label>
+                            <div class="col-3">
+                                <input type="number" class="form-control  col-form-label" name="jumlah_ok" id="jumlah_ok">
+                                <div class="invalid-feedback" id="msgjumlah_ok"></div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label for="" class="col-form-label col-5" style="text-align: right">Jumlah NOK</label>
+                            <div class="col-3">
+                                <input type="number" class="form-control  col-form-label" name="jumlah_nok" id="jumlah_nok">
+                                <div class="invalid-feedback" id="msgjumlah_nok"></div>
+                            </div>
+                        </div>
+                        @endif
                     </div>
                 </div>
                 <div class="card-footer">
@@ -77,5 +131,4 @@
             </div>
         </div>
     </div>
-    {{$id}}
 </form>

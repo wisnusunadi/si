@@ -12,6 +12,7 @@
 
 <section class="content">
     <div class="row">
+        <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
         <div class="col-lg-4 col-md-12 col-sm-12 mb-4">
             <div class="row">
                 <div class="col-12">
@@ -40,18 +41,15 @@
                                             <label for="" class="col-12 font-weight-bold col-form-label">Produk</label>
                                             <div class="col-12">
                                                 <select class="form-control product" name="gdg_brg_jadi_id" id="gdg_brg_jadi_id">
-                                                    <option value="AMBULATORY BLOOD PRESSURE MONITOR">AMBULATORY BLOOD PRESSURE MONITOR</option>
-                                                    <option value="AIR STERILIZER AND PURIFIER">AIR STERILIZER AND PURIFIER</option>
-                                                    <option value="BACKUP POWER">BACKUP POWER</option>
                                                 </select>
                                             </div>
                                         </div>
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Stok</label>
                                             <div class="col-12">
-                                                <input type="text" name="qty" id="qty"
-                                                    class="form-control number-input input-notzero qty">
-                                                {{-- <span class="form-text text-muted">Stok Input Maks. 20</span> --}}
+                                                <input type="text" id="qtyy"
+                                                    class="form-control number-input input-notzero qtyy">
+                                                <span class="form-text text-muted">Stok Input Maks : <span id="stock"><b></b></span> </span>
                                                 <input type="text" class="stok-gudang" value="20" hidden>
                                             </div>
                                         </div>
@@ -88,8 +86,7 @@
                             </table>
                         </div>
                         <div class="col-12 d-flex justify-content-end">
-                            <button class="btn btn-primary btn-simpan" type="submit" data-toggle="modal"
-                                data-target="#modalNotes" hidden>Simpan</button>
+                            <button class="btn btn-primary btn-simpan" type="button" hidden>Simpan</button>
                         </div>
                     </div>
                     </form>
@@ -115,21 +112,17 @@
                     <thead>
                         <tr>
                             <th>Nomor Seri</th>
-                            <th></th>
+                            <th><input type="checkbox" id="head-cb"></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>36541654654654564</td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>65654564646545455</td>
-                            <td></td>
-                        </tr>
+
                     </tbody>
                 </table>
 
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-primary" type="button" id="btnSave">Simpan</button>
             </div>
         </div>
     </div>
@@ -138,8 +131,6 @@
 
 @section('adminlte_js')
 <script>
-    // import swal from 'sweetalert2/src/sweetalert2.js'
-    // Restricts input for each element in the set of matched elements to the given inputFilter.
     (function ($) {
         $.fn.inputFilter = function (inputFilter) {
             return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
@@ -165,6 +156,17 @@
             var value = $(this).val();
         });
 
+        $("#head-cb").on('click', function () {
+            var isChecked = $("#head-cb").prop('checked')
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
+        });
+
         // load produk
         $.ajax({
             url: '/api/gbj/sel-gbj',
@@ -183,6 +185,18 @@
                 }
             }
         });
+
+        $('#gdg_brg_jadi_id').on('change', function() {
+            // console.log($(this).val());
+            $.ajax({
+                url : "{{ URL('/api/tfp/cekStok')}}",
+                type: "post",
+                data: {gdg_brg_jadi_id: $(this).val()},
+                success: function(res) {
+                    $('span#stock').text(res.stok);
+                }
+            })
+        })
 
         // load divisi
         $.ajax({
@@ -212,7 +226,7 @@
         let deskripsi = $('.deskripsi').val();
         let produk = $('.product').val();
         let d_produk = $('.product').find(':selected').text();
-        let stok = parseInt($('.qty').val());
+        let stok = parseInt($('.qtyy').val());
         // let stok_gudang = parseInt($('.stok-gudang').val());
 
         $.ajax({
@@ -232,12 +246,10 @@
                         position: 'center',
                         icon: 'error',
                         title: 'Stok Tidak Mencukupi',
-                        showConfirmButton: false,
-                        timer: 1500
+                        text: 'Stok gudang produk saat ini '+res.stok,
+                        confirmButtonText: 'Oke',
                     })
-                    // console.log('tidak');
                 } else {
-                    // console.log('ok');
                     Swal.fire({
                         position: 'center',
                         icon: 'success',
@@ -246,10 +258,6 @@
                         timer: 1500
                     })
                     addData(divisi, d_divisi, deskripsi, d_produk, produk, stok);
-                    $('#post_ke').val(divisi);
-                    $('#post_deskripsi').val(deskripsi);
-                    $('#post_produk').val(produk);
-                    $('#post_qty').val(stok);
                 }
             $('.btn-simpan').prop('hidden', false);
             }
@@ -265,9 +273,9 @@
         }
 
         i++;
-        // console.log(deskripsi.length);
-        let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty'+i+'" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'" ><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
+
 
     }
     $(document).on('click', '.btn-delete', function(e){
@@ -281,70 +289,15 @@
         }
     });
 
-    $(document).on('click', '.btn-simpan', function(e) {
-        e.preventDefault();
 
-        let a = $('#post_ke').val();
-        let b = $('#post_deskripsi').val();
-        let c = $('#post_produk').val();
-        let d = parseInt($('#post_qty').val());
-        let stok_gudang = parseInt($('.stok-gudang').val());
-
-        // let divisi = $('.ke').val();
-        // let deskripsi = $('.deskripsi').val();
-        // let produk = $('.product').val();
-        // let stok = parseInt($('.qty').val());
-        // let stok_gudang = parseInt($('.stok-gudang').val());
-
-        let ke = [];
-        let desk = [];
-        let gdg = [];
-        let stok = [];
-
-        $('input[name^="ke"]').each(function() {
-            ke.push($(this).val());
-        });
-        console.log(ke);
-
-        $('input[name^="deskripsi"]').each(function() {
-            desk.push($(this).val());
-        });
-
-        $('input[name^="gdg_brg_jadi_id"]').each(function() {
-            gdg.push($(this).val());
-        });
-
-        $('input[name^="qty"]').each(function() {
-            stok.push($(this).val());
-        });
-
-        $.ajax({
-            url: "/api/tfp/create",
-            type:"POST",
-            data: {
-                "_token": "{{ csrf_token() }}",
-                ke: ke,
-                deskripsi: desk,
-                gdg_brg_jadi_id: gdg,
-                qty: stok,
-            },
-            success: function (res) {
-                console.log(res);
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: res.msg,
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-                location.reload();
-            }
-        });
-        // console.log('ok');
-    })
-
+    var prd = '';
+    var jml = '';
+    var id = '';
     $(document).on('click', '.noseriModal', function(e) {
-        var id = $(this).data('id');
+        var tr = $(this).closest('tr');
+        jml = tr.find('#post_qty').val();
+        console.log(jml);
+        id = $(this).data('id');
         console.log(id);
 
         $.ajax({
@@ -356,35 +309,132 @@
                 console.log(res);
 
                 $('.scan-produk').DataTable({
+                    destroy: true,
                     processing: true,
-                    serverSide: true,
+                    serverSide: false,
+                    autoWidth: false,
+                    ordering: false,
                     ajax: {
                         url: '/api/tfp/noseri/' + id,
                     },
                     columns: [
                         { data: 'noseri', name: 'noseri'},
-                        { data: 'checkbox', name: 'checkbox'},
+                        { data: 'checkbox', name: 'checkbox', orderable: 'false'},
                     ],
-                    'columnDefs': [{
-                        'targets': 1,
-                        'checkboxes': {
-                            'selectRow': true
-                        },
-                    }],
+
                     'select': {
                         'style': 'multi'
                     },
-                    'order': [
-                        [0, 'asc']
-                    ],
-                    "oLanguage": {
-                    "sSearch": "Scan Nomor Seri:"
-                    }
+
+                    "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        }
                 });
             }
         })
         $('.modal-produk').modal('show');
     })
+    const seri = {};
+    $(document).on('click', '#btnSave', function() {
+        let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type="checkbox"]:checked').map(function() {
+            return $(this).val();
+        }).get();
+        console.log(a);
+        // console.log('jum '+jml);
+
+        // const ids = [];
+        $('.cb-child').each(function() {
+            if ($(this).is(":checked")) {
+                if (a.length > jml) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Batas Maksimal '+jml+' Barang!'
+                    })
+                } else {
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Noseri Berhasil Disimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    })
+                    $('.modal-produk').modal('hide');
+                }
+            }
+        })
+        seri[id] = a;
+        console.log(seri);
+    })
+
+    $(document).on('click', '.btn-simpan', function(e) {
+        e.preventDefault();
+
+        let a = $('#post_ke').val();
+        let b = $('#post_deskripsi').val();
+        let c = $('#post_produk').val();
+        let d = parseInt($('#post_qty').val());
+        let stok_gudang = parseInt($('.stok-gudang').val());
+
+        let ke = [];
+        let desk = [];
+        let gdg = [];
+        let stok_push = [];
+
+        $('input[name^="ke"]').each(function() {
+            ke.push($(this).val());
+        });
+
+        $('input[name^="deskripsi"]').each(function() {
+            desk.push($(this).val());
+        });
+
+        $('input[name^="gdg_brg_jadi_id"]').each(function() {
+            gdg.push($(this).val());
+        });
+
+        $('input[name^="qty"]').each(function() {
+            stok_push.push($(this).val());
+        });
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, transfer it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                'Sukses!',
+                'Data Berhasil Ditransfer',
+                'success'
+                )
+                $.ajax({
+                    url: "/api/tfp/create",
+                    type:"POST",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        userid: $('#userid').val(),
+                        ke: ke,
+                        deskripsi: desk,
+                        gdg_brg_jadi_id: gdg,
+                        qty: stok_push,
+                        noseri_id : seri,
+                    },
+                    success: function (res) {
+                        location.reload();
+                    }
+                });
+
+            }
+        })
+
+
+    })
+
 
 </script>
 @stop

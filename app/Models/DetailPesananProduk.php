@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DetailPesananProduk extends Model
 {
     protected $table = 'detail_pesanan_produk';
-    protected $fillable = ['detail_pesanan_id', 'gudang_barang_jadi_id'];
+    protected $fillable = ['detail_pesanan_id', 'gudang_barang_jadi_id', 'checked_by', 'status_cek'];
     public $timestamps = false;
 
     public function GudangBarangJadi()
@@ -25,6 +25,58 @@ class DetailPesananProduk extends Model
     }
     public function DetailLogistik()
     {
-        return $this->hasMany(DetailLogistik::class);
+        return $this->hasMany(DetailLogistik::class, 'detail_pesanan_produk_id');
+    }
+
+    public function getJumlahPesanans()
+    {
+        $id = 1;
+        $jumlah = 0;
+        $data = DetailPesananProduk::where('detail_pesanan_id', $id)->get();
+        foreach ($data as $d) {
+            $jumlah += $d->jumlah;
+        }
+        return $jumlah;
+    }
+
+    public function getJumlahKirim()
+    {
+        $id = $this->id;
+        $jumlah = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->count();
+        return $jumlah;
+    }
+
+    public function getJumlahPesanan()
+    {
+        $id = $this->id;
+        $produk_id = $this->GudangBarangJadi->produk_id;
+        $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            foreach ($i->PenjualanProduk->Produk as $j) {
+                if ($j->id == $produk_id) {
+                    $jumlah = $i->jumlah * $j->pivot->jumlah;
+                }
+            }
+        }
+        return $jumlah;
+    }
+
+    public function getJumlahCek()
+    {
+        $id = $this->id;
+        $jumlah = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->count();
+        return $jumlah;
+    }
+
+    function status()
+    {
+        return $this->belongsTo(Status::class, 'status_cek');
     }
 }

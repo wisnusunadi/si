@@ -4,7 +4,7 @@
 
 @section('content')
 <style>
-    .belum_diterima{
+    .belum_diterima {
         float: left;
         width: auto;
         padding: 5px;
@@ -15,7 +15,20 @@
         font-size: 14px;
         border-radius: 6px;
     }
-    .sudah_diterima{
+
+    .sebagian_diterima {
+        float: left;
+        width: auto;
+        padding: 5px;
+        margin-top: 5px;
+        border: 1px solid #FFCC83;
+        background-color: #FEF7EA;
+        color: #ff9e17;
+        font-size: 14px;
+        border-radius: 6px;
+    }
+
+    .sudah_diterima {
         float: left;
         width: auto;
         padding: 5px;
@@ -26,83 +39,65 @@
         font-size: 14px;
         border-radius: 6px;
     }
+
+    /* .dataTables_filter{
+        display: none;
+    } */
+    #DataTables_Table_1_filter {
+        display: none;
+    }
+    .calendar-time {
+        display: none;
+    }
+
 </style>
 <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
 <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <div class="content-header">
     <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Transfer Gudang</h1>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Transfer Gudang</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
 <div class="row ml-2">
-    <div class="col-sm-4">
+    <div class="col-sm-2">
+        <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
         <div class="form-group">
-            <label for="">Tanggal Perakitan</label>
-            <input type="text" name="" id="" class="form-control daterange">
+            <label for="">Tanggal Masuk</label>
+            <input type="text" name="" id="kt_datepicker_1" class="form-control">
+        </div>
+    </div>
+    <div class="col-sm-2">
+        <div class="form-group">
+            <label for="">Tanggal Keluar</label>
+            <input type="text" name="" id="kt_datepicker_2" class="form-control">
         </div>
     </div>
 </div>
 <div class="row ml-2">
     <div class="col-lg-12">
         <div class="card">
-            <div class="card-body">              
+            <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">
                         <table class="table table-bordered table_produk_perakitan ">
                             <thead class="thead-dark">
+
                                 <tr>
-                                    <th colspan="2" class="text-center">Tanggal</th>
-                                    <th rowspan="2">Nomor BPPB</th>
-                                    <th rowspan="2">Produk</th>
-                                    <th rowspan="2">Jumlah</th>
-                                    <th rowspan="2">Status</th>
-                                    <th rowspan="2">Aksi</th>
-                                </tr>
-                                <tr>
-                                    <th class="text-center">Tgl Mulai</th>
-                                    <th class="text-center">Tgl Selesai</th>
+                                    <th class="text-center">Tanggal Masuk</th>
+                                    <th class="text-center">Tanggal Keluar</th>
+                                    <th>Nomor BPPB</th>
+                                    <th>Produk</th>
+                                    <th>Jumlah</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody>
-                                <tr>
-                                    <td scope="row" class="text-center">16-06-2021 <br><span class="badge badge-primary">Baru</span></td>
-                                    <td class="text-center">18-06-2021 <br> <span class="badge badge-warning">Kurang 5 Hari</span></td>
-                                    <td>6543524635465464</td>
-                                    <td>Produk 1</td>
-                                    <td>100 Unit <br> <span class="badge badge-dark">Kurang 50 Unit</span></td>
-                                    <td class="text-center"><span class="sudah_diterima">Sudah Diterima</span></td>
-                                    <td>
-                                        <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" class="text-center">18-06-2021 <br><span class="badge badge-info">Revisi</span></td>
-                                    <td class="text-center">21-06-2021 <br> <span class="badge badge-danger">Lebih 10 Hari</span></td>
-                                    <td>6543524635465464</td>
-                                    <td>Produk 2</td>
-                                    <td>200 Unit</td>
-                                    <td><span class="belum_diterima">Belum Diterima</span></td>
-                                    <td>
-                                        <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td scope="row" class="text-center">20-06-2021</td>
-                                    <td class="text-center">25-06-2021</td>
-                                    <td>6543524635465464</td>
-                                    <td>Produk 3</td>
-                                    <td>300 Unit</td>
-                                    <td><span class="belum_diterima">Belum Diterima</span></td>
-                                    <td>
-                                        <button class="btn btn-outline-success" onclick="modalRakit()"><i class="far fa-edit"></i> Transfer</button>
-                                    </td>
-                                </tr>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </div>
@@ -116,9 +111,9 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <div class="card">
@@ -126,27 +121,27 @@
                         <div class="row">
                             <div class="col-sm">
                                 <label for="">Nomor BPPB</label>
-                                    <div class="card" style="background-color: #C8E1A7">
-                                        <div class="card-body">
-                                            89798797856456
-                                        </div>
-                                      </div>
+                                <div class="card" style="background-color: #C8E1A7">
+                                    <div class="card-body">
+                                        <span id="no_bppb">89798797856456</span>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #F89F81">
                                     <div class="card-body">
-                                        Produk 1
+                                        <span id="produk">Produk 1</span>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Kategori</label>
                                 <div class="card" style="background-color: #FCF9C4">
                                     <div class="card-body">
-                                        Kategori 1
+                                        <span id="kategori">Kategori 1</span>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                         </div>
                         <div class="row">
@@ -154,109 +149,57 @@
                                 <label for="">Jumlah Rakit</label>
                                 <div class="card" style="background-color: #FFCC83">
                                     <div class="card-body">
-                                        100 Unit
+                                        <span id="jml">100 Unit</span>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Tanggal Mulai</label>
                                 <div class="card" style="background-color: #FFE0B4">
                                     <div class="card-body">
-                                        10-06-2021
+                                        <span id="start">10-06-2021</span>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Tanggal Selesai</label>
                                 <div class="card" style="background-color: #FFECB2">
                                     <div class="card-body">
-                                        13-06-2021
+                                        <span id="end"> 13-06-2021</span>
                                     </div>
-                                  </div>
+                                </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
                         <div class="row">
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Tanggal Pengiriman</label>
+                                    <input type="text" class="form-control" id="tgl_perakitan" name="waktu_tf"
+                                        placeholder="Tanggal Perakitan">
+                                </div>
+                            </div>
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                    <label for="">Cari</label>
+                                    <input type="text" class="form-control" id="cari" name="cari" placeholder="Cari">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-12">
-                                <table class="table table-striped scan-produk">
-                                    <thead>
-                                        <tr>
-                                            <th><input type="checkbox" name="" id="head-cb"></th>
-                                            <th>Nomor Seri</th>
-                                            <th><input type="checkbox" name="" id="head-cb-1"></th>
-                                            <th>Nomor Seri</th>
-                                            <th><input type="checkbox" name="" id="head-cb-2"></th>
-                                            <th>Nomor Seri</th>
-                                            <th><input type="checkbox" name="" id="head-cb-3"></th>
-                                            <th>Nomor Seri</th>
-                                            <th><input type="checkbox" name="" id="head-cb-4"></th>
-                                            <th>Nomor Seri</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
-                                            <td>65462136516515</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
-                                            <td>84651651651562</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
-                                            <td>89784946512123</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
-                                            <td>65666654545465</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
-                                            <td>59689498484548</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
-                                            <td>65462136516515</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
-                                            <td>84651651651562</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
-                                            <td>89784946512123</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
-                                            <td>65666654545465</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
-                                            <td>59689498484548</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
-                                            <td>65462136516515</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
-                                            <td>84651651651562</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
-                                            <td>89784946512123</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
-                                            <td>65666654545465</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
-                                            <td>59689498484548</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
-                                            <td>65462136516515</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
-                                            <td>84651651651562</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
-                                            <td>89784946512123</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
-                                            <td>65666654545465</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
-                                            <td>59689498484548</td>
-                                        </tr>
-                                        <tr>
-                                            <td><input type="checkbox" name="" id="" class="cb-child"></td>
-                                            <td>65462136516515</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-1"></td>
-                                            <td>84651651651562</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-2"></td>
-                                            <td>89784946512123</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-3"></td>
-                                            <td>65666654545465</td>
-                                            <td><input type="checkbox" name="" id="" class="cb-child-4"></td>
-                                            <td>59689498484548</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                                <form action="post" id="form-scan">
+                                    <table class="table table-striped scan-produk" id>
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" name="" id="head-cb"></th>
+                                                <th>Nomor Seri</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="scan"></tbody>
+                                    </table>
                             </div>
                         </div>
                     </div>
@@ -264,8 +207,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="button" class="btn btn-primary" onclick="transfer()">Simpan</button>
+                <button type="submit" class="btn btn-primary" id="">Simpan</button>
             </div>
+            </form>
         </div>
     </div>
 </div>
@@ -273,53 +217,142 @@
 
 @section('adminlte_js')
 <script>
-    $('.table_produk_perakitan').DataTable({
-        "ordering": false,
-        "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            },
-        "lengthChange": false,
-        searching: false,
-        "columnDefs": [
-        {
-            "targets": [6],
-            "visible": document.getElementById('auth').value == '2' ? false : true
-        }]
-        });
+    // Tanggal Masuk
+    var start_date;
+    var end_date;
+    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue(start_date);
+        var dateEnd = parseDateValue(end_date);
 
-        $('.scan-produk').DataTable({
-            ordering: false,
-            "autoWidth": false,
+        var evalDate = parseDateValue(aData[0]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+            0]);
+        return parsedDate;
+    }
+
+    // Tanggal Keluar
+    var start_date2;
+    var end_date2;
+    var DateFilterFunction2 = (function (oSettings, aData, iDataIndex) {
+        var dateStart = parseDateValue2(start_date2);
+        var dateEnd = parseDateValue2(end_date2);
+
+        var evalDate = parseDateValue2(aData[1]);
+        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
+            (isNaN(dateStart) && evalDate <= dateEnd) ||
+            (dateStart <= evalDate && isNaN(dateEnd)) ||
+            (dateStart <= evalDate && evalDate <= dateEnd)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue2(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+            0]);
+        return parsedDate;
+    }
+    $(document).ready(function () {
+        let date = new Date();
+        $('#tgl_perakitan').val(date.toISOString().substr(0, 10));
+        $('#tgl_perakitan').daterangepicker({
+            singleDatePicker: true,
+            locale: {
+                format: 'YYYY-MM-DD'
+            }
+        });
+        var table = $('.table_produk_perakitan').DataTable({
+            processing: true,
+            ajax: "/api/prd/kirim",
+            columns: [{
+                    data: "start"
+                },
+                {
+                    data: "end"
+                },
+                {
+                    data: "no_bppb"
+                },
+                {
+                    data: "produk"
+                },
+                {
+                    data: "jml"
+                },
+                {
+                    data: "status"
+                },
+                {
+                    data: "action"
+                },
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
             "lengthChange": false,
-        });
-    function modalRakit() { 
-        $('.modalRakit').modal('show');
-        $("#head-cb").on('click', function () {
-            var isChecked = $("#head-cb").prop('checked')
-            $('.cb-child').prop('checked', isChecked)
+            "columnDefs": [{
+                "targets": [6],
+                "visible": document.getElementById('auth').value == '2' ? false : true
+            }]
         });
 
-        $("#head-cb-1").on('click', function () {
-            var isChecked = $("#head-cb-1").prop('checked')
-            $('.cb-child-1').prop('checked', isChecked)
+        $('#kt_datepicker_1').daterangepicker({
+            autoUpdateInput: false
         });
 
-        $("#head-cb-2").on('click', function () {
-            var isChecked = $("#head-cb-2").prop('checked')
-            $('.cb-child-2').prop('checked', isChecked)
+        $('#kt_datepicker_1').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date = picker.startDate.format('DD-MM-YYYY');
+            end_date = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
+            table.draw();
         });
-        $("#head-cb-3").on('click', function () {
-            var isChecked = $("#head-cb-3").prop('checked')
-            $('.cb-child-3').prop('checked', isChecked)
+
+        $('#kt_datepicker_1').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date = '';
+            end_date = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
+            table.draw();
         });
-        $("#head-cb-4").on('click', function () {
-            var isChecked = $("#head-cb-4").prop('checked')
-            $('.cb-child-4').prop('checked', isChecked)
+
+        // Tanggal Keluar
+        $('#kt_datepicker_2').daterangepicker({
+            autoUpdateInput: false
         });
-    }
+
+        $('#kt_datepicker_2').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date2 = picker.startDate.format('DD-MM-YYYY');
+            end_date2 = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction2);
+            table.draw();
+        });
+
+        $('#kt_datepicker_2').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date2 = '';
+            end_date2 = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
+            table.draw();
+        });
+
+    })
+
     function transfer() {
         Swal.fire({
             title: "Apakah anda yakin?",
@@ -345,10 +378,132 @@
             }
         });
     }
-    $('.daterange').daterangepicker({
-        locale: {
-            format: 'DD/MM/YYYY'
-        }
+    var id = '';
+    var prd = '';
+    var jml = '';
+
+
+
+    $(document).on('click', '.detailmodal', function () {
+        $('.modalRakit').modal('show');
+        $('.scan-produk tbody').empty();
+        id = $(this).data('id');
+        console.log(id);
+        prd = $(this).data('prd');
+        jumlah = $(this).data('jml');
+        $.ajax({
+            url: "/api/prd/headerSeri/" + id,
+            type: "get",
+            dataType: "json",
+            success: function (res) {
+                // console.log(res);
+                $('span#no_bppb').text(res.bppb);
+                $('span#produk').text(res.produk);
+                $('span#kategori').text(res.kategori);
+                $('span#jml').text(res.jumlah);
+                $('span#start').text(res.start);
+                $('span#end').text(res.end);
+            }
+        })
+        $('.scan').empty();
+        tableModal(prd, id)
     });
+
+    function tableModal(prd, jadwal) {
+        var table = $('.scan-produk').DataTable({
+            'destroy': true,
+            'info': false,
+            paging: true,
+            retrieve: false,
+            processing: true,
+            "autoWidth": false,
+            ordering: false,
+            "lengthChange": false,
+            ajax: "/api/prd/detailSeri1/" + prd + '/' + jadwal,
+            columns: [{
+                    data: "no_seri"
+                },
+                {
+                    data: "no_seri"
+                }
+            ],
+            columnDefs: [{
+                targets: [0],
+                checkboxes: {
+                    selectRow: false,
+                },
+                width: "5%"
+            }, ],
+            select: {
+                style: 'multi'
+            },
+        });
+        $('#cari').on('keyup', function () {
+            table.search($(this).val()).draw();
+        });
+        $('#form-scan').on('submit', function (e) {
+            e.preventDefault();
+
+            Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Transfer it'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    var form = $(this);
+
+                    var rows_selected = table.column(0).checkboxes.selected();
+                    const seri = [];
+
+                    $.each(rows_selected, function (index, rowId) {
+                        seri.push(rowId);
+                    });
+                    if (seri.length > 0) {
+                        let tgl = $('#tgl_perakitan').val();
+                        let today = new Date();
+                        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                        let datetime = tgl + ' ' + time;
+                        Swal.fire(
+                            'Success!',
+                            'Data Terkirim ke Gudang Barang Jadi',
+                            'success'
+                        )
+                        $.ajax({
+                            url: "/api/prd/send",
+                            type: "post",
+                            data: {
+                                "_token": "{{csrf_token() }}",
+                                userid: $('#userid').val(),
+                                qty: jumlah,
+                                gbj_id: prd,
+                                jadwal_id: id,
+                                noseri: seri,
+                                tgl_transfer: datetime,
+                            },
+                            success: function (res) {
+                                console.log(res);
+                                setTimeout(() => {
+                                    window.location.reload();
+                                }, 1000);
+                            }
+                        })
+                    } else {
+                        Swal.fire(
+                            'Error!',
+                            'Tidak ada data yang dipilih',
+                            'error'
+                        )
+                    }
+
+                }
+            })
+
+        });
+    }
+
 </script>
 @stop
