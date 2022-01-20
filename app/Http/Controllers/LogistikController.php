@@ -3333,10 +3333,11 @@ class LogistikController extends Controller
 
     public function check_no_sj($id, $val)
     {
-        if ($id == "0") {
-            $e = Logistik::where('nosurat', 'SPA-' . $val)->count();
+        $e = "";
+        if ($id != "0") {
+            $e = Logistik::where([['id', '!=', $id], ['nosurat', '=', $val]])->get();
         } else {
-            $e = Logistik::where('nosurat', 'SPA-' . $val)->whereNotIn('id', $id)->count();
+            $e = Logistik::where('nosurat', 'SPA-' . $val)->count();
         }
         return $e;
     }

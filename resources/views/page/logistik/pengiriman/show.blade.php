@@ -597,8 +597,10 @@
         });
 
         $(document).on('change keyup', '#no_invoice', function(event) {
+
             if ($(this).val() != "") {
                 var val = $(this).val();
+                console.log('/api/logistik/cek/no_sj/' + idonclick + '/' + val);
                 $.ajax({
                     type: "POST",
                     url: '/api/logistik/cek/no_sj/' + idonclick + '/' + val,
