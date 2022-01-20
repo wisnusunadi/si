@@ -78,11 +78,11 @@
                                         <label for="" class="col-form-label col-5" style="text-align: right">Cari Pengujian</label>
                                         <div class="col-5 col-form-label">
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="cari" id="cari1" value="semua" />
+                                                <input class="form-check-input" type="radio" name="cari" id="cari1" value="produk" />
                                                 <label class="form-check-label" for="cari1">Produk</label>
                                             </div>
                                             <div class="form-check form-check-inline">
-                                                <input class="form-check-input" type="radio" name="cari" id="cari2" value="ok" />
+                                                <input class="form-check-input" type="radio" name="cari" id="cari2" value="part" />
                                                 <label class="form-check-label" for="cari2">Part</label>
                                             </div>
                                         </div>
@@ -176,12 +176,17 @@
                             <table class="table table-hover" id="qctable" style="width:100%">
                                 <thead style="text-align: center;">
                                     <tr>
-                                        <th>No</th>
-                                        <th>No SO</th>
-                                        <th>Nama Produk</th>
-                                        <th>No Seri</th>
-                                        <th>Tanggal Uji</th>
-                                        <th>Hasil</th>
+                                        <th rowspan="2">No</th>
+                                        <th rowspan="2">No SO</th>
+                                        <th rowspan="2">Nama Produk</th>
+                                        <th rowspan="2">No Seri</th>
+                                        <th rowspan="2">Tanggal Uji</th>
+                                        <th rowspan="2">Hasil</th>
+                                        <th colspan="2">Jumlah</th>
+                                    </tr>
+                                    <tr>
+                                        <th>OK</th>
+                                        <th>NOK</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -341,12 +346,43 @@
             }
         });
 
+        $('.part_id').select2({
+            placeholder: "Pilih Part",
+            ajax: {
+                minimumResultsForSearch: 20,
+                dataType: 'json',
+                theme: "bootstrap",
+                delay: 250,
+                type: 'POST',
+                url: '/api/gk/sel-m-spare',
+                data: function(params) {
+                    return {
+                        term: params.term
+                    }
+                },
+                processResults: function(data) {
+
+                    //console.log(data);
+                    return {
+                        results: $.map(data, function(obj) {
+                            return {
+                                id: obj.id,
+                                text: obj.nama
+                            };
+                        })
+                    };
+                },
+            }
+        });
+
         $("#btnbatal").on('click', function() {
             $("#btncetak").attr('disabled', true);
             $(".produk_id").val(null).trigger("change");
             $(".part_id").val(null).trigger("change");
             $(".no_so").val("");
-            $('')
+            $('#prt_id').addClass('hide');
+            $('#prd_id').addClass('hide');
+            $('#prd_uji').addClass('hide');
             $('input[type="radio"][name="hasil_uji"]').prop('checked', false);
             $('input[type="radio"][name="cari"]').prop('checked', false);
             $('#tanggal_mulai').val('');
@@ -360,18 +396,22 @@
             $("#btncetak").attr('disabled', true);
             $('#lapform').removeClass('hide');
 
-
+            var hasil = "";
             var produk = "";
             if ($(".produk_id").val() != "") {
                 produk = $(".produk_id").val();
+                hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
             } else {
                 produk = "0";
+                hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
             }
 
-            if ($(".produk_id").val() != "") {
+            if ($(".part_id").val() != "") {
                 produk = $(".part_id").val();
+                hasil = "0";
             } else {
                 produk = "0";
+                hasil = "0";
             }
 
             var so = "";
@@ -382,7 +422,7 @@
                 so = "0";
             }
             var jenis = $('input[type="radio"][name="cari"]:checked').val();
-            var hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
+
             var tgl_awal = $('#tanggal_mulai').val();
             var tgl_akhir = $('#tanggal_akhir').val();
             table(jenis, produk, so, hasil, tgl_awal, tgl_akhir);
@@ -425,7 +465,8 @@
                     },
                     {
                         data: 'noseri',
-                        className: 'nowrap-text align-center'
+                        className: 'nowrap-text align-center',
+                        visible: jenis == "produk" ? true : false
                     },
                     {
                         data: 'tgl_uji',
@@ -433,7 +474,18 @@
                     },
                     {
                         data: 'status',
-                        className: 'nowrap-text align-center'
+                        className: 'nowrap-text align-center',
+                        visible: jenis == "produk" ? true : false
+                    },
+                    {
+                        data: 'jumlah_ok',
+                        className: 'nowrap-text align-center',
+                        visible: jenis == "part" ? true : false
+                    },
+                    {
+                        data: 'jumlah_nok',
+                        className: 'nowrap-text align-center',
+                        visible: jenis == "part" ? true : false
                     },
                 ],
             });

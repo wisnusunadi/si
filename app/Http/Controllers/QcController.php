@@ -1344,7 +1344,7 @@ class QcController extends Controller
     {
         return Excel::download(new LaporanQcOutgoing($request->produk_id ?? '', $request->no_so ?? '', $request->hasil_uji  ?? '', $request->tanggal_mulai  ?? '', $request->tanggal_akhir ?? ''), 'laporan_qc_outgoing.xlsx');
     }
-    public function get_data_laporan_qc($produk, $no_so, $hasil, $tgl_awal, $tgl_akhir)
+    public function get_data_laporan_qc($jenis, $produk, $no_so, $hasil, $tgl_awal, $tgl_akhir)
     {
         $res = "";
         $so = "";
@@ -1354,98 +1354,144 @@ class QcController extends Controller
             $so = $no_so;
         }
 
-        if ($produk != "0" && $so == '0') {
-            if ($hasil != "semua") {
-                $res = NoseriDetailPesanan::where('status', $hasil)
-                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
-                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
-                        $q->where('penjualan_produk_id', $produk);
-                    })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
-            } else {
-                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
-                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
-                        $q->where('penjualan_produk_id', $produk);
-                    })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+        if ($jenis == "produk") {
+            if ($produk != "0" && $so == '0') {
+                if ($hasil != "semua") {
+                    $res = NoseriDetailPesanan::where('status', $hasil)
+                        ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                        ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
+                            $q->where('penjualan_produk_id', $produk);
+                        })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+                } else {
+                    $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                        ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
+                            $q->where('penjualan_produk_id', $produk);
+                        })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+                }
+            } else if ($produk == "0" && $so != '0') {
+                if ($hasil != "semua") {
+                    $res = NoseriDetailPesanan::where('status', $hasil)
+                        ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                        ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
+                            $q->where('so', $so);
+                        })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+                } else {
+                    $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                        ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
+                            $q->where('so', $so);
+                        })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+                }
+            } else if ($produk != "0" && $so != '0') {
+                if ($hasil != "semua") {
+                    $res = NoseriDetailPesanan::where('status', $hasil)
+                        ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                        ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
+                            $q->where('penjualan_produk_id', $produk);
+                        })
+                        ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
+                            $q->where('so', $so);
+                        })
+                        ->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+                } else {
+                    $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
+                        ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
+                            $q->where('penjualan_produk_id', $produk);
+                        })
+                        ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
+                            $q->where('so', $so);
+                        })
+                        ->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+                }
+            } else if ($produk == "0" && $so == '0') {
+                if ($hasil != "semua") {
+                    $res = NoseriDetailPesanan::where('status', $hasil)
+                        ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+                } else {
+                    $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+                }
             }
-        } else if ($produk == "0" && $so != '0') {
-            if ($hasil != "semua") {
-                $res = NoseriDetailPesanan::where('status', $hasil)
-                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
-                    ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
-                        $q->where('so', $so);
-                    })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
-            } else {
-                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
-                    ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
-                        $q->where('so', $so);
-                    })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
-            }
-        } else if ($produk != "0" && $so != '0') {
-            if ($hasil != "semua") {
-                $res = NoseriDetailPesanan::where('status', $hasil)
-                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
-                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
-                        $q->where('penjualan_produk_id', $produk);
-                    })
-                    ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
-                        $q->where('so', $so);
-                    })
-                    ->orderBy('detail_pesanan_produk_id', 'ASC')->get();
-            } else {
-                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
-                    ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk) {
-                        $q->where('penjualan_produk_id', $produk);
-                    })
-                    ->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($so) {
-                        $q->where('so', $so);
-                    })
-                    ->orderBy('detail_pesanan_produk_id', 'ASC')->get();
-            }
-        } else if ($produk == "0" && $so == '0') {
-            if ($hasil != "semua") {
-                $res = NoseriDetailPesanan::where('status', $hasil)
-                    ->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->orderBy('detail_pesanan_produk_id', 'ASC')->get();
-            } else {
-                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->orderBy('detail_pesanan_produk_id', 'ASC')->get();
+        } else if ($jenis == "part") {
+            if ($produk != "0" && $so == '0') {
+                $res = OutgoingPesananPart::whereHas('DetailPesananPart', function ($q) use ($produk) {
+                    $q->where('m_sparepart_id', $produk);
+                })->whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir])->orderBy('detail_pesanan_part_id', 'ASC')->get();
+            } else if ($produk == "0" && $so != '0') {
+                $res = OutgoingPesananPart::whereHas('DetailPesananPart.Pesanan', function ($q) use ($so) {
+                    $q->where('so', $so);
+                })->whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir])->orderBy('detail_pesanan_part_id', 'ASC')->get();
+            } else if ($produk != "0" && $so != '0') {
+                $res = OutgoingPesananPart::whereHas('DetailPesananPart', function ($q) use ($produk) {
+                    $q->where('m_sparepart_id', $produk);
+                })->whereHas('DetailPesananPart.Pesanan', function ($q) use ($so) {
+                    $q->where('so', $so);
+                })->whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir])->orderBy('detail_pesanan_part_id', 'ASC')->get();
+            } else if ($produk == "0" && $so == '0') {
+                $res = OutgoingPesananPart::whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir])->orderBy('detail_pesanan_part_id', 'ASC')->get();
             }
         }
         return datatables()->of($res)
             ->addIndexColumn()
-            ->addColumn('so', function ($data) {
-                return $data->DetailPesananProduk->DetailPesanan->Pesanan->so;
+            ->addColumn('so', function ($data) use ($jenis) {
+                if ($jenis == "produk") {
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                } else {
+                    return $data->DetailPesananPart->Pesanan->so;
+                }
             })
-            ->addColumn('produk', function ($data) {
-                if (count($data->DetailPesananProduk->DetailPesanan->PenjualanProduk->Produk) > 1) {
-                    if ($data->DetailPesananProduk->GudangBarangJadi->nama != '') {
-                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - <b>' . $data->DetailPesananProduk->GudangBarangJadi->nama . '</b> ';
-                        $datas .= "<div><small>(" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . ")</small></div>";
-                        return $datas;
+            ->addColumn('produk', function ($data) use ($jenis) {
+                if ($jenis == "produk") {
+                    if (count($data->DetailPesananProduk->DetailPesanan->PenjualanProduk->Produk) > 1) {
+                        if ($data->DetailPesananProduk->GudangBarangJadi->nama != '') {
+                            $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - <b>' . $data->DetailPesananProduk->GudangBarangJadi->nama . '</b> ';
+                            $datas .= "<div><small>(" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . ")</small></div>";
+                            return $datas;
+                        } else {
+                            $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . " ";
+                            $datas .= "<div><small>(" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . ")</small></div>";
+                            return $datas;
+                        }
                     } else {
-                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . " ";
-                        $datas .= "<div><small>(" . $data->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama . ")</small></div>";
-                        return $datas;
+                        if ($data->DetailPesananProduk->GudangBarangJadi->nama != '') {
+                            $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - <b>' . $data->DetailPesananProduk->GudangBarangJadi->nama . '</b> ';
+                            return $datas;
+                        } else {
+                            $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . " ";
+                            return $datas;
+                        }
                     }
                 } else {
-                    if ($data->DetailPesananProduk->GudangBarangJadi->nama != '') {
-                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - <b>' . $data->DetailPesananProduk->GudangBarangJadi->nama . '</b> ';
-                        return $datas;
-                    } else {
-                        $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . " ";
-                        return $datas;
+                    return $data->DetailPesananPart->Sparepart->nama;
+                }
+            })
+            ->addColumn('noseri', function ($data) use ($jenis) {
+                if ($jenis == "produk") {
+                    return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+                }
+            })
+            ->addColumn('tgl_uji', function ($data) use ($jenis) {
+                if ($jenis == "produk") {
+                    return Carbon::createFromFormat('Y-m-d', $data->tgl_uji)->format('d-m-Y');
+                } else {
+                    return Carbon::createFromFormat('Y-m-d', $data->tanggal_uji)->format('d-m-Y');
+                }
+            })
+            ->addColumn('status', function ($data) use ($jenis) {
+                if ($jenis == "produk") {
+                    if ($data->status == "ok") {
+                        return 'OK';
+                    } else if ($data->status == "nok") {
+                        return 'Tidak OK';
                     }
                 }
             })
-            ->addColumn('noseri', function ($data) {
-                return $data->NoseriTGbj->NoseriBarangJadi->noseri;
+            ->addColumn('jumlah_ok', function ($data) use ($jenis) {
+                if ($jenis == "part") {
+                    return $data->jumlah_ok;
+                }
             })
-            ->addColumn('tgl_uji', function ($data) {
-                return Carbon::createFromFormat('Y-m-d', $data->tgl_uji)->format('d-m-Y');
-            })
-            ->addColumn('status', function ($data) {
-                if ($data->status == "ok") {
-                    return 'OK';
-                } else if ($data->status == "nok") {
-                    return 'Tidak OK';
+            ->addColumn('tgl_uji', function ($data) use ($jenis) {
+                if ($jenis == "part") {
+                    return $data->jumlah_nok;
                 }
             })
             ->rawColumns(['status', 'produk'])
