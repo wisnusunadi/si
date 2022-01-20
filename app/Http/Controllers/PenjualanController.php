@@ -1570,6 +1570,7 @@ class PenjualanController extends Controller
                 $c_id = $request->customer_id;
             }
 
+
             $Ekatalog = Ekatalog::create([
                 'customer_id' => $c_id,
                 'provinsi_id' => $request->provinsi,
@@ -1590,12 +1591,17 @@ class PenjualanController extends Controller
             if ($Ekatalog) {
                 if ($request->status != 'draft') {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                        if (empty($request->produk_ongkir[$i])) {
+                            $ongkir[$i] = 0;
+                        } else {
+                            $ongkir[$i] =  str_replace('.', "", $request->produk_ongkir[$i]);
+                        }
                         $dekat = DetailPesanan::create([
                             'pesanan_id' => $x,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
-                            'ongkir' => 0,
+                            'ongkir' => $ongkir[$i],
                         ]);
 
                         if (!$dekat) {
@@ -1937,6 +1943,10 @@ class PenjualanController extends Controller
         } else {
             $c_id = $request->customer_id;
         }
+
+
+
+
         $ekatalog = Ekatalog::find($id);
         $poid = $ekatalog->pesanan_id;
         $ekatalog->customer_id = $c_id;
@@ -1973,12 +1983,17 @@ class PenjualanController extends Controller
             if ($bool == true) {
                 if ($request->status_akn != "draft") {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                        if (empty($request->produk_ongkir[$i])) {
+                            $ongkir[$i] = 0;
+                        } else {
+                            $ongkir[$i] =  str_replace('.', "", $request->produk_ongkir[$i]);
+                        }
                         $c = DetailPesanan::create([
                             'pesanan_id' => $poid,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
-                            'ongkir' => 0,
+                            'ongkir' => $ongkir[$i],
                         ]);
                         if ($c) {
                             for ($j = 0; $j < count($request->variasi[$i]); $j++) {
