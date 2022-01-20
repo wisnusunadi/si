@@ -146,7 +146,6 @@
                                             <th>No PO</th>
                                             <th>Batas Pengujian</th>
                                             <th>Customer</th>
-                                            <th>Keterangan</th>
                                             <th>Status</th>
                                             <th>Aksi</th>
                                         </thead>
@@ -261,11 +260,6 @@
             }, {
                 data: 'nama_customer',
 
-            }, {
-                data: 'ket',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
             }, {
                 data: 'status',
                 className: 'nowrap-text align-center',
