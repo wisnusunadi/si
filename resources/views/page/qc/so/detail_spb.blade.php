@@ -652,20 +652,25 @@
                             if (valok > data) {
                                 $('input[type="number"][name="jumlah_ok"]').addClass('is-invalid');
                                 $('#btnsimpan').attr('disabled', true);
+                                $("#msgjumlah_ok").text("Data melebihi jumlah Part");
                             } else if (valok <= data) {
                                 $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
+                                $("#msgjumlah_ok").text("");
                                 if ($("input[type='number'][name='jumlah_nok']").val() != "") {
                                     var jumlahnok = $("input[type='number'][name='jumlah_nok']").val();
                                     var jumlahcurr = jumlahnok + valok;
                                     if (jumlahcurr > data) {
                                         $('input[type="number"][name="jumlah_ok"]').addClass('is-invalid');
+                                        $("#msgjumlah_ok").text("Data melebihi jumlah Part");
                                         $('#btnsimpan').attr('disabled', true);
                                     } else if (jumlahcurr <= data) {
                                         if ($("input[name='tanggal_uji']").val() != "") {
                                             $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
+                                            $("#msgjumlah_ok").text("");
                                             $('#btnsimpan').removeAttr('disabled');
                                         } else {
                                             $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                            $("#msgjumlah_ok").text("");
                                             $('#btnsimpan').attr('disabled', true);
                                         }
                                     }
@@ -673,6 +678,7 @@
                                     $("input[type='number'][name='jumlah_nok']").val("0");
                                     if ($("input[name='tanggal_uji']").val() != "") {
                                         $('input[type="number"][name="jumlah_ok"]').removeClass('is-invalid');
+                                        $("#msgjumlah_ok").text("");
                                         $('#btnsimpan').removeAttr('disabled');
                                     } else {
                                         $('#btnsimpan').attr('disabled', true);
@@ -701,21 +707,26 @@
                         success: function(data) {
                             if (valnok > data) {
                                 $('input[type="number"][name="jumlah_nok"]').addClass('is-invalid');
+                                $("#msgjumlah_nok").text("Data melebihi jumlah Part");
                                 $('#btnsimpan').attr('disabled', true);
                             } else if (valnok <= data) {
                                 $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                $("#msgjumlah_nok").text("");
                                 if ($("input[type='number'][name='jumlah_ok']").val() != "") {
                                     var jumlahok = $("input[type='number'][name='jumlah_ok']").val();
                                     var jumlahcurr = jumlahok + valnok;
                                     if (jumlahcurr > data) {
                                         $('input[type="number"][name="jumlah_nok"]').addClass('is-invalid');
+                                        $("#msgjumlah_nok").text("Data melebihi jumlah Part");
                                         $('#btnsimpan').attr('disabled', true);
                                     } else if (jumlahcurr <= data) {
                                         if ($("input[name='tanggal_uji']").val() != "") {
                                             $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                            $("#msgjumlah_nok").text("");
                                             $('#btnsimpan').removeAttr('disabled');
                                         } else {
                                             $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                            $("#msgjumlah_nok").text("");
                                             $('#btnsimpan').attr('disabled', true);
                                         }
                                     }
@@ -723,6 +734,7 @@
                                     $("input[type='number'][name='jumlah_ok']").val("0");
                                     if ($("input[name='tanggal_uji']").val() != "") {
                                         $('input[type="number"][name="jumlah_nok"]').removeClass('is-invalid');
+                                        $("#msgjumlah_nok").text("");
                                         $('#btnsimpan').removeAttr('disabled');
                                     } else {
                                         $('#btnsimpan').attr('disabled', true);

@@ -107,12 +107,14 @@
                             <label for="" class="col-form-label col-5" style="text-align: right">Jumlah OK</label>
                             <div class="col-3">
                                 <input type="number" class="form-control  col-form-label" name="jumlah_ok" id="jumlah_ok">
+                                <div class="invalid-feedback" id="msgjumlah_ok"></div>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label for="" class="col-form-label col-5" style="text-align: right">Jumlah NOK</label>
                             <div class="col-3">
                                 <input type="number" class="form-control  col-form-label" name="jumlah_nok" id="jumlah_nok">
+                                <div class="invalid-feedback" id="msgjumlah_nok"></div>
                             </div>
                         </div>
                         @endif

@@ -601,7 +601,7 @@
                 var val = $(this).val();
                 $.ajax({
                     type: "POST",
-                    url: '/api/logistik/cek/no_sj/' + idonclick + '/' + val,
+                    url: '/api/logistik/cek/no_sj/' + idonclick + '/' + val + '/0',
                     dataType: 'json',
                     success: function(data) {
                         if (data > 0) {
@@ -704,7 +704,7 @@
             if ($(this).val() != "") {
                 $('#nama_pengirim').removeClass('is-invalid');
                 $('#msgnama_pengirim').text("");
-                if ($('#no_invoice').val() != "" && $('#tgl_mulai').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                if (($('#no_invoice').val() != "" && !$('#no_invoice').hasClass('is-invalid')) && $('#nama_pengirim').val() != "") {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
@@ -736,14 +736,14 @@
             if ($(this).val() != "") {
                 $('#ekspedisi_id').removeClass('is-invalid');
                 $('#msgekspedisi_id').text("");
-                if (($('#nama_pengirim').val() != "") || $('#ekspedisi_id').val() != "") {
+                if (($('#no_invoice').val() != "" && !$('#no_invoice').hasClass('is-invalid')) && $('.ekspedisi_id').val() != "") {
                     $('#btnsimpan').removeAttr('disabled');
                 } else {
                     $('#btnsimpan').attr('disabled', true);
                 }
             } else if ($(this).val() == "") {
                 $('#ekspedisi_id').addClass('is-invalid');
-                $('#msgekspedisi_id').text("No Kendaraan harus diisi");
+                $('#msgekspedisi_id').text("Ekspedisi harus dipilih");
                 $('#btnsimpan').attr('disabled', true);
             }
         });
