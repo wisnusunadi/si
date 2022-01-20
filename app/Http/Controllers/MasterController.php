@@ -780,11 +780,16 @@ class MasterController extends Controller
         $Ekspedisi->save();
 
 
-        $provinsi_array = [];
-        for ($i = 0; $i < count($request->provinsi_id); $i++) {
-            $provinsi_array[] = $request->provinsi_id[$i];
+        if ($request->jurusan == 'indonesia') {
+            $p = $Ekspedisi->Provinsi()->sync('35');
+        } else {
+            $provinsi_array = [];
+            for ($i = 0; $i < count($request->provinsi_id); $i++) {
+                $provinsi_array[] = $request->provinsi_id[$i];
+            }
+            $p = $Ekspedisi->Provinsi()->sync($provinsi_array);
         }
-        $p = $Ekspedisi->Provinsi()->sync($provinsi_array);
+
 
         if ($p) {
             $jalur_array = [];
@@ -873,12 +878,14 @@ class MasterController extends Controller
     public function select_provinsi(Request $request)
     {
         $data = Provinsi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->whereNotin('id', ['35'])
             ->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }
     public function select_provinsi_edit(Request $request)
     {
         $data = Provinsi::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->whereNotin('id', ['35'])
             ->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }

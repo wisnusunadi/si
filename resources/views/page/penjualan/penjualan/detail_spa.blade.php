@@ -1,7 +1,7 @@
 <div class="row filter">
     <div class="col-12">
         <div class="row">
-            <div class="col-5">
+            <div class="col-4">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Info Customer</h5>
@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-7">
+            <div class="col-8">
                 <h5>Detail Pemesanan</h5>
                 <div class="card overflowy" id="detailspa">
                     <div class="card-body">
@@ -85,7 +85,7 @@
                             <?php $totalharga = 0; ?>
                             <?php $no = 0; ?>
                             @if(isset($data->Pesanan))
-                            <div class="card removeshadow" style="background-color:white;">
+                            <div class="card removeshadow" id="detailspa">
                                 <div class="card-body">
                                     <table class="table" style="max-width:100%; overflow-x: hidden; background-color:white;" id="tabledetailpesan">
                                         <thead>

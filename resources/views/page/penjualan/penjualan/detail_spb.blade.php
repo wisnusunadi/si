@@ -1,7 +1,7 @@
 <div class="row filter">
     <div class="col-12">
         <div class="row">
-            <div class="col-5">
+            <div class="col-4">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Info Customer</h5>
@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-7">
+            <div class="col-8">
                 <h5>Detail Pemesanan</h5>
                 <div class="card overflowy" id="detailspb">
                     <div class="card-body">

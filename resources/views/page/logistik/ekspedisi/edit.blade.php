@@ -84,25 +84,23 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="form-group row">
+
+                            <div class="form-group row">
                                 <label for="" class="col-form-label col-4" style="text-align: right">Jurusan</label>
                                 <div class="col-8 col-form-label">
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan1" value="indonesia" />
-                                        <label class="form-check-label" for="jurusan1">Seluruh Indonesia</label>
+                                        <label class="form-check-label" for="jurusan1">Seluruh Provinsi</label>
                                     </div>
                                     <div class="form-check form-check-inline">
                                         <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan2" value="provinsi" />
                                         <label class="form-check-label" for="jurusan2">Per Provinsi</label>
-                                    </div> -->
-                            <!-- <div class="form-check form-check-inline">
-                                        <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan3" value="kota_kabupaten" />
-                                        <label class="form-check-label" for="jurusan3">Per Kota / Kabupaten</label>
-                                    </div> -->
-                            <!-- <div class="invalid-feedback" id="msgjurusan">
+                                    </div>
+
+                                    <div class="invalid-feedback" id="msgjurusan">
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div> -->
                             <!-- <div class="form-group row hide" id="provinsi_select">
                                 <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Provinsi</label>
                                 <div class="col-8">
@@ -139,7 +137,7 @@
                     </div>
 
                 </div>
-                <div class="row d-flex justify-content-center">
+                <div class="row d-flex justify-content-center" id="provinsi_select">
                     <div class="col-11">
                         <h6>Jurusan</h6>
                         <div class="card">

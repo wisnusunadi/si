@@ -276,7 +276,11 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert($('#form-ekspedisi-update').serialize());
+                    swal.fire(
+                        'Gagal',
+                        'Gagal melakukan ubah data Ekspedisi',
+                        'error'
+                    );
                 }
             });
             return false;
@@ -492,8 +496,10 @@
 
             if ($(this).val() != "") {
                 if ($(this).val() == "provinsi") {
+                    $("#createtable tbody").empty();
                     $('#provinsi_select').removeClass('hide');
                 } else if ($(this).val() == "indonesia") {
+                    $("#createtable tbody").empty();
                     $('#provinsi_select').addClass('hide');
                 }
                 $('#msgjurusan').text("");
@@ -548,8 +554,6 @@
             }
         })
 
-
-
         function numberRows($t) {
             var c = 0 - 2;
             $t.find("tr").each(function(ind, el) {
@@ -560,6 +564,7 @@
                 provinsi(j);
             });
         }
+
         $(document).on('click', '#addrow', function() {
             $('#createtable tr:last').after(`<tr>
             <td></td>

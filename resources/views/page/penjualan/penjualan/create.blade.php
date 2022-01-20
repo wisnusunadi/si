@@ -437,10 +437,10 @@
                                                                 <tr>
                                                                     <th width="5%">No</th>
                                                                     <th width="35%">Nama Paket</th>
-                                                                    <th width="15%">Jumlah</th>
-                                                                    <th width="20%">Harga</th>
-                                                                    {{-- <th width="20%">Ongkir</th> --}}
-                                                                    <th width="20%">Subtotal</th>
+                                                                    <th width="10%">Jumlah</th>
+                                                                    <th width="15%">Harga</th>
+                                                                    <th width="15%">Ongkir</th>
+                                                                    <th width="15%">Subtotal</th>
                                                                     <th width="5%">Aksi</th>
                                                                 </tr>
                                                             </thead>
@@ -461,34 +461,25 @@
                                                                         <div class="form-group d-flex justify-content-center">
                                                                             <div class="input-group">
                                                                                 <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah0" style="width:100%;">
-                                                                                <div class="input-group-append">
-                                                                                    <span class="input-group-text" id="produk_satuan">pcs</span>
-                                                                                </div>
+
                                                                             </div>
                                                                             <small id="produk_ketersediaan"></small>
                                                                         </div>
                                                                     </td>
-                                                                    {{-- <td>
-                                                                        <div class="form-group d-flex justify-content-center">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">Rp</span>
-                                                                            </div>
-                                                                            <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Harga" style="width:100%;" />
-                                                                        </div>
-                                                                    </td> --}}
+
                                                                     <td>
                                                                         <div class="form-group d-flex justify-content-center">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">Rp</span>
-                                                                            </div>
                                                                             <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" />
                                                                         </div>
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group d-flex justify-content-center">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">Rp</span>
-                                                                            </div>
+                                                                            <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Harga" style="width:100%;" />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group d-flex justify-content-center">
+
                                                                             <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                                                                         </div>
                                                                     </td>
@@ -499,7 +490,7 @@
                                                             </tbody>
                                                             <tfoot>
                                                                 <tr>
-                                                                    <th colspan="4" style="text-align:right;">Total Harga</th>
+                                                                    <th colspan="5" style="text-align:right;">Total Harga</th>
                                                                     <th id="totalhargaprd" class="align-right">Rp. 0</th>
                                                                 </tr>
                                                             </tfoot>
@@ -532,7 +523,7 @@
                                                                 <tr>
                                                                     <th width="5%">No</th>
                                                                     <th width="35%">Nama Part</th>
-                                                                    <th width="15%">Jumlah</th>
+                                                                    <th width="18%">Jumlah</th>
                                                                     <th width="20%">Harga</th>
                                                                     <th width="20%">Subtotal</th>
                                                                     <th width="5%">Aksi</th>
@@ -560,17 +551,13 @@
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group d-flex justify-content-center">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">Rp</span>
-                                                                            </div>
+
                                                                             <input type="text" class="form-control part_harga" name="part_harga[]" id="part_harga0" placeholder="Masukkan Harga" style="width:100%;" />
                                                                         </div>
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group d-flex justify-content-center">
-                                                                            <div class="input-group-prepend">
-                                                                                <span class="input-group-text">Rp</span>
-                                                                            </div>
+
                                                                             <input type="text" class="form-control part_subtotal" name="part_subtotal[]" id="part_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                                                                         </div>
                                                                     </td>
@@ -681,7 +668,6 @@
                 }
             }
         }
-
 
         function checkvalidasinonakn() {
             if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
@@ -1371,13 +1357,16 @@
         $("#produktable").on('keyup change', '.produk_jumlah', function() {
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
+            var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
             var ketstok = $(this).closest('tr').find('.ketstok');
             var variasi = $(this).closest('tr').find('.variasi');
             var ppid = $(this).closest('tr').find('.penjualan_produk_id').attr('id');
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
-                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                var ongkircvrt = replaceAll(ongkir, '.', '');
+                subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
+
                 totalhargaprd();
                 for (var i = 0; i < variasi.length; i++) {
                     var variasires = $('select[name="variasi[' + ppid + '][' + i + ']"]').select2('data')[0];
@@ -1409,10 +1398,29 @@
             $(this).val(result);
             var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
             var harga = $(this).closest('tr').find('.produk_harga').val();
+            var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
-                subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
+                var ongkircvrt = replaceAll(ongkir, '.', '');
+                subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
+                totalhargaprd();
+            } else {
+                subtotal.val(formatmoney("0"));
+                totalhargaprd();
+            }
+        });
+        $("#produktable").on('keyup change', '.produk_ongkir', function() {
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
+            var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
+            var harga = $(this).closest('tr').find('.produk_harga').val();
+            var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
+            var subtotal = $(this).closest('tr').find('.produk_subtotal');
+            if (jumlah != "" && harga != "") {
+                var hargacvrt = replaceAll(harga, '.', '');
+                var ongkircvrt = replaceAll(ongkir, '.', '');
+                subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
                 totalhargaprd();
             } else {
                 subtotal.val(formatmoney("0"));
@@ -1436,6 +1444,8 @@
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k);
                 }
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
+                $(el).find('.produk_ongkir').attr('id', 'produk_ongkir' + j);
+                $(el).find('.produk_ongkir').attr('id', 'produk_ongkir' + j);
                 $(el).find('.produk_harga').attr('id', 'produk_harga' + j);
                 $(el).find('.produk_harga').attr('name', 'produk_harga[' + j + ']');
                 $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
@@ -1464,26 +1474,26 @@
                     <div class="form-group d-flex justify-content-center">
                         <div class="input-group">
                             <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="produk_satuan">pcs</span>
-                            </div>
+                           
                         </div>
                         <small id="produk_ketersediaan"></small>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Rp</span>
-                        </div>
+                      
                         <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;"/>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Rp</span>
-                        </div>
+                      
+                        <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Harga" style="width:100%;"/>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+                      
                         <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
                     </div>
                 </td>
@@ -1553,17 +1563,13 @@
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Rp</span>
-                        </div>
+                     
                         <input type="text" class="form-control part_harga" name="part_harga[]" id="part_harga0" placeholder="Masukkan Harga" style="width:100%;" />
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text">Rp</span>
-                        </div>
+                       
                         <input type="text" class="form-control part_subtotal" name="part_subtotal[]" id="part_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                     </div>
                 </td>

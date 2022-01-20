@@ -1,7 +1,7 @@
 <div class="row filter">
     <div class="col-12">
         <div class="row">
-            <div class="col-5">
+            <div class="col-4">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Info Customer</h5>
@@ -44,7 +44,12 @@
                         </div>
                         <div class="margin">
                             <a class="text-muted">Tgl Kontrak</a>
-                            <b class="float-right">{{ date('d-m-Y', strtotime($data->tgl_kontrak)) }}</b>
+                            <b class="float-right">
+                                @if(!empty($data->tgl_kontrak))
+                                {{ date('d-m-Y', strtotime($data->tgl_kontrak)) }}
+
+                                @endif
+                            </b>
                         </div>
                         <div class="margin">
                             <a class="text-muted">No PO</a>
@@ -81,7 +86,7 @@
                 </div>
             </div>
 
-            <div class="col-7">
+            <div class="col-8">
                 <h5>Detail Pemesanan</h5>
                 <div class="card overflowy" id="detailekat">
                     <div class="card-body">
@@ -89,8 +94,8 @@
                             <?php $totalharga = 0; ?>
                             <?php $no = 0; ?>
                             @if(isset($data->Pesanan))
-                            <div class="card removeshadow" style="background-color:white;">
-                                <div class="card-body">
+                            <div class="card removeshadow">
+                                <div class="card-body" id="detailekat">
                                     <table class="table" style="max-width:100%; overflow-x: hidden; background-color:white;" id="tabledetailpesan">
                                         <thead>
                                             <tr>
@@ -98,6 +103,7 @@
                                                 <th rowspan="2">Produk</th>
                                                 <th colspan="2">Qty</th>
                                                 <th rowspan="2">Harga</th>
+                                                <th rowspan="2">Ongkir</th>
                                                 <th rowspan="2">Subtotal</th>
                                             </tr>
                                             <tr>
@@ -114,8 +120,9 @@
                                                 <td><b class="wb">{{$e->PenjualanProduk->nama}}</b></td>
                                                 <td colspan="2" class="nowraptxt">{{$e->jumlah}}</td>
                                                 <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency($e->harga)</td>
-                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency($e->harga * $e->jumlah)</td>
-                                                <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency($e->ongkir)</td>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency(($e->harga * $e->jumlah )+ $e->ongkir)</td>
+                                                <?php $totalharga = $totalharga + (($e->harga * $e->jumlah) + $e->ongkir); ?>
                                             </tr>
                                             @if(isset($e->DetailPesananProduk))
                                             @foreach($e->DetailPesananProduk as $l)
@@ -138,7 +145,7 @@
                                         </tbody>
                                         <tfoot>
                                             <tr>
-                                                <td colspan="5">Total Harga</td>
+                                                <td colspan="6">Total Harga</td>
                                                 <td>@currency($totalharga)</td>
                                             </tr>
                                         </tfoot>

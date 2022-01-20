@@ -1229,7 +1229,7 @@ return [
             'text' => 'Customer',
             'icon' => 'fas fa-users',
             'url' => '/penjualan/customer/show',
-            'auth' => [8],
+            'auth' => [8, 15],
         ],
         [
             'text' => 'Sales Order',
@@ -1402,6 +1402,12 @@ return [
             'icon'    => 'fas fa-cogs',
             'auth' => [2],
             'submenu' => [
+                [
+                    'text' => 'Perakitan Berlangsung',
+                    'url'  => 'produksi/jadwal_perakitan',
+                    'icon' => 'far fa-circle',
+                    'auth' => [2]
+                ],
                 [
                     'text' => 'Riwayat Perakitan',
                     'url'  => 'produksi/riwayat_perakitan',

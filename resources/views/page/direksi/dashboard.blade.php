@@ -781,7 +781,6 @@
 
         // initialize the external events
         // -----------------------------------------------------------------
-
         var calendar = new Calendar(calendarEl, {
             headerToolbar: {
                 left: 'prev,next today',
@@ -790,7 +789,10 @@
             },
             weekends: false,
             locale: 'id',
-            stickyFooterScrollbar: false,
+            contentHeight: 'auto',
+            width: 500,
+            // stickyFooterScrollbar: true,
+            // dayMinWidth: 100,
             events: function(fetchInfo, successCallback, failureCallback) {
                 $.ajax({
                     url: "/api/prd/ongoing-cal",
@@ -810,12 +812,12 @@
                             })
                         }
                         successCallback(events);
+                        testIsi.push("terisi")
                     }
                 })
             },
         });
-
-        calendar.render();
+            calendar.render();
     });
     $(document).ready(function() {
         $.ajax({

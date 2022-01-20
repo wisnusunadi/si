@@ -1,9 +1,28 @@
 <template>
   <div>
     <div class="is-flex is-justify-content-space-between">
-      <h1 class="title">Data Sales Order</h1>
+      <h1 class="title">Daftar Sales Order</h1>
     </div>
-    <div class="columns is-multiline">
+    <div class="tabs is-centered">
+      <ul>
+        <li :class="{ 'is-active': view === 'sales_order'}" @click="view= 'sales_order'">
+        <a>
+          <span class="icon is-small"><i class="fas fa-table" aria-hidden="true"></i></span>
+          <span>Per SO</span>
+        </a>
+        </li>
+        <li :class="{ 'is-active': view === 'per_produk'}" @click="view = 'per_produk'">
+          <a>
+            <span class="icon is-small">
+              <i class="fas fa-table" aria-hidden="true"></i>
+            </span>
+              <span>Per Produk</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+    <template v-if="view === 'per_produk'">
+      <div class="columns is-multiline">
       <div class="column is-12">
         <table class="table is-fullwidth has-text-centered" id="table_so">
           <thead>
@@ -38,7 +57,7 @@
         </table>
       </div>
     </div>
-
+    </template>
     <!-- modal -->
     <div class="modal" :class="{ 'is-active': showModal }">
       <div class="modal-background"></div>
@@ -111,6 +130,7 @@ export default {
       nama_produk: "",
 
       showModal: false,
+      view: "sales_order"
     };
   },
 
