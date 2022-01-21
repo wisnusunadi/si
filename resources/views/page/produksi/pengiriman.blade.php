@@ -412,7 +412,6 @@
     function tableModal(prd, jadwal) {
         var table = $('.scan-produk').DataTable({
             'destroy': true,
-            'info': false,
             paging: true,
             retrieve: false,
             processing: true,

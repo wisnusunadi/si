@@ -21,10 +21,36 @@
         </li>
       </ul>
     </div>
-    <template v-if="view === 'per_produk'">
+    <template v-if="view === 'sales_order'">
       <div class="columns is-multiline">
       <div class="column is-12">
         <table class="table is-fullwidth has-text-centered" id="table_so">
+          <thead>
+            <tr>
+              <th>No</th>
+              <th>Nomor SO</th>
+              <th>Customer</th>
+              <th>Batas Transfer</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="item in salesOrder" :key="item.id">
+              <td v-html="item.DT_RowIndex"></td>
+              <td v-html="item.so"></td>
+              <td v-html="item.nama_customer"></td>
+              <td v-html="item.batas_out"></td>
+              <td v-html="item.status_prd"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    </template>
+    <template v-if="view === 'per_produk'">
+      <div class="columns is-multiline">
+      <div class="column is-12">
+        <table class="table is-fullwidth has-text-centered" id="table_produk">
           <thead>
             <tr>
               <th>No</th>
@@ -126,6 +152,7 @@ export default {
   data() {
     return {
       data: [],
+      salesOrder: [],
       detail: {},
       nama_produk: "",
 
@@ -140,7 +167,11 @@ export default {
       await axios.get("/api/ppic/data/so").then((response) => {
         this.data = response.data.data;
       });
+      await axios.post("/api/prd/so").then((response) => {
+        this.salesOrder = response.data.data;
+      });
       $("#table_so").DataTable();
+      $("#table_produk").DataTable();
 
       this.$store.commit("setIsLoading", false);
     },
