@@ -355,14 +355,43 @@
 
         $(document).on('submit', '#form-pengujian-update', function(e) {
             e.preventDefault();
+            var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
+            var data = [];
+            var tanggal_uji_arr = "";
+            var cek_arr = [];
+
+            var tanggal_uji = $('#form-pengujian-update').find('input[name="tanggal_uji"]').serializeArray();
+            var cek = $('#form-pengujian-update').find('input[type="radio"][name="cek"]').serializeArray();
+
+            $.each(tanggal_uji, function() {
+                tanggal_uji_arr = this.value;
+            });
+
+            $.each(no_seri, function() {
+                data.push(this.value);
+            });
+
+            $.each(cek, function() {
+                cek_arr = this.value;
+            });
+
+            console.log(tanggal_uji_arr);
+            console.log(data);
+
+            console.log(cek_arr);
             var action = $(this).attr('action');
             $.ajax({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
-                type: "POST",
+                type: "PUT",
                 url: action,
-                data: $('#form-pengujian-update').serialize(),
+                data: {
+                    tanggal_uji: tanggal_uji_arr,
+                    cek: cek_arr,
+                    noseri_id: data,
+                },
+                dataType: 'JSON',
                 success: function(response) {
                     console.log(response);
                     if (response['data'] == "success") {
@@ -385,7 +414,7 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert($('#form-pengujian-update').serialize());
+                    console.log(xhr);
                 }
             });
             return false;
@@ -433,7 +462,7 @@
             $('#listnoseri').DataTable({
                 destroy: true,
                 processing: true,
-                serverSide: true,
+                serverSide: false,
                 ajax: {
                     'type': 'POST',
                     'datatype': 'JSON',

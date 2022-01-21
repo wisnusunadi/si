@@ -1112,7 +1112,7 @@ class QcController extends Controller
                 $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $request->noseri_id[$i])->first();
                 if ($check == null) {
                     $c = NoseriDetailPesanan::create([
-                        'detail_pesanan_produk_id' => $request->detail_pesanan_produk_id[$i],
+                        'detail_pesanan_produk_id' => $data->detail->detail_pesanan_produk_id,
                         't_tfbj_noseri_id' => $request->noseri_id[$i],
                         'status' => $request->cek,
                         'tgl_uji' => $request->tanggal_uji,

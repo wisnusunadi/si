@@ -567,49 +567,115 @@
         }
 
         $(document).on('click', '.editmodal', function(event) {
-            var href = "";
-            event.preventDefault();
             if (datajenis == "produk") {
-                data = $(".nosericheck").data().value;
-            } else {
-                data = dataid
-            }
-            console.log(checkedAry);
-            console.log(data);
-            console.log(idpesanan);
-            if (datajenis == "produk") {
-                href = "/qc/so/edit/" + datajenis + '/' + data + "/" + '{{$id}}';
-            } else {
-                href = "/qc/so/edit/" + datajenis + '/' + dataid + "/" + '{{$id}}';
-            }
+                event.preventDefault();
+                var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
+                var data = [];
+                var tanggal_uji_arr = "";
+                var cek_arr = [];
 
-            $.ajax({
-                url: href,
-                beforeSend: function() {
-                    $('#loader').show();
-                },
-                // return the result
-                success: function(result) {
+                var tanggal_uji = $('#form-pengujian-update').find('input[name="tanggal_uji"]').serializeArray();
+                var cek = $('#form-pengujian-update').find('input[type="radio"][name="cek"]').serializeArray();
 
-                    $('#editmodal').modal("show");
-                    $('#edit').html(result).show();
-                    if (datajenis == "produk") {
-                        listnoseri(checkedAry, data, '{{$id}}');
+                $.each(tanggal_uji, function() {
+                    tanggal_uji_arr = this.value;
+                });
+
+                $.each(no_seri, function() {
+                    data.push(this.value);
+                });
+
+                $.each(cek, function() {
+                    cek_arr = this.value;
+                });
+
+                console.log(tanggal_uji_arr);
+                console.log(data);
+
+                console.log(cek_arr);
+                var action = $(this).attr('action');
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "PUT",
+                    url: action,
+                    data: {
+                        tanggal_uji: tanggal_uji_arr,
+                        cek: cek_arr,
+                        noseri_id: data,
+                    },
+                    dataType: 'JSON',
+                    success: function(response) {
+                        console.log(response);
+                        if (response['data'] == "success") {
+                            swal.fire(
+                                'Berhasil',
+                                'Berhasil melakukan Penambahan Data Pengujian',
+                                'success'
+                            );
+                            $("#editmodal").modal('hide');
+                            $('#noseritable').DataTable().ajax.reload();
+                            $('#showtable').DataTable().ajax.reload();
+                            location.reload();
+
+                        } else if (response['data'] == "error") {
+                            swal.fire(
+                                'Gagal',
+                                'Gagal melakukan Penambahan Data Pengujian',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr);
                     }
-                    max_date();
-                    // $("#editform").attr("action", href);
-                },
-                complete: function() {
-                    $('#loader').hide();
+                });
+            } else if (datajenis == "part") {
+                var href = "";
+                event.preventDefault();
+                if (datajenis == "produk") {
+                    data = $(".nosericheck").data().value;
+                } else {
+                    data = dataid
+                }
+                console.log(checkedAry);
+                console.log(data);
+                console.log(idpesanan);
+                if (datajenis == "produk") {
+                    href = "/qc/so/edit/" + datajenis + '/' + data + "/" + '{{$id}}';
+                } else {
+                    href = "/qc/so/edit/" + datajenis + '/' + dataid + "/" + '{{$id}}';
+                }
 
-                },
-                error: function(jqXHR, testStatus, error) {
-                    console.log(error);
-                    alert("Page " + href + " cannot open. Error:" + error);
-                    $('#loader').hide();
-                },
-                timeout: 8000
-            })
+                $.ajax({
+                    url: href,
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    // return the result
+                    success: function(result) {
+
+                        $('#editmodal').modal("show");
+                        $('#edit').html(result).show();
+                        if (datajenis == "produk") {
+                            listnoseri(checkedAry, data, '{{$id}}');
+                        }
+                        max_date();
+                        // $("#editform").attr("action", href);
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page " + href + " cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+            }
         });
 
         $(document).on('change', 'input[type="radio"][name="cek"]', function(event) {

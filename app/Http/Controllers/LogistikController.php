@@ -302,7 +302,7 @@ class LogistikController extends Controller
                     if ($data->gudangbarangjadi->nama == '') {
                         return $data->gudangbarangjadi->produk->nama;
                     } else {
-                        return $data->gudangbarangjadi->nama;
+                        return $data->gudangbarangjadi->produk->nama . ' - ' . $data->gudangbarangjadi->nama;
                     }
                 })
                 ->addColumn('jumlah', function ($data) {
