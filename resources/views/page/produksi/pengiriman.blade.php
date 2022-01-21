@@ -466,11 +466,6 @@
                         let today = new Date();
                         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                         let datetime = tgl + ' ' + time;
-                        Swal.fire(
-                            'Success!',
-                            'Data Terkirim ke Gudang Barang Jadi',
-                            'success'
-                        )
                         $.ajax({
                             url: "/api/prd/send",
                             type: "post",
@@ -485,9 +480,13 @@
                             },
                             success: function (res) {
                                 console.log(res);
-                                setTimeout(() => {
-                                    window.location.reload();
-                                }, 1000);
+                                Swal.fire(
+                                    'Berhasil!',
+                                    'Data berhasil di transfer!',
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                });
                             }
                         })
                     } else {

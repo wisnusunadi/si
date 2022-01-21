@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 class JadwalPerakitan extends Model
 {
     protected $table = 'jadwal_perakitan';
-    protected $fillable = ['produk_id', 'jumlah', 'tanggal_mulai', 'tanggal_selesai', 'status', 'state', 'konfirmasi', 'warna', 'status_tf'];
+    protected $fillable = ['produk_id', 'jumlah', 'tanggal_mulai', 'tanggal_selesai', 'status', 'state', 'konfirmasi', 'warna', 'status_tf', 'created_at'];
 
     public function Produk()
     {
