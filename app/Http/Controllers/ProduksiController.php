@@ -500,7 +500,7 @@ class ProduksiController extends Controller
                 $x = explode('/', $data->so);
                 $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
                 $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
-                if ($sumcek == $sumprd) {
+                if ($sumcek->sum() == $sumprd->sum()) {
                     for ($i = 1; $i < count($x); $i++) {
                         if ($x[1] == 'EKAT') {
                             return '
@@ -516,7 +516,27 @@ class ProduksiController extends Controller
                                     ';
                         }
                     }
-                } else {
+                } elseif ($sumcek->sum() != $sumprd->sum()) {
+                    for ($i = 1; $i < count($x); $i++) {
+                        if ($x[1] == 'EKAT') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="ekatalog" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                    ';
+                        } elseif ($x[1] == 'SPA') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spa" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                    ';
+                        } elseif ($x[1] == 'SPB') {
+                            return '
+                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                    ';
+                        }
+                    }
+                }
+                 else {
                     if ($data->log_id == 9) {
                         for ($i = 1; $i < count($x); $i++) {
                             if ($x[1] == 'EKAT') {
