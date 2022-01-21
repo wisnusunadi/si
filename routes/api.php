@@ -429,6 +429,7 @@ Route::prefix('/qc')->group(function () {
     Route::prefix('/so')->group(function () {
         Route::put('create/{jenis}/{pesanan_id}/{produk_id}', [App\Http\Controllers\QcController::class, 'create_data_qc']);
         Route::post('data/{value}', [App\Http\Controllers\QcController::class, 'get_data_so']);
+        Route::post('data/selesai/{value}', [App\Http\Controllers\QcController::class, 'get_data_selesai_so']);
         Route::post('seri/{value}/{idpesanan}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
         Route::post('part/{value}', [App\Http\Controllers\QcController::class, 'get_data_part_cek']);
         Route::post('seri/select/{seri_id}/{produk_id}/{pesanan_id}', [App\Http\Controllers\QcController::class, 'get_data_select_seri']);
@@ -462,6 +463,7 @@ Route::prefix('/logistik')->group(function () {
         Route::post('data/detail/selesai_kirim/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_selesai_kirim_so']);
         Route::get('detail/select/{produk_id}/{part_id}/{pesanan_id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_select_produk']);
         Route::get('data/selesai', [App\Http\Controllers\LogistikController::class, 'get_data_selesai_so']);
+
         Route::post('data/sj/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_pesanan_sj']);
     });
     Route::group(['prefix' => '/ekspedisi'], function () {

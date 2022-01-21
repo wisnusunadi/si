@@ -364,38 +364,196 @@ class QcController extends Controller
         $data = "";
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $data = Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->orderby('id', 'ASC')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else if ($x == ['ekatalog', 'spa']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%ekat%')->get());
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spa%')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
             $data = $Ekat->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%ekat%')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spb%')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
             $data = $Ekat->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spa%')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spb%')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
             $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%ekat%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekaralog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else if ($value == 'spa') {
-            $data = Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spa%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else if ($value == 'spb') {
-            $data = Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->where('so', 'LIKE', '%spb%')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else {
-            $data = Pesanan::whereIN('id', $this->check_input())->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+        }
+
+
+        $arrayid = array();
+
+        foreach ($data as $i) {
+            if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
+                if ($i->getJumlahSeri() > 0 && $i->getJumlahPesanan() > $i->getJumlahCek()) {
+                    $arrayid[] = $i->id;
+                }
+            } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
+                if ($i->getJumlahPesananPart() > $i->getJumlahCekPart("ok")) {
+                    $arrayid[] = $i->id;
+                }
+            } else {
+                if (($i->getJumlahSeri() > 0 && $i->getJumlahPesanan() > $i->getJumlahCek()) || $i->getJumlahPesananPart() > $i->getJumlahCekPart("ok")) {
+                    $arrayid[] = $i->id;
+                }
+            }
+        }
+
+        $s = Pesanan::whereIn('id', $arrayid)->get();
+
+        // echo json_encode($data);
+        return datatables()->of($s)
+            ->addIndexColumn()
+            ->addColumn('nama_customer', function ($data) {
+                if (!empty($data->so)) {
+                    $name = explode('/', $data->so);
+                    if ($name[1] == 'EKAT') {
+                        return $data->Ekatalog->satuan_kerja;
+                    } elseif ($name[1] == 'SPA') {
+                        return $data->Spa->Customer->nama;
+                    } else {
+                        return $data->spb->Customer->nama;
+                    }
+                }
+            })
+            ->addColumn('batas_uji', function ($data) {
+                if (!empty($data->so)) {
+                    $name = explode('/', $data->so);
+                    if ($name[1] == 'EKAT') {
+                        if ($data->getJumlahPesanan() == $data->getJumlahCek()) {
+                            return  '-';
+                        } else {
+                            $tgl_sekarang = Carbon::now()->format('Y-m-d');
+                            $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+
+                            if ($tgl_sekarang < $tgl_parameter) {
+                                $to = Carbon::now();
+                                $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                                $hari = $to->diffInDays($from);
+
+                                if ($hari > 7) {
+                                    return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
+                                } else if ($hari > 0 && $hari <= 7) {
+                                    return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $hari . ' Hari</small>';
+                                } else {
+                                    return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><span class="badge bg-danger">Batas Kontrak Habis</span>';
+                                }
+                            } elseif ($tgl_sekarang == $tgl_parameter) {
+                                return   '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
+                            } else {
+                                $to = Carbon::now();
+                                $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
+                                $hari = $to->diffInDays($from);
+                                return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                            }
+                        }
+                    } else {
+                        return '-';
+                    }
+                }
+            })
+            ->addColumn('status', function ($data) {
+                if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) <= 0) {
+                    if ($data->getJumlahCek() == 0) {
+                        return '<span class="badge red-text">Belum diuji</span>';
+                    } else {
+                        if ($data->getJumlahCek() >= $data->getJumlahPesanan()) {
+                            return  '<span class="badge green-text">Selesai</span>';
+                        } else {
+                            return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                        }
+                    }
+                } else if (count($data->DetailPesanan) <= 0 && count($data->DetailPesananPart) > 0) {
+                    if ($data->getJumlahCekPart('ok') == 0) {
+                        return '<span class="badge red-text">Belum diuji</span>';
+                    } else {
+                        if ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPart()) {
+                            return  '<span class="badge green-text">Selesai</span>';
+                        } else {
+                            return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                        }
+                    }
+                } else if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) > 0) {
+                    if ($data->getJumlahCek() == 0 && $data->getJumlahCekPart('ok') == 0) {
+                        return '<span class="badge red-text">Belum diuji</span>';
+                    } else {
+                        if (($data->getJumlahCek() >= $data->getJumlahPesanan()) && ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPart())) {
+                            return  '<span class="badge green-text">Selesai</span>';
+                        } else {
+                            return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                        }
+                    }
+                }
+            })
+            ->addColumn('button', function ($data) {
+                if (!empty($data->so)) {
+                    $name = explode('/', $data->so);
+                    if ($name[1] == 'EKAT') {
+                        $x =  'ekatalog';
+                    } elseif ($name[1] == 'SPA') {
+                        $x =  'spa';
+                    } else {
+                        $x =  'spb';
+                    }
+                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '">
+                                <i class="fas fa-search"></i>
+                        </a>';
+                }
+            })
+            ->rawColumns(['button', 'status', 'batas_uji'])
+            ->make(true);
+    }
+
+    public function get_data_selesai_so($value)
+    {
+        $data = "";
+        $x = explode(',', $value);
+        if ($value == 'semua') {
+            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+        } else if ($x == ['ekatalog', 'spa']) {
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $data = $Ekat->merge($Spa);
+        } else if ($x == ['ekatalog', 'spb']) {
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $data = $Ekat->merge($Spb);
+        } else if ($x == ['spa', 'spb']) {
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $data = $Spa->merge($Spb);
+        } else if ($value == 'ekatalog') {
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekaralog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+        } else if ($value == 'spa') {
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+        } else if ($value == 'spb') {
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+        } else {
+            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         }
 
         $arrayid = array();
 
         foreach ($data as $i) {
             if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
-                if ($i->getJumlahSeri() > 0) {
+                if ($i->getJumlahPesanan() == $i->getJumlahCek()) {
+                    $arrayid[] = $i->id;
+                }
+            } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
+                if ($i->getJumlahPesananPart() == $i->getJumlahCekPart("ok")) {
                     $arrayid[] = $i->id;
                 }
             } else {
-                $arrayid[] = $i->id;
+                if (($i->getJumlahPesanan() == $i->getJumlahCek()) && ($i->getJumlahPesananPart() == $i->getJumlahCekPart("ok"))) {
+                    $arrayid[] = $i->id;
+                }
             }
         }
 
@@ -1111,7 +1269,7 @@ class QcController extends Controller
         $tgl_sekarang = Carbon::now()->format('Y-m-d');
         $lewat_batas = 0;
         foreach ($lewat_batas_data as $l) {
-            $tgl_parameter = $this->getHariBatasKontrak($l->pesanan->ekatalog->tgl_kontrak, $l->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
+            $tgl_parameter = $this->getHariBatasKontrak($l->ekatalog->tgl_kontrak, $l->ekatalog->provinsi->status)->format('Y-m-d');
             if ($tgl_sekarang > $tgl_parameter) {
                 $lewat_batas++;
             }
