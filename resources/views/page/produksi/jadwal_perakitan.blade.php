@@ -24,7 +24,7 @@
 <link rel="stylesheet" href="{{ asset('vendor/apexcharts/dist/apexcharts.css') }}">
 <script src="{{ asset('vendor/apexcharts/dist/apexcharts.min.js') }}"></script>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
-    
+
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
@@ -509,7 +509,7 @@
                                         $('.scan-produk tbody').empty();
                                         $('#table_produk_perakitan').DataTable().ajax
                                             .reload();
-                                        // location.reload();
+                                        location.reload();
                                     }
                                 })
                             }
