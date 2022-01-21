@@ -770,6 +770,9 @@ class LogistikController extends Controller
             ->addColumn('so', function ($data) {
                 return $data->so;
             })
+            ->addColumn('po', function ($data) {
+                return $data->no_po;
+            })
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->so);
                 if ($name[1] == 'EKAT') {
@@ -3353,7 +3356,7 @@ class LogistikController extends Controller
     public function check_no_resi($val)
     {
         $vals = str_replace("_", "/", $val);
-        $e = Logistik::where('noresi', $vals)->count();
+        $e = Logistik::where([['noresi', '!=', '-'], ['noresi', '=', $vals]])->count();
         return $e;
     }
 }

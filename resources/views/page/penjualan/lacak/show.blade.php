@@ -262,6 +262,7 @@
                                 <thead>
                                     <tr>
                                         <th>No</th>
+                                        <th>No SO</th>
                                         <th>No Surat Jalan</th>
                                         <th>No SO</th>
                                         <th>Customer</th>

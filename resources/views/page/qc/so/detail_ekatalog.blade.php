@@ -329,6 +329,14 @@
             var data = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');
             $('.nosericheck').prop('checked', false);
+            console.log(datacount);
+            if (datacount == 0) {
+                // $('.sericheckbox').addClass("hide");
+                $('#noseritable').DataTable().column(0).visible(false);
+            } else {
+                // $('.sericheckbox').removeClass("hide");
+                $('#noseritable').DataTable().column(0).visible(true);
+            }
             $('#cekbrg').prop('disabled', true);
             $('input[name ="check_all"]').prop('checked', false);
             if (datacount == 0) {
@@ -342,6 +350,7 @@
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
+
         });
 
         $(document).on('submit', '#form-pengujian-update', function(e) {
@@ -365,8 +374,8 @@
                         $("#editmodal").modal('hide');
                         $('#noseritable').DataTable().ajax.reload();
                         $('#showtable').DataTable().ajax.reload();
-
                         location.reload();
+
                     } else if (response['data'] == "error") {
                         swal.fire(
                             'Gagal',
@@ -376,7 +385,7 @@
                     }
                 },
                 error: function(xhr, status, error) {
-                    alert($('#form-customer-update').serialize());
+                    alert($('#form-pengujian-update').serialize());
                 }
             });
             return false;
@@ -391,7 +400,7 @@
                 'datatype': 'JSON',
                 'url': '/api/qc/so/seri/0/0',
                 'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    'X-CSRF-TOKEN': '{{csrf_token()}}',
                 }
             },
             language: {
@@ -430,7 +439,8 @@
                     'datatype': 'JSON',
                     'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + pesanan_id,
                     'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                        'X-CSRF-TOKEN': '{{csrf_token()}}',
+
                     }
                 },
                 language: {
