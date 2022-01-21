@@ -1468,9 +1468,9 @@ class QcController extends Controller
             $lewat_batas = 0;
             $id = array();
             foreach ($lewat_batas_data as $l) {
-                $tgl_parameter = $this->getHariBatasKontrak($l->pesanan->ekatalog->tgl_kontrak, $l->pesanan->ekatalog->provinsi->status)->format('Y-m-d');
+                $tgl_parameter = $this->getHariBatasKontrak($l->ekatalog->tgl_kontrak, $l->ekatalog->provinsi->status)->format('Y-m-d');
                 if ($tgl_sekarang > $tgl_parameter) {
-                    $id[] = $l->pesanan->id;
+                    $id[] = $l->id;
                 }
             }
             $data = Pesanan::whereIN('id', $id)->get();
