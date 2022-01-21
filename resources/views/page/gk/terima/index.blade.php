@@ -397,7 +397,6 @@
             },
         });
 
-        var arrSparepart = []
         var seriSparepart = [];
         var kerusakanSparepart = [];
         var tingkatSparepart = [];
@@ -405,13 +404,6 @@
         const data = tableScan.$('.seri').map(function () {
             return $(this).val();
         }).get();
-
-        data.forEach(function (item) {
-            if (item != '') {
-                arrSparepart.push(item);
-            }
-        })
-
         // Data Null
         const ker = tableScan.$('.remark').map(function () {
             return $(this).val();
@@ -423,24 +415,28 @@
 
         // No Seri
         data.forEach(function (item) {
-            if (item == '') {
+            if (item != '') {
                 seriSparepart.push(item);
             }
         })
 
         // Kerusakan
         ker.forEach(function (item) {
-            if (item == '') {
+            if (item != '') {
                 kerusakanSparepart.push(item);
             }
         })
 
         // Tingkat
         ting.forEach(function (item) {
-            if (item == '') {
+            if (item != '') {
                 tingkatSparepart.push(item);
             }
         })
+
+        console.log("seri", seriSparepart);
+        console.log("kerusakan", kerusakanSparepart);
+        console.log("tingkat", tingkatSparepart);
 
         const count = arr =>
             arr.reduce((a, b) => ({
@@ -451,8 +447,7 @@
         const duplicates = dict =>
             Object.keys(dict).filter((a) => dict[a] > 1)
 
-        if (duplicates(count(arrSparepart)).length > 0 || duplicates(count(seriSparepart)).length > 0 || duplicates(
-                count(tingkatSparepart)).length > 0 || duplicates(count(kerusakanSparepart)).length > 0) {
+        if (seriSparepart.length == 0 || kerusakanSparepart.length == 0 || tingkatSparepart.length == 0) {
             $('.seri').removeClass('is-invalid');
             $('.remark').removeClass('is-invalid');
             $('.layout_id').removeClass('is-invalid');
@@ -465,32 +460,24 @@
             $('.layout_id').filter(function () {
                 return $(this).val() == '';
             }).addClass('is-invalid');
-        }
-
-        if (duplicates(count(arrSparepart)).length > 0 || duplicates(count(seriSparepart)).length > 0) {
-            $('.seri').removeClass('is-invalid');
-            $('.seri').filter(function () {
-                for (let index = 0; index < duplicates(count(arrSparepart)).length; index++) {
-                    if ($(this).val() == duplicates(count(arrSparepart))[index]) {
+        }else if (duplicates(count(seriSparepart)).length > 0) {
+                $('.seri').removeClass('is-invalid');
+                $('.remark').removeClass('is-invalid');
+                $('.layout_id').removeClass('is-invalid');
+                $('.seri').filter(function () {
+                for (let index = 0; index < duplicates(count(seriSparepart)).length; index++) {
+                    if ($(this).val() == duplicates(count(seriSparepart))[index]) {
                         return true;
                     }
                 }
             }).addClass('is-invalid');
-            $('.seri').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-            if (duplicates(count(arrSparepart)).length > 0) {
-                Swal.fire({
+            Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Nomor seri ' + duplicates(count(arrSparepart)) + ' ada yang sama.',
+                    text: 'Nomor seri ' + duplicates(count(seriSparepart)) + ' ada yang sama.',
                 })
             }
-        }
-
-        if ((duplicates(count(kerusakanSparepart)).length == 0 && duplicates(count(seriSparepart)).length == 0 &&
-                duplicates(count(tingkatSparepart)).length == 0 && duplicates(count(arrSparepart)).length == 0) ==
-            true) {
+        else{
             $('.seri').removeClass('is-invalid');
             $('.remark').removeClass('is-invalid');
             $('.layout_id').removeClass('is-invalid');
@@ -615,7 +602,6 @@
             }
         });
 
-        var arrUnit = [];
         var seriUnit = [];
         var kerusakanUnit = [];
         var tingkatUnit = [];
@@ -634,27 +620,22 @@
 
         dataUnit.forEach(function (item) {
             if (item != '') {
-                arrUnit.push(item);
-            }
-        });
-
-        dataUnit.forEach(function (item) {
-            if (item == '') {
                 seriUnit.push(item);
             }
         });
 
         ker.forEach(function (item) {
-            if (item == '') {
+            if (item != '') {
                 kerusakanUnit.push(item);
             }
         });
 
         ting.forEach(function (item) {
-            if (item == '') {
+            if (item != '') {
                 tingkatUnit.push(item);
             }
         });
+        console.log("seri",seriUnit);
 
         const count = arr =>
             arr.reduce((a, b) => ({
@@ -665,7 +646,8 @@
         const duplicates = dict =>
             Object.keys(dict).filter((a) => dict[a] > 1)
 
-        if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0 || duplicates(count(kerusakanUnit)).length > 0 || duplicates(count(tingkatUnit)).length > 0) {
+        console.log("duplikat",duplicates(count(seriUnit)));
+        if (seriUnit.length == 0 || kerusakanUnit.length == 0 || tingkatUnit.length == 0) {
             $('.seri').removeClass('is-invalid');
             $('.kerusakan').removeClass('is-invalid');
             $('.tingkat').removeClass('is-invalid');
@@ -678,32 +660,25 @@
             $('.tingkat').filter(function () {
                 return $(this).val() == '';
             }).addClass('is-invalid');
-        }
-
-        if (duplicates(count(arrUnit)).length > 0 || duplicates(count(seriUnit)).length > 0) {
+        }else if (duplicates(count(seriUnit)).length > 0) {
             $('.seri').removeClass('is-invalid');
+            $('.kerusakan').removeClass('is-invalid');
+            $('.tingkat').removeClass('is-invalid');
             $('.seri').filter(function () {
                 $('.seri').filter(function () {
-                    for (let index = 0; index < duplicates(count(arrUnit)).length; index++) {
-                    if ($(this).val() == duplicates(count(arrUnit))[index]) {
+                    for (let index = 0; index < duplicates(count(seriUnit)).length; index++) {
+                    if ($(this).val() == duplicates(count(seriUnit))[index]) {
                         return true;
                     }
                 }
                         }).addClass('is-invalid');
             }).addClass('is-invalid');
-            $('.seri').filter(function () {
-                return $(this).val() == '';
-            }).addClass('is-invalid');
-            if (duplicates(count(arrUnit)).length > 0) {
-                Swal.fire({
+            Swal.fire({
                     icon: 'error',
                     title: 'Oops...',
-                    text: 'Nomor seri ' + duplicates(count(arrUnit)) + ' ada yang sama.',
+                    text: 'Nomor seri ' + duplicates(count(seriUnit)) + ' ada yang sama.',
                 })
-            }
-        }
-
-        if ((duplicates(count(kerusakanUnit)).length == 0 && duplicates(count(seriUnit)).length == 0 && duplicates(count(tingkatUnit)).length == 0 && duplicates(count(arrUnit)).length == 0) == true) {
+        }else{
             $('.seri').removeClass('is-invalid');
             $('.kerusakan').removeClass('is-invalid');
             $('.tingkat').removeClass('is-invalid');
@@ -968,9 +943,9 @@
                             'Data berhasil diterima!',
                             'success'
                         )
-                        // setTimeout(() => {
-                        //     location.reload();
-                        // }, 1000);
+                        setTimeout(() => {
+                            location.reload();
+                        }, 1000);
                     },
                 })
 
