@@ -1961,23 +1961,24 @@ class ProduksiController extends Controller
         })->where('status', 11)->get()->count();
         $total_rakit = JadwalPerakitan::find($request->jadwal_id);
         $now = intval($total_rakit->jumlah - $sdh_terkirim);
-        // return $now - count($request->noseri);
         if ($now == $total_rakit->jumlah) {
-            return 'a';
+            // return 'a';
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
-        } elseif ($now == $blm_terkirim) {
+        } elseif ($total_rakit->jumlah == $sdh_terkirim) {
+            // return 'b';
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
         } else {
+            // return 'c';
             $total_rakit->status_tf = 13;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
         }
 
-        // return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
+        return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
     }
 
     // riwayat rakit
