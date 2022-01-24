@@ -56,6 +56,9 @@
         text-align: right;
         margin-top: 0px;
     }
+    .page-break-inside-avoid {
+                    page-break-inside: avoid;
+                }
 </style>
 <body>
 
@@ -122,7 +125,7 @@
                         </td>
                         <td class="td">
                             @foreach ($s->seri as $seri)
-                            {{ $seri->seri->noseri }} <br>
+                            {{ $seri->seri->noseri }},
                             @endforeach
                         </td>
                     </tr>

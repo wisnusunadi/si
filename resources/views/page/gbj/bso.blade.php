@@ -596,17 +596,16 @@
                             data: prd1,
                         },
                         success: function(res) {
-                            console.log(res);
+                            Swal.fire(
+                                'Success!',
+                                'Data Terkirim ke QC',
+                                'success'
+                            ).then(function() {
+                                location.reload();
+                            })
                         }
                     })
-                    Swal.fire(
-                        'Success!',
-                        'Data Terkirim ke QC',
-                        'success'
-                    )
-                    setTimeout(() => {
-                        location.reload();
-                    }, 1000);
+
                 }
             });
     });

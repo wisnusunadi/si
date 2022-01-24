@@ -1657,7 +1657,7 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12, 13])->OrwhereNull('status_tf')->get();
+        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12, 13])->orderByDesc('created_at')->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -1711,6 +1711,9 @@ class ProduksiController extends Controller
                 return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $c) . '">
                                 <button class="btn btn-outline-info"><i class="far fa-edit"></i> Rakit Produk</button>
                             </a>';
+            })
+            ->addColumn('created_at', function ($d) {
+                return $d->created_at;
             })
             ->rawColumns(['action', 'jml', 'end'])
             ->make(true);
@@ -1958,16 +1961,18 @@ class ProduksiController extends Controller
         })->where('status', 11)->get()->count();
         $total_rakit = JadwalPerakitan::find($request->jadwal_id);
         $now = intval($total_rakit->jumlah - $sdh_terkirim);
-        // return $now - count($request->noseri);
         if ($now == $total_rakit->jumlah) {
+            // return 'a';
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
-        } elseif ($now == $blm_terkirim) {
+        } elseif ($total_rakit->jumlah == $sdh_terkirim) {
+            // return 'b';
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
         } else {
+            // return 'c';
             $total_rakit->status_tf = 13;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
