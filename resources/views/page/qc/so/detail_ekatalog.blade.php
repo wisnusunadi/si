@@ -357,28 +357,14 @@
             e.preventDefault();
             var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
             var data = [];
-            var tanggal_uji_arr = "";
-            var cek_arr = [];
 
-            var tanggal_uji = $('#form-pengujian-update').find('input[name="tanggal_uji"]').serializeArray();
-            var cek = $('#form-pengujian-update').find('input[type="radio"][name="cek"]').serializeArray();
-
-            $.each(tanggal_uji, function() {
-                tanggal_uji_arr = this.value;
-            });
+            var tanggal_uji = $('input[type="date"][name="tanggal_uji"]').val();
+            var cek = $('input[type="radio"][name="cek"]').val();
 
             $.each(no_seri, function() {
                 data.push(this.value);
             });
 
-            $.each(cek, function() {
-                cek_arr = this.value;
-            });
-
-            console.log(tanggal_uji_arr);
-            console.log(data);
-
-            console.log(cek_arr);
             var action = $(this).attr('action');
             $.ajax({
                 headers: {
@@ -387,8 +373,8 @@
                 type: "PUT",
                 url: action,
                 data: {
-                    tanggal_uji: tanggal_uji_arr,
-                    cek: cek_arr,
+                    tanggal_uji: tanggal_uji,
+                    cek: cek,
                     noseri_id: data,
                 },
                 dataType: 'JSON',

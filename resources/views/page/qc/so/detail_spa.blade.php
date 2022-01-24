@@ -378,6 +378,58 @@
         });
 
         $(document).on('submit', '#form-pengujian-update', function(e) {
+            if(datajenis == "produk"){
+                e.preventDefault();
+                var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
+                var data = [];
+
+                var tanggal_uji = $('input[type="date"][name="tanggal_uji"]').val();
+                var cek = $('input[type="radio"][name="cek"]').val();
+
+                $.each(no_seri, function() {
+                    data.push(this.value);
+                });
+
+                var action = $(this).attr('action');
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "PUT",
+                    url: action,
+                    data: {
+                        tanggal_uji: tanggal_uji,
+                        cek: cek,
+                        noseri_id: data,
+                    },
+                    dataType: 'JSON',
+                    success: function(response) {
+                        console.log(response);
+                        if (response['data'] == "success") {
+                            swal.fire(
+                                'Berhasil',
+                                'Berhasil melakukan Penambahan Data Pengujian',
+                                'success'
+                            );
+                            $("#editmodal").modal('hide');
+                            $('#noseritable').DataTable().ajax.reload();
+                            $('#showtable').DataTable().ajax.reload();
+                            location.reload();
+
+                        } else if (response['data'] == "error") {
+                            swal.fire(
+                                'Gagal',
+                                'Gagal melakukan Penambahan Data Pengujian',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr);
+                    }
+                });
+            }
+            else if(datajenis == "part"){
             e.preventDefault();
             var action = $(this).attr('action');
             $.ajax({
@@ -413,6 +465,7 @@
                     alert($('#form-customer-update').serialize());
                 }
             });
+        }
             return false;
         });
 
@@ -567,71 +620,7 @@
         }
 
         $(document).on('click', '.editmodal', function(event) {
-            if (datajenis == "produk") {
-                event.preventDefault();
-                var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
-                var data = [];
-                var tanggal_uji_arr = "";
-                var cek_arr = [];
 
-                var tanggal_uji = $('#form-pengujian-update').find('input[name="tanggal_uji"]').serializeArray();
-                var cek = $('#form-pengujian-update').find('input[type="radio"][name="cek"]').serializeArray();
-
-                $.each(tanggal_uji, function() {
-                    tanggal_uji_arr = this.value;
-                });
-
-                $.each(no_seri, function() {
-                    data.push(this.value);
-                });
-
-                $.each(cek, function() {
-                    cek_arr = this.value;
-                });
-
-                console.log(tanggal_uji_arr);
-                console.log(data);
-
-                console.log(cek_arr);
-                var action = $(this).attr('action');
-                $.ajax({
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    type: "PUT",
-                    url: action,
-                    data: {
-                        tanggal_uji: tanggal_uji_arr,
-                        cek: cek_arr,
-                        noseri_id: data,
-                    },
-                    dataType: 'JSON',
-                    success: function(response) {
-                        console.log(response);
-                        if (response['data'] == "success") {
-                            swal.fire(
-                                'Berhasil',
-                                'Berhasil melakukan Penambahan Data Pengujian',
-                                'success'
-                            );
-                            $("#editmodal").modal('hide');
-                            $('#noseritable').DataTable().ajax.reload();
-                            $('#showtable').DataTable().ajax.reload();
-                            location.reload();
-
-                        } else if (response['data'] == "error") {
-                            swal.fire(
-                                'Gagal',
-                                'Gagal melakukan Penambahan Data Pengujian',
-                                'error'
-                            );
-                        }
-                    },
-                    error: function(xhr, status, error) {
-                        console.log(xhr);
-                    }
-                });
-            } else if (datajenis == "part") {
                 var href = "";
                 event.preventDefault();
                 if (datajenis == "produk") {
@@ -675,7 +664,7 @@
                     },
                     timeout: 8000
                 })
-            }
+
         });
 
         $(document).on('change', 'input[type="radio"][name="cek"]', function(event) {
