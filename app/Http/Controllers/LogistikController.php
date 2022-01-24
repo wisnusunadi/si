@@ -92,7 +92,7 @@ class LogistikController extends Controller
                     if ($data->GudangBarangJadi->nama == '') {
                         return $data->GudangBarangJadi->produk->nama;
                     } else {
-                        return $data->GudangBarangJadi->nama;
+                        return $data->GudangBarangJadi->produk->nama . ' - ' . $data->GudangBarangJadi->nama;
                     }
                 })
                 ->addColumn('jumlah', function ($data) {
@@ -156,7 +156,7 @@ class LogistikController extends Controller
                         if ($data->GudangBarangJadi->nama == '') {
                             return $data->GudangBarangJadi->produk->nama;
                         } else {
-                            return $data->GudangBarangJadi->nama;
+                            return $data->GudangBarangJadi->produk->nama . ' - ' . $data->GudangBarangJadi->nama;
                         }
                     } else {
                         return $data->Sparepart->nama;
