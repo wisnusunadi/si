@@ -385,7 +385,7 @@ class LogistikController extends Controller
                         if ($data->gudangbarangjadi->nama == '') {
                             return $data->gudangbarangjadi->produk->nama;
                         } else {
-                            return $data->gudangbarangjadi->nama;
+                            return $data->gudangbarangjadi->produk->nama . ' - ' . $data->gudangbarangjadi->nama;
                         }
                     } else {
                         return $data->Sparepart->nama;
@@ -488,7 +488,11 @@ class LogistikController extends Controller
                     }
                 })
                 ->addColumn('nama_produk', function ($data) {
-                    return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                    if (empty($data->DetailPesananProduk->GudangBarangJadi->nama)) {
+                        return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                    } else {
+                        return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - ' . $data->DetailPesananProduk->GudangBarangJadi->nama;
+                    }
                 })
                 ->addColumn('jumlah', function ($data) {
                     $c = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
@@ -551,9 +555,12 @@ class LogistikController extends Controller
                     }
                 })
                 ->addColumn('nama_produk', function ($data) {
-
                     if (isset($data->DetailPesananProduk)) {
-                        return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                        if (empty($data->DetailPesananProduk->GudangBarangJadi->nama)) {
+                            return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                        } else {
+                            return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - ' . $data->DetailPesananProduk->GudangBarangJadi->nama;
+                        }
                     } else {
                         return $data->DetailPesananPart->Sparepart->nama;
                     }
