@@ -132,6 +132,9 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::put('/update/spb/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spb'])->name('penjualan.penjualan.update_spb');
         Route::view('/edit_spa', 'page.penjualan.penjualan.edit_spa')->name('penjualan.penjualan.edit_spa');
         Route::view('/edit_spa', 'page.penjualan.penjualan.edit_spa')->name('penjualan.penjualan.edit_spa');
+
+        //Export Laporan
+        Route::get('/export/{jenis}/{customer_id}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\PenjualanController::class, 'export_laporan'])->name('penjualan.penjualan.export');
     });
 
     Route::group(['prefix' => '/so'], function () {
