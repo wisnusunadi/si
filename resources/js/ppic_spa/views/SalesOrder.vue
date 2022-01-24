@@ -29,18 +29,33 @@
             <tr>
               <th>No</th>
               <th>Nomor SO</th>
+              <th>Nomor AKN</th>
+              <th>Nomor PO</th>
+              <th>Tanggal Order</th>
+              <th>Tanggal Delivery</th>
               <th>Customer</th>
-              <th>Batas Transfer</th>
+              <th>Jenis</th>
               <th>Status</th>
+              <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in salesOrder" :key="item.id">
+            <tr v-for="item in salesOrder" :key="'so'+item.DT_RowIndex">
               <td v-html="item.DT_RowIndex"></td>
               <td v-html="item.so"></td>
-              <td v-html="item.nama_customer"></td>
-              <td v-html="item.batas_out"></td>
-              <td v-html="item.status_prd"></td>
+              <td v-html="item.no_paket"></td>
+              <td v-html="item.nopo"></td>
+              <td v-html="item.tgl_order"></td>
+              <td v-html="item.tgl_kontrak"></td>
+              <td v-html="item.nama_customer "></td>
+              <td v-html="item.jenis"></td>
+              <td v-html="item.status"></td>
+              <td><button v-if="item.button != null"
+                  class="button is-light"
+                  @click="getSO(item.button)"
+                >
+                  <i class="fas fa-search"></i>
+                </button></td>
             </tr>
           </tbody>
         </table>
@@ -129,6 +144,19 @@
         <footer class="modal-card-foot"></footer>
       </div>
     </div>
+
+<div class="modal" :class="{ 'is-active': showModalSO }">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title">Modal title</p>
+      <button class="delete" @click="showModalSO = false"></button>
+    </header>
+    <section class="modal-card-body">
+      <!-- Content ... -->
+    </section>
+  </div>
+</div>
   </div>
 </template>
 
@@ -155,8 +183,10 @@ export default {
       salesOrder: [],
       detail: {},
       nama_produk: "",
+      detailSO: {},
 
       showModal: false,
+      showModalSO: false,
       view: "sales_order"
     };
   },
@@ -167,7 +197,7 @@ export default {
       await axios.get("/api/ppic/data/so").then((response) => {
         this.data = response.data.data;
       });
-      await axios.post("/api/prd/so").then((response) => {
+        await axios.get("/api/ppic/data/perso").then((response) => {
         this.salesOrder = response.data.data;
       });
       $("#table_so").DataTable();
@@ -175,6 +205,7 @@ export default {
 
       this.$store.commit("setIsLoading", false);
     },
+
 
     async getDetail(id, nama) {
       this.$store.commit("setIsLoading", true);
@@ -189,6 +220,17 @@ export default {
 
       this.showModal = true;
     },
+
+    async getSO(url){
+      this.$store.commit("setIsLoading", true);
+      await axios.get(url).then((response) => {
+        this.detailSO = response.data;
+        console.log("get detail", this.detailSO);
+      });
+      this.$store.commit("setIsLoading", false);
+
+      this.showModalSO = true;
+    }
   },
 
   mounted() {
