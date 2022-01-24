@@ -68,9 +68,31 @@ class GudangBarangJadi extends Model
             $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
                 $q->where('gudang_barang_jadi_id', $id);
             })->whereHas('Pesanan', function ($q) {
-                $q->whereNotIn('log_id', ['7', '10']);
+                $q->whereIn('log_id', ['7']);
             })->whereHas('Pesanan.Ekatalog', function ($q) use ($status) {
                 $q->where('status', $status);
+            })->get();
+            foreach ($s as $i) {
+                foreach ($i->PenjualanProduk->Produk as $j) {
+                    if ($j->id == $produk_id) {
+                        $jumlah =  $jumlah + ($i->jumlah * $j->pivot->jumlah);
+                    }
+                }
+            }
+        } else if ($jenis == "ekatalog_po") {
+            $id = $this->id;
+            $produk_id = $this->produk_id;
+            // $s = DetailPesananProduk::where('gudang_barang_jadi_id', $id)->whereHas('DetailPesanan.Pesanan', function ($q) {
+            //     $q->whereNotIn('log_id', ['10']);
+            // })->whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($status) {
+            //     $q->where('status', $status);
+            // })->get();
+            $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                $q->where('gudang_barang_jadi_id', $id);
+            })->whereHas('Pesanan', function ($q) {
+                $q->whereNotIn('log_id', ['7', '10']);
+            })->whereHas('Pesanan.Ekatalog', function ($q) use ($status) {
+                $q->whereNotIn('status', ['batal']);
             })->get();
             foreach ($s as $i) {
                 foreach ($i->PenjualanProduk->Produk as $j) {

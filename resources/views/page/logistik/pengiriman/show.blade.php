@@ -670,29 +670,32 @@
 
         $(document).on('change keyup', '#no_resi', function(event) {
             if ($(this).val() != "") {
-                var value = $(this).val();
-                var val = value.replaceAll("/", "_")
-                $.ajax({
-                    type: 'POST',
-                    dataType: 'json',
-                    url: '/api/logistik/cek/no_resi/' + val,
-                    success: function(data) {
-                        if (data > 0) {
-                            $('#no_resi').addClass('is-invalid');
-                            $('#msgno_resi').text("No Resi sudah terpakai");
-                            $('#btnsimpan').attr('disabled', true);
-                        } else {
-                            $('#no_resi').removeClass('is-invalid');
-                            $('#msgno_resi').text("");
-                            $('#btnsimpan').removeAttr('disabled');
-                        }
-                    },
-                    error: function(data) {
-                        $('#no_resi').addClass('is-invalid');
-                        $('#msgno_resi').text("No Resi harus diisi");
-                        $('#btnsimpan').attr('disabled', true);
-                    }
-                });
+                // var value = $(this).val();
+                // var val = value.replaceAll("/", "_")
+                // $.ajax({
+                //     type: 'POST',
+                //     dataType: 'json',
+                //     url: '/api/logistik/cek/no_resi/' + val,
+                //     success: function(data) {
+                //         if (data > 0) {
+                //             $('#no_resi').addClass('is-invalid');
+                //             $('#msgno_resi').text("No Resi sudah terpakai");
+                //             $('#btnsimpan').attr('disabled', true);
+                //         } else {
+                //             $('#no_resi').removeClass('is-invalid');
+                //             $('#msgno_resi').text("");
+                //             $('#btnsimpan').removeAttr('disabled');
+                //         }
+                //     },
+                //     error: function(data) {
+                //         $('#no_resi').addClass('is-invalid');
+                //         $('#msgno_resi').text("No Resi harus diisi");
+                //         $('#btnsimpan').attr('disabled', true);
+                //     }
+                // });
+                $('#no_resi').removeClass('is-invalid');
+                $('#msgno_resi').text("");
+                $('#btnsimpan').removeAttr('disabled');
             } else if ($(this).val() == "") {
                 $('#no_resi').addClass('is-invalid');
                 $('#msgno_resi').text("No Resi harus diisi");

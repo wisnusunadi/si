@@ -366,23 +366,23 @@ class QcController extends Controller
         if ($value == 'semua') {
             $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else if ($x == ['ekatalog', 'spa']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
             $data = $Ekat->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
             $data = $Ekat->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
             $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekaralog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else if ($value == 'spa') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else if ($value == 'spb') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else {
             $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         }
@@ -516,27 +516,27 @@ class QcController extends Controller
         $data = "";
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else if ($x == ['ekatalog', 'spa']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Ekat = collect(Pesanan::has('Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spa = collect(Pesanan::has('Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
             $data = $Ekat->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Ekat = collect(Pesanan::has('Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spb = collect(Pesanan::has('Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
             $data = $Ekat->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spa = collect(Pesanan::has('Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spb = collect(Pesanan::has('Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
             $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Ekaralog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::has('Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else if ($value == 'spa') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::has('Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else if ($value == 'spb') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('Pesanan.Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::has('Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         } else {
-            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         }
 
         $arrayid = array();
@@ -1112,7 +1112,7 @@ class QcController extends Controller
                 $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $request->noseri_id[$i])->first();
                 if ($check == null) {
                     $c = NoseriDetailPesanan::create([
-                        'detail_pesanan_produk_id' => $request->detail_pesanan_produk_id[$i],
+                        'detail_pesanan_produk_id' => $data->detail->detail_pesanan_produk_id,
                         't_tfbj_noseri_id' => $request->noseri_id[$i],
                         'status' => $request->cek,
                         'tgl_uji' => $request->tanggal_uji,
@@ -1209,9 +1209,9 @@ class QcController extends Controller
 
         $data = Pesanan::whereNotIn('log_id', ['7', '10'])->orderby('id', "DESC")->get();
 
-        $terbarus =  Pesanan::orWhereHas('TFProduksi', function ($q) {
-            $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
-        })->whereIN('id',  $this->check_input())->get()->count();
+        // $terbarus =  Pesanan::orWhereHas('TFProduksi', function ($q) {
+        //     $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
+        // })->whereIN('id',  $this->check_input())->get()->count();
 
         // $hasil = "";
         // foreach ($data as $i) {
@@ -1274,7 +1274,11 @@ class QcController extends Controller
                 $lewat_batas++;
             }
         }
-        return view('page.qc.dashboard', ['terbaru' => $terbaru, 'hasil' => $hasil, 'lewat_batas' => $lewat_batas]);
+
+        $cpo = Pesanan::where('log_id', ['9'])->count();
+        $cgudang = Pesanan::where('log_id', ['6'])->count();
+        $clogistik = Pesanan::where('log_id', ['11', '13'])->count();
+        return view('page.qc.dashboard', ['terbaru' => $terbaru, 'hasil' => $hasil, 'lewat_batas' => $lewat_batas, 'po' => $cpo, 'gudang' => $cgudang, 'logistik' => $clogistik]);
     }
     public function dashboard_data($value)
     {
@@ -1561,6 +1565,41 @@ class QcController extends Controller
         }
     }
 
+    public function dashboard_so()
+    {
+        $data = Pesanan::whereIn('log_id', ['9', '6', '11', '13'])->orderBy('id', 'desc')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->so;
+            })
+            ->addColumn('customer', function ($data) {
+                $name = explode('/', $data->so);
+                if ($name[1] == 'EKAT') {
+                    return '<div>' . $data->Ekatalog->Customer->nama . '</div><small>' . $data->Ekatalog->instansi . '</small>';
+                } else if ($name[1] == 'SPA') {
+                    return $data->Spa->Customer->nama;
+                } else if ($name[1] == 'SPB') {
+                    return $data->Spb->Customer->nama;
+                }
+            })
+            ->addColumn('status', function ($data) {
+                $datas = "";
+                if ($data->log_id == "9") {
+                    $datas .= '<span class="badge purple-text">';
+                } else if ($data->log_id == "6") {
+                    $datas .= '<span class="badge orange-text">';
+                } else if ($data->log_id == "11") {
+                    $datas .= '<span class="badge red-text">';
+                } else if ($data->log_id == "13") {
+                    $datas .= '<span class="badge blue-text">';
+                }
+                $datas .= $data->State->nama . '</span>';
+                return $datas;
+            })
+            ->rawColumns(['customer', 'status'])
+            ->make(true);
+    }
     //Laporan
     public function laporan_outgoing(Request $request)
     {

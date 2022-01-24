@@ -1017,6 +1017,16 @@ return [
         //     ],
         // ],
         [
+            'header' => 'DATA',
+            'auth' => [23]
+        ],
+        [
+            'text' => 'Customer',
+            'icon' => 'fas fa-users',
+            'url' => '/penjualan/customer/show',
+            'auth' => [23],
+        ],
+        [
             'header' => 'OUTGOING',
             'auth' => [23]
         ],
@@ -1163,6 +1173,12 @@ return [
             'auth' => [15],
         ],
         [
+            'text' => 'Customer',
+            'icon' => 'fas fa-users',
+            'url' => '/penjualan/customer/show',
+            'auth' => [15],
+        ],
+        [
             'header' => 'PENJUALAN',
             'auth' => [15]
         ],
@@ -1229,7 +1245,7 @@ return [
             'text' => 'Customer',
             'icon' => 'fas fa-users',
             'url' => '/penjualan/customer/show',
-            'auth' => [8, 15],
+            'auth' => [8],
         ],
         [
             'text' => 'Sales Order',

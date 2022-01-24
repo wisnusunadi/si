@@ -397,6 +397,7 @@ Route::prefix('/noseri')->group(function () {
 Route::prefix('/produk')->group(function () {
     Route::post('/variasi_stok/{id}', [App\Http\Controllers\PenjualanController::class, 'check_variasi_jumlah']);
 });
+
 Route::prefix('/ekatalog')->group(function () {
     // Route::get('data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
     Route::post('pengiriman/data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog_pengiriman']);
@@ -407,6 +408,7 @@ Route::prefix('/ekatalog')->group(function () {
     Route::get('detail/delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_detail_ekatalog']);
     Route::delete('delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_ekatalog']);
 });
+
 Route::prefix('/spa')->group(function () {
     // Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
     // Route::post('update/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spa']);
@@ -415,6 +417,7 @@ Route::prefix('/spa')->group(function () {
     Route::delete('delete/{id}', [App\Http\Controllers\PenjualanController::class, 'delete_spa']);
     Route::post('paket/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_paket_spa']);
 });
+
 Route::prefix('/spb')->group(function () {
     // Route::get('data', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
 
@@ -424,8 +427,10 @@ Route::prefix('/spb')->group(function () {
     Route::post('paket/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_paket_spb']);
     // Route::post('update/{id}', [App\Http\Controllers\PenjualanController::class, 'update_spb']);
 });
+
 Route::prefix('/qc')->group(function () {
     Route::post('dashboard/data/{value}', [App\Http\Controllers\QcController::class, 'dashboard_data']);
+    Route::post('dashboard/so', [App\Http\Controllers\QcController::class, 'dashboard_so']);
     Route::prefix('/so')->group(function () {
         Route::put('create/{jenis}/{pesanan_id}/{produk_id}', [App\Http\Controllers\QcController::class, 'create_data_qc']);
         Route::post('data/{value}', [App\Http\Controllers\QcController::class, 'get_data_so']);
@@ -451,6 +456,7 @@ Route::prefix('/qc')->group(function () {
 
 Route::prefix('/logistik')->group(function () {
     Route::post('dashboard/data/{value}', [App\Http\Controllers\LogistikController::class, 'dashboard_data']);
+    Route::post('dashboard/so', [App\Http\Controllers\LogistikController::class, 'dashboard_so']);
     Route::group(['prefix' => '/so'], function () {
         Route::put('create/{detail_pesanan_id}/{part_array}/{jenis}', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
         // Route::get('data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);

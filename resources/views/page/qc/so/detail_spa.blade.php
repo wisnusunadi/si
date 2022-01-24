@@ -378,6 +378,58 @@
         });
 
         $(document).on('submit', '#form-pengujian-update', function(e) {
+            if(datajenis == "produk"){
+                e.preventDefault();
+                var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
+                var data = [];
+
+                var tanggal_uji = $('input[type="date"][name="tanggal_uji"]').val();
+                var cek = $('input[type="radio"][name="cek"]').val();
+
+                $.each(no_seri, function() {
+                    data.push(this.value);
+                });
+
+                var action = $(this).attr('action');
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "PUT",
+                    url: action,
+                    data: {
+                        tanggal_uji: tanggal_uji,
+                        cek: cek,
+                        noseri_id: data,
+                    },
+                    dataType: 'JSON',
+                    success: function(response) {
+                        console.log(response);
+                        if (response['data'] == "success") {
+                            swal.fire(
+                                'Berhasil',
+                                'Berhasil melakukan Penambahan Data Pengujian',
+                                'success'
+                            );
+                            $("#editmodal").modal('hide');
+                            $('#noseritable').DataTable().ajax.reload();
+                            $('#showtable').DataTable().ajax.reload();
+                            location.reload();
+
+                        } else if (response['data'] == "error") {
+                            swal.fire(
+                                'Gagal',
+                                'Gagal melakukan Penambahan Data Pengujian',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr);
+                    }
+                });
+            }
+            else if(datajenis == "part"){
             e.preventDefault();
             var action = $(this).attr('action');
             $.ajax({
@@ -413,6 +465,7 @@
                     alert($('#form-customer-update').serialize());
                 }
             });
+        }
             return false;
         });
 
@@ -567,49 +620,51 @@
         }
 
         $(document).on('click', '.editmodal', function(event) {
-            var href = "";
-            event.preventDefault();
-            if (datajenis == "produk") {
-                data = $(".nosericheck").data().value;
-            } else {
-                data = dataid
-            }
-            console.log(checkedAry);
-            console.log(data);
-            console.log(idpesanan);
-            if (datajenis == "produk") {
-                href = "/qc/so/edit/" + datajenis + '/' + data + "/" + '{{$id}}';
-            } else {
-                href = "/qc/so/edit/" + datajenis + '/' + dataid + "/" + '{{$id}}';
-            }
 
-            $.ajax({
-                url: href,
-                beforeSend: function() {
-                    $('#loader').show();
-                },
-                // return the result
-                success: function(result) {
+                var href = "";
+                event.preventDefault();
+                if (datajenis == "produk") {
+                    data = $(".nosericheck").data().value;
+                } else {
+                    data = dataid
+                }
+                console.log(checkedAry);
+                console.log(data);
+                console.log(idpesanan);
+                if (datajenis == "produk") {
+                    href = "/qc/so/edit/" + datajenis + '/' + data + "/" + '{{$id}}';
+                } else {
+                    href = "/qc/so/edit/" + datajenis + '/' + dataid + "/" + '{{$id}}';
+                }
 
-                    $('#editmodal').modal("show");
-                    $('#edit').html(result).show();
-                    if (datajenis == "produk") {
-                        listnoseri(checkedAry, data, '{{$id}}');
-                    }
-                    max_date();
-                    // $("#editform").attr("action", href);
-                },
-                complete: function() {
-                    $('#loader').hide();
+                $.ajax({
+                    url: href,
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    // return the result
+                    success: function(result) {
 
-                },
-                error: function(jqXHR, testStatus, error) {
-                    console.log(error);
-                    alert("Page " + href + " cannot open. Error:" + error);
-                    $('#loader').hide();
-                },
-                timeout: 8000
-            })
+                        $('#editmodal').modal("show");
+                        $('#edit').html(result).show();
+                        if (datajenis == "produk") {
+                            listnoseri(checkedAry, data, '{{$id}}');
+                        }
+                        max_date();
+                        // $("#editform").attr("action", href);
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page " + href + " cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+
         });
 
         $(document).on('change', 'input[type="radio"][name="cek"]', function(event) {
