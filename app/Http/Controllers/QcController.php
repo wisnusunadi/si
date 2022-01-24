@@ -1209,61 +1209,41 @@ class QcController extends Controller
 
         $data = Pesanan::whereNotIn('log_id', ['7', '10'])->orderby('id', "DESC")->get();
 
-        // $terbarus =  Pesanan::orWhereHas('TFProduksi', function ($q) {
-        //     $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
-        // })->whereIN('id',  $this->check_input())->get()->count();
-
-        // $hasil = "";
-        // foreach ($data as $i) {
-        //     if (isset($i->DetailPesanan) && !isset($i->DetailPesananPart)) {
-        //         if ($i->getJumlahPesanan() > $i->getJumlahCek()) {
-        //             $k = Pesanan::orWhereHas('TFProduksi', function ($q) {
-        //                 $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
-        //             })->where('id',  $i->id)->get()->count();
-        //             $terbaru = $terbaru + $k;
-        //         }
-        //     } else if (!isset($i->DetailPesanan) && isset($i->DetailPesananPart)) {
-        //         if ($i->getJumlahPesananPart() > $i->getJumlahCekPart("ok")) {
-        //             if ($i->tgl_po >= Carbon::now()->subdays(7)) {
-        //                 $terbaru = $terbaru + 1;
-        //             }
-        //         }
-        //     } else if (isset($i->DetailPesanan) && isset($i->DetailPesananPart)) {
-        //         if (($i->getJumlahPesanan() > $i->getJumlahCek()) && ($i->getJumlahPesananPart() <= $i->getJumlahCekPart("ok"))) {
-        //             $k = Pesanan::orWhereHas('TFProduksi', function ($q) {
-        //                 $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
-        //             })->where('id',  $i->id)->get()->count();
-        //             $terbaru = $terbaru + $k;
-        //         } else if (($i->getJumlahPesanan() <= $i->getJumlahCek()) && ($i->getJumlahPesananPart() > $i->getJumlahCekPart("ok"))) {
-        //             if ($i->getJumlahPesananPart() > $i->getJumlahCekPart("ok")) {
-        //                 if ($i->tgl_po >= Carbon::now()->subdays(7)) {
-        //                     $terbaru = $terbaru + 1;
-        //                 }
-        //             }
-        //         } else if (($i->getJumlahPesanan() > $i->getJumlahCek()) && ($i->getJumlahPesananPart() > $i->getJumlahCekPart("ok"))) {
-        //             $k = Pesanan::orWhereHas('TFProduksi', function ($q) {
-        //                 $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
-        //             })->where('id',  $i->id)->get()->count();
-        //             if ($k > 0) {
-        //                 $terbaru = $terbaru + $k;
-        //             } else {
-        //                 if ($i->tgl_po >= Carbon::now()->subdays(7)) {
-        //                     $terbaru = $terbaru + 1;
-        //                 }
-        //             }
-        //         }
-        //     }
-        // }
-
         $terbaruprd = Pesanan::whereHas('TFProduksi', function ($q) {
             $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
         })->whereIN('id',  $this->check_input())->get();
         $terbaruprt = Pesanan::has('DetailPesananPart')->where('tgl_po', '>=', Carbon::now()->subdays(7))->get();
-        $terbaru = count($terbaruprd->merge($terbaruprt));
 
-        $hasilprd = Pesanan::doesntHave('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->has('TFProduksi')->whereIN('id',  $this->check_input())->get();
-        $hasilprt = Pesanan::doesntHave('DetailPesananPart.OutgoingPesananPart')->whereNotIn('log_id', ['7', '10'])->get();
-        $hasil = count($hasilprd->merge($hasilprt));
+        $cekterbaru = $terbaruprd->merge($terbaruprt);
+        foreach ($cekterbaru as $j) {
+            if ($j->getJumlahCek() == 0 && $j->getJumlahCekPart("ok") == 0) {
+                $terbaru++;
+            }
+        }
+
+
+        $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+        // $hasilprd = Pesanan::doesntHave('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->where('log_id', 6)->whereIN('id',  $this->check_input())->get();
+        // $hasilprt = Pesanan::doesntHave('DetailPesananPart.OutgoingPesananPart')->whereNotIn('log_id', ['7', '10'])->get();
+        // $cekhasil = $hasilprd->merge($hasilprt);
+        $arrayid = array();
+        foreach ($cekhasil as $h) {
+            if (count($h->DetailPesanan) > 0 && count($h->DetailPesananPart) <= 0) {
+                if ($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) {
+                    $arrayid[] = $h->id;
+                }
+            } else if (count($h->DetailPesanan) <= 0 && count($h->DetailPesananPart) > 0) {
+                if ($h->getJumlahPesananPart() > $h->getJumlahCekPart("ok")) {
+                    $arrayid[] = $h->id;
+                }
+            } else {
+                if (($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) || $h->getJumlahPesananPart() > $h->getJumlahCekPart("ok")) {
+                    $arrayid[] = $h->id;
+                }
+            }
+        }
+        $hasil = Pesanan::whereIn('id', $arrayid)->get()->count();
+
 
         $lewat_batas_data = Pesanan::has('Ekatalog')->whereIN('id',  $this->check_input())->get();
         $tgl_sekarang = Carbon::now()->format('Y-m-d');
@@ -1289,11 +1269,18 @@ class QcController extends Controller
                 $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
             })->whereIN('id',  $this->check_input())->get();
             $terbaruprt = Pesanan::has('DetailPesananPart')->where('tgl_po', '>=', Carbon::now()->subdays(7))->get();
-            $data = $terbaruprd->merge($terbaruprt);
+            $terbaru_data = $terbaruprd->merge($terbaruprt);
+            $terbaru_id = [];
+            foreach ($terbaru_data as $j) {
+                if ($j->getJumlahCek() == 0 && $j->getJumlahCekPart("ok") == 0) {
+                    $terbaru_id[] = $j->id;
+                }
+            }
 
-            // $data = TFProduksi::WhereHas('Pesanan', function ($q) use ($a) {
-            //     $q->whereIN('id', $a);
-            // })->where('tgl_keluar', '>=', Carbon::now()->subdays(7))->get();
+            $prd = Pesanan::has('DetailPesanan')->whereIN('id', $terbaru_id)->get();
+            $part = Pesanan::has('DetailPesananPart')->whereIN('id', $terbaru_id)->get();
+            $data = $prd->merge($part);
+
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {
@@ -1410,9 +1397,21 @@ class QcController extends Controller
                 ->rawColumns(['button', 'batas', 'status'])
                 ->make(true);
         } else if ($value == 'belum_uji') {
-            $hasilprd = Pesanan::doesntHave('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->has('TFProduksi')->whereIN('id',  $this->check_input())->get();
+            $hasilprd = Pesanan::doesntHave('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->whereNotIn('log_id', ['7', '10'])->whereIN('id',  $this->check_input())->get();
             $hasilprt = Pesanan::doesntHave('DetailPesananPart.OutgoingPesananPart')->whereNotIn('log_id', ['7', '10'])->get();
-            $data = $hasilprd->merge($hasilprt);
+            $hasildata = $hasilprd->merge($hasilprt);
+
+
+            $terbaru_id = [];
+            foreach ($hasildata as $j) {
+                if ($j->getJumlahCek() == 0 && $j->getJumlahCekPart("ok") == 0) {
+                    $terbaru_id[] = $j->id;
+                }
+            }
+
+            $prd = Pesanan::has('DetailPesanan')->whereIN('id', $terbaru_id)->get();
+            $part = Pesanan::has('DetailPesananPart')->whereIN('id', $terbaru_id)->get();
+            $data = $prd->merge($part);
 
             return datatables()->of($data)
                 ->addIndexColumn()
