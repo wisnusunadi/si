@@ -86,6 +86,7 @@
                                             <th rowspan="2">Produk</th>
                                             <th rowspan="2">Jumlah Rakit</th>
                                             <th rowspan="2">Aksi</th>
+                                            <th rowspan="2">Created_at</th>
                                         </tr>
                                         <tr>
                                             <th>Tgl Mulai</th>
@@ -358,12 +359,19 @@
                 {
                     data: "action"
                 },
+                {
+                    data: "created_at",
+                    visible: false
+                }
+            ],
+            order: [
+                [5, 'desc']
             ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             },
             "lengthChange": false,
-            "ordering": false,
+            "ordering": true,
             "columnDefs": [{
                 "targets": [4],
                 "visible": document.getElementById('auth').value == '2' ? false : true
