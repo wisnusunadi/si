@@ -252,6 +252,8 @@
                 console.log(res);
                 $('p#d_rakit').text(res[0].day_rakit);
                 $('p#d_kirim').text(res[0].day_kirim);
+                $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
+                $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
             }
         });
 
@@ -275,21 +277,21 @@
             }
         });
     });
-
+    // var groupCol = [0,2];
     var table = $('.table-history').DataTable({
-        "columnDefs": [
-            { "visible": false, "targets": 0 },
-            { "visible": false, "targets": 2 },
-            { "visible": false, "targets": 8 },
-            { "visible": false, "targets": 9 }
-        ],
+        // "columnDefs": [
+        //     { "visible": false, "targets": 0 },
+        //     { "visible": false, "targets": 2 },
+        //     { "visible": false, "targets": 8 },
+        //     { "visible": false, "targets": 9 }
+        // ],
         destroy: true,
         "lengthChange": false,
         "ordering": false,
         "bPaginate": false,
         "info": false,
         "responsive": true,
-        "order": [[ 0, 'asc' ]],
+        "order": [[ 0, 'asc' ], [2, 'asc']],
         ajax: {
             url: "/api/prd/ajax_his_rakit",
             headers: {
@@ -308,29 +310,36 @@
             {data: 'day_rakit_filter'},
             {data: 'day_kirim_filter'},
         ],
-        "drawCallback": function ( settings ) {
-            var api = this.api();
-            var rows = api.rows( {page:'current'} ).nodes();
-            var last=null;
+        // "drawCallback": function ( settings ) {
+        //     var api = this.api();
+        //     var rows = api.rows( {page:'current'} ).nodes();
+        //     var last=null;
 
-            api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+        //     api.column(groupCol, {page:'current'} ).data().each( function ( group, i, $currTable ) {
+        //         // console.log(group);
+        //         if (last !== group) {
+        //             var rowData = api.row(i).data();
 
-                if (last !== group) {
-                    var rowData = api.row(i).data();
 
-
-                    $(rows).eq(i).before(
-                    '<tr class="table-dark text-bold"><td colspan="1">' + group + '</td><td colspan="5">'+rowData.day_kirim+'</td></tr>'
-                );
-                    last = group;
-                }
-            });
-        },
+        //             $(rows).eq(i).before(
+        //                 // console.log(rows[i].children[2].textContent)
+        //             '<tr class="table-dark text-bold"><td colspan="1">' + group + '</td><td colspan="5">'+rows[i].children[2].textContent+'</td></tr>'
+        //         );
+        //             last = group;
+        //         }
+        //     });
+        // },
         autoWidth: false,
         processing: true,
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         },
+    }).rowGrouping({
+        bExpandableGrouping: true,
+        asExpandedGroups: [0, 2],
+        iGroupingColumnIndex: 2,
+        sGroupBy: "letter",
+        bHideGroupingColumn: false
     });
 
     $('#produk_select').change(function() {

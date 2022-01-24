@@ -165,6 +165,74 @@ class PpicController extends Controller
         return $data;
     }
 
+    function get_data_pesanan_produk($id, $value)
+    {
+        $data = Pesanan::orHas('DetailPesanan')->orHas('DetailPesananPart')->where('id', $id)->get();
+        return $data;
+    //     if ($value == "ekatalog") {
+    //         // $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
+    //         //     $q->where('pesanan_id', $id);
+    //         // })->get();
+    //         // $detail_id = array();
+    //         // foreach ($detail_pesanan as $d) {
+    //         //     $detail_id[] = $d->id;
+    //         // }
+
+    //         // $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+    //     } else if ($value == "spa") {
+    //         // $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
+    //         //     $q->where('pesanan_id', $id);
+    //         // })->get();
+    //         // $detail_id = array();
+    //         // foreach ($detail_pesanan as $d) {
+    //         //     $detail_id[] = $d->id;
+    //         // }
+
+    //         // $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+    //     } else if ($value == "spb") {
+    //         // $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($id) {
+    //         //     $q->where('pesanan_id', $id);
+    //         // })->get();
+    //         // $detail_id = array();
+    //         // foreach ($detail_pesanan as $d) {
+    //         //     $detail_id[] = $d->id;
+    //         // }
+
+    //         // $g = DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get();
+    //     }
+
+        // return datatables()->of($g)
+        //     ->addIndexColumn()
+        //     ->addColumn('paket', function($d) {
+        //         return $d->detailpesanan->penjualanproduk->nama;
+        //     })
+        //     ->addColumn('produk', function ($data) {
+        //         if (empty($data->gudangbarangjadi->nama)) {
+        //             return $data->gudangbarangjadi->produk->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->gudang_barang_jadi_id . '"><input type="hidden" name="detail_pesanan_produk_id[]" id="detail_pesanan_produk_id" value="' . $data->id . '">';
+        //         } else {
+        //             return $data->gudangbarangjadi->produk->nama . '-' . $data->gudangbarangjadi->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->gudang_barang_jadi_id . '"><input type="hidden" name="detail_pesanan_produk_id[]" id="detail_pesanan_produk_id" value="' . $data->id . '">';
+        //         }
+        //     })
+        //     ->addColumn('jumlah', function ($data) {
+        //         // $s = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($data) {
+        //         //     $q->where('id', $data->id);
+        //         // })->get();
+        //         // $x = 0;
+        //         // foreach ($s as $i) {
+        //         //     foreach ($i->PenjualanProduk->Produk as $j) {
+        //         //         if ($j->id == $data->gudangbarangjadi->produk_id) {
+        //         //             $x = $i->jumlah * $j->pivot->jumlah;
+        //         //         }
+        //         //     }
+        //         // }
+        //         // return $x . ' ' . $data->gudangbarangjadi->satuan->nama;
+        //     })
+        //     ->addColumn('jumlah_kirim', function($d) {
+
+        //     })
+        //     ->make(true);
+    }
+
     /**
      * Get data product from sales order
      *
