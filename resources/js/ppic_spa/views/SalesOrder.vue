@@ -244,7 +244,7 @@ export default {
       this.$store.commit("setIsLoading", true);
       $("#detailtableSO").DataTable().destroy();
       try {
-              await axios.get("/api/ppic/data/produk_so/" + id + "/" + value).then((response) => {
+        await axios.get("/api/ppic/data/produk_so/" + id + "/" + value).then((response) => {
         this.detailSO = response.data.data;
       });
       } catch (error) {
