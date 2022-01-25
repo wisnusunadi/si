@@ -56,20 +56,44 @@ class LaporanPenjualanAll implements FromView, ShouldAutoSize, WithStyles, WithC
     public function columnFormats(): array
     {
         return [
-            'L' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
-            'M' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+            'O' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+            'P' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+            'Q' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
             'N' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
-        return [
+        // return [
 
-            1    => ['font' => ['bold' => true, 'size' => 16]],
+        //     1    => ['font' => ['bold' => true, 'size' => 16]],
 
+        // ];
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+        $sheet->getStyle('A2:T2')->getFont()->setBold(true);
 
-        ];
+        $sheet->getStyle('b2:e2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('51adb9');
+        $sheet->getStyle('e2:f2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('51adb9');
+        $sheet->getStyle('l2:q2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('89d0b4');
+        $sheet->getStyle('f2:i2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('00ff7f');
+        $sheet->getStyle('a2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('00ff7f');
+        $sheet->getStyle('j2:k2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('00b359');
+        $sheet->getStyle('r2:T2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('f99c83');
     }
 
     public function view(): View
@@ -83,40 +107,40 @@ class LaporanPenjualanAll implements FromView, ShouldAutoSize, WithStyles, WithC
         if ($dsb == 'semua') {
             $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                 $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-            })->get();
+            })->orderBy('pesanan_id', 'ASC')->get();
             $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                 $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-            })->get();
+            })->orderBy('pesanan_id', 'ASC')->get();
             $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                 $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-            })->get();
+            })->orderBy('pesanan_id', 'ASC')->get();
             $Part_Spa  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                 $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-            })->get();
+            })->orderBy('pesanan_id', 'ASC')->get();
             $Part_Spb  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
                 $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-            })->get();
+            })->orderBy('pesanan_id', 'ASC')->get();
         } else {
             $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
                 $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                     ->where('customer_id', $dsb);
-            })->get();
+            })->orderBy('pesanan_id', 'ASC')->get();
             $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
                 $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                     ->where('customer_id', $dsb);
-            })->get();
+            })->orderBy('pesanan_id', 'ASC')->get();
             $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
                 $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                     ->where('customer_id', $dsb);
-            })->get();
+            })->orderBy('pesanan_id', 'ASC')->get();
             $Part_Spa  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
                 $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                     ->where('customer_id', $dsb);
-            })->get();
+            })->orderBy('pesanan_id', 'ASC')->get();
             $Part_Spb  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
                 $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                     ->where('customer_id', $dsb);
-            })->get();
+            })->orderBy('pesanan_id', 'ASC')->get();
         }
 
 
