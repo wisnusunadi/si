@@ -25,7 +25,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <div><small class="text-muted">Jumlah Selesi Dikirim</small></div>
+                        <div><small class="text-muted">Jumlah Selesai Dikirim</small></div>
                         <div><b>{{$jumlahselesai}} pcs</b></div>
                     </div>
                 </div>

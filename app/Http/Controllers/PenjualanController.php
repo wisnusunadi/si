@@ -408,10 +408,14 @@ class PenjualanController extends Controller
                     }
                 })
                 ->addColumn('tgl_buat', function ($data) {
-                    return Carbon::createFromFormat('Y-m-d', $data->tgl_buat)->format('d-m-Y');
+                    if (!empty($data->tgl_buat)) {
+                        return Carbon::createFromFormat('Y-m-d', $data->tgl_buat)->format('d-m-Y');
+                    }
                 })
                 ->addColumn('tgl_kontrak', function ($data) {
-                    return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak)->format('d-m-Y');
+                    if (!empty($data->tgl_kontrak)) {
+                        return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak)->format('d-m-Y');
+                    }
                 })
                 ->addColumn('customer', function ($data) {
                     return $data->Customer->nama;
