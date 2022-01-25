@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="title">DashBoard</h1>
+    <h1 class="title">Dashboard</h1>
     <div class="columns is-multiline">
       <div class="column is-6">
         <article class="message is-primary">
