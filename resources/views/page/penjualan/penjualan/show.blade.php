@@ -144,7 +144,7 @@
         }
 
         .btn {
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .overflowy {
@@ -1010,10 +1010,7 @@
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
             columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
+                    data: 'id'
                 },
                 {
                     data: 'so',

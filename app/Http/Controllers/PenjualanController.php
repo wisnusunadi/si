@@ -1096,6 +1096,9 @@ class PenjualanController extends Controller
 
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('id', function ($data) {
+                return $data->id;
+            })
             ->addColumn('so', function ($data) {
                 if ($data->Pesanan) {
                     if (!empty($data->Pesanan->so)) {
@@ -1145,7 +1148,7 @@ class PenjualanController extends Controller
 
                     if (isset($data->Pesanan->so)) {
                         if ($data->Pesanan->getJumlahPesanan() == $data->Pesanan->getJumlahKirim()) {
-                            return $tgl_parameter;
+                            return Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
                         } else {
                             if ($tgl_sekarang < $tgl_parameter) {
                                 $to = Carbon::now();
@@ -1199,12 +1202,14 @@ class PenjualanController extends Controller
                         }
                     }
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('nama_customer', function ($data) {
                 if (isset($data->Customer)) {
                     return $data->Customer['nama'];
+                } else {
+                    return '-';
                 }
             })
             ->addColumn('button', function ($data) use ($divisi_id) {

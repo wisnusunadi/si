@@ -1474,26 +1474,26 @@
                     <div class="form-group d-flex justify-content-center">
                         <div class="input-group">
                             <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;">
-                           
+
                         </div>
                         <small id="produk_ketersediaan"></small>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                      
+
                         <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;"/>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                      
+
                         <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Harga" style="width:100%;"/>
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                      
+
                         <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
                     </div>
                 </td>
@@ -1563,13 +1563,13 @@
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                     
+
                         <input type="text" class="form-control part_harga" name="part_harga[]" id="part_harga0" placeholder="Masukkan Harga" style="width:100%;" />
                     </div>
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                       
+
                         <input type="text" class="form-control part_subtotal" name="part_subtotal[]" id="part_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                     </div>
                 </td>
