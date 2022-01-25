@@ -22,9 +22,9 @@
           </div>
         </article>
       </div>
-      <div class="column is-12">
+      <div class="column is-6">
         <div class="box">
-          <table class="table is-fullwidth has-text-centered" id="table_so">
+        <table class="table is-fullwidth has-text-centered" id="table_so_detail">
             <thead>
               <tr>
                 <th>No</th>
@@ -40,6 +40,34 @@
                 <td v-html="item.nama_produk"></td>
                 <td>{{ item.stok }}</td>
                 <td>{{ item.total }}</td>
+                <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
+                  {{ item.penjualan }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+            <div class="column is-6">
+        <div class="box">
+          <table class="table is-fullwidth has-text-centered" id="table_so">
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Nama Produk</th>
+                <th>Stok</th>
+                <th>Pesanan</th>
+                <th>Jumlah Terkirim</th>
+                <th>Selisih stok dengan pesanan</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in data_so" :key="item.id">
+                <td>{{ item.DT_RowIndex }}</td>
+                <td v-html="item.nama_produk"></td>
+                <td>{{ item.stok }}</td>
+                <td>{{ item.total }}</td>
+                <td v-text="item.jumlah_kirim"></td>
                 <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
                   {{ item.penjualan }}
                 </td>
@@ -171,6 +199,7 @@ export default {
     return {
       data_gbj: [],
       data_so: [],
+      // data_so_
       data_unit: [],
       data_sparepart: [],
 
@@ -184,6 +213,10 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
+
+      $("#table_so_detail").DataTable({
+        pagingType: "simple_numbers_no_ellipses",
+      });
 
       await axios.get("/api/ppic/data/so").then((response) => {
         this.data_so = response.data.data;

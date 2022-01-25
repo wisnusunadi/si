@@ -33,7 +33,7 @@
               <th>Tanggal Order</th>
               <th>Customer</th>
               <th>Status</th>
-              <!-- <th>Aksi</th> -->
+              <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
@@ -44,12 +44,14 @@
               <td v-html="item.tgl_po"></td>
               <td v-html="item.nama_customer "></td>
               <td v-html="item.status_prd"></td>
-              <!-- <td><button v-if="item.button != null"
+              <td>
+                <button
                   class="button is-light"
-                  @click="getSO(item.button)"
+                  @click="getSO(item.id)"
                 >
                   <i class="fas fa-search"></i>
-                </button></td> -->
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -66,6 +68,7 @@
               <th>Nama Produk</th>
               <th>Stok</th>
               <th>Pesanan</th>
+              <th>Jumlah Terkirim</th>
               <th>Selisih stok dengan pesanan</th>
               <th>Detail</th>
             </tr>
@@ -76,6 +79,7 @@
               <td v-html="item.nama_produk"></td>
               <td>{{ item.stok }}</td>
               <td>{{ item.total }}</td>
+              <td v-text="item.jumlah_kirim"></td>
               <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
                 {{ item.penjualan }}
               </td>
@@ -143,11 +147,38 @@
   <div class="modal-background"></div>
   <div class="modal-card">
     <header class="modal-card-head">
-      <p class="modal-card-title">Modal title</p>
+      <p class="modal-card-title"></p>
       <button class="delete" @click="showModalSO = false"></button>
     </header>
     <section class="modal-card-body">
-      <!-- Content ... -->
+      <table class="table is-fullwidth" id="detailtableSO">
+            <thead>
+              <tr>
+                <th>SO</th>
+                <th>PO</th>
+                <th>AKN</th>
+                <th>Tanggal order</th>
+                <th>Tanggal pengiriman</th>
+                <th>Jumlah</th>
+                <th>Customer</th>
+                <th>Jenis</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailSO" :key="item.id">
+                <td v-text="item.so"></td>
+                <td v-text="item.po"></td>
+                <td v-text="item.akn"></td>
+                <td v-text="item.tgl_order"></td>
+                <td v-text="item.tgl_delivery"></td>
+                <td v-text="item.jumlah"></td>
+                <td v-text="item.customer"></td>
+                <td v-text="item.jenis"></td>
+                <td v-text="item.status"></td>
+              </tr>
+            </tbody>
+          </table>
     </section>
   </div>
 </div>
@@ -192,14 +223,14 @@ export default {
         this.data = response.data.data;
       });
       try {
-        await axios.get("/api/ppic/data/perso").then((response) => {
+        await axios.post("/api/prd/so").then((response) => {
           this.salesOrder = response.data.data;
-        });     
+        });
       } catch (error) {
         console.log(error);
       }
 
-      $("#table_so").DataTable();
+        $("#table_so").DataTable();
       $("#table_produk").DataTable();
 
       this.$store.commit("setIsLoading", false);
@@ -210,7 +241,6 @@ export default {
       this.$store.commit("setIsLoading", true);
       await axios.get("/api/ppic/data/so/detail/" + id).then((response) => {
         this.detail = response.data.data;
-        console.log("get detail", this.detail);
       });
       $("#detailtable").DataTable();
       this.$store.commit("setIsLoading", false);
@@ -220,15 +250,16 @@ export default {
       this.showModal = true;
     },
 
-    async getSO(url){
+  async getSO(id){
       this.$store.commit("setIsLoading", true);
-      await axios.get(url).then((response) => {
-        this.detailSO = response.data;
-        console.log("get detail", this.detailSO);
+      $("#detailtableSO").DataTable().destroy();
+      await axios.get("/api/ppic/data/so/detail/" + id).then((response) => {
+        this.detailSO = response.data.data;
       });
+      $("#detailtableSO").DataTable();
       this.$store.commit("setIsLoading", false);
-
       this.showModalSO = true;
+      
     }
   },
 

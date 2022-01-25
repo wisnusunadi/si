@@ -844,6 +844,22 @@ class ProduksiController extends Controller
                     </a>';
                 }
             })
+            ->addColumn('btn', function ($d) {
+                $x = explode('/', $d->so);
+                for ($i = 1; $i < count($x); $i++) {
+                    if ($x[1] == 'EKAT') {
+                        return ''.$d->id.'';
+                    } elseif ($x[1] == 'SPA') {
+                        return ''.$d->id.'';
+                    } elseif ($x[1] == 'SPB') {
+                        return ''.$d->id.'';
+                    }
+                }
+
+                if (empty($d->so)) {
+                    return ''.$d->id.'';
+                }
+            })
             ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
             ->make(true);
     }
