@@ -167,7 +167,7 @@ class GudangBarangJadi extends Model
         return $jumlah;
     }
 
-    public function getJumlahTransferPesanan($jenis, $status)
+    public function getJumlahTransferPesanan($jenis)
     {
         $jumlah = 0;
         $id = $this->id;
@@ -176,8 +176,8 @@ class GudangBarangJadi extends Model
                 $q->where('gdg_brg_jadi_id', $id);
             })->whereHas('detail.header.pesanan', function ($q) {
                 $q->whereNotIn('log_id', ['7', '10']);
-            })->whereHas('detail.header.pesanan.Ekatalog', function ($q) use ($status) {
-                $q->where('status', $status);
+            })->whereHas('detail.header.pesanan.Ekatalog', function ($q) {
+                $q->whereNotIn('status', ['batal']);
             })->count();
         } else if ($jenis == "spa") {
             $jumlah = NoseriTGbj::where('jenis', 'keluar')->whereHas('detail', function ($q) use ($id) {
@@ -195,12 +195,45 @@ class GudangBarangJadi extends Model
         return $jumlah;
     }
 
+    public function getJumlahCekPesanan()
+    {
+        // $jumlah = 0;
+        $id = $this->id;
+        // if ($jenis == "ekatalog") {
+        //     $jumlah = NoseriTGbj::where('jenis', 'keluar')->whereHas('detail', function ($q) use ($id) {
+        //         $q->where('gdg_brg_jadi_id', $id);
+        //     })->whereHas('detail.header.pesanan', function ($q) {
+        //         $q->whereNotIn('log_id', ['7', '10']);
+        //     })->whereHas('detail.header.pesanan.Ekatalog', function ($q) {
+        //         $q->whereNotIn('status', ['batal']);
+        //     })->count();
+        // } else if ($jenis == "spa") {
+        //     $jumlah = NoseriTGbj::where('jenis', 'keluar')->whereHas('detail', function ($q) use ($id) {
+        //         $q->where('gdg_brg_jadi_id', $id);
+        //     })->whereHas('detail.header.pesanan', function ($q) {
+        //         $q->whereNotIn('log_id', ['10']);
+        //     })->has('detail.header.pesanan.Spa')->count();
+        // } else if ($jenis == "spb") {
+        //     $jumlah = NoseriTGbj::where('jenis', 'keluar')->whereHas('detail', function ($q) use ($id) {
+        //         $q->where('gdg_brg_jadi_id', $id);
+        //     })->whereHas('detail.header.pesanan', function ($q) {
+        //         $q->whereNotIn('log_id', ['10']);
+        //     })->has('detail.header.pesanan.Spb')->count();
+        // }
+        $jumlah = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            $q->where('gudang_barang_jadi_id', $id);
+        })->doesntHave('NoseriDetailLogistik')->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+            $q->whereNotIn('log_id', ['10']);
+        })->count();
+        return $jumlah;
+    }
+
     public function getJumlahKirimPesanan()
     {
         $id = $this->id;
         $jumlah = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
             $q->where('gudang_barang_jadi_id', $id);
-        })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($id) {
+        })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
             $q->whereNotIn('log_id', ['10']);
         })->count();
         return $jumlah;
