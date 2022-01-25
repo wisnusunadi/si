@@ -362,6 +362,9 @@ class PpicController extends Controller
             ->addColumn('po', function ($data) {
                 return $data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa", "");
             })
+            ->addColumn('jumlah_kirim', function($data) {
+                return $data->getJumlahKirimPesanan();
+            })
             ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
             ->make(true);
     }
