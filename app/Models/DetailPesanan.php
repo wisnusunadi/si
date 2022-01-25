@@ -38,6 +38,18 @@ class DetailPesanan extends Model
         })->first();
         return $date;
     }
+    public function getJumlahProduk()
+    {
+        $id = $this->id;
+        $s = DetailPesanan::where('id', $id)->Has('DetailPesananProduk.NoSeriDetailPesanan')->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            foreach ($i->PenjualanProduk->Produk as $j) {
+                $jumlah++;
+            }
+        }
+        return $jumlah;
+    }
     public function getJumlahPesanan()
     {
         $id = $this->id;
