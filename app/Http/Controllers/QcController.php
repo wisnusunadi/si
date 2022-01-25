@@ -1220,8 +1220,6 @@ class QcController extends Controller
                 $terbaru++;
             }
         }
-
-
         $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
         // $hasilprd = Pesanan::doesntHave('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->where('log_id', 6)->whereIN('id',  $this->check_input())->get();
         // $hasilprt = Pesanan::doesntHave('DetailPesananPart.OutgoingPesananPart')->whereNotIn('log_id', ['7', '10'])->get();
