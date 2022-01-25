@@ -54,6 +54,19 @@ class Pesanan extends Model
     }
 
 
+    public function getJumlahProduk()
+    {
+        $id = $this->id;
+        $s = DetailPesanan::where('pesanan_id', $id)->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            foreach ($i->PenjualanProduk->Produk as $j) {
+                $jumlah = $jumlah + ($i->jumlah * $j->pivot->jumlah);
+            }
+        }
+        return $jumlah;
+    }
+
     public function getJumlahPesanan()
     {
         $id = $this->id;

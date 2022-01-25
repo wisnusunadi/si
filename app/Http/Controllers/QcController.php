@@ -1221,9 +1221,7 @@ class QcController extends Controller
             }
         }
         $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
-        // $hasilprd = Pesanan::doesntHave('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->where('log_id', 6)->whereIN('id',  $this->check_input())->get();
-        // $hasilprt = Pesanan::doesntHave('DetailPesananPart.OutgoingPesananPart')->whereNotIn('log_id', ['7', '10'])->get();
-        // $cekhasil = $hasilprd->merge($hasilprt);
+
         $arrayid = array();
         foreach ($cekhasil as $h) {
             if (count($h->DetailPesanan) > 0 && count($h->DetailPesananPart) <= 0) {
@@ -1395,21 +1393,43 @@ class QcController extends Controller
                 ->rawColumns(['button', 'batas', 'status'])
                 ->make(true);
         } else if ($value == 'belum_uji') {
-            $hasilprd = Pesanan::doesntHave('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->whereNotIn('log_id', ['7', '10'])->whereIN('id',  $this->check_input())->get();
-            $hasilprt = Pesanan::doesntHave('DetailPesananPart.OutgoingPesananPart')->whereNotIn('log_id', ['7', '10'])->get();
-            $hasildata = $hasilprd->merge($hasilprt);
 
 
-            $terbaru_id = [];
-            foreach ($hasildata as $j) {
-                if ($j->getJumlahCek() == 0 && $j->getJumlahCekPart("ok") == 0) {
-                    $terbaru_id[] = $j->id;
+            $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+
+            $arrayid = array();
+            foreach ($cekhasil as $h) {
+                if (count($h->DetailPesanan) > 0 && count($h->DetailPesananPart) <= 0) {
+                    if ($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) {
+                        $arrayid[] = $h->id;
+                    }
+                } else if (count($h->DetailPesanan) <= 0 && count($h->DetailPesananPart) > 0) {
+                    if ($h->getJumlahPesananPart() > $h->getJumlahCekPart("ok")) {
+                        $arrayid[] = $h->id;
+                    }
+                } else {
+                    if (($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) || $h->getJumlahPesananPart() > $h->getJumlahCekPart("ok")) {
+                        $arrayid[] = $h->id;
+                    }
                 }
             }
+            $data = Pesanan::whereIn('id', $arrayid)->get();
 
-            $prd = Pesanan::has('DetailPesanan')->whereIN('id', $terbaru_id)->get();
-            $part = Pesanan::has('DetailPesananPart')->whereIN('id', $terbaru_id)->get();
-            $data = $prd->merge($part);
+            // $hasilprd = Pesanan::doesntHave('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->whereNotIn('log_id', ['7', '10'])->whereIN('id',  $this->check_input())->get();
+            // $hasilprt = Pesanan::doesntHave('DetailPesananPart.OutgoingPesananPart')->whereNotIn('log_id', ['7', '10'])->get();
+            // $hasildata = $hasilprd->merge($hasilprt);
+
+
+            // $terbaru_id = [];
+            // foreach ($hasildata as $j) {
+            //     if ($j->getJumlahCek() == 0 && $j->getJumlahCekPart("ok") == 0) {
+            //         $terbaru_id[] = $j->id;
+            //     }
+            // }
+
+            // $prd = Pesanan::has('DetailPesanan')->whereIN('id', $terbaru_id)->get();
+            // $part = Pesanan::has('DetailPesananPart')->whereIN('id', $terbaru_id)->get();
+            // $data = $prd->merge($part);
 
             return datatables()->of($data)
                 ->addIndexColumn()

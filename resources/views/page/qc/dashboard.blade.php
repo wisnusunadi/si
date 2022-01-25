@@ -399,6 +399,7 @@
                                                 <thead>
                                                     <th>No</th>
                                                     <th>No SO</th>
+                                                    <th>No PO</th>
                                                     <th>Customer</th>
                                                     <th>Status</th>
                                                 </thead>
@@ -657,13 +658,17 @@
                     data: 'so',
                     className: 'nowrap-text align-center',
                     orderable: false,
-                    searchable: false
-                },
-                {
+                    searchable: true
+                }, {
+                    data: 'no_po',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: true
+                }, {
                     data: 'customer',
                     className: 'nowrap-text align-center',
                     orderable: false,
-                    searchable: false
+                    searchable: true
                 },
                 {
                     data: 'status',
