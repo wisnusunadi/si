@@ -168,7 +168,7 @@
             </div>
             <div class="col-xl-12 d-flex justify-content-end">
                 <div class="btn-simpan mb-3">
-                    <button class="btn btn-success" onclick="terima()" type="button">Terima</button>&nbsp;
+                    <button class="btn btn-success" onclick="terima()" id="buttonSubmit" type="button">Terima</button>&nbsp;
                     <button class="btn btn-info" onclick="rancang()" type="button">Rancang</button>&nbsp;
                     <button class="btn btn-secondary" onclick="batal()" type="button">Batal</button>
                 </div>
@@ -894,6 +894,7 @@
             showCancelButton: true,
         }).then((result) => {
             if (result.value) {
+                $('#buttonSubmit').attr('disabled', true);
                 let out = $('#datePicker').val();
                 let to = $('.dari').val();
 

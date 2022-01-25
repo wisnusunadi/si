@@ -176,7 +176,7 @@
             </div>
             <div class="col-xl-12 d-flex justify-content-end">
                 <div class="btn-simpan mb-3">
-                    <button class="btn btn-success" type="button" onclick="modalTerima()">Transfer</button>&nbsp;
+                    <button class="btn btn-success" id="buttonSubmit" type="button" onclick="modalTerima()">Transfer</button>&nbsp;
                     <button class="btn btn-info" type="button" onclick="modalRancang()">Rancang</button>&nbsp;
                     <button class="btn btn-secondary " type="button" onclick="batal()">Batal</button>
                 </div>
@@ -877,6 +877,7 @@
             dangerMode: true,
             showCancelButton: true,
         }).then((success) => {
+            $(this).prop('disabled', true);
             if (success) {
                 Swal.fire(
                     'Data berhasil di transfer!',
