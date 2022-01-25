@@ -3,29 +3,32 @@
 namespace App\Http\Controllers;
 
 // library
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Carbon;
+use App\Models\Spa;
+use App\Models\Spb;
+use App\Models\Produk;
+use App\Models\Pesanan;
 
 // model
-use App\Models\JadwalPerakitan;
-use App\Models\JadwalPerakitanRencana;
-use App\Models\JadwalPerakitanLog;
-use App\Models\GudangBarangJadi;
-use App\Models\GudangKarantinaDetail;
-use App\Models\KomentarJadwalPerakitan;
-use App\Models\DetailPesanan;
-use App\Models\NoseriDetailLogistik;
+use App\Models\Ekatalog;
+use App\Events\PpicNotif;
 use App\Models\NoseriTGbj;
-use App\Models\Pesanan;
-use App\Models\Produk;
+use Illuminate\Http\Request;
+use App\Models\DetailPesanan;
+use Illuminate\Support\Carbon;
+use App\Models\JadwalPerakitan;
+use App\Models\GudangBarangJadi;
+use App\Models\JadwalPerakitanLog;
+use Illuminate\Support\Facades\DB;
+use App\Models\DetailPesananProduk;
 
 // event
-use App\Events\PpicNotif;
+use App\Models\NoseriDetailLogistik;
+use App\Models\GudangKarantinaDetail;
+use App\Models\JadwalPerakitanRencana;
+use App\Models\KomentarJadwalPerakitan;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\DetailLogistikPart;
 use App\Models\DetailPesananPart;
-use App\Models\DetailPesananProduk;
 
 class PpicController extends Controller
 {
@@ -1374,4 +1377,5 @@ class PpicController extends Controller
         })->count();
         return $jumlah;
     }
+
 }

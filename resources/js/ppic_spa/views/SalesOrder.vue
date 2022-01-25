@@ -29,18 +29,29 @@
             <tr>
               <th>No</th>
               <th>Nomor SO</th>
+              <th>Nomor PO</th>
+              <th>Tanggal Order</th>
               <th>Customer</th>
-              <th>Batas Transfer</th>
               <th>Status</th>
+              <th>Aksi</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="item in salesOrder" :key="item.id">
+            <tr v-for="item in salesOrder" :key="'so'+item.DT_RowIndex">
               <td v-html="item.DT_RowIndex"></td>
               <td v-html="item.so"></td>
-              <td v-html="item.nama_customer"></td>
-              <td v-html="item.batas_out"></td>
+              <td v-html="item.no_po"></td>
+              <td v-html="item.tgl_po"></td>
+              <td v-html="item.nama_customer "></td>
               <td v-html="item.status_prd"></td>
+              <td>
+                <button
+                  class="button is-light"
+                  @click="getSO(item.id)"
+                >
+                  <i class="fas fa-search"></i>
+                </button>
+              </td>
             </tr>
           </tbody>
         </table>
@@ -57,6 +68,7 @@
               <th>Nama Produk</th>
               <th>Stok</th>
               <th>Pesanan</th>
+              <th>Jumlah Terkirim</th>
               <th>Selisih stok dengan pesanan</th>
               <th>Detail</th>
             </tr>
@@ -67,6 +79,7 @@
               <td v-html="item.nama_produk"></td>
               <td>{{ item.stok }}</td>
               <td>{{ item.total }}</td>
+              <td v-text="item.jumlah_kirim"></td>
               <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
                 {{ item.penjualan }}
               </td>
@@ -129,6 +142,46 @@
         <footer class="modal-card-foot"></footer>
       </div>
     </div>
+
+<div class="modal" :class="{ 'is-active': showModalSO }">
+  <div class="modal-background"></div>
+  <div class="modal-card">
+    <header class="modal-card-head">
+      <p class="modal-card-title"></p>
+      <button class="delete" @click="showModalSO = false"></button>
+    </header>
+    <section class="modal-card-body">
+      <table class="table is-fullwidth" id="detailtableSO">
+            <thead>
+              <tr>
+                <th>SO</th>
+                <th>PO</th>
+                <th>AKN</th>
+                <th>Tanggal order</th>
+                <th>Tanggal pengiriman</th>
+                <th>Jumlah</th>
+                <th>Customer</th>
+                <th>Jenis</th>
+                <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in detailSO" :key="item.id">
+                <td v-text="item.so"></td>
+                <td v-text="item.po"></td>
+                <td v-text="item.akn"></td>
+                <td v-text="item.tgl_order"></td>
+                <td v-text="item.tgl_delivery"></td>
+                <td v-text="item.jumlah"></td>
+                <td v-text="item.customer"></td>
+                <td v-text="item.jenis"></td>
+                <td v-text="item.status"></td>
+              </tr>
+            </tbody>
+          </table>
+    </section>
+  </div>
+</div>
   </div>
 </template>
 
@@ -155,10 +208,12 @@ export default {
       salesOrder: [],
       detail: {},
       nama_produk: "",
+      detailSO: {},
 
       showModal: false,
+      showModalSO: false,
       view: "sales_order"
-    };
+    };  
   },
 
   methods: {
@@ -167,20 +222,25 @@ export default {
       await axios.get("/api/ppic/data/so").then((response) => {
         this.data = response.data.data;
       });
-      await axios.post("/api/prd/so").then((response) => {
-        this.salesOrder = response.data.data;
-      });
-      $("#table_so").DataTable();
+      try {
+        await axios.post("/api/prd/so").then((response) => {
+          this.salesOrder = response.data.data;
+        });
+      } catch (error) {
+        console.log(error);
+      }
+
+        $("#table_so").DataTable();
       $("#table_produk").DataTable();
 
       this.$store.commit("setIsLoading", false);
     },
 
+
     async getDetail(id, nama) {
       this.$store.commit("setIsLoading", true);
       await axios.get("/api/ppic/data/so/detail/" + id).then((response) => {
         this.detail = response.data.data;
-        console.log("get detail", this.detail);
       });
       $("#detailtable").DataTable();
       this.$store.commit("setIsLoading", false);
@@ -189,6 +249,18 @@ export default {
 
       this.showModal = true;
     },
+
+  async getSO(id){
+      this.$store.commit("setIsLoading", true);
+      $("#detailtableSO").DataTable().destroy();
+      await axios.get("/api/ppic/data/so/detail/" + id).then((response) => {
+        this.detailSO = response.data.data;
+      });
+      $("#detailtableSO").DataTable();
+      this.$store.commit("setIsLoading", false);
+      this.showModalSO = true;
+      
+    }
   },
 
   mounted() {

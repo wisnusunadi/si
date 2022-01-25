@@ -734,7 +734,7 @@ class ProduksiController extends Controller
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
-        return datatables()->of($data)
+        return datatables()->of($data) 
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->so;
@@ -842,6 +842,22 @@ class ProduksiController extends Controller
                     return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
                         <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
                     </a>';
+                }
+            })
+            ->addColumn('btn', function ($d) {
+                $x = explode('/', $d->so);
+                for ($i = 1; $i < count($x); $i++) {
+                    if ($x[1] == 'EKAT') {
+                        return ''.$d->id.'';
+                    } elseif ($x[1] == 'SPA') {
+                        return ''.$d->id.'';
+                    } elseif ($x[1] == 'SPB') {
+                        return ''.$d->id.'';
+                    }
+                }
+
+                if (empty($d->so)) {
+                    return ''.$d->id.'';
                 }
             })
             ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
@@ -1327,6 +1343,14 @@ class ProduksiController extends Controller
                     return '-';
                 }
             })
+            ->addColumn('status_prd', function ($data) {
+                if ($data->log_id) {
+                    # code...
+                    return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('button', function ($data) {
                 $x = explode('/', $data->so);
                 for ($i = 1; $i < count($x); $i++) {
@@ -1351,7 +1375,7 @@ class ProduksiController extends Controller
                     }
                 }
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button','status_prd'])
             ->make(true);
     }
 
@@ -1383,12 +1407,20 @@ class ProduksiController extends Controller
                 }
 
                 if (empty($data->so)) {
-                    return $data->Ekatalog->Customer->nama;
+                    return $data->Ekatalog->Customer->nama; 
                 }
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
                     return Carbon::parse($d->Ekatalog->tgl_kontrak)->isoFormat('D MMM YYYY');
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('status_prd', function ($data) {
+                if ($data->log_id) {
+                    # code...
+                    return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
                 } else {
                     return '-';
                 }
@@ -1417,7 +1449,7 @@ class ProduksiController extends Controller
                     }
                 }
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button','status_prd'])
             ->make(true);
     }
 
@@ -1464,6 +1496,14 @@ class ProduksiController extends Controller
                     return '-';
                 }
             })
+            ->addColumn('status_prd', function ($data) {
+                if ($data->log_id) {
+                    # code...
+                    return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('button', function ($data) {
                 $x = explode('/', $data->so);
                 for ($i = 1; $i < count($x); $i++) {
@@ -1488,7 +1528,7 @@ class ProduksiController extends Controller
                     }
                 }
             })
-            ->rawColumns(['button', 'batas_out'])
+            ->rawColumns(['button', 'batas_out', 'status_prd'])
             ->make(true);
     }
     // rakit
