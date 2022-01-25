@@ -47,7 +47,7 @@
               <td>
                 <button
                   class="button is-light"
-                  @click="getSO(item.id)"
+                  @click="getSO(item.id, item.btnValue)"
                 >
                   <i class="fas fa-search"></i>
                 </button>
@@ -68,8 +68,8 @@
               <th>Nama Produk</th>
               <th>Stok</th>
               <th>Pesanan</th>
-              <th>Jumlah Terkirim</th>
               <th>Selisih stok dengan pesanan</th>
+              <th>Jumlah Terkirim</th>
               <th>Detail</th>
             </tr>
           </thead>
@@ -79,10 +79,10 @@
               <td v-html="item.nama_produk"></td>
               <td>{{ item.stok }}</td>
               <td>{{ item.total }}</td>
-              <td v-text="item.jumlah_kirim"></td>
               <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
                 {{ item.penjualan }}
               </td>
+              <td v-text="item.jumlah_kirim"></td>
               <td>
                 <button
                   class="button is-light"
@@ -154,28 +154,18 @@
       <table class="table is-fullwidth" id="detailtableSO">
             <thead>
               <tr>
-                <th>SO</th>
-                <th>PO</th>
-                <th>AKN</th>
-                <th>Tanggal order</th>
-                <th>Tanggal pengiriman</th>
+                <th>Paket</th>
+                <th>Produk</th>
                 <th>Jumlah</th>
-                <th>Customer</th>
-                <th>Jenis</th>
-                <th>Status</th>
+                <th>Jumlah Terkirim</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in detailSO" :key="item.id">
-                <td v-text="item.so"></td>
-                <td v-text="item.po"></td>
-                <td v-text="item.akn"></td>
-                <td v-text="item.tgl_order"></td>
-                <td v-text="item.tgl_delivery"></td>
+              <tr v-for="item in detailSO" :key="'detailSO'+item.id">
+                <td v-text="item.paket"></td>
+                <td v-text="item.produk"></td>
                 <td v-text="item.jumlah"></td>
-                <td v-text="item.customer"></td>
-                <td v-text="item.jenis"></td>
-                <td v-text="item.status"></td>
+                <td v-text="item.jumlah_kirim"></td>
               </tr>
             </tbody>
           </table>
@@ -250,13 +240,39 @@ export default {
       this.showModal = true;
     },
 
-  async getSO(id){
+  async getSO(id, value){
       this.$store.commit("setIsLoading", true);
       $("#detailtableSO").DataTable().destroy();
-      await axios.get("/api/ppic/data/so/detail/" + id).then((response) => {
+      try {
+              await axios.get("/api/ppic/data/produk_so/" + id + "/" + value).then((response) => {
         this.detailSO = response.data.data;
       });
-      $("#detailtableSO").DataTable();
+      } catch (error) {
+        console.log(error);
+      }
+      $("#detailtableSO").DataTable({
+            autoWidth: false,
+          "drawCallback": function (settings) {
+            var api = this.api();
+            var rows = api.rows( {page:'current'} ).nodes();
+            var last=null;
+
+            api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                if (last !== group) {
+                    var rowData = api.row(i).data();
+
+                    $(rows).eq(i).before(
+                    '<tr class="is-selected"><td colspan="3">' + group + '</td></tr>'
+                );
+                    last = group;
+                }
+            });
+          },
+           "columnDefs":[
+                {"targets": [0], "visible": false},
+            ],
+      });
       this.$store.commit("setIsLoading", false);
       this.showModalSO = true;
       
