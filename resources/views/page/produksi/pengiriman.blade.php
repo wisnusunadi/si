@@ -207,7 +207,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary" id="">Simpan</button>
+                <button type="submit" class="btn btn-primary" id="saveButton">Simpan</button>
             </div>
             </form>
         </div>
@@ -442,7 +442,6 @@
         });
         $('#form-scan').on('submit', function (e) {
             e.preventDefault();
-
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -454,6 +453,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     var form = $(this);
+                $('#saveButton').attr('disabled', true);
 
                     var rows_selected = table.column(0).checkboxes.selected();
                     const seri = [];

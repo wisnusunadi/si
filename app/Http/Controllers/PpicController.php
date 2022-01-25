@@ -1364,162 +1364,125 @@ class PpicController extends Controller
 
     public function get_data_perso()
     {
-        $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
-        $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
-        $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->get());
+        $Spa = collect(Pesanan::has('Spa')->get());
+        $Spb = collect(Pesanan::has('Spb')->get());
+
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
-        return Datatables::of($data)
-            ->addIndexColumn()
-            ->addColumn('jenis', function ($data) {
-                return $data->getTable();
-            })
-            ->addColumn('nama_customer', function ($data) {
-                return $data->Customer['nama'];
-            })
-            ->addColumn('no_paket', function ($data) {
-                if (isset($data->no_paket)) {
-                    return $data->no_paket;
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('tgl_order', function ($data) {
-                if (isset($data->tgl_buat)) {
-                    return Carbon::createFromFormat('Y-m-d', $data->tgl_buat)->format('d-m-Y');
-                    // return $data->tgl_buat;
-                } else {
-                    if (!empty($data->Pesanan->tgl_po)) {
-                        return Carbon::createFromFormat('Y-m-d', $data->Pesanan->tgl_po)->format('d-m-Y');
-                    } else {
-                        return "-";
-                    }
-                }
-            })
-            ->addColumn('tgl_kontrak', function ($data) {
-                if (isset($data->tgl_kontrak)) {
-                    $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                    $tgl_parameter = $data->tgl_kontrak;
+        // return datatables()->of($data)
+        // ->addIndexColumn()
+        // ->addColumn('so', function ($data) {
+        //     return $data->so;
+        // })
+        // ->addColumn('nama_customer', function ($data) {
+        //     $name = explode('/', $data->so);
+        //     for ($i = 1; $i < count($name); $i++) {
+        //         if ($name[1] == 'EKAT') {
+        //             return $data->Ekatalog->Customer->nama;
+        //         } elseif ($name[1] == 'SPA') {
+        //             return $data->Spa->Customer->nama;
+        //         } elseif ($name[1] == 'SPB') {
+        //             return $data->Spb->Customer->nama;
+        //         } else { }
+        //     }
 
-                    if (isset($data->Pesanan->so)) {
-                        if ($data->Pesanan->getJumlahPesanan() == $data->Pesanan->getJumlahKirim()) {
-                            return Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
-                        } else {
-                            if ($tgl_sekarang < $tgl_parameter) {
-                                $to = Carbon::now();
-                                $from = $data->tgl_kontrak;
-                                $hari = $to->diffInDays($from);
-                                if ($hari > 7) {
-                                    return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                    <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
-                                } else if ($hari > 0 && $hari <= 7) {
-                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                    <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
-                                } else {
-                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                    <div class="help is-danger d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                                }
-                            } else if ($tgl_sekarang == $tgl_parameter) {
-                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                <div class="help is-danger d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                            } else {
-                                $to = Carbon::now();
-                                $from = $data->tgl_kontrak;
-                                $hari = $to->diffInDays($from);
-                                return '<div class="has-text-danger">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                <div class="help is-danger d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
-                            }
-                        }
-                    } else {
-                        if ($tgl_sekarang < $tgl_parameter) {
-                            $to = Carbon::now();
-                            $from = $data->tgl_kontrak;
-                            $hari = $to->diffInDays($from);
-                            if ($hari > 7) {
-                                return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
-                            } else if ($hari > 0 && $hari <= 7) {
-                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
-                            } else {
-                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                <div class="help is-danger d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                            }
-                        } else if ($tgl_sekarang == $tgl_parameter) {
-                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                            <div class="help is-danger d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                        } else {
-                            $to = Carbon::now();
-                            $from = $data->tgl_kontrak;
-                            $hari = $to->diffInDays($from);
-                            return '<div class="has-text-danger">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                            <div class="help is-danger d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
-                        }
-                    }
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('so', function ($data) {
-                if ($data->Pesanan) {
-                    if (!empty($data->Pesanan->so)) {
-                        return $data->Pesanan->so;
-                    } else {
-                        return '-';
-                    }
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('nopo', function ($data) {
-                if ($data->Pesanan) {
-                    if (!empty($data->Pesanan->no_po)) {
-                        return $data->Pesanan->no_po;
-                    } else {
-                        return '-';
-                    }
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('status', function ($data) {
-                $datas = "";
-                if (!empty($data->Pesanan->log_id)) {
-                    if ($data->Pesanan->State->nama == "Penjualan") {
-                        $datas .= '<span class="button is-danger is-small">';
-                    } else if ($data->Pesanan->State->nama == "PO") {
-                        $datas .= '<span class="button is-link is-small">';
-                    } else if ($data->Pesanan->State->nama == "Gudang") {
-                        $datas .= '<span class="button is-info is-small">';
-                    } else if ($data->Pesanan->State->nama == "QC") {
-                        $datas .= '<span class="button is-success is-small">';
-                    } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
-                        $datas .= '<span class="button is-danger is-small">';
-                    } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
-                        $datas .= '<span class="button is-success is-small">';
-                    } else if ($data->Pesanan->State->nama == "Kirim") {
-                        $datas .= '<span class="button is-link is-small">';
-                    }
-                    $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
-                } else {
-                    $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
-                }
-                return $datas;
-            })->addColumn('button', function ($data)
-            {
-                $name =  $data->getTable();
-                if ($name == 'ekatalog') {
-                    if ($data->status != 'draft') {
-                        return  '' .url('/api/ppic/data/perso/ekat/'.$data->id) . '';
-                    }
-                } else if ($name == 'spa') {
-                    return  '' . url('/api/ppic/data/perso/spa/'.$data->id) . '';
-                } else {
-                    return  '' . url('/api/ppic/data/perso/spb/'.$data->id) . '';
-                }
-            })
-            ->rawColumns(['status', 'tgl_order', 'tgl_kontrak'])
-            ->make(true);
+        //     if (empty($data->so)) {
+        //         return $data->Ekatalog->Customer->nama;
+        //     }
+        // })
+        // ->addColumn('batas_out', function ($d) {
+        //     if (isset($d->Ekatalog->tgl_kontrak)) {
+        //         return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY');
+        //     } else {
+        //         return '-';
+        //     }
+        // })
+        // ->addColumn('status_prd', function ($data) {
+        //     if ($data->log_id) {
+        //         # code...
+        //         return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+        //     } else {
+        //         return '-';
+        //     }
+        // })
+        // ->addColumn('status1', function ($data) {
+        //     $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
+        //     $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
+        //     if ($sumcek == $sumprd) {
+        //         return '<span class="badge badge-primary">Sudah Dicek</span>';
+        //     } elseif ($sumcek != $sumprd) {
+        //         return '<span class="badge badge-danger">Belum Dicek</span>';
+        //     }
+        // })
+        // ->addColumn('action', function ($data) {
+        //     $x = explode('/', $data->so);
+        //     $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
+        //     $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
+        //     if ($sumcek == $sumprd) {
+        //         for ($i = 1; $i < count($x); $i++) {
+        //             if ($x[1] == 'EKAT') {
+        //                 return '
+        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+        //                         ';
+        //             } elseif ($x[1] == 'SPA') {
+        //                 return '
+        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+        //                         ';
+        //             } elseif ($x[1] == 'SPB') {
+        //                 return '
+        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+        //                         ';
+        //             }
+        //         }
+        //     } else {
+        //         for ($i = 1; $i < count($x); $i++) {
+        //             if ($x[1] == 'EKAT') {
+        //                 return '
+        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+        //                         <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="ekatalog" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+        //                         ';
+        //             } elseif ($x[1] == 'SPA') {
+        //                 return '
+        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+        //                         <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+        //                         ';
+        //             } elseif ($x[1] == 'SPB') {
+        //                 return '
+        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+        //                         <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+        //                         ';
+        //             }
+        //         }
+        //     }
+        // })
+        // ->addColumn('button_prd', function ($d) {
+        //     $x = explode('/', $d->so);
+        //     for ($i = 1; $i < count($x); $i++) {
+        //         if ($x[1] == 'EKAT') {
+        //             return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
+        //                 <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+        //             </a>';
+        //         } elseif ($x[1] == 'SPA') {
+        //             return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spa"  data-id="' . $d->id . '">
+        //                 <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+        //             </a>';
+        //         } elseif ($x[1] == 'SPB') {
+        //             return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spb"  data-id="' . $d->id . '">
+        //                 <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+        //             </a>';
+        //         }
+        //     }
+
+        //     if (empty($d->so)) {
+        //         return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
+        //             <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+        //         </a>';
+        //     }
+        // })
+        // ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
+        // ->make(true);
+        return $data;
     }
 
     public function detail_ekatalog($id)

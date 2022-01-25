@@ -437,7 +437,7 @@
 
             $(document).on('click', '#btnSave', function (e) {
                 e.preventDefault();
-
+                $(this).prop('disabled', true);
                 let arr = [];
                 const data = scanProduk.$('.noseri').map(function () {
                     return $(this).val();

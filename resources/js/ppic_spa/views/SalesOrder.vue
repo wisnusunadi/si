@@ -188,7 +188,7 @@ export default {
       showModal: false,
       showModalSO: false,
       view: "sales_order"
-    };
+    };  
   },
 
   methods: {
@@ -198,7 +198,8 @@ export default {
         this.data = response.data.data;
       });
         await axios.get("/api/ppic/data/perso").then((response) => {
-        this.salesOrder = response.data.data;
+        // this.salesOrder = response.data.data;
+        console.log(response.data);
       });
       $("#table_so").DataTable();
       $("#table_produk").DataTable();
