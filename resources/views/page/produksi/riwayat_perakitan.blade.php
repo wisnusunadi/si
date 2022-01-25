@@ -279,12 +279,12 @@
     });
     // var groupCol = [0,2];
     var table = $('.table-history').DataTable({
-        // "columnDefs": [
-        //     { "visible": false, "targets": 0 },
-        //     { "visible": false, "targets": 2 },
-        //     { "visible": false, "targets": 8 },
-        //     { "visible": false, "targets": 9 }
-        // ],
+        "columnDefs": [
+            // { "visible": false, "targets": 0 },
+            // { "visible": false, "targets": 2 },
+            { "visible": false, "targets": 8 },
+            { "visible": false, "targets": 9 }
+        ],
         destroy: true,
         "lengthChange": false,
         "ordering": false,
