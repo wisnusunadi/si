@@ -29,33 +29,27 @@
             <tr>
               <th>No</th>
               <th>Nomor SO</th>
-              <th>Nomor AKN</th>
               <th>Nomor PO</th>
               <th>Tanggal Order</th>
-              <th>Tanggal Delivery</th>
               <th>Customer</th>
-              <th>Jenis</th>
               <th>Status</th>
-              <th>Aksi</th>
+              <!-- <th>Aksi</th> -->
             </tr>
           </thead>
           <tbody>
             <tr v-for="item in salesOrder" :key="'so'+item.DT_RowIndex">
               <td v-html="item.DT_RowIndex"></td>
               <td v-html="item.so"></td>
-              <td v-html="item.no_paket"></td>
-              <td v-html="item.nopo"></td>
-              <td v-html="item.tgl_order"></td>
-              <td v-html="item.tgl_kontrak"></td>
+              <td v-html="item.no_po"></td>
+              <td v-html="item.tgl_po"></td>
               <td v-html="item.nama_customer "></td>
-              <td v-html="item.jenis"></td>
-              <td v-html="item.status"></td>
-              <td><button v-if="item.button != null"
+              <td v-html="item.status_prd"></td>
+              <!-- <td><button v-if="item.button != null"
                   class="button is-light"
                   @click="getSO(item.button)"
                 >
                   <i class="fas fa-search"></i>
-                </button></td>
+                </button></td> -->
             </tr>
           </tbody>
         </table>
@@ -197,10 +191,14 @@ export default {
       await axios.get("/api/ppic/data/so").then((response) => {
         this.data = response.data.data;
       });
+      try {
         await axios.get("/api/ppic/data/perso").then((response) => {
-        // this.salesOrder = response.data.data;
-        console.log(response.data);
-      });
+          this.salesOrder = response.data.data;
+        });     
+      } catch (error) {
+        console.log(error);
+      }
+
       $("#table_so").DataTable();
       $("#table_produk").DataTable();
 

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\MasterController;
+use App\Http\Controllers\PpicController;
 use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\SparepartController;
 use Illuminate\Http\Request;
@@ -51,6 +52,7 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/data/perso/ekat/{id}', [App\Http\Controllers\PpicController::class, 'detail_ekatalog']);
     Route::get('/data/perso/spa/{id}', [App\Http\Controllers\PpicController::class, 'detail_spa']);
     Route::get('/data/perso/spb/{id}', [App\Http\Controllers\PpicController::class, 'get_data_detail_spb']);
+    Route::post('/detail_so/{id}/{value}', [PpicController::class, 'get_data_pesanan_produk']);
 
     Route::get('/test/query', [App\Http\Controllers\PpicController::class, 'test_query']);
 });

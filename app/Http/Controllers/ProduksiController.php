@@ -734,7 +734,7 @@ class ProduksiController extends Controller
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
-        return datatables()->of($data)
+        return datatables()->of($data) 
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->so;
@@ -1681,7 +1681,7 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12, 13])->orderByDesc('created_at')->get();
+        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12])->orderByDesc('created_at')->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -1983,25 +1983,34 @@ class ProduksiController extends Controller
         $blm_terkirim = JadwalRakitNoseri::whereHas('header', function ($q) use ($request) {
             $q->where('produk_id', $request->gbj_id);
         })->where('status', 11)->get()->count();
+        $sdh_terisi = JadwalRakitNoseri::whereHas('header', function ($q) use ($request) {
+            $q->where('produk_id', $request->gbj_id);
+        })->get()->count();
         $total_rakit = JadwalPerakitan::find($request->jadwal_id);
         $now = intval($total_rakit->jumlah - $sdh_terkirim);
-        // return $now - count($request->noseri);
         if ($now == $total_rakit->jumlah) {
-            return 'a';
+            // return 'a';
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
-        } elseif ($now == $blm_terkirim) {
+        } elseif ($total_rakit->jumlah == $sdh_terkirim) {
+            // return 'b';
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
-        } else {
+        } elseif ($sdh_terisi != $total_rakit->jumlah) {
+            $total_rakit->status_tf = 12;
+            $total_rakit->filled_by = $request->userid;
+            $total_rakit->save();
+        }
+         else {
+            // return 'c';
             $total_rakit->status_tf = 13;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
         }
 
-        // return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
+        return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
     }
 
     // riwayat rakit

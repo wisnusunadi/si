@@ -27,6 +27,8 @@ use App\Models\GudangKarantinaDetail;
 use App\Models\JadwalPerakitanRencana;
 use App\Models\KomentarJadwalPerakitan;
 use Yajra\DataTables\Facades\DataTables;
+use App\Models\DetailLogistikPart;
+use App\Models\DetailPesananPart;
 
 class PpicController extends Controller
 {
@@ -168,6 +170,138 @@ class PpicController extends Controller
         return $data;
     }
 
+    function get_data_pesanan_produk($id, $value)
+    {
+        // $data = Pesanan::orHas('DetailPesanan')->orHas('DetailPesananPart')->where('id', $id)->get();
+        // return $data;
+        if ($value == "ekatalog") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+
+            $detail_pesanan_part  = DetailPesananPart::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $data = $detail_pesanan->merge($detail_pesanan_part);
+            $detail_id = array();
+            $did = [];
+            foreach ($data as $d) {
+                $detail_id[] = $d->id;
+                $did[] = $d->pesanan_id;
+            }
+
+            $g = collect(DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get());
+            $g_part = collect(DetailPesananPart::whereIn('pesanan_id', $did)->get());
+            $g_data = $g->merge($g_part);
+        } else if ($value == "spa") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+
+            $detail_pesanan_part  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $data = $detail_pesanan->merge($detail_pesanan_part);
+
+            $detail_id = array();
+            $did = [];
+            foreach ($data as $d) {
+                $detail_id[] = $d->id;
+                $did[] = $d->pesanan_id;
+
+            }
+
+
+            $g = collect(DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get());
+            $g_part = collect(DetailPesananPart::whereIn('pesanan_id', $did)->get());
+            $g_data = $g->merge($g_part);
+        } else if ($value == "spb") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+
+            $detail_pesanan_part  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $data = $detail_pesanan->merge($detail_pesanan_part);
+
+            $detail_id = array();
+            $did = [];
+            foreach ($data as $d) {
+                $detail_id[] = $d->id;
+                $did[] = $d->pesanan_id;
+
+            }
+
+            $g = collect(DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get());
+            $g_part = collect(DetailPesananPart::whereIn('pesanan_id', $did)->get());
+            $g_data = $g->merge($g_part);
+        }
+
+        return datatables()->of($g_data)
+            ->addIndexColumn()
+            ->addColumn('paket', function($d) {
+                if(empty($d->GudangBarangJadi)) {
+                   return '-';
+                } else {
+                    return $d->detailpesanan->penjualanproduk->nama;
+                }
+            })
+            ->addColumn('produk', function ($data) {
+                if(empty($data->GudangBarangJadi)) {
+                    return $data->Sparepart->nama;
+                } else {
+                    if (empty($data->gudangbarangjadi->nama)) {
+                        return $data->gudangbarangjadi->produk->nama;
+                    } else {
+                        return $data->gudangbarangjadi->produk->nama . '-' . $data->gudangbarangjadi->nama;
+                    }
+                }
+
+            })
+            ->addColumn('jumlah', function ($data) {
+                if(empty($data->GudangBarangJadi)) {
+                    return $data->jumlah;
+                } else {
+                    $s = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($data) {
+                        $q->where('id', $data->id);
+                    })->get();
+                    $x = 0;
+                    foreach ($s as $i) {
+                        foreach ($i->PenjualanProduk->Produk as $j) {
+                            if ($j->id == $data->gudangbarangjadi->produk_id) {
+                                $x = $i->jumlah * $j->pivot->jumlah;
+                            }
+                        }
+                    }
+                    return $x . ' ' . $data->gudangbarangjadi->satuan->nama;
+                }
+
+            })
+            ->addColumn('jumlah_kirim', function($d) {
+
+                if(empty($d->GudangBarangJadi)) {
+                    // return 'a';
+                    $s = DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($d) {
+                        $q->where('pesanan_id', $d->pesanan->id);
+                    })->get();
+                    $jumlah = 0;
+                    foreach ($s as $i) {
+                        // return $i->DetailPesananPart->jumlah;
+                        $jumlah = $jumlah + $i->DetailPesananPart->jumlah;
+                    }
+                    return $jumlah;
+                } else {
+                    $jumlah = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($d) {
+                        $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
+                    })->count();
+                    return $jumlah;
+                }
+
+            })
+            ->make(true);
+    }
+
     /**
      * Get data product from sales order
      *
@@ -240,117 +374,6 @@ class PpicController extends Controller
      */
     public function get_data_so_detail($id)
     {
-        // $datas = DetailPesanan::whereHas('DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
-        //     $q->where('id', $id);
-        // })->whereHas('pesanan', function($q) {
-        //     $q->whereNotIn('log_id', ['7', '10']);
-        // })->get();
-
-        // // $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
-        // //     $q->where('id', $id);
-        // // })->first();
-        // $prd = GudangBarangJadi::where('id', $id)->has('DetailPesananProduk')->first();
-
-        // $arrayid = array();
-        // foreach ($datas as $i) {
-        //     if ($this->getJumlahPermintaanPesanan($prd->id, $id, $i->id) > $this->getJumlahTransferPesanan($id, $i->id)) {
-        //         $arrayid[] = $i->id;
-        //     }
-        // }
-
-        // $data = Pesanan::whereIn('id', $arrayid)->get();
-
-        // return datatables()->of($datas)
-        //     ->addIndexColumn()
-        //     ->addColumn('so', function ($data) {
-        //         return $data->pesanan->so ? $data->pesanan->so : "-";
-        //     })
-            // ->addColumn('po', function ($data) {
-            //     return $data->pesanan->no_po ? $data->pesanan->no_po : "-";
-            // })
-            // ->addColumn('akn', function ($data) {
-            //     if (isset($data->pesanan->Ekatalog)) {
-            //         return $data->pesanan->Ekatalog->no_paket;
-            //     } else {
-            //         return "-";
-            //     }
-            // })
-        //     ->addColumn('tgl_order', function ($data) {
-        //         if (isset($data->pesanan->Ekatalog)) {
-        //             return Carbon::createFromFormat('Y-m-d', $data->pesanan->Ekatalog->tgl_buat)->format('d-m-Y');
-        //         } else {
-        //             return Carbon::createFromFormat('Y-m-d', $data->pesanan->tgl_po)->format('d-m-Y');
-        //         }
-        //     })
-        //     ->addColumn('tgl_delivery', function ($data) {
-        //         if (isset($data->pesanan->Ekatalog)) {
-        //             $tanggal_sekarang = Carbon::now()->format('Y-m-d');
-        //             $tanggal_sekarang = Carbon::parse($tanggal_sekarang);
-        //             $tanggal_pengiriman = Carbon::parse($data->pesanan->ekatalog->tgl_kontrak);
-        //             $days = $tanggal_sekarang->diffInDays($tanggal_pengiriman);
-
-        //             $param = "";
-        //             if ($tanggal_sekarang <= $tanggal_pengiriman) {
-        //                 if ($days > 7) {
-        //                     $param = ' <div>' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas Sisa ' . $days . ' Hari</small>';
-        //                 } else if ($days > 0 && $days <= 7) {
-        //                     $param = ' <div class="has-text-warning">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $days . ' Hari</small>';
-        //                 } else {
-        //                     $param = '<div class="has-text-danger">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
-        //                 }
-        //             } else {
-        //                 $param =  '<div class="has-text-danger">' . Carbon::parse($tanggal_pengiriman)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $days . ' Hari</small>';
-        //             }
-
-        //             return $param;
-        //         } else {
-        //             return '-';
-        //         }
-        //     })
-        //     ->addColumn('customer', function ($data) {
-        //         if (isset($data->pesanan->Ekatalog)) {
-        //             return $data->pesanan->ekatalog->instansi;
-        //         } else if (isset($data->pesanan->spa)) {
-        //             return $data->pesanan->spa->customer->nama;
-        //         } else if (isset($data->pesanan->spb)) {
-        //             return $data->pesanan->spb->customer->nama;
-        //         }
-        //     })
-        //     ->addColumn('jenis', function ($data) {
-        //         if (isset($data->pesanan->Ekatalog)) {
-        //             return "Ekatalog";
-        //         } else if (isset($data->pesanan->spa)) {
-        //             return "SPA";
-        //         } else if (isset($data->pesanan->spb)) {
-        //             return "SPB";
-        //         }
-        //     })
-        //     ->addColumn('status', function ($data) {
-        //         return $data->pesanan->log->nama;
-        //     })
-        //     ->addColumn('jumlah', function ($data) use ($prd) {
-        //         $id = $data->pesanan->id;
-        //         // $jumlah = $this->getJumlahPermintaanPesanan($prd->id, $id, $data->id) - $this->getJumlahTransferPesanan($id, $data->id);
-        //         $res =
-        //         DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($prd) {
-        //             $q->where('gudang_barang_jadi_id', $prd->id);
-        //         })->whereHas('pesanan', function($qq) use($id) {
-        //             $qq->where('id', $id);
-        //         })->get();
-        //         $jumlah = 0;
-        //         foreach ($res as $a) {
-        //             return $a;
-        //         //     foreach ($a->PenjualanProduk->Produk as $b) {
-        //         //         if ($b->id == $prd->id) {
-        //         //             $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
-        //         //         }
-        //         //     }
-        //         }
-        //         // return $res;
-        //     })
-        //     ->rawColumns(['tgl_delivery'])
-        //     ->make(true);
-
         $datas = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);
         })->whereNotIn('log_id', ['7', '10'])->get();
@@ -444,16 +467,6 @@ class PpicController extends Controller
             })
             ->addColumn('jumlah', function ($data) use ($prd, $id) {
                 $jumlah = $this->getJumlahPermintaanPesanan($prd->id, $id, $data->id) - $this->getJumlahTransferPesanan($id, $data->id);
-                // $id = $data->id;
-                // $res = DetailPesanan::where('pesanan_id', $id)->get();
-                // $jumlah = 0;
-                // foreach ($res as $a) {
-                //     foreach ($a->PenjualanProduk->Produk as $b) {
-                //         if ($b->id == $prd->id) {
-                //             $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
-                //         }
-                //     }
-                // }
                 return $jumlah;
             })
             ->rawColumns(['tgl_delivery'])
@@ -1370,119 +1383,118 @@ class PpicController extends Controller
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
-        // return datatables()->of($data)
-        // ->addIndexColumn()
-        // ->addColumn('so', function ($data) {
-        //     return $data->so;
-        // })
-        // ->addColumn('nama_customer', function ($data) {
-        //     $name = explode('/', $data->so);
-        //     for ($i = 1; $i < count($name); $i++) {
-        //         if ($name[1] == 'EKAT') {
-        //             return $data->Ekatalog->Customer->nama;
-        //         } elseif ($name[1] == 'SPA') {
-        //             return $data->Spa->Customer->nama;
-        //         } elseif ($name[1] == 'SPB') {
-        //             return $data->Spb->Customer->nama;
-        //         } else { }
-        //     }
+        return datatables()->of($data)
+        ->addIndexColumn()
+        ->addColumn('so', function ($data) {
+            return $data->so;
+        })
+        ->addColumn('nama_customer', function ($data) {
+            $name = explode('/', $data->so);
+            for ($i = 1; $i < count($name); $i++) {
+                if ($name[1] == 'EKAT') {
+                    return $data->Ekatalog->Customer->nama;
+                } elseif ($name[1] == 'SPA') {
+                    return $data->Spa->Customer->nama;
+                } elseif ($name[1] == 'SPB') {
+                    return $data->Spb->Customer->nama;
+                } else { }
+            }
 
-        //     if (empty($data->so)) {
-        //         return $data->Ekatalog->Customer->nama;
-        //     }
-        // })
-        // ->addColumn('batas_out', function ($d) {
-        //     if (isset($d->Ekatalog->tgl_kontrak)) {
-        //         return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY');
-        //     } else {
-        //         return '-';
-        //     }
-        // })
-        // ->addColumn('status_prd', function ($data) {
-        //     if ($data->log_id) {
-        //         # code...
-        //         return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
-        //     } else {
-        //         return '-';
-        //     }
-        // })
-        // ->addColumn('status1', function ($data) {
-        //     $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
-        //     $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
-        //     if ($sumcek == $sumprd) {
-        //         return '<span class="badge badge-primary">Sudah Dicek</span>';
-        //     } elseif ($sumcek != $sumprd) {
-        //         return '<span class="badge badge-danger">Belum Dicek</span>';
-        //     }
-        // })
-        // ->addColumn('action', function ($data) {
-        //     $x = explode('/', $data->so);
-        //     $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
-        //     $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
-        //     if ($sumcek == $sumprd) {
-        //         for ($i = 1; $i < count($x); $i++) {
-        //             if ($x[1] == 'EKAT') {
-        //                 return '
-        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-        //                         ';
-        //             } elseif ($x[1] == 'SPA') {
-        //                 return '
-        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-        //                         ';
-        //             } elseif ($x[1] == 'SPB') {
-        //                 return '
-        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-        //                         ';
-        //             }
-        //         }
-        //     } else {
-        //         for ($i = 1; $i < count($x); $i++) {
-        //             if ($x[1] == 'EKAT') {
-        //                 return '
-        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-        //                         <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="ekatalog" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
-        //                         ';
-        //             } elseif ($x[1] == 'SPA') {
-        //                 return '
-        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-        //                         <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
-        //                         ';
-        //             } elseif ($x[1] == 'SPB') {
-        //                 return '
-        //                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-        //                         <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
-        //                         ';
-        //             }
-        //         }
-        //     }
-        // })
-        // ->addColumn('button_prd', function ($d) {
-        //     $x = explode('/', $d->so);
-        //     for ($i = 1; $i < count($x); $i++) {
-        //         if ($x[1] == 'EKAT') {
-        //             return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
-        //                 <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-        //             </a>';
-        //         } elseif ($x[1] == 'SPA') {
-        //             return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spa"  data-id="' . $d->id . '">
-        //                 <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-        //             </a>';
-        //         } elseif ($x[1] == 'SPB') {
-        //             return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spb"  data-id="' . $d->id . '">
-        //                 <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-        //             </a>';
-        //         }
-        //     }
+            if (empty($data->so)) {
+                return $data->Ekatalog->Customer->nama;
+            }
+        })
+        ->addColumn('batas_out', function ($d) {
+            if (isset($d->Ekatalog->tgl_kontrak)) {
+                return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY');
+            } else {
+                return '-';
+            }
+        })
+        ->addColumn('status_prd', function ($data) {
+            if ($data->log_id) {
+                # code...
+                return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+            } else {
+                return '-';
+            }
+        })
+        ->addColumn('status1', function ($data) {
+            $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
+            $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
+            if ($sumcek == $sumprd) {
+                return '<span class="badge badge-primary">Sudah Dicek</span>';
+            } elseif ($sumcek != $sumprd) {
+                return '<span class="badge badge-danger">Belum Dicek</span>';
+            }
+        })
+        ->addColumn('action', function ($data) {
+            $x = explode('/', $data->so);
+            $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
+            $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
+            if ($sumcek == $sumprd) {
+                for ($i = 1; $i < count($x); $i++) {
+                    if ($x[1] == 'EKAT') {
+                        return '
+                                <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                ';
+                    } elseif ($x[1] == 'SPA') {
+                        return '
+                                <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                ';
+                    } elseif ($x[1] == 'SPB') {
+                        return '
+                                <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                ';
+                    }
+                }
+            } else {
+                for ($i = 1; $i < count($x); $i++) {
+                    if ($x[1] == 'EKAT') {
+                        return '
+                                <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="ekatalog" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                ';
+                    } elseif ($x[1] == 'SPA') {
+                        return '
+                                <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                ';
+                    } elseif ($x[1] == 'SPB') {
+                        return '
+                                <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
+                                <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
+                                ';
+                    }
+                }
+            }
+        })
+        ->addColumn('button_prd', function ($d) {
+            $x = explode('/', $d->so);
+            for ($i = 1; $i < count($x); $i++) {
+                if ($x[1] == 'EKAT') {
+                    return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
+                        <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                    </a>';
+                } elseif ($x[1] == 'SPA') {
+                    return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spa"  data-id="' . $d->id . '">
+                        <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                    </a>';
+                } elseif ($x[1] == 'SPB') {
+                    return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spb"  data-id="' . $d->id . '">
+                        <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                    </a>';
+                }
+            }
 
-        //     if (empty($d->so)) {
-        //         return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
-        //             <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-        //         </a>';
-        //     }
-        // })
-        // ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
-        // ->make(true);
-        return $data;
+            if (empty($d->so)) {
+                return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
+                    <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
+                </a>';
+            }
+        })
+        ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
+        ->make(true);
     }
 
     public function detail_ekatalog($id)
