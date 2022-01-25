@@ -431,6 +431,12 @@ return [
             'auth' => [26]
         ],
         [
+            'text' => 'Rencana Order',
+            'url'  => '',
+            'icon' => 'fas fa-users',
+            'auth' => [1]
+        ],
+        [
             'text' => 'Laporan',
             'url'  => '/penjualan/laporan/show',
             'icon' => 'fas fa-book-open',
