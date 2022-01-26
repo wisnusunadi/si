@@ -457,7 +457,7 @@
                 {
                     data: "id",
                     render: function (data, type, row) {
-                        return '<button class="btn btn-outline-primary btn-sm detail" data-id="' + data + '"><i class="fas fa-edit"></i></button>&nbsp;<button class="btn btn-outline-danger btn-sm detail" data-id="' + data + '"><i class="fas fa-trash"></i></button>'
+                        return '<button type="button" class="btn btn-outline-primary btn-sm detail" data-id="' + data + '"><i class="fas fa-edit"></i></button>&nbsp;<button type="button" class="btn btn-outline-danger btn-sm delete" data-id="' + data + '"><i class="fas fa-trash"></i></button>'
                     }
                 }
             ],
@@ -550,5 +550,10 @@
         });
         $('#no_seri').text(check_seri);
     });
+    // Produksi Delete
+    $(document).on('click','.delete', function () {
+        const id = $(this).data('id');
+        console.log(id);
+    })
 </script>
 @stop
