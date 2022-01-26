@@ -203,11 +203,15 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card-footer">
+                        No Seri Yang Dipilih : <span id="no_seri"></span>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                <button type="submit" class="btn btn-primary" id="">Simpan</button>
+                <button type="button" class="btn btn-info" id="checked">Check</button>
+                <button type="submit" class="btn btn-primary" id="saveButton">Simpan</button>
             </div>
             </form>
         </div>
@@ -429,7 +433,8 @@
             columnDefs: [{
                 targets: [0],
                 checkboxes: {
-                    selectRow: false,
+                    selectRow: true,
+                    selectAllPages: false,
                 },
                 width: "5%"
             }, ],
@@ -442,7 +447,6 @@
         });
         $('#form-scan').on('submit', function (e) {
             e.preventDefault();
-
             Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
@@ -454,6 +458,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     var form = $(this);
+                $('#saveButton').attr('disabled', true);
 
                     var rows_selected = table.column(0).checkboxes.selected();
                     const seri = [];
@@ -466,29 +471,30 @@
                         let today = new Date();
                         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                         let datetime = tgl + ' ' + time;
-                        $.ajax({
-                            url: "/api/prd/send",
-                            type: "post",
-                            data: {
-                                "_token": "{{csrf_token() }}",
-                                userid: $('#userid').val(),
-                                qty: jumlah,
-                                gbj_id: prd,
-                                jadwal_id: id,
-                                noseri: seri,
-                                tgl_transfer: datetime,
-                            },
-                            success: function (res) {
-                                console.log(res);
-                                Swal.fire(
-                                    'Berhasil!',
-                                    'Data berhasil di transfer!',
-                                    'success'
-                                ).then(function () {
-                                    location.reload();
-                                });
-                            }
-                        })
+                        // $.ajax({
+                        //     url: "/api/prd/send",
+                        //     type: "post",
+                        //     data: {
+                        //         "_token": "{{csrf_token() }}",
+                        //         userid: $('#userid').val(),
+                        //         qty: jumlah,
+                        //         gbj_id: prd,
+                        //         jadwal_id: id,
+                        //         noseri: seri,
+                        //         tgl_transfer: datetime,
+                        //     },
+                        //     success: function (res) {
+                        //         console.log(res);
+                        //         Swal.fire(
+                        //             'Berhasil!',
+                        //             'Data berhasil di transfer!',
+                        //             'success'
+                        //         ).then(function () {
+                        //             location.reload();
+                        //         });
+                        //     }
+                        // })
+                        console.log("seri", seri);
                     } else {
                         Swal.fire(
                             'Error!',
@@ -502,6 +508,16 @@
 
         });
     }
+    // Produksi Checkbox
+    $(document).on('click','#checked', function () {
+        var table = $('.scan-produk').DataTable();
+        var rows_select = table.column(0).checkboxes.selected();
+        const check_seri = [];
 
+        $.each(rows_select, function (index, rowId) {
+            check_seri.push(rowId);
+        });
+        $('#no_seri').text(check_seri);
+    });
 </script>
 @stop

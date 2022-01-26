@@ -586,6 +586,7 @@
             confirmButtonText: 'Yes, Transfer it'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    $(this).attr('disabled', true);
                     $.ajax({
                         url: "/api/tfp/byso-final",
                         type: "post",

@@ -844,6 +844,38 @@ class ProduksiController extends Controller
                     </a>';
                 }
             })
+            ->addColumn('btn', function ($d) {
+                $x = explode('/', $d->so);
+                for ($i = 1; $i < count($x); $i++) {
+                    if ($x[1] == 'EKAT') {
+                        return ''.$d->id.'';
+                    } elseif ($x[1] == 'SPA') {
+                        return ''.$d->id.'';
+                    } elseif ($x[1] == 'SPB') {
+                        return ''.$d->id.'';
+                    }
+                }
+
+                if (empty($d->so)) {
+                    return ''.$d->id.'';
+                }
+            })
+            ->addColumn('btnValue', function ($d) {
+                $x = explode('/', $d->so);
+                for ($i = 1; $i < count($x); $i++) {
+                    if ($x[1] == 'EKAT') {
+                        return 'ekatalog';
+                    } elseif ($x[1] == 'SPA') {
+                        return 'spa';
+                    } elseif ($x[1] == 'SPB') {
+                        return 'spb';
+                    }
+                }
+
+                if (empty($d->so)) {
+                    return 'ekatalog';
+                }
+            })
             ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
             ->make(true);
     }
@@ -1327,6 +1359,14 @@ class ProduksiController extends Controller
                     return '-';
                 }
             })
+            ->addColumn('status_prd', function ($data) {
+                if ($data->log_id) {
+                    # code...
+                    return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('button', function ($data) {
                 $x = explode('/', $data->so);
                 for ($i = 1; $i < count($x); $i++) {
@@ -1351,7 +1391,7 @@ class ProduksiController extends Controller
                     }
                 }
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button','status_prd'])
             ->make(true);
     }
 
@@ -1393,6 +1433,14 @@ class ProduksiController extends Controller
                     return '-';
                 }
             })
+            ->addColumn('status_prd', function ($data) {
+                if ($data->log_id) {
+                    # code...
+                    return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('button', function ($data) {
                 $x = explode('/', $data->so);
                 for ($i = 1; $i < count($x); $i++) {
@@ -1417,7 +1465,7 @@ class ProduksiController extends Controller
                     }
                 }
             })
-            ->rawColumns(['button'])
+            ->rawColumns(['button','status_prd'])
             ->make(true);
     }
 
@@ -1464,6 +1512,14 @@ class ProduksiController extends Controller
                     return '-';
                 }
             })
+            ->addColumn('status_prd', function ($data) {
+                if ($data->log_id) {
+                    # code...
+                    return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('button', function ($data) {
                 $x = explode('/', $data->so);
                 for ($i = 1; $i < count($x); $i++) {
@@ -1488,7 +1544,7 @@ class ProduksiController extends Controller
                     }
                 }
             })
-            ->rawColumns(['button', 'batas_out'])
+            ->rawColumns(['button', 'batas_out', 'status_prd'])
             ->make(true);
     }
     // rakit
@@ -1657,7 +1713,7 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12, 13])->orderByDesc('created_at')->get();
+        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12])->orderByDesc('created_at')->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -1754,9 +1810,20 @@ class ProduksiController extends Controller
             })
             ->addColumn('action', function ($d) {
                 if ($d->status_tf == 12) {
-                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
-                        <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
-                    </a>';
+                    $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 14)->get();
+                    $c = count($seri);
+                    $seri_all = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
+                    $c_all = count($seri_all);
+                    if ($c == $c_all) {
+
+                    } else {
+                        return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                            <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
+                        </a>';
+                    }
+                    // return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                    //     <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
+                    // </a>';
                 } elseif ($d->status_tf == 13) {
                     $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 14)->get();
                     $c = count($seri);
@@ -1896,9 +1963,6 @@ class ProduksiController extends Controller
             $q->where('produk_id', $id);
         })->whereNull('waktu_tf')->where('jadwal_id', $jadwal)->get();
         return datatables()->of($data)
-            ->addColumn('checkbox', function ($d) {
-                return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
-            })
             ->addColumn('no_seri', function ($d) {
                 return $d->noseri;
             })
@@ -1959,6 +2023,9 @@ class ProduksiController extends Controller
         $blm_terkirim = JadwalRakitNoseri::whereHas('header', function ($q) use ($request) {
             $q->where('produk_id', $request->gbj_id);
         })->where('status', 11)->get()->count();
+        $sdh_terisi = JadwalRakitNoseri::whereHas('header', function ($q) use ($request) {
+            $q->where('produk_id', $request->gbj_id);
+        })->get()->count();
         $total_rakit = JadwalPerakitan::find($request->jadwal_id);
         $now = intval($total_rakit->jumlah - $sdh_terkirim);
         if ($now == $total_rakit->jumlah) {
@@ -1971,7 +2038,12 @@ class ProduksiController extends Controller
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
-        } else {
+        } elseif ($sdh_terisi != $total_rakit->jumlah) {
+            $total_rakit->status_tf = 12;
+            $total_rakit->filled_by = $request->userid;
+            $total_rakit->save();
+        }
+         else {
             // return 'c';
             $total_rakit->status_tf = 13;
             $total_rakit->filled_by = $request->userid;
