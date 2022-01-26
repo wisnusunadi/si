@@ -1587,6 +1587,7 @@ class PenjualanController extends Controller
                 'provinsi_id' => $request->provinsi,
                 'pesanan_id' => $x,
                 'no_paket' => 'AK1-' . $request->no_paket,
+                'no_urut' => $request->no_urut,
                 'deskripsi' => $request->deskripsi,
                 'instansi' => $request->instansi,
                 'alamat' => $request->alamatinstansi,
@@ -1966,6 +1967,8 @@ class PenjualanController extends Controller
         $ekatalog->instansi = $request->instansi;
         $ekatalog->alamat = $request->alamatinstansi;
         $ekatalog->tgl_kontrak = $request->batas_kontrak;
+        $ekatalog->tgl_edit = $request->tgl_edit;
+        $ekatalog->no_urut = $request->no_urut;
         $ekatalog->satuan = $request->satuan_kerja;
         $ekatalog->status = $request->status_akn;
         $ekatalog->ket = $request->keterangan;

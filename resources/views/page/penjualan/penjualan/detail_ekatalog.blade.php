@@ -14,12 +14,12 @@
                                     <h6><b>{{$data->Customer->nama}}</b></h6>
                                 </div>
                                 <div><b>{{$data->satuan}}</b></div>
-                                <div><b>{{$data->alamat}}</b></div>
-                                <div><b>
+                                <div>{{$data->alamat}}</div>
+                                <div>
                                         @if(!empty($data->provinsi))
                                         {{$data->Provinsi->nama}}
                                         @endif
-                                    </b></div>
+                                    </div>
 
                             </div>
                         </div>

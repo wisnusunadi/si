@@ -54,7 +54,15 @@
 
     }
 
-    @media screen and (min-width: 1440px) {
+    #produktable{
+        width:1371px !important;
+    }
+    #parttable{
+        width:1371px !important;
+    }
+
+
+    @media screen and (min-width: 1220px) {
 
         section {
             font-size: 14px;
@@ -63,9 +71,15 @@
         .btn {
             font-size: 14px;
         }
+
+        .labelket{
+            text-align: right;
+        }
+
+
     }
 
-    @media screen and (max-width: 1439px) {
+    @media screen and (max-width: 1219px) {
 
         /* label,
         .row {
@@ -82,7 +96,35 @@
         .btn {
             font-size: 12px;
         }
+
+        .labelket{
+            text-align: right;
+        }
     }
+
+    @media screen and (max-width: 991px) {
+
+        /* label,
+        .row {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        } */
+        section {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .labelket{
+            text-align: left;
+        }
+    }
+
 </style>
 @stop
 
@@ -116,14 +158,14 @@
                         <form method="post" action="{{route('penjualan.penjualan.store')}}">
                             {{csrf_field()}}
                             <div class="row d-flex justify-content-center">
-                                <div class="col-11">
+                                <div class="col-lg-11 col-md-12">
                                     <h4>Info Customer</h4>
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="form-horizontal">
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Jenis Penjualan</label>
-                                                    <div class="col-5 col-form-label">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Jenis Penjualan</label>
+                                                    <div class="col-lg-5 col-md-12 col-form-label">
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" name="jenis_penjualan" id="jenis_penjualan1" value="ekatalog" />
                                                             <label class="form-check-label" for="jenis_penjualan1">E-Catalogue</label>
@@ -145,8 +187,8 @@
                                                 </div>
 
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right"></label>
-                                                    <div class="col-5 col-form-label">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Pilih Barang</label>
+                                                    <div class="col-lg-5 col-md-12 col-form-label">
                                                         <div class="form-check form-check-inline hide" id="penj_prd">
                                                             <input class="form-check-input" type="radio" name="jenis_penj" id="jenis_penj1" value="produk" />
                                                             <label class="form-check-label" for="jenis_penj1">Produk</label>
@@ -162,8 +204,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer / Distributor</label>
-                                                    <div class="col-5 col-form-label">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Nama Customer / Distributor</label>
+                                                    <div class="col-lg-5 col-md-12 col-form-label">
                                                         <div class="form-check form-check-inline " id="sudah_dsb">
                                                             <input class="form-check-input" type="radio" name="namadistributor" id="namadistributor1" value="sudah" />
                                                             <label class="form-check-label" for="namadistributor1">Sudah Diketahui</label>
@@ -180,21 +222,21 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right"></label>
-                                                    <div class="col-5 ">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket"></label>
+                                                    <div class="col-lg-5 col-md-12">
                                                         <select name="customer_id" id="customer_id" class="form-control custom-select customer_id  @error('customer_id') is-invalid @enderror">
                                                         </select>
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
-                                                    <div class="col-7">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat</label>
+                                                    <div class="col-lg-7 col-md-12">
                                                         <input type="text" class="form-control col-form-label" name="alamat" id="alamat" readonly />
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
-                                                    <div class="col-5">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Telepon</label>
+                                                    <div class="col-lg-5 col-md-12">
                                                         <input type="text" class="form-control col-form-label" name="telepon" id="telepon" readonly />
                                                     </div>
                                                 </div>
@@ -205,14 +247,14 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center hide" id="akn">
-                                <div class="col-11">
+                                <div class="col-lg-11 col-md-12">
                                     <h4>Info AKN</h4>
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="form-horizontal">
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Pemesanan</label>
-                                                    <div class="col-4">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Pemesanan</label>
+                                                    <div class="col-lg-4">
                                                         <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />
                                                         <div class="invalid-feedback" id="msgtanggal_pemesanan">
                                                             @if($errors->has('tanggal_pemesanan'))
@@ -222,8 +264,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Instansi</label>
-                                                    <div class="col-7">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
+                                                    <div class="col-lg-7 col-md-12">
                                                         <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" />
                                                         <div class="invalid-feedback" id="msginstansi">
                                                             @if($errors->has('instansi'))
@@ -233,8 +275,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Alamat Instansi</label>
-                                                    <div class="col-7">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat Instansi</label>
+                                                    <div class="col-lg-7 col-md-12">
                                                         <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" />
                                                         <div class="invalid-feedback" id="msgalamatinstansi">
                                                             @if($errors->has('alamatinstansi'))
@@ -244,8 +286,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Provinsi</label>
-                                                    <div class="col-7">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Provinsi</label>
+                                                    <div class="col-lg-7 col-md-12">
                                                         <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
                                                         </select>
                                                         <div class="invalid-feedback" id="msgprovinsi">
@@ -256,8 +298,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Satuan Kerja</label>
-                                                    <div class="col-7">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Satuan Kerja</label>
+                                                    <div class="col-lg-6 col-md-12">
                                                         <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" />
                                                         <div class="invalid-feedback" id="msgsatuan_kerja">
                                                             @if($errors->has('satuan_kerja'))
@@ -267,8 +309,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
-                                                    <div class="col-5 col-form-label">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
+                                                    <div class="col-lg-5 col-md-12 col-form-label">
                                                         <!-- <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="radio" name="status" id="satuan4" value="draft" />
                                                     <label class="form-check-label" for="satuan4">Draft</label>
@@ -297,12 +339,12 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">No Paket</label>
-                                                    <div class="col-5 input-group">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Paket</label>
+                                                    <div class="col-lg-5 col-md-12 input-group">
                                                         <div class="input-group-prepend">
                                                             <span class="input-group-text" id="ket_no_paket">AK1-</span>
                                                         </div>
-                                                        <input type="text" class="form-control col-form-label @error('nomor_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" />
+                                                        <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" />
                                                         <div class="invalid-feedback" id="msgno_paket">
                                                             @if($errors->has('no_paket'))
                                                             {{ $errors->first('no_paket')}}
@@ -311,8 +353,19 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Delivery</label>
-                                                    <div class="col-4">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Urut</label>
+                                                    <div class="col-lg-2 col-md-6">
+                                                        <input type="number" class="form-control col-form-label @error('no_urut') is-invalid @enderror" name="no_urut" id="no_urut"/>
+                                                        <div class="invalid-feedback" id="msgno_urut">
+                                                            @if($errors->has('no_urut'))
+                                                            {{ $errors->first('no_urut')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Delivery</label>
+                                                    <div class="col-lg-4 col-md-12">
                                                         <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
                                                         <div class="invalid-feedback" id="msgbatas_kontrak">
                                                             @if($errors->has('batas_kontrak'))
@@ -322,8 +375,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Deskripsi</label>
-                                                    <div class="col-5">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Deskripsi</label>
+                                                    <div class="col-lg-5 col-md-12">
                                                         <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"></textarea>
                                                         <div class="invalid-feedback" id="msgdeskripsi">
                                                             @if($errors->has('deskripsi'))
@@ -333,8 +386,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
-                                                    <div class="col-5">
+                                                    <label for="keterangan" class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
+                                                    <div class="col-lg-5 col-md-12">
                                                         <textarea class="form-control col-form-label" name="keterangan"></textarea>
                                                     </div>
                                                 </div>
@@ -344,13 +397,13 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center hide" id="nonakn">
-                                <div class="col-11">
+                                <div class="col-lg-11 col-md-12">
                                     <h4>Info Penjualan</h4>
                                     <div class="card">
                                         <div class="card-body">
                                             <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Nomor PO</label>
-                                                <div class="col-4">
+                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Nomor PO</label>
+                                                <div class="col-lg-4 col-md-12">
                                                     <input type="text" class="form-control col-form-label @error('no_po') is-invalid @enderror" id="no_po" name="no_po" />
                                                     <div class="invalid-feedback" id="msgno_po">
                                                         @if($errors->has('no_po'))
@@ -360,8 +413,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Tanggal PO</label>
-                                                <div class="col-4">
+                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal PO</label>
+                                                <div class="col-lg-4 col-md-12">
                                                     <input type="date" class="form-control col-form-label @error('tanggal_po') is-invalid @enderror" id="tanggal_po" name="tanggal_po" />
                                                     <div class="invalid-feedback" id="msgtanggal_po">
                                                         @if($errors->has('tanggal_po'))
@@ -371,8 +424,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Delivery Order</label>
-                                                <div class="col-5 col-form-label">
+                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Delivery Order</label>
+                                                <div class="col-lg-5 col-md-12 col-form-label">
                                                     <div class="form-check form-check-inline">
                                                         <input class="form-check-input" type="radio" name="do" id="yes" value="yes" />
                                                         <label class="form-check-label" for="yes">Tersedia</label>
@@ -385,8 +438,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row hide" id="do_detail_no">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Nomor DO</label>
-                                                <div class="col-4">
+                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Nomor DO</label>
+                                                <div class="col-lg-4 col-md-12">
                                                     <input type="text" class="form-control col-form-label @error('no_do') is-invalid @enderror" id="no_do" name="no_do" />
                                                     <div class="invalid-feedback" id="msgno_do">
                                                         @if($errors->has('no_do'))
@@ -396,8 +449,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row hide" id="do_detail_tgl">
-                                                <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
-                                                <div class="col-4">
+                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal DO</label>
+                                                <div class="col-lg-4 col-md-12">
                                                     <input type="date" class="form-control col-form-label @error('tanggal_do') is-invalid @enderror" id="tanggal_do" name="tanggal_do" />
                                                     <div class="invalid-feedback" id="msgtanggal_do">
                                                         @if($errors->has('tanggal_do'))
@@ -407,8 +460,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
-                                                <div class="col-5">
+                                                <label for="keterangan" class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
+                                                <div class="col-lg-5 col-md-12">
                                                     <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan"></textarea>
                                                 </div>
                                             </div>
@@ -416,8 +469,8 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row d-flex justify-content-center hide" id="dataproduk">
-                                <div class="col-11">
+                            <div class="row justify-content-center hide" id="dataproduk">
+                                <div class="col-lg-11 col-md-12">
                                     <h4>Data Produk</h4>
                                     <div class="card">
                                         <div class="card-body">
@@ -461,7 +514,6 @@
                                                                         <div class="form-group d-flex justify-content-center">
                                                                             <div class="input-group">
                                                                                 <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah0" style="width:100%;">
-
                                                                             </div>
                                                                             <small id="produk_ketersediaan"></small>
                                                                         </div>
@@ -503,7 +555,7 @@
                                 </div>
                             </div>
                             <div class="row d-flex justify-content-center hide" id="datapart">
-                                <div class="col-11">
+                                <div class="col-lg-11 col-md-12">
                                     <h4>Data Part</h4>
                                     <div class="card">
                                         <div class="card-body">
@@ -540,12 +592,7 @@
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group d-flex justify-content-center">
-                                                                            <div class="input-group">
-                                                                                <input type="number" class="form-control part_jumlah" aria-label="produk_satuan" name="part_jumlah[]" id="part_jumlah0" style="width:100%;">
-                                                                                <div class="input-group-append">
-                                                                                    <span class="input-group-text" id="part_satuan">pcs</span>
-                                                                                </div>
-                                                                            </div>
+                                                                            <input type="number" class="form-control part_jumlah" name="part_jumlah[]" id="part_jumlah0" style="width:100%;">
                                                                             <small id="part_ketersediaan"></small>
                                                                         </div>
                                                                     </td>
@@ -655,13 +702,13 @@
 
         function checkvalidasi() {
             if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
-                if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "") {
+                if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "" && $('no_urut').val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
             } else {
-                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "") {
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "" && $('no_urut').val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
@@ -923,6 +970,18 @@
             }
         });
 
+        $('#no_urut').on('keyup change', function() {
+            if ($(this).val() != "") {
+                $("#msgno_urut").text("");
+                $("#no_urut").removeClass('is-invalid');
+                checkvalidasi();
+            } else if ($(this).val() == "") {
+                $("#msgno_urut").text("No Urut Harus diisi");
+                $("#no_urut").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
+            }
+        });
+
         $('#no_po').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgno_po").text("");
@@ -1140,7 +1199,7 @@
                     theme: "bootstrap",
                     delay: 250,
                     type: 'GET',
-                    url: '/api/penjualan_produk/select/',
+                    url: '/api/penjualan_produk/select',
                     data: function(params) {
                         return {
                             term: params.term
@@ -1276,24 +1335,10 @@
         }
 
         $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
-            // var jumlah = $(this).closest('tr').find('.produk_jumlah').val();
-            // var harga = $(this).closest('tr').find('.produk_harga').val();
-            // var subtotal = $(this).closest('tr').find('.produk_subtotal');
-            // if (jumlah != "" && harga != "") {
-            //     var hargacvrt = replaceAll(harga, '.', '');
-            //     subtotal.val(formatmoney(jumlah * parseInt(hargacvrt)));
-            //     totalhargaprd();
-            // } else {
-            //     subtotal.val(formatmoney("0"));
-            //     totalhargaprd();
-            // }
-
-
-
             var index = $(this).attr('id');
             var id = $(this).val();
             $.ajax({
-                url: '/api/penjualan_produk/select/' + id,
+                url: '/api/penjualan_produk/select/'+id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
@@ -1307,6 +1352,7 @@
                     tes.empty();
                     var datas = "";
                     tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
+                    // console.log(res);
                     for (var x = 0; x < res[0].produk.length; x++) {
                         var data = [];
                         tes.append(`<div>`);
@@ -1552,12 +1598,8 @@
                 </td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <div class="input-group">
-                            <input type="number" class="form-control part_jumlah" aria-label="produk_satuan" name="part_jumlah[]" id="part_jumlah0" style="width:100%;">
-                            <div class="input-group-append">
-                                <span class="input-group-text" id="part_satuan">pcs</span>
-                            </div>
-                        </div>
+                            <input type="number" class="form-control part_jumlah" name="part_jumlah[]" id="part_jumlah0" style="width:100%;">
+
                         <small id="part_ketersediaan"></small>
                     </div>
                 </td>

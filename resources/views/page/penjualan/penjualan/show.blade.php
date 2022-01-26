@@ -537,7 +537,7 @@
                                         <table class="table table-hover" id="ekatalogtable" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th>No</th>
+                                                    <th>No Urut</th>
                                                     <th>Nomor SO</th>
                                                     <th>Nomor AKN</th>
                                                     <th>Nomor PO</th>

@@ -65,7 +65,15 @@
         margin-bottom: 10px;
     }
 
-    @media (max-width: 800px) {
+    @media (max-width: 992px) {
+        body{
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
         .form-inline input {
             margin: 10px 0;
         }

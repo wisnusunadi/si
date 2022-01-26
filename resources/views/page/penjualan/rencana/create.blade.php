@@ -14,6 +14,16 @@
     .select2 {
         width:100%!important;
     }
+
+    @media (max-width: 992px) {
+        body {
+                font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+    }
 </style>
 @endsection
 
@@ -338,7 +348,7 @@
             validasiall();
         });
 
-        
+
     })
 </script>
 @stop
