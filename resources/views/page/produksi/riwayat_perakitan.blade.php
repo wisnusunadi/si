@@ -61,10 +61,10 @@
                         <table class="table table-history">
                             <thead class="thead-light">
                                 <tr>
-                                    <th>Waktu</th>
-                                    <th>Tanggal & Waktu Perakitan</th>
-                                    <th>Waktu1</th>
-                                    <th>Tanggal & Waktu Pengiriman</th>
+                                    <th>Tanggal Perakitan</th>
+                                    <th>Waktu Perakitan</th>
+                                    <th>Tanggal Pengiriman</th>
+                                    <th>Waktu Pengiriman</th>
                                     <th>Nomor BPPB</th>
                                     <th>Produk</th>
                                     <th>Jumlah</th>
@@ -240,7 +240,9 @@
         var time = $(this).data('tf');
         var rakit = $(this).data('rakit');
         console.log($(this).parent());
-        $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
+        $('p#d_rakit').text($(this).parent().prev().prev().prev().prev().prev().prev().prev().html());
+        $('p#d_kirim').text($(this).parent().prev().prev().prev().prev().prev().html());
+        $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().prev().html());
         $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
         $('div#bppb').text($(this).parent().prev().prev().prev().html());
         $('div#produk').text($(this).parent().prev().prev().html());
@@ -250,8 +252,7 @@
             type: "get",
             success: function(res) {
                 console.log(res);
-                $('p#d_rakit').text(res[0].day_rakit);
-                $('p#d_kirim').text(res[0].day_kirim);
+
                 $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
                 $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
             }
