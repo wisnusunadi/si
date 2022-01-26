@@ -1963,9 +1963,6 @@ class ProduksiController extends Controller
             $q->where('produk_id', $id);
         })->whereNull('waktu_tf')->where('jadwal_id', $jadwal)->get();
         return datatables()->of($data)
-            ->addColumn('checkbox', function ($d) {
-                return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
-            })
             ->addColumn('no_seri', function ($d) {
                 return $d->noseri;
             })
