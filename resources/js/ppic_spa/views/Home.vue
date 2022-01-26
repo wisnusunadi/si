@@ -62,7 +62,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="item in data_so" :key="item.id">
+              <tr v-for="item in data_so" :key="'table_so'+item.id">
                 <td>{{ item.DT_RowIndex }}</td>
                 <td v-html="item.nama_produk"></td>
                 <td>{{ item.stok }}</td>
@@ -89,7 +89,7 @@
               </tr>
             </thead>
             <tbody>
-              <tr v-for="(d, index) in data_gbj" :key="d.id">
+              <tr v-for="(d, index) in data_gbj" :key="'table_gbj'+d.id">
                 <td>{{ index + 1 }}</td>
                 <td>{{ d.produk.product.kode }}</td>
                 <td>{{ d.produk.nama + " " + d.nama }}</td>
@@ -137,7 +137,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in data_sparepart" :key="item.id">
+                <tr v-for="item in data_sparepart" :key="'table_sparepart'+item.id">
                   <td>{{ item.kode }}</td>
                   <td>{{ item.nama }}</td>
                   <td>{{ item.unit }}</td>
@@ -158,7 +158,7 @@
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="item in data_unit" :key="item.id">
+                <tr v-for="(item, index) in data_unit" :key="index">
                   <td>{{ item.kode }}</td>
                   <td>{{ item.nama }}</td>
                   <td>{{ item.jml }}</td>
