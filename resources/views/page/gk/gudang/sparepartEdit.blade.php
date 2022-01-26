@@ -325,6 +325,7 @@
         var actionType = $('#btnSave').val();
         $('#btnSave').html('Sending..');
         var formData = new FormData(this);
+        $('#btnSave').attr('disabled', true);
         $.ajax({
             type: 'POST',
             url: "/api/gk/ubahunit",

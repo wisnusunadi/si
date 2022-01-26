@@ -320,6 +320,7 @@
             confirmButtonText: 'Ya, Terima!'
         }).then((result) => {
             if (result.value) {
+            $(this).prop('disabled', true);
                 $.ajax({
                     url: "/api/prd/terimaseri",
                     type: "post",

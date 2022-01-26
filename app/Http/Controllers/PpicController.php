@@ -3,16 +3,25 @@
 namespace App\Http\Controllers;
 
 // library
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
-use Yajra\DataTables\Facades\DataTables;
-use Illuminate\Support\Carbon;
+use App\Models\Spa;
+use App\Models\Spb;
+use App\Models\Produk;
+use App\Models\Pesanan;
 
 // model
+use App\Models\Ekatalog;
+use App\Events\PpicNotif;
+use App\Models\NoseriTGbj;
+use Illuminate\Http\Request;
+use App\Models\DetailPesanan;
+use Illuminate\Support\Carbon;
 use App\Models\JadwalPerakitan;
-use App\Models\JadwalPerakitanRencana;
-use App\Models\JadwalPerakitanLog;
 use App\Models\GudangBarangJadi;
+<<<<<<< HEAD
+use App\Models\JadwalPerakitanLog;
+use Illuminate\Support\Facades\DB;
+use App\Models\DetailPesananProduk;
+=======
 use App\Models\GudangKarantinaDetail;
 use App\Models\KomentarJadwalPerakitan;
 use App\Models\DetailPesanan;
@@ -21,10 +30,16 @@ use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
 use App\Models\Produk;
+>>>>>>> b3033c9f41c802a412c20ce95f91a43afc1710e3
 
 // event
-use App\Events\PpicNotif;
-use App\Models\DetailPesananProduk;
+use App\Models\NoseriDetailLogistik;
+use App\Models\GudangKarantinaDetail;
+use App\Models\JadwalPerakitanRencana;
+use App\Models\KomentarJadwalPerakitan;
+use Yajra\DataTables\Facades\DataTables;
+use App\Models\DetailLogistikPart;
+use App\Models\DetailPesananPart;
 
 class PpicController extends Controller
 {
@@ -166,6 +181,138 @@ class PpicController extends Controller
         return $data;
     }
 
+    function get_data_pesanan_produk($id, $value)
+    {
+        // $data = Pesanan::orHas('DetailPesanan')->orHas('DetailPesananPart')->where('id', $id)->get();
+        // return $data;
+        if ($value == "ekatalog") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+
+            $detail_pesanan_part  = DetailPesananPart::whereHas('Pesanan.Ekatalog', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $data = $detail_pesanan->merge($detail_pesanan_part);
+            $detail_id = array();
+            $did = [];
+            foreach ($data as $d) {
+                $detail_id[] = $d->id;
+                $did[] = $d->pesanan_id;
+            }
+
+            $g = collect(DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get());
+            $g_part = collect(DetailPesananPart::whereIn('pesanan_id', $did)->get());
+            $g_data = $g->merge($g_part);
+        } else if ($value == "spa") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spa', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+
+            $detail_pesanan_part  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $data = $detail_pesanan->merge($detail_pesanan_part);
+
+            $detail_id = array();
+            $did = [];
+            foreach ($data as $d) {
+                $detail_id[] = $d->id;
+                $did[] = $d->pesanan_id;
+
+            }
+
+
+            $g = collect(DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get());
+            $g_part = collect(DetailPesananPart::whereIn('pesanan_id', $did)->get());
+            $g_data = $g->merge($g_part);
+        } else if ($value == "spb") {
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan.Spb', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+
+            $detail_pesanan_part  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $data = $detail_pesanan->merge($detail_pesanan_part);
+
+            $detail_id = array();
+            $did = [];
+            foreach ($data as $d) {
+                $detail_id[] = $d->id;
+                $did[] = $d->pesanan_id;
+
+            }
+
+            $g = collect(DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get());
+            $g_part = collect(DetailPesananPart::whereIn('pesanan_id', $did)->get());
+            $g_data = $g->merge($g_part);
+        }
+
+        return datatables()->of($g_data)
+            ->addIndexColumn()
+            ->addColumn('paket', function($d) {
+                if(empty($d->GudangBarangJadi)) {
+                   return '-';
+                } else {
+                    return $d->detailpesanan->penjualanproduk->nama;
+                }
+            })
+            ->addColumn('produk', function ($data) {
+                if(empty($data->GudangBarangJadi)) {
+                    return $data->Sparepart->nama;
+                } else {
+                    if (empty($data->gudangbarangjadi->nama)) {
+                        return $data->gudangbarangjadi->produk->nama;
+                    } else {
+                        return $data->gudangbarangjadi->produk->nama . '-' . $data->gudangbarangjadi->nama;
+                    }
+                }
+
+            })
+            ->addColumn('jumlah', function ($data) {
+                if(empty($data->GudangBarangJadi)) {
+                    return $data->jumlah;
+                } else {
+                    $s = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($data) {
+                        $q->where('id', $data->id);
+                    })->get();
+                    $x = 0;
+                    foreach ($s as $i) {
+                        foreach ($i->PenjualanProduk->Produk as $j) {
+                            if ($j->id == $data->gudangbarangjadi->produk_id) {
+                                $x = $i->jumlah * $j->pivot->jumlah;
+                            }
+                        }
+                    }
+                    return $x . ' ' .   $data->gudangbarangjadi->satuan->nama;
+                }
+
+            })
+            ->addColumn('jumlah_kirim', function($d) {
+
+                if(empty($d->GudangBarangJadi)) {
+                    // return 'a';
+                    $s = DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($d) {
+                        $q->where('pesanan_id', $d->pesanan->id);
+                    })->get();
+                    $jumlah = 0;
+                    foreach ($s as $i) {
+                        // return $i->DetailPesananPart->jumlah;
+                        $jumlah = $jumlah + $i->DetailPesananPart->jumlah;
+                    }
+                    return $jumlah;
+                } else {
+                    $jumlah = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($d) {
+                        $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
+                    })->count();
+                    return $jumlah;
+                }
+
+            })
+            ->make(true);
+    }
+
     /**
      * Get data product from sales order
      *
@@ -226,6 +373,9 @@ class PpicController extends Controller
             ->addColumn('po', function ($data) {
                 return $data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa");
             })
+            ->addColumn('jumlah_kirim', function($data) {
+                return $data->getJumlahKirimPesanan();
+            })
             ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
             ->make(true);
     }
@@ -259,7 +409,7 @@ class PpicController extends Controller
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->so;
-            })
+            }) 
             ->addColumn('po', function ($data) {
                 return $data->no_po ? $data->no_po : "-";
             })
@@ -1263,4 +1413,5 @@ class PpicController extends Controller
         })->count();
         return $jumlah;
     }
+
 }

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="title">DashBoard</h1>
+    <h1 class="title">Dashboard</h1>
     <div class="columns is-multiline">
       <div class="column is-6">
         <article class="message is-primary">
@@ -22,7 +22,33 @@
           </div>
         </article>
       </div>
-      <div class="column is-12">
+      <div class="column is-6">
+        <div class="box">
+        <table class="table is-fullwidth has-text-centered" id="table_so_detail">
+            <thead>
+              <tr>
+              <th>No</th>
+              <th>Nomor SO</th>
+              <th>Nomor PO</th>
+              <th>Tanggal Order</th>
+              <th>Customer</th>
+              <th>Status</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr v-for="item in salesOrder" :key="'so'+item.DT_RowIndex">
+              <td v-html="item.DT_RowIndex"></td>
+              <td v-html="item.so"></td>
+              <td v-html="item.no_po"></td>
+              <td v-html="item.tgl_po"></td>
+              <td v-html="item.nama_customer "></td>
+              <td v-html="item.status_prd"></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+            <div class="column is-6">
         <div class="box">
           <table class="table is-fullwidth has-text-centered" id="table_so">
             <thead>
@@ -31,6 +57,7 @@
                 <th>Nama Produk</th>
                 <th>Stok</th>
                 <th>Pesanan</th>
+                <th>Jumlah Terkirim</th>
                 <th>Selisih stok dengan pesanan</th>
               </tr>
             </thead>
@@ -40,6 +67,7 @@
                 <td v-html="item.nama_produk"></td>
                 <td>{{ item.stok }}</td>
                 <td>{{ item.total }}</td>
+                <td v-text="item.jumlah_kirim"></td>
                 <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
                   {{ item.penjualan }}
                 </td>
@@ -171,6 +199,7 @@ export default {
     return {
       data_gbj: [],
       data_so: [],
+      salesOrder: [],
       data_unit: [],
       data_sparepart: [],
 
@@ -184,6 +213,12 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
+        await axios.post("/api/prd/so").then((response) => {
+          this.salesOrder = response.data.data;
+        });
+      $("#table_so_detail").DataTable({
+        pagingType: "simple_numbers_no_ellipses",
+      });
 
       await axios.get("/api/ppic/data/so").then((response) => {
         this.data_so = response.data.data;
