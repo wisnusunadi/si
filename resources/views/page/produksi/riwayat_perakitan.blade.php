@@ -335,12 +335,6 @@
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         },
-    }).rowGrouping({
-        bExpandableGrouping: true,
-        asExpandedGroups: [0, 2],
-        iGroupingColumnIndex: 2,
-        sGroupBy: "letter",
-        bHideGroupingColumn: false
     });
 
     $('#produk_select').change(function() {
