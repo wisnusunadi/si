@@ -17,26 +17,16 @@ use App\Models\DetailPesanan;
 use Illuminate\Support\Carbon;
 use App\Models\JadwalPerakitan;
 use App\Models\GudangBarangJadi;
-<<<<<<< HEAD
 use App\Models\JadwalPerakitanLog;
 use Illuminate\Support\Facades\DB;
 use App\Models\DetailPesananProduk;
-=======
 use App\Models\GudangKarantinaDetail;
 use App\Models\KomentarJadwalPerakitan;
-use App\Models\DetailPesanan;
 use App\Models\NoseriDetailPesanan;
 use App\Models\NoseriDetailLogistik;
-use App\Models\NoseriTGbj;
-use App\Models\Pesanan;
-use App\Models\Produk;
->>>>>>> b3033c9f41c802a412c20ce95f91a43afc1710e3
 
 // event
-use App\Models\NoseriDetailLogistik;
-use App\Models\GudangKarantinaDetail;
 use App\Models\JadwalPerakitanRencana;
-use App\Models\KomentarJadwalPerakitan;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\DetailLogistikPart;
 use App\Models\DetailPesananPart;
