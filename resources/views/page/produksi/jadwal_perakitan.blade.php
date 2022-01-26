@@ -474,7 +474,11 @@
                         title: 'Oops...',
                         text: 'Nomor seri ' + duplicates(count(arr)) +
                             ' ada yang sama.',
-                    })
+                    }).then((result) => {
+                        if (result.value) {
+                            $(this).prop('disabled', false);
+                        }
+                    });
                 } else {
                     $.ajax({
                         url: "/api/prd/cek-noseri",
@@ -488,6 +492,10 @@
                                     icon: 'error',
                                     title: 'Oops...',
                                     text: res.msg,
+                                }).then((result) => {
+                                    if (result.value) {
+                                        $('#btnSave').prop('disabled', false);
+                                    }
                                 });
                             } else {
                                 let tgl = $('#tgl_perakitan').val();
