@@ -1966,6 +1966,9 @@ class ProduksiController extends Controller
             ->addColumn('no_seri', function ($d) {
                 return $d->noseri;
             })
+            ->addColumn('id', function ($d) {
+                return $d->id;
+            })
             ->rawColumns(['checkbox'])
             ->make(true);
     }
