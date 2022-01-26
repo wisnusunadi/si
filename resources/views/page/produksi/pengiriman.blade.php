@@ -196,6 +196,7 @@
                                             <tr>
                                                 <th><input type="checkbox" name="" id="head-cb"></th>
                                                 <th>Nomor Seri</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody class="scan"></tbody>
@@ -452,6 +453,12 @@
                 },
                 {
                     data: "no_seri"
+                },
+                {
+                    data: "id",
+                    render: function (data, type, row) {
+                        return '<button class="btn btn-outline-primary btn-sm detail" data-id="' + data + '"><i class="fas fa-edit"></i></button>&nbsp;<button class="btn btn-outline-danger btn-sm detail" data-id="' + data + '"><i class="fas fa-trash"></i></button>'
+                    }
                 }
             ],
             columnDefs: [{
