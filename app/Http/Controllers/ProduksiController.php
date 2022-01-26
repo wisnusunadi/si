@@ -734,7 +734,7 @@ class ProduksiController extends Controller
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
-        return datatables()->of($data) 
+        return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->so;
@@ -1423,7 +1423,7 @@ class ProduksiController extends Controller
                 }
 
                 if (empty($data->so)) {
-                    return $data->Ekatalog->Customer->nama; 
+                    return $data->Ekatalog->Customer->nama;
                 }
             })
             ->addColumn('batas_out', function ($d) {
@@ -1810,9 +1810,20 @@ class ProduksiController extends Controller
             })
             ->addColumn('action', function ($d) {
                 if ($d->status_tf == 12) {
-                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
-                        <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
-                    </a>';
+                    $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 14)->get();
+                    $c = count($seri);
+                    $seri_all = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
+                    $c_all = count($seri_all);
+                    if ($c == $c_all) {
+
+                    } else {
+                        return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                            <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
+                        </a>';
+                    }
+                    // return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                    //     <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
+                    // </a>';
                 } elseif ($d->status_tf == 13) {
                     $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 14)->get();
                     $c = count($seri);
