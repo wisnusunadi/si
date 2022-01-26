@@ -274,7 +274,7 @@ class PpicController extends Controller
                             }
                         }
                     }
-                    return $x . ' ' . $data->gudangbarangjadi->satuan->nama;
+                    return $x . ' ' .   $data->gudangbarangjadi->satuan->nama;
                 }
 
             })
@@ -398,7 +398,7 @@ class PpicController extends Controller
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->so;
-            })
+            }) 
             ->addColumn('po', function ($data) {
                 return $data->no_po ? $data->no_po : "-";
             })
