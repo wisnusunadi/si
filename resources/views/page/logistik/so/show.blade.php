@@ -169,7 +169,6 @@
                                                         <th colspan="2">Pengiriman</th>
                                                         <th rowspan="2">Customer</th>
                                                         <th rowspan="2">Alamat</th>
-                                                        <th rowspan="2">Telepon</th>
                                                         <th rowspan="2">Keterangan</th>
                                                         <th rowspan="2">Aksi</th>
                                                     </tr>
@@ -303,11 +302,6 @@
                 {
                     data: 'alamat',
                     className: 'align-center minimizechar'
-                }, {
-                    data: 'telp',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
                 }, {
                     data: 'ket',
                     className: 'align-center minimizechar',

@@ -375,42 +375,94 @@
         });
 
         $(document).on('submit', '#form-pengujian-update', function(e) {
-            e.preventDefault();
-            var action = $(this).attr('action');
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: action,
-                data: $('#form-pengujian-update').serialize(),
-                success: function(response) {
-                    console.log(response);
-                    if (response['data'] == "success") {
-                        swal.fire(
-                            'Berhasil',
-                            'Berhasil melakukan Penambahan Data Pengujian',
-                            'success'
-                        );
-                        $("#editmodal").modal('hide');
-                        // $('#noseritable').DataTable().ajax.reload();
-                        // $('#parttable').DataTable().ajax.reload();
-                        // $('#showtable').DataTable().ajax.reload();
+            if (datajenis == "produk") {
+                e.preventDefault();
+                var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
+                var data = [];
 
-                        location.reload();
-                    } else if (response['data'] == "error") {
-                        swal.fire(
-                            'Gagal',
-                            'Gagal melakukan Penambahan Data Pengujian',
-                            'error'
-                        );
+                var tanggal_uji = $('input[type="date"][name="tanggal_uji"]').val();
+                var cek = $('input[type="radio"][name="cek"]').val();
+
+                $.each(no_seri, function() {
+                    data.push(this.value);
+                });
+
+                var action = $(this).attr('action');
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "PUT",
+                    url: action,
+                    data: {
+                        tanggal_uji: tanggal_uji,
+                        cek: cek,
+                        noseri_id: data,
+                    },
+                    dataType: 'JSON',
+                    success: function(response) {
+                        console.log(response);
+                        if (response['data'] == "success") {
+                            swal.fire(
+                                'Berhasil',
+                                'Berhasil melakukan Penambahan Data Pengujian',
+                                'success'
+                            );
+                            $("#editmodal").modal('hide');
+                            // $('#noseritable').DataTable().ajax.reload();
+                            // $('#showtable').DataTable().ajax.reload();
+                            location.reload();
+
+                        } else if (response['data'] == "error") {
+                            swal.fire(
+                                'Gagal',
+                                'Gagal melakukan Penambahan Data Pengujian',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr);
                     }
-                },
-                error: function(xhr, status, error) {
-                    alert($('#form-customer-update').serialize());
-                }
-            });
-            return false;
+                });
+            } else if (datajenis == "part") {
+                e.preventDefault();
+                var action = $(this).attr('action');
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    url: action,
+                    data: $('#form-pengujian-update').serialize(),
+                    success: function(response) {
+                        console.log(response);
+                        if (response['data'] == "success") {
+                            swal.fire(
+                                'Berhasil',
+                                'Berhasil melakukan Penambahan Data Pengujian',
+                                'success'
+                            );
+                            $("#editmodal").modal('hide');
+                            // $('#noseritable').DataTable().ajax.reload();
+                            // $('#parttable').DataTable().ajax.reload();
+                            // $('#showtable').DataTable().ajax.reload();
+
+                            location.reload();
+                        } else if (response['data'] == "error") {
+                            swal.fire(
+                                'Gagal',
+                                'Gagal melakukan Penambahan Data Pengujian',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert($('#form-customer-update').serialize());
+                    }
+                });
+                return false;
+            }
         });
 
         var noseritable = $('#noseritable').DataTable({

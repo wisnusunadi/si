@@ -92,7 +92,7 @@ class LogistikController extends Controller
                     if ($data->GudangBarangJadi->nama == '') {
                         return $data->GudangBarangJadi->produk->nama;
                     } else {
-                        return $data->GudangBarangJadi->nama;
+                        return $data->GudangBarangJadi->produk->nama . ' - ' . $data->GudangBarangJadi->nama;
                     }
                 })
                 ->addColumn('jumlah', function ($data) {
@@ -156,7 +156,7 @@ class LogistikController extends Controller
                         if ($data->GudangBarangJadi->nama == '') {
                             return $data->GudangBarangJadi->produk->nama;
                         } else {
-                            return $data->GudangBarangJadi->nama;
+                            return $data->GudangBarangJadi->produk->nama . ' - ' . $data->GudangBarangJadi->nama;
                         }
                     } else {
                         return $data->Sparepart->nama;
@@ -302,7 +302,7 @@ class LogistikController extends Controller
                     if ($data->gudangbarangjadi->nama == '') {
                         return $data->gudangbarangjadi->produk->nama;
                     } else {
-                        return $data->gudangbarangjadi->nama;
+                        return $data->gudangbarangjadi->produk->nama . ' - ' . $data->gudangbarangjadi->nama;
                     }
                 })
                 ->addColumn('jumlah', function ($data) {
@@ -385,7 +385,7 @@ class LogistikController extends Controller
                         if ($data->gudangbarangjadi->nama == '') {
                             return $data->gudangbarangjadi->produk->nama;
                         } else {
-                            return $data->gudangbarangjadi->nama;
+                            return $data->gudangbarangjadi->produk->nama . ' - ' . $data->gudangbarangjadi->nama;
                         }
                     } else {
                         return $data->Sparepart->nama;
@@ -488,7 +488,11 @@ class LogistikController extends Controller
                     }
                 })
                 ->addColumn('nama_produk', function ($data) {
-                    return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                    if (empty($data->DetailPesananProduk->GudangBarangJadi->nama)) {
+                        return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                    } else {
+                        return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - ' . $data->DetailPesananProduk->GudangBarangJadi->nama;
+                    }
                 })
                 ->addColumn('jumlah', function ($data) {
                     $c = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
@@ -551,9 +555,12 @@ class LogistikController extends Controller
                     }
                 })
                 ->addColumn('nama_produk', function ($data) {
-
                     if (isset($data->DetailPesananProduk)) {
-                        return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                        if (empty($data->DetailPesananProduk->GudangBarangJadi->nama)) {
+                            return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                        } else {
+                            return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama . ' - ' . $data->DetailPesananProduk->GudangBarangJadi->nama;
+                        }
                     } else {
                         return $data->DetailPesananPart->Sparepart->nama;
                     }
@@ -2902,7 +2909,11 @@ class LogistikController extends Controller
             }
         }
 
-        return view('page.logistik.dashboard', ['terbaru' => $terbaru, 'belum_dikirim' => $belum_dikirim, 'lewat_batas' => $lewat_batas]);
+        $cpo = Pesanan::where('log_id', ['9'])->count();
+        $cgudang = Pesanan::where('log_id', ['6'])->count();
+        $cqc = Pesanan::where('log_id', ['8'])->count();
+
+        return view('page.logistik.dashboard', ['terbaru' => $terbaru, 'belum_dikirim' => $belum_dikirim, 'lewat_batas' => $lewat_batas, 'po' => $cpo, 'gudang' => $cgudang, 'qc' => $cqc]);
         // }
     }
     public function dashboard_data($value)
@@ -3145,6 +3156,40 @@ class LogistikController extends Controller
                 ->rawColumns(['batas', 'status', 'button'])
                 ->make(true);
         }
+    }
+
+    public function dashboard_so()
+    {
+        $data = Pesanan::whereIn('log_id', ['9', '6', '8'])->orderBy('id', 'desc')->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->so;
+            })
+            ->addColumn('customer', function ($data) {
+                $name = explode('/', $data->so);
+                if ($name[1] == 'EKAT') {
+                    return '<div>' . $data->Ekatalog->Customer->nama . '</div><small>' . $data->Ekatalog->instansi . '</small>';
+                } else if ($name[1] == 'SPA') {
+                    return $data->Spa->Customer->nama;
+                } else if ($name[1] == 'SPB') {
+                    return $data->Spb->Customer->nama;
+                }
+            })
+            ->addColumn('status', function ($data) {
+                $datas = "";
+                if ($data->log_id == "9") {
+                    $datas .= '<span class="badge purple-text">';
+                } else if ($data->log_id == "6") {
+                    $datas .= '<span class="badge orange-text">';
+                } else if ($data->log_id == "8") {
+                    $datas .= '<span class="badge yellow-text">';
+                }
+                $datas .= $data->State->nama . '</span>';
+                return $datas;
+            })
+            ->rawColumns(['customer', 'status'])
+            ->make(true);
     }
 
     //Other

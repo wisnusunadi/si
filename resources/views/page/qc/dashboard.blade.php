@@ -96,6 +96,10 @@
             font-size: 12px;
         }
 
+        #sotable {
+            font-size: 12px;
+        }
+
         h4 {
             font-size: 20px;
         }
@@ -123,6 +127,10 @@
         }
 
         #lewatbatasujitable {
+            font-size: 14px;
+        }
+
+        #sotable {
             font-size: 14px;
         }
 
@@ -344,6 +352,66 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-6 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>Sales Order</h4>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center">
+                                        <div class="small-box purple-text">
+                                            <div class="inner">
+                                                <h3>{{$po}}</h3>
+                                                <p>Dalam Proses PO</p>
+                                            </div>
+                                            <!-- <div class="icon">
+                                                <i class="fas fa-tasks"></i>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center">
+                                        <div class="small-box orange-text">
+                                            <div class="inner">
+                                                <h3>{{$gudang}}</h3>
+                                                <p>Dalam Proses Gudang</p>
+                                            </div>
+                                            <!-- <div class="icon">
+                                                <i class="fas fa-boxes"></i>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center">
+                                        <div class="small-box green-text">
+                                            <div class="inner">
+                                                <h3>{{$logistik}}</h3>
+                                                <p>Dalam Proses Logistik</p>
+                                            </div>
+                                            <!-- <div class="icon">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" style="width:100%;" id="sotable">
+                                                <thead>
+                                                    <th>No</th>
+                                                    <th>No SO</th>
+                                                    <th>No PO</th>
+                                                    <th>Customer</th>
+                                                    <th>Status</th>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -359,13 +427,13 @@
             </div>
         </div>
     </div>
-
 </section>
 @stop
 
 @section('adminlte_js')
 <script>
     $(function() {
+
         pengujianterbarutable();
         $('#pengujianterbaru').on('click', function() {
             belumdiujitable_destroy();
@@ -564,6 +632,52 @@
         function lewatbatasujitable_destroy() {
             $('#lewatbatasujitable').DataTable().clear().destroy();
         }
+
+        $('#sotable').DataTable().clear().destroy();
+        $('#sotable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/qc/dashboard/so',
+                'type': 'POST',
+                'datatype': 'JSON',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'so',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: true
+                }, {
+                    data: 'no_po',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: true
+                }, {
+                    data: 'customer',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: true
+                },
+                {
+                    data: 'status',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
     })
 </script>
 <script>
@@ -593,69 +707,6 @@
                 timeout: 8000
             })
         });
-    });
-</script>
-<script>
-    // var ctx = document.getElementById("areaChart");
-    // var tensi_sistolik_chart = new Chart(ctx, {
-    //     type: 'line',
-    //     data: {
-    //         labels: [],
-    //         datasets: [{
-    //             label: 'Sistolik',
-    //             data: [],
-    //             borderWidth: 2,
-    //             backgroundColor: 'transparent',
-    //             borderColor: 'red',
-    //         }]
-    //     },
-    //     options: {
-    //         scales: {
-    //             xAxes: [],
-    //             yAxes: [{
-    //                 ticks: {
-    //                     beginAtZero: true
-    //                 }
-    //             }]
-    //         }
-    //     }
-    // });
-    var ctx = document.getElementById("myChart");
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
     });
 </script>
 

@@ -111,7 +111,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" />
+                                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" name="jenis_penj[]" />
                                                                 <label class="form-check-label" for="defaultCheck1">
                                                                     E-Catalogue
                                                                 </label>
@@ -119,7 +119,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
+                                                                <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" name="jenis_penj[]" />
                                                                 <label class="form-check-label" for="defaultCheck2">
                                                                     SPA
                                                                 </label>
@@ -127,7 +127,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="spb" id="defaultCheck3" />
+                                                                <input class="form-check-input" type="checkbox" value="spb" id="defaultCheck3" name="jenis_penj[]" />
                                                                 <label class="form-check-label" for="defaultCheck3">
                                                                     SPB
                                                                 </label>
@@ -181,7 +181,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" />
+                                                                <input class="form-check-input" type="checkbox" value="ekatalog" id="defaultCheck1" name="jenis_penj2[]" />
                                                                 <label class="form-check-label" for="defaultCheck1">
                                                                     E-Catalogue
                                                                 </label>
@@ -189,7 +189,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" />
+                                                                <input class="form-check-input" type="checkbox" value="spa" id="defaultCheck2" name="jenis_penj2[]" />
                                                                 <label class="form-check-label" for="defaultCheck2">
                                                                     SPA
                                                                 </label>
@@ -197,7 +197,7 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="spb" id="defaultCheck3" />
+                                                                <input class="form-check-input" type="checkbox" value="spb" id="defaultCheck3" name="jenis_penj2[]" />
                                                                 <label class="form-check-label" for="defaultCheck3">
                                                                     SPB
                                                                 </label>
@@ -295,7 +295,7 @@
         })
         $('#filter').submit(function() {
             var values = [];
-            $("input:checked").each(function() {
+            $("input[name='jenis_penj[]']:checked").each(function() {
                 values.push($(this).val());
             });
             if (values != 0) {
@@ -332,10 +332,8 @@
                 searchable: false
             }, {
                 data: 'so',
-
             }, {
                 data: 'no_po',
-
             }, {
                 data: 'batas_uji',
                 className: 'nowrap-text align-center',
@@ -358,18 +356,18 @@
         });
 
         $('#filter_selesai').submit(function() {
-            var values = [];
-            $("input:checked").each(function() {
-                values.push($(this).val());
+            var values2 = [];
+            var x2 = [];
+            $("input[name='jenis_penj2[]']:checked").each(function() {
+                values2.push($(this).val());
             });
-            if (values != 0) {
-                var x = values;
-
+            if (values2 != 0) {
+                x2 = values2;
             } else {
-                var x = ['semua']
+                x2 = ['semua']
             }
-            console.log(x);
-            $('#selesaitable').DataTable().ajax.url('/api/qc/so/data/selesai/' + x).load();
+            console.log(x2);
+            $('#selesaitable').DataTable().ajax.url('/api/qc/so/data/selesai/' + x2).load();
             return false;
         });
     })

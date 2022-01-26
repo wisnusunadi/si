@@ -98,6 +98,10 @@
             font-size: 12px;
         }
 
+        #sotable {
+            font-size: 12px;
+        }
+
         h4 {
             font-size: 20px;
         }
@@ -128,6 +132,9 @@
             font-size: 14px;
         }
 
+        #sotable {
+            font-size: 14px;
+        }
 
         h4 {
             font-size: 20px;
@@ -255,6 +262,66 @@
                             </div>
                         </div>
                     </div>
+                    <div class="col-lg-6 col-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>Sales Order</h4>
+                                <div class="row">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center">
+                                        <div class="small-box purple-text">
+                                            <div class="inner">
+                                                <h3>{{$po}}</h3>
+                                                <p>Dalam Proses PO</p>
+                                            </div>
+                                            <!-- <div class="icon">
+                                                <i class="fas fa-tasks"></i>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center">
+                                        <div class="small-box orange-text">
+                                            <div class="inner">
+                                                <h3>{{$gudang}}</h3>
+                                                <p>Dalam Proses Gudang</p>
+                                            </div>
+                                            <!-- <div class="icon">
+                                                <i class="fas fa-boxes"></i>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center">
+                                        <div class="small-box green-text">
+                                            <div class="inner">
+                                                <h3>{{$qc}}</h3>
+                                                <p>Dalam Proses QC</p>
+                                            </div>
+                                            <!-- <div class="icon">
+                                                <i class="fas fa-exclamation-circle"></i>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" style="width:100%;" id="sotable">
+                                                <thead>
+                                                    <th>No</th>
+                                                    <th>No SO</th>
+                                                    <th>Customer</th>
+                                                    <th>Status</th>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -277,6 +344,47 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $('#sotable').DataTable().clear().destroy();
+        $('#sotable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/logistik/dashboard/so',
+                'type': 'POST',
+                'datatype': 'JSON',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'so',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'customer',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'status',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
         pengirimanbarutable();
         $('#pengirimanterbaru').on('click', function() {
             pengirimanbarutable();

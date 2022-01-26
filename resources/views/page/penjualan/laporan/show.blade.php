@@ -157,6 +157,12 @@
                     <div class="card-body">
                         <h5>Laporan Penjualan</h5>
                         <div class="table-responsive">
+                            <a id="exportbutton" href="{{route('penjualan.penjualan.export',['jenis'=> 'semua','customer_id'=> 'semua','tgl_awal'=> '0','tgl_akhir'=>'0'])}}"><button class="btn btn-success">
+                                    <i class="far fa-file-excel"></i> Export
+                                </button>
+                            </a>
+                            <span class="float-right filter">
+                            </span>
                             <table class="table table-hover" id="semuatable" style="width:100%">
                                 <thead style="text-align: center;">
                                     <tr>
@@ -297,13 +303,13 @@
 <script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}">
 
-<script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
+<!-- <script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('assets/button/jszip.min.js') }}"></script>
 <script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
 <script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
 <script src="{{ asset('assets/button/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('assets/button/buttons.print.min.js') }} "></script>
-<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}"> -->
 
 <script>
     $(function() {
@@ -334,12 +340,12 @@
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
             },
-            buttons: [{
-                extend: 'excel',
-                title: 'Laporan Penjualan',
-                text: '<i class="far fa-file-excel"></i> Export',
-                className: "btn btn-info"
-            }, ],
+            // buttons: [{
+            //     extend: 'excel',
+            //     title: 'Laporan Penjualan',
+            //     text: '<i class="far fa-file-excel"></i> Export',
+            //     className: "btn btn-info"
+            // }, ],
             columns: [{
                     data: 'kosong'
                 },
@@ -398,7 +404,7 @@
             rowGroup: {
                 startRender: function(rows, group) {
                     var i = 0;
-                    console.log(group); 
+                    //console.log(group);
                     return $('<tr/>')
                         .append('<td class="tes" colspan="1"><p style="font-weight:50;">' + group + '</td>');
                 },
@@ -551,9 +557,11 @@
         // })
         $('#filter').submit(function() {
             var penjualan = [];
+            var exportbutton = $('#exportbutton').val();
             var tanggal_mulai = $('#tanggal_mulai').val();
             var tanggal_akhir = $('#tanggal_akhir').val();
             var customer_id = $('#customer_id').val();
+
             $("input[name=penjualan]:checked").each(function() {
                 penjualan.push($(this).val());
             });
@@ -564,14 +572,22 @@
                 var x = ['kosong']
             }
             console.log(x);
-            console.log(customer_id);
-            console.log(tanggal_mulai);
-            console.log(tanggal_akhir);
+
             $('#semuaform').removeClass('hide');
             $('#semuatable').DataTable().ajax.url('/api/laporan/penjualan/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir).load();
 
+            var link = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir;
+
+            $('#exportbutton').attr({
+                href: link
+            });
             return false;
         });
+
+        // $('#exportbutton').on('click', function(event) {
+        //     console.log($(this).attr("href"));
+        //     return false;
+        // });
     });
 </script>
 @endsection

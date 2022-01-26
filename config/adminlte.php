@@ -431,6 +431,12 @@ return [
             'auth' => [26]
         ],
         [
+            'text' => 'Rencana Order',
+            'url'  => '',
+            'icon' => 'fas fa-users',
+            'auth' => [1]
+        ],
+        [
             'text' => 'Laporan',
             'url'  => '/penjualan/laporan/show',
             'icon' => 'fas fa-book-open',
@@ -1017,6 +1023,16 @@ return [
         //     ],
         // ],
         [
+            'header' => 'DATA',
+            'auth' => [23]
+        ],
+        [
+            'text' => 'Customer',
+            'icon' => 'fas fa-users',
+            'url' => '/penjualan/customer/show',
+            'auth' => [23],
+        ],
+        [
             'header' => 'OUTGOING',
             'auth' => [23]
         ],
@@ -1163,6 +1179,12 @@ return [
             'auth' => [15],
         ],
         [
+            'text' => 'Customer',
+            'icon' => 'fas fa-users',
+            'url' => '/penjualan/customer/show',
+            'auth' => [15],
+        ],
+        [
             'header' => 'PENJUALAN',
             'auth' => [15]
         ],
@@ -1229,7 +1251,7 @@ return [
             'text' => 'Customer',
             'icon' => 'fas fa-users',
             'url' => '/penjualan/customer/show',
-            'auth' => [8, 15],
+            'auth' => [8],
         ],
         [
             'text' => 'Sales Order',
