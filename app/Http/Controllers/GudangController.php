@@ -344,6 +344,7 @@ class GudangController extends Controller
             ->groupBy('tg.tgl_masuk')
             ->groupBy('t_gbj_detail.gdg_brg_jadi_id')
             ->where('tg.dari', 17)
+            ->where('tg.ke', 13)
             ->get();
 
         $x = [];
@@ -351,7 +352,7 @@ class GudangController extends Controller
         foreach ($data as $k) {
 
             $jumlah_done = NoseriTGbj::whereHas('detail.header', function ($q) use ($k) {
-                $q->where('dari', 17);
+                $q->where('dari', 17)->where('ke', 13);
                 $q->where('tgl_masuk', $k->header->tgl_masuk);
             })
                 ->whereHas('detail', function ($qq) use ($k) {
@@ -362,7 +363,7 @@ class GudangController extends Controller
                 ->get()->count();
 
             $jumlah = NoseriTGbj::whereHas('detail.header', function ($q) use ($k) {
-                $q->where('dari', 17);
+                $q->where('dari', 17)->where('ke', 13);
                 $q->where('tgl_masuk', $k->header->tgl_masuk);
             })
                 ->whereHas('detail', function ($qq) use ($k) {
@@ -382,6 +383,7 @@ class GudangController extends Controller
             ->groupBy('tg.tgl_masuk')
             ->groupBy('t_gbj_detail.gdg_brg_jadi_id')
             ->where('tg.dari', 17)
+            ->where('tg.ke', 13)
             ->whereIn('tg.tgl_masuk', $x)
             ->whereIn('t_gbj_detail.gdg_brg_jadi_id', $y)
             ->get();
@@ -402,7 +404,7 @@ class GudangController extends Controller
                 $seri_done = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
                     $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
                     $q->whereHas('header', function ($a) use ($d) {
-                        $a->where('tgl_masuk', $d->header->tgl_masuk);
+                        $a->where('tgl_masuk', $d->header->tgl_masuk)->where('ke', 13)->where('dari', 17);
                         // $a->where('dari', 17);
                     });
                 })->where('jenis', 'masuk')->where('status_id', 3)->get()->count();
@@ -482,7 +484,7 @@ class GudangController extends Controller
         $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $value) {
             $q->where('gdg_brg_jadi_id', $id);
             $q->whereHas('header', function ($a) use ($value) {
-                $a->where('tgl_masuk', $value);
+                $a->where('tgl_masuk', $value)->where('dari', 17)->where('ke', 13);
             });
         })->where('status_id', null)->where('jenis', 'masuk')->get();
         $layout = Layout::where('jenis_id', 1)->get();
