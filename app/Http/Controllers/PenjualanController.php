@@ -1096,8 +1096,8 @@ class PenjualanController extends Controller
 
         return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('id', function ($data) {
-                return $data->id;
+            ->addColumn('no_urut', function ($data) {
+                return $data->no_urut;
             })
             ->addColumn('so', function ($data) {
                 if ($data->Pesanan) {
