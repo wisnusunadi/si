@@ -204,7 +204,7 @@
                                             <tr>
                                                 <th><input type="checkbox" name="" id="head-cb"></th>
                                                 <th>Nomor Seri</th>
-                                                {{-- <th>Aksi</th> --}}
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody class="scan"></tbody>

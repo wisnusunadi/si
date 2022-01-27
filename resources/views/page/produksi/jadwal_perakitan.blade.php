@@ -548,10 +548,10 @@
         $('.modalRakit').on('shown.bs.modal', function () {
             $('.noseri:first').focus();
         })
-        $(document).on('keydown','input.noseri',function(e){
-            const a = $(this).val();
-            alert(a.length);
-        })
+        // $(document).on('keydown','input.noseri',function(e){
+        //     const a = $(this).val();
+        //     alert(a.length);
+        // })
     }
 </script>
 @stop
