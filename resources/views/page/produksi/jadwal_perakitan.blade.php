@@ -173,7 +173,7 @@
                                 <label for="">Tanggal Mulai</label>
                                 <div class="card" style="background-color: #FFE0B4">
                                     <div class="card-body">
-                                        <span id="start">10-06-2021</span>
+                                        <span id="start"></span>
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +181,7 @@
                                 <label for="">Tanggal Selesai</label>
                                 <div class="card" style="background-color: #FFECB2">
                                     <div class="card-body">
-                                        <span id="end">13-06-2021</span>
+                                        <span id="end"></span>
                                     </div>
                                 </div>
                             </div>
@@ -404,7 +404,7 @@
                 dataType: "json",
                 type: "get",
                 success: function (res) {
-                    $('span#bppb').val(res.no_bppb);
+                    $('#no_bppb').val(res.no_bppb);
                     $('span#produk').text(res.produk);
                     $('span#kategori').text(res.kategori);
                     $('span#jml').text(res.jml);
