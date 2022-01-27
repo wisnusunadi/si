@@ -181,13 +181,13 @@
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                {{-- <div class="form-group">
+                                <div class="form-group">
                                   <label for="">Tujuan</label>
                                   <select name="" id="tujuanGudang" class="form-control">
                                     <option value="">Gudang Barang Jadi</option>
                                     <option value="">Gudang Karantina</option>
                                   </select>
-                                </div> --}}
+                                </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
@@ -462,12 +462,12 @@
                 {
                     data: "no_seri"
                 },
-                // {
-                //     data: "id",
-                //     render: function (data, type, row) {
-                //         return '<button type="button" class="btn btn-outline-primary btn-sm detail" data-id="' + data + '"><i class="fas fa-edit"></i></button>&nbsp;<button type="button" class="btn btn-outline-danger btn-sm delete" data-id="' + data + '"><i class="fas fa-trash"></i></button>'
-                //     }
-                // }
+                {
+                    data: "id",
+                    render: function (data, type, row) {
+                        return '<button type="button" class="btn btn-outline-primary btn-sm detail" data-id="' + data + '"><i class="fas fa-edit"></i></button>&nbsp;<button type="button" class="btn btn-outline-danger btn-sm delete" data-id="' + data + '"><i class="fas fa-trash"></i></button>'
+                    }
+                }
             ],
             columnDefs: [{
                 targets: [0],
