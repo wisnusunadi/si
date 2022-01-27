@@ -132,16 +132,16 @@
                         <div class="row">
                             <div class="col-sm">
                                 <label for="">Nomor BPPB</label>
-                                <div class="card" style="background-color: #C8E1A7">
+                                {{-- <div class="card" style="background-color: #C8E1A7">
                                     <div class="card-body">
                                         <span id="bppb">89798797856456</span>
                                     </div>
-                                </div>
-                                {{-- <div class="card">
+                                </div> --}}
+                                <div class="card">
                                     <div class="card-body">
                                         <input type="text" name="no_bppb" id="no_bppb" class="form-control" style="text-transform:uppercase">
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
@@ -404,7 +404,7 @@
                 dataType: "json",
                 type: "get",
                 success: function (res) {
-                    // $('span#bppb').text(res.no_bppb);
+                    $('span#bppb').val(res.no_bppb);
                     $('span#produk').text(res.produk);
                     $('span#kategori').text(res.kategori);
                     $('span#jml').text(res.jml);
@@ -523,17 +523,17 @@
                                     },
                                     success: function (res) {
                                         console.log(res);
-                                        // Swal.fire({
-                                        //     icon: 'success',
-                                        //     title: 'Berhasil',
-                                        //     text: 'Data berhasil disimpan.',
-                                        // })
-                                        // $('.modalRakit').modal('hide');
-                                        // $('.scan-produk').DataTable().destroy();
-                                        // $('.scan-produk tbody').empty();
-                                        // $('#table_produk_perakitan').DataTable().ajax
-                                        //     .reload();
-                                        // location.reload();
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Berhasil',
+                                            text: 'Data berhasil disimpan.',
+                                        })
+                                        $('.modalRakit').modal('hide');
+                                        $('.scan-produk').DataTable().destroy();
+                                        $('.scan-produk tbody').empty();
+                                        $('#table_produk_perakitan').DataTable().ajax
+                                            .reload();
+                                        location.reload();
                                     }
                                 })
                             }

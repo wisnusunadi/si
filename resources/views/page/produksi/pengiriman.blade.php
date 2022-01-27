@@ -121,14 +121,9 @@
                         <div class="row">
                             <div class="col-sm">
                                 <label for="">Nomor BPPB</label>
-                                {{-- <div class="card" style="background-color: #C8E1A7">
+                                <div class="card" style="background-color: #C8E1A7">
                                     <div class="card-body">
-                                        <span id="no_bppb">89798797856456</span>
-                                    </div>
-                                </div> --}}
-                                <div class="card">
-                                    <div class="card-body">
-                                        <input type="text" name="no_bppb" id="no_bppb"  class="form-control">
+                                        <span id="no_bppb">-</span>
                                     </div>
                                 </div>
                             </div>
@@ -188,9 +183,9 @@
                             <div class="col-sm-4">
                                 <div class="form-group">
                                   <label for="">Tujuan</label>
-                                  <select name="" id="tujuanGudang" class="form-control">
-                                    <option value="">Gudang Barang Jadi</option>
-                                    <option value="">Gudang Karantina</option>
+                                  <select name="ke" id="tujuanGudang" class="form-control">
+                                    <option value="13">Gudang Barang Jadi</option>
+                                    <option value="12">Gudang Karantina</option>
                                   </select>
                                 </div>
                             </div>
@@ -521,6 +516,7 @@
                             type: "post",
                             data: {
                                 "_token": "{{csrf_token() }}",
+                                tujuan: $('#tujuanGudang').val(),
                                 userid: $('#userid').val(),
                                 qty: jumlah,
                                 gbj_id: prd,
@@ -614,13 +610,14 @@
     })
 
     $(document).on('click', '.submitNoSeri', function () {
-        const id = $('#idNoseri').val();
+        const noseriid = $('#idNoseri').val();
         const noseri = $('#noseriselect').val();
         $.ajax({
-            url: "#",
+            url: "/api/prd/updateRakitseri",
             data: {
-                id : id,
+                noseriid : noseriid,
                 noseri : noseri,
+                jadwal_id: id,
             },
             type: "post",
             success: function(res) {

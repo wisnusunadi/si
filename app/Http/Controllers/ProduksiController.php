@@ -302,10 +302,9 @@ class ProduksiController extends Controller
             }
         }
 
-        $jumlah_kirim = NoseriTGbj::
-        whereHas('detail.header', function ($q) use ($request) {
-            $q->where('pesanan_id', $request->pesanan_id);
-        })->where('status_id', 2)->get()->count();
+        $jumlah_kirim = NoseriTGbj::whereHas('detail.header', function ($q) use ($request) {
+                $q->where('pesanan_id', $request->pesanan_id);
+            })->where('status_id', 2)->get()->count();
 
         if ($x == $jumlah_kirim) {
             Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
@@ -439,9 +438,9 @@ class ProduksiController extends Controller
 
     function getSOCek()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7,10])->get());
-        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7,10])->Has('DetailPesanan')->get());
-        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7,10])->Has('DetailPesanan')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
+        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
@@ -492,7 +491,7 @@ class ProduksiController extends Controller
                     return '<span class="badge badge-primary">Sudah Dicek</span>';
                 } elseif ($sumcek->sum() == 0) {
                     return '<span class="badge badge-danger">Belum Dicek</span>';
-                } elseif($sumcek->sum() != $sumprd->sum()) {
+                } elseif ($sumcek->sum() != $sumprd->sum()) {
                     return '<span class="badge badge-warning">Pengecekan Berlangsung</span>';
                 }
             })
@@ -535,8 +534,7 @@ class ProduksiController extends Controller
                                     ';
                         }
                     }
-                }
-                 else {
+                } else {
                     if ($data->log_id == 9) {
                         for ($i = 1; $i < count($x); $i++) {
                             if ($x[1] == 'EKAT') {
@@ -557,7 +555,6 @@ class ProduksiController extends Controller
                             }
                         }
                     }
-
                 }
             })
             ->addColumn('button_prd', function ($d) {
@@ -584,9 +581,9 @@ class ProduksiController extends Controller
 
     function getOutSO()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7,10])->get());
-        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7,10])->get());
-        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7,10])->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10])->get());
+        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10])->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
@@ -748,7 +745,8 @@ class ProduksiController extends Controller
                         return $data->Spa->Customer->nama;
                     } elseif ($name[1] == 'SPB') {
                         return $data->Spb->Customer->nama;
-                    } else { }
+                    } else {
+                    }
                 }
 
                 if (empty($data->so)) {
@@ -848,16 +846,16 @@ class ProduksiController extends Controller
                 $x = explode('/', $d->so);
                 for ($i = 1; $i < count($x); $i++) {
                     if ($x[1] == 'EKAT') {
-                        return ''.$d->id.'';
+                        return '' . $d->id . '';
                     } elseif ($x[1] == 'SPA') {
-                        return ''.$d->id.'';
+                        return '' . $d->id . '';
                     } elseif ($x[1] == 'SPB') {
-                        return ''.$d->id.'';
+                        return '' . $d->id . '';
                     }
                 }
 
                 if (empty($d->so)) {
-                    return ''.$d->id.'';
+                    return '' . $d->id . '';
                 }
             })
             ->addColumn('btnValue', function ($d) {
@@ -916,7 +914,7 @@ class ProduksiController extends Controller
 
         return datatables()->of($g)
             ->addIndexColumn()
-            ->addColumn('paket', function($d) {
+            ->addColumn('paket', function ($d) {
                 return $d->detailpesanan->penjualanproduk->nama;
             })
             ->addColumn('produk', function ($data) {
@@ -927,7 +925,7 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('qty', function ($data) {
-                $s = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($data) {
+                $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($data) {
                     $q->where('id', $data->id);
                 })->get();
                 $x = 0;
@@ -941,7 +939,7 @@ class ProduksiController extends Controller
                 return $x . '<input type="hidden" class="jumlah" name="qty[]" id="qty" value="' . $x . '">';
             })
             ->addColumn('jumlah', function ($data) {
-                $s = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($data) {
+                $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($data) {
                     $q->where('id', $data->id);
                 })->get();
                 $x = 0;
@@ -983,7 +981,7 @@ class ProduksiController extends Controller
                         $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
                     })->get()->count();
 
-                    $s = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($data) {
+                    $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($data) {
                         $q->where('id', $data->id);
                     })->get();
                     $x = 0;
@@ -995,17 +993,16 @@ class ProduksiController extends Controller
                         }
                     }
                     if ($x == $datacek) {
-
                     } else {
                         $jml_now = $x - $datacek;
                         // return $datacek;
-                        return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $jml_now . '" data-id="' . $data->gudang_barang_jadi_id . '" data-dpp="'.$data->id.'">
+                        return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $jml_now . '" data-id="' . $data->gudang_barang_jadi_id . '" data-dpp="' . $data->id . '">
                                 <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
                                 class="fas fa-qrcode"></i> Scan Produk</button>
                                 </a>';
                     }
                 } else {
-                    $s = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($data) {
+                    $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($data) {
                         $q->where('id', $data->id);
                     })->get();
                     $x = 0;
@@ -1016,7 +1013,7 @@ class ProduksiController extends Controller
                             }
                         }
                     }
-                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $x . '" data-id="' . $data->gudang_barang_jadi_id . '" data-dpp="'.$data->id.'">
+                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $x . '" data-id="' . $data->gudang_barang_jadi_id . '" data-dpp="' . $data->id . '">
                                 <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
                                 class="fas fa-qrcode"></i> Scan Produk</button>
                                 </a>';
@@ -1048,7 +1045,7 @@ class ProduksiController extends Controller
                         $q->where('pesanan_id', $d->detailpesanan->pesanan->id);
                     })->get()->count();
 
-                    $s = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($d) {
+                    $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($d) {
                         $q->where('id', $d->id);
                     })->get();
                     $x = 0;
@@ -1230,7 +1227,7 @@ class ProduksiController extends Controller
         $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->get();
         $i = 0;
         return datatables()->of($data)
-            ->addColumn('ids', function($d) {
+            ->addColumn('ids', function ($d) {
                 return $d->id;
             })
             ->addColumn('seri', function ($d) {
@@ -1284,7 +1281,7 @@ class ProduksiController extends Controller
     // sale
     function h_minus10()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
             $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(10));
         })->get());
         $Spa = collect(Pesanan::has('Spa')->get());
@@ -1297,7 +1294,7 @@ class ProduksiController extends Controller
 
     function h_minus5()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
             $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(5));
         })->get());
         $Spa = collect(Pesanan::has('Spa')->get());
@@ -1310,7 +1307,7 @@ class ProduksiController extends Controller
 
     function h_exp()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
             $q->whereDate('tgl_kontrak', '<', Carbon::now());
         })->get());
         $Spa = collect(Pesanan::has('Spa')->get());
@@ -1323,7 +1320,7 @@ class ProduksiController extends Controller
 
     function minus5()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
             $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(5));
         })->get());
         $Spa = collect(Pesanan::has('Spa')->get());
@@ -1345,7 +1342,8 @@ class ProduksiController extends Controller
                         return $data->Spa->Customer->nama;
                     } elseif ($name[1] == 'SPB') {
                         return $data->Spb->Customer->nama;
-                    } else { }
+                    } else {
+                    }
                 }
 
                 if (empty($data->so)) {
@@ -1371,19 +1369,19 @@ class ProduksiController extends Controller
                 $x = explode('/', $data->so);
                 for ($i = 1; $i < count($x); $i++) {
                     if ($x[1] == 'EKAT') {
-                        return '<a data-toggle="modal" data-target="#minus5" class="minus5" data-attr="" data-value="ekatalog"  data-id="' . $data-> id . '">
+                        return '<a data-toggle="modal" data-target="#minus5" class="minus5" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
                                 </a>';
                     } elseif ($x[1] == 'SPA') {
-                        return '<a data-toggle="modal" data-target="#minus5" class="minus5" data-attr="" data-value="spa"  data-id="' . $data-> id . '">
+                        return '<a data-toggle="modal" data-target="#minus5" class="minus5" data-attr="" data-value="spa"  data-id="' . $data->id . '">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
                                 </a>';
                     } elseif ($x[1] == 'SPB') {
-                        return '<a data-toggle="modal" data-target="#minus5" class="minus5" data-attr="" data-value="spb"  data-id="' . $data-> id . '">
+                        return '<a data-toggle="modal" data-target="#minus5" class="minus5" data-attr="" data-value="spb"  data-id="' . $data->id . '">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
@@ -1391,13 +1389,13 @@ class ProduksiController extends Controller
                     }
                 }
             })
-            ->rawColumns(['button','status_prd'])
+            ->rawColumns(['button', 'status_prd'])
             ->make(true);
     }
 
     function minus10()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
             $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(10));
         })->get());
         $Spa = collect(Pesanan::has('Spa')->get());
@@ -1419,7 +1417,8 @@ class ProduksiController extends Controller
                         return $data->Spa->Customer->nama;
                     } elseif ($name[1] == 'SPB') {
                         return $data->Spb->Customer->nama;
-                    } else { }
+                    } else {
+                    }
                 }
 
                 if (empty($data->so)) {
@@ -1445,19 +1444,19 @@ class ProduksiController extends Controller
                 $x = explode('/', $data->so);
                 for ($i = 1; $i < count($x); $i++) {
                     if ($x[1] == 'EKAT') {
-                        return '<a data-toggle="modal" data-target="#minus10" class="minus10" data-attr="" data-value="ekatalog"  data-id="' . $data-> id . '">
+                        return '<a data-toggle="modal" data-target="#minus10" class="minus10" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
                                 </a>';
                     } elseif ($x[1] == 'SPA') {
-                        return '<a data-toggle="modal" data-target="#minus10" class="minus10" data-attr="" data-value="spa"  data-id="' . $data-> id . '">
+                        return '<a data-toggle="modal" data-target="#minus10" class="minus10" data-attr="" data-value="spa"  data-id="' . $data->id . '">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
                                 </a>';
                     } elseif ($x[1] == 'SPB') {
-                        return '<a data-toggle="modal" data-target="#minus10" class="minus10" data-attr="" data-value="spb"  data-id="' . $data-> id . '">
+                        return '<a data-toggle="modal" data-target="#minus10" class="minus10" data-attr="" data-value="spb"  data-id="' . $data->id . '">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
@@ -1465,13 +1464,13 @@ class ProduksiController extends Controller
                     }
                 }
             })
-            ->rawColumns(['button','status_prd'])
+            ->rawColumns(['button', 'status_prd'])
             ->make(true);
     }
 
     function expired()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function($q) {
+        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
             $q->whereDate('tgl_kontrak', '<', Carbon::now());
         })->get());
         $Spa = collect(Pesanan::has('Spa')->get());
@@ -1493,7 +1492,8 @@ class ProduksiController extends Controller
                         return $data->Spa->Customer->nama;
                     } elseif ($name[1] == 'SPB') {
                         return $data->Spb->Customer->nama;
-                    } else { }
+                    } else {
+                    }
                 }
 
                 if (empty($data->so)) {
@@ -1524,19 +1524,19 @@ class ProduksiController extends Controller
                 $x = explode('/', $data->so);
                 for ($i = 1; $i < count($x); $i++) {
                     if ($x[1] == 'EKAT') {
-                        return '<a data-toggle="modal" data-target="#expired" class="expired" data-attr="" data-value="ekatalog"  data-id="' . $data-> id . '">
+                        return '<a data-toggle="modal" data-target="#expired" class="expired" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
                                 </a>';
                     } elseif ($x[1] == 'SPA') {
-                        return '<a data-toggle="modal" data-target="#expired" class="expired" data-attr="" data-value="spa"  data-id="' . $data-> id . '">
+                        return '<a data-toggle="modal" data-target="#expired" class="expired" data-attr="" data-value="spa"  data-id="' . $data->id . '">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
                                 </a>';
                     } elseif ($x[1] == 'SPB') {
-                        return '<a data-toggle="modal" data-target="#expired" class="expired" data-attr="" data-value="spb"  data-id="' . $data-> id . '">
+                        return '<a data-toggle="modal" data-target="#expired" class="expired" data-attr="" data-value="spb"  data-id="' . $data->id . '">
                                     <button class="btn btn-primary" type="button">
                                         <i class="fas fa-paper-plane"></i>
                                     </button>
@@ -1713,7 +1713,7 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12])->orderByDesc('created_at')->get();
+        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12, 13])->orderByDesc('created_at')->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -1771,8 +1771,8 @@ class ProduksiController extends Controller
             ->addColumn('created_at', function ($d) {
                 return $d->created_at;
             })
-            ->addColumn('no_bppb', function($d) {
-                return '-';
+            ->addColumn('no_bppb', function ($d) {
+                return $d->no_bppb == null ? '-' : $d->no_bppb;
             })
             ->rawColumns(['action', 'jml', 'end'])
             ->make(true);
@@ -1818,7 +1818,6 @@ class ProduksiController extends Controller
                     $seri_all = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
                     $c_all = count($seri_all);
                     if ($c == $c_all) {
-
                     } else {
                         return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
                             <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
@@ -1833,7 +1832,6 @@ class ProduksiController extends Controller
                     $seri_all = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
                     $c_all = count($seri_all);
                     if ($c == $c_all) {
-
                     } else {
                         return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
                             <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
@@ -1861,8 +1859,8 @@ class ProduksiController extends Controller
                     // return 'xx';
                 }
             })
-            ->addColumn('no_bppb', function () {
-                return '-';
+            ->addColumn('no_bppb', function ($d) {
+                return $d->no_bppb == null ? '-' : $d->no_bppb;
             })
             ->rawColumns(['action', 'status', 'jml'])
             ->make(true);
@@ -1872,7 +1870,7 @@ class ProduksiController extends Controller
     {
         $d = JadwalPerakitan::find($id);
         return response()->json([
-            'no_bppb' => '-',
+            'no_bppb' => $d->no_bppb == null ? '-' : $d->no_bppb,
             'produk' => $d->produk->produk->nama . ' ' . $d->produk->nama,
             'kategori' => $d->produk->produk->KelompokProduk->nama,
             'jml' => $d->jumlah . ' ' . $d->produk->satuan->nama,
@@ -1881,7 +1879,8 @@ class ProduksiController extends Controller
         ]);
     }
 
-    function cekDuplicateNoseri(Request $request) {
+    function cekDuplicateNoseri(Request $request)
+    {
         $noseri = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get();
         $data = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get()->count();
         $seri = [];
@@ -1905,7 +1904,6 @@ class ProduksiController extends Controller
                     $seri = new JadwalRakitNoseri();
                     $seri->date_in = $request->tgl_perakitan;
                     $seri->jadwal_id = $request->jadwal_id;
-                    $seri->no_bppb = strtoupper($request->no_bppb);
                     $seri->noseri = strtoupper($value);
                     $seri->status = 11;
                     $seri->created_by = $request->userid;
@@ -1917,10 +1915,12 @@ class ProduksiController extends Controller
             $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
             if ($d->jumlah == $jj) {
                 $d->status_tf = 15;
+                $d->no_bppb = strtoupper($request->no_bppb);
                 $d->filled_by = $request->userid;
                 $d->save();
             } else {
                 $d->status_tf = 12;
+                $d->no_bppb = strtoupper($request->no_bppb);
                 $d->filled_by = $request->userid;
                 $d->save();
             }
@@ -1937,7 +1937,7 @@ class ProduksiController extends Controller
         $gdg = GudangBarangJadi::find($jadwal->produk_id);
 
         return response()->json([
-            'bppb' => '-',
+            'bppb' => $jadwal->no_bppb == null ? '-' : $jadwal->no_bppb,
             'produk' => $gdg->produk->nama . ' ' . $gdg->nama,
             'kategori' => $gdg->produk->KelompokProduk->nama,
             'jumlah' => $jadwal->jumlah . ' ' . $gdg->satuan->nama,
@@ -1983,8 +1983,8 @@ class ProduksiController extends Controller
         // dd($request->all());
         $header = new TFProduksi();
         $header->tgl_masuk = $request->tgl_transfer;
-        // return $header;
         $header->dari = 17;
+        $header->ke = $request->tujuan;
         $header->jenis = 'masuk';
         $header->created_at = Carbon::now();
         $header->created_by = $request->userid;
@@ -2004,6 +2004,7 @@ class ProduksiController extends Controller
             if (in_array($request->noseri[$key], $check_array)) {
                 $seri = new NoseriBarangJadi();
                 $seri->dari = 17;
+                $seri->ke = $request->tujuan;
                 $seri->gdg_barang_jadi_id = $request->gbj_id;
                 $seri->noseri = $request->noseri[$key];
                 $seri->jenis = 'MASUK';
@@ -2050,8 +2051,7 @@ class ProduksiController extends Controller
             $total_rakit->status_tf = 12;
             $total_rakit->filled_by = $request->userid;
             $total_rakit->save();
-        }
-         else {
+        } else {
             // return 'c';
             $total_rakit->status_tf = 13;
             $total_rakit->filled_by = $request->userid;
@@ -2064,11 +2064,23 @@ class ProduksiController extends Controller
     function deleteNoseri(Request $request)
     {
         $cek_data = JadwalRakitNoseri::where('id', $request->noseriid)->where('jadwal_id', $request->jadwal_id)->get()->count();
-        if($cek_data > 0) {
+        if ($cek_data > 0) {
             JadwalRakitNoseri::where('id', $request->noseriid)->where('jadwal_id', $request->jadwal_id)->delete();
             JadwalPerakitan::find($request->jadwal_id)->update(['status_tf' => 12]);
 
             return response()->json(['msg' => 'Data Berhasil Dihapus']);
+        } else {
+            return response()->json(['error' => 'Data Tidak Ada']);
+        }
+    }
+
+    function updateNoseri(Request $request)
+    {
+        $cek_data = JadwalRakitNoseri::where('id', $request->noseriid)->where('jadwal_id', $request->jadwal_id)->get()->count();
+        if ($cek_data > 0) {
+            JadwalRakitNoseri::where('id', $request->noseriid)->where('jadwal_id', $request->jadwal_id)->update(['noseri' => $request->noseri]);
+
+            return response()->json(['msg' => 'Data Berhasil diubah']);
         } else {
             return response()->json(['error' => 'Data Tidak Ada']);
         }
