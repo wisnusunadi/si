@@ -1771,6 +1771,9 @@ class ProduksiController extends Controller
             ->addColumn('created_at', function ($d) {
                 return $d->created_at;
             })
+            ->addColumn('no_bppb', function($d) {
+                return '-';
+            })
             ->rawColumns(['action', 'jml', 'end'])
             ->make(true);
         return $res;
@@ -1894,6 +1897,7 @@ class ProduksiController extends Controller
 
     function storeRakitNoseri(Request $request)
     {
+        // dd($request->all());
         $cek_seri = JadwalRakitNoseri::where('noseri', $request->noseri)->get();
         if (count($cek_seri) == 0) {
             foreach ($request->noseri as $key => $value) {
@@ -1901,6 +1905,7 @@ class ProduksiController extends Controller
                     $seri = new JadwalRakitNoseri();
                     $seri->date_in = $request->tgl_perakitan;
                     $seri->jadwal_id = $request->jadwal_id;
+                    $seri->no_bppb = strtoupper($request->no_bppb);
                     $seri->noseri = strtoupper($value);
                     $seri->status = 11;
                     $seri->created_by = $request->userid;
@@ -2054,6 +2059,11 @@ class ProduksiController extends Controller
         }
 
         return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
+    }
+
+    function deleteNoseri($id)
+    {
+        
     }
 
     // riwayat rakit

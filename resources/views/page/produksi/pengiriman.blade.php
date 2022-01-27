@@ -121,9 +121,14 @@
                         <div class="row">
                             <div class="col-sm">
                                 <label for="">Nomor BPPB</label>
-                                <div class="card" style="background-color: #C8E1A7">
+                                {{-- <div class="card" style="background-color: #C8E1A7">
                                     <div class="card-body">
                                         <span id="no_bppb">89798797856456</span>
+                                    </div>
+                                </div> --}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <input type="text" class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -558,10 +563,33 @@
         });
         $('#no_seri').text(check_seri);
     });
+
     // Produksi Delete
     $(document).on('click','.delete', function () {
         const id = $(this).data('id');
-        console.log(id);
+        console.log($(this).prev().html());
+
+        // Swal.fire({
+        //     title: 'Are you sure?',
+        //     text: "Hapus Noseri "++"",
+        //     icon: 'warning',
+        //     showCancelButton: true,
+        //     confirmButtonColor: '#3085d6',
+        //     cancelButtonColor: '#d33',
+        //     confirmButtonText: 'Yes, delete it!'
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             Swal.fire(
+        //             'Deleted!',
+        //             'Data Berhasil Dihapus.',
+        //             'success'
+        //             )
+        //         }
+        //     })
+    })
+
+    $(document).on('click', '.detail', function() {
+        console.log('detail');
     })
 </script>
 @stop
