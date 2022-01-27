@@ -1713,7 +1713,7 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12, 13])->orderByDesc('created_at')->get();
+        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12])->orderByDesc('created_at')->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
