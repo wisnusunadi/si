@@ -7,7 +7,6 @@
         </tr>
         <tr>
             <th>No</th>
-
             <th>No PO</th>
             <th>Tanggal PO</th>
             <th>Surat Jalan</th>

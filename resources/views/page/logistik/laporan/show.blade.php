@@ -92,6 +92,9 @@
                                             <select class="select2 select-info form-control ekspedisi_id" name="ekspedisi_id" id="ekspedisi_id" style="width:100%;">
                                                 <option value=""></option>
                                             </select>
+                                            <div class="feedback" id="msgjasa_pengiriman">
+                                                <small class="text-muted">Nama Ekspedisi boleh dikosongi</small>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -131,24 +134,25 @@
                     <div class="card-body">
                         <h5>Laporan Pengiriman</h5>
                         <div class="table-responsive">
+                            <a id="exportbutton" href="{{route('logistik.laporan.export',['jenis'=> 'semua','ekspedisi' => 0,'tgl_awal' => '0','tgl_akhir' => '0'])}}"><button class="btn btn-success">
+                                    <i class="far fa-file-excel"></i> Export
+                                </button>
+                            </a>
                             <table class="table table-hover" id="showtable">
                                 <thead style="text-align: center;">
                                     <tr>
                                         <th>No</th>
                                         <th>No SO</th>
+                                        <th>No PO</th>
                                         <th>No SJ</th>
-                                        <th>No Invoice</th>
+                                        <th>Tanggal Kirim</th>
                                         <th>No Resi</th>
                                         <th>Customer</th>
                                         <th>Alamat</th>
                                         <th>Provinsi</th>
-                                        <th>Telepon</th>
                                         <th>Jasa Ekspedisi</th>
-                                        <th>Tanggal Kirim</th>
-                                        <th>Tanggal Sampai</th>
                                         <th>Nama Produk</th>
-                                        <th>Qty</th>
-                                        <th>Ongkos Kirim</th>
+                                        <th>Jumlah</th>
                                         <th>Status</th>
                                     </tr>
                                 </thead>
@@ -169,15 +173,6 @@
 <script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}">
 
-<script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('assets/button/jszip.min.js') }}"></script>
-<script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
-<script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
-<script src="{{ asset('assets/button/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('assets/button/buttons.print.min.js') }} "></script>
-<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}">
-
-
 <script>
     $(function() {
         var today = new Date();
@@ -186,7 +181,7 @@
         var yyyy = today.getFullYear();
 
         today = yyyy + '-' + mm + '-' + dd;
-        console.log(today);
+        //  console.log(today);
         $("#tanggal_mulai").attr("max", today);
         $("#tanggal_akhir").attr("max", today);
 
@@ -210,12 +205,6 @@
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
                 },
-                buttons: [{
-                    extend: 'excel',
-                    title: 'Laporan Pengiriman',
-                    text: '<i class="far fa-file-excel"></i> Export',
-                    className: "btn btn-info"
-                }],
                 columns: [{
                         data: 'DT_RowIndex',
                         className: 'nowrap-text align-center'
@@ -225,14 +214,15 @@
                         className: 'nowrap-text align-center'
                     },
                     {
-                        data: 'no_po',
+                        data: 'po',
                         className: 'nowrap-text align-center'
                     },
                     {
                         data: 'sj'
                     },
                     {
-                        data: 'invoice'
+                        data: 'tgl_kirim',
+                        className: 'nowrap-text align-center'
                     },
                     {
                         data: 'no_resi'
@@ -241,39 +231,23 @@
                         data: 'customer'
                     },
                     {
-                        data: 'alamat',
-                        className: 'nowrap-text align-center'
+                        data: 'alamat'
                     },
                     {
                         data: 'provinsi',
                         className: 'nowrap-text align-center'
                     },
                     {
-                        data: 'telp',
-                        className: 'nowrap-text align-center'
-                    },
-                    {
                         data: 'ekspedisi',
                         className: 'nowrap-text align-center'
                     },
-                    {
-                        data: 'tgl_kirim',
-                        className: 'nowrap-text align-center'
-                    },
-                    {
-                        data: 'tgl_selesai',
-                        className: 'nowrap-text align-center'
-                    },
+
                     {
                         data: 'produk',
                         className: 'nowrap-text align-center'
                     },
                     {
                         data: 'jumlah',
-                        className: 'nowrap-text align-center'
-                    },
-                    {
-                        data: 'ongkir',
                         className: 'nowrap-text align-center'
                     },
                     {
@@ -299,7 +273,7 @@
                         }
                     },
                     processResults: function(data) {
-                        console.log(data);
+                        //   console.log(data);
                         return {
                             results: $.map(data, function(obj) {
                                 return {
@@ -312,7 +286,7 @@
                 }
             }).change(function() {
                 var value = $(this).val();
-                console.log(value);
+                //  console.log(value);
             });
         }
 
@@ -367,28 +341,7 @@
             }
         });
 
-        // $('.customer_id').select2({
-        //     allowClear: true,
-        //     placeholder: 'Pilih Data',
-        //     ajax: {
-        //         tags: [],
-        //         dataType: 'json',
-        //         delay: 250,
-        //         type: 'GET',
-        //         url: '/api/customer/select/',
-        //         processResults: function(data) {
-        //             console.log(data);
-        //             return {
-        //                 results: $.map(data, function(obj) {
-        //                     return {
-        //                         id: obj.id,
-        //                         text: obj.nama
-        //                     };
-        //                 })
-        //             };
-        //         },
-        //     }
-        // });
+
 
         $("#btnbatal").on('click', function() {
             $("#btncetak").attr('disabled', true);
@@ -405,7 +358,7 @@
             $('#showform').removeClass('hide');
 
             var ekspedisi = "0";
-            console.log($(".ekspedisi_id").val());
+            // console.log($(".ekspedisi_id").val());
             var pengiriman = "0";
             if ($('input[type="radio"][name="pengiriman"]:checked').length > 0) {
                 pengiriman = $('input[type="radio"][name="pengiriman"]:checked').val();
@@ -422,7 +375,22 @@
 
             var tgl_awal = $('#tanggal_mulai').val();
             var tgl_akhir = $('#tanggal_akhir').val();
+
+            console.log(pengiriman);
+            console.log(ekspedisi);
+            console.log(tgl_awal);
+            console.log(tgl_akhir);
+
             table(pengiriman, ekspedisi, tgl_awal, tgl_akhir);
+
+            var link = '/logistik/laporan/export/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir;
+
+            $('#exportbutton').attr({
+                href: link
+            });
+
+            return false
+
         })
     });
 </script>
