@@ -181,13 +181,13 @@
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <div class="form-group">
+                                {{-- <div class="form-group">
                                   <label for="">Tujuan</label>
                                   <select name="ke" id="tujuanGudang" class="form-control">
                                     <option value="13">Gudang Barang Jadi</option>
                                     <option value="12">Gudang Karantina</option>
                                   </select>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="col-sm-4">
                                 <div class="form-group">

@@ -132,16 +132,16 @@
                         <div class="row">
                             <div class="col-sm">
                                 <label for="">Nomor BPPB</label>
-                                {{-- <div class="card" style="background-color: #C8E1A7">
+                                <div class="card" style="background-color: #C8E1A7">
                                     <div class="card-body">
                                         <span id="bppb">89798797856456</span>
                                     </div>
-                                </div> --}}
-                                <div class="card">
+                                </div>
+                                {{-- <div class="card">
                                     <div class="card-body">
                                         <input type="text" name="no_bppb" id="no_bppb" class="form-control" style="text-transform:uppercase">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
@@ -189,10 +189,17 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Tanggal Perakitan</label>
                                     <input type="text" class="form-control" id="tgl_perakitan" name="tgl_perakitan" placeholder="Tanggal Perakitan">
+                                </div>
+                            </div>
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                  <label for="">Panjang Karakter No Seri</label>
+                                  <input type="text" name="" id="lengthNoSeri" class="form-control number" >
                                 </div>
                             </div>
                         </div>
@@ -542,6 +549,18 @@
 
                 }
             })
+        })
+
+        // Produksi Tab
+        $('.modalRakit').on('shown.bs.modal', function () {
+            $('.noseri:first').focus();
+        })
+        $(document).on('keydown','input.noseri',function(e){
+            const a = $(this).val();
+            const length = $('#lengthNoSeri').val();
+            if (a.length == length) {
+                $(this).parent().parent().next().find('input.noseri').focus();
+            }
         })
     }
 </script>

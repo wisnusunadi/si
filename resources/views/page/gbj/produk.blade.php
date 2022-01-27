@@ -799,7 +799,6 @@ var authid = $('#authid').val();
                 destroy: true,
                 "ordering":false,
                 "autoWidth": false,
-                searching: false,
                 "lengthChange": false,
                 processing: true,
                 serverSide: false,
