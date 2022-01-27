@@ -503,19 +503,25 @@ class PpicController extends Controller
     public function get_data_unit_gk(Request $request)
     {
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
-            ->whereNotNull('t_gk_detail.gbj_id')
-            ->where('is_draft', 0)
-            ->where('is_keluar', 0)
-            ->groupBy('t_gk_detail.gbj_id')
-            ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
-            ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id');
-
-        if (isset($request->id)) {
-            $data->where('gbj_id', $request->id);
-        }
-
-        $data = $data->get();
-        return $data;
+        ->whereNotNull('t_gk_detail.gbj_id')
+        ->where('is_draft', 0)
+        ->where('is_keluar', 0)
+        ->groupBy('t_gk_detail.gbj_id')
+        ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
+        ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+        ->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                return $data->units->produk->nama . ' ' . $data->units->nama;
+            })
+            ->addColumn('kode_produk', function ($data) {
+                return $data->units->produk->product->kode . '' . $data->units->produk->kode;
+            })
+            ->addColumn('jumlah', function ($data) {
+                return $data->jml . ' ' . $data->units->satuan->nama;
+            })
+            ->make(true);
     }
 
     /**
