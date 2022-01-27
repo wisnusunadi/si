@@ -118,6 +118,7 @@
     }
 
     @media screen and (max-width: 992px) {
+
         label,
         .row {
             font-size: 12px;
@@ -135,7 +136,7 @@
             font-size: 12px;
         }
 
-        .collapsable{
+        .collapsable {
             display: none;
         }
     }
@@ -402,7 +403,7 @@
         });
 
         $(document).on('submit', '#form-pengujian-update', function(e) {
-            if(datajenis == "produk"){
+            if (datajenis == "produk") {
                 e.preventDefault();
                 var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
                 var data = [];
@@ -452,44 +453,43 @@
                         console.log(xhr);
                     }
                 });
-            }
-            else if(datajenis == "part"){
-            e.preventDefault();
-            var action = $(this).attr('action');
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: action,
-                data: $('#form-pengujian-update').serialize(),
-                success: function(response) {
-                    console.log(response);
-                    if (response['data'] == "success") {
-                        swal.fire(
-                            'Berhasil',
-                            'Berhasil melakukan Penambahan Data Pengujian',
-                            'success'
-                        );
-                        $("#editmodal").modal('hide');
-                        // $('#noseritable').DataTable().ajax.reload();
-                        // $('#parttable').DataTable().ajax.reload();
-                        // $('#showtable').DataTable().ajax.reload();
+            } else if (datajenis == "part") {
+                e.preventDefault();
+                var action = $(this).attr('action');
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    url: action,
+                    data: $('#form-pengujian-update').serialize(),
+                    success: function(response) {
+                        console.log(response);
+                        if (response['data'] == "success") {
+                            swal.fire(
+                                'Berhasil',
+                                'Berhasil melakukan Penambahan Data Pengujian',
+                                'success'
+                            );
+                            $("#editmodal").modal('hide');
+                            // $('#noseritable').DataTable().ajax.reload();
+                            // $('#parttable').DataTable().ajax.reload();
+                            // $('#showtable').DataTable().ajax.reload();
 
-                        location.reload();
-                    } else if (response['data'] == "error") {
-                        swal.fire(
-                            'Gagal',
-                            'Gagal melakukan Penambahan Data Pengujian',
-                            'error'
-                        );
+                            location.reload();
+                        } else if (response['data'] == "error") {
+                            swal.fire(
+                                'Gagal',
+                                'Gagal melakukan Penambahan Data Pengujian',
+                                'error'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert($('#form-customer-update').serialize());
                     }
-                },
-                error: function(xhr, status, error) {
-                    alert($('#form-customer-update').serialize());
-                }
-            });
-        }
+                });
+            }
             return false;
         });
 
@@ -647,49 +647,49 @@
 
         $(document).on('click', '.editmodal', function(event) {
 
-                var href = "";
-                event.preventDefault();
-                if (datajenis == "produk") {
-                    data = $(".nosericheck").data().value;
-                } else {
-                    data = dataid
-                }
-                console.log(checkedAry);
-                console.log(data);
-                console.log(idpesanan);
-                if (datajenis == "produk") {
-                    href = "/qc/so/edit/" + datajenis + '/' + data + "/" + '{{$id}}';
-                } else {
-                    href = "/qc/so/edit/" + datajenis + '/' + dataid + "/" + '{{$id}}';
-                }
+            var href = "";
+            event.preventDefault();
+            if (datajenis == "produk") {
+                data = $(".nosericheck").data().value;
+            } else {
+                data = dataid
+            }
+            console.log(checkedAry);
+            console.log(data);
+            console.log(idpesanan);
+            if (datajenis == "produk") {
+                href = "/qc/so/edit/" + datajenis + '/' + data + "/" + '{{$id}}';
+            } else {
+                href = "/qc/so/edit/" + datajenis + '/' + dataid + "/" + '{{$id}}';
+            }
 
-                $.ajax({
-                    url: href,
-                    beforeSend: function() {
-                        $('#loader').show();
-                    },
-                    // return the result
-                    success: function(result) {
+            $.ajax({
+                url: href,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
 
-                        $('#editmodal').modal("show");
-                        $('#edit').html(result).show();
-                        if (datajenis == "produk") {
-                            listnoseri(checkedAry, data, '{{$id}}');
-                        }
-                        max_date();
-                        // $("#editform").attr("action", href);
-                    },
-                    complete: function() {
-                        $('#loader').hide();
+                    $('#editmodal').modal("show");
+                    $('#edit').html(result).show();
+                    if (datajenis == "produk") {
+                        listnoseri(checkedAry, data, '{{$id}}');
+                    }
+                    max_date();
+                    // $("#editform").attr("action", href);
+                },
+                complete: function() {
+                    $('#loader').hide();
 
-                    },
-                    error: function(jqXHR, testStatus, error) {
-                        console.log(error);
-                        alert("Page " + href + " cannot open. Error:" + error);
-                        $('#loader').hide();
-                    },
-                    timeout: 8000
-                })
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
 
         });
 
