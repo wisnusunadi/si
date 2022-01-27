@@ -233,7 +233,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade modalSeri" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -245,12 +245,13 @@
             <div class="modal-body">
                 <div class="form-group">
                   <label for="">No Seri</label>
-                  <input type="text" name="" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                  <input type="hidden" name="" id="idNoseri">
+                  <input type="text" name="" id="noseriselect" class="form-control" placeholder="" aria-describedby="helpId">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary submitNoSeri">Simpan</button>
             </div>
         </div>
     </div>
@@ -470,7 +471,7 @@
                 {
                     data: "id",
                     render: function (data, type, row) {
-                        return '<button type="button" class="btn btn-outline-primary btn-sm detail" data-id="' + data + '"><i class="fas fa-edit"></i></button>&nbsp;<button type="button" class="btn btn-outline-danger btn-sm delete" data-id="' + data + '"><i class="fas fa-trash"></i></button>'
+                        return '<button type="button" class="btn btn-outline-primary btn-sm detail" data-id="' + data + '" data-seri="'+row.no_seri+'"><i class="fas fa-edit"></i></button>&nbsp;<button type="button" class="btn btn-outline-danger btn-sm delete" data-id="' + data + '" data-seri="'+row.no_seri+'"><i class="fas fa-trash"></i></button>'
                     }
                 }
             ],
@@ -567,11 +568,12 @@
     // Produksi Delete
     $(document).on('click','.delete', function () {
         const noseriid = $(this).data('id');
+        const noseri = $(this).data('seri');
         console.log(id);
 
         Swal.fire({
             title: 'Are you sure?',
-            text: "Hapus Noseri ",
+            text: "Hapus Noseri "+noseri+" ?",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -604,7 +606,34 @@
     })
 
     $(document).on('click', '.detail', function() {
-        console.log('test');
+        const id = $(this).data('id');
+        const noseri = $(this).data('seri');
+        $('#noseriselect').val(noseri);
+        $('#idNoseri').val(id);
+        $('.modalSeri').modal('show');
+    })
+
+    $(document).on('click', '.submitNoSeri', function () {
+        const id = $('#idNoseri').val();
+        const noseri = $('#noseriselect').val();
+        $.ajax({
+            url: "#",
+            data: {
+                id : id,
+                noseri : noseri,
+            },
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                Swal.fire(
+                    'Updated!',
+                    res.msg,
+                    'success'
+                ).then(function () {
+                    location.reload();
+                });
+            }
+        })
     })
 </script>
 @stop
