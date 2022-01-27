@@ -2061,9 +2061,17 @@ class ProduksiController extends Controller
         return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
     }
 
-    function deleteNoseri($id)
+    function deleteNoseri(Request $request)
     {
-        
+        $cek_data = JadwalRakitNoseri::where('id', $request->noseriid)->where('jadwal_id', $request->jadwal_id)->get()->count();
+        if($cek_data > 0) {
+            JadwalRakitNoseri::where('id', $request->noseriid)->where('jadwal_id', $request->jadwal_id)->delete();
+            JadwalPerakitan::find($request->jadwal_id)->update(['status_tf' => 12]);
+
+            return response()->json(['msg' => 'Data Berhasil Dihapus']);
+        } else {
+            return response()->json(['error' => 'Data Tidak Ada']);
+        }
     }
 
     // riwayat rakit

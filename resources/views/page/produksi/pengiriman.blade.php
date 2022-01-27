@@ -128,7 +128,7 @@
                                 </div> --}}
                                 <div class="card">
                                     <div class="card-body">
-                                        <input type="text" class="form-control">
+                                        <input type="text" name="no_bppb" id="no_bppb"  class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -515,29 +515,29 @@
                         let today = new Date();
                         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                         let datetime = tgl + ' ' + time;
-                        // $.ajax({
-                        //     url: "/api/prd/send",
-                        //     type: "post",
-                        //     data: {
-                        //         "_token": "{{csrf_token() }}",
-                        //         userid: $('#userid').val(),
-                        //         qty: jumlah,
-                        //         gbj_id: prd,
-                        //         jadwal_id: id,
-                        //         noseri: seri,
-                        //         tgl_transfer: datetime,
-                        //     },
-                        //     success: function (res) {
-                        //         console.log(res);
-                        //         Swal.fire(
-                        //             'Berhasil!',
-                        //             'Data berhasil di transfer!',
-                        //             'success'
-                        //         ).then(function () {
-                        //             location.reload();
-                        //         });
-                        //     }
-                        // })
+                        $.ajax({
+                            url: "/api/prd/send",
+                            type: "post",
+                            data: {
+                                "_token": "{{csrf_token() }}",
+                                userid: $('#userid').val(),
+                                qty: jumlah,
+                                gbj_id: prd,
+                                jadwal_id: id,
+                                noseri: seri,
+                                tgl_transfer: datetime,
+                            },
+                            success: function (res) {
+                                console.log(res);
+                                Swal.fire(
+                                    'Berhasil!',
+                                    'Data berhasil di transfer!',
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                });
+                            }
+                        })
                         console.log("seri", seri);
                     } else {
                         Swal.fire(
@@ -566,30 +566,45 @@
 
     // Produksi Delete
     $(document).on('click','.delete', function () {
-        const id = $(this).data('id');
-        console.log($(this).prev().html());
+        const noseriid = $(this).data('id');
+        console.log(id);
 
-        // Swal.fire({
-        //     title: 'Are you sure?',
-        //     text: "Hapus Noseri "++"",
-        //     icon: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#3085d6',
-        //     cancelButtonColor: '#d33',
-        //     confirmButtonText: 'Yes, delete it!'
-        //     }).then((result) => {
-        //         if (result.isConfirmed) {
-        //             Swal.fire(
-        //             'Deleted!',
-        //             'Data Berhasil Dihapus.',
-        //             'success'
-        //             )
-        //         }
-        //     })
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Hapus Noseri ",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/prd/delete",
+                        data: {
+                            noseriid : noseriid,
+                            jadwal_id: id,
+                        },
+                        type: "post",
+                        success: function(res) {
+                            console.log(res);
+                            Swal.fire(
+                                'Deleted!',
+                                res.msg,
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            });
+                        }
+                    })
+
+
+                }
+            })
     })
 
     $(document).on('click', '.detail', function() {
-        console.log('detail');
+        console.log('test');
     })
 </script>
 @stop
