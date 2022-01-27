@@ -1,6 +1,6 @@
 <div class="content">
     <div class="row d-flex justify-content">
-        <div class="col-5">
+        <div class="col-lg-5 col-md-12">
             <div class="card">
                 <div class="card-header">
                     <h5 class="card-title">Info Customer</h5>
@@ -14,8 +14,8 @@
                                 <h6><b>{{$res->Pesanan->Ekatalog->Customer->nama}}</b></h6>
                             </div>
                             <div class="margin"><b>{{$res->Pesanan->Ekatalog->satuan}}</b></div>
-                            <div class="margin"><b>{{$res->Pesanan->Ekatalog->alamat}}</b></div>
-                            <div class="margin"><b>{{$res->Pesanan->Ekatalog->Provinsi->nama}}</b></div>
+                            <div class="margin">{{$res->Pesanan->Ekatalog->alamat}}</div>
+                            <div class="margin">{{$res->Pesanan->Ekatalog->Provinsi->nama}}</div>
                             @elseif(isset($res->Pesanan->Spa))
                             <!-- <div id="profileImage" class="center margin-all"></div> -->
                             <div class="margin">
@@ -83,7 +83,7 @@
                 @endif
             </div>
         </div>
-        <div class="col-7">
+        <div class="col-lg-7 col-md-12">
             <div class="card">
                 <div class="card-body">
                     <div class="form-horizontal">

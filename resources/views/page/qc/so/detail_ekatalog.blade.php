@@ -40,6 +40,21 @@
         font-weight: 600;
     }
 
+    #urgent {
+        color: #dc3545;
+        font-weight: 600;
+    }
+
+    #warning {
+        color: #FFC700;
+        font-weight: 600;
+    }
+
+    .info {
+        color: #3a7bb0;
+        font-weight: 600;
+    }
+
     .list-group-item {
         border: 0 none;
     }
@@ -78,6 +93,12 @@
 
     .nowrap-text {
         white-space: nowrap;
+    }
+
+    .overflowy {
+        max-height: 240px;
+        overflow-y: scroll;
+        box-shadow: none;
     }
 
     /* @media screen and (min-width: 1440px) {
