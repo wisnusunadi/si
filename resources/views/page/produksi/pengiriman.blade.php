@@ -121,9 +121,14 @@
                         <div class="row">
                             <div class="col-sm">
                                 <label for="">Nomor BPPB</label>
-                                <div class="card" style="background-color: #C8E1A7">
+                                {{-- <div class="card" style="background-color: #C8E1A7">
                                     <div class="card-body">
                                         <span id="no_bppb">89798797856456</span>
+                                    </div>
+                                </div> --}}
+                                <div class="card">
+                                    <div class="card-body">
+                                        <input type="text" name="no_bppb" id="no_bppb"  class="form-control">
                                     </div>
                                 </div>
                             </div>
@@ -558,10 +563,48 @@
         });
         $('#no_seri').text(check_seri);
     });
+
     // Produksi Delete
     $(document).on('click','.delete', function () {
-        const id = $(this).data('id');
+        const noseriid = $(this).data('id');
         console.log(id);
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Hapus Noseri ",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/prd/delete",
+                        data: {
+                            noseriid : noseriid,
+                            jadwal_id: id,
+                        },
+                        type: "post",
+                        success: function(res) {
+                            console.log(res);
+                            Swal.fire(
+                                'Deleted!',
+                                res.msg,
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            });
+                        }
+                    })
+
+
+                }
+            })
+    })
+
+    $(document).on('click', '.detail', function() {
+        console.log('test');
     })
 </script>
 @stop

@@ -83,7 +83,7 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th colspan="2" class="text-center">Tanggal</th>
-                                            {{-- <th rowspan="2">No BPPB</th> --}}
+                                            <th rowspan="2">No BPPB</th>
                                             <th rowspan="2">Produk</th>
                                             <th rowspan="2">Jumlah Rakit</th>
                                             <th rowspan="2">Aksi</th>
@@ -139,7 +139,7 @@
                                 </div>
                                 {{-- <div class="card">
                                     <div class="card-body">
-                                        <input type="text" class="form-control">
+                                        <input type="text" name="no_bppb" id="no_bppb" class="form-control" style="text-transform:uppercase">
                                     </div>
                                 </div> --}}
                             </div>
@@ -356,6 +356,7 @@
                 {
                     data: "end"
                 },
+                { data: 'no_bppb'},
                 {
                     data: "produk"
                 },
@@ -403,7 +404,7 @@
                 dataType: "json",
                 type: "get",
                 success: function (res) {
-                    $('span#bppb').text(res.no_bppb);
+                    // $('span#bppb').text(res.no_bppb);
                     $('span#produk').text(res.produk);
                     $('span#kategori').text(res.kategori);
                     $('span#jml').text(res.jml);
@@ -514,6 +515,7 @@
                                     type: "post",
                                     data: {
                                         "_token": "{{ csrf_token() }}",
+                                        no_bppb: $('#no_bppb').val(),
                                         noseri: arr,
                                         userid: $('#userid').val(),
                                         jadwal_id: id,
@@ -521,17 +523,17 @@
                                     },
                                     success: function (res) {
                                         console.log(res);
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Berhasil',
-                                            text: 'Data berhasil disimpan.',
-                                        })
-                                        $('.modalRakit').modal('hide');
-                                        $('.scan-produk').DataTable().destroy();
-                                        $('.scan-produk tbody').empty();
-                                        $('#table_produk_perakitan').DataTable().ajax
-                                            .reload();
-                                        location.reload();
+                                        // Swal.fire({
+                                        //     icon: 'success',
+                                        //     title: 'Berhasil',
+                                        //     text: 'Data berhasil disimpan.',
+                                        // })
+                                        // $('.modalRakit').modal('hide');
+                                        // $('.scan-produk').DataTable().destroy();
+                                        // $('.scan-produk tbody').empty();
+                                        // $('#table_produk_perakitan').DataTable().ajax
+                                        //     .reload();
+                                        // location.reload();
                                     }
                                 })
                             }
