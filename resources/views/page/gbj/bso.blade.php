@@ -547,7 +547,7 @@
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, Draft it'
+            confirmButtonText: 'Ya Masukkan Draft'
             }).then((result) => {
                 if (result.isConfirmed) {
                     Swal.fire(
