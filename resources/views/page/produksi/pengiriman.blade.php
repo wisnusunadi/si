@@ -510,29 +510,29 @@
                         let today = new Date();
                         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                         let datetime = tgl + ' ' + time;
-                        // $.ajax({
-                        //     url: "/api/prd/send",
-                        //     type: "post",
-                        //     data: {
-                        //         "_token": "{{csrf_token() }}",
-                        //         userid: $('#userid').val(),
-                        //         qty: jumlah,
-                        //         gbj_id: prd,
-                        //         jadwal_id: id,
-                        //         noseri: seri,
-                        //         tgl_transfer: datetime,
-                        //     },
-                        //     success: function (res) {
-                        //         console.log(res);
-                        //         Swal.fire(
-                        //             'Berhasil!',
-                        //             'Data berhasil di transfer!',
-                        //             'success'
-                        //         ).then(function () {
-                        //             location.reload();
-                        //         });
-                        //     }
-                        // })
+                        $.ajax({
+                            url: "/api/prd/send",
+                            type: "post",
+                            data: {
+                                "_token": "{{csrf_token() }}",
+                                userid: $('#userid').val(),
+                                qty: jumlah,
+                                gbj_id: prd,
+                                jadwal_id: id,
+                                noseri: seri,
+                                tgl_transfer: datetime,
+                            },
+                            success: function (res) {
+                                console.log(res);
+                                Swal.fire(
+                                    'Berhasil!',
+                                    'Data berhasil di transfer!',
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                });
+                            }
+                        })
                         console.log("seri", seri);
                     } else {
                         Swal.fire(
