@@ -523,17 +523,17 @@
                                     },
                                     success: function (res) {
                                         console.log(res);
-                                        // Swal.fire({
-                                        //     icon: 'success',
-                                        //     title: 'Berhasil',
-                                        //     text: 'Data berhasil disimpan.',
-                                        // })
-                                        // $('.modalRakit').modal('hide');
-                                        // $('.scan-produk').DataTable().destroy();
-                                        // $('.scan-produk tbody').empty();
-                                        // $('#table_produk_perakitan').DataTable().ajax
-                                        //     .reload();
-                                        // location.reload();
+                                        Swal.fire({
+                                            icon: 'success',
+                                            title: 'Berhasil',
+                                            text: 'Data berhasil disimpan.',
+                                        })
+                                        $('.modalRakit').modal('hide');
+                                        $('.scan-produk').DataTable().destroy();
+                                        $('.scan-produk tbody').empty();
+                                        $('#table_produk_perakitan').DataTable().ajax
+                                            .reload();
+                                        location.reload();
                                     }
                                 })
                             }
@@ -542,6 +542,15 @@
 
                 }
             })
+        })
+
+        // Produksi Tab
+        $('.modalRakit').on('shown.bs.modal', function () {
+            $('.noseri:first').focus();
+        })
+        $(document).on('keydown','input.noseri',function(e){
+            const a = $(this).val();
+            alert(a.length);
         })
     }
 </script>
