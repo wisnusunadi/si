@@ -108,6 +108,10 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/create', 'page.penjualan.rencana.create')->name('penjualan.rencana.create');
     });
 
+    Route::group(['prefix' => '/pesanan'], function () {
+        Route::get('/edit/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'edit_penjualan_pesanan'])->name('penjualan.pesanan.edit');
+    });
+
     Route::group(['prefix' => '/customer'], function () {
         Route::view('/show', 'page.penjualan.customer.show')->name('penjualan.customer.show');
         // Route::get('/data/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);

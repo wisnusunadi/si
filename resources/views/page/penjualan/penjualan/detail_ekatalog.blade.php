@@ -1,7 +1,7 @@
 <div class="row filter">
     <div class="col-12">
         <div class="row">
-            <div class="col-4">
+            <div class="col-lg-4 col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Info Customer</h5>
@@ -37,6 +37,10 @@
                         <div class="margin">
                             <a class="text-muted">No AKN</a>
                             <b class="float-right">{{ $data->no_paket}}</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">No Urut</a>
+                            <b class="float-right">{{ $data->no_urut}}</b>
                         </div>
                         <div class="margin">
                             <a class="text-muted">Tgl Order</a>
@@ -86,7 +90,7 @@
                 </div>
             </div>
 
-            <div class="col-8">
+            <div class="col-lg-8 col-md-12">
                 <h5>Detail Pemesanan</h5>
                 <div class="card overflowy" id="detailekat">
                     <div class="card-body">

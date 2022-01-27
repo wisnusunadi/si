@@ -1352,7 +1352,6 @@
                     tes.empty();
                     var datas = "";
                     tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
-                    // console.log(res);
                     for (var x = 0; x < res[0].produk.length; x++) {
                         var data = [];
                         tes.append(`<div>`);

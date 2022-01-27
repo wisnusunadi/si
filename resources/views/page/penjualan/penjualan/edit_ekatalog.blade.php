@@ -56,6 +56,7 @@
     #produktable{
         width: 1371px !important;
     }
+
     @media screen and (min-width: 1220px) {
 
         section {
@@ -97,27 +98,26 @@
     }
 
     @media screen and (max-width: 991px) {
+        /* label,
+        .row {
+            font-size: 12px;
+        }
 
-    /* label,
-    .row {
-        font-size: 12px;
-    }
+        h4 {
+            font-size: 20px;
+        } */
+        section {
+            font-size: 12px;
+        }
 
-    h4 {
-        font-size: 20px;
-    } */
-    section {
-        font-size: 12px;
-    }
+        .btn {
+            font-size: 12px;
+        }
 
-    .btn {
-        font-size: 12px;
+        .labelket{
+            text-align: left;
+        }
     }
-
-    .labelket{
-        text-align: left;
-    }
-}
 </style>
 @stop
 
@@ -323,7 +323,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat</label>
-                                                        <div class="col-7">
+                                                        <div class="col-lg-7 col-md-12">
                                                             <input type="text" class="form-control col-form-label" name="alamat" id="alamat_customer" readonly value="{{$e->customer->alamat}}" />
                                                         </div>
                                                     </div>
@@ -347,7 +347,7 @@
                                                 <div class="form-horizontal">
                                                     <div class="form-group row">
                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Urut</label>
-                                                        <div class="col-2">
+                                                        <div class="col-lg-2 col-md-4">
                                                             <input type="number" class="form-control col-form-label @error('no_urut') is-invalid @enderror" name="no_urut" id="no_urut" value="{{$e->no_urut}}" />
                                                             <div class="invalid-feedback" id="msgno_urut">
                                                                 @if($errors->has('no_urut'))
@@ -384,7 +384,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
-                                                        <div class="col-7">
+                                                        <div class="col-lg-7 col-md-12">
                                                             <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" value="{{$e->instansi}}" />
                                                             <div class="invalid-feedback" id="msginstansi">
                                                                 @if($errors->has('instansi'))
@@ -395,7 +395,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat Instansi</label>
-                                                        <div class="col-7">
+                                                        <div class="col-lg-7 col-md-12">
                                                             <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" value="{{$e->alamat}}" />
                                                             <div class="invalid-feedback" id="msgalamatinstansi">
                                                                 @if($errors->has('alamatinstansi'))
@@ -406,7 +406,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Provinsi</label>
-                                                        <div class="col-7">
+                                                        <div class="col-lg-7 col-md-12">
                                                             <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
                                                                 @if(!empty($e->provinsi_id))
                                                                 <option value="{{$e->provinsi_id}}" selected>{{$e->provinsi->nama}}</option>
@@ -416,7 +416,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Satuan Kerja</label>
-                                                        <div class="col-7">
+                                                        <div class="col-lg-7 col-md-12">
                                                             <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" value="{{$e->satuan}}" />
                                                             <div class=" invalid-feedback" id="msgsatuan_kerja">
                                                                 @if($errors->has('satuan_kerja'))
@@ -427,8 +427,8 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Edit</label>
-                                                        <div class="col-4">
-                                                            <input type="date" class="form-control col-form-label @error('tgl_edit') is-invalid @enderror" name="tgl_edit" id="tgl_edit" value="" />
+                                                        <div class="col-lg-4 col-md-4">
+                                                            <input type="date" class="form-control col-form-label @error('tgl_edit') is-invalid @enderror" name="tgl_edit" id="tgl_edit" value="{{$e->tgl_edit}}" />
                                                             <div class="invalid-feedback" id="msgtgl_edit">
                                                                 @if($errors->has('tgl_edit'))
                                                                 {{ $errors->first('tgl_edit')}}
@@ -438,7 +438,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Delivery</label>
-                                                        <div class="col-4">
+                                                        <div class="col-lg-4 col-md-4">
                                                             <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" value="{{$e->tgl_kontrak}}" />
                                                             <div class="invalid-feedback" id="msgbatas_kontrak">
                                                                 @if($errors->has('batas_kontrak'))
@@ -726,6 +726,15 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $(".os-content-arrange").remove();
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+        $("#tgl_edit").attr("max", today);
+        $("#batas_kontrak").attr("min", today);
 
         loop();
         load_variasi();
@@ -900,7 +909,7 @@
             }
         });
 
-        $('#tanggal_pemesanan').on('keyup', function() {
+        $('#tanggal_pemesanan').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgtanggal_pemesanan").text("");
                 $("#tanggal_pemesanan").removeClass('is-invalid');
@@ -920,7 +929,7 @@
             }
         });
 
-        $('#batas_kontrak').on('keyup', function() {
+        $('#batas_kontrak').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgbatas_kontrak").text("");
                 $("#batas_kontrak").removeClass('is-invalid');
@@ -929,7 +938,18 @@
                 $("#batas_kontrak").addClass('is-invalid');
             }
         });
-        $('#instansi').on('keyup', function() {
+
+        $('#tgl_edit').on('keyup change', function() {
+            if ($(this).val() != "") {
+                $("#msgtgl_edit").text("");
+                $("#tgl_edit").removeClass('is-invalid');
+            } else if ($(this).val() == "") {
+                $("#msgtgl_edit").text("Tanggal Edit Harus diisi");
+                $("#tgl_edit").addClass('is-invalid');
+            }
+        });
+
+        $('#instansi').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msginstansi").text("");
                 $("#instansi").removeClass('is-invalid');
@@ -938,7 +958,7 @@
                 $("#instansi").addClass('is-invalid');
             }
         });
-        $('#deskripsi').on('keyup', function() {
+        $('#deskripsi').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgdeskripsi").text("");
                 $("#deskripsi").removeClass('is-invalid');
@@ -947,7 +967,18 @@
                 $("#deskripsi").addClass('is-invalid');
             }
         });
-        $('#no_po_akn').on('keyup', function() {
+
+        $('#no_urut').on('keyup change', function() {
+            if ($(this).val() != "") {
+                $("#msgno_urut").text("");
+                $("#no_urut").removeClass('is-invalid');
+            } else if ($(this).val() == "") {
+                $("#msgno_urut").text("No Urut harus diisi");
+                $("#no_urut").addClass('is-invalid');
+            }
+        });
+
+        $('#no_po_akn').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgno_po_akn").text("");
                 $("#no_po_akn").removeClass('is-invalid');
@@ -956,6 +987,7 @@
                 $("#no_po_akn").addClass('is-invalid');
             }
         });
+
         $('#tanggal_po_akn').on('keyup', function() {
             if ($(this).val() != "") {
                 $("#msgtanggal_po_akn").text("");
