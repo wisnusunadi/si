@@ -407,6 +407,7 @@
             confirmButtonText: 'Yes, transfer it!'
             }).then((result) => {
             if (result.isConfirmed) {
+                $(this).prop('disabled', true);
                 Swal.fire(
                 'Sukses!',
                 'Data Berhasil Ditransfer',

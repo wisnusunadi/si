@@ -114,6 +114,7 @@
                                     <th>Nomor SO</th>
                                     <th>Customer</th>
                                     <th>Batas Pengiriman</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -128,6 +129,7 @@
                                     <th>Nomor SO</th>
                                     <th>Customer</th>
                                     <th>Batas Pengiriman</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -143,6 +145,7 @@
                                     <th>Nomor SO</th>
                                     <th>Customer</th>
                                     <th>Batas Pengiriman</th>
+                                    <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
                             </thead>
@@ -555,6 +558,7 @@
             {data: 'so'},
             {data: 'nama_customer'},
             {data: 'batas_out'},
+            {data: 'status_prd'},
             {data: 'button'},
         ],
         "language": {
@@ -647,6 +651,7 @@
             {data: 'so'},
             {data: 'nama_customer'},
             {data: 'batas_out'},
+            {data: 'status_prd'},
             {data: 'button'},
         ],
         "language": {
@@ -794,6 +799,7 @@
             {data: 'so'},
             {data: 'nama_customer'},
             {data: 'batas_out'},
+            {data: 'status_prd'},
             {data: 'button'},
         ],
         "language": {

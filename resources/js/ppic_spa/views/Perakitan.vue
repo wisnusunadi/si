@@ -36,7 +36,6 @@ export default {
   methods: {
     loadData() {
       $("#table").DataTable({
-        serverSide: true,
         ajax: "/api/ppic/datatables/perakitan",
         columns: [
           {

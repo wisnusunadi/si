@@ -83,6 +83,7 @@
                                     <thead class="thead-dark">
                                         <tr>
                                             <th colspan="2" class="text-center">Tanggal</th>
+                                            {{-- <th rowspan="2">No BPPB</th> --}}
                                             <th rowspan="2">Produk</th>
                                             <th rowspan="2">Jumlah Rakit</th>
                                             <th rowspan="2">Aksi</th>
@@ -136,12 +137,17 @@
                                         <span id="bppb">89798797856456</span>
                                     </div>
                                 </div>
+                                {{-- <div class="card">
+                                    <div class="card-body">
+                                        <input type="text" class="form-control">
+                                    </div>
+                                </div> --}}
                             </div>
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #F89F81">
                                     <div class="card-body">
-                                        <span id="produk">Produk 1</span>
+                                        <span id="produk"></span>
                                     </div>
                                 </div>
                             </div>
@@ -149,7 +155,7 @@
                                 <label for="">Kategori</label>
                                 <div class="card" style="background-color: #FCF9C4">
                                     <div class="card-body">
-                                        <span id="kategori">Kategori 1</span>
+                                        <span id="kategori"></span>
                                     </div>
                                 </div>
                             </div>
@@ -159,7 +165,7 @@
                                 <label for="">Jumlah Rakit</label>
                                 <div class="card" style="background-color: #FFCC83">
                                     <div class="card-body">
-                                        <span id="jml">100 Unit</span>
+                                        <span id="jml"></span>
                                     </div>
                                 </div>
                             </div>
@@ -437,7 +443,7 @@
 
             $(document).on('click', '#btnSave', function (e) {
                 e.preventDefault();
-
+                $(this).prop('disabled', true);
                 let arr = [];
                 const data = scanProduk.$('.noseri').map(function () {
                     return $(this).val();
@@ -474,7 +480,11 @@
                         title: 'Oops...',
                         text: 'Nomor seri ' + duplicates(count(arr)) +
                             ' ada yang sama.',
-                    })
+                    }).then((result) => {
+                        if (result.value) {
+                            $(this).prop('disabled', false);
+                        }
+                    });
                 } else {
                     $.ajax({
                         url: "/api/prd/cek-noseri",
@@ -488,6 +498,10 @@
                                     icon: 'error',
                                     title: 'Oops...',
                                     text: res.msg,
+                                }).then((result) => {
+                                    if (result.value) {
+                                        $('#btnSave').prop('disabled', false);
+                                    }
                                 });
                             } else {
                                 let tgl = $('#tgl_perakitan').val();
