@@ -82,7 +82,7 @@
         white-space: nowrap;
     }
 
-    @media screen and (min-width: 1440px) {
+    /* @media screen and (min-width: 1440px) {
 
         section {
             font-size: 14px;
@@ -93,19 +93,38 @@
         }
 
         .btn {
-            font-size: 12px;
+            font-size: 14px;
+        }
+    } */
+
+    @media screen and (min-width: 993px) {
+
+        label,
+        .row {
+            font-size: 14px;
+        }
+
+        h4 {
+            font-size: 24px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
         }
     }
 
-    @media screen and (max-width: 1439px) {
-
+    @media screen and (max-width: 992px) {
         label,
         .row {
             font-size: 12px;
         }
 
         h4 {
-            font-size: 20px;
+            font-size: 22px;
         }
 
         #detailmodal {
@@ -114,6 +133,10 @@
 
         .btn {
             font-size: 12px;
+        }
+
+        .collapsable{
+            display: none;
         }
     }
 </style>
@@ -129,7 +152,7 @@
                         <h4>Info Penjualan SPA</h4>
                         @foreach($data as $d)
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-lg-5 col-md-12 col-sm-6">
                                 <div class="margin">
                                     <div><small class="text-muted">Customer</small></div>
                                 </div>
@@ -137,16 +160,16 @@
                                     <b id="distributor">{{$d->customer->nama}}</b>
                                 </div>
                                 <div class="margin">
-                                    <b id="no_akn">{{$d->customer->alamat}}</b>
+                                    {{$d->customer->alamat}}
                                 </div>
                                 <div class="margin">
-                                    <b id="no_akn">{{$d->customer->provinsi->nama}}</b>
+                                    {{$d->customer->provinsi->nama}}
                                 </div>
                                 <div class="margin">
-                                    <b id="distributor">{{$d->customer->telp}}</b>
+                                    {{$d->customer->telp}}
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="margin">
                                     <div><small class="text-muted">No SO</small></div>
                                     <div><b id="no_so">{{$d->pesanan->so}}</b></div>
@@ -156,7 +179,7 @@
                                     <div id="status">{!!$status!!}</div>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-lg-3 col-md-6 col-md-12">
                                 <div class="margin">
                                     <div><small class="text-muted">No PO</small></div>
                                     <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
@@ -187,7 +210,7 @@
                                                 <th rowspan="2">No</th>
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th rowspan="2">Jumlah</th>
-                                                <th colspan="2">Hasil</th>
+                                                <th colspan="2" class="collapsable">Hasil</th>
                                                 <th rowspan="2">Aksi</th>
                                             </tr>
                                             <tr>
@@ -294,6 +317,7 @@
             destroy: true,
             processing: true,
             serverSide: true,
+            autowidth: true,
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
@@ -322,12 +346,12 @@
                 searchable: false
             }, {
                 data: 'jumlah_ok',
-                className: 'nowrap-text align-center',
+                className: 'nowrap-text align-center collapsable',
                 orderable: false,
                 searchable: false
             }, {
                 data: 'jumlah_nok',
-                className: 'nowrap-text align-center',
+                className: 'nowrap-text align-center collapsable',
                 orderable: false,
                 searchable: false
             }, {
@@ -473,6 +497,7 @@
             destroy: true,
             processing: true,
             serverSide: false,
+            autowidth: true,
             ajax: {
                 'type': 'post',
                 'datatype': 'JSON',
@@ -496,7 +521,7 @@
                 searchable: true
             }, {
                 data: 'tgl_uji',
-                className: 'nowrap-text align-center',
+                className: 'nowrap-text align-center collapsable',
                 orderable: false,
                 searchable: false
             }, {
@@ -512,6 +537,7 @@
                 destroy: true,
                 processing: true,
                 serverSide: true,
+                autowidth: true,
                 ajax: {
                     'type': 'post',
                     'datatype': 'JSON',

@@ -53,7 +53,11 @@
         background-color: #c8daea;
     }
 
-    @media screen and (min-width: 1440px) {
+    #produktable{
+        width: 1371px !important;
+    }
+
+    @media screen and (min-width: 1220px) {
 
         section {
             font-size: 14px;
@@ -62,21 +66,56 @@
         .btn {
             font-size: 14px;
         }
+
+        .labelket{
+            text-align: right;
+        }
+
+
     }
 
-    @media screen and (max-width: 1439px) {
+    @media screen and (max-width: 1219px) {
 
-        label,
+        /* label,
         .row {
             font-size: 12px;
         }
 
         h4 {
             font-size: 20px;
+        } */
+        section {
+            font-size: 12px;
         }
 
         .btn {
             font-size: 12px;
+        }
+
+        .labelket{
+            text-align: right;
+        }
+    }
+
+    @media screen and (max-width: 991px) {
+        /* label,
+        .row {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        } */
+        section {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .labelket{
+            text-align: left;
         }
     }
 </style>
@@ -93,7 +132,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-lg-6 col-md-12">
                                         <div>
                                             <div class="margin">
                                                 <small class="text-muted">Info Instansi</small>
@@ -123,7 +162,7 @@
                                             <div id="alamat" class="margin"><b>{{$e->Customer->telp}}</b></div>
                                         </div>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-lg-3 col-md-6">
                                         <div class="margin">
                                             <div><small class="text-muted">No SO</small></div>
                                             <div>@if($e->Pesanan)
@@ -168,7 +207,7 @@
                                             @endif
                                         </div>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-lg-3 col-md-6">
                                         <div class="margin">
                                             <div><small class="text-muted">No PO</small></div>
                                             <div>@if($e->Pesanan)
@@ -246,14 +285,14 @@
                                 {{csrf_field()}}
                                 {{method_field('PUT')}}
                                 <div class="row d-flex justify-content-center">
-                                    <div class="col-10">
+                                    <div class="col-lg-11 col-md-12">
                                         <h4>Info Customer</h4>
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="form-horizontal">
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer / Distributor</label>
-                                                        <div class="col-5 col-form-label">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Nama Customer / Distributor</label>
+                                                        <div class="col-lg-5 col-md-12 col-form-label">
                                                             <div class="form-check form-check-inline " id="sudah_dsb">
                                                                 <input class="form-check-input" type="radio" name="namadistributor" id="namadistributor1" value="sudah" />
                                                                 <label class="form-check-label" for="namadistributor1">Sudah Diketahui</label>
@@ -270,8 +309,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right"></label>
-                                                        <div class="col-5">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket"></label>
+                                                        <div class="col-lg-5 col-md-12">
                                                             <select name="customer_id" id="customer_id" class="form-control customer_id custom-select @error('customer_id') is-invalid @enderror">
                                                                 <option value="{{$e->customer_id}}" selected>{{$e->customer->nama}}</option>
                                                             </select>
@@ -283,14 +322,14 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
-                                                        <div class="col-7">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat</label>
+                                                        <div class="col-lg-7 col-md-12">
                                                             <input type="text" class="form-control col-form-label" name="alamat" id="alamat_customer" readonly value="{{$e->customer->alamat}}" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
-                                                        <div class="col-5">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Telepon</label>
+                                                        <div class="col-lg-5 col-md-12">
                                                             <input type="text" class="form-control col-form-label" name="telepon" id="telepon_customer" readonly value="{{$e->customer->telp}}" />
                                                         </div>
                                                     </div>
@@ -301,15 +340,26 @@
                                     </div>
                                 </div>
                                 <div class="row d-flex justify-content-center" id="akn">
-                                    <div class="col-10">
+                                    <div class="col-lg-11 col-md-12">
                                         <h4>Info AKN</h4>
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="form-horizontal">
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Status</label>
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Urut</label>
+                                                        <div class="col-lg-2 col-md-4">
+                                                            <input type="number" class="form-control col-form-label @error('no_urut') is-invalid @enderror" name="no_urut" id="no_urut" value="{{$e->no_urut}}" />
+                                                            <div class="invalid-feedback" id="msgno_urut">
+                                                                @if($errors->has('no_urut'))
+                                                                {{ $errors->first('no_urut')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
 
-                                                        <div class="col-5 col-form-label">
+                                                        <div class="col-lg-5 col-md-12 col-form-label">
                                                             <!-- <div class="form-check form-check-inline">
                                                                 <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
                                                                 <label class="form-check-label" for="status_akn4">Draft</label>
@@ -333,8 +383,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Instansi</label>
-                                                        <div class="col-7">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
+                                                        <div class="col-lg-7 col-md-12">
                                                             <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" value="{{$e->instansi}}" />
                                                             <div class="invalid-feedback" id="msginstansi">
                                                                 @if($errors->has('instansi'))
@@ -344,8 +394,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Alamat Instansi</label>
-                                                        <div class="col-7">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat Instansi</label>
+                                                        <div class="col-lg-7 col-md-12">
                                                             <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" value="{{$e->alamat}}" />
                                                             <div class="invalid-feedback" id="msgalamatinstansi">
                                                                 @if($errors->has('alamatinstansi'))
@@ -355,8 +405,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Provinsi</label>
-                                                        <div class="col-7">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Provinsi</label>
+                                                        <div class="col-lg-7 col-md-12">
                                                             <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
                                                                 @if(!empty($e->provinsi_id))
                                                                 <option value="{{$e->provinsi_id}}" selected>{{$e->provinsi->nama}}</option>
@@ -365,8 +415,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Satuan Kerja</label>
-                                                        <div class="col-7">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Satuan Kerja</label>
+                                                        <div class="col-lg-7 col-md-12">
                                                             <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" value="{{$e->satuan}}" />
                                                             <div class=" invalid-feedback" id="msgsatuan_kerja">
                                                                 @if($errors->has('satuan_kerja'))
@@ -376,8 +426,19 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Tanggal Delivery</label>
-                                                        <div class="col-4">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Edit</label>
+                                                        <div class="col-lg-4 col-md-4">
+                                                            <input type="date" class="form-control col-form-label @error('tgl_edit') is-invalid @enderror" name="tgl_edit" id="tgl_edit" value="{{$e->tgl_edit}}" />
+                                                            <div class="invalid-feedback" id="msgtgl_edit">
+                                                                @if($errors->has('tgl_edit'))
+                                                                {{ $errors->first('tgl_edit')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Delivery</label>
+                                                        <div class="col-lg-4 col-md-4">
                                                             <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" value="{{$e->tgl_kontrak}}" />
                                                             <div class="invalid-feedback" id="msgbatas_kontrak">
                                                                 @if($errors->has('batas_kontrak'))
@@ -387,8 +448,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Deskripsi</label>
-                                                        <div class="col-5">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Deskripsi</label>
+                                                        <div class="col-lg-5 col-md-12">
                                                             <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi">{{$e->deskripsi}}</textarea>
                                                             <div class="invalid-feedback" id="msgdeskripsi">
                                                                 @if($errors->has('deskripsi'))
@@ -398,8 +459,8 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
-                                                        <div class="col-5">
+                                                        <label for="keterangan" class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
+                                                        <div class="col-lg-5 col-md-12">
                                                             <textarea class="form-control col-form-label" name="keterangan">{{$e->ket}}</textarea>
                                                         </div>
                                                     </div>
@@ -409,7 +470,7 @@
                                     </div>
                                 </div>
                                 <div class="row d-flex justify-content-center" id="dataproduk">
-                                    <div class="col-10">
+                                    <div class="col-lg-11 col-md-12">
                                         <h4>Data Produk</h4>
                                         <div class="card">
                                             <div class="card-body">
@@ -632,7 +693,7 @@
                                 </div>
 
                                 <div class="row d-flex justify-content-center">
-                                    <div class="col-10">
+                                    <div class="col-lg-11 col-md-12">
                                         <span>
                                             <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
                                                 Batal
@@ -665,6 +726,15 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $(".os-content-arrange").remove();
+        var today = new Date();
+        var dd = String(today.getDate()).padStart(2, '0');
+        var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+        var yyyy = today.getFullYear();
+
+        today = yyyy + '-' + mm + '-' + dd;
+        $("#tgl_edit").attr("max", today);
+        $("#batas_kontrak").attr("min", today);
 
         loop();
         load_variasi();
@@ -839,7 +909,7 @@
             }
         });
 
-        $('#tanggal_pemesanan').on('keyup', function() {
+        $('#tanggal_pemesanan').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgtanggal_pemesanan").text("");
                 $("#tanggal_pemesanan").removeClass('is-invalid');
@@ -859,7 +929,7 @@
             }
         });
 
-        $('#batas_kontrak').on('keyup', function() {
+        $('#batas_kontrak').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgbatas_kontrak").text("");
                 $("#batas_kontrak").removeClass('is-invalid');
@@ -868,7 +938,18 @@
                 $("#batas_kontrak").addClass('is-invalid');
             }
         });
-        $('#instansi').on('keyup', function() {
+
+        $('#tgl_edit').on('keyup change', function() {
+            if ($(this).val() != "") {
+                $("#msgtgl_edit").text("");
+                $("#tgl_edit").removeClass('is-invalid');
+            } else if ($(this).val() == "") {
+                $("#msgtgl_edit").text("Tanggal Edit Harus diisi");
+                $("#tgl_edit").addClass('is-invalid');
+            }
+        });
+
+        $('#instansi').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msginstansi").text("");
                 $("#instansi").removeClass('is-invalid');
@@ -877,7 +958,7 @@
                 $("#instansi").addClass('is-invalid');
             }
         });
-        $('#deskripsi').on('keyup', function() {
+        $('#deskripsi').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgdeskripsi").text("");
                 $("#deskripsi").removeClass('is-invalid');
@@ -886,7 +967,18 @@
                 $("#deskripsi").addClass('is-invalid');
             }
         });
-        $('#no_po_akn').on('keyup', function() {
+
+        $('#no_urut').on('keyup change', function() {
+            if ($(this).val() != "") {
+                $("#msgno_urut").text("");
+                $("#no_urut").removeClass('is-invalid');
+            } else if ($(this).val() == "") {
+                $("#msgno_urut").text("No Urut harus diisi");
+                $("#no_urut").addClass('is-invalid');
+            }
+        });
+
+        $('#no_po_akn').on('keyup change', function() {
             if ($(this).val() != "") {
                 $("#msgno_po_akn").text("");
                 $("#no_po_akn").removeClass('is-invalid');
@@ -895,6 +987,7 @@
                 $("#no_po_akn").addClass('is-invalid');
             }
         });
+
         $('#tanggal_po_akn').on('keyup', function() {
             if ($(this).val() != "") {
                 $("#msgtanggal_po_akn").text("");

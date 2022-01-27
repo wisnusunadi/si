@@ -55,7 +55,15 @@
         background-color: #c8daea;
     }
 
-    @media screen and (min-width: 1440px) {
+    #produktable{
+        width: 1371px !important;
+    }
+
+    #parttable{
+        width: 1371px !important;
+    }
+
+    @media screen and (min-width: 1220px) {
 
         section {
             font-size: 14px;
@@ -64,21 +72,56 @@
         .btn {
             font-size: 14px;
         }
+
+        .labelket{
+            text-align: right;
+        }
+
+
     }
 
-    @media screen and (max-width: 1439px) {
+    @media screen and (max-width: 1219px) {
 
-        label,
+        /* label,
         .row {
             font-size: 12px;
         }
 
         h4 {
             font-size: 20px;
+        } */
+        section {
+            font-size: 12px;
         }
 
         .btn {
             font-size: 12px;
+        }
+
+        .labelket{
+            text-align: right;
+        }
+    }
+
+    @media screen and (max-width: 991px) {
+        /* label,
+        .row {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        } */
+        section {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .labelket{
+            text-align: left;
         }
     }
 </style>
@@ -96,7 +139,7 @@
                             <div class="col-12">
                                 <h5 class="margin">Info Penjualan SPB</h5>
                                 <div class="row">
-                                    <div class="col-5">
+                                    <div class="col-lg-5 col-md-12">
                                         <div class="margin">
                                             <small>Info Customer</small>
                                         </div>
@@ -105,8 +148,7 @@
                                         <div id="provinsi" class="margin"><b>{{$e->customer->provinsi->nama}}</b></div>
                                         <div id="telepon" class="margin"><b>{{$e->customer->telp}}</b></div>
                                     </div>
-                                    <div class="col-1"></div>
-                                    <div class="col-2">
+                                    <div class="col-lg-3 col-md-4">
                                         <div class="margin">
                                             <div><small class="text-muted">No PO</small></div>
                                             <div id="no_po">
@@ -133,7 +175,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-2">
+                                    <div class="col-lg-3 col-md-4">
                                         <div class="margin">
                                             <div><small class="text-muted">No DO</small></div>
                                             <div id="no_po">
@@ -163,7 +205,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-3 col-md-4">
                                         <div class="margin">
                                             <div><small class="text-muted">No SO</small></div>
                                             <div id="no_so">
@@ -231,14 +273,14 @@
                                 {{csrf_field()}}
                                 {{method_field('PUT')}}
                                 <div class="row d-flex justify-content-center">
-                                    <div class="col-10">
+                                    <div class="col-lg-10 col-md-12">
                                         <h4>Info Customer</h4>
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="form-horizontal">
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Nama Customer</label>
-                                                        <div class="col-5">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Nama Customer</label>
+                                                        <div class="col-lg-5 col-md-12">
                                                             <select name="customer_id" id="customer_id" class="form-control customer_id custom-select @error('customer_id') is-invalid @enderror">
                                                                 <option value="{{$e->customer_id}}" selected>{{$e->customer->nama}}</option>
                                                             </select>
@@ -250,20 +292,20 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Alamat</label>
-                                                        <div class="col-7">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat</label>
+                                                        <div class="col-lg-7 col-md-12">
                                                             <input type="text" class="form-control col-form-label" name="alamat" id="alamat_customer" readonly value="{{$e->customer->alamat}}" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Telepon</label>
-                                                        <div class="col-5">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Telepon</label>
+                                                        <div class="col-lg-5 col-md-12">
                                                             <input type="text" class="form-control col-form-label" name="telepon" id="telepon_customer" readonly value="{{$e->customer->telp}}" />
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
-                                                        <label for="" class="col-form-label col-5" style="text-align: right">Barang</label>
-                                                        <div class="col-5">
+                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Barang</label>
+                                                        <div class="col-lg-5 col-md-12">
                                                             <div class="form-check form-check-inline col-form-label" id="penj_prd">
                                                                 <input class="form-check-input" type="radio" name="jenis_penj" id="jenis_penj1" value="produk" @if(count($e->pesanan->detailpesanan) > 0 && count($e->pesanan->detailpesananpart)) checked @endif/>
                                                                 <label class="form-check-label" for="jenis_penj1">Produk</label>
@@ -284,13 +326,13 @@
                                     </div>
                                 </div>
                                 <div class="row d-flex justify-content-center">
-                                    <div class="col-10">
+                                    <div class="col-lg-10 col-md-12">
                                         <h4>Info Penjualan</h4>
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="form-group row">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Delivery Order</label>
-                                                    <div class="col-5 col-form-label">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Delivery Order</label>
+                                                    <div class="col-lg-5 col-md-12 col-form-label">
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" name="do" id="yes" value="yes" {{ empty($e->Pesanan->no_do)? "" : "checked" }} />
                                                             <label class="form-check-label" for="yes">Tersedia</label>
@@ -302,9 +344,9 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="form-group row    @if(empty($e->Pesanan->no_do)) hide @endif " id="do_detail_no">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Nomor DO</label>
-                                                    <div class="col-4">
+                                                <div class="form-group row  @if(empty($e->Pesanan->no_do)) hide @endif " id="do_detail_no">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Nomor DO</label>
+                                                    <div class="col-lg-4 col-md-12">
                                                         <input type="text" class="form-control col-form-label @error('no_do') is-invalid @enderror" id="no_do" name="no_do" value="{{$e->Pesanan->no_do}}" />
                                                         <div class="invalid-feedback" id="msgno_do">
                                                             @if($errors->has('no_do'))
@@ -314,8 +356,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row  @if(empty($e->Pesanan->tgl_do)) hide @endif " id="do_detail_tgl">
-                                                    <label for="" class="col-form-label col-5" style="text-align: right">Tanggal DO</label>
-                                                    <div class="col-4">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal DO</label>
+                                                    <div class="col-lg-4 col-md-7">
                                                         <input type="date" class="form-control col-form-label @error('tanggal_do') is-invalid @enderror" id="tanggal_do" name="tanggal_do" value="{{$e->Pesanan->tgl_do}}" />
                                                         <div class="invalid-feedback" id="msgtanggal_po">
                                                             @if($errors->has('tanggal_do'))
@@ -327,8 +369,8 @@
 
 
                                                 <div class="form-group row">
-                                                    <label for="keterangan" class="col-form-label col-5" style="text-align: right">Keterangan</label>
-                                                    <div class="col-5">
+                                                    <label for="keterangan" class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
+                                                    <div class="col-lg-5 col-md-12">
                                                         <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan">{{$e->Pesanan->ket}}</textarea>
                                                     </div>
                                                 </div>
@@ -341,7 +383,7 @@
 
                                 @if(isset($e->pesanan))
                                 <div class="row d-flex justify-content-center @if(count($e->pesanan->detailpesanan) <= 0) hide @endif" id="dataproduk">
-                                    <div class="col-10">
+                                    <div class="col-lg-10 col-md-12">
                                         <h4>Data Produk</h4>
                                         <div class="card">
                                             <div class="card-body">
@@ -516,7 +558,7 @@
 
 
                                 <div class="row d-flex justify-content-center @if(count($e->pesanan->detailpesananpart) <= 0) hide @endif" id="datapart">
-                                    <div class="col-10">
+                                    <div class="col-lg-10 col-md-12">
                                         <h4>Data Part</h4>
                                         <div class="card">
                                             <div class="card-body">
@@ -614,7 +656,7 @@
                                 @endif
 
                                 <div class="row d-flex justify-content-center">
-                                    <div class="col-10">
+                                    <div class="col-lg-10 col-md-12">
                                         <span>
                                             <a href="{{route('penjualan.penjualan.show')}}" type="button" class="btn btn-danger">
                                                 Batal
@@ -643,7 +685,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
-
+        $(".os-content-arrange").remove();
         loop();
         load_variasi();
 

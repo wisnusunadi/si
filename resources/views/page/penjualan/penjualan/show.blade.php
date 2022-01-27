@@ -144,7 +144,7 @@
         }
 
         .btn {
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .overflowy {
@@ -153,10 +153,13 @@
             overflow-y: scroll;
             box-shadow: none;
         }
+
+        .labelket{
+            text-align: right;
+        }
     }
 
     @media screen and (max-width: 1439px) {
-
         label,
         .row {
             font-size: 12px;
@@ -179,6 +182,16 @@
             width: auto;
             overflow-y: scroll;
             box-shadow: none;
+        }
+
+        .labelket{
+            text-align: right;
+        }
+    }
+
+    @media screen and (max-width: 991px) {
+        .labelket{
+            text-align: left;
         }
     }
 </style>
@@ -537,7 +550,7 @@
                                         <table class="table table-hover" id="ekatalogtable" style="width:100%">
                                             <thead>
                                                 <tr>
-                                                    <th>No</th>
+                                                    <th>No Urut</th>
                                                     <th>Nomor SO</th>
                                                     <th>Nomor AKN</th>
                                                     <th>Nomor PO</th>
@@ -895,6 +908,19 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-warning">
+                        <h4 id="modal-title">Edit Pesanan</h4>
+                    </div>
+                    <div class="modal-body" id="edit">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
@@ -934,7 +960,7 @@
                     </form>
                 </div>
             </div>
-        </div> 
+        </div>
     </div>
 </section>
 @stop
@@ -1010,10 +1036,7 @@
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
             columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
+                    data: 'id'
                 },
                 {
                     data: 'so',
@@ -1129,12 +1152,10 @@
 <script>
     $(function() {
         $(document).on('click', '.detailmodal', function(event) {
-
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data("id");
             var label = $(this).data("target");
-
             $.ajax({
                 url: href,
                 beforeSend: function() {
@@ -1175,6 +1196,67 @@
                 timeout: 8000
             })
         });
+
+        $(document).on('click', '.editmodal', function(event) {
+            event.preventDefault();
+            var jenis = $(this).attr('data-jenis');
+            var id = $(this).attr("data-id");
+            $.ajax({
+                url: '/penjualan/pesanan/edit/'+id+'/'+jenis,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#editmodal').modal("show");
+                    $('#edit').html(result).show();
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + '/penjualan/pesanan/edit/'+id+'/'+jenis + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
+
+        $(document).on('submit', '#form-pesanan-update', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-pesanan-update').serialize(),
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan Perubahan Pesanan',
+                            'success'
+                        );
+                        $("#editmodal").modal('hide');
+                        location.reload();
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Perubahan Pesanan',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert("Page cannot open. Error:" + error);
+                }
+            });
+            return false;
+        });
+
 
         $(document).on('click', '.deletemodal', function(event) {
             event.preventDefault();

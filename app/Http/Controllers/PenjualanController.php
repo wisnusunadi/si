@@ -1096,6 +1096,9 @@ class PenjualanController extends Controller
 
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('id', function ($data) {
+                return $data->id;
+            })
             ->addColumn('so', function ($data) {
                 if ($data->Pesanan) {
                     if (!empty($data->Pesanan->so)) {
@@ -1145,7 +1148,7 @@ class PenjualanController extends Controller
 
                     if (isset($data->Pesanan->so)) {
                         if ($data->Pesanan->getJumlahPesanan() == $data->Pesanan->getJumlahKirim()) {
-                            return $tgl_parameter;
+                            return Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
                         } else {
                             if ($tgl_sekarang < $tgl_parameter) {
                                 $to = Carbon::now();
@@ -1199,12 +1202,14 @@ class PenjualanController extends Controller
                         }
                     }
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('nama_customer', function ($data) {
                 if (isset($data->Customer)) {
                     return $data->Customer['nama'];
+                } else {
+                    return '-';
                 }
             })
             ->addColumn('button', function ($data) use ($divisi_id) {
@@ -1262,9 +1267,23 @@ class PenjualanController extends Controller
                                 </button>
                             </a>
                             ';
+                        } else{
+                            $return .= '<a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="' . $data->id . '">
+                                <button class="dropdown-item" type="button" >
+                                <i class="fas fa-pencil-alt"></i>
+                                Edit No Urut & DO
+                                </button>
+                            </a>
+                            ';
                         }
                     } else if (empty($data->Pesanan->log_id)) {
-                        $return .= '<a data-toggle="modal" data-target="ekatalog" class="deletemodal" data-id="' . $data->id . '">
+                        $return .= '<a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button" >
+                            <i class="fas fa-pencil-alt"></i>
+                            Edit No Urut & DO
+                            </button>
+                        </a>
+                        <a data-toggle="modal" data-target="ekatalog" class="deletemodal" data-id="' . $data->id . '">
                             <button class="dropdown-item" type="button" >
                             <i class="far fa-trash-alt"></i>
                             Hapus
@@ -1381,6 +1400,14 @@ class PenjualanController extends Controller
                             </button>
                         </a>
                         ';
+                        }else{
+                            $return .= '<a data-toggle="modal" data-jenis="spa" class="editmodal" data-id="' . $data->id . '">
+                                <button class="dropdown-item" type="button" >
+                                <i class="fas fa-pencil-alt"></i>
+                                Edit DO
+                                </button>
+                            </a>
+                            ';
                         }
                     } else {
                         $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
@@ -1490,19 +1517,30 @@ class PenjualanController extends Controller
                     if (!empty($data->Pesanan->log_id)) {
                         if ($data->Pesanan->State->nama == "Penjualan" || $data->Pesanan->State->nama == "PO") {
                             $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">
-                        <button class="dropdown-item" type="button" >
-                          <i class="fas fa-pencil-alt"></i>
-                          Edit
-                        </button>
-                    </a>';
+                                <button class="dropdown-item" type="button" >
+                                <i class="fas fa-pencil-alt"></i>
+                                Edit
+                                </button>
+                            </a>';
                             if ($divisi_id == "26") {
                                 $return .= '<a data-toggle="modal" data-target="spb" class="deletemodal" data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="far fa-trash-alt"></i>
-                            Hapus
-                            </button>
-                        </a>
-                        ';
+                                    <button class="dropdown-item" type="button" >
+                                    <i class="far fa-trash-alt"></i>
+                                    Hapus
+                                    </button>
+                                </a>
+                                ';
+                            }
+                        }
+                        else{
+                            if ($divisi_id == "26") {
+                                $return .= '<a data-toggle="modal" data-jenis="spb" class="editmodal" data-id="' . $data->id . '">
+                                    <button class="dropdown-item" type="button" >
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Edit DO
+                                    </button>
+                                </a>
+                                ';
                             }
                         }
                     } else {
@@ -1582,6 +1620,7 @@ class PenjualanController extends Controller
                 'provinsi_id' => $request->provinsi,
                 'pesanan_id' => $x,
                 'no_paket' => 'AK1-' . $request->no_paket,
+                'no_urut' => $request->no_urut,
                 'deskripsi' => $request->deskripsi,
                 'instansi' => $request->instansi,
                 'alamat' => $request->alamatinstansi,
@@ -1928,6 +1967,18 @@ class PenjualanController extends Controller
         // }
     }
     //Update
+    public function edit_penjualan_pesanan($id, $jenis){
+        $data = "";
+        if($jenis == "ekatalog"){
+            $data = Ekatalog::find($id);
+        }else if($jenis == "spa"){
+            $data = Spa::find($id);
+        }else if($jenis == "spb"){
+            $data = Spb::find($id);
+        }
+        return view('page.penjualan.penjualan.edit_pesanan', ['data' => $data, 'id' => $id, 'jenis' => $jenis]);
+    }
+
     public function update_penjualan($id, $jenis)
     {
         if ($jenis == 'ekatalog') {
@@ -1949,10 +2000,6 @@ class PenjualanController extends Controller
         } else {
             $c_id = $request->customer_id;
         }
-
-
-
-
         $ekatalog = Ekatalog::find($id);
         $poid = $ekatalog->pesanan_id;
         $ekatalog->customer_id = $c_id;
@@ -1961,6 +2008,8 @@ class PenjualanController extends Controller
         $ekatalog->instansi = $request->instansi;
         $ekatalog->alamat = $request->alamatinstansi;
         $ekatalog->tgl_kontrak = $request->batas_kontrak;
+        $ekatalog->tgl_edit = $request->tgl_edit;
+        $ekatalog->no_urut = $request->no_urut;
         $ekatalog->satuan = $request->satuan_kerja;
         $ekatalog->status = $request->status_akn;
         $ekatalog->ket = $request->keterangan;
@@ -2250,6 +2299,62 @@ class PenjualanController extends Controller
             return redirect()->back()->with('success', 'Berhasil mengubah SPB');
         } else if ($bool == false) {
             return redirect()->back()->with('error', 'Gagal mengubah SPB');
+        }
+    }
+
+    public function update_penjualan_pesanan(Request $request, $id, $jenis){
+        $bool = true;
+        if($jenis == "ekatalog"){
+            $po = Pesanan::find($id);
+            $ekat = Ekatalog::find($po->Ekatalog->id);
+            $ekat->no_urut = $request->no_urut;
+            $u = $ekat->save();
+            if($u){
+                if(!empty($request->no_do) && !empty($request->tgl_do)){
+                    $po->no_do = $request->no_do;
+                    $po->tgl_do = $request->tgl_do;
+                    $pou = $po->save();
+                    if(!$pou){
+                        $bool = false;
+                    }
+                }else if(empty($request->no_do) && empty($request->tgl_do)){
+                    $po->no_do = "";
+                    $po->tgl_do = NULL;
+                    $pou = $po->save();
+                    $bool = true;
+                }else{
+                    $bool = false;
+                }
+            }else{
+                $bool = false;
+            }
+        }
+        else
+        {
+            $po = Pesanan::find($id);
+            if(!empty($request->no_do) && !empty($request->tgl_do)){
+                $po->no_do = $request->no_do;
+                $po->tgl_do = $request->tgl_do;
+                $pou = $po->save();
+
+                if(!$pou){
+                    $bool = false;
+                }
+            }else if(empty($request->no_do) && empty($request->tgl_do)){
+                $po->no_do = "";
+                $po->tgl_do = NULL;
+                $pou = $po->save();
+                $bool = true;
+            }else{
+                $bool = false;
+            }
+        }
+
+        if($bool == true){
+            return response()->json(['data' => 'success']);
+        }
+        else if($bool == false){
+            return response()->json(['data' => 'error']);
         }
     }
 
