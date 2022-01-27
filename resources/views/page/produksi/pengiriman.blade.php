@@ -180,7 +180,15 @@
                                         placeholder="Tanggal Perakitan">
                                 </div>
                             </div>
-                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                {{-- <div class="form-group">
+                                  <label for="">Tujuan</label>
+                                  <select name="" id="tujuanGudang" class="form-control">
+                                    <option value="">Gudang Barang Jadi</option>
+                                    <option value="">Gudang Karantina</option>
+                                  </select>
+                                </div> --}}
+                            </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Cari</label>
@@ -196,6 +204,7 @@
                                             <tr>
                                                 <th><input type="checkbox" name="" id="head-cb"></th>
                                                 <th>Nomor Seri</th>
+                                                {{-- <th>Aksi</th> --}}
                                             </tr>
                                         </thead>
                                         <tbody class="scan"></tbody>
@@ -214,6 +223,30 @@
                 <button type="submit" class="btn btn-primary" id="saveButton">Simpan</button>
             </div>
             </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Edit No Seri</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                  <label for="">No Seri</label>
+                  <input type="text" name="" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Simpan</button>
+            </div>
         </div>
     </div>
 </div>
@@ -428,7 +461,13 @@
                 },
                 {
                     data: "no_seri"
-                }
+                },
+                // {
+                //     data: "id",
+                //     render: function (data, type, row) {
+                //         return '<button type="button" class="btn btn-outline-primary btn-sm detail" data-id="' + data + '"><i class="fas fa-edit"></i></button>&nbsp;<button type="button" class="btn btn-outline-danger btn-sm delete" data-id="' + data + '"><i class="fas fa-trash"></i></button>'
+                //     }
+                // }
             ],
             columnDefs: [{
                 targets: [0],
@@ -471,29 +510,29 @@
                         let today = new Date();
                         let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                         let datetime = tgl + ' ' + time;
-                        // $.ajax({
-                        //     url: "/api/prd/send",
-                        //     type: "post",
-                        //     data: {
-                        //         "_token": "{{csrf_token() }}",
-                        //         userid: $('#userid').val(),
-                        //         qty: jumlah,
-                        //         gbj_id: prd,
-                        //         jadwal_id: id,
-                        //         noseri: seri,
-                        //         tgl_transfer: datetime,
-                        //     },
-                        //     success: function (res) {
-                        //         console.log(res);
-                        //         Swal.fire(
-                        //             'Berhasil!',
-                        //             'Data berhasil di transfer!',
-                        //             'success'
-                        //         ).then(function () {
-                        //             location.reload();
-                        //         });
-                        //     }
-                        // })
+                        $.ajax({
+                            url: "/api/prd/send",
+                            type: "post",
+                            data: {
+                                "_token": "{{csrf_token() }}",
+                                userid: $('#userid').val(),
+                                qty: jumlah,
+                                gbj_id: prd,
+                                jadwal_id: id,
+                                noseri: seri,
+                                tgl_transfer: datetime,
+                            },
+                            success: function (res) {
+                                console.log(res);
+                                Swal.fire(
+                                    'Berhasil!',
+                                    'Data berhasil di transfer!',
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                });
+                            }
+                        })
                         console.log("seri", seri);
                     } else {
                         Swal.fire(
@@ -519,5 +558,10 @@
         });
         $('#no_seri').text(check_seri);
     });
+    // Produksi Delete
+    $(document).on('click','.delete', function () {
+        const id = $(this).data('id');
+        console.log(id);
+    })
 </script>
 @stop
