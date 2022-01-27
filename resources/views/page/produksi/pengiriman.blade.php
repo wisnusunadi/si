@@ -180,7 +180,15 @@
                                         placeholder="Tanggal Perakitan">
                                 </div>
                             </div>
-                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                  <label for="">Tujuan</label>
+                                  <select name="" id="tujuanGudang" class="form-control">
+                                    <option value="">Gudang Barang Jadi</option>
+                                    <option value="">Gudang Karantina</option>
+                                  </select>
+                                </div>
+                            </div>
                             <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Cari</label>
