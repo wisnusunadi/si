@@ -601,7 +601,7 @@
             })
     })
 
-    $(document).on('click', '.detail', function() { 
+    $(document).on('click', '.detail', function() {
         const id = $(this).data('id');
         const noseri = $(this).data('seri');
         $('#noseriselect').val(noseri);
@@ -611,14 +611,16 @@
 
     $(document).on('click', '.submitNoSeri', function () {
         const noseriid = $('#idNoseri').val();
+        // console.log(noseriid);
         const noseri = $('#noseriselect').val();
         $.ajax({
             type: "post",
-            url: "/api/prd/cek-noseri",
+            url: "/api/prd/cekUpdateNoseri",
             data: {
                 noseri: noseri,
             },
             success: function (response) {
+                console.log(response);
                 if (response.error == true) {
                     Swal.fire(
                         'Oops...',
@@ -627,17 +629,18 @@
                     )
                 }else{
                     $.ajax({
-                        url: "/api/prd/update-noseri",
-                        type: "post",
+                        url: "/api/prd/updateRakitseri",
                         data: {
-                            noseriid: noseriid,
-                            noseri: noseri,
+                            noseriid : noseriid,
+                            noseri : noseri,
+                            jadwal_id: id,
                         },
-                        success: function (res) {
+                        type: "post",
+                        success: function(res) {
                             console.log(res);
                             Swal.fire(
-                                'Berhasil!',
-                                'Data berhasil di update!',
+                                'Updated!',
+                                res.msg,
                                 'success'
                             ).then(function () {
                                 location.reload();

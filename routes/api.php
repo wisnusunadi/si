@@ -283,6 +283,7 @@ Route::prefix('/prd')->group(function () {
     Route::post('/terimaseri', [ProduksiController::class, 'terimaseri']);
     Route::post('/delete', [ProduksiController::class, 'deleteNoseri']);
     Route::post('/updateRakitseri', [ProduksiController::class, 'updateNoseri']);
+    Route::post('/cekUpdateNoseri', [ProduksiController::class, 'cekUbahNoseri']);
 
     // riwayat
     Route::prefix('/history')->group(function () {

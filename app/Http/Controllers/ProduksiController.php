@@ -1713,7 +1713,7 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::wherehNotIn('status', [6])->whereIn('status_tf', [11, 12, 13])->orderByDesc('created_at')->get();
+        $data = JadwalPerakitan::whereNotIn('status', [6])->whereIn('status_tf', [11, 12, 13])->orderByDesc('created_at')->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -1891,6 +1891,16 @@ class ProduksiController extends Controller
             return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true]);
         } else {
             return response()->json(['msg' => 'Success', 'error' => false]);
+        }
+    }
+
+    function cekUbahNoseri(Request $request)
+    {
+        $data = JadwalRakitNoseri::where('noseri', $request->noseri)->get()->count();
+        if ($data > 0) {
+            return response()->json(['msg' => 'Noseri '.$request->noseri.' Sudah Terdaftar', 'error' => true]);
+        } else {
+
         }
     }
 
