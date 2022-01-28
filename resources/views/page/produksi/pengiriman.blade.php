@@ -218,8 +218,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-info" id="checked">Check</button>
+                <button type="button" class="btn btn-danger" id="hapusSeri">Hapus</button>
                 <button type="submit" class="btn btn-primary" id="saveButton">Simpan</button>
             </div>
             </form>
@@ -561,6 +561,45 @@
         $('#no_seri').text(check_seri);
     });
 
+    // Hapus Seri
+    $(document).on('click', '#hapusSeri', function () {
+        var table = $('.scan-produk').DataTable();
+        var rows_select = table.column(0).checkboxes.selected();
+        const check_seri = [];
+
+        $.each(rows_select, function (index, rowId) {
+            check_seri.push(rowId);
+        });
+        console.log(check_seri);
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Hapus Noseri "+check_seri+" ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) =>{
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "post",
+                    url: "#",
+                    data: {
+                        noseri: check_seri,
+                    },
+                    success: function (response) {
+                        Swal.fire(
+                            'Berhasil!',
+                            'Data berhasil di hapus!',
+                            'success'
+                        ).then(function () {
+                            location.reload();
+                        });
+                    }
+                });
+            }
+        })
+    });
     // Produksi Delete
     $(document).on('click','.delete', function () {
         const noseriid = $(this).data('id');
