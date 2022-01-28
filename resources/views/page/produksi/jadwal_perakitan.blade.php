@@ -309,10 +309,11 @@
 
         var calendar = new Calendar(calendarEl, {
             headerToolbar: {
-                left: '',
+                left: 'prev,next today',
                 center: 'title',
-                right: ''
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            weekends: false,
             locale: 'id',
             events: function (fetchInfo, successCallback, failureCallback) {
                 $.ajax({
