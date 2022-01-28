@@ -3,7 +3,7 @@
     @csrf
     <div class="content">
         <div class="row">
-            <div class="col-4">
+            <div class="col-lg-4 col-md-12">
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
@@ -132,7 +132,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8 col-md-12">
 
                 <div class="col-12">
                     <div class="card">
@@ -211,32 +211,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- <div class="row">
-                        <div class="col-12">
-                            <div class="card">
-                                <div class="card-body">
-                                    <h5>Data Barang</h5>
-                                    <div class="form-group row">
-                                        <div class="col-12">
-                                            <div class="table-responsive">
-                                                <table class="table table-hover align-center" style="width:100%;" id="barangtable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th>No</th>
-                                                            <th>Nama Barang</th>
-                                                            <th>Jumlah</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    </tbody>
-                                                </table>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div> -->
                 <div class="row">
                     <div class="col-6 float-left">
                         <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>

@@ -59,7 +59,7 @@ class LaporanPenjualanAll implements FromView, ShouldAutoSize, WithStyles, WithC
             'O' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
             'P' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
             'Q' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
-            'N' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+            'R' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
         ];
     }
 
@@ -71,27 +71,27 @@ class LaporanPenjualanAll implements FromView, ShouldAutoSize, WithStyles, WithC
 
         // ];
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
-        $sheet->getStyle('A2:T2')->getFont()->setBold(true);
+        $sheet->getStyle('A2:u2')->getFont()->setBold(true);
 
-        $sheet->getStyle('b2:e2')->getFill()
+        $sheet->getStyle('b2:f2')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('51adb9');
-        $sheet->getStyle('e2:f2')->getFill()
+        $sheet->getStyle('f2:g2')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('51adb9');
-        $sheet->getStyle('l2:q2')->getFill()
+        $sheet->getStyle('m2:r2')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('89d0b4');
-        $sheet->getStyle('f2:i2')->getFill()
+        $sheet->getStyle('g2:j2')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('00ff7f');
         $sheet->getStyle('a2')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('00ff7f');
-        $sheet->getStyle('j2:k2')->getFill()
+        $sheet->getStyle('k2:l2')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('00b359');
-        $sheet->getStyle('r2:T2')->getFill()
+        $sheet->getStyle('s2:u2')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('f99c83');
     }

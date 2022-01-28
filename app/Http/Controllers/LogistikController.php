@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\LaporanLogistik;
+use App\Exports\LaporanPenjualanAll;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
@@ -24,6 +26,7 @@ use App\Models\NoseriTGbj;
 use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 use function PHPUnit\Framework\returnSelf;
 
@@ -927,7 +930,7 @@ class LogistikController extends Controller
             ->addColumn('so', function ($data) {
                 return $data->so;
             })
-            ->addColumn('so', function ($data) {
+            ->addColumn('no_po', function ($data) {
                 return $data->no_po;
             })
             ->addColumn('nama_customer', function ($data) {
@@ -3208,12 +3211,24 @@ class LogistikController extends Controller
     {
         $s = "";
         if ($pengiriman == "ekspedisi") {
-            $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
-                $q->where('ekspedisi_id', $ekspedisi)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
-            })->get();
-            $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
-                $q->where('ekspedisi_id', $ekspedisi)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
-            })->get();
+
+            if ($ekspedisi != '0') {
+                $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
+                    $q->where('ekspedisi_id', $ekspedisi)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+                })->get();
+                $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
+                    $q->where('ekspedisi_id', $ekspedisi)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+                })->get();
+            } else {
+                $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
+                    $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+                })->get();
+                $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
+                    $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+                })->get();
+            }
+
+
             $s = $prd->merge($prt);
         } else if ($pengiriman == "nonekspedisi") {
             $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
@@ -3233,6 +3248,8 @@ class LogistikController extends Controller
             $s = $prd->merge($prt);
         }
 
+
+
         return datatables()->of($s)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -3242,7 +3259,7 @@ class LogistikController extends Controller
                     return $data->DetailPesananPart->Pesanan->so;
                 }
             })
-            ->addColumn('so', function ($data) {
+            ->addColumn('po', function ($data) {
                 if (isset($data->DetailPesananProduk)) {
                     return $data->DetailPesananProduk->DetailPesanan->Pesanan->no_po;
                 } else {
@@ -3348,12 +3365,14 @@ class LogistikController extends Controller
             ->addColumn('tgl_kirim', function ($data) {
                 return Carbon::createFromFormat('Y-m-d', $data->Logistik->tgl_kirim)->format('d-m-Y');
             })
-            ->addColumn('tgl_selesai', function ($data) {
-                return '-';
-            })
+
             ->addColumn('produk', function ($data) {
                 if (isset($data->DetailPesananProduk)) {
-                    return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                    $datas = $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                    if ($data->DetailPesananProduk->GudangBarangJadi->nama != '') {
+                        $datas .= "<div class=text-primary><small>" . $data->DetailPesananProduk->GudangBarangJadi->nama . "</small></div>";
+                    }
+                    return $datas;
                 } else {
                     return $data->DetailPesananPart->Sparepart->nama;
                 }
@@ -3365,13 +3384,11 @@ class LogistikController extends Controller
                     return $data->DetailPesananPart->jumlah;
                 }
             })
-            ->addColumn('ongkir', function ($data) {
-                return '0';
-            })
+
             ->addColumn('status', function ($data) {
                 return $data->Logistik->State->nama;
             })
-            ->rawColumns(['status'])
+            ->rawColumns(['status', 'produk'])
             ->make(true);
     }
 
@@ -3403,5 +3420,19 @@ class LogistikController extends Controller
         $vals = str_replace("_", "/", $val);
         $e = Logistik::where([['noresi', '!=', '-'], ['noresi', '=', $vals]])->count();
         return $e;
+    }
+
+    public function export_laporan($jenis, $ekspedisi, $tgl_awal, $tgl_akhir)
+    {
+
+        $waktu = Carbon::now();
+
+        if ($jenis == "ekspedisi") {
+            return Excel::download(new LaporanLogistik($jenis, $ekspedisi, $tgl_awal, $tgl_akhir), 'Laporan Pengiriman Ekspedisi ' . $waktu->toDateTimeString() . '.xlsx');
+        } else if ($jenis == "nonekspedisi") {
+            return Excel::download(new LaporanLogistik($jenis, $ekspedisi, $tgl_awal, $tgl_akhir), 'Laporan Pengiriman Non Ekspedisi ' . $waktu->toDateTimeString() . '.xlsx');
+        } else {
+            return Excel::download(new LaporanLogistik($jenis, $ekspedisi, $tgl_awal, $tgl_akhir), 'Laporan Pengiriman Ekspedisi dan Non Ekspedisi ' . $waktu->toDateTimeString() . '.xlsx');
+        }
     }
 }
