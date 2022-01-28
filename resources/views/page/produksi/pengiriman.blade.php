@@ -123,7 +123,7 @@
                                 <label for="">Nomor BPPB</label>
                                 <div class="card" style="background-color: #C8E1A7">
                                     <div class="card-body">
-                                        <span id="no_bppb">89798797856456</span>
+                                        <span id="no_bppb">-</span>
                                     </div>
                                 </div>
                             </div>
@@ -183,9 +183,9 @@
                             <div class="col-sm-4">
                                 {{-- <div class="form-group">
                                   <label for="">Tujuan</label>
-                                  <select name="" id="tujuanGudang" class="form-control">
-                                    <option value="">Gudang Barang Jadi</option>
-                                    <option value="">Gudang Karantina</option>
+                                  <select name="ke" id="tujuanGudang" class="form-control">
+                                    <option value="13">Gudang Barang Jadi</option>
+                                    <option value="12">Gudang Karantina</option>
                                   </select>
                                 </div> --}}
                             </div>
@@ -204,7 +204,7 @@
                                             <tr>
                                                 <th><input type="checkbox" name="" id="head-cb"></th>
                                                 <th>Nomor Seri</th>
-                                                {{-- <th>Aksi</th> --}}
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody class="scan"></tbody>
@@ -228,7 +228,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade modalSeri" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -240,12 +240,13 @@
             <div class="modal-body">
                 <div class="form-group">
                   <label for="">No Seri</label>
-                  <input type="text" name="" id="" class="form-control" placeholder="" aria-describedby="helpId">
+                  <input type="hidden" name="" id="idNoseri">
+                  <input type="text" name="" id="noseriselect" class="form-control" placeholder="" aria-describedby="helpId">
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary">Simpan</button>
+                <button type="button" class="btn btn-primary submitNoSeri">Simpan</button>
             </div>
         </div>
     </div>
@@ -462,12 +463,12 @@
                 {
                     data: "no_seri"
                 },
-                // {
-                //     data: "id",
-                //     render: function (data, type, row) {
-                //         return '<button type="button" class="btn btn-outline-primary btn-sm detail" data-id="' + data + '"><i class="fas fa-edit"></i></button>&nbsp;<button type="button" class="btn btn-outline-danger btn-sm delete" data-id="' + data + '"><i class="fas fa-trash"></i></button>'
-                //     }
-                // }
+                {
+                    data: "id",
+                    render: function (data, type, row) {
+                        return '<button type="button" class="btn btn-outline-primary btn-sm detail" data-id="' + data + '" data-seri="'+row.no_seri+'"><i class="fas fa-edit"></i></button>&nbsp;<button type="button" class="btn btn-outline-danger btn-sm delete" data-id="' + data + '" data-seri="'+row.no_seri+'"><i class="fas fa-trash"></i></button>'
+                    }
+                }
             ],
             columnDefs: [{
                 targets: [0],
@@ -515,6 +516,7 @@
                             type: "post",
                             data: {
                                 "_token": "{{csrf_token() }}",
+                                tujuan: $('#tujuanGudang').val(),
                                 userid: $('#userid').val(),
                                 qty: jumlah,
                                 gbj_id: prd,
@@ -558,10 +560,77 @@
         });
         $('#no_seri').text(check_seri);
     });
+
     // Produksi Delete
     $(document).on('click','.delete', function () {
-        const id = $(this).data('id');
+        const noseriid = $(this).data('id');
+        const noseri = $(this).data('seri');
         console.log(id);
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Hapus Noseri "+noseri+" ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/prd/delete",
+                        data: {
+                            noseriid : noseriid,
+                            jadwal_id: id,
+                        },
+                        type: "post",
+                        success: function(res) {
+                            console.log(res);
+                            Swal.fire(
+                                'Deleted!',
+                                res.msg,
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            });
+                        }
+                    })
+
+
+                }
+            })
+    })
+
+    $(document).on('click', '.detail', function() {
+        const id = $(this).data('id');
+        const noseri = $(this).data('seri');
+        $('#noseriselect').val(noseri);
+        $('#idNoseri').val(id);
+        $('.modalSeri').modal('show');
+    })
+
+    $(document).on('click', '.submitNoSeri', function () {
+        const noseriid = $('#idNoseri').val();
+        const noseri = $('#noseriselect').val();
+        $.ajax({
+            url: "/api/prd/updateRakitseri",
+            data: {
+                noseriid : noseriid,
+                noseri : noseri,
+                jadwal_id: id,
+            },
+            type: "post",
+            success: function(res) {
+                console.log(res);
+                Swal.fire(
+                    'Updated!',
+                    res.msg,
+                    'success'
+                ).then(function () {
+                    location.reload();
+                });
+            }
+        })
     })
 </script>
 @stop
