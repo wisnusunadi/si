@@ -44,10 +44,10 @@ class AfterSalesController extends Controller
                         if ($d->gudangbarangjadi->nama == '') {
                             $id[] = $d->gudangbarangjadi->produk->nama;
                         } else {
-                            $id[]  = $d->gudangbarangjadi->nama;
+                            $id[] = $d->gudangbarangjadi->produk->nama.' '.$d->gudangbarangjadi->nama;
                         }
                     }
-                    return implode(',', $id);
+                    return implode(', ', $id);
                 } else {
                     return $data->Sparepart->nama;
                 }
@@ -262,7 +262,7 @@ class AfterSalesController extends Controller
                 $q->where('detail_pesanan_id', $id);
             })->count();
 
-            if ($jumlahkirim == $jumlahseri) {
+            if ($jumlahkirim >= $jumlahseri) {
                 $status = '<span class="badge green-text">Selesai</span>';
             } else if ($jumlahkirim < $jumlahseri) {
                 $status = '<span class="badge yellow-text">Terkirim Sebagian</span>';

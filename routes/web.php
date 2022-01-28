@@ -103,6 +103,15 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::put('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_penjualan_produk'])->name('penjualan.produk.update');
     });
 
+    Route::group(['prefix' => '/rencana'], function () {
+        Route::view('/show', 'page.penjualan.rencana.show')->name('penjualan.rencana.show');
+        Route::view('/create', 'page.penjualan.rencana.create')->name('penjualan.rencana.create');
+    });
+
+    Route::group(['prefix' => '/pesanan'], function () {
+        Route::get('/edit/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'edit_penjualan_pesanan'])->name('penjualan.pesanan.edit');
+    });
+
     Route::group(['prefix' => '/customer'], function () {
         Route::view('/show', 'page.penjualan.customer.show')->name('penjualan.customer.show');
         // Route::get('/data/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
@@ -216,6 +225,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     });
     Route::group(['prefix' => '/laporan'], function () {
         Route::view('/show', 'page.logistik.laporan.show')->name('logistik.laporan.show');
+        Route::get('/export/{jenis}/{ekspedisi}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\LogistikController::class, 'export_laporan'])->name('logistik.laporan.export');
     });
 });
 

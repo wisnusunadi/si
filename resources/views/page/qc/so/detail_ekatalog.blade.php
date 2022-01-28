@@ -40,6 +40,21 @@
         font-weight: 600;
     }
 
+    #urgent {
+        color: #dc3545;
+        font-weight: 600;
+    }
+
+    #warning {
+        color: #FFC700;
+        font-weight: 600;
+    }
+
+    .info {
+        color: #3a7bb0;
+        font-weight: 600;
+    }
+
     .list-group-item {
         border: 0 none;
     }
@@ -80,10 +95,36 @@
         white-space: nowrap;
     }
 
-    @media screen and (min-width: 1440px) {
+    .overflowy {
+        max-height: 240px;
+        overflow-y: scroll;
+        box-shadow: none;
+    }
+
+    /* @media screen and (min-width: 1440px) {
 
         section {
+            font-size: 16px;
+        }
+
+        #detailmodal {
+            font-size: 16px;
+        }
+
+        .btn {
+            font-size: 16px;
+        }
+    } */
+
+    @media screen and (min-width: 993px) {
+
+        label,
+        .row {
             font-size: 14px;
+        }
+
+        h4 {
+            font-size: 24px;
         }
 
         #detailmodal {
@@ -91,19 +132,18 @@
         }
 
         .btn {
-            font-size: 12px;
+            font-size: 14px;
         }
     }
 
-    @media screen and (max-width: 1439px) {
-
+    @media screen and (max-width: 992px) {
         label,
         .row {
             font-size: 12px;
         }
 
         h4 {
-            font-size: 20px;
+            font-size: 22px;
         }
 
         #detailmodal {
@@ -112,6 +152,10 @@
 
         .btn {
             font-size: 12px;
+        }
+
+        .collapsable{
+            display: none;
         }
     }
 </style>
@@ -128,7 +172,7 @@
                         <?php $item = array(); ?>
                         @foreach($data as $d)
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-lg-5 col-md-8 col-sm-12">
                                 <div class="margin">
                                     <div><small class="text-muted">Distributor & Instansi</small></div>
                                 </div>
@@ -145,7 +189,7 @@
                                     <div><b id="no_akn">@if($d->provinsi_id) {{$d->Provinsi->nama}} @else - @endif</b></div>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-2 col-md-4 col-sm-12">
                                 <div class="margin">
                                     <div><small class="text-muted">No AKN</small></div>
                                     <div><b id="no_akn">{{$d->no_paket}}</b></div>
@@ -156,7 +200,7 @@
                                             {{$d->pesanan->so}}</b></div>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-2 col-md-8 col-sm-12">
                                 <div class="margin">
                                     <div><small class="text-muted">No PO</small></div>
                                     <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
@@ -166,7 +210,7 @@
                                     <div class="urgent"><b>{!!$param!!}</b></div>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-2 col-md-4 col-sm-12">
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
                                     <div>{!!$status!!}</div>
@@ -192,7 +236,7 @@
                                                 <th rowspan="2">No</th>
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th rowspan="2">Jumlah</th>
-                                                <th colspan="2">Hasil</th>
+                                                <th colspan="2" class="collapsable">Hasil</th>
                                                 <th rowspan="2">Aksi</th>
                                             </tr>
                                             <tr>
@@ -307,12 +351,12 @@
                 searchable: false
             }, {
                 data: 'jumlah_ok',
-                className: 'nowrap-text align-center',
+                className: 'nowrap-text align-center collapsable',
                 orderable: false,
                 searchable: false
             }, {
                 data: 'jumlah_nok',
-                className: 'nowrap-text align-center',
+                className: 'nowrap-text align-center collapsable',
                 orderable: false,
                 searchable: false
             }, {
@@ -410,6 +454,7 @@
             destroy: true,
             processing: true,
             serverSide: false,
+            autowidth: true,
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
@@ -433,7 +478,7 @@
                 searchable: true
             }, {
                 data: 'tgl_uji',
-                className: 'nowrap-text align-center',
+                className: 'nowrap-text align-center collapsable',
                 orderable: false,
                 searchable: false
             }, {
@@ -447,6 +492,7 @@
         function listnoseri(seri_id, produk_id, pesanan_id) {
             $('#listnoseri').DataTable({
                 destroy: true,
+                autowidth: true,
                 processing: true,
                 serverSide: false,
                 ajax: {

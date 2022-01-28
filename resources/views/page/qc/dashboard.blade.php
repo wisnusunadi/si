@@ -212,44 +212,15 @@
                                                 </tr>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>No SO</th>
+                                                    <th>No PO</th>
                                                     <th>Batas Pengujian</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>SOSPA102100001</td>
-                                                    <td>
-                                                        <div class="urgent">12-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
-                                                    </td>
-                                                    <td><span class="badge red-text">Belum diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>SOSPA102100002</td>
-                                                    <td>
-                                                        <div class="urgent">11-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                    </td>
-                                                    <td><span class="badge red-text">Belum diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>SOSPA102100003</td>
-                                                    <td>
-                                                        <div class="urgent">11-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                    </td>
-                                                    <td><span class="badge red-text">Belum diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                            </tbody> -->
+
+                                            </tbody>
                                         </table>
 
 
@@ -264,48 +235,13 @@
                                                 </tr>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>No SO</th>
+                                                    <th>No PO</th>
                                                     <th>Batas Pengujian</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>SOSPA092100093</td>
-                                                    <td>
-                                                        <div class="urgent">31-10-2021</div>
-                                                        <small><i class="fas fa-exclamation-circle" id="warning"></i> 2 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href="{{route('qc.so.detail_ekatalog', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>SOSPA092100121</td>
-                                                    <td>
-                                                        <div class="urgent">01-11-2021</div>
-                                                        <small><i class="fas fa-exclamation-circle" id="warning"></i> 3 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>SOSPA102100001</td>
-                                                    <td>
-                                                        <div class="urgent">12-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>SOSPA102100002</td>
-                                                    <td>
-                                                        <div class="urgent">11-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr> -->
+
                                             </tbody>
                                         </table>
 
@@ -318,33 +254,14 @@
                                                 </tr>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>No SO</th>
+                                                    <th>No PO</th>
                                                     <th>Batas Pengujian</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>SOSPA092100093</td>
-                                                    <td>
-                                                        <div class="urgent">31-10-2021</div>
-                                                        <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 3 Hari</small>
-                                                    </td>
-                                                    <td><span class="badge yellow-text">Sebagian diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>SOSPA092100121</td>
-                                                    <td>
-                                                        <div class="urgent">01-11-2021</div>
-                                                        <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
-                                                    </td>
-                                                    <td><span class="badge yellow-text">Sebagian diuji</span></td>
-                                                    <td><a href="{{route('qc.so.detail_spa', ['id' => '1'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr> -->
+
                                             </tbody>
                                         </table>
                                     </div>
@@ -398,7 +315,7 @@
                                             <table class="table table-hover" style="width:100%;" id="sotable">
                                                 <thead>
                                                     <th>No</th>
-                                                    <th>No SO</th>
+
                                                     <th>No PO</th>
                                                     <th>Customer</th>
                                                     <th>Status</th>
@@ -500,7 +417,7 @@
                         orderable: false,
                         searchable: false
                     }, {
-                        data: 'so',
+                        data: 'no_po',
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
@@ -548,7 +465,7 @@
                         orderable: false,
                         searchable: false
                     }, {
-                        data: 'so',
+                        data: 'no_po',
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
@@ -602,7 +519,7 @@
                         orderable: false,
                         searchable: false
                     }, {
-                        data: 'so',
+                        data: 'no_po',
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
@@ -654,11 +571,6 @@
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
-                }, {
-                    data: 'so',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: true
                 }, {
                     data: 'no_po',
                     className: 'nowrap-text align-center',

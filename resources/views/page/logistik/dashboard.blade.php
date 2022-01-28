@@ -210,7 +210,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>No SO</th>
+                                                    <th>No PO</th>
                                                     <th>Batas Kirim</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
@@ -230,7 +230,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>No SO</th>
+                                                    <th>No PO</th>
                                                     <th>Batas Kirim</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -248,7 +248,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>No SO</th>
+                                                    <th>No PO</th>
                                                     <th>Batas Kirim</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
@@ -308,7 +308,7 @@
                                             <table class="table table-hover" style="width:100%;" id="sotable">
                                                 <thead>
                                                     <th>No</th>
-                                                    <th>No SO</th>
+                                                    <th>No PO</th>
                                                     <th>Customer</th>
                                                     <th>Status</th>
                                                 </thead>
@@ -366,7 +366,7 @@
                     orderable: false,
                     searchable: false
                 }, {
-                    data: 'so',
+                    data: 'no_po',
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
@@ -450,7 +450,7 @@
                     orderable: false,
                     searchable: false
                 }, {
-                    data: 'so',
+                    data: 'no_po',
 
                 }, {
                     data: 'batas',
@@ -492,7 +492,7 @@
                     orderable: false,
                     searchable: false
                 }, {
-                    data: 'so',
+                    data: 'no_po',
 
                 }, {
                     data: 'batas',
@@ -528,7 +528,7 @@
                     orderable: false,
                     searchable: false
                 }, {
-                    data: 'so',
+                    data: 'no_po',
 
                 }, {
                     data: 'batas',
