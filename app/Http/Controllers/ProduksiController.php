@@ -1908,23 +1908,23 @@ class ProduksiController extends Controller
                     $seri->status = 11;
                     $seri->created_by = $request->userid;
                     $seri->save();
+
+                    $d = JadwalPerakitan::find($request->jadwal_id);
+                    $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
+                    if ($d->jumlah == $jj) {
+                        $d->status_tf = 15;
+                        $d->no_bppb = strtoupper($request->no_bppb);
+                        $d->filled_by = $request->userid;
+                        $d->save();
+                    } else {
+                        $d->status_tf = 12;
+                        $d->no_bppb = strtoupper($request->no_bppb);
+                        $d->filled_by = $request->userid;
+                        $d->save();
+                    }
                 }
             }
-
-            $d = JadwalPerakitan::find($request->jadwal_id);
-            $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
-            if ($d->jumlah == $jj) {
-                $d->status_tf = 15;
-                $d->no_bppb = strtoupper($request->no_bppb);
-                $d->filled_by = $request->userid;
-                $d->save();
-            } else {
-                $d->status_tf = 12;
-                $d->no_bppb = strtoupper($request->no_bppb);
-                $d->filled_by = $request->userid;
-                $d->save();
-            }
-
+            
             return response()->json(['msg' => 'Successfully']);
         } else {
             return response()->json(['msg' => 'Noseri Sudah Ada, Silahkan Gunakan yang lain.']);
