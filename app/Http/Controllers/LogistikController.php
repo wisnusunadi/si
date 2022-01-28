@@ -927,7 +927,7 @@ class LogistikController extends Controller
             ->addColumn('so', function ($data) {
                 return $data->so;
             })
-            ->addColumn('so', function ($data) {
+            ->addColumn('no_po', function ($data) {
                 return $data->no_po;
             })
             ->addColumn('nama_customer', function ($data) {

@@ -79,7 +79,7 @@
                         </div>
                         <h5>No Seri </h5>
                         <div class="form-group row">
-                            <div class="table-responsive">
+                            <div class="table-responsive overflowy">
                                 <table class="table table-striped align-center" id="listnoseri" style="width:100%;">
                                     <thead>
                                         <tr>

@@ -82,10 +82,14 @@
         white-space: nowrap;
     }
 
-    @media screen and (min-width: 1440px) {
-
-        section {
+    @media screen and (min-width: 993px) {
+        label,
+        .row {
             font-size: 14px;
+        }
+
+        h4 {
+            font-size: 24px;
         }
 
         #detailmodal {
@@ -93,19 +97,18 @@
         }
 
         .btn {
-            font-size: 12px;
+            font-size: 14px;
         }
     }
 
-    @media screen and (max-width: 1439px) {
-
+    @media screen and (max-width: 992px) {
         label,
         .row {
             font-size: 12px;
         }
 
         h4 {
-            font-size: 20px;
+            font-size: 22px;
         }
 
         #detailmodal {
@@ -114,6 +117,10 @@
 
         .btn {
             font-size: 12px;
+        }
+
+        .collapsable{
+            display: none;
         }
     }
 </style>
@@ -128,7 +135,7 @@
                     <div class="card-body">
                         <h4>Info Penjualan SPB</h4>
                         @foreach($data as $d) <div class="row">
-                            <div class="col-5">
+                            <div class="col-lg-5 col-md-12 col-sm-12">
                                 <div class="margin">
                                     <div><small class="text-muted">Customer</small></div>
                                 </div>
@@ -145,13 +152,17 @@
                                     <b id="distributor">{{$d->customer->telp}}</b>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="margin">
                                     <div><small class="text-muted">No SO</small></div>
                                     <div><b id="no_so">{{$d->pesanan->so}}</b></div>
                                 </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Status</small></div>
+                                    <div>{!!$status!!}</div>
+                                </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-3 col-md-6 col-sm-12">
                                 <div class="margin">
                                     <div><small class="text-muted">No PO</small></div>
                                     <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
@@ -159,12 +170,6 @@
                                 <div class="margin">
                                     <div><small class="text-muted">Tanggal PO</small></div>
                                     <div><b id="no_so">{{$d->pesanan->tgl_po}}</b></div>
-                                </div>
-                            </div>
-                            <div class="col-2">
-                                <div class="margin">
-                                    <div><small class="text-muted">Status</small></div>
-                                    <div>{!!$status!!}</div>
                                 </div>
                             </div>
                         </div>
@@ -187,7 +192,7 @@
                                                 <th rowspan="2">No</th>
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th rowspan="2">Jumlah</th>
-                                                <th colspan="2">Hasil</th>
+                                                <th colspan="2" class="collapsable">Hasil</th>
                                                 <th rowspan="2">Aksi</th>
                                             </tr>
                                             <tr>
@@ -319,12 +324,12 @@
                 searchable: false
             }, {
                 data: 'jumlah_ok',
-                className: 'nowrap-text align-center',
+                className: 'nowrap-text align-center collapsable',
                 orderable: false,
                 searchable: false
             }, {
                 data: 'jumlah_nok',
-                className: 'nowrap-text align-center',
+                className: 'nowrap-text align-center collapsable',
                 orderable: false,
                 searchable: false
             }, {
@@ -492,7 +497,7 @@
                 searchable: true
             }, {
                 data: 'tgl_uji',
-                className: 'nowrap-text align-center',
+                className: 'nowrap-text align-center collapsable',
                 orderable: false,
                 searchable: false
             }, {
@@ -580,14 +585,16 @@
 
         var checkedAry = [];
         $('#noseritable').on('click', 'input[name="check_all"]', function() {
+            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
+            // Check/uncheck checkboxes for all rows in the table
             if ($('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
-                $('.nosericheck').prop('checked', true);
+                $('.nosericheck', rows).prop('checked', true);
                 checkedAry = []
                 checkedAry.push('0');
                 $('#btnedit').removeAttr('disabled');
             } else if ($('input[name="check_all"]:checked').length <= 0) {
-                $('.nosericheck').prop('checked', false);
+                $('#noseritable').find('.nosericheck').prop('checked', false);
                 $('#cekbrg').prop('disabled', true);
             }
         });
