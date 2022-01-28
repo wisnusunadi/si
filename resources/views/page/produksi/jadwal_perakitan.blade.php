@@ -435,18 +435,16 @@
                 }
             }
             var scanProduk = $('.scan-produk').DataTable({
+                scrollY: '200px',
+                scrollCollapse: true,
+                paging: false,
                 ordering: false,
-                "autoWidth": false,
                 searching: false,
                 "lengthChange": false,
-                "pageLength": 10,
+                fixedHeader: true,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 },
-                columnDefs: [{
-                    targets: [0],
-                    width: "5%",
-                }],
             });
 
             $(document).on('click', '#btnSave', function (e) {
@@ -554,6 +552,7 @@
         // Produksi Tab
         $('.modalRakit').on('shown.bs.modal', function () {
             $('.noseri:first').focus();
+            $('.scan-produk').DataTable().columns.adjust().draw();
         })
         $(document).on('keydown','input.noseri',function(e){
             const a = $(this).val();

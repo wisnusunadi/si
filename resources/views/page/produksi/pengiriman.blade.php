@@ -601,7 +601,7 @@
             })
     })
 
-    $(document).on('click', '.detail', function() {
+    $(document).on('click', '.detail', function() { 
         const id = $(this).data('id');
         const noseri = $(this).data('seri');
         $('#noseriselect').val(noseri);
@@ -613,24 +613,40 @@
         const noseriid = $('#idNoseri').val();
         const noseri = $('#noseriselect').val();
         $.ajax({
-            url: "/api/prd/updateRakitseri",
-            data: {
-                noseriid : noseriid,
-                noseri : noseri,
-                jadwal_id: id,
-            },
             type: "post",
-            success: function(res) {
-                console.log(res);
-                Swal.fire(
-                    'Updated!',
-                    res.msg,
-                    'success'
-                ).then(function () {
-                    location.reload();
-                });
+            url: "/api/prd/cek-noseri",
+            data: {
+                noseri: noseri,
+            },
+            success: function (response) {
+                if (response.error == true) {
+                    Swal.fire(
+                        'Oops...',
+                        response.msg,
+                        'error'
+                    )
+                }else{
+                    $.ajax({
+                        url: "/api/prd/update-noseri",
+                        type: "post",
+                        data: {
+                            noseriid: noseriid,
+                            noseri: noseri,
+                        },
+                        success: function (res) {
+                            console.log(res);
+                            Swal.fire(
+                                'Berhasil!',
+                                'Data berhasil di update!',
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            });
+                        }
+                    })
+                }
             }
-        })
+        });
     })
 </script>
 @stop
