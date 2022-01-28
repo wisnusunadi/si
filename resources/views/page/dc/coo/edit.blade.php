@@ -1,35 +1,38 @@
 <div class="row">
-    <div class="col-4">
+    <div class="col-lg-12 col-md-12">
         <div class="card">
+            <div class="card-header"><h6 class="card-title">Info</h6></div>
             <div class="card-body">
-                <h5 class="filter">Info</h5>
-                <div class="filter">
-                    <div><small class="text-muted">Nama Produk</small></div>
-                    <div><b>
-                            @if($data->detaillogistik->DetailPesananProduk->GudangBarangJadi->nama == '')
-                            {{$data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->nama}}
-                            @else
-                            {{$data->detaillogistik->DetailPesananProduk->GudangBarangJadi->nama}}
-                            @endif</b></div>
-                </div>
-                <div class="filter">
-                    <div><small class="text-muted">No AKD</small></div>
-                    <div><b>
-                            @if($data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->no_akd != '')
-                            {{ $data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->no_akd}}
-                            @endif
-                        </b></div>
-                </div>
-                <div class="filter">
-                    <div><small class="text-muted">Jumlah</small></div>
-                    <div><b>{{$jumlah}}</b></div>
+                <div class="row d-flex justify-content-center">
+                    <div class="col-5">
+                        <div><small class="text-muted">Nama Produk</small></div>
+                        <div><b>
+                                @if($data->detaillogistik->DetailPesananProduk->GudangBarangJadi->nama == '')
+                                {{$data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->nama}}
+                                @else
+                                {{$data->detaillogistik->DetailPesananProduk->GudangBarangJadi->nama}}
+                                @endif</b></div>
+                    </div>
+                    <div class="col-4">
+                        <div><small class="text-muted">No AKD</small></div>
+                        <div><b>
+                                @if($data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->no_akd != '')
+                                {{ $data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->no_akd}}
+                                @endif
+                            </b></div>
+                    </div>
+                    <div class="col-3">
+                        <div><small class="text-muted">Jumlah</small></div>
+                        <div><b>{{$jumlah}}</b></div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-8">
+    <div class="col-lg-8 col-md-12">
         <form action="/api/dc/so/create/{{$noseri_id}}" id="form-create-coo" method="POST">
             <div class="card">
+                <div class="card-header"><h6 class="card-title">Tambah</h6></div>
                 <div class="card-body">
                     <div class="form-horizontal">
                         <!-- <div class="form-group row">
@@ -52,9 +55,9 @@
                                 </select>
                             </div>
                         </div> -->
-                        <div class="form-group row">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Diketahui Oleh</label>
-                            <div class="col-5 col-form-label">
+                        <div class="form-group">
+                            <label for="" class="col-form-label">Diketahui Oleh</label>
+                            <div class="col-form-label d-flex justify-content-between">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="spa" />
                                     <label class="form-check-label" for="diketahui1">PT Sinko Prima Alloy</label>
@@ -69,32 +72,42 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row hide" id="nama_label">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Nama</label>
+                        <div class="form-group hide" id="nama_label">
+                            <div class="card" style="box-shadow:none;">
+                                <div class="card-body" style="backgound-color:#E8B12D;">
+                                    <div class="row">
+                                        <div class="form-group col-6">
+                                            <label for="" class="col-form-label" style="text-align:right;">Nama</label>
+                                            <input type="text" class="form-control col-form-label" id="nama" name="nama">
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="" class="col-form-label" style="text-align:right;">Jabatan</label>
+                                            <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <label for="" class="col-5 col-form-label" style="text-align:right;">Nama</label>
                             <div class="col-5">
                                 <input type="text" class="form-control col-form-label" id="nama" name="nama">
-                            </div>
+                            </div> --}}
                         </div>
-                        <div class="form-group row hide" id="jabatan_label">
+                        {{-- <div class="form-group row hide" id="jabatan_label">
                             <label for="" class="col-5 col-form-label" style="text-align:right;">Jabatan</label>
                             <div class="col-5">
                                 <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan">
                             </div>
+                        </div> --}}
+                        <div class="form-group" id="tgl_kirim">
+                            <label for="" class="col-form-label" style="text-align:right;">Tgl Kirim</label>
+                            <input type="date" class="form-control col-form-label col-lg-4 col-md-6" name="tgl_kirim">
                         </div>
-                        <div class="form-group row" id="tgl_kirim">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Tgl Kirim</label>
-                            <div class="col-5">
-                                <input type="date" class="form-control col-form-label" name="tgl_kirim">
-                            </div>
+                        <div class="form-group">
+                            <label for="" class="col-form-label">Keterangan</label>
+                            <textarea class="form-control col-form-label" name="keterangan"></textarea>
                         </div>
-                        <div class="form-group row" id="tgl_kirim">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Keterangan</label>
-                            <div class="col-5">
-                                <textarea class="form-control col-form-label" name="keterangan"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-12">
+                        <div class="form-group">
+                            <div class="table-responsive">
                                 <table class="table" style="width: 100%; text-align:center;" id="listnoseri">
                                     <thead>
                                         <tr>
