@@ -2109,6 +2109,14 @@ class ProduksiController extends Controller
         }
     }
 
+    function deleteAllSeri(Request $request)
+    {
+        // dd($request->all());
+        JadwalRakitNoseri::whereIn('noseri', $request->noseri)->where('jadwal_id', $request->jadwal_id)->delete();
+        JadwalPerakitan::find($request->jadwal_id)->update(['status_tf' => 12]);
+        return response()->json(['msg' => 'Sukses']);
+    }
+
     // riwayat rakit
     function h_rakit()
     {

@@ -586,11 +586,13 @@
             if (result.isConfirmed) {
                 $.ajax({
                     type: "post",
-                    url: "#",
+                    url: "/api/prd/deleteAll",
                     data: {
                         noseri: check_seri,
+                        jadwal_id: id,
                     },
                     success: function (response) {
+                        console.log(response);
                         Swal.fire(
                             'Berhasil!',
                             'Data berhasil di hapus!',
