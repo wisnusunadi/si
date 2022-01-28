@@ -1713,7 +1713,7 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->where('status', 7)->whereIn('status_tf', [11, 12, 13])->orderByDesc('created_at')->get();
+        $data = JadwalPerakitan::whereNotIn('status', [6])->whereIn('status_tf', [11, 12, 13])->orderByDesc('created_at')->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -1891,6 +1891,16 @@ class ProduksiController extends Controller
             return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true]);
         } else {
             return response()->json(['msg' => 'Success', 'error' => false]);
+        }
+    }
+
+    function cekUbahNoseri(Request $request)
+    {
+        $data = JadwalRakitNoseri::where('noseri', $request->noseri)->get()->count();
+        if ($data > 0) {
+            return response()->json(['msg' => 'Noseri '.$request->noseri.' Sudah Terdaftar', 'error' => true]);
+        } else {
+
         }
     }
 
@@ -2112,7 +2122,7 @@ class ProduksiController extends Controller
     function header_his_rakit($id)
     {
         // $detail = JadwalPerakitan::with('noseri', 'produk.produk')->where('status_tf', 14)->where('produk_id', $id)->get();
-        $detail = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'))
+        $detail = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'), 'jadwal_perakitan.no_bppb')
             ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
             ->groupBy('jadwal_rakit_noseri.jadwal_id')
             ->groupBy('jadwal_rakit_noseri.date_in')
@@ -2128,7 +2138,7 @@ class ProduksiController extends Controller
                 'time_rakit' => Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('H:i'),
                 'day_kirim' => Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y'),
                 'time_kirim' => Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i'),
-                'bppb' => '-',
+                'bppb' => $d->no_bppb == null ? '-' : $d->no_bppb,
                 // 'produk' => $d->produk->produk->nama . ' ' . $d->produk->nama,
                 'produk' => $d->produk_id,
                 'jml' => $d->jumlah . ' Unit',
@@ -2139,7 +2149,7 @@ class ProduksiController extends Controller
 
     function ajax_history_rakit()
     {
-        $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'))
+        $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'), 'jadwal_perakitan.no_bppb')
             ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
             ->groupBy('jadwal_rakit_noseri.jadwal_id')
             ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
@@ -2168,7 +2178,7 @@ class ProduksiController extends Controller
                 }
             })
             ->addColumn('bppb', function ($d) {
-                return '-';
+                return $d->no_bppb == null ? '-' : $d->no_bppb;
             })
             ->addColumn('produk', function ($d) {
                 $a = GudangBarangJadi::find($d->produk_id);
