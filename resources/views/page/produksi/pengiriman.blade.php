@@ -88,6 +88,7 @@
                             <thead class="thead-dark">
 
                                 <tr>
+                                    <th>Periode</th>
                                     <th class="text-center">Tanggal Masuk</th>
                                     <th class="text-center">Tanggal Keluar</th>
                                     <th>Nomor BPPB</th>
@@ -314,7 +315,9 @@
         var table = $('.table_produk_perakitan').DataTable({
             processing: true,
             ajax: "/api/prd/kirim",
-            columns: [{
+            columns: [
+                { data: 'periode'},
+                {
                     data: "start"
                 },
                 {
@@ -341,7 +344,7 @@
             },
             "lengthChange": false,
             "columnDefs": [{
-                "targets": [6],
+                "targets": [7],
                 "visible": document.getElementById('auth').value == '2' ? false : true
             }]
         });
