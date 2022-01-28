@@ -1897,8 +1897,8 @@ class ProduksiController extends Controller
     function storeRakitNoseri(Request $request)
     {
         // dd($request->all());
-        $cek_seri = JadwalRakitNoseri::where('noseri', $request->noseri)->get();
-        if (count($cek_seri) == 0) {
+        // $cek_seri = JadwalRakitNoseri::where('noseri', $request->noseri)->get();
+        // if (count($cek_seri) == 0) {
             foreach ($request->noseri as $key => $value) {
                 if (isset($value)) {
                     $seri = new JadwalRakitNoseri();
@@ -1926,9 +1926,9 @@ class ProduksiController extends Controller
             }
 
             return response()->json(['msg' => 'Successfully']);
-        } else {
-            return response()->json(['msg' => 'Noseri Sudah Ada, Silahkan Gunakan yang lain.']);
-        }
+        // } else {
+        //     return response()->json(['msg' => 'Noseri Sudah Ada, Silahkan Gunakan yang lain.']);
+        // }
     }
 
     function getHeaderSeri($id)
