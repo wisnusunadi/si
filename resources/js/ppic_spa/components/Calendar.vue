@@ -184,6 +184,9 @@ export default {
         locale: "id",
         headerToolbar: {
           end: "",
+           left: 'prev,next today',
+                center: 'title',
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
         },
         selectable: false,
         editable: false,

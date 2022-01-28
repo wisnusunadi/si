@@ -83,7 +83,7 @@ class PpicController extends Controller
         if ($status == $this->change_status('penyusunan')) {
             $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else if ($status == $this->change_status("pelaksanaan")) {
-            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
+            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orwhereNotIn('status', [6])->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else {
             $data = JadwalPerakitan::with('Produk.produk')->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         }
