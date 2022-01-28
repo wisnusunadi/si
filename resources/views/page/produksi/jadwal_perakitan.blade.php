@@ -82,6 +82,7 @@
                                 <table class="table table-bordered" id="table_produk_perakitan">
                                     <thead class="thead-dark">
                                         <tr>
+                                            <th rowspan="2">Periode</th>
                                             <th colspan="2" class="text-center">Tanggal</th>
                                             <th rowspan="2">No BPPB</th>
                                             <th rowspan="2">Produk</th>
@@ -358,7 +359,9 @@
                 url: "/api/prd/ongoing",
                 type: "post",
             },
-            columns: [{
+            columns: [
+                { data: 'periode'},
+                {
                     data: "start"
                 },
                 {
@@ -380,7 +383,7 @@
                 }
             ],
             order: [
-                [5, 'desc']
+                [6, 'desc']
             ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"

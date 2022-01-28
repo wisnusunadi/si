@@ -303,8 +303,8 @@ class ProduksiController extends Controller
         }
 
         $jumlah_kirim = NoseriTGbj::whereHas('detail.header', function ($q) use ($request) {
-                $q->where('pesanan_id', $request->pesanan_id);
-            })->where('status_id', 2)->get()->count();
+            $q->where('pesanan_id', $request->pesanan_id);
+        })->where('status_id', 2)->get()->count();
 
         if ($x == $jumlah_kirim) {
             Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
@@ -1708,7 +1708,7 @@ class ProduksiController extends Controller
 
     function calender_current()
     {
-        $data = JadwalPerakitan::with('Produk.Produk')->whereMonth('tanggal_mulai', '=', Carbon::now()->format('m'))->get();
+        $data = JadwalPerakitan::with('Produk.Produk')->whereNotIn('status', [6])->get();
         return response()->json($data);
     }
     function on_rakit()
@@ -1774,6 +1774,13 @@ class ProduksiController extends Controller
             ->addColumn('no_bppb', function ($d) {
                 return $d->no_bppb == null ? '-' : $d->no_bppb;
             })
+            ->addColumn('periode', function ($d) {
+                if (isset($d->tanggal_mulai)) {
+                    return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
+                } else {
+                    return '-';
+                }
+            })
             ->rawColumns(['action', 'jml', 'end'])
             ->make(true);
         return $res;
@@ -1783,6 +1790,13 @@ class ProduksiController extends Controller
     {
         $data = JadwalPerakitan::whereIn('status_tf', [15, 13, 12])->where('status', 7)->get();
         return datatables()->of($data)
+            ->addColumn('periode', function ($d) {
+                if (isset($d->tanggal_mulai)) {
+                    return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
                     return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
@@ -1898,9 +1912,8 @@ class ProduksiController extends Controller
     {
         $data = JadwalRakitNoseri::where('noseri', $request->noseri)->get()->count();
         if ($data > 0) {
-            return response()->json(['msg' => 'Noseri '.$request->noseri.' Sudah Terdaftar', 'error' => true]);
+            return response()->json(['msg' => 'Noseri ' . $request->noseri . ' Sudah Terdaftar', 'error' => true]);
         } else {
-
         }
     }
 
