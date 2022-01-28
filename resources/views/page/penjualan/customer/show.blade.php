@@ -170,6 +170,7 @@
                                                         <th>Email</th>
                                                         <th>Telp</th>
                                                         <th>NPWP</th>
+                                                        <th>KTP</th>
                                                         <th>Keterangan</th>
                                                         <th>Aksi</th>
                                                     </tr>
@@ -329,6 +330,12 @@
                     searchable: false
                 },
                 {
+                    data: 'ktp',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                },
+                {
                     data: 'ket',
                     className: 'minimizechar',
                     orderable: false,
@@ -357,6 +364,7 @@
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
                     $('#npwp').mask('00.000.000.0-000.000');
+                    $('#ktp').mask('0000000000000000');
                     console.log(id);
                     // $("#editform").attr("action", href);
                     select_data();

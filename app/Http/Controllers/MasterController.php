@@ -582,6 +582,7 @@ class MasterController extends Controller
             'alamat' => $request->alamat,
             'email' => $request->email,
             'id_provinsi' => $request->provinsi,
+            'ktp' => $request->ktp,
             'npwp' => $request->npwp,
             'batas' => $request->batas,
             'pic' => $request->pic,
@@ -661,6 +662,7 @@ class MasterController extends Controller
         $customer->id_provinsi = $request->provinsi;
         $customer->nama = $request->nama_customer;
         $customer->npwp = $request->npwp;
+        $customer->ktp = $request->ktp;
         $customer->pic = $request->pic;
         $customer->batas = $request->batas;
         $customer->email = $request->email;
