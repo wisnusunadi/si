@@ -41,29 +41,28 @@
             <td style="text-align:left">
                 @if(isset($d->penjualan_produk_id))
 
-                    @if($d->getJumlahProduk() > 1)
-                        {{-- {{$d->DetailPesananProduk->first()->DetailLogistik->first()->Logistik->nosurat}} --}}
-                    @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
+                @if($d->getJumlahProduk() > 1)
+                {{-- {{$d->DetailPesananProduk->first()->DetailLogistik->first()->Logistik->nosurat}} --}}
+                @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
+                @foreach( $p->DetailLogistik as $q)
+                {{$q->Logistik->nosurat}}
+                @endforeach
+                @endforeach
+                @elseif($d->getJumlahProduk() <= 1) @foreach($d->DetailPesananProduk as $p)
                     @foreach( $p->DetailLogistik as $q)
                     {{$q->Logistik->nosurat}}
                     @endforeach
                     @endforeach
-                    @elseif($d->getJumlahProduk() <= 1)
-                        @foreach($d->DetailPesananProduk as $p)
-                            @foreach( $p->DetailLogistik as $q)
-                            {{$q->Logistik->nosurat}}
-                            @endforeach
-                        @endforeach
                     @endif
 
-                @else
+                    @else
 
 
-                {{$d->DetailLogistikPart->Logistik->nosurat}}
+                    {{$d->DetailLogistikPart->Logistik->nosurat}}
 
 
 
-                @endif
+                    @endif
             </td>
             <td style="text-align:left">
                 @if(isset($d->PenjualanProduk))

@@ -81,6 +81,17 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+                                        <label for="ktp" class="col-4 col-form-label" style="text-align:right;">No KTP</label>
+                                        <div class="col-5">
+                                            <input type="text" class="form-control @error('ktp') is-invalid @enderror" value="" placeholder="Masukkan ktp" id="ktp" name="ktp" />
+                                            <div class="invalid-feedback" id="msgktp">
+                                                @if($errors->has('ktp'))
+                                                {{ $errors->first('ktp')}}
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
                                         <label for="alamat" class="col-4 col-form-label" style="text-align:right;">Alamat</label>
                                         <div class="col-8">
                                             <input type="text" class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan Alamat" id="alamat" name="alamat" />
@@ -188,6 +199,7 @@
 <script>
     $(function() {
         $('#npwp').mask('00.000.000.0-000.000');
+        $('#ktp').mask('0000000000000000');
 
         $('input[name="nama_customer"]').on('keyup change', function() {
             var val = $(this).val();

@@ -232,6 +232,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     });
     Route::group(['prefix' => '/laporan'], function () {
         Route::view('/show', 'page.logistik.laporan.show')->name('logistik.laporan.show');
+        Route::get('/export/{jenis}/{ekspedisi}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\LogistikController::class, 'export_laporan'])->name('logistik.laporan.export');
     });
 });
 
