@@ -281,6 +281,8 @@ Route::prefix('/prd')->group(function () {
     Route::get('/detailSeri1/{id}/{value}', [ProduksiController::class, 'detailSeri1']);
     Route::post('/send', [ProduksiController::class, 'kirimseri']);
     Route::post('/terimaseri', [ProduksiController::class, 'terimaseri']);
+    Route::post('/delete', [ProduksiController::class, 'deleteNoseri']);
+    Route::post('/updateRakitseri', [ProduksiController::class, 'updateNoseri']);
 
     // riwayat
     Route::prefix('/history')->group(function () {
