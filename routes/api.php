@@ -102,6 +102,10 @@ Route::prefix('/penjualan')->group(function () {
 
     //   Route::get('customer/data/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
 
+    Route::prefix('/pesanan')->group(function () {
+        Route::put('update/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'update_penjualan_pesanan']);
+        Route::post('produk/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_paket_pesanan_ekat']);
+    });
 
     Route::prefix('/lacak')->group(function () {
         Route::post('data/{parameter}/{value}', [App\Http\Controllers\PenjualanController::class, 'get_lacak_penjualan']);

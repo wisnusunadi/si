@@ -7,6 +7,7 @@
         </tr>
         <tr>
             <th>No</th>
+            <th>No SO</th>
             <th>No PO</th>
             <th>Tanggal PO</th>
             <th>Surat Jalan</th>
@@ -32,44 +33,42 @@
         @foreach ($data as $d)
         <tr>
             <td style="text-align:left">{{ $loop->iteration }}</td>
-
+            <td style="text-align:left">{{$d->Pesanan->so}}</td>
             <td style="text-align:left">{{$d->Pesanan->no_po}}</td>
             <td style="text-align:left">
                 {{$d->Pesanan->tgl_po}}
             </td>
             <td style="text-align:left">
-                @if(isset($d->PenjualanProduk))
+                @if(isset($d->penjualan_produk_id))
 
                 @if($d->getJumlahProduk() > 1)
-
+                {{-- {{$d->DetailPesananProduk->first()->DetailLogistik->first()->Logistik->nosurat}} --}}
                 @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
                 @foreach( $p->DetailLogistik as $q)
                 {{$q->Logistik->nosurat}}
                 @endforeach
                 @endforeach
+                @elseif($d->getJumlahProduk() <= 1) @foreach($d->DetailPesananProduk as $p)
+                    @foreach( $p->DetailLogistik as $q)
+                    {{$q->Logistik->nosurat}}
+                    @endforeach
+                    @endforeach
+                    @endif
 
-                @else
-                @foreach($d->DetailPesananProduk as $p)
-                @foreach( $p->DetailLogistik as $q)
-                {{$q->Logistik->nosurat}}
-                @endforeach
-                @endforeach
-                @endif
-
-                @else
+                    @else
 
 
-                {{$d->DetailLogistikPart->Logistik->nosurat}}
+                    {{$d->DetailLogistikPart->Logistik->nosurat}}
 
 
 
-                @endif
+                    @endif
             </td>
             <td style="text-align:left">
                 @if(isset($d->PenjualanProduk))
 
                 @if($d->getJumlahProduk() > 1)
-
+                {{-- {{$q->DetailPesananProduk}} --}}
                 @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
                 @foreach( $p->DetailLogistik as $q)
                 {{$q->Logistik->tgl_kirim}}
