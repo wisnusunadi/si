@@ -132,16 +132,16 @@
                         <div class="row">
                             <div class="col-sm">
                                 <label for="">Nomor BPPB</label>
-                                <div class="card" style="background-color: #C8E1A7">
+                                {{-- <div class="card" style="background-color: #C8E1A7">
                                     <div class="card-body">
                                         <span id="bppb">89798797856456</span>
                                     </div>
-                                </div>
-                                {{-- <div class="card">
+                                </div> --}}
+                                <div class="card">
                                     <div class="card-body">
                                         <input type="text" name="no_bppb" id="no_bppb" class="form-control" style="text-transform:uppercase">
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
