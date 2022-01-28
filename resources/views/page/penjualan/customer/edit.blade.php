@@ -41,6 +41,14 @@
                                 </div>
                             </div>
                             <div class="form-group row">
+                                <label for="ktp" class="col-4 col-form-label" style="text-align:right;">KTP</label>
+                                <div class="col-8">
+                                    <input type="text" class="form-control" placeholder="Masukkan KTP" id="ktp" name="ktp" value="{{old('ktp', $customer->ktp)}}" />
+                                    <div class="invalid-feedback" id="msgktp">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="alamat" class="col-4 col-form-label" style="text-align:right;">Alamat</label>
                                 <div class="col-8">
                                     <input type="text" class="form-control" placeholder="Masukkan Alamat" id="alamat" name="alamat" value="{{old('alamat', $customer->alamat)}}" />
