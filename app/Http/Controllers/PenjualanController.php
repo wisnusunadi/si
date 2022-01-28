@@ -952,6 +952,25 @@ class PenjualanController extends Controller
             ->rawColumns(['button', 'variasi'])
             ->make(true);
     }
+    public function get_data_paket_pesanan_ekat($id)
+    {
+        $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan.Ekatalog', function($q) use($id){
+                    $q->where('id', $id);
+                })->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('paket_produk', function ($data) {
+                return $data->DetailPesanan->PenjualanProduk->nama.' ('.$data->DetailPesanan->jumlah.' unit)';
+            })
+            ->addColumn('nama_produk', function ($data) {
+                return $data->GudangBarangJadi->Produk->nama.' '.$data->GudangBarangJadi->nama;
+            })
+            ->addColumn('jumlah', function ($data) {
+                return $data->getJumlahPesanan();
+            })
+            ->rawColumns(['paket_produk', 'nama_produk'])
+            ->make(true);
+    }
     public function getHariBatasKontrak($value, $limit)
     {
         if ($limit == 2) {

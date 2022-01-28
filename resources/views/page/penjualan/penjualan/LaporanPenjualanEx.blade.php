@@ -39,27 +39,19 @@
                 {{$d->Pesanan->tgl_po}}
             </td>
             <td style="text-align:left">
-
-                <?php $c = 0; ?>
                 @if(isset($d->penjualan_produk_id))
 
                     @if($d->getJumlahProduk() > 1)
                         {{-- {{$d->DetailPesananProduk->first()->DetailLogistik->first()->Logistik->nosurat}} --}}
                     @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
                     @foreach( $p->DetailLogistik as $q)
-                    @if($c <= 0)
                     {{$q->Logistik->nosurat}}
-                    <?php $c++; ?>
-                    @endif
                     @endforeach
                     @endforeach
                     @elseif($d->getJumlahProduk() <= 1)
                         @foreach($d->DetailPesananProduk as $p)
                             @foreach( $p->DetailLogistik as $q)
-                            @if($c <= 0)
                             {{$q->Logistik->nosurat}}
-                            <?php $c++; ?>
-                            @endif
                             @endforeach
                         @endforeach
                     @endif
@@ -74,27 +66,20 @@
                 @endif
             </td>
             <td style="text-align:left">
-                <?php $ctgl = 0; ?>
                 @if(isset($d->PenjualanProduk))
 
                 @if($d->getJumlahProduk() > 1)
                 {{-- {{$q->DetailPesananProduk}} --}}
                 @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
                 @foreach( $p->DetailLogistik as $q)
-                @if($ctgl <= 0)
                 {{$q->Logistik->tgl_kirim}}
-                <?php $ctgl++; ?>
-                @endif
                 @endforeach
                 @endforeach
 
                 @else
                 @foreach($d->DetailPesananProduk as $p)
                 @foreach( $p->DetailLogistik as $q)
-                @if($ctgl <= 0)
                 {{$q->Logistik->tgl_kirim}}
-                <?php $ctgl++; ?>
-                @endif
                 @endforeach
                 @endforeach
                 @endif
