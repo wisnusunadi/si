@@ -99,6 +99,16 @@
             font-size: 12px;
         }
     }
+
+    @media screen and (max-width: 992px){
+        .collapsable{
+            display: none;
+        }
+
+        .align-md{
+            text-align:center;
+        }
+    }
 </style>
 @stop
 
@@ -111,19 +121,29 @@
                     <div class="card-body">
                         <h5>Info</h5>
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-lg-5 col-md-12 align-md">
                                 <div class="filter">
                                     <div><small class="text-muted">Customer</small></div>
                                     <div><b>{{$data->spa->customer->nama}}</b></div>
+                                    <div><b>{{$data->spa->customer->alamat}}</b></div>
+                                    <div><b>{{$data->spa->customer->Provinsi->nama}}</b></div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-lg-4 col-md-6">
                                 <div class="filter">
                                     <div><small class="text-muted">No SO</small></div>
                                     <div><b>{{$data->so}}</b></div>
                                 </div>
+                                <div class="filter">
+                                    <div><small class="text-muted">No PO</small></div>
+                                    <div><b>{{$data->no_po}}</b></div>
+                                </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-lg-3 col-md-6">
+                                <div class="filter">
+                                    <div><small class="text-muted">Tanggal PO</small></div>
+                                    <div><b>{{date('d-m-Y', strtotime($data->tgl_po))}}</b></div>
+                                </div>
                                 <div class="filter">
                                     <div><small class="text-muted">Status</small></div>
                                     <div><b>{!!$status!!}</b></div>
@@ -136,7 +156,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-7 col-12">
+        <div class="col-lg-7 col-md-6">
             <div class="card">
                 <div class="card-body">
                     <h5>Daftar Barang</h5>
@@ -202,7 +222,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-5 col-12 hide" id="noseri">
+        <div class="col-lg-5 col-md-6 hide" id="noseri">
             <div class="card">
                 <div class="card-body">
                     <div>
@@ -326,16 +346,19 @@
                     searchable: false
                 }, {
                     data: 'tgl_surat',
+                    className: 'nowrap-text align-center collapsable',
                 },
                 {
                     data: 'nama_paket',
                 },
                 {
                     data: 'no_akd',
+                    className: 'nowrap-text align-center collapsable',
                 }, {
                     data: 'bulan',
                 }, {
                     data: 'status',
+                    className: 'nowrap-text align-center collapsable',
                 }, {
                     data: 'button',
                     orderable: false,
@@ -372,10 +395,10 @@
 
             }, {
                 data: 'tgl',
-
+                className: 'nowrap-text align-center collapsable',
             }, {
                 data: 'ket',
-
+                className: 'nowrap-text align-center collapsable',
             }, {
                 data: 'laporan',
 

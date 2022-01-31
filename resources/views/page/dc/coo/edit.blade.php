@@ -29,36 +29,16 @@
             </div>
         </div>
     </div>
-    <div class="col-lg-8 col-md-12">
+    <div class="col-lg-7 col-md-6">
         <form action="/api/dc/so/create/{{$noseri_id}}" id="form-create-coo" method="POST">
             <div class="card">
                 <div class="card-header"><h6 class="card-title">Tambah</h6></div>
                 <div class="card-body">
                     <div class="form-horizontal">
-                        <!-- <div class="form-group row">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Bulan</label>
-                            <div class="col-3">
-                                <select class="form-control bulan_edit col-form-label" name="bulan" id="bulan">
-                                    <option value=""></option>
-                                    <option value="I">Januari</option>
-                                    <option value="II">Februari</option>
-                                    <option value="III">Maret</option>
-                                    <option value="IV">April</option>
-                                    <option value="V">Mei</option>
-                                    <option value="VI">Juni</option>
-                                    <option value="VII">Juli</option>
-                                    <option value="VIII">Agustus</option>
-                                    <option value="IX">September</option>
-                                    <option value="X">Oktober</option>
-                                    <option value="XI">November</option>
-                                    <option value="XII">Desember</option>
-                                </select>
-                            </div>
-                        </div> -->
                         <div class="form-group">
                             <label for="" class="col-form-label">Diketahui Oleh</label>
                             <div class="col-form-label d-flex justify-content-between">
-                                <div class="form-check form-check-inline">
+                                <div class="form-check form-check-inline ">
                                     <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="spa" />
                                     <label class="form-check-label" for="diketahui1">PT Sinko Prima Alloy</label>
                                 </div>
@@ -74,7 +54,7 @@
                         </div>
                         <div class="form-group hide" id="nama_label">
                             <div class="card" style="box-shadow:none;">
-                                <div class="card-body" style="backgound-color:#E8B12D;">
+                                <div class="card-body bg-warning">
                                     <div class="row">
                                         <div class="form-group col-6">
                                             <label for="" class="col-form-label" style="text-align:right;">Nama</label>
@@ -106,28 +86,6 @@
                             <label for="" class="col-form-label">Keterangan</label>
                             <textarea class="form-control col-form-label" name="keterangan"></textarea>
                         </div>
-                        <div class="form-group">
-                            <div class="table-responsive">
-                                <table class="table" style="width: 100%; text-align:center;" id="listnoseri">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>No Seri</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- <tr>
-                                        <td>1</td>
-                                        <td>FX358085238401</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>FX358085238390</td>
-                                    </tr> -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="card-footer">
@@ -140,5 +98,28 @@
                 </div>
             </div>
         </form>
+    </div>
+    <div class="col-lg-5 col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h6 class="card-title">List No Seri</h6>
+            </div>
+            <div class="card-body overflowy">
+                <div class="form-group">
+                    <div class="table-responsive">
+                        <table class="table" style="width: 100%; text-align:center;" id="listnoseri">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>No Seri</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

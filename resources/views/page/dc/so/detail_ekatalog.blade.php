@@ -80,6 +80,12 @@
         max-width: 30ch;
     }
 
+    .overflowy {
+        max-height: 402px;
+        overflow-y: scroll;
+        box-shadow: none;
+    }
+
     @media screen and (min-width: 1440px) {
         section {
             font-size: 14px;
@@ -99,6 +105,16 @@
             font-size: 12px;
         }
     }
+
+    @media screen and (max-width: 992px){
+        .collapsable{
+            display: none;
+        }
+
+        .form-check-inline{
+            white-space: nowrap;
+        }
+    }
 </style>
 @stop
 
@@ -106,22 +122,22 @@
 <section class="content">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-12">
+            <div class="col-lg-12 col-md-12">
                 <div class="card">
                     <div class="card-body">
                         <h5>Info</h5>
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-lg-4 col-md-12">
                                 <div class="filter">
                                     <div><small class="text-muted">Distributor</small></div>
                                     <div><b>{{$data->ekatalog->customer->nama}}</b></div>
                                 </div>
                                 <div class="filter">
-                                    <div><small class="text-muted">Customer</small></div>
+                                    <div><small class="text-muted">Instansi</small></div>
                                     <div><b>{{$data->ekatalog->instansi}}</b></div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-lg-4 col-md-6">
                                 <div class="filter">
                                     <div><small class="text-muted">No SO</small></div>
                                     <div><b>{{$data->so}}</b></div>
@@ -131,14 +147,14 @@
                                     <div><b>{{$data->ekatalog->no_paket}}</b></div>
                                 </div>
                             </div>
-                            <div class="col-4">
-                                <div class="filter">
-                                    <div><small class="text-muted">Deskripsi</small></div>
-                                    <div><b>{{$data->ekatalog->deskripsi}}</b></div>
-                                </div>
+                            <div class="col-lg-4 col-md-6">
                                 <div class="filter">
                                     <div><small class="text-muted">Status</small></div>
                                     <div><b>{!!$status!!}</b></div>
+                                </div>
+                                <div class="filter">
+                                    <div><small class="text-muted">Deskripsi</small></div>
+                                    <div><b>{{$data->ekatalog->deskripsi}}</b></div>
                                 </div>
                             </div>
                         </div>
@@ -148,7 +164,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-7 col-12">
+        <div class="col-lg-7 col-md-6">
             <div class="card">
                 <div class="card-body">
                     <h5>Daftar Barang</h5>
@@ -157,7 +173,7 @@
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th class="nowrap-text">Tgl Surat Jalan</th>
+                                    <th>Tgl Surat Jalan</th>
                                     <th>Nama</th>
                                     <th>No AKD</th>
                                     <th>Bulan</th>
@@ -214,7 +230,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-5 col-12 hide" id="noseri">
+        <div class="col-lg-5 col-md-6 hide" id="noseri">
             <div class="card">
                 <div class="card-body">
                     <div>
@@ -338,16 +354,19 @@
                     searchable: false
                 }, {
                     data: 'tgl_surat',
+                    className: 'collapsable nowrap-text',
                 },
                 {
                     data: 'nama_paket',
                 },
                 {
                     data: 'no_akd',
+                    className: 'collapsable nowrap-text',
                 }, {
                     data: 'bulan',
                 }, {
                     data: 'status',
+                    className: 'collapsable nowrap-text',
                 }, {
                     data: 'button',
                     orderable: false,
@@ -375,16 +394,20 @@
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false
-            }, {
+            },
+            {
                 data: 'noseri',
 
-            }, {
+            },
+            {
                 data: 'tgl',
-
-            }, {
+                className: 'collapsable',
+            },
+            {
                 data: 'ket',
-
-            }, {
+                className: 'collapsable',
+            },
+            {
                 data: 'laporan',
 
             }]
@@ -395,6 +418,8 @@
                 destroy: true,
                 processing: true,
                 serverSide: true,
+                searching: false,
+                info: false,
                 ajax: {
                     'type': 'POST',
                     'datatype': 'JSON',
