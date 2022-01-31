@@ -2421,13 +2421,30 @@ class ProduksiController extends Controller
 
     function ajax_perproduk()
     {
-        $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'), 'jadwal_perakitan.no_bppb')
-            ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-            ->groupBy('jadwal_rakit_noseri.jadwal_id')
-            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
-            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
-            ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
-            ->get();
-        return $d;
+       $data = JadwalRakitNoseri::whereHas('header', function($q) {
+           $q->groupBy('produk_id');
+       })->with('header')->groupBy('jadwal_id')->get();
+        // $data = JadwalPerakitan::groupBy('produk_id')->get()->count();
+       return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('no_bppb', function($d) {
+                return $d->header->no_bppb == null ? '-' : $d->no_bppb;
+            })
+            ->addColumn('produk', function($d) {
+                if (isset($d->header->produk_id)) {
+                    return $d->header->produk->produk->nama . ' ' . $d->header->produk->nama;
+                }
+            })
+            ->addColumn('aksi', function($d) {
+                return $d->header->produk_id;
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
+    function detail_perproduk($id)
+    {
+        $data = JadwalPerakitan::where('produk_id', $id)->get();
+        return $data;
     }
 }
