@@ -458,7 +458,6 @@
             processing: true,
             "autoWidth": false,
             ordering: false,
-            "lengthChange": false,
             ajax: "/api/prd/detailSeri1/" + prd + '/' + jadwal,
             columns: [{
                     data: "no_seri"
@@ -561,7 +560,7 @@
         $.each(rows_select, function (index, rowId) {
             check_seri.push(rowId);
         });
-        $('#no_seri').text(check_seri);
+        $('#no_seri').text(check_seri.length);
     });
 
     // Hapus Seri
