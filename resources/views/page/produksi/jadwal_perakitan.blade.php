@@ -651,7 +651,7 @@
             const keterangan = $('#keteranganTransferSisa').val();
             Swal.fire({
                 title: 'Apakah anda yakin?',
-                text: 'Data akan dikirim ke gudang.',
+                text: 'Data akan ditransfer.',
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
