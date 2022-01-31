@@ -75,7 +75,7 @@
         <div class="column is-12">
           <div class="box">
             <div class="table-container">
-              <table class="table is-fullwidth">
+              <table class="table is-fullwidth" id="table-jadwal">
                 <thead>
                   <tr>
                     <th>Produk</th>
@@ -124,6 +124,7 @@
 
 <script>
 import axios from "axios";
+import $ from "jquery";
 
 import Calendar from "../components/Calendar.vue";
 import Table from "../components/Table.vue";
@@ -168,11 +169,13 @@ export default {
         (a, b) => new Date(a.tanggal_mulai) - new Date(b.tanggal_mulai)
       );
     },
-
     events() {
       let data = mixins.convertJadwal(this.$store.state.jadwal);
       return data;
     },
+  },
+  beforeCreate() {
+    console.log("beforeCreate");
   },
 };
 </script>

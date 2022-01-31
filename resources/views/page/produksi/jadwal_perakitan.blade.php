@@ -72,8 +72,7 @@
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">
-                            <i class="fas fa-layer-group"></i> Perakitan Bulan
-                            {{ Carbon\Carbon::now()->isoFormat('MMMM') }}
+                            <i class="fas fa-layer-group"></i> Tabel Perakitan Produk
                         </h5>
                     </div>
                     <div class="card-body">
@@ -223,6 +222,73 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                 <button type="button" id="btnSave" class="btn btn-primary">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade modalDetailTransfer">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Transfer Produk</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm">
+                                <label for="">Nama Produk</label>
+                                <div class="card" style="background-color: #C8E1A7">
+                                    <div class="card-body">
+                                        <span id="produkTransfer"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm">
+                                <label for="">Jumlah Transfer</label>
+                                <div class="card" style="background-color: #F89F81">
+                                    <div class="card-body">
+                                            <span id="jmlTransfer"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm">
+                                <label for="">Tanggal Mulai</label>
+                                <div class="card" style="background-color: #FFE0B4">
+                                    <div class="card-body">
+                                        <span id="tglMulaiTransfer"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <label for="">Tanggal Selesai</label>
+                                <div class="card" style="background-color: #FFECB2">
+                                    <div class="card-body">
+                                        <span id="tglSelesaiTransfer"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <label for="">Keterangan</label>
+                        <div class="form-group">
+                            <textarea name="keterangan" id="keteranganTransferSisa" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary detailtransferKirim">Simpan</button>
             </div>
         </div>
     </div>
@@ -551,7 +617,7 @@
 
                 }
             })
-        })
+        });
 
         // Produksi Tab
         $('.modalRakit').on('shown.bs.modal', function () {
@@ -564,7 +630,61 @@
             if (a.length == length) {
                 $(this).parent().parent().next().find('input.noseri').focus();
             }
-        })
+        });
+
+        // Sisa Transfer Produk
+        $(document).on('click','.detailtransfer ', function () {
+            const prd = $(this).data('prd');
+            const jml = $(this).data('jml');
+            const tglmulai = $(this).parent().prev().prev().prev().prev().prev().text();
+            const tglselesai = $(this).parent().prev().prev().prev().prev().find('span.tanggal').text();
+            console.log("tglselesai", tglselesai);
+            $('#produkTransfer').text(prd);
+            $('#jmlTransfer').text(jml + ' Unit');
+            $('#tglMulaiTransfer').text(tglmulai);
+            $('#tglSelesaiTransfer').text(tglselesai);
+            $('.modalDetailTransfer').modal('show');
+        });
+
+        // Sisa Transfer Produk Kirim
+        $(document).on('click','.detailtransferKirim ', function () {
+            const keterangan = $('#keteranganTransferSisa').val();
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Data akan dikirim ke gudang.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Kirim!'
+            }).then((result) => {
+                if (result.value) {
+                    $(this).prop('disabled', true);
+                    $.ajax({
+                        url: "#",
+                        type: "post",
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            keterangan: keterangan,
+                        },
+                        success: function (res) {
+                            console.log(res);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Data berhasil dikirim.',
+                            })
+                            $('.modalDetailTransfer').modal('hide');
+                            $('#table_produk_perakitan').DataTable().ajax
+                                .reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    })
+                }
+            })
+        });
     }
 </script>
 @stop
