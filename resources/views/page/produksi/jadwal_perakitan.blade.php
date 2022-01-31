@@ -660,7 +660,12 @@
                 confirmButtonText: 'Ya, Kirim!'
             }).then((result) => {
                 if (result.value) {
-                    $(this).prop('disabled', true);
+                    Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
                     $.ajax({
                         url: "#",
                         type: "post",
