@@ -273,6 +273,8 @@ Route::prefix('/prd')->group(function () {
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current']);
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
     Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
+    Route::get('/ajax_perproduk', [ProduksiController::class, 'ajax_perproduk']);
+    Route::get('/detail_perproduk/{id}', [ProduksiController::class, 'detail_perproduk']);
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
     Route::post('cek-noseri', [ProduksiController::class, 'cekDuplicateNoseri']);

@@ -2424,4 +2424,71 @@ class ProduksiController extends Controller
             'data' => $arr,
         ]);
     }
+
+    function ajax_perproduk()
+    {
+       $data = JadwalRakitNoseri::whereHas('header', function($q) {
+           $q->groupBy('produk_id');
+       })->with('header')->groupBy('jadwal_id')->get();
+       return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('no_bppb', function($d) {
+                return $d->header->no_bppb == null ? '-' : $d->header->no_bppb;
+            })
+            ->addColumn('produk', function($d) {
+                if (isset($d->header->produk_id)) {
+                    return $d->header->produk->produk->nama . ' ' . $d->header->produk->nama;
+                }
+            })
+            ->addColumn('aksi', function($d) {
+                return $d->header->produk_id;
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
+    }
+
+    function detail_perproduk($id)
+    {
+        $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'), 'jadwal_perakitan.no_bppb')
+        ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+        ->groupBy('jadwal_rakit_noseri.jadwal_id')
+        ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
+        ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
+        ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
+        ->where('produk_id', $id)
+        ->get()->sortByDesc('date_in');
+        return datatables()->of($d)
+        ->addColumn('day_rakit', function ($d) {
+            return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('dddd, D MMMM Y');
+        })
+        ->addColumn('day_kirim', function ($d) {
+            if (isset($d->waktu_tf)) {
+                return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y');
+            } else {
+                return '-';
+            }
+        })
+        ->addColumn('time_rakit', function ($d) {
+            return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('H:i');
+        })
+        ->addColumn('time_kirim', function ($d) {
+            if (isset($d->waktu_tf)) {
+                return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i');
+            } else {
+                return '-';
+            }
+        })
+        ->addColumn('bppb', function ($d) {
+            return $d->no_bppb == null ? '-' : $d->no_bppb;
+        })
+        ->addColumn('produk', function ($d) {
+            $a = GudangBarangJadi::find($d->produk_id);
+            return $a->produk->nama . ' ' . $a->nama;
+        })
+        ->addColumn('jml', function ($d) {
+            return $d->jml . ' Unit';
+        })
+        ->rawColumns(['action'])
+        ->make(true);
+    }
 }

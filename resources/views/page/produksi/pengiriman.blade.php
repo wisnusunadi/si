@@ -458,7 +458,6 @@
             processing: true,
             "autoWidth": false,
             ordering: false,
-            "lengthChange": false,
             ajax: "/api/prd/detailSeri1/" + prd + '/' + jadwal,
             columns: [{
                     data: "no_seri"
@@ -501,7 +500,13 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     var form = $(this);
-                $('#saveButton').attr('disabled', true);
+                    $('#saveButton').prop('disabled', true);
+                    Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
 
                     var rows_selected = table.column(0).checkboxes.selected();
                     const seri = [];
@@ -561,7 +566,7 @@
         $.each(rows_select, function (index, rowId) {
             check_seri.push(rowId);
         });
-        $('#no_seri').text(check_seri);
+        $('#no_seri').text(check_seri.length);
     });
 
     // Hapus Seri

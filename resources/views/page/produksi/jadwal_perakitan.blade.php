@@ -633,6 +633,7 @@
 
         // Sisa Transfer Produk
         $(document).on('click','.detailtransfer ', function () {
+            const id = $(this).data('id');
             const prd = $(this).data('prd');
             const jml = $(this).data('jml');
             const tglmulai = $(this).parent().prev().prev().prev().prev().prev().text();
@@ -660,12 +661,18 @@
             }).then((result) => {
                 if (result.value) {
                     $(this).prop('disabled', true);
+                    Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
                     $.ajax({
                         url: "/api/tfp/closeRakit",
                         type: "post",
                         data: {
                             "_token": "{{ csrf_token() }}",
-                            jadwal_id: jadwalid,
+                            id: id,
                             keterangan: keterangan,
                         },
                         success: function (res) {

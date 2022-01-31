@@ -782,7 +782,12 @@
                 confirmButtonText: 'Yes, save it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                    $(this).prop('disabled', true);
+                        Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
                         Swal.fire(
                         'Sukses!',
                         'Data Berhasil Disimpan',
@@ -869,6 +874,7 @@
                 confirmButtonText: 'Yes, draft it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        $(this).prop('disabled', true);
                         Swal.fire(
                         'Sukses!',
                         'Data Berhasil Disimpan',
