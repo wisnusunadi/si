@@ -209,6 +209,36 @@
         </div>
     </div>
 </div>
+
+<!-- Modal -->
+<div class="modal fade modalTableProduk" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title"></h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-history-produk">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Tanggal Perakitan</th>
+                            <th>Waktu Perakitan</th>
+                            <th>Tanggal Pengiriman</th>
+                            <th>Waktu Pengiriman</th>
+                            <th>Nomor BPPB</th>
+                            <th>Produk</th>
+                            <th>Jumlah</th>
+                        </tr>
+                        </thead>
+                        <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('adminlte_js')
@@ -431,16 +461,50 @@
             "autoWidth": false,
             processing: true,
             ajax: {
-                url: "/api/prd/history/ajax_perproduk",
+                url: "/api/prd/ajax_perproduk",
             },
             columns: [
+                {data: 'no_bppb'},
                 {data: 'produk'},
-                {data: 'jml'},
-                {data: 'action'},
+                {data: 'aksi', 
+                    "render": function ( data, type, row, meta ) {
+                        return '<button class="btn btn-sm btn-outline-secondary buttonModalProduk" data-id="'+data+'"><i class="far fa-eye"></i> Detail</button>';
+                    }
+                },
             ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
+        });
+
+        $(document).on('click','.buttonModalProduk', function () {
+            var id = $(this).data('id');
+            var table = $('.table-history-produk').DataTable({
+                destroy: true,
+                "lengthChange": false,
+                "autoWidth": false,
+                "info": false,
+                "responsive": true,
+                "order": [[ 0, 'asc' ], [2, 'asc']],
+                ajax: {
+                    url: "/api/prd/detail_perproduk/"+id,
+                },
+                columns: [
+                    {data: 'day_rakit'},
+                    {data: 'time_rakit'},
+                    {data: 'day_kirim'},
+                    {data: 'time_kirim'},
+                    {data: 'bppb'},
+                    {data: 'produk'},
+                    {data: 'jml'},
+                ],
+                autoWidth: false,
+                processing: true,
+                "language": {
+                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                },
+            });
+            $('.modalTableProduk').modal('show');
         });
 </script>
 @stop

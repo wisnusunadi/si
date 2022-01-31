@@ -634,8 +634,9 @@
 
         // Sisa Transfer Produk
         $(document).on('click','.detailtransfer ', function () {
+            const id = $(this).data('id');
             const prd = $(this).data('prd');
-            const jml = $(this).data('jml');
+            const jml = $(this).data('jml'); 
             const tglmulai = $(this).parent().prev().prev().prev().prev().prev().text();
             const tglselesai = $(this).parent().prev().prev().prev().prev().find('span.tanggal').text();
             console.log("tglselesai", tglselesai);
@@ -665,6 +666,7 @@
                         type: "post",
                         data: {
                             "_token": "{{ csrf_token() }}",
+                            id: id,
                             keterangan: keterangan,
                         },
                         success: function (res) {
