@@ -462,9 +462,9 @@
             }]
         });
         $('#table_produk_perakitan').css("width", "100%");
-        var id = '';
-        $(document).on('click', '.detailmodal', function () {
-            $('#tgl_perakitan').daterangepicker({
+    var id = '';
+    $(document).on('click', '.detailmodal', function () {
+        $('#tgl_perakitan').daterangepicker({
             singleDatePicker: true,
             minYear: 1901,
             maxYear: parseInt(moment().format('YYYY'), 10),
@@ -472,152 +472,151 @@
                 format: 'YYYY-MM-DD'
             }
         });
-            id = $(this).data('id');
-            console.log(id);
-            var jml = $(this).data('jml');
-            console.log(jml);
-            $.ajax({
-                url: "/api/prd/ongoing/h/" + id,
-                dataType: "json",
-                type: "get",
-                success: function (res) {
-                    $('#no_bppb').val(res.no_bppb);
-                    $('span#produk').text(res.produk);
-                    $('span#kategori').text(res.kategori);
-                    $('span#jml').text(res.jml);
-                    $('span#start').text(res.start);
-                    $('span#end').text(res.end);
+        id = $(this).data('id');
+        console.log(id);
+        var jml = $(this).data('jml');
+        console.log(jml);
+        $.ajax({
+            url: "/api/prd/ongoing/h/" + id,
+            dataType: "json",
+            type: "get",
+            success: function (res) {
+                $('#no_bppb').val(res.no_bppb);
+                $('span#produk').text(res.produk);
+                $('span#kategori').text(res.kategori);
+                $('span#jml').text(res.jml);
+                $('span#start').text(res.start);
+                $('span#end').text(res.end);
+            }
+        })
+
+        $('.modalRakit').modal('show');
+
+        $('.scan-produk').DataTable().destroy();
+        $('.scan-produk tbody').empty();
+
+        var $table = $(".scan-produk");
+        for (var i = 0; i < jml; i++) {
+            var $row = $table.find("tbody").append("<tr></tr>").children("tr:eq(" + i + ")");
+            for (var k = 0; k < 1; k++) {
+                $row.append(
+                    '<td><input type="text" name="noseri[]" class="form-control noseri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td>'
+                );
+            }
+        }
+        var scanProduk = $('.scan-produk').DataTable({
+            scrollY: '200px',
+            scrollCollapse: true,
+            paging: false,
+            ordering: false,
+            searching: false,
+            "lengthChange": false,
+            fixedHeader: true,
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
+        });
+
+        $(document).on('click', '#btnSave', function (e) {
+            e.preventDefault();
+            $(this).prop('disabled', true);
+            let arr = [];
+            const data = scanProduk.$('.noseri').map(function () {
+                return $(this).val();
+            }).get();
+
+            data.forEach(function (item) {
+                if (item != '') {
+                    arr.push(item);
                 }
             })
 
-            $('.modalRakit').modal('show');
+            const count = arr =>
+                arr.reduce((a, b) => ({
+                    ...a,
+                    [b]: (a[b] || 0) + 1
+                }), {})
 
-            $('.scan-produk').DataTable().destroy();
-            $('.scan-produk tbody').empty();
+            const duplicates = dict =>
+                Object.keys(dict).filter((a) => dict[a] > 1)
 
-            var $table = $(".scan-produk");
-            for (var i = 0; i < jml; i++) {
-                var $row = $table.find("tbody").append("<tr></tr>").children("tr:eq(" + i + ")");
-                for (var k = 0; k < 1; k++) {
-                    $row.append(
-                        '<td><input type="text" name="noseri[]" class="form-control noseri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td>'
-                    );
-                }
-            }
-            var scanProduk = $('.scan-produk').DataTable({
-                scrollY: '200px',
-                scrollCollapse: true,
-                paging: false,
-                ordering: false,
-                searching: false,
-                "lengthChange": false,
-                fixedHeader: true,
-                "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                },
-            });
+            if (duplicates(count(arr)).length > 0) {
+                $('.noseri').removeClass('is-invalid');
+                $('.noseri').filter(function () {
+                    for (let index = 0; index < duplicates(count(arr))
+                        .length; index++) {
+                        if ($(this).val() == duplicates(count(arr))[index]) {
+                            return true;
+                        }
+                    }
+                }).addClass('is-invalid');
 
-            $(document).on('click', '#btnSave', function (e) {
-                e.preventDefault();
-                $(this).prop('disabled', true);
-                let arr = [];
-                const data = scanProduk.$('.noseri').map(function () {
-                    return $(this).val();
-                }).get();
-
-                data.forEach(function (item) {
-                    if (item != '') {
-                        arr.push(item);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Nomor seri ' + duplicates(count(arr)) +
+                        ' ada yang sama.',
+                }).then((result) => {
+                    if (result.value) {
+                        $(this).prop('disabled', false);
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: "/api/prd/cek-noseri",
+                    type: "post",
+                    data: {
+                        noseri: arr,
+                    },
+                    success: function(res) {
+                        if(res.error == true) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: res.msg,
+                            }).then((result) => {
+                                if (result.value) {
+                                    $('#btnSave').prop('disabled', false);
+                                }
+                            });
+                        } else {
+                            let tgl = $('#tgl_perakitan').val();
+                            let today = new Date();
+                            let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                            let datetime = tgl + ' ' + time;
+                            console.log('a');
+                            $.ajax({
+                                url: "/api/prd/rakit-seri",
+                                type: "post",
+                                data: {
+                                    "_token": "{{ csrf_token() }}",
+                                    no_bppb: $('#no_bppb').val(),
+                                    noseri: arr,
+                                    userid: $('#userid').val(),
+                                    jadwal_id: id,
+                                    tgl_perakitan: datetime,
+                                },
+                                success: function (res) {
+                                    console.log(res);
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Berhasil',
+                                        text: 'Data berhasil disimpan.',
+                                    })
+                                    $('.modalRakit').modal('hide');
+                                    $('.scan-produk').DataTable().destroy();
+                                    $('.scan-produk tbody').empty();
+                                    $('#table_produk_perakitan').DataTable().ajax
+                                        .reload();
+                                    location.reload();
+                                }
+                            })
+                        }
                     }
                 })
-
-                const count = arr =>
-                    arr.reduce((a, b) => ({
-                        ...a,
-                        [b]: (a[b] || 0) + 1
-                    }), {})
-
-                const duplicates = dict =>
-                    Object.keys(dict).filter((a) => dict[a] > 1)
-
-                if (duplicates(count(arr)).length > 0) {
-                    $('.noseri').removeClass('is-invalid');
-                    $('.noseri').filter(function () {
-                        for (let index = 0; index < duplicates(count(arr))
-                            .length; index++) {
-                            if ($(this).val() == duplicates(count(arr))[index]) {
-                                return true;
-                            }
-                        }
-                    }).addClass('is-invalid');
-
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Nomor seri ' + duplicates(count(arr)) +
-                            ' ada yang sama.',
-                    }).then((result) => {
-                        if (result.value) {
-                            $(this).prop('disabled', false);
-                        }
-                    });
-                } else {
-                    $.ajax({
-                        url: "/api/prd/cek-noseri",
-                        type: "post",
-                        data: {
-                            noseri: arr,
-                        },
-                        success: function(res) {
-                            if(res.error == true) {
-                                Swal.fire({
-                                    icon: 'error',
-                                    title: 'Oops...',
-                                    text: res.msg,
-                                }).then((result) => {
-                                    if (result.value) {
-                                        $('#btnSave').prop('disabled', false);
-                                    }
-                                });
-                            } else {
-                                let tgl = $('#tgl_perakitan').val();
-                                let today = new Date();
-                                let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                                let datetime = tgl + ' ' + time;
-                                console.log('a');
-                                $.ajax({
-                                    url: "/api/prd/rakit-seri",
-                                    type: "post",
-                                    data: {
-                                        "_token": "{{ csrf_token() }}",
-                                        no_bppb: $('#no_bppb').val(),
-                                        noseri: arr,
-                                        userid: $('#userid').val(),
-                                        jadwal_id: id,
-                                        tgl_perakitan: datetime,
-                                    },
-                                    success: function (res) {
-                                        console.log(res);
-                                        Swal.fire({
-                                            icon: 'success',
-                                            title: 'Berhasil',
-                                            text: 'Data berhasil disimpan.',
-                                        })
-                                        $('.modalRakit').modal('hide');
-                                        $('.scan-produk').DataTable().destroy();
-                                        $('.scan-produk tbody').empty();
-                                        $('#table_produk_perakitan').DataTable().ajax
-                                            .reload();
-                                        location.reload();
-                                    }
-                                })
-                            }
-                        }
-                    })
-
-                }
-            })
-        });
+            }
+        })
+    });
 
         // Produksi Tab
         $('.modalRakit').on('shown.bs.modal', function () {
@@ -645,9 +644,10 @@
             $('#tglSelesaiTransfer').text(tglselesai);
             $('.modalDetailTransfer').modal('show');
         });
-
+        jadwalid = $(this).data('id');
         // Sisa Transfer Produk Kirim
         $(document).on('click','.detailtransferKirim ', function () {
+            console.log(jadwalid);
             const keterangan = $('#keteranganTransferSisa').val();
             Swal.fire({
                 title: 'Apakah anda yakin?',
@@ -661,10 +661,11 @@
                 if (result.value) {
                     $(this).prop('disabled', true);
                     $.ajax({
-                        url: "#",
+                        url: "/api/tfp/closeRakit",
                         type: "post",
                         data: {
                             "_token": "{{ csrf_token() }}",
+                            jadwal_id: jadwalid,
                             keterangan: keterangan,
                         },
                         success: function (res) {
@@ -677,9 +678,9 @@
                             $('.modalDetailTransfer').modal('hide');
                             $('#table_produk_perakitan').DataTable().ajax
                                 .reload();
-                            setTimeout(() => {
-                                location.reload();
-                            }, 2000);
+                            // setTimeout(() => {
+                            //     location.reload();
+                            // }, 2000);
                         }
                     })
                 }

@@ -233,6 +233,7 @@ Route::prefix('/tfp')->group(function () {
     Route::get('rakit-terima/{id}/{value}', [GudangController::class, 'getTerimaRakit']);
     Route::post('/seri-so', [ProduksiController::class, 'getNoseriSO']);
     Route::post('/seri-edit-so', [ProduksiController::class, 'getNoseriSOEdit']);
+    Route::post('/closeRakit', [ProduksiController::class, 'closeRakit']);
 
     // check
     Route::post('/cekStok', [ProduksiController::class, 'checkStok']);

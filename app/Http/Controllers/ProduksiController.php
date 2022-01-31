@@ -1957,6 +1957,11 @@ class ProduksiController extends Controller
 
     }
 
+    function closeRakit(Request $request)
+    {
+        dd($request->all());
+    }
+
     function getHeaderSeri($id)
     {
         $jadwal = JadwalPerakitan::find($id);
