@@ -92,7 +92,7 @@
         }
 
         .btn {
-            font-size: 12px;
+            font-size: 14px;
         }
     }
 
@@ -113,6 +113,12 @@
 
         .btn {
             font-size: 12px;
+        }
+    }
+
+    @media screen and (max-width: 992px){
+        .align-md{
+            text-align: center;
         }
     }
 </style>
@@ -167,7 +173,7 @@
                                 @if(isset($d->Pesanan->Ekatalog))
                                 <div class="row">
 
-                                    <div class="col-5">
+                                    <div class="col-lg-5 col-md-12 align-md">
                                         <div class="margin">
                                             <div><small class="text-muted">Distributor & Instansi</small></div>
                                         </div>
@@ -180,7 +186,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-2">
+                                    <div class="col-lg-2 col-md-4">
                                         <div class="margin">
                                             <div><small class="text-muted">No AKN</small></div>
                                             <div><b id="no_akn">{{$d->pesanan->Ekatalog->no_paket}}</b></div>
@@ -191,7 +197,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-2">
+                                    <div class="col-lg-2 col-md-4">
                                         <div class="margin">
                                             <div><small class="text-muted">No PO</small></div>
                                             <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
@@ -202,7 +208,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-2">
+                                    <div class="col-lg-2 col-md-4">
                                         <div class="margin">
                                             <div><small class="text-muted">Status</small></div>
                                             <div>{!!$status!!}</div>
@@ -211,7 +217,7 @@
                                 </div>
                                 @elseif(isset($d->Pesanan->Spa))
                                 <div class="row">
-                                    <div class="col-5">
+                                    <div class="col-lg-6 col-md-12 align-md">
                                         <div class="margin">
                                             <div><small class="text-muted">Customer</small></div>
                                         </div>
@@ -222,31 +228,33 @@
                                             <div><b id="no_akn">{{$d->pesanan->Spa->customer->alamat}}</b></div>
                                         </div>
                                         <div class="margin">
-                                            <div><b id="no_akn">{{$d->pesanan->Spa->customer->telp}}</b></div>
+                                            <div><b id="no_akn">{{$d->pesanan->Spa->customer->Provinsi->nama}}</b></div>
                                         </div>
                                     </div>
-                                    <div class="col-2">
+                                    <div class="col-lg-3 col-md-6">
                                         <div class="margin">
                                             <div><small class="text-muted">No SO</small></div>
                                             <div><b id="no_so">{{$d->pesanan->Spa->pesanan->so}}</b></div>
                                         </div>
-                                    </div>
-                                    <div class="col-2">
-                                        <div class="margin">
-                                            <div><small class="text-muted">No PO</small></div>
-                                            <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
-                                        </div>
-                                    </div>
-                                    <div class="col-2">
                                         <div class="margin">
                                             <div><small class="text-muted">Status</small></div>
                                             <div>{!!$status!!}</div>
                                         </div>
                                     </div>
+                                    <div class="col-lg-3 col-md-6">
+                                        <div class="margin">
+                                            <div><small class="text-muted">No PO</small></div>
+                                            <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Tanggal PO</small></div>
+                                            <div><b id="no_so">{{$d->pesanan->tgl_po}}</b></div>
+                                        </div>
+                                    </div>
                                 </div>
                                 @elseif(isset($d->Pesanan->Spb))
                                 <div class="row">
-                                    <div class="col-6">
+                                    <div class="col-lg-6 col-md-12 align-md">
                                         <div class="margin">
                                             <div><small class="text-muted">Customer</small></div>
                                         </div>
@@ -257,10 +265,10 @@
                                             <div><b id="no_akn">{{$d->pesanan->Spb->customer->alamat}}</b></div>
                                         </div>
                                         <div class="margin">
-                                            <div><b id="no_akn">{{$d->pesanan->Spb->customer->telp}}</b></div>
+                                            <div><b id="no_akn">{{$d->pesanan->Spb->customer->Provinsi->nama}}</b></div>
                                         </div>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-lg-3 col-md-6">
                                         <div class="margin">
                                             <div><small class="text-muted">No SO</small></div>
                                             <div><b id="no_so">{{$d->pesanan->Spb->pesanan->so}}</b></div>
@@ -270,7 +278,7 @@
                                             <div>{!!$status!!}</div>
                                         </div>
                                     </div>
-                                    <div class="col-3">
+                                    <div class="col-lg-3 col-md-6">
                                         <div class="margin">
                                             <div><small class="text-muted">No PO</small></div>
                                             <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>

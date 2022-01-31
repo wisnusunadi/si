@@ -121,6 +121,12 @@
             font-size: 12px;
         }
     }
+
+    @media screen and (max-width: 992px){
+        .align-md{
+            text-align: center;
+        }
+    }
 </style>
 @stop
 
@@ -138,7 +144,7 @@
                     <div class="card-body">
                         <h5>Info</h5>
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-lg-4 col-md-12 align-md">
                                 <div class="margin">
                                     <div><small class="text-muted">Subjek Pengiriman</small></div>
                                 </div>
@@ -155,7 +161,7 @@
                                     <b id="telepon">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->telp}}</b>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-lg-3 col-md-4">
                                 <div class="margin">
                                     <div><small class="text-muted">Ekspedisi / Pengiriman</small></div>
                                     <div><b id="ekspedisi">@if(!empty($l->ekspedisi_id))
@@ -174,7 +180,7 @@
                                     <div><b id="no_sj">{{$l->tgl_kirim}}</b></div>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-3 col-md-4">
                                 <div class="margin">
                                     <div><small class="text-muted">No Sales Order</small></div>
                                     <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}</b></div>
@@ -188,7 +194,7 @@
                                     <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}</b></div>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-2 col-md-4">
                                 <div class="margin">
                                     <div><small class="text-muted">No Invoice</small></div>
                                     <div><b id="no_resi">-</b></div>
@@ -224,7 +230,7 @@
                     <div class="card-body">
                         <h5>Info</h5>
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-lg-4 col-md-12 align-md">
                                 <div class="margin">
                                     <div><small class="text-muted">Subjek Pengiriman</small></div>
                                 </div>
@@ -285,7 +291,7 @@
                                     </b>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-lg-3 col-md-4">
                                 <div class="margin">
                                     <div><small class="text-muted">Ekspedisi / Pengiriman</small></div>
                                     <div><b id="ekspedisi">@if(!empty($l->ekspedisi_id))
@@ -306,7 +312,7 @@
                                     <div><b id="no_sj">{{$l->tgl_kirim}}</b></div>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-3 col-md-4">
                                 <div class="margin">
                                     <div><small class="text-muted">No Sales Order</small></div>
                                     <div><b id="no_so">
@@ -353,7 +359,7 @@
                                         </b></div>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-2 col-md-4">
                                 <div class="margin">
                                     <div><small class="text-muted">No Invoice</small></div>
                                     <div><b id="no_resi">-</b></div>
@@ -389,7 +395,7 @@
                     <div class="card-body">
                         <h5>Info</h5>
                         <div class="row">
-                            <div class="col-5">
+                            <div class="col-lg-4 col-md-12 align-md">
                                 <div class="margin">
                                     <div><small class="text-muted">Subjek Pengiriman</small></div>
                                 </div>
@@ -438,7 +444,7 @@
                                     </b>
                                 </div>
                             </div>
-                            <div class="col-3">
+                            <div class="col-lg-3 col-md-4">
                                 <div class="margin">
                                     <div><small class="text-muted">Ekspedisi / Pengiriman</small></div>
                                     <div><b id="ekspedisi">@if(!empty($l->ekspedisi_id))
@@ -457,7 +463,7 @@
                                     <div><b id="no_sj">{{$l->tgl_kirim}}</b></div>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-3 col-md-4">
                                 <div class="margin">
                                     <div><small class="text-muted">No Sales Order</small></div>
                                     <div><b id="no_so">
@@ -495,7 +501,7 @@
                                         </b></div>
                                 </div>
                             </div>
-                            <div class="col-2">
+                            <div class="col-lg-2 col-md-4">
                                 <div class="margin">
                                     <div><small class="text-muted">No Invoice</small></div>
                                     <div><b id="no_resi">-</b></div>
@@ -603,7 +609,7 @@
                 },
                 {
                     data: 'no_seri',
-                    visible: jenis == "SPB" ? false : true
+                    className: 'minimizechar',
                 },
                 {
                     data: 'keterangan',
