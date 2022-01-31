@@ -812,6 +812,7 @@
             confirmButtonText: 'Yes, Draft it'
             }).then((result) => {
                 if (result.isConfirmed) {
+                    $(this).prop('disabled', true);
                     Swal.fire({
                         title: 'Please wait',
                         text: 'Data is transferring...',

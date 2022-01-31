@@ -500,6 +500,7 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     var form = $(this);
+                    $('#saveButton').prop('disabled', true);
                     Swal.fire({
                         title: 'Please wait',
                         text: 'Data is transferring...',

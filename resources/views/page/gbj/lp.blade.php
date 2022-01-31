@@ -874,6 +874,7 @@
                 confirmButtonText: 'Yes, draft it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
+                        $(this).prop('disabled', true);
                         Swal.fire(
                         'Sukses!',
                         'Data Berhasil Disimpan',
