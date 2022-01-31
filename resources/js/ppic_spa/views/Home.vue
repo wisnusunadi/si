@@ -112,7 +112,7 @@
                   <span>Sparepart</span>
                 </a>
               </li>
-              <li :class="{ 'is-active': tabs }" @click="tabs = true, unit">
+              <li :class="{ 'is-active': tabs }" @click="tabs = true">
                 <a>
                   <span class="icon is-small"
                     ><i class="fas fa-tools" aria-hidden="true"></i
@@ -237,6 +237,10 @@ export default {
       await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
         this.data_sparepart = response.data;
       });
+
+      await axios.get("/api/ppic/data/gk/unit").then((response) => {
+        this.data_unit = response.data.data;
+      });
       $("#table_sparepart").DataTable({
         pagingType: "simple_numbers_no_ellipses",
       });
@@ -250,11 +254,6 @@ export default {
       });
 
       this.$store.commit("setIsLoading", false);
-    },
-    async unit() {
-        await axios.get("/api/ppic/data/gk/unit").then((response) => {
-        this.data_unit = response.data.data;
-      });
     },
   },
 

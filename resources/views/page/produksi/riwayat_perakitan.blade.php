@@ -221,19 +221,43 @@
                     </button>
             </div>
             <div class="modal-body">
-                <table class="table table-history-produk">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>Tanggal Perakitan</th>
-                            <th>Waktu Perakitan</th>
-                            <th>Tanggal Pengiriman</th>
-                            <th>Waktu Pengiriman</th>
-                            <th>Produk</th>
-                            <th>Jumlah</th>
-                        </tr>
-                        </thead>
-                        <tbody></tbody>
-                </table>
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm">
+                                <label for="">No BPPB</label>
+                                <div class="card" style="background-color: #C8E1A7">
+                                    <div class="card-body">
+                                        <span id="no_bppb"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <label for="">Nama Produk</label>
+                                <div class="card" style="background-color: #F89F81">
+                                    <div class="card-body">
+                                        <span id="nama_produk"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <table class="table table-history-produk">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th>Tanggal Perakitan</th>
+                                    <th>Waktu Perakitan</th>
+                                    <th>Tanggal Pengiriman</th>
+                                    <th>Waktu Pengiriman</th>
+                                    <th>Produk</th>
+                                    <th>Jumlah</th>
+                                </tr>
+                                </thead>
+                                <tbody></tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -467,7 +491,7 @@
                 {data: 'produk'},
                 {data: 'aksi', 
                     "render": function ( data, type, row, meta ) {
-                        return '<button class="btn btn-sm btn-outline-secondary buttonModalProduk" data-id="'+data+'"><i class="far fa-eye"></i> Detail</button>';
+                        return '<button class="btn btn-sm btn-outline-secondary buttonModalProduk" data-id="'+data+'" data-bppb="'+row.no_bppb+'" data-produk="'+row.produk+'"><i class="far fa-eye"></i> Detail</button>';
                     }
                 },
             ],
@@ -478,6 +502,10 @@
 
         $(document).on('click','.buttonModalProduk', function () {
             var id = $(this).data('id');
+            var bppb = $(this).data('bppb');
+            var produk = $(this).data('produk');
+            $('#no_bppb').text(bppb);
+            $('#nama_produk').text(produk);
             var table = $('.table-history-produk').DataTable({
                 destroy: true,
                 "lengthChange": false,
