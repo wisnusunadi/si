@@ -17,35 +17,52 @@
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
-<section class="content">
+<div class="content-header"> 
     <div class="container-fluid">
-        <div class="row ml-1">
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="">Pilih Produk</label>
-                    <select name="" id="produk_select" class="form-control produk_select" multiple>
-                        <option value="" selected="selected">All Produk</option>
-                    </select>
-                </div>
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <nav>
+                    <div class="nav nav-tabs topnav" id="nav-tab" role="tablist">
+                        <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
+                            aria-controls="nav-home" aria-selected="true">Per Tanggal</a>
+                        <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
+                            aria-controls="nav-profile" aria-selected="false">Per Produk</a>
+                    </div>
+                </nav>
             </div>
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="">Tanggal Perakitan</label>
-                    <input type="text" name="" id="" class="form-control daterange">
-                </div>
-            </div>
-            <div class="col-sm-3">
-                <div class="form-group">
-                    <label for="">Tanggal Pengiriman</label>
-                    <input type="text" name="" id="" class="form-control daterange2">
-                </div>
-            </div>
-            <div class="col-sm-3"></div>
         </div>
+    </div>
+</div>
+<div class="tab-content" id="nav-tabContent">
+    <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
         <div class="row">
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="">Pilih Produk</label>
+                                    <select name="" id="produk_select" class="form-control produk_select" multiple>
+                                        <option value="" selected="selected">All Produk</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="">Tanggal Perakitan</label>
+                                    <input type="text" name="" id="" class="form-control daterange">
+                                </div>
+                            </div>
+                            <div class="col-sm-3">
+                                <div class="form-group">
+                                    <label for="">Tanggal Pengiriman</label>
+                                    <input type="text" name="" id="" class="form-control daterange2">
+                                </div>
+                            </div>
+                            <div class="col-sm-3"></div>
+                        </div>
+                        <hr>
                         <div class="row text-center">
                             <div class="col-6">
                                 <h3 class="font-weight-bold" id="h_rakit">{{ $rakit }}</h3>
@@ -80,8 +97,26 @@
                 </div>
             </div>
         </div>
+        </div>
     </div>
-</section>
+    <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="card">
+            <div class="card-body">
+                <table class="table tablePerProduk">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>No BPPB</th>
+                            <th>Nama Produk</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+  </div>
 
 <!-- Modal -->
 <div class="modal fade modal_id" id="modal_id" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
@@ -388,6 +423,24 @@
             end_date2 = '';
             $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
             table.draw();
+        });
+
+        // Tabel PerProduk
+        $('.tablePerProduk').DataTable({
+            destroy: true,
+            "autoWidth": false,
+            processing: true,
+            ajax: {
+                url: "/api/prd/history/ajax_perproduk",
+            },
+            columns: [
+                {data: 'produk'},
+                {data: 'jml'},
+                {data: 'action'},
+            ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
         });
 </script>
 @stop
