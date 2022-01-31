@@ -289,7 +289,6 @@
         destroy: true,
         "lengthChange": false,
         "ordering": false,
-        "bPaginate": false,
         "info": false,
         "responsive": true,
         "order": [[ 0, 'asc' ], [2, 'asc']],

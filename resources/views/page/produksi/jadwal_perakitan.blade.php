@@ -82,6 +82,7 @@
                                 <table class="table table-bordered" id="table_produk_perakitan">
                                     <thead class="thead-dark">
                                         <tr>
+                                            <th rowspan="2">Periode</th>
                                             <th colspan="2" class="text-center">Tanggal</th>
                                             <th rowspan="2">No BPPB</th>
                                             <th rowspan="2">Produk</th>
@@ -132,16 +133,16 @@
                         <div class="row">
                             <div class="col-sm">
                                 <label for="">Nomor BPPB</label>
-                                <div class="card" style="background-color: #C8E1A7">
+                                {{-- <div class="card" style="background-color: #C8E1A7">
                                     <div class="card-body">
                                         <span id="bppb">89798797856456</span>
                                     </div>
-                                </div>
-                                {{-- <div class="card">
+                                </div> --}}
+                                <div class="card">
                                     <div class="card-body">
                                         <input type="text" name="no_bppb" id="no_bppb" class="form-control" style="text-transform:uppercase">
                                     </div>
-                                </div> --}}
+                                </div>
                             </div>
                             <div class="col-sm">
                                 <label for="">Nama Produk</label>
@@ -173,7 +174,7 @@
                                 <label for="">Tanggal Mulai</label>
                                 <div class="card" style="background-color: #FFE0B4">
                                     <div class="card-body">
-                                        <span id="start">10-06-2021</span>
+                                        <span id="start"></span>
                                     </div>
                                 </div>
                             </div>
@@ -181,7 +182,7 @@
                                 <label for="">Tanggal Selesai</label>
                                 <div class="card" style="background-color: #FFECB2">
                                     <div class="card-body">
-                                        <span id="end">13-06-2021</span>
+                                        <span id="end"></span>
                                     </div>
                                 </div>
                             </div>
@@ -189,10 +190,17 @@
                     </div>
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-sm-6">
+                            <div class="col-sm-4">
                                 <div class="form-group">
                                     <label for="">Tanggal Perakitan</label>
                                     <input type="text" class="form-control" id="tgl_perakitan" name="tgl_perakitan" placeholder="Tanggal Perakitan">
+                                </div>
+                            </div>
+                            <div class="col-sm-4"></div>
+                            <div class="col-sm-4">
+                                <div class="form-group">
+                                  <label for="">Panjang Karakter No Seri</label>
+                                  <input type="text" name="" id="lengthNoSeri" class="form-control number" >
                                 </div>
                             </div>
                         </div>
@@ -301,10 +309,11 @@
 
         var calendar = new Calendar(calendarEl, {
             headerToolbar: {
-                left: '',
+                left: 'prev,next today',
                 center: 'title',
-                right: ''
+                right: 'dayGridMonth,timeGridWeek,timeGridDay'
             },
+            weekends: false,
             locale: 'id',
             events: function (fetchInfo, successCallback, failureCallback) {
                 $.ajax({
@@ -350,7 +359,9 @@
                 url: "/api/prd/ongoing",
                 type: "post",
             },
-            columns: [{
+            columns: [
+                { data: 'periode'},
+                {
                     data: "start"
                 },
                 {
@@ -372,7 +383,7 @@
                 }
             ],
             order: [
-                [5, 'desc']
+                [6, 'desc']
             ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
@@ -404,7 +415,7 @@
                 dataType: "json",
                 type: "get",
                 success: function (res) {
-                    $('span#bppb').val(res.no_bppb);
+                    $('#no_bppb').val(res.no_bppb);
                     $('span#produk').text(res.produk);
                     $('span#kategori').text(res.kategori);
                     $('span#jml').text(res.jml);
@@ -428,18 +439,16 @@
                 }
             }
             var scanProduk = $('.scan-produk').DataTable({
+                scrollY: '200px',
+                scrollCollapse: true,
+                paging: false,
                 ordering: false,
-                "autoWidth": false,
                 searching: false,
                 "lengthChange": false,
-                "pageLength": 10,
+                fixedHeader: true,
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                 },
-                columnDefs: [{
-                    targets: [0],
-                    width: "5%",
-                }],
             });
 
             $(document).on('click', '#btnSave', function (e) {
@@ -547,11 +556,15 @@
         // Produksi Tab
         $('.modalRakit').on('shown.bs.modal', function () {
             $('.noseri:first').focus();
+            $('.scan-produk').DataTable().columns.adjust().draw();
         })
-        // $(document).on('keydown','input.noseri',function(e){
-        //     const a = $(this).val();
-        //     alert(a.length);
-        // })
+        $(document).on('keydown','input.noseri',function(e){
+            const a = $(this).val();
+            const length = $('#lengthNoSeri').val();
+            if (a.length == length) {
+                $(this).parent().parent().next().find('input.noseri').focus();
+            }
+        })
     }
 </script>
 @stop
