@@ -286,7 +286,9 @@ Route::prefix('/prd')->group(function () {
     Route::post('/send', [ProduksiController::class, 'kirimseri']);
     Route::post('/terimaseri', [ProduksiController::class, 'terimaseri']);
     Route::post('/delete', [ProduksiController::class, 'deleteNoseri']);
+    Route::post('/deleteAll', [ProduksiController::class, 'deleteAllSeri']);
     Route::post('/updateRakitseri', [ProduksiController::class, 'updateNoseri']);
+    Route::post('/cekUpdateNoseri', [ProduksiController::class, 'cekUbahNoseri']);
 
     // riwayat
     Route::prefix('/history')->group(function () {
