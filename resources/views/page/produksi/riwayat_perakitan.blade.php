@@ -228,7 +228,6 @@
                             <th>Waktu Perakitan</th>
                             <th>Tanggal Pengiriman</th>
                             <th>Waktu Pengiriman</th>
-                            <th>Nomor BPPB</th>
                             <th>Produk</th>
                             <th>Jumlah</th>
                         </tr>
@@ -494,7 +493,6 @@
                     {data: 'time_rakit'},
                     {data: 'day_kirim'},
                     {data: 'time_kirim'},
-                    {data: 'bppb'},
                     {data: 'produk'},
                     {data: 'jml'},
                 ],
