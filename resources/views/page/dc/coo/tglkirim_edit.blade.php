@@ -10,7 +10,8 @@
                             {{$data->detaillogistik->DetailPesananProduk->GudangBarangJadi->produk->nama}}
                             @else
                             {{$data->detaillogistik->DetailPesananProduk->GudangBarangJadi->nama}}
-                            @endif</b></div>
+                            @endif
+                        </b></div>
                 </div>
                 <div class="filter">
                     <div><small class="text-muted">No AKD</small></div>
@@ -21,70 +22,57 @@
                         </b></div>
                 </div>
                 <div class="filter">
-                    <div><small class="text-muted">Jumlah</small></div>
-                    <div><b>{{$jumlah}}</b></div>
+                    <div><small class="text-muted">No Seri</small></div>
+                    <div><b>{{$data->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri}}</b></div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-8">
-        <form action="/api/dc/so/create/{{$noseri_id}}" id="form-create-coo" method="POST">
+        <form action="/api/dc/so/update/{{$data->NoseriCoo->id}}" id="form-update-coo" method="POST">
+            @method('PUT')
             <div class="card">
                 <div class="card-body">
                     <div class="form-horizontal">
-                        <!-- <div class="form-group row">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Bulan</label>
-                            <div class="col-3">
-                                <select class="form-control bulan_edit col-form-label" name="bulan" id="bulan">
-                                    <option value=""></option>
-                                    <option value="I">Januari</option>
-                                    <option value="II">Februari</option>
-                                    <option value="III">Maret</option>
-                                    <option value="IV">April</option>
-                                    <option value="V">Mei</option>
-                                    <option value="VI">Juni</option>
-                                    <option value="VII">Juli</option>
-                                    <option value="VIII">Agustus</option>
-                                    <option value="IX">September</option>
-                                    <option value="X">Oktober</option>
-                                    <option value="XI">November</option>
-                                    <option value="XII">Desember</option>
-                                </select>
-                            </div>
-                        </div> -->
                         <div class="form-group row">
                             <label for="" class="col-5 col-form-label" style="text-align:right;">Diketahui Oleh</label>
                             <div class="col-5 col-form-label">
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="spa" />
+                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="spa" {{ ($data->NoseriCoo->ket=="spa")? "checked" : "" }} disabled />
                                     <label class="form-check-label" for="diketahui1">PT Sinko Prima Alloy</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="emiindo" />
+                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="emiindo" {{ ($data->NoseriCoo->ket=="emiindo")? "checked" : "" }} disabled />
                                     <label class="form-check-label" for="diketahui1">PT. EMIINDO Jaya Bersama</label>
                                 </div>
                                 <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui2" value="custom" />
+                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui2" value="custom" {{ ($data->NoseriCoo->ket!="emiindo" && $data->NoseriCoo->ket!="spa")? "checked" : "" }} disabled />
                                     <label class="form-check-label" for="diketahui2">Custom</label>
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group row hide" id="nama_label">
+                        @if($data->Nosericoo->nama != '')
+                        <div class="form-group row " id="nama_label">
                             <label for="" class="col-5 col-form-label" style="text-align:right;">Nama</label>
                             <div class="col-5">
-                                <input type="text" class="form-control col-form-label" id="nama" name="nama">
+                                <input type="text" class="form-control col-form-label" id="nama" name="nama" value="{{$data->NoseriCoo->nama}}" disabled>
                             </div>
                         </div>
-                        <div class="form-group row hide" id="jabatan_label">
+                        <div class="form-group row " id="jabatan_label">
                             <label for="" class="col-5 col-form-label" style="text-align:right;">Jabatan</label>
                             <div class="col-5">
-                                <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan">
+                                <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan" value="{{$data->NoseriCoo->jabatan}}" disabled>
                             </div>
                         </div>
+                        @endif
                         <div class="form-group row" id="tgl_kirim">
                             <label for="" class="col-5 col-form-label" style="text-align:right;">Tgl Kirim</label>
                             <div class="col-5">
-                                <input type="date" class="form-control col-form-label" name="tgl_kirim">
+                                @if($data->NoseriCoo->tgl_kirim != '')
+                                <input type="date" class="form-control col-form-label" name="tgl_kirim" value="{{$data->NoseriCoo->tgl_kirim}}">
+                                @else
+                                <input type="date" class="form-control col-form-label" name="tgl_kirim" value="">
+                                @endif
                                 <div class="feedback" id="msgpart_id">
                                     <small class="text-muted">*Boleh dikosongi jika tidak ada</small>
                                 </div>
@@ -93,29 +81,11 @@
                         <div class="form-group row" id="tgl_kirim">
                             <label for="" class="col-5 col-form-label" style="text-align:right;">Tanda Terima</label>
                             <div class="col-5">
+                                @if($data->NoseriCoo->catatan != '')
+                                <textarea class="form-control col-form-label" name="keterangan">{{$data->NoseriCoo->catatan}}</textarea>
+                                @else
                                 <textarea class="form-control col-form-label" name="keterangan"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-12">
-                                <table class="table" style="width: 100%; text-align:center;" id="listnoseri">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>No Seri</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- <tr>
-                                        <td>1</td>
-                                        <td>FX358085238401</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>FX358085238390</td>
-                                    </tr> -->
-                                    </tbody>
-                                </table>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -125,7 +95,7 @@
                         <button class="btn btn-danger float-left" data-dismiss="modal">Batal</button>
                     </span>
                     <span>
-                        <button type="submit" class="btn btn-warning float-right disabled" id="btnsimpan">Simpan</button>
+                        <button type="submit" class="btn btn-warning float-right " id="btnsimpan">Update</button>
                     </span>
                 </div>
             </div>

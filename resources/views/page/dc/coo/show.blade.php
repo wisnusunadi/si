@@ -75,7 +75,7 @@
                                             <th>Bulan</th>
                                             <th>Tgl Surat Jalan</th>
                                             <th>Tgl Kirim</th>
-                                            <th>Ket</th>
+                                            <th>Ttd Terima</th>
                                             <th>Laporan</th>
                                         </thead>
                                         <tbody>

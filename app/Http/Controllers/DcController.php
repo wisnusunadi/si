@@ -567,6 +567,12 @@ class DcController extends Controller
                 if ($get != 0) {
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-target="#tglkirim_modal" class="tglkirim_modal"  data-id="' . $data->id . '">
+                    <button class="dropdown-item" type="button">
+                    <i class="fas fa-pencil-alt"></i>
+                        Edit
+                    </button>
+                </a>
                     <a href="' . route('dc.seri.coo.pdf', [$data->id, $x, "kosong"]) . '" target="_blank">
                     <button class="dropdown-item" type="button">
                         <i class="fas fa-file"></i>
@@ -736,6 +742,11 @@ class DcController extends Controller
 
         return view('page.dc.coo.edit', ['data' => $data, 'id' => $id, 'jumlah' => $jumlah, 'noseri_id' => $noseri_id]);
     }
+    public function edit_tglkirim_coo($id)
+    {
+        $data =  NoseriDetailLogistik::find($id);
+        return view('page.dc.coo.tglkirim_edit', ['data' => $data]);
+    }
     public function create_coo(Request $request, $value)
     {
         if ($request->diketahui == 'spa') {
@@ -768,6 +779,19 @@ class DcController extends Controller
             }
         }
         if ($bool == true) {
+            return response()->json(['data' =>  'success']);
+        } else {
+            return response()->json(['data' =>  'error']);
+        }
+    }
+    public function update_coo(Request $request, $id)
+    {
+        //  return response($id);
+        $l = NoseriCoo::find($id);
+        $l->tgl_kirim = $request->tgl_kirim;
+        $l->catatan = $request->keterangan;
+        $l->save();
+        if ($l) {
             return response()->json(['data' =>  'success']);
         } else {
             return response()->json(['data' =>  'error']);

@@ -512,6 +512,7 @@ Route::prefix('/dc')->group(function () {
     Route::post('dashboard/data/{value}', [App\Http\Controllers\DcController::class, 'dashboard_data']);
     Route::prefix('/so')->group(function () {
         Route::post('create/{value}', [App\Http\Controllers\DcController::class, 'create_coo']);
+        Route::put('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);
         Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
         Route::post('detail/seri/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);
