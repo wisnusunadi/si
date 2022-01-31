@@ -1920,39 +1920,39 @@ class ProduksiController extends Controller
     function storeRakitNoseri(Request $request)
     {
         // dd($request->all());
-        // $cek_seri = JadwalRakitNoseri::where('noseri', $request->noseri)->get();
-        // if (count($cek_seri) == 0) {
-
-        // } else {
-        //     return response()->json(['msg' => 'Noseri Sudah Ada, Silahkan Gunakan yang lain.']);
-        // }
-        foreach ($request->noseri as $key => $value) {
-            if (isset($value)) {
-                $seri = new JadwalRakitNoseri();
-                $seri->date_in = $request->tgl_perakitan;
-                $seri->jadwal_id = $request->jadwal_id;
-                $seri->noseri = strtoupper($value);
-                $seri->status = 11;
-                $seri->created_by = $request->userid;
-                $seri->save();
+        $cek_seri = JadwalRakitNoseri::where('noseri', $request->noseri)->get();
+        if (count($cek_seri) == 0) {
+            foreach ($request->noseri as $key => $value) {
+                if (isset($value)) {
+                    $seri = new JadwalRakitNoseri();
+                    $seri->date_in = $request->tgl_perakitan;
+                    $seri->jadwal_id = $request->jadwal_id;
+                    $seri->noseri = strtoupper($value);
+                    $seri->status = 11;
+                    $seri->created_by = $request->userid;
+                    $seri->save();
+                }
             }
-        }
 
-        $d = JadwalPerakitan::find($request->jadwal_id);
-        $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
-        if ($d->jumlah == $jj) {
-            $d->status_tf = 15;
-            $d->no_bppb = strtoupper($request->no_bppb);
-            $d->filled_by = $request->userid;
-            $d->save();
+            $d = JadwalPerakitan::find($request->jadwal_id);
+            $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
+            if ($d->jumlah == $jj) {
+                $d->status_tf = 15;
+                $d->no_bppb = strtoupper($request->no_bppb);
+                $d->filled_by = $request->userid;
+                $d->save();
+            } else {
+                $d->status_tf = 12;
+                $d->no_bppb = strtoupper($request->no_bppb);
+                $d->filled_by = $request->userid;
+                $d->save();
+            }
+
+            return response()->json(['msg' => 'Successfully']);
         } else {
-            $d->status_tf = 12;
-            $d->no_bppb = strtoupper($request->no_bppb);
-            $d->filled_by = $request->userid;
-            $d->save();
+            return response()->json(['msg' => 'Noseri Sudah Ada, Silahkan Gunakan yang lain.']);
         }
 
-        return response()->json(['msg' => 'Successfully']);
     }
 
     function getHeaderSeri($id)
