@@ -88,6 +88,7 @@
                             <thead class="thead-dark">
 
                                 <tr>
+                                    <th>Periode</th>
                                     <th class="text-center">Tanggal Masuk</th>
                                     <th class="text-center">Tanggal Keluar</th>
                                     <th>Nomor BPPB</th>
@@ -218,8 +219,8 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                 <button type="button" class="btn btn-info" id="checked">Check</button>
+                <button type="button" class="btn btn-danger" id="hapusSeri">Hapus</button>
                 <button type="submit" class="btn btn-primary" id="saveButton">Simpan</button>
             </div>
             </form>
@@ -314,7 +315,9 @@
         var table = $('.table_produk_perakitan').DataTable({
             processing: true,
             ajax: "/api/prd/kirim",
-            columns: [{
+            columns: [
+                { data: 'periode'},
+                {
                     data: "start"
                 },
                 {
@@ -341,7 +344,7 @@
             },
             "lengthChange": false,
             "columnDefs": [{
-                "targets": [6],
+                "targets": [7],
                 "visible": document.getElementById('auth').value == '2' ? false : true
             }]
         });
@@ -561,6 +564,47 @@
         $('#no_seri').text(check_seri);
     });
 
+    // Hapus Seri
+    $(document).on('click', '#hapusSeri', function () {
+        var table = $('.scan-produk').DataTable();
+        var rows_select = table.column(0).checkboxes.selected();
+        const check_seri = [];
+
+        $.each(rows_select, function (index, rowId) {
+            check_seri.push(rowId);
+        });
+        console.log(check_seri);
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Hapus Noseri "+check_seri+" ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) =>{
+            if (result.isConfirmed) {
+                $.ajax({
+                    type: "post",
+                    url: "/api/prd/deleteAll",
+                    data: {
+                        noseri: check_seri,
+                        jadwal_id: id,
+                    },
+                    success: function (response) {
+                        console.log(response);
+                        Swal.fire(
+                            'Berhasil!',
+                            'Data berhasil di hapus!',
+                            'success'
+                        ).then(function () {
+                            location.reload();
+                        });
+                    }
+                });
+            }
+        })
+    });
     // Produksi Delete
     $(document).on('click','.delete', function () {
         const noseriid = $(this).data('id');
@@ -611,26 +655,45 @@
 
     $(document).on('click', '.submitNoSeri', function () {
         const noseriid = $('#idNoseri').val();
+        // console.log(noseriid);
         const noseri = $('#noseriselect').val();
         $.ajax({
-            url: "/api/prd/updateRakitseri",
-            data: {
-                noseriid : noseriid,
-                noseri : noseri,
-                jadwal_id: id,
-            },
             type: "post",
-            success: function(res) {
-                console.log(res);
-                Swal.fire(
-                    'Updated!',
-                    res.msg,
-                    'success'
-                ).then(function () {
-                    location.reload();
-                });
+            url: "/api/prd/cekUpdateNoseri",
+            data: {
+                noseri: noseri,
+            },
+            success: function (response) {
+                console.log(response);
+                if (response.error == true) {
+                    Swal.fire(
+                        'Oops...',
+                        response.msg,
+                        'error'
+                    )
+                }else{
+                    $.ajax({
+                        url: "/api/prd/updateRakitseri",
+                        data: {
+                            noseriid : noseriid,
+                            noseri : noseri,
+                            jadwal_id: id,
+                        },
+                        type: "post",
+                        success: function(res) {
+                            console.log(res);
+                            Swal.fire(
+                                'Updated!',
+                                res.msg,
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            });
+                        }
+                    })
+                }
             }
-        })
+        });
     })
 </script>
 @stop

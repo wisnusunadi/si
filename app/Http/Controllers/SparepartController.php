@@ -65,7 +65,7 @@ class SparepartController extends Controller
             ->make(true);
     }
 
-    function get_unit()
+    function get_unit() 
     {
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
             ->whereNotNull('t_gk_detail.gbj_id')
