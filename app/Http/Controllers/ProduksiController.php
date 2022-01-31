@@ -2475,10 +2475,6 @@ class ProduksiController extends Controller
         ->addColumn('bppb', function ($d) {
             return $d->no_bppb == null ? '-' : $d->no_bppb;
         })
-        ->addColumn('produk', function ($d) {
-            $a = GudangBarangJadi::find($d->produk_id);
-            return $a->produk->nama . ' ' . $a->nama;
-        })
         ->addColumn('jml', function ($d) {
             return $d->jml . ' Unit';
         })

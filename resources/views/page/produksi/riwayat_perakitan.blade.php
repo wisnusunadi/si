@@ -250,7 +250,6 @@
                                     <th>Waktu Perakitan</th>
                                     <th>Tanggal Pengiriman</th>
                                     <th>Waktu Pengiriman</th>
-                                    <th>Produk</th>
                                     <th>Jumlah</th>
                                 </tr>
                                 </thead>
@@ -521,7 +520,6 @@
                     {data: 'time_rakit'},
                     {data: 'day_kirim'},
                     {data: 'time_kirim'},
-                    {data: 'produk'},
                     {data: 'jml'},
                 ],
                 autoWidth: false,
