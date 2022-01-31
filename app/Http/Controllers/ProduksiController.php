@@ -2418,16 +2418,4 @@ class ProduksiController extends Controller
             'data' => $arr,
         ]);
     }
-
-    function ajax_perproduk()
-    {
-        $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'), 'jadwal_perakitan.no_bppb')
-            ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-            ->groupBy('jadwal_rakit_noseri.jadwal_id')
-            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
-            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
-            ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
-            ->get();
-        return $d;
-    }
 }
