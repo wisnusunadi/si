@@ -500,7 +500,12 @@
             }).then((result) => {
                 if (result.isConfirmed) {
                     var form = $(this);
-                $('#saveButton').attr('disabled', true);
+                    Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
 
                     var rows_selected = table.column(0).checkboxes.selected();
                     const seri = [];
