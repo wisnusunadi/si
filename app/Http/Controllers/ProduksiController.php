@@ -1960,6 +1960,8 @@ class ProduksiController extends Controller
     function closeRakit(Request $request)
     {
         dd($request->all());
+        // JadwalPerakitan::find($request->jadwal_id)->update(['keterangan' => $request->keterangan]);
+        // return response()->json(['msg' => 'Data Berhasil disimpan']);
     }
 
     function getHeaderSeri($id)

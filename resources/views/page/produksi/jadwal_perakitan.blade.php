@@ -278,6 +278,8 @@
                             </div>
                         </div>
                     </div>
+                    <form action="" id="transferForm" name="transferForm">
+                    <input type="text" name="jadwal_id" id="jwdid">
                     <div class="card-body">
                         <label for="">Keterangan</label>
                         <div class="form-group">
@@ -288,8 +290,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary detailtransferKirim">Simpan</button>
+                <button type="submit" class="btn btn-primary detailtransferKirim">Simpan</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
@@ -633,6 +636,7 @@
 
         // Sisa Transfer Produk
         $(document).on('click','.detailtransfer ', function () {
+            $('#jwdid').val($(this).data('id'));
             const id = $(this).data('id');
             const prd = $(this).data('prd');
             const jml = $(this).data('jml');
@@ -644,11 +648,14 @@
             $('#tglMulaiTransfer').text(tglmulai);
             $('#tglSelesaiTransfer').text(tglselesai);
             $('.modalDetailTransfer').modal('show');
+            console.log($(this).data('id'));
         });
-        jadwalid = $(this).data('id');
-        // Sisa Transfer Produk Kirim
-        $(document).on('click','.detailtransferKirim ', function () {
-            console.log(jadwalid);
+
+        $('body').on('submit', '#transferForm', function(e) {
+            e.preventDefault();
+            var actionType = $('.detailtransferKirim').val();
+            $('.detailtransferKirim').html('Sending..');
+            var formData = new FormData(this);
             const keterangan = $('#keteranganTransferSisa').val();
             Swal.fire({
                 title: 'Apakah anda yakin?',
@@ -670,29 +677,37 @@
                     $.ajax({
                         url: "/api/tfp/closeRakit",
                         type: "post",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            id: id,
-                            keterangan: keterangan,
-                        },
-                        success: function (res) {
-                            console.log(res);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Berhasil',
-                                text: 'Data berhasil dikirim.',
-                            })
-                            $('.modalDetailTransfer').modal('hide');
-                            $('#table_produk_perakitan').DataTable().ajax
-                                .reload();
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: (data) => {
+                            console.log(data);
+                        }
+                        // success: function (res) {
+                            // console.log(res);
+                            // Swal.fire({
+                            //     icon: 'success',
+                            //     title: 'Berhasil',
+                            //     text: 'Data berhasil dikirim.',
+                            // })
+                            // $('.modalDetailTransfer').modal('hide');
+                            // $('#table_produk_perakitan').DataTable().ajax
+                            //     .reload();
                             // setTimeout(() => {
                             //     location.reload();
                             // }, 2000);
-                        }
+                        // }
                     })
                 }
             })
-        });
+        })
+        // jadwalid = $(this).data('id');
+        // Sisa Transfer Produk Kirim
+        // $(document).on('click','.detailtransferKirim ', function () {
+        //     console.log(jadwalid);
+
+        // });
     }
 </script>
 @stop
