@@ -666,6 +666,8 @@
 
         $(document).on('submit', '#form-logistik-create', function(e) {
             e.preventDefault();
+            $('#btnsimpan').attr('disabled', true);
+
             var action = $(this).attr('action');
             $.ajax({
                 headers: {
