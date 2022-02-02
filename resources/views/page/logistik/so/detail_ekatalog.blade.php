@@ -696,17 +696,17 @@
                 timeout: 8000
             })
         })
-        var showLoading = swal.fire({
-            title: 'Sedang Proses',
-            html: 'Loading...',
-            allowOutsideClick: false,
-            showConfirmButton: false,
-            willOpen: () => {Swal.showLoading()}
-        });
+
         $(document).on('submit', '#form-logistik-create', function(e) {
             e.preventDefault();
+            var showLoading = swal.fire({
+                title: 'Sedang Proses',
+                html: 'Loading...',
+                allowOutsideClick: false,
+                showConfirmButton: false,
+                willOpen: () => {Swal.showLoading()}
+            });
             $('#btnsimpan').attr('disabled', true);
-            showLoading();
             var action = $(this).attr('action');
             $.ajax({
                 headers: {
