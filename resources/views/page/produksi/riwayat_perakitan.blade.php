@@ -434,7 +434,7 @@
             search.push(val);
         });
         search = search.join('|');
-        table.column(5).search(search ?  '^'+search+'$' : '', true, false).draw();
+        table.column(5).search(search, true, false).draw();
     });
 
     // Tanggal Perakitan
