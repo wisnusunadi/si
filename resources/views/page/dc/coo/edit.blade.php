@@ -1,7 +1,9 @@
 <div class="row">
     <div class="col-lg-12 col-md-12">
         <div class="card">
-            <div class="card-header"><h6 class="card-title">Info</h6></div>
+            <div class="card-header">
+                <h6 class="card-title">Info</h6>
+            </div>
             <div class="card-body">
                 <div class="row d-flex justify-content-center">
                     <div class="col-5">
@@ -32,7 +34,9 @@
     <div class="col-lg-7 col-md-6">
         <form action="/api/dc/so/create/{{$noseri_id}}" id="form-create-coo" method="POST">
             <div class="card">
-                <div class="card-header"><h6 class="card-title">Tambah</h6></div>
+                <div class="card-header">
+                    <h6 class="card-title">Tambah</h6>
+                </div>
                 <div class="card-body">
                     <div class="form-horizontal">
                         <div class="form-group">
@@ -82,9 +86,42 @@
                             <label for="" class="col-form-label" style="text-align:right;">Tgl Kirim</label>
                             <input type="date" class="form-control col-form-label col-lg-4 col-md-6" name="tgl_kirim">
                         </div>
-                        <div class="form-group">
-                            <label for="" class="col-form-label">Keterangan</label>
-                            <textarea class="form-control col-form-label" name="keterangan"></textarea>
+                        <div class="form-group row" id="tgl_kirim">
+                            <label for="" class="col-5 col-form-label" style="text-align:right;">Tgl Kirim</label>
+                            <div class="col-5">
+                                <input type="date" class="form-control col-form-label" name="tgl_kirim">
+                                <div class="feedback" id="msgpart_id">
+                                    <small class="text-muted">*Boleh dikosongi jika tidak ada</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row" id="tgl_kirim">
+                            <label for="" class="col-5 col-form-label" style="text-align:right;">Tanda Terima</label>
+                            <div class="col-5">
+                                <textarea class="form-control col-form-label" name="keterangan"></textarea>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-12">
+                                <table class="table" style="width: 100%; text-align:center;" id="listnoseri">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>No Seri</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <!-- <tr>
+                                        <td>1</td>
+                                        <td>FX358085238401</td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>FX358085238390</td>
+                                    </tr> -->
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>

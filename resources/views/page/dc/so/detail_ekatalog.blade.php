@@ -256,8 +256,8 @@
                                     </th>
                                     <th>No Seri</th>
                                     <th>Tgl Kirim</th>
-                                    <th>Ket</th>
-                                    <th>Laporan</th>
+                                    <th>Ttd Terima</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -319,6 +319,21 @@
                         </button>
                     </div>
                     <div class="modal-body" id="edit">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="tglkirim_modal" role="dialog" aria-labelledby="tglkirim_modal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-warning">
+                        <h4 class="modal-title">Tgl Kirim COO</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="tglkirim_edit">
 
                     </div>
                 </div>
@@ -409,7 +424,8 @@
             },
             {
                 data: 'laporan',
-
+                orderable: false,
+                searchable: false
             }]
         });
 
@@ -505,6 +521,7 @@
                         ).then(function() {
                             location.reload();
                         });
+                        $('#cekbrg').attr("disabled", true);
                         $("#editmodal").modal('hide');
                         //$('#noseritable').DataTable().ajax.reload();
 
@@ -518,6 +535,43 @@
                 },
                 error: function(xhr, status, error) {
                     alert($('#form-create-coo').serialize());
+                }
+            });
+            return false;
+        });
+        $(document).on('submit', '#form-update-coo', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-update-coo').serialize(),
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan Penambahan Data Pengujian',
+                            'success'
+                        ).then(function() {
+                            location.reload();
+                        });
+                        $("#editmodal").modal('hide');
+                        $('#cekbrg').attr("disabled", true);
+                        $('#noseritable').DataTable().ajax.reload();
+
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Penambahan Data Pengujian',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-update-coo').serialize());
                 }
             });
             return false;
@@ -574,6 +628,34 @@
                     });
                     listnoseri(checkedAry, data);
                     // $("#editform").attr("action", href);
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
+
+        $(document).on('click', '.tglkirim_modal', function(event) {
+            var id = $(this).data('id');
+            console.log(id);
+
+            $.ajax({
+                url: "/dc/coo/edit_tglkirim/" + id,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#tglkirim_modal').modal("show");
+                    $('#tglkirim_edit').html(result).show();
+                    //  alert('response);
+
                 },
                 complete: function() {
                     $('#loader').hide();

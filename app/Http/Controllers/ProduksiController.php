@@ -2008,7 +2008,7 @@ class ProduksiController extends Controller
         $header = new TFProduksi();
         $header->tgl_masuk = $request->tgl_transfer;
         $header->dari = 17;
-        $header->ke = $request->tujuan;
+        $header->ke = 13;
         $header->jenis = 'masuk';
         $header->created_at = Carbon::now();
         $header->created_by = $request->userid;

@@ -169,7 +169,7 @@
                     <div class="card-body">
 
                         <div class="row">
-                            <div class="col-lg-6 col-12">
+                            <div class="col-lg-6 col-md-12">
                                 <div class="card h-100">
                                     <div class="card-body">
                                         <div class="row">
@@ -183,7 +183,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-6 col-12 align-center">
+                            <div class="col-lg-6 col-md-12 align-center">
                                 <div class="card">
                                     <div class="card-body">
                                         <h4><b>Sales Order</b></h4>
