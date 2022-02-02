@@ -237,13 +237,12 @@ export default {
       await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
         this.data_sparepart = response.data;
       });
-      $("#table_sparepart").DataTable({
-        pagingType: "simple_numbers_no_ellipses",
-      });
 
       await axios.get("/api/ppic/data/gk/unit").then((response) => {
         this.data_unit = response.data.data;
-        console.log("unit", this.data_unit);
+      });
+      $("#table_sparepart").DataTable({
+        pagingType: "simple_numbers_no_ellipses",
       });
       $("#table_unit").DataTable({
         pagingType: "simple_numbers_no_ellipses",
