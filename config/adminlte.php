@@ -1226,6 +1226,16 @@ return [
             'auth' => [9],
         ],
         [
+            'header' => 'DATA',
+            'auth' => [9]
+        ],
+        [
+            'text' => 'Produk',
+            'icon' => 'fas fa-box-open',
+            'url' => '/master/produk/show',
+            'auth' => [9],
+        ],
+        [
             'header' => 'PENJUALAN',
             'auth' => [9]
         ],

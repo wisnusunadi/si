@@ -23,6 +23,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('/master')->group(function () {
+    Route::post('/produk/no_akd', [App\Http\Controllers\MasterController::class, 'check_no_akd']);
+    Route::put('/produk/update_coo/{id}', [App\Http\Controllers\MasterController::class, 'update_coo_master_produk'])->name('master.produk.update_coo');
+});
+
 Route::prefix('/ppic')->group(function () {
     Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data']);
     Route::post('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_stok']);
@@ -48,7 +53,6 @@ Route::prefix('/ppic')->group(function () {
     Route::post('/update/komentar', [App\Http\Controllers\PpicController::class, 'update_komentar_jadwal_perakitan']);
     Route::post('/send_notification', [App\Http\Controllers\PpicController::class, 'send_notification']);
     Route::get('/data/produk_so/{id}/{value}', [PpicController::class, 'get_data_pesanan_produk']);
-
     Route::get('/test/query', [App\Http\Controllers\PpicController::class, 'test_query']);
 });
 
@@ -445,7 +449,7 @@ Route::prefix('/qc')->group(function () {
         Route::put('create/{jenis}/{pesanan_id}/{produk_id}', [App\Http\Controllers\QcController::class, 'create_data_qc']);
         Route::post('data/{value}', [App\Http\Controllers\QcController::class, 'get_data_so']);
         Route::post('data/selesai/{value}', [App\Http\Controllers\QcController::class, 'get_data_selesai_so']);
-        Route::post('seri/{value}/{idpesanan}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
+        Route::post('seri/{status}/{value}/{idpesanan}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
         Route::post('part/{value}', [App\Http\Controllers\QcController::class, 'get_data_part_cek']);
         Route::post('seri/select/{seri_id}/{produk_id}/{pesanan_id}', [App\Http\Controllers\QcController::class, 'get_data_select_seri']);
         Route::get('data_test', [App\Http\Controllers\QcController::class, 'get_data_so_qc']);
@@ -514,6 +518,7 @@ Route::prefix('/dc')->group(function () {
     Route::post('dashboard/data/{value}', [App\Http\Controllers\DcController::class, 'dashboard_data']);
     Route::prefix('/so')->group(function () {
         Route::post('create/{value}', [App\Http\Controllers\DcController::class, 'create_coo']);
+        Route::put('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);
         Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
         Route::post('detail/seri/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);

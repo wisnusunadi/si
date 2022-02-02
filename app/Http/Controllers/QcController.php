@@ -93,13 +93,35 @@ class QcController extends Controller
         }
         return view('page.qc.so.edit', ['jenis' => $jenis, 'pesanan_id' => $pesanan_id, 'produk_id' => $produk_id, 'data' => $data]);
     }
-    public function get_data_seri_ekatalog($id, $idpesanan)
+    public function get_data_seri_ekatalog($status, $id, $idpesanan)
     {
-        $data = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
-            $q->where(['gdg_brg_jadi_id' => $id]);
-        })->whereHas('detail.header', function ($q) use ($idpesanan) {
-            $q->where(['pesanan_id' => $idpesanan]);
-        });
+        if ($status == 'semua') {
+            $data = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
+                $q->where(['gdg_brg_jadi_id' => $id]);
+            })->whereHas('detail.header', function ($q) use ($idpesanan) {
+                $q->where(['pesanan_id' => $idpesanan]);
+            });
+        } elseif ($status == 'belum') {
+            $data = NoseriTGbj::DoesntHave('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
+                $q->where(['gdg_brg_jadi_id' => $id]);
+            })->whereHas('detail.header', function ($q) use ($idpesanan) {
+                $q->where(['pesanan_id' => $idpesanan]);
+            });
+        } elseif ($status == 'sudah') {
+            $data = NoseriTGbj::Has('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
+                $q->where(['gdg_brg_jadi_id' => $id]);
+            })->whereHas('detail.header', function ($q) use ($idpesanan) {
+                $q->where(['pesanan_id' => $idpesanan]);
+            });
+        }
+
+        // $data = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
+        //     $q->where(['gdg_brg_jadi_id' => $id]);
+        // })->whereHas('detail.header', function ($q) use ($idpesanan) {
+        //     $q->where(['pesanan_id' => $idpesanan]);
+        // });
+
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
@@ -1146,7 +1168,7 @@ class QcController extends Controller
         $po = Pesanan::find($pesanan_id);
         if ($po->log_id == "8") {
 
-            if (isset($po->DetailPesanan) && !isset($po->DetailPesananPart)) {
+            if (count($po->DetailPesanan) && !count($po->DetailPesananPart)) {
                 if ($po->getJumlahPesanan() == $po->getJumlahCek()) {
                     if ($po->getJumlahKirim() == 0) {
                         $po->log_id = '11';
@@ -1161,7 +1183,7 @@ class QcController extends Controller
                         }
                     }
                 }
-            } else if (!isset($po->DetailPesanan) && isset($po->DetailPesananPart)) {
+            } else if (!count($po->DetailPesanan) && count($po->DetailPesananPart)) {
                 if ($po->getJumlahPesananPart() == $po->getJumlahCekPart()) {
                     if ($po->getJumlahKirimPart() == 0) {
                         $po->log_id = '11';
@@ -1176,7 +1198,7 @@ class QcController extends Controller
                         }
                     }
                 }
-            } else if (isset($po->DetailPesanan) && isset($po->DetailPesananPart)) {
+            } else if (count($po->DetailPesanan) && count($po->DetailPesananPart)) {
                 if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPart() == $po->getJumlahCekPart())) {
                     if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
                         $po->log_id = '11';
