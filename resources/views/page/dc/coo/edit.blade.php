@@ -58,7 +58,7 @@
                         </div>
                         <div class="form-group hide" id="nama_label">
                             <div class="card" style="box-shadow:none;">
-                                <div class="card-body bg-warning">
+                                <div class="card-body" style="background-color: #a1c4ec">
                                     <div class="row">
                                         <div class="form-group col-6">
                                             <label for="" class="col-form-label" style="text-align:right;">Nama</label>
@@ -82,11 +82,14 @@
                                 <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan">
                             </div>
                         </div> --}}
-                        <div class="form-group" id="tgl_kirim">
+                        <div class="form-group" for="tgl_kirim">
                             <label for="" class="col-form-label" style="text-align:right;">Tgl Kirim</label>
                             <input type="date" class="form-control col-form-label col-lg-4 col-md-6" name="tgl_kirim">
+                            <div class="feedback" id="msgpart_id">
+                                <small class="text-muted">*Boleh dikosongi jika tidak ada</small>
+                            </div>
                         </div>
-                        <div class="form-group row" id="tgl_kirim">
+                        {{-- <div class="form-group row" id="tgl_kirim">
                             <label for="" class="col-5 col-form-label" style="text-align:right;">Tgl Kirim</label>
                             <div class="col-5">
                                 <input type="date" class="form-control col-form-label" name="tgl_kirim">
@@ -94,35 +97,12 @@
                                     <small class="text-muted">*Boleh dikosongi jika tidak ada</small>
                                 </div>
                             </div>
+                        </div> --}}
+                        <div class="form-group" for="keterangan">
+                            <label for="" class="col-form-label">Tanda Terima</label>
+                            <textarea class="form-control col-form-label" name="keterangan"></textarea>
                         </div>
-                        <div class="form-group row" id="tgl_kirim">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Tanda Terima</label>
-                            <div class="col-5">
-                                <textarea class="form-control col-form-label" name="keterangan"></textarea>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-12">
-                                <table class="table" style="width: 100%; text-align:center;" id="listnoseri">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>No Seri</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <!-- <tr>
-                                        <td>1</td>
-                                        <td>FX358085238401</td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>FX358085238390</td>
-                                    </tr> -->
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
+
                     </div>
                 </div>
                 <div class="card-footer">
@@ -130,7 +110,7 @@
                         <button class="btn btn-danger float-left" data-dismiss="modal">Batal</button>
                     </span>
                     <span>
-                        <button type="submit" class="btn btn-warning float-right disabled" id="btnsimpan">Simpan</button>
+                        <button type="submit" class="btn btn-info float-right disabled" id="btnsimpan">Simpan</button>
                     </span>
                 </div>
             </div>
