@@ -1836,8 +1836,10 @@ class ProduksiController extends Controller
                     if ($c == $c_all) {
                     } else {
                         return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
-                            <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
-                        </a>';
+                            <button class="btn btn-outline-success btn-sm"><i class="far fa-edit"></i> Transfer</button>
+                        </a>&nbsp;<a data-toggle="modal" data-target="#detailmodalTransfer" class="detailmodalTransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                        <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
+                    </a>';
                     }
                     // return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
                     //     <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
@@ -1850,13 +1852,17 @@ class ProduksiController extends Controller
                     if ($c == $c_all) {
                     } else {
                         return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
-                            <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
-                        </a>';
+                            <button class="btn btn-outline-success btn-sm"><i class="far fa-edit"></i> Transfer</button>
+                        </a>&nbsp;<a data-toggle="modal" data-target="#detailmodalTransfer" class="detailmodalTransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                        <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
+                    </a>';
                     }
                 } else {
                     return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
-                        <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
-                    </a>';
+                        <button class="btn btn-outline-success btn-sm"><i class="far fa-edit"></i> Transfer</button>
+                    </a>&nbsp;<a data-toggle="modal" data-target="#detailmodalTransfer" class="detailmodalTransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                    <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
+                </a>';
                 }
             })
             ->addColumn('status', function ($d) {
