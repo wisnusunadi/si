@@ -279,7 +279,7 @@
                         </div>
                     </div>
                     <form action="" id="transferForm" name="transferForm">
-                    <input type="text" name="jadwal_id" id="jwdid">
+                    <input type="hidden" name="jadwal_id" id="jwdid">
                     <div class="card-body">
                         <label for="">Keterangan</label>
                         <div class="form-group">
@@ -683,31 +683,22 @@
                         processData: false,
                         success: (data) => {
                             console.log(data);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Data berhasil dikirim.',
+                            })
+                            $('.modalDetailTransfer').modal('hide');
+                            $('#table_produk_perakitan').DataTable().ajax
+                                .reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
                         }
-                        // success: function (res) {
-                            // console.log(res);
-                            // Swal.fire({
-                            //     icon: 'success',
-                            //     title: 'Berhasil',
-                            //     text: 'Data berhasil dikirim.',
-                            // })
-                            // $('.modalDetailTransfer').modal('hide');
-                            // $('#table_produk_perakitan').DataTable().ajax
-                            //     .reload();
-                            // setTimeout(() => {
-                            //     location.reload();
-                            // }, 2000);
-                        // }
                     })
                 }
             })
         })
-        // jadwalid = $(this).data('id');
-        // Sisa Transfer Produk Kirim
-        // $(document).on('click','.detailtransferKirim ', function () {
-        //     console.log(jadwalid);
-
-        // });
     }
 </script>
 @stop

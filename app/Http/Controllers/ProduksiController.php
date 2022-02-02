@@ -1959,9 +1959,8 @@ class ProduksiController extends Controller
 
     function closeRakit(Request $request)
     {
-        dd($request->all());
-        // JadwalPerakitan::find($request->jadwal_id)->update(['keterangan' => $request->keterangan]);
-        // return response()->json(['msg' => 'Data Berhasil disimpan']);
+        JadwalPerakitan::find($request->jadwal_id)->update(['keterangan' => $request->keterangan, 'status_tf' => 14]);
+        return response()->json(['msg' => 'Data Berhasil disimpan']);
     }
 
     function getHeaderSeri($id)
@@ -2456,7 +2455,7 @@ class ProduksiController extends Controller
         ->groupBy('jadwal_rakit_noseri.jadwal_id')
         ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
         ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
-        ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
+        // ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
         ->where('produk_id', $id)
         ->get()->sortByDesc('date_in');
         return datatables()->of($d)
