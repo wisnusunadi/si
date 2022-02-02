@@ -17,7 +17,7 @@
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
 </div>
-<div class="content-header"> 
+<div class="content-header">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
@@ -488,7 +488,7 @@
             columns: [
                 {data: 'no_bppb'},
                 {data: 'produk'},
-                {data: 'aksi', 
+                {data: 'aksi',
                     "render": function ( data, type, row, meta ) {
                         return '<button class="btn btn-sm btn-outline-secondary buttonModalProduk" data-id="'+data+'" data-bppb="'+row.no_bppb+'" data-produk="'+row.produk+'"><i class="far fa-eye"></i> Detail</button>';
                     }

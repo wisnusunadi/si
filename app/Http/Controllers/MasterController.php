@@ -33,6 +33,7 @@ use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
 use App\Models\Sparepart;
 use App\Models\SparepartGudang;
+use App\Models\UserLog;
 use Illuminate\Support\Facades\DB;
 
 use function PHPUnit\Framework\returnValueMap;
@@ -971,5 +972,18 @@ class MasterController extends Controller
     {
         $data = GudangKarantinaNoseri::with('layout')->groupBy('layout_id')->whereNotNull('layout_id')->get();
         return $data;
+    }
+
+    function create_user_log(Request $request)
+    {
+        $row = new UserLog();
+        $row->user_id = $request->userid;
+        $row->user_nama = $request->usernama;
+        $row->subjek = $request->subjek;
+        $row->table = $this->table();
+        $row->keterangan = $request->keterangan;
+        $row->aksi = $request->aksi;
+        $row->created_at = Carbon::now();
+        $row->save();
     }
 }

@@ -2272,12 +2272,7 @@ class ProduksiController extends Controller
 
         // dd($request->seri);
         $seri = NoseriTGbj::whereIn('id', $request->seri)->get()->toArray();
-        // // return $seri;
-        // // // // if (count($seri) == $request->seri) {
-        // // // //     return 'a';
-        // // // // } else {
-        // // // //     return 'b';
-        // // // // }
+
         $i = 0;
         foreach ($seri as $s) {
             // return $s;
