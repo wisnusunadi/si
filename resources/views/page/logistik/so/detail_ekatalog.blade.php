@@ -227,7 +227,7 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Tanggal PO</small></div>
-                                    <div><b>{{$data->pesanan->tgl_po}}</b></div>
+                                    <div><b>{{date('d-m-Y', strtotime($data->pesanan->tgl_po))}}</b></div>
                                 </div>
                             </div>
                             <div class="col-2">
