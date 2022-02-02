@@ -2428,21 +2428,22 @@ class ProduksiController extends Controller
 
     function ajax_perproduk()
     {
-       $data = JadwalRakitNoseri::whereHas('header', function($q) {
-           $q->groupBy('produk_id');
-       })->with('header')->groupBy('jadwal_id')->get();
+    //    $data = JadwalRakitNoseri::whereHas('header', function($q) {
+    //        $q->groupBy('produk_id');
+    //    })->with('header')->groupBy('jadwal_id')->get();
+        $data = JadwalPerakitan::groupBy('produk_id')->groupBy('no_bppb')->has('noseri')->get();
        return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('no_bppb', function($d) {
-                return $d->header->no_bppb == null ? '-' : $d->header->no_bppb;
+                return $d->no_bppb == null ? '-' : $d->no_bppb;
             })
             ->addColumn('produk', function($d) {
-                if (isset($d->header->produk_id)) {
-                    return $d->header->produk->produk->nama . ' ' . $d->header->produk->nama;
+                if (isset($d->produk_id)) {
+                    return $d->produk->produk->nama . ' ' . $d->produk->nama;
                 }
             })
             ->addColumn('aksi', function($d) {
-                return $d->header->produk_id;
+                return $d->produk_id;
             })
             ->rawColumns(['aksi'])
             ->make(true);
