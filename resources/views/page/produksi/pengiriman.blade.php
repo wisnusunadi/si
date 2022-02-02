@@ -321,7 +321,7 @@
                         </div>
                     </div>
                     <form action="" id="formClose" name="formClose">
-                    <input type="text" name="jadwal_id" id="jwdid">
+                    <input type="hidden" name="jadwal_id" id="jwdid">
                     <div class="card-body">
                         <label for="">Keterangan</label>
                         <textarea name="keterangan_transfer" id="keterangan_transfer" cols="10" rows="10" class="form-control keteranganTransfer"></textarea>
@@ -813,7 +813,7 @@
         e.preventDefault();
         $('#btnCloseSimpan').html('Sending..');
         var formData = new FormData(this);
-       
+
         Swal.fire({
             title: 'Are you sure?',
             text: "Transfer Sisa Produk ?",
