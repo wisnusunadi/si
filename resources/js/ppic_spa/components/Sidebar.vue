@@ -36,7 +36,7 @@
                 </div>
               </a>
               <ul>
-                <li v-for="submenu in menu.submenu">
+                <li v-for="(submenu, index) in menu.submenu" :key="index">
                   <router-link :to="submenu.url">
                     <span>{{ submenu.text }}</span>
                   </router-link>
