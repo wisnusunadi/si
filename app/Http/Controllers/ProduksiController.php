@@ -1933,27 +1933,34 @@ class ProduksiController extends Controller
                     $seri->status = 11;
                     $seri->created_by = $request->userid;
                     $seri->save();
-                }
-            }
 
-            $d = JadwalPerakitan::find($request->jadwal_id);
-            $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
-            if ($d->jumlah == $jj) {
-                $d->status_tf = 15;
-                $d->no_bppb = strtoupper($request->no_bppb);
-                $d->filled_by = $request->userid;
-                $d->save();
-            } else {
-                $d->status_tf = 12;
-                $d->no_bppb = strtoupper($request->no_bppb);
-                $d->filled_by = $request->userid;
-                $d->save();
+                    $d = JadwalPerakitan::find($request->jadwal_id);
+                    $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
+                    if ($d->jumlah == $jj) {
+                        $d->status_tf = 15;
+                        $d->no_bppb = strtoupper($request->no_bppb);
+                        $d->filled_by = $request->userid;
+                        $d->save();
+                    } else {
+                        $d->status_tf = 12;
+                        $d->no_bppb = strtoupper($request->no_bppb);
+                        $d->filled_by = $request->userid;
+                        $d->save();
+                    }
+                }
             }
 
             return response()->json(['msg' => 'Successfully']);
         } else {
             return response()->json(['msg' => 'Noseri Sudah Ada, Silahkan Gunakan yang lain.']);
         }
+
+    }
+
+    function closeRakit(Request $request)
+    {
+        JadwalPerakitan::find($request->jadwal_id)->update(['keterangan' => $request->keterangan, 'status_tf' => 14]);
+        return response()->json(['msg' => 'Data Berhasil disimpan']);
     }
 
     function getHeaderSeri($id)
@@ -2421,21 +2428,22 @@ class ProduksiController extends Controller
 
     function ajax_perproduk()
     {
-       $data = JadwalRakitNoseri::whereHas('header', function($q) {
-           $q->groupBy('produk_id');
-       })->with('header')->groupBy('jadwal_id')->get();
+    //    $data = JadwalRakitNoseri::whereHas('header', function($q) {
+    //        $q->groupBy('produk_id');
+    //    })->with('header')->groupBy('jadwal_id')->get();
+        $data = JadwalPerakitan::groupBy('produk_id')->groupBy('no_bppb')->has('noseri')->get();
        return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('no_bppb', function($d) {
-                return $d->header->no_bppb == null ? '-' : $d->header->no_bppb;
+                return $d->no_bppb == null ? '-' : $d->no_bppb;
             })
             ->addColumn('produk', function($d) {
-                if (isset($d->header->produk_id)) {
-                    return $d->header->produk->produk->nama . ' ' . $d->header->produk->nama;
+                if (isset($d->produk_id)) {
+                    return $d->produk->produk->nama . ' ' . $d->produk->nama;
                 }
             })
             ->addColumn('aksi', function($d) {
-                return $d->header->produk_id;
+                return $d->produk_id;
             })
             ->rawColumns(['aksi'])
             ->make(true);
@@ -2448,7 +2456,7 @@ class ProduksiController extends Controller
         ->groupBy('jadwal_rakit_noseri.jadwal_id')
         ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
         ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
-        ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
+        // ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
         ->where('produk_id', $id)
         ->get()->sortByDesc('date_in');
         return datatables()->of($d)
