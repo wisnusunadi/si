@@ -83,6 +83,7 @@
     }
 
     @media screen and (min-width: 993px) {
+
         label,
         .row {
             font-size: 14px;
@@ -102,6 +103,7 @@
     }
 
     @media screen and (max-width: 992px) {
+
         label,
         .row {
             font-size: 12px;
@@ -119,7 +121,7 @@
             font-size: 12px;
         }
 
-        .collapsable{
+        .collapsable {
             display: none;
         }
     }
@@ -214,6 +216,42 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
+                                <span class="float-right filter hide" id="filter_form">
+                                    <button class="btn btn-outline-secondary dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
+                                        <i class="fas fa-filter"></i> Filter
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="filterpenjualan">
+                                        <form class="px-4" style="white-space:nowrap;">
+                                            <div class="dropdown-header">
+                                                Status
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus1" value="semua" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus1">
+                                                        Semua
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus2" value="belum" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus2">
+                                                        Belum di Uji
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="sudah" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus3">
+                                                        Sudah di Uji
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </span>
                                 <span class="float-right filter">
                                     <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
                                         <button class="btn btn-warning" id="cekbrg" disabled="true">
@@ -230,7 +268,7 @@
                                         <thead>
                                             <tr>
                                                 <th>
-                                                    <div class="form-check">
+                                                    <div class="form-check cek_header">
                                                         <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
                                                         <label class="form-check-label" for="check_all">
                                                         </label>
@@ -345,6 +383,8 @@
 
         $('#showtable').on('click', '.noserishow', function() {
             idpesanan = '{{$id}}';
+            $(".cek_header").css("display", "block");
+            $('input[type=radio][name=filter]').prop('checked', false);
             dataid = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');
             datajenis = $(this).attr('data-jenis');
@@ -352,9 +392,10 @@
             $('#cekbrg').prop('disabled', true);
             $('input[name ="check_all"]').prop('checked', false);
             if (datajenis == "produk") {
+                $('#filter_form').removeClass('hide')
                 $('#produk_detail').removeClass('hide');
                 $('#part_detail').addClass('hide');
-                $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + dataid + '/' + '{{$id}}').load();
+                $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/belum/' + dataid + '/' + '{{$id}}').load();
                 if (datacount == 0) {
                     // $('.sericheckbox').addClass("hide");
                     $('#noseritable').DataTable().column(0).visible(false);
@@ -364,6 +405,7 @@
                 }
 
             } else {
+                $('#filter_form').addClass('hide')
                 $('#produk_detail').addClass('hide');
                 $('#part_detail').removeClass('hide');
                 listcekpart(dataid);
@@ -477,7 +519,7 @@
             ajax: {
                 'type': 'post',
                 'datatype': 'JSON',
-                'url': '/api/qc/so/seri/0/0',
+                'url': '/api/qc/so/seri/belum/0/0',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -585,7 +627,9 @@
 
         var checkedAry = [];
         $('#noseritable').on('click', 'input[name="check_all"]', function() {
-            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
+            var rows = $('#noseritable').DataTable().rows({
+                'search': 'applied'
+            }).nodes();
             // Check/uncheck checkboxes for all rows in the table
             if ($('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
@@ -809,6 +853,19 @@
                     $('#btnsimpan').attr('disabled', true);
                 }
             }
+        });
+
+
+        $('input[type=radio][name=filter]').change(function() {
+            $('input[name ="check_all"]').prop('checked', false);
+            $(".cek_header").css("display", "block");
+            var stat = this.value;
+            if (stat == 'sudah' || stat == 'semua') {
+                $('.cek_header').css('display', 'none')
+            }
+            console.log('/api/qc/so/seri/' + stat + '/' + dataid + '/{{$id}}');
+            var dat = $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + stat + '/' + dataid + '/{{$id}}').load();
+
         });
     })
 </script>

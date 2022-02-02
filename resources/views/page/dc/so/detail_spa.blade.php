@@ -100,13 +100,13 @@
         }
     }
 
-    @media screen and (max-width: 992px){
-        .collapsable{
+    @media screen and (max-width: 992px) {
+        .collapsable {
             display: none;
         }
 
-        .align-md{
-            text-align:center;
+        .align-md {
+            text-align: center;
         }
     }
 </style>
@@ -423,7 +423,6 @@
         });
 
         function listnoseri(seri_id, data) {
-
             $('#listnoseri').DataTable({
                 destroy: true,
                 processing: true,
