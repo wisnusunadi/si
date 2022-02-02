@@ -320,16 +320,19 @@
                                 </div>
                         </div>
                     </div>
+                    <form action="" id="formClose" name="formClose">
+                    <input type="text" name="jadwal_id" id="jwdid">
                     <div class="card-body">
                         <label for="">Keterangan</label>
-                        <textarea name="" id="" cols="10" rows="10" class="form-control keteranganTransfer"></textarea>
+                        <textarea name="keterangan_transfer" id="keterangan_transfer" cols="10" rows="10" class="form-control keteranganTransfer"></textarea>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary simpanTransfer">Simpan</button>
+                <button type="submit" class="btn btn-primary simpanTransfer" id="btnCloseSimpan">Simpan</button>
             </div>
+        </form>
         </div>
     </div>
 </div>
@@ -784,9 +787,12 @@
 
     // Transfer Sisa Produk
     $(document).on('click','.detailmodalTransfer', function () {
-        const jml_sisa = $(this).parent().prev().prev().children().eq(1).text();
+        $('#jwdid').val($(this).data('id'));
+        // const jml_sisa = $(this).parent().prev().prev().children().eq(1).text();
+        const jml_sisa = $(this).data('jml');
         const id = $(this).data('id');
-        $('#jml1').text(jml_sisa.replace( /^\D+/g, ''));
+        // $('#jml1').text(jml_sisa.replace( /^\D+/g, ''));
+        $('span#jml1').text(jml_sisa + ' Unit');
         $.ajax({
             url: "/api/prd/headerSeri/" + id,
             type: "get",
@@ -803,7 +809,11 @@
         $('.modalTranfer').modal('show');
     });
 
-    $(document).on('click','.simpanTransfer', function () {
+    $('body').on('submit', '#formClose', function(e){
+        e.preventDefault();
+        $('#btnCloseSimpan').html('Sending..');
+        var formData = new FormData(this);
+       
         Swal.fire({
             title: 'Are you sure?',
             text: "Transfer Sisa Produk ?",
@@ -821,20 +831,18 @@
                         showConfirmButton: false
                 });
                 $(this).prop('disabled', true);
-                const jml_sisa = $('#jml1').text().match(/\d+/g);
-                const keterangan = $('#keteranganTransfer').val();
                 $.ajax({
-                    url: "#",
-                    data: {
-                        jml_sisa: jml_sisa,
-                        keterangan: keterangan,
-                    },
+                    url: "/api/tfp/closeTransfer",
                     type: "post",
-                    success: function (res) {
-                        console.log(res);
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: (data) => {
+                        console.log(data);
                         Swal.fire(
                             'Updated!',
-                            res.msg,
+                            data.msg,
                             'success'
                         ).then(function () {
                             location.reload();
