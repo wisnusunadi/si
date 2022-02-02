@@ -9,37 +9,86 @@
         border: 0 none;
     }
 
-    #showtable {
+    #historitabel {
         text-align: center;
-        white-space: nowrap;
     }
 
-    .filter {
-        margin-top: 5px;
-        margin-bottom: 5px;
+    .align-center {
+        text-align: center;
     }
 
-    .minimizechar {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 25ch;
+    .margin-all {
+        margin: 5px;
     }
 
-    .wb {
-        word-break: break-all;
+    .margin-side {
+        margin-left: 5px;
+        margin-right: 5px;
     }
 
-    .fa-search:hover {
-        color: #4682B4;
+    #profileImage {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        background: #4682B4;
+        font-size: 22px;
+        color: #fff;
+        text-align: center;
+        line-height: 100px;
+        margin-top: 10px;
+        margin-bottom: 20px;
     }
 
-    .fa-search:active {
-        color: #C0C0C0;
+    .center {
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 50%;
     }
 
-    .hide {
-        display: none !important;
+    #detailekat {
+        background-color: #E9DDE5;
+
+    }
+
+    #detailspa {
+        background-color: #FFE6C9;
+    }
+
+    #detailspb {
+        background-color: #E1EBF2;
+        /* color: #7D6378; */
+
+    }
+
+    .overflowy {
+        max-height: 550px;
+        width: auto;
+        overflow-y: scroll;
+        box-shadow: none;
+    }
+
+    .removeshadow {
+        box-shadow: none;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
+    .bordertopnone {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        vertical-align: top;
+    }
+
+    .margin {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
     }
 
     @media screen and (min-width: 1440px) {
@@ -50,6 +99,10 @@
         .dropdown-item {
             font-size: 14px;
         }
+
+        .labelinfo{
+            text-align: center;
+        }
     }
 
     @media screen and (max-width: 1439px) {
@@ -59,6 +112,22 @@
 
         .dropdown-item {
             font-size: 12px;
+        }
+
+        .labelinfo{
+            text-align: center;
+        }
+    }
+
+    @media screen and (max-width:991px){
+        .labelinfo{
+            text-align: left;
+        }
+    }
+
+    @media screen and (max-width:767px){
+        .labelinfo{
+            text-align: center;
         }
     }
 </style>
@@ -87,68 +156,56 @@
 @stop
 
 @section('content')
-<section class="content">
+<section class="section">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-lg-12 col-12">
+            <div class="col-lg-4 col-md-12">
+                <h5>Info</h5>
                 <div class="card">
                     <div class="card-body">
-                        <h5>Info Ekspedisi</h5>
-                        @foreach($ekspedisi as $e)
                         <div class="row">
-                            <div class="col-6 filter">
-                                <div><small class="text-muted">Deskripsi Ekspedisi</small></div>
-                                <div><b>{{$e->nama}}</b></div>
-                                <div><b>{{$e->telp}}</b></div>
-                                <div><b>{{$e->alamat}}</b></div>
+                            <div class="col-lg-12 col-md-4 align-center">
+                                <div id="profileImage" class="center margin-all"></div>
                             </div>
-
-                            <div class="col-3">
-                                <div class="filter">
-                                    <div><small class="text-muted">Jalur</small></div>
-                                    <div>
-                                        @foreach($e->jalurekspedisi as $j)
-                                        @if($j->nama == 'darat')
-                                        <span class="badge green-text">Darat</span>
-                                        @elseif($j->nama == 'laut')
-                                        <span class="badge blue-text">Laut</span>
-                                        @elseif($j->nama == 'udara')
-                                        <span class="badge orange-text">Udara</span>
-                                        @else
-                                        <span class="badge purple-text">Lain</span>
-                                        @endif
-                                        @endforeach
-                                    </div>
+                            <div class="col-lg-12 col-md-8 labelinfo">
+                                <div class="margin-all">
+                                    <h5><b>{{$e->nama}}</b></h5>
                                 </div>
-                                <div class="filter">
-                                    <div><small class="text-muted">Jurusan</small></div>
-                                    <div>
-                                        @foreach($e->Provinsi as $p)
-                                        {{$p->nama}}
-                                        @if( !$loop->last)
-                                        ,
-                                        @endif
-                                        @endforeach
-                                    </div>
+                                <div class="margin-all"><b>{{$e->alamat}}</b></div>
+                                <div class="margin-all">
+                                    <span class="margin-side"><i class="fas fa-phone text-muted margin-side"></i> <b>{{$e->telp}}</b></span>
+                                    <span class="margin-side"><i class="fas fa-envelope text-muted margin-side"></i><b>@if(!empty($e->email)) {{$e->email}} @else - @endif</b></span>
                                 </div>
-                            </div>
-                            <div class="col-3 filter">
-                                <div><small class="text-muted">Keterangan</small></div>
-                                <div>{{$e->ket}}</div>
+                                <div class="margin-all"><a class="text-muted margin-side">Jalur :</a><b>@foreach($e->jalurekspedisi as $j)
+                                    @if($j->nama == 'darat')
+                                    <span class="badge green-text">Darat</span>
+                                    @elseif($j->nama == 'laut')
+                                    <span class="badge blue-text">Laut</span>
+                                    @elseif($j->nama == 'udara')
+                                    <span class="badge orange-text">Udara</span>
+                                    @else
+                                    <span class="badge purple-text">Lain</span>
+                                    @endif
+                                    @endforeach</b></div>
+                                <div class="margin-all"><a class="text-muted margin-side">Jurusan :</a><b>
+                                    @foreach($e->Provinsi as $p)
+                                    {{$p->nama}}
+                                    @if(!$loop->last)
+                                    ,
+                                    @endif
+                                    @endforeach</b></div>
+                                <div class="margin-all"><a class="text-muted">{{$e->ket}}</a></div>
                             </div>
                         </div>
-                        @endforeach
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <h5>Histori Pengiriman</h5>
+            <div class="col-lg-8 col-md-12">
+                <h5>Histori Penjualan</h5>
                 <div class="card">
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table class="table table-hover" id="showtable" style="width: 100%;">
+                            <table class="table align-center" id="showtable" style="width: 100%;">
                                 <thead>
                                     <tr>
                                         <th>No</th>
@@ -164,39 +221,6 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                    <!-- <tr>
-                                        <td>1</td>
-                                        <td>SO-SPA10210001</td>
-                                        <td>SJ/10/20/2001</td>
-                                        <td>09-10-2021</td>
-                                        <td class="minimizechar">RS Nurul Ikhsan</td>
-                                        <td class="minimizechar">Jl. Jakarta No 18A-20A, Garut, Jawa Barat</td>
-                                        <td>081119494950</td>
-                                        <td><span class="badge blue-text">Dalam Pengiriman</span></td>
-                                        <td><i class="fas fa-search"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>2</td>
-                                        <td>SO-EKAT08210005</td>
-                                        <td>SJ/08/21/0986</td>
-                                        <td>02-08-2021</td>
-                                        <td class="minimizechar">Bapak Hutapea</td>
-                                        <td class="minimizechar">Jl. Moh. Hatta No 73, Medan, Sumatera Utara</td>
-                                        <td>082139754850</td>
-                                        <td><span class="badge green-text">Selesai</span></td>
-                                        <td><i class="fas fa-search"></i></td>
-                                    </tr>
-                                    <tr>
-                                        <td>3</td>
-                                        <td>SO-SPB08210005</td>
-                                        <td>SJ/01/20/1927</td>
-                                        <td>02-08-2021</td>
-                                        <td>Pemerintah Kab Badung</td>
-                                        <td class="minimizechar">Jl. Bougenvil No 45, Badung, Bali</td>
-                                        <td>082139754850</td>
-                                        <td><span class="badge green-text">Selesai</span></td>
-                                        <td><i class="fas fa-search"></i></td>
-                                    </tr> -->
                                 </tbody>
                             </table>
                         </div>
@@ -205,13 +229,25 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content" style="margin: 10px">
+                <div class="modal-header">
+                    <h4>Detail</h4>
+                </div>
+                <div class="modal-body" id="detail">
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
+
+
 @stop
 
 @section('adminlte_js')
 <script>
     $(function() {
-        console.log("{{$e->id}}");
         var showtable = $('#showtable').DataTable({
             destroy: true,
             processing: true,
@@ -266,6 +302,15 @@
                 }
             ]
         });
+
+        var cust = <?php echo json_encode($e->nama); ?>;
+        var cust = cust.replace('.', '').replace('PT ', '').replace('CV ', '').replace('& ', '').replace('(', '').replace(')', '');
+        var init = cust.split(" ");
+        var initial = "";
+        for (var i = 0; i < init.length; i++) {
+            initial = initial + init[i].charAt(0);
+        }
+        var profileImage = $('#profileImage').text(initial);
     });
 </script>
 @stop

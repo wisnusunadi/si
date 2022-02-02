@@ -2,10 +2,9 @@
     @method('PUT')
     @csrf
     <div class="content">
-        <div class="d-flex justify-content-center">
-        <div class="row">
+        <div class="row d-flex justify-content-center">
         {{-- <div class="d-flex justify-content-center"> --}}
-            <div class="col-lg-12">
+            <div class="col-lg-11">
                 {{-- <div class="d-flex justify-content-center"> --}}
                     <div class="row">
                         <div class="col-lg-12 col-md-12">
@@ -126,9 +125,7 @@
             </div>
         {{-- </div> --}}
         </div>
-        </div>
     </div>
     <!-- {{$prd_array}}
     {{$part_array}} -->
-
 </form>

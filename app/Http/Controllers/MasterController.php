@@ -233,6 +233,9 @@ class MasterController extends Controller
             ->addColumn('prov', function ($data) {
                 return $data->provinsi->nama;
             })
+            ->addColumn('ktp', function ($data) {
+                return $data->ktp;
+            })
             ->addColumn('button', function ($data) use ($divisi) {
 
                 $datas = "";
@@ -926,8 +929,8 @@ class MasterController extends Controller
     }
     public function detail_ekspedisi($id)
     {
-        $ekspedisi = Ekspedisi::where('id', $id)->get();
-        return view('page.logistik.ekspedisi.detail', ['ekspedisi' => $ekspedisi]);
+        $e = Ekspedisi::find($id);
+        return view('page.logistik.ekspedisi.detail', ['e' => $e]);
     }
 
     //Select
