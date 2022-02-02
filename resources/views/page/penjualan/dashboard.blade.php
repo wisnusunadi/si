@@ -243,8 +243,8 @@
                     <div class="card">
                         <div class="card-body">
                             <div class="row">
-                                <div class="col-lg-3 col-6">
-                                    <div class="small-box purple-text">
+                                <div class="col-lg-3 col-6 d-flex">
+                                    <div class="small-box purple-text flex-fill">
                                         <div class="inner">
                                             <h3>{{$belum_so}}</h3>
                                             <p>Belum Memiliki SO</p>
@@ -254,8 +254,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-6">
-                                    <div class="small-box orange-text">
+                                <div class="col-lg-3 col-6 d-flex">
+                                    <div class="small-box orange-text flex-fill">
                                         <div class="inner">
                                             <h3>{{$so_belum_gudang}}</h3>
                                             <p>SO Belum Diproses Gudang</p>
@@ -265,8 +265,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-6">
-                                    <div class="small-box yellow-text">
+                                <div class="col-lg-3 col-6 d-flex">
+                                    <div class="small-box yellow-text flex-fill">
                                         <div class="inner">
                                             <h3>{{$so_belum_qc}}</h3>
                                             <p>SO Belum Diproses QC</p>
@@ -276,8 +276,8 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-lg-3 col-6">
-                                    <div class="small-box green-text">
+                                <div class="col-lg-3 col-6 d-flex">
+                                    <div class="small-box green-text flex-fill">
                                         <div class="inner">
                                             <h3>{{$so_belum_logistik}}</h3>
                                             <p>SO Belum Diproses Logistik</p>
