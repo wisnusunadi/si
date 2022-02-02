@@ -234,6 +234,7 @@ Route::prefix('/tfp')->group(function () {
     Route::post('/seri-so', [ProduksiController::class, 'getNoseriSO']);
     Route::post('/seri-edit-so', [ProduksiController::class, 'getNoseriSOEdit']);
     Route::post('/closeRakit', [ProduksiController::class, 'closeRakit']);
+    Route::post('/closeTransfer', [ProduksiController::class, 'closeTransfer']);
 
     // check
     Route::post('/cekStok', [ProduksiController::class, 'checkStok']);
