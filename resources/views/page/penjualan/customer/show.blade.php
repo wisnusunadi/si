@@ -114,7 +114,7 @@
                                                 </button></a>
                                         </span>
                                         @endif
-                                        <span class=" float-right filter">
+                                        <span class="float-right filter">
                                             <button class="btn btn-outline-secondary dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
                                                 <i class="fas fa-filter"></i> Filter
                                             </button>

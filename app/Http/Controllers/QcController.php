@@ -1168,7 +1168,7 @@ class QcController extends Controller
         $po = Pesanan::find($pesanan_id);
         if ($po->log_id == "8") {
 
-            if (count($po->DetailPesanan) && !count($po->DetailPesananPart)) {
+            if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) <= 0) {
                 if ($po->getJumlahPesanan() == $po->getJumlahCek()) {
                     if ($po->getJumlahKirim() == 0) {
                         $po->log_id = '11';
@@ -1183,8 +1183,8 @@ class QcController extends Controller
                         }
                     }
                 }
-            } else if (!count($po->DetailPesanan) && count($po->DetailPesananPart)) {
-                if ($po->getJumlahPesananPart() == $po->getJumlahCekPart()) {
+            } else if (count($po->DetailPesanan) <= 0 && count($po->DetailPesananPart) > 0) {
+                if ($po->getJumlahPesananPart() == $po->getJumlahCekPart("ok")) {
                     if ($po->getJumlahKirimPart() == 0) {
                         $po->log_id = '11';
                         $po->save();
@@ -1198,8 +1198,8 @@ class QcController extends Controller
                         }
                     }
                 }
-            } else if (count($po->DetailPesanan) && count($po->DetailPesananPart)) {
-                if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPart() == $po->getJumlahCekPart())) {
+            } else if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) > 0) {
+                if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPart() == $po->getJumlahCekPart("ok"))) {
                     if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
                         $po->log_id = '11';
                         $po->save();
