@@ -39,36 +39,37 @@
                 {{$d->Pesanan->tgl_po}}
             </td>
             <td style="text-align:left">
-                @if(isset($d->penjualan_produk_id))
+                @if(isset($d->PenjualanProduk))
 
                 @if($d->getJumlahProduk() > 1)
-                {{-- {{$d->DetailPesananProduk->first()->DetailLogistik->first()->Logistik->nosurat}} --}}
+
                 @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
                 @foreach( $p->DetailLogistik as $q)
                 {{$q->Logistik->nosurat}}
                 @endforeach
                 @endforeach
-                @elseif($d->getJumlahProduk() <= 1) @foreach($d->DetailPesananProduk as $p)
-                    @foreach( $p->DetailLogistik as $q)
-                    {{$q->Logistik->nosurat}}
-                    @endforeach
-                    @endforeach
-                    @endif
 
-                    @else
+                @else
+                @foreach($d->DetailPesananProduk as $p)
+                @foreach( $p->DetailLogistik as $q)
+                {{$q->Logistik->nosurat}}
+                @endforeach
+                @endforeach
+                @endif
 
+                @else
 
-                    {{$d->DetailLogistikPart->Logistik->nosurat}}
+                @if(isset($d->DetailLogistikPart->Logistik))
+                {{$d->DetailLogistikPart->Logistik->nosurat}}
+                @endif
 
-
-
-                    @endif
+                @endif
             </td>
             <td style="text-align:left">
                 @if(isset($d->PenjualanProduk))
 
                 @if($d->getJumlahProduk() > 1)
-                {{-- {{$q->DetailPesananProduk}} --}}
+
                 @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
                 @foreach( $p->DetailLogistik as $q)
                 {{$q->Logistik->tgl_kirim}}
@@ -85,10 +86,9 @@
 
                 @else
 
-
+                @if(isset($d->DetailLogistikPart->Logistik))
                 {{$d->DetailLogistikPart->Logistik->tgl_kirim}}
-
-
+                @endif
 
                 @endif
             </td>
