@@ -153,6 +153,9 @@
                 data: 'action'
             }
         ],
+        order: [
+                [1, 'desc']
+            ],
         "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
@@ -320,7 +323,13 @@
             confirmButtonText: 'Ya, Terima!'
         }).then((result) => {
             if (result.value) {
-            $(this).prop('disabled', true);
+                $(this).prop('disabled', true);
+                Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
                 $.ajax({
                     url: "/api/prd/terimaseri",
                     type: "post",

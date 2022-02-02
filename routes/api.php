@@ -237,6 +237,8 @@ Route::prefix('/tfp')->group(function () {
     Route::get('rakit-terima/{id}/{value}', [GudangController::class, 'getTerimaRakit']);
     Route::post('/seri-so', [ProduksiController::class, 'getNoseriSO']);
     Route::post('/seri-edit-so', [ProduksiController::class, 'getNoseriSOEdit']);
+    Route::post('/closeRakit', [ProduksiController::class, 'closeRakit']);
+    Route::post('/closeTransfer', [ProduksiController::class, 'closeTransfer']);
 
     // check
     Route::post('/cekStok', [ProduksiController::class, 'checkStok']);
@@ -276,6 +278,8 @@ Route::prefix('/prd')->group(function () {
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current']);
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
     Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
+    Route::get('/ajax_perproduk', [ProduksiController::class, 'ajax_perproduk']);
+    Route::get('/detail_perproduk/{id}', [ProduksiController::class, 'detail_perproduk']);
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
     Route::post('cek-noseri', [ProduksiController::class, 'cekDuplicateNoseri']);

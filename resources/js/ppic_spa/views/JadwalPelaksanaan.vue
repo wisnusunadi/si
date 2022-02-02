@@ -7,6 +7,8 @@
 <script>
 import axios from "axios";
 import Jadwal from "./Jadwal.vue";
+import $ from "jquery";
+
 
 export default {
   name: "JadwalPelaksanaan",
@@ -24,7 +26,6 @@ export default {
         .then((response) => {
           this.$store.commit("setJadwal", response.data);
         });
-
       this.$store.commit("setStatus", "pelaksanaan");
 
       this.$store.commit("setIsLoading", false);
