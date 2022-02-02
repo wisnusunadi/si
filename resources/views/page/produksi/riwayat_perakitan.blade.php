@@ -4,9 +4,9 @@
 
 @section('content')
 <style>
-    #DataTables_Table_0_filter{
+    /* #DataTables_Table_0_filter{
         display: none;
-    }
+    } */
 </style>
 <div class="content-header">
     <div class="container-fluid">
@@ -315,10 +315,10 @@
     $('.produk_select').select2();
     $.ajax({
         type: "get",
-        url: "/api/prd/product_his_rakit",
+        url: "/api/prd/product_his_rakit", 
         success: function (response) {
             $.each(response, function (a,b) {
-                 $('#produk_select').append('<option value="'+b+'">'+b+'</option>');
+                 $('.produk_select').append('<option value="'+b+'">'+b+'</option>');
             });
         }
     });
@@ -377,6 +377,9 @@
         "lengthChange": false,
         "ordering": false,
         "info": false,
+        "search": {
+            "regex": true
+        },
         "responsive": true,
         "order": [[ 0, 'asc' ], [2, 'asc']],
         ajax: {
@@ -423,11 +426,12 @@
         },
     });
 
-    $('#produk_select').change(function() {
+    $('.produk_select').change(function() {
         var search = [];
 
-        $.each($('#produk_select option:selected'), function () {
-            search.push($(this).val());
+        $.each($('.produk_select option:selected'), function () {
+            let val = $.fn.dataTable.util.escapeRegex($(this).val());
+            search.push(val);
         });
         search = search.join('|');
         table.column(5).search(search, true, false).draw();

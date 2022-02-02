@@ -86,16 +86,18 @@
                     <div class="col-lg-12">
                         <table class="table table-bordered table_produk_perakitan ">
                             <thead class="thead-dark">
-
                                 <tr>
-                                    <th>Periode</th>
+                                    <th rowspan="2">Periode</th>
+                                    <th colspan="2" class="text-center">Tanggal</th>
+                                    <th rowspan="2">Nomor BPPB</th>
+                                    <th rowspan="2">Produk</th>
+                                    <th rowspan="2">Jumlah</th>
+                                    <th rowspan="2">Status</th>
+                                    <th rowspan="2">Aksi</th>
+                                </tr>
+                                <tr>
                                     <th class="text-center">Tanggal Masuk</th>
                                     <th class="text-center">Tanggal Keluar</th>
-                                    <th>Nomor BPPB</th>
-                                    <th>Produk</th>
-                                    <th>Jumlah</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
@@ -228,7 +230,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal Transfer-->
 <div class="modal fade modalSeri" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -246,8 +248,87 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
                 <button type="button" class="btn btn-primary submitNoSeri">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Modal Transfer Sisa --}}
+<div class="modal fade modalTranfer" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm">
+                                <label for="">Nomor BPPB</label>
+                                <div class="card" style="background-color: #C8E1A7">
+                                    <div class="card-body">
+                                        <span id="no_bppb1">-</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <label for="">Nama Produk</label>
+                                <div class="card" style="background-color: #F89F81">
+                                    <div class="card-body">
+                                        <span id="produk1">Produk 1</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <label for="">Kategori</label>
+                                <div class="card" style="background-color: #FCF9C4">
+                                    <div class="card-body">
+                                        <span id="kategori1">Kategori 1</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                                <div class="col-sm">
+                                    <label for="">Jumlah Transfer</label>
+                                    <div class="card" style="background-color: #FFCC83">
+                                        <div class="card-body">
+                                            <span id="jml1">100 Unit</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <label for="">Tanggal Mulai</label>
+                                    <div class="card" style="background-color: #FFE0B4">
+                                        <div class="card-body">
+                                            <span id="start1">10-06-2021</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm">
+                                    <label for="">Tanggal Selesai</label>
+                                    <div class="card" style="background-color: #FFECB2">
+                                        <div class="card-body">
+                                            <span id="end1"> 13-06-2021</span>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <label for="">Keterangan</label>
+                        <textarea name="" id="" cols="10" rows="10" class="form-control keteranganTransfer"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary simpanTransfer">Simpan</button>
             </div>
         </div>
     </div>
@@ -699,6 +780,69 @@
                 }
             }
         });
+    });
+
+    // Transfer Sisa Produk
+    $(document).on('click','.detailmodalTransfer', function () {
+        const jml_sisa = $(this).parent().prev().prev().children().eq(1).text();
+        const id = $(this).data('id');
+        $('#jml1').text(jml_sisa.replace( /^\D+/g, ''));
+        $.ajax({
+            url: "/api/prd/headerSeri/" + id,
+            type: "get",
+            dataType: "json",
+            success: function (res) {
+                // console.log(res);
+                $('span#no_bppb1').text(res.bppb);
+                $('span#produk1').text(res.produk);
+                $('span#kategori1').text(res.kategori);
+                $('span#start1').text(res.start);
+                $('span#end1').text(res.end);
+            }
+        })
+        $('.modalTranfer').modal('show');
+    });
+
+    $(document).on('click','.simpanTransfer', function () {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "Transfer Sisa Produk ?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, Transfer it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                });
+                $(this).prop('disabled', true);
+                const jml_sisa = $('#jml1').text().match(/\d+/g);
+                const keterangan = $('#keteranganTransfer').val();
+                $.ajax({
+                    url: "#",
+                    data: {
+                        jml_sisa: jml_sisa,
+                        keterangan: keterangan,
+                    },
+                    type: "post",
+                    success: function (res) {
+                        console.log(res);
+                        Swal.fire(
+                            'Updated!',
+                            res.msg,
+                            'success'
+                        ).then(function () {
+                            location.reload();
+                        });
+                    }
+                })
+            }
+        })
     })
 </script>
 @stop
