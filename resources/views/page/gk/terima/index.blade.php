@@ -895,6 +895,12 @@
         }).then((result) => {
             if (result.value) {
                 $('#buttonSubmit').attr('disabled', true);
+                Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
                 let out = $('#datePicker').val();
                 let to = $('.dari').val();
 
