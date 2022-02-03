@@ -154,15 +154,21 @@
                 <table class="table tableLain">
                     <thead class="thead-light">
                         <tr>
-                            <th>Tanggal Masuk</th>
-                            <th>Tanggal Keluar</th>
-                            <th>Nomor BPPB</th>
-                            <th>Produk</th>
-                            <th>Jumlah</th>
-                            <th>Aksi</th>
+                            <th colspan="2"><center>Tanggal</center></th>
+                            {{-- <th>Tanggal Keluar</th> --}}
+                            <th rowspan="2">Nomor BPPB</th>
+                            <th rowspan="2">Produk</th>
+                            <th colspan="2"><center>Jumlah</center></th>
+                            <th rowspan="2">Aksi</th>
+                        </tr>
+                        <tr align="center">
+                            <th>Masuk</th>
+                            <th>Keluar</th>
+                            <th>Rakit</th>
+                            <th>Sisa</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    {{-- <tbody>
                         <tr>
                             <td>Kamis, 27 Januari 2022</td>
                             <td>Jumat, 28 Januari 2022</td>
@@ -171,7 +177,7 @@
                             <td>1 Unit</td>
                             <td><button class="btn btn-outline-secondary buttonTransfer"><i class="far fa-eye"></i> Detail</button></td>
                         </tr>
-                    </tbody>
+                    </tbody> --}}
                 </table>
             </div>
         </div>
@@ -338,7 +344,7 @@
                             <div class="col-sm">
                                 <label for="">Tanggal Masuk</label>
                                 <div class="card" style="background-color: #FFE0B4">
-                                    <div class="card-body" id="d_rakit">
+                                    <div class="card-body" id="d_rakit1">
                                         Senin 10-04-2021
                                     </div>
                                   </div>
@@ -346,7 +352,7 @@
                             <div class="col-sm">
                                 <label for="">Tanggal Keluar</label>
                                 <div class="card" style="background-color: #C8E1A7">
-                                    <div class="card-body" id="t_rakit">
+                                    <div class="card-body" id="t_rakit1">
                                         Senin 10-04-2021
                                     </div>
                                   </div>
@@ -356,7 +362,7 @@
                                 <div class="col-sm">
                                     <label for="">Nomor BPPB</label>
                                     <div class="card" style="background-color: #F89F81">
-                                        <div class="card-body" id="bppb">
+                                        <div class="card-body" id="bppb1">
                                             516546546546546
                                         </div>
                                       </div>
@@ -364,7 +370,7 @@
                                 <div class="col-sm">
                                     <label for="">Nama Produk</label>
                                     <div class="card" style="background-color: #FCF9C4">
-                                        <div class="card-body" id="produk">
+                                        <div class="card-body" id="produk1">
                                             Produk 1
                                         </div>
                                       </div>
@@ -372,7 +378,7 @@
                                 <div class="col-sm">
                                     <label for="">Jumlah</label>
                                     <div class="card" style="background-color: #FFCC83">
-                                        <div class="card-body" id="jml">
+                                        <div class="card-body" id="jml1">
                                             100 Unit
                                         </div>
                                       </div>
@@ -381,7 +387,7 @@
                         </div>
                     <div class="card-body">
                         <label for="">Keterangan</label>
-                        <textarea name="" class="form-control keterangan" id="" cols="10" rows="5" disabled>Keterangan</textarea>
+                        <textarea name="" class="form-control keterangan1" id="" cols="10" rows="5" disabled>Keterangan</textarea>
                         <hr>
                         <table class="table tableNoseri">
                             <thead>
@@ -452,7 +458,7 @@
     $('.produk_select').select2();
     $.ajax({
         type: "get",
-        url: "/api/prd/product_his_rakit", 
+        url: "/api/prd/product_his_rakit",
         success: function (response) {
             $.each(response, function (a,b) {
                  $('.produk_select').append('<option value="'+b+'">'+b+'</option>');
@@ -678,33 +684,67 @@
             "autoWidth": false,
             processing: true,
             lengthChange: false,
-            // ajax: {
-            //     url: "/api/prd/ajax_lain",
-            // },
-            // columns: [
-            //     {data: 'no_bppb'},
-            //     {data: 'produk'},
-            //     {data: 'aksi'},
-            // ],
+            ajax: {
+                url: "/api/prd/ajax_sisa",
+                type: "post"
+            },
+            columns: [
+                {data: 'start'},
+                {data: 'end'},
+                {data: 'no_bppb'},
+                {data: 'produk'},
+                {data: 'jml_rakit'},
+                {data: 'jml_sisa'},
+                {data: 'aksi'},
+            ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+        $('#produk_select2').select2({});
+        $(document).on('click','.transferlain', function () {
+            let jwdid = $(this).data('id');
+            let jml_sisa = $(this).data('jml');
+            let mulai = $(this).parent().prev().prev().prev().prev().prev().prev().text();
+            let selesai = $(this).parent().prev().prev().prev().prev().prev().text();
+            let bppb = $(this).parent().prev().prev().prev().prev().text();
+            let produk = $(this).parent().prev().prev().prev().text();
+            $('#d_rakit1').text(mulai);
+            $('#t_rakit1').text(selesai);
+            $('#bppb1').text(bppb);
+            $('#produk1').text(produk);
+            $('#jml1').text(jml_sisa + ' Unit');
+            $.ajax({
+                url: "/api/prd/detail_sisa_kirim",
+                type: "post",
+                data: {id: jwdid},
+                success: function(res) {
+                    console.log(res);
+                    $('.keterangan1').val(res.data[0].remark);
+                    $('.modalTransferLain').modal('show');
+                }
+            })
 
-        $(document).on('click','.buttonTransfer', function () {
-            $('.modalTransferLain').modal('show');
-        });
-        $('.tableNoseri').DataTable({
+            $('.tableNoseri').DataTable({
                 destroy: true,
                 "autoWidth": false,
                 processing: true,
                 scrollY: "100px",
                 lengthChange: false,
-        })
+                ajax: {
+                    url: "/api/prd/detail_sisa_kirim",
+                    type: "post",
+                    data: {id: jwdid},
+                },
+                columns: [
+                    {data: 'noseri'}
+                ],
+            })
 
-        $('#produk_select2').select2({});
-        $('.modalTransferLain').on('shown.bs.modal', function () {
             $('.tableNoseri').DataTable().columns.adjust().draw();
+            // console.log(jwdid);
         });
+
+
 </script>
 @stop
