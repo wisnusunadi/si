@@ -231,11 +231,29 @@ class MasterController extends Controller
         }
         return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('email', function($data){
+                if(!empty($data->email)){
+                    return $data->email;
+                }else{
+                    return '-';
+                }
+            })
+            ->editColumn('telp', function($data){
+                if(!empty($data->telp)){
+                    return $data->telp;
+                }else{
+                    return '-';
+                }
+            })
             ->addColumn('prov', function ($data) {
                 return $data->provinsi->nama;
             })
             ->addColumn('ktp', function ($data) {
-                return $data->ktp;
+                if(!empty($data->ktp)){
+                    return $data->ktp;
+                }else{
+                    return '-';
+                }
             })
             ->addColumn('button', function ($data) use ($divisi) {
 

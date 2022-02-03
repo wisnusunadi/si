@@ -94,17 +94,20 @@
         .btn {
             font-size: 14px;
         }
+
+        h4 {
+            font-size: 20px;
+        }
     }
 
     @media screen and (max-width: 1439px) {
 
-        label,
-        .row {
-            font-size: 12px;
+        section {
+            font-size: 14px;
         }
 
         h4 {
-            font-size: 20px;
+            font-size: 18px;
         }
 
         #detailmodal {
@@ -172,7 +175,6 @@
                                 <h5>Info Penjualan</h5>
                                 @if(isset($d->Pesanan->Ekatalog))
                                 <div class="row">
-
                                     <div class="col-lg-5 col-md-12 align-md">
                                         <div class="margin">
                                             <div><small class="text-muted">Distributor & Instansi</small></div>
@@ -186,7 +188,7 @@
                                         </div>
                                     </div>
 
-                                    <div class="col-lg-2 col-md-4">
+                                    <div class="col-lg-3 col-md-4">
                                         <div class="margin">
                                             <div><small class="text-muted">No AKN</small></div>
                                             <div><b id="no_akn">{{$d->pesanan->Ekatalog->no_paket}}</b></div>
@@ -204,7 +206,7 @@
                                         </div>
                                         <div class="margin">
                                             <div><small class="text-muted">Batas Pengiriman</small></div>
-                                            <div><b>{{$d->pesanan->Ekatalog->tgl_kontrak}}</b></div>
+                                            <div><b>{{date('d-m-Y', strtotime($d->pesanan->Ekatalog->tgl_kontrak))}}</b></div>
                                         </div>
                                     </div>
 
@@ -248,7 +250,7 @@
                                         </div>
                                         <div class="margin">
                                             <div><small class="text-muted">Tanggal PO</small></div>
-                                            <div><b id="no_so">{{$d->pesanan->tgl_po}}</b></div>
+                                            <div><b id="no_so">{{date('d-m-Y', strtotime($d->pesanan->tgl_po))}}</b></div>
                                         </div>
                                     </div>
                                 </div>
@@ -285,7 +287,7 @@
                                         </div>
                                         <div class="margin">
                                             <div><small class="text-muted">Tanggal PO</small></div>
-                                            <div><b id="no_so">{{$d->pesanan->tgl_po}}</b></div>
+                                            <div><b id="no_so">{{date('d-m-Y', strtotime($d->pesanan->tgl_po))}}</b></div>
                                         </div>
                                     </div>
                                 </div>
