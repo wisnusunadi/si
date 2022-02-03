@@ -814,7 +814,12 @@ class DcController extends Controller
                 }
             }
         }
-        return view('page.dc.dashboard', ['daftar_so' => $daftar_so, 'belum_coo' => $belum_coo, 'lewat_batas' => $lewat_batas]);
+
+        $penjualan = Pesanan::where('log_id', ['9'])->count();
+        $gudang = Pesanan::where('log_id', '6')->count();
+        $qc = Pesanan::where('log_id', '8')->count();
+        $logistik = Pesanan::whereIn('log_id', ['11', '13'])->count();
+        return view('page.dc.dashboard', ['daftar_so' => $daftar_so, 'belum_coo' => $belum_coo, 'lewat_batas' => $lewat_batas, 'penjualan' => $penjualan, 'gudang' => $gudang, 'qc' => $qc, 'logistik' => $logistik]);
     }
     public function dashboard_data($value)
     {
@@ -823,7 +828,7 @@ class DcController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {
-                    return  $data->so;
+                    return $data->so;
                 })
                 ->addColumn('status', function ($data) {
 
@@ -1287,6 +1292,48 @@ class DcController extends Controller
                 ->rawColumns(['batas_kontrak', 'status', 'button'])
                 ->make(true);
         }
+    }
+
+    public function dashboard_so(){
+        $data = Pesanan::whereIn('log_id', ['6', '8', '9', '11', '13'])->get();
+        return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('so', function ($data) {
+                    return $data->so;
+                })
+                ->addColumn('no_po', function ($data) {
+                    return $data->no_po;
+                })
+                ->addColumn('customer', function ($data) {
+                    $name = explode('/', $data->so);
+                    if ($name[1] == 'EKAT') {
+                        return '<div>' . $data->Ekatalog->Customer->nama . '</div><small>' . $data->Ekatalog->instansi . '</small>';
+                    } else if ($name[1] == 'SPA') {
+                        return $data->Spa->Customer->nama;
+                    } else if ($name[1] == 'SPB') {
+                        return $data->Spb->Customer->nama;
+                    }
+                })
+                ->addColumn('status', function ($data) {
+                    $datas = "";
+                    if ($data->log_id == "9") {
+                        $datas .= '<span class="badge purple-text">';
+                    } else if ($data->log_id == "6") {
+                        $datas .= '<span class="badge orange-text">';
+                    } else if ($data->log_id == "8") {
+                        $datas .= '<span class="badge yellow-text">';
+                    } else if ($data->log_id == "7") {
+                        $datas .= '<span class="badge red-text">';
+                    } else if ($data->log_id == "11") {
+                        $datas .= '<span class="badge red-text">';
+                    } else if ($data->log_id == "13") {
+                        $datas .= '<span class="badge red-text">';
+                    }
+                    $datas .= $data->State->nama . '</span>';
+                    return $datas;
+                })
+                ->rawColumns(['customer', 'status'])
+                ->make(true);
     }
     //Another
     public function bulan_romawi($value)

@@ -83,24 +83,37 @@
         padding: 6px;
         border-radius: 0.3rem;
     }
-
-    @media screen and (min-width: 1440px) {
-        section {
-            font-size: 14px;
-        }
-
-        .dropdown-item {
-            font-size: 14px;
-        }
+    .removeboxshadow {
+        box-shadow: none;
+        border: 1px;
     }
 
-    @media screen and (max-width: 1439px) {
-        section {
-            font-size: 12px;
+    @media screen and (min-width: 993px){
+        .labelket{
+            text-align: right;
         }
-
+        section{
+            font-size:14px;
+        }
+        .btn{
+            font-size:14px;
+        }
+        .dropdown-item {
+            font-size: 14px;
+        }
+        }
+    @media screen and (max-width: 992px){
+        .labelket{
+            text-align: left;
+        }
+        section{
+            font-size:12px;
+        }
         .dropdown-item {
             font-size: 12px;
+        }
+        .btn{
+            font-size:12px;
         }
     }
 </style>
