@@ -2551,6 +2551,20 @@ class ProduksiController extends Controller
                     </a>
                     ';
             })
+            ->addColumn('start_filter', function ($d) {
+                if (isset($d->tanggal_mulai)) {
+                    return $d->tanggal_mulai;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('end_filter', function ($d) {
+                if (isset($d->tanggal_selesai)) {
+                    return $d->tanggal_selesai;
+                } else {
+                    return '-';
+                }
+            })
             ->rawColumns(['aksi', 'jml_rakit', 'jml_sisa'])
             ->make(true);
     }
