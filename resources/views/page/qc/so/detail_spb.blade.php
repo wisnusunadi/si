@@ -422,6 +422,14 @@
         });
 
         $(document).on('submit', '#form-pengujian-update', function(e) {
+            $('#btnsimpan').attr('disabled', true);
+            // var showLoading = swal.fire({
+            //     title: 'Sedang Proses',
+            //     html: 'Loading...',
+            //     allowOutsideClick: false,
+            //     showConfirmButton: false,
+            //     willOpen: () => {Swal.showLoading()}
+            // });
             if (datajenis == "produk") {
                 e.preventDefault();
                 var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
@@ -447,6 +455,15 @@
                         noseri_id: data,
                     },
                     dataType: 'JSON',
+                    beforeSend: function() {
+                        swal.fire({
+                            title: 'Sedang Proses',
+                            html: 'Loading...',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {Swal.showLoading()}
+                        })
+                    },
                     success: function(response) {
                         console.log(response);
                         if (response['data'] == "success") {
@@ -467,6 +484,9 @@
                                 'error'
                             );
                         }
+                        else{
+                            console.log(response['data']);
+                        }
                     },
                     error: function(xhr, status, error) {
                         console.log(xhr);
@@ -482,6 +502,15 @@
                     type: "POST",
                     url: action,
                     data: $('#form-pengujian-update').serialize(),
+                    beforeSend: function() {
+                        swal.fire({
+                            title: 'Sedang Proses',
+                            html: 'Loading...',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {Swal.showLoading()}
+                        })
+                    },
                     success: function(response) {
                         console.log(response);
                         if (response['data'] == "success") {
@@ -502,6 +531,8 @@
                                 'Gagal melakukan Penambahan Data Pengujian',
                                 'error'
                             );
+                        } else{
+                            console.log(response['data']);
                         }
                     },
                     error: function(xhr, status, error) {

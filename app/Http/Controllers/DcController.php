@@ -800,7 +800,7 @@ class DcController extends Controller
     public function dashboard()
     {
         $daftar_so = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->DoesntHave('Spb')->get()->count();
-        $belum_coo = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik.NoseriCoo')->DoesntHave('Spb')->get()->count();
+        $belum_coo = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik')->DoesntHave('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan.NoseriDetailLogistik.NoseriCoo')->DoesntHave('Spb')->get()->count();
         $lewat_batas_data = Ekatalog::Has('Pesanan.DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->get();
 
         $tgl_sekarang = Carbon::now()->format('Y-m-d');

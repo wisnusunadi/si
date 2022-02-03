@@ -312,7 +312,7 @@
         <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
-                    <div class="modal-header bg-warning">
+                    <div class="modal-header bg-info">
                         <h4 class="modal-title">COO</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
