@@ -324,6 +324,13 @@
         e.preventDefault();
         var actionType = $('#btnSave').val();
         $('#btnSave').html('Sending..');
+        $('#btnSave').attr('disabled', true);
+        Swal.fire({
+            title: 'Please wait',
+            text: 'Data is transferring...',
+            allowOutsideClick: false,
+            showConfirmButton: false
+        });
         var formData = new FormData(this);
         $('#btnSave').attr('disabled', true);
         $.ajax({

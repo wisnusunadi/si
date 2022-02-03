@@ -788,17 +788,14 @@
     // Transfer Sisa Produk
     $(document).on('click','.detailmodalTransfer', function () {
         $('#jwdid').val($(this).data('id'));
-        // const jml_sisa = $(this).parent().prev().prev().children().eq(1).text();
         const jml_sisa = $(this).data('jml');
         const id = $(this).data('id');
-        // $('#jml1').text(jml_sisa.replace( /^\D+/g, ''));
         $('span#jml1').text(jml_sisa + ' Unit');
         $.ajax({
             url: "/api/prd/headerSeri/" + id,
             type: "get",
             dataType: "json",
             success: function (res) {
-                // console.log(res);
                 $('span#no_bppb1').text(res.bppb);
                 $('span#produk1').text(res.produk);
                 $('span#kategori1').text(res.kategori);
