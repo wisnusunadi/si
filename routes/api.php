@@ -333,6 +333,7 @@ Route::prefix('/gk')->group(function () {
     Route::post('/header/spr', [SparepartController::class, 'headerNoseriSpr']);
 
     // select
+    Route::post('/sel-m-jasa', [MasterController::class, 'select_m_jasa']);
     Route::post('/sel-m-spare', [MasterController::class, 'select_m_sparepart']);
     Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
     Route::post('/gkspr', [MasterController::class, 'select_gk_spr']);
@@ -522,6 +523,7 @@ Route::prefix('/logistik')->group(function () {
 Route::prefix('/dc')->group(function () {
     Route::post('data', [App\Http\Controllers\DcController::class, 'get_data_coo']);
     Route::post('dashboard/data/{value}', [App\Http\Controllers\DcController::class, 'dashboard_data']);
+    Route::post('dashboard/so', [App\Http\Controllers\DcController::class, 'dashboard_so']);
     Route::prefix('/so')->group(function () {
         Route::post('create/{value}', [App\Http\Controllers\DcController::class, 'create_coo']);
         Route::put('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);

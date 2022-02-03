@@ -160,8 +160,8 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-lg-4 col-md-12">
-                <h5>Info</h5>
                 <div class="card">
+                    <div class="card-header"><h5 class="card-title">Info Ekspedisi</h5></div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-lg-12 col-md-4 align-center">
@@ -201,8 +201,8 @@
                 </div>
             </div>
             <div class="col-lg-8 col-md-12">
-                <h5>Histori Penjualan</h5>
                 <div class="card">
+                    <div class="card-header"><h5 class="card-title">Histori Pengiriman</h5></div>
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table align-center" id="showtable" style="width: 100%;">

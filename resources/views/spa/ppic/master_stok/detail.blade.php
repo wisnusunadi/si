@@ -1,10 +1,10 @@
 <div class="row">
-    <div class="col-4">
+    <div class="col-lg-4 col-md-12">
         <div class="card">
             <div class="card-body">
                 <h5>Detail</h5>
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-12 col-md-8">
                         <div><small class="text-muted">Nama Produk</small></div>
                         <div>
                             <b>
@@ -16,9 +16,7 @@
                             </b>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-12 col-md-4">
                         <div><small class="text-muted">Jumlah</small></div>
                         <div><b>{{$jumlah}} pcs</b></div>
                     </div>
@@ -26,7 +24,7 @@
             </div>
         </div>
     </div>
-    <div class="col-8">
+    <div class="col-lg-8 col-md-12">
         <div class="card">
             <div class="card-body">
                 <h5>Laporan</h5>

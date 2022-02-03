@@ -1,7 +1,7 @@
 <div class="row filter">
     <div class="col-12">
         <div class="row">
-            <div class="col-4">
+            <div class="col-lg-4 col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Info Customer</h5>
@@ -13,8 +13,8 @@
                                 <div>
                                     <h6><b>{{$data->Customer->nama}}</b></h6>
                                 </div>
-                                <div><b>{{$data->Customer->alamat}}</b></div>
-                                <div><b>{{$data->Customer->Provinsi->nama}}</b></div>
+                                <div>{{$data->Customer->alamat}}</div>
+                                <div>{{$data->Customer->Provinsi->nama}}</div>
 
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8 col-md-12">
                 <h5>Detail Pemesanan</h5>
                 <div class="card overflowy" id="detailspa">
                     <div class="card-body">

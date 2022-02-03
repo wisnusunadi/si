@@ -484,7 +484,9 @@
                             html: 'Loading...',
                             allowOutsideClick: false,
                             showConfirmButton: false,
-                            willOpen: () => {Swal.showLoading()}
+                            willOpen: () => {
+                                Swal.showLoading()
+                            }
                         })
                     },
                     success: function(response) {
@@ -506,7 +508,7 @@
                                 'Gagal melakukan Penambahan Data Pengujian',
                                 'error'
                             );
-                        } else{
+                        } else {
                             console.log(response['data']);
                         }
                     },
@@ -530,7 +532,9 @@
                             html: 'Loading...',
                             allowOutsideClick: false,
                             showConfirmButton: false,
-                            willOpen: () => {Swal.showLoading()}
+                            willOpen: () => {
+                                Swal.showLoading()
+                            }
                         })
                     },
                     success: function(response) {
@@ -553,7 +557,7 @@
                                 'Gagal melakukan Penambahan Data Pengujian',
                                 'error'
                             );
-                        } else{
+                        } else {
                             console.log(response['data']);
                         }
                     },

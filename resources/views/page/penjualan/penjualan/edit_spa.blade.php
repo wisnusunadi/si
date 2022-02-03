@@ -53,11 +53,11 @@
         background-color: #c8daea;
     }
 
-    #produktable{
+    #produktable {
         width: 1371px !important;
     }
 
-    #parttable{
+    #parttable {
         width: 1371px !important;
     }
 
@@ -71,7 +71,7 @@
             font-size: 14px;
         }
 
-        .labelket{
+        .labelket {
             text-align: right;
         }
 
@@ -96,12 +96,13 @@
             font-size: 12px;
         }
 
-        .labelket{
+        .labelket {
             text-align: right;
         }
     }
 
     @media screen and (max-width: 991px) {
+
         /* label,
         .row {
             font-size: 12px;
@@ -118,7 +119,7 @@
             font-size: 12px;
         }
 
-        .labelket{
+        .labelket {
             text-align: left;
         }
     }

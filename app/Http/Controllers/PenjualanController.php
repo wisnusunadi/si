@@ -15,6 +15,7 @@ use App\Models\NoseriTGbj;
 use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\Logistik;
+use App\Models\OutgoingPesananPart;
 use App\Models\Pesanan;
 use App\Models\Spa;
 use App\Models\Spb;
@@ -954,16 +955,16 @@ class PenjualanController extends Controller
     }
     public function get_data_paket_pesanan_ekat($id)
     {
-        $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan.Ekatalog', function($q) use($id){
-                    $q->where('id', $id);
-                })->get();
+        $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('paket_produk', function ($data) {
-                return $data->DetailPesanan->PenjualanProduk->nama.' ('.$data->DetailPesanan->jumlah.' unit)';
+                return $data->DetailPesanan->PenjualanProduk->nama . ' (' . $data->DetailPesanan->jumlah . ' unit)';
             })
             ->addColumn('nama_produk', function ($data) {
-                return $data->GudangBarangJadi->Produk->nama.' '.$data->GudangBarangJadi->nama;
+                return $data->GudangBarangJadi->Produk->nama . ' ' . $data->GudangBarangJadi->nama;
             })
             ->addColumn('jumlah', function ($data) {
                 return $data->getJumlahPesanan();
@@ -1286,7 +1287,7 @@ class PenjualanController extends Controller
                                 </button>
                             </a>
                             ';
-                        } else{
+                        } else {
                             $return .= '<a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="' . $data->id . '">
                                 <button class="dropdown-item" type="button" >
                                 <i class="fas fa-pencil-alt"></i>
@@ -1419,7 +1420,7 @@ class PenjualanController extends Controller
                             </button>
                         </a>
                         ';
-                        }else{
+                        } else {
                             $return .= '<a data-toggle="modal" data-jenis="spa" class="editmodal" data-id="' . $data->id . '">
                                 <button class="dropdown-item" type="button" >
                                 <i class="fas fa-pencil-alt"></i>
@@ -1550,8 +1551,7 @@ class PenjualanController extends Controller
                                 </a>
                                 ';
                             }
-                        }
-                        else{
+                        } else {
                             if ($divisi_id == "26") {
                                 $return .= '<a data-toggle="modal" data-jenis="spb" class="editmodal" data-id="' . $data->id . '">
                                     <button class="dropdown-item" type="button" >
@@ -1694,6 +1694,11 @@ class PenjualanController extends Controller
                 return redirect()->back()->with('error', 'Gagal menambahkan Ekatalog');
             }
         } else if ($request->jenis_penjualan == 'spa') {
+            if ($request->jenis_penj == 'jasa') {
+                $k = '11';
+            } else {
+                $k = '9';
+            }
             $pesanan = Pesanan::create([
                 'so' => $this->createSO('SPA'),
                 'no_po' => $request->no_po,
@@ -1701,7 +1706,7 @@ class PenjualanController extends Controller
                 'no_do' => $request->no_do,
                 'tgl_do' => $request->tanggal_do,
                 'ket' =>  $request->keterangan,
-                'log_id' => '9'
+                'log_id' => $k
             ]);
             $x = $pesanan->id;
             $Spa = Spa::create([
@@ -1744,6 +1749,27 @@ class PenjualanController extends Controller
                             'harga' => str_replace('.', "", $request->part_harga[$i]),
                             'ongkir' => 0,
                         ]);
+                        if (!$dspb) {
+                            $bool = false;
+                        }
+                    }
+                } else if ($request->jenis_penj == 'jasa') {
+                    for ($i = 0; $i < count($request->jasa_id); $i++) {
+                        $dspb = DetailPesananPart::create([
+                            'pesanan_id' => $x,
+                            'm_sparepart_id' => $request->jasa_id[$i],
+                            'jumlah' => 1,
+                            'harga' => str_replace('.', "", $request->jasa_harga[$i]),
+                            'ongkir' => 0,
+                        ]);
+
+                        $qcspb = OutgoingPesananPart::create([
+                            'detail_pesanan_part_id' => $dspb->id,
+                            'tanggal_uji' => $request->tanggal_po,
+                            'jumlah_ok' => 1,
+                            'jumlah_nok' => 0
+                        ]);
+
                         if (!$dspb) {
                             $bool = false;
                         }
@@ -1796,6 +1822,11 @@ class PenjualanController extends Controller
                 return redirect()->back()->with('error', 'Gagal menambahkan SPA');
             }
         } else {
+            if ($request->jenis_penj == 'jasa') {
+                $k = '11';
+            } else {
+                $k = '9';
+            }
             $pesanan = Pesanan::create([
                 'so' => $this->createSO('SPB'),
                 'no_po' => $request->no_po,
@@ -1803,7 +1834,7 @@ class PenjualanController extends Controller
                 'no_do' => $request->no_do,
                 'tgl_do' => $request->tanggal_do,
                 'ket' =>  $request->keterangan,
-                'log_id' => '9'
+                'log_id' => $k
             ]);
             $x = $pesanan->id;
 
@@ -1846,6 +1877,26 @@ class PenjualanController extends Controller
                             'jumlah' => $request->part_jumlah[$i],
                             'harga' => str_replace('.', "", $request->part_harga[$i]),
                             'ongkir' => 0,
+                        ]);
+                        if (!$dspb) {
+                            $bool = false;
+                        }
+                    }
+                } else if ($request->jenis_penj == 'jasa') {
+                    for ($i = 0; $i < count($request->jasa_id); $i++) {
+                        $dspb = DetailPesananPart::create([
+                            'pesanan_id' => $x,
+                            'm_sparepart_id' => $request->jasa_id[$i],
+                            'jumlah' => 1,
+                            'harga' => str_replace('.', "", $request->jasa_harga[$i]),
+                            'ongkir' => 0,
+                        ]);
+
+                        $qcspb = OutgoingPesananPart::create([
+                            'detail_pesanan_part_id' => $dspb->id,
+                            'tanggal_uji' => $request->tanggal_po,
+                            'jumlah_ok' => 1,
+                            'jumlah_nok' => 0
                         ]);
                         if (!$dspb) {
                             $bool = false;
@@ -1986,13 +2037,14 @@ class PenjualanController extends Controller
         // }
     }
     //Update
-    public function edit_penjualan_pesanan($id, $jenis){
+    public function edit_penjualan_pesanan($id, $jenis)
+    {
         $data = "";
-        if($jenis == "ekatalog"){
+        if ($jenis == "ekatalog") {
             $data = Ekatalog::find($id);
-        }else if($jenis == "spa"){
+        } else if ($jenis == "spa") {
             $data = Spa::find($id);
-        }else if($jenis == "spb"){
+        } else if ($jenis == "spb") {
             $data = Spb::find($id);
         }
         return view('page.penjualan.penjualan.edit_pesanan', ['data' => $data, 'id' => $id, 'jenis' => $jenis]);
@@ -2115,7 +2167,6 @@ class PenjualanController extends Controller
                     $q->where('pesanan_id', $poid);
                 })->get();
                 if (count($dspap) > 0) {
-                    echo "yesdpp";
                     $deldspap = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
                         $q->where('pesanan_id', $poid);
                     })->delete();
@@ -2126,7 +2177,6 @@ class PenjualanController extends Controller
 
                 $dspa = DetailPesanan::where('pesanan_id', $poid)->get();
                 if (count($dspa) > 0) {
-                    echo "yes dp";
                     $deldspa = DetailPesanan::where('pesanan_id', $poid)->delete();
                     if (!$deldspa) {
                         $bool = false;
@@ -2321,58 +2371,56 @@ class PenjualanController extends Controller
         }
     }
 
-    public function update_penjualan_pesanan(Request $request, $id, $jenis){
+    public function update_penjualan_pesanan(Request $request, $id, $jenis)
+    {
         $bool = true;
-        if($jenis == "ekatalog"){
+        if ($jenis == "ekatalog") {
             $po = Pesanan::find($id);
             $ekat = Ekatalog::find($po->Ekatalog->id);
             $ekat->no_urut = $request->no_urut;
             $u = $ekat->save();
-            if($u){
-                if(!empty($request->no_do) && !empty($request->tgl_do)){
+            if ($u) {
+                if (!empty($request->no_do) && !empty($request->tgl_do)) {
                     $po->no_do = $request->no_do;
                     $po->tgl_do = $request->tgl_do;
                     $pou = $po->save();
-                    if(!$pou){
+                    if (!$pou) {
                         $bool = false;
                     }
-                }else if(empty($request->no_do) && empty($request->tgl_do)){
+                } else if (empty($request->no_do) && empty($request->tgl_do)) {
                     $po->no_do = "";
                     $po->tgl_do = NULL;
                     $pou = $po->save();
                     $bool = true;
-                }else{
+                } else {
                     $bool = false;
                 }
-            }else{
+            } else {
                 $bool = false;
             }
-        }
-        else
-        {
+        } else {
             $po = Pesanan::find($id);
-            if(!empty($request->no_do) && !empty($request->tgl_do)){
+            if (!empty($request->no_do) && !empty($request->tgl_do)) {
                 $po->no_do = $request->no_do;
                 $po->tgl_do = $request->tgl_do;
                 $pou = $po->save();
 
-                if(!$pou){
+                if (!$pou) {
                     $bool = false;
                 }
-            }else if(empty($request->no_do) && empty($request->tgl_do)){
+            } else if (empty($request->no_do) && empty($request->tgl_do)) {
                 $po->no_do = "";
                 $po->tgl_do = NULL;
                 $pou = $po->save();
                 $bool = true;
-            }else{
+            } else {
                 $bool = false;
             }
         }
 
-        if($bool == true){
+        if ($bool == true) {
             return response()->json(['data' => 'success']);
-        }
-        else if($bool == false){
+        } else if ($bool == false) {
             return response()->json(['data' => 'error']);
         }
     }

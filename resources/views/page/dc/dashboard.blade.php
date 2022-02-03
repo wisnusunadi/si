@@ -18,16 +18,19 @@
         text-align: center;
     }
 
-    #urgent {
-        color: red;
+    .urgent {
+        color: #dc3545;
+        font-weight: 600;
     }
 
-    #warning {
+    .warning {
         color: #FFC700;
+        font-weight: 600;
     }
 
-    #info {
+    .info {
         color: #3a7bb0;
+        font-weight: 600;
     }
 
     .fa-search:hover {
@@ -78,7 +81,7 @@
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 
-    @media screen and (max-width: 1440px) {
+    @media screen and (max-width: 1439px) {
         #pengirimansotable {
             font-size: 12px;
         }
@@ -92,7 +95,7 @@
         }
 
         h4 {
-            font-size: 20px;
+            font-size: 18px;
         }
 
         #detailmodal {
@@ -137,14 +140,14 @@
         <div class="row">
             <div class="col-12">
                 <div class="row">
-                    <div class="col-lg-6 col-12">
+                    <div class="col-lg-6 col-md-12">
                         <div class="card">
                             <div class="card-body">
                                 <h4>Penjualan 2021</h4>
                                 <div class="row">
 
-                                    <div class="col-lg-4 col-6">
-                                        <div class="small-box bg-success">
+                                    <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+                                        <div class="small-box bg-success flex-fill">
                                             <div class="inner">
                                                 <h3>{{$daftar_so}}</h3>
                                                 <p>Daftar SO</p>
@@ -155,8 +158,8 @@
                                             <a class="small-box-footer active" id="pengirimanso">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-6">
-                                        <div class="small-box warning-bg">
+                                    <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+                                        <div class="small-box warning-bg flex-fill">
                                             <div class="inner">
                                                 <h3>{{$belum_coo}}</h3>
                                                 <p>Belum memiliki COO</p>
@@ -167,8 +170,8 @@
                                             <a class="small-box-footer" id="sotanpacoo">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-6">
-                                        <div class="small-box bg-danger">
+                                    <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+                                        <div class="small-box bg-danger flex-fill">
                                             <div class="inner">
                                                 <h3>{{$lewat_batas}}</h3>
                                                 <p>Lewat Batas Kontrak</p>
@@ -183,6 +186,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
+                                        <div class="table-responsive">
                                         <table class="table table-hover" id="pengirimansotable" style="width:100%;">
                                             <thead>
                                                 <tr>
@@ -338,6 +342,65 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-md-12">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4>Sales Order</h4>
+                                <div class="row">
+                                    <div class="col-lg-3 col-md-6 col-sm-12 d-flex">
+                                        <div class="small-box red-text flex-fill align-center">
+                                            <div class="inner">
+                                                <h3>{{$penjualan}}</h3>
+                                                <p>Penjualan</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 d-flex">
+                                        <div class="small-box orange-text flex-fill align-center">
+                                            <div class="inner">
+                                                <h3>{{$gudang}}</h3>
+                                                <p>Gudang</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 d-flex">
+                                        <div class="small-box yellow-text flex-fill align-center">
+                                            <div class="inner">
+                                                <h3>{{$qc}}</h3>
+                                                <p>QC</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-3 col-md-6 col-sm-12 d-flex">
+                                        <div class="small-box green-text flex-fill align-center">
+                                            <div class="inner">
+                                                <h3>{{$logistik}}</h3>
+                                                <p>Logistik</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" id="sotable">
+                                                <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>No PO</th>
+                                                    <th>Customer</th>
+                                                    <th>Status</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody></tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -364,6 +427,8 @@
 @section('adminlte_js')
 <script>
     $(function() {
+
+
         pengirimansotable();
         $('#pengirimanso').on('click', function() {
             pengirimansotable();
@@ -560,6 +625,48 @@
                 ]
             })
         }
+
+        $('#sotable').DataTable().clear().destroy();
+        $('#sotable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/dc/dashboard/so',
+                'type': 'POST',
+                'datatype': 'JSON',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'no_po',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: true
+                }, {
+                    data: 'customer',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: true
+                },
+                {
+                    data: 'status',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
     })
 </script>
 <script>
