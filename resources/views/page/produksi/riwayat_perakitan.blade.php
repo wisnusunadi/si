@@ -4,9 +4,9 @@
 
 @section('content')
 <style>
-    /* #DataTables_Table_0_filter{
+    #DataTables_Table_0_filter{
         display: none;
-    } */
+    }
 </style>
 <div class="content-header">
     <div class="container-fluid">
