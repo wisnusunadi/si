@@ -704,6 +704,7 @@
         $('#produk_select2').select2({});
         $(document).on('click','.transferlain', function () {
             let jwdid = $(this).data('id');
+            let ket = $(this).data('ket');
             let jml_sisa = $(this).data('jml');
             let mulai = $(this).parent().prev().prev().prev().prev().prev().prev().text();
             let selesai = $(this).parent().prev().prev().prev().prev().prev().text();
@@ -714,16 +715,7 @@
             $('#bppb1').text(bppb);
             $('#produk1').text(produk);
             $('#jml1').text(jml_sisa + ' Unit');
-            $.ajax({
-                url: "/api/prd/detail_sisa_kirim",
-                type: "post",
-                data: {id: jwdid},
-                success: function(res) {
-                    console.log(res);
-                    $('.keterangan1').val(res.data[0].remark);
-                    $('.modalTransferLain').modal('show');
-                }
-            })
+            $('.keterangan1').val(ket);
 
             $('.tableNoseri').DataTable({
                 destroy: true,
@@ -740,7 +732,7 @@
                     {data: 'noseri'}
                 ],
             })
-
+            $('.modalTransferLain').modal('show');
             $('.tableNoseri').DataTable().columns.adjust().draw();
             // console.log(jwdid);
         });
