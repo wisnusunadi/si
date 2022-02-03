@@ -387,7 +387,32 @@
                         </div>
                     <div class="card-body">
                         <label for="">Keterangan</label>
-                        <textarea name="" class="form-control keterangan1" id="" cols="30" rows="10" disabled>Keterangan</textarea>
+                        <textarea name="" class="form-control keterangan1" id="" cols="10" rows="5" disabled>Keterangan</textarea>
+                        <hr>
+                        <table class="table tableNoseri">
+                            <thead>
+                                <tr>
+                                    <th>Nomor Seri</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>TB001</td>
+                                </tr>
+                                <tr>
+                                    <td>TB001</td>
+                                </tr>
+                                <tr>
+                                    <td>TB001</td>
+                                </tr>
+                                <tr>
+                                    <td>TB001</td>
+                                </tr>
+                                <tr>
+                                    <td>TB001</td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
@@ -692,11 +717,6 @@
             }
         });
 
-        function data_detail_sisa()
-        {
-            
-        }
-
         $(document).on('click','.transferlain', function () {
             let jwdid = $(this).data('id');
             let jml_sisa = $(this).data('jml');
@@ -720,9 +740,28 @@
                 }
             })
 
+            $('.tableNoseri').DataTable({
+                destroy: true,
+                "autoWidth": false,
+                processing: true,
+                scrollY: "100px",
+                lengthChange: false,
+                ajax: {
+                    url: "/api/prd/detail_sisa_kirim",
+                    type: "post",
+                    data: {id: jwdid},
+                },
+                columns: [
+                    {data: 'noseri'}
+                ],
+            })
+
             // console.log(jwdid);
         });
 
         $('#produk_select2').select2({});
+        $('.modalTransferLain').on('shown.bs.modal', function () {
+
+        });
 </script>
 @stop
