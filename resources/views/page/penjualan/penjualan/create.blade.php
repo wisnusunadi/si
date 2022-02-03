@@ -54,11 +54,12 @@
 
     }
 
-    #produktable{
-        width:1371px !important;
+    #produktable {
+        width: 1371px !important;
     }
-    #parttable{
-        width:1371px !important;
+
+    #parttable {
+        width: 1371px !important;
     }
 
 
@@ -72,7 +73,7 @@
             font-size: 14px;
         }
 
-        .labelket{
+        .labelket {
             text-align: right;
         }
 
@@ -97,7 +98,7 @@
             font-size: 12px;
         }
 
-        .labelket{
+        .labelket {
             text-align: right;
         }
     }
@@ -120,11 +121,10 @@
             font-size: 12px;
         }
 
-        .labelket{
+        .labelket {
             text-align: left;
         }
     }
-
 </style>
 @stop
 
@@ -200,6 +200,10 @@
                                                         <div class="form-check form-check-inline hide" id="penj_sem">
                                                             <input class="form-check-input" type="radio" name="jenis_penj" id="jenis_penj3" value="semua" />
                                                             <label class="form-check-label" for="jenis_penj3">Produk + Sparepart</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline hide" id="penj_jas">
+                                                            <input class="form-check-input" type="radio" name="jenis_penj" id="jenis_penj4" value="jasa" />
+                                                            <label class="form-check-label" for="jenis_penj3">Jasa</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -355,7 +359,7 @@
                                                 <div class="form-group row">
                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Urut</label>
                                                     <div class="col-lg-2 col-md-6">
-                                                        <input type="number" class="form-control col-form-label @error('no_urut') is-invalid @enderror" name="no_urut" id="no_urut"/>
+                                                        <input type="number" class="form-control col-form-label @error('no_urut') is-invalid @enderror" name="no_urut" id="no_urut" />
                                                         <div class="invalid-feedback" id="msgno_urut">
                                                             @if($errors->has('no_urut'))
                                                             {{ $errors->first('no_urut')}}
@@ -627,6 +631,72 @@
                                     </div>
                                 </div>
                             </div>
+                            <div class="row d-flex justify-content-center hide" id="datajasa">
+                                <div class="col-lg-11 col-md-12">
+                                    <h4>Jasa</h4>
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div class="table-responsive">
+                                                        <table class="table" style="text-align: center;" id="jasatable">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th colspan="7">
+                                                                        <button type="button" class="btn btn-primary float-right" id="addrowjasa">
+                                                                            <i class="fas fa-plus"></i>
+                                                                            Jasa
+                                                                        </button>
+                                                                    </th>
+                                                                </tr>
+                                                                <tr>
+                                                                    <th width="5%">No</th>
+                                                                    <th width="35%">Nama Jasa</th>
+                                                                    <th width="20%">Harga</th>
+                                                                    <th width="20%">Subtotal</th>
+                                                                    <th width="5%">Aksi</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>1</td>
+                                                                    <td>
+                                                                        <div class="form-group">
+                                                                            <select class="select2 form-control select-info custom-select jasa_id" name="jasa_id[]" id="jasa_id0" width="100%">
+                                                                            </select>
+                                                                        </div>
+                                                                    </td>
+
+                                                                    <td>
+                                                                        <div class="form-group d-flex justify-content-center">
+                                                                            <input type="text" class="form-control jasa_harga" name="jasa_harga[]" id="jasa_harga0" placeholder="Masukkan Harga" style="width:100%;" />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <div class="form-group d-flex justify-content-center">
+
+                                                                            <input type="text" class="form-control jasa_subtotal" name="jasa_subtotal[]" id="jasa_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
+                                                                        </div>
+                                                                    </td>
+                                                                    <td>
+                                                                        <a id="removerowjasa"><i class="fas fa-minus" style="color: red"></i></a>
+                                                                    </td>
+                                                                </tr>
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <th colspan="3" style="text-align:right;">Total Harga</th>
+                                                                    <th id="totalhargajasa" class="align-right">Rp. 0</th>
+                                                                </tr>
+                                                            </tfoot>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="row d-flex justify-content-center">
                                 <div class="col-11">
                                     <span>
@@ -666,6 +736,7 @@
         $("#tanggal_do").attr("min", today);
         select_data();
         load_part();
+        load_jasa();
         // $('#customer_id').on('keyup change', function() {
         //     if ($(this).val() != "") {
         //         $('#msgcustomer_id').text("");
@@ -759,6 +830,7 @@
                 $("#penj_prd").removeClass("hide");
                 $("#penj_spr").addClass("hide");
                 $("#penj_sem").addClass("hide");
+                $("#penj_jas").addClass("hide");
                 //
                 $("#alamat").val("");
                 $("#telepon").val("");
@@ -781,6 +853,7 @@
                 $("#penj_prd").removeClass("hide");
                 $("#penj_spr").removeClass("hide");
                 $("#penj_sem").removeClass("hide");
+                $("#penj_jas").removeClass("hide");
                 $("input[name=namadistributor][value='sudah']").prop("checked", true);
                 $("input[name=jenis_penj][value='produk']").prop("checked", true);
                 $("input[name=jenis_penj][value='sparepart']").prop("checked", false);
@@ -796,6 +869,7 @@
                 $("#penj_prd").removeClass("hide");
                 $("#penj_spr").removeClass("hide");
                 $("#penj_sem").removeClass("hide");
+                $("#penj_jas").removeClass("hide");
                 $("input[name=namadistributor][value='sudah']").prop("checked", true);
                 $("input[name=jenis_penj][value='produk']").prop("checked", false);
                 $("input[name=jenis_penj][value='sparepart']").prop("checked", true);
@@ -806,12 +880,19 @@
             if ($(this).val() == "produk") {
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
+                $("#datajasa").addClass("hide");
             } else if ($(this).val() == "sparepart") {
                 $("#datapart").removeClass("hide");
                 $("#dataproduk").addClass("hide");
+                $("#datajasa").addClass("hide");
             } else if ($(this).val() == "semua") {
                 $("#datapart").removeClass("hide");
                 $("#dataproduk").removeClass("hide");
+                $("#datajasa").addClass("hide");
+            } else if ($(this).val() == "jasa") {
+                $("#datapart").addClass("hide");
+                $("#dataproduk").addClass("hide");
+                $("#datajasa").removeClass("hide");
             }
         });
         $('input[type="radio"][name="do"]').on('change', function() {
@@ -1316,6 +1397,37 @@
             });
         }
 
+        function load_jasa() {
+            $('.jasa_id').select2({
+                placeholder: "Pilih Jasa",
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'POST',
+                    url: '/api/gk/sel-m-jasa',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+
+                        //console.log(data);
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            });
+        }
+
         function totalhargaprd() {
             var totalharga = 0;
             $('#produktable').find('tr .produk_subtotal').each(function() {
@@ -1334,11 +1446,20 @@
             })
         }
 
+        function totalhargajasa() {
+            var totalharga = 0;
+            $('#jasatable').find('tr .jasa_subtotal').each(function() {
+                var subtotal = replaceAll($(this).val(), '.', '');
+                totalharga = parseInt(totalharga) + parseInt(subtotal);
+                $("#totalhargajasa").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
+            })
+        }
+
         $("#produktable").on('keyup change', '.penjualan_produk_id', function() {
             var index = $(this).attr('id');
             var id = $(this).val();
             $.ajax({
-                url: '/api/penjualan_produk/select/'+id,
+                url: '/api/penjualan_produk/select/' + id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
@@ -1621,6 +1742,52 @@
             numberRowsPart($("#parttable"));
         });
 
+        function numberRowsJasa($t) {
+            var c = 0 - 2;
+            $t.find("tr").each(function(ind, el) {
+                $(el).find("td:eq(0)").html(++c);
+                var j = c - 1;
+                $(el).find('.jasa_id').attr('name', 'jasa_id[' + j + ']');
+                $(el).find('.jasa_id').attr('id', 'jasa_id' + j);
+                $(el).find('.jasa_jumlah').attr('name', 'jasa_jumlah[' + j + ']');
+                $(el).find('.jasa_jumlah').attr('id', 'jasa_jumlah' + j);
+                $(el).find('.jasa_harga').attr('name', 'jasa_harga[' + j + ']');
+                $(el).find('.jasa_harga').attr('id', 'jasa_harga' + j);
+                $(el).find('.jasa_subtotal').attr('name', 'jasa_subtotal[' + j + ']');
+                $(el).find('.jasa_subtotal').attr('id', 'jasa_subtotal' + j);
+                load_jasa();
+            });
+        }
+
+        $('#addrowjasa').on('click', function() {
+            $('#jasatable tbody tr:last').after(`
+            <tr>
+                <td>1</td>
+                <td>
+                    <div class="form-group">
+                        <select class="select2 form-control select-info custom-select jasa_id" name="jasa_id[]" id="jasa_id0" width="100%">
+                        </select>
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+
+                        <input type="text" class="form-control jasa_harga" name="jasa_harga[]" id="jasa_harga0" placeholder="Masukkan Harga" style="width:100%;" />
+                    </div>
+                </td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+
+                        <input type="text" class="form-control jasa_subtotal" name="jasa_subtotal[]" id="jasa_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
+                    </div>
+                </td>
+                <td>
+                    <a id="removerowjasa"><i class="fas fa-minus" style="color: red"></i></a>
+                </td>
+            </tr>`);
+            numberRowsJasa($("#jasatable"));
+        });
+
         $("#parttable").on('keyup change', '.part_jumlah', function() {
             var jumlah = $(this).closest('tr').find('.part_jumlah').val();
             var harga = $(this).closest('tr').find('.part_harga').val();
@@ -1652,10 +1819,32 @@
             }
         });
 
+        $("#jasatable").on('keyup change', '.jasa_harga', function() {
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
+            var harga = $(this).closest('tr').find('.jasa_harga').val();
+            var subtotal = $(this).closest('tr').find('.jasa_subtotal');
+
+            if (harga != "") {
+                var hargacvrt = replaceAll(harga, '.', '');
+                subtotal.val(formatmoney(1 * parseInt(hargacvrt)));
+                totalhargajasa();
+            } else {
+                subtotal.val(formatmoney("0"));
+                totalhargajasa();
+            }
+        });
+
         $('#parttable').on('click', '#removerowpart', function(e) {
             $(this).closest('tr').remove();
             numberRowsPart($("#parttable"));
             totalhargapart();
+        });
+
+        $('#jasatable').on('click', '#removerowjasa', function(e) {
+            $(this).closest('tr').remove();
+            numberRowsJasa($("#jasatable"));
+            totalhargajasa();
         });
 
         $('.provinsi').select2({

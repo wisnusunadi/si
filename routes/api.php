@@ -333,6 +333,7 @@ Route::prefix('/gk')->group(function () {
     Route::post('/header/spr', [SparepartController::class, 'headerNoseriSpr']);
 
     // select
+    Route::post('/sel-m-jasa', [MasterController::class, 'select_m_jasa']);
     Route::post('/sel-m-spare', [MasterController::class, 'select_m_sparepart']);
     Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
     Route::post('/gkspr', [MasterController::class, 'select_gk_spr']);

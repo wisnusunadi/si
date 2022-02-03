@@ -415,7 +415,7 @@ class MasterController extends Controller
         $Spb = collect(Spb::with('Pesanan')->where('customer_id', $id)->get());
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
-        if ($data){
+        if ($data) {
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('jenis', function ($data) {
@@ -496,57 +496,58 @@ class MasterController extends Controller
                 })
                 ->rawColumns(['status', 'button'])
                 ->make(true);
-            }
+        }
     }
 
-    public function get_data_master_produk(){
+    public function get_data_master_produk()
+    {
         $data = Produk::select();
         return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('kelompok_produk', function ($data) {
-                    $res = "";
-                    if($data->KelompokProduk->nama == 'Alat Kesehatan'){
-                        $res .= '<span class="badge blue-text">';
-                    } else if($data->KelompokProduk->nama == 'Water Treatment'){
-                        $res .= '<span class="badge orange-text">';
-                    } else if($data->KelompokProduk->nama == 'Aksesoris'){
-                        $res .= '<span class="badge purple-text">';
-                    } else if($data->KelompokProduk->nama == 'Lain Lain'){
-                        $res .= '<span class="badge red-text">';
-                    } else if($data->KelompokProduk->nama == 'Sparepart'){
-                        $res .= '<span class="badge green-text">';
-                    }
-                    $res .= $data->KelompokProduk->nama.'</span>';
-                    return $res;
-                })
-                ->addColumn('merk', function ($data) {
-                    return $data->merk;
-                })
-                ->addColumn('nama_produk', function ($data) {
-                    return $data->nama_coo;
-                })
-                ->addColumn('tipe', function ($data) {
-                    return $data->nama;
-                })
-                ->addColumn('no_akd', function ($data) {
-                    return $data->no_akd;
-                })
-                ->addColumn('coo', function ($data) {
-                    if($data->coo == "1"){
-                        return '<span class="badge green-text">Produk Utama</span>';
-                    } else {
-                        return '<span class="badge red-text">Bukan Produk Utama</span>';
-                    }
-                })
-                ->addColumn('aksi', function ($data) {
-                    if(Auth::user()->divisi->id == '9'){
-                        return '<a data-toggle="modal" class="editmodal" data-attr="' . route('master.produk.edit_coo',  $data->id) . '">
+            ->addIndexColumn()
+            ->addColumn('kelompok_produk', function ($data) {
+                $res = "";
+                if ($data->KelompokProduk->nama == 'Alat Kesehatan') {
+                    $res .= '<span class="badge blue-text">';
+                } else if ($data->KelompokProduk->nama == 'Water Treatment') {
+                    $res .= '<span class="badge orange-text">';
+                } else if ($data->KelompokProduk->nama == 'Aksesoris') {
+                    $res .= '<span class="badge purple-text">';
+                } else if ($data->KelompokProduk->nama == 'Lain Lain') {
+                    $res .= '<span class="badge red-text">';
+                } else if ($data->KelompokProduk->nama == 'Sparepart') {
+                    $res .= '<span class="badge green-text">';
+                }
+                $res .= $data->KelompokProduk->nama . '</span>';
+                return $res;
+            })
+            ->addColumn('merk', function ($data) {
+                return $data->merk;
+            })
+            ->addColumn('nama_produk', function ($data) {
+                return $data->nama_coo;
+            })
+            ->addColumn('tipe', function ($data) {
+                return $data->nama;
+            })
+            ->addColumn('no_akd', function ($data) {
+                return $data->no_akd;
+            })
+            ->addColumn('coo', function ($data) {
+                if ($data->coo == "1") {
+                    return '<span class="badge green-text">Produk Utama</span>';
+                } else {
+                    return '<span class="badge red-text">Bukan Produk Utama</span>';
+                }
+            })
+            ->addColumn('aksi', function ($data) {
+                if (Auth::user()->divisi->id == '9') {
+                    return '<a data-toggle="modal" class="editmodal" data-attr="' . route('master.produk.edit_coo',  $data->id) . '">
                             <i class="fas fa-edit info"></i>
                         </a>';
-                    }
-                })
-                ->rawColumns(['kelompok_produk', 'coo', 'aksi'])
-                ->make(true);
+                }
+            })
+            ->rawColumns(['kelompok_produk', 'coo', 'aksi'])
+            ->make(true);
     }
 
     //Create
@@ -712,7 +713,8 @@ class MasterController extends Controller
 
 
     //Edit
-    public function edit_coo_data_produk($id){
+    public function edit_coo_data_produk($id)
+    {
         $data = Produk::find($id);
         return view('page.master.produk.edit_coo', ['id' => $id, 'data' => $data]);
     }
@@ -759,7 +761,8 @@ class MasterController extends Controller
         }
     }
 
-    public function update_coo_master_produk(Request $request, $id){
+    public function update_coo_master_produk(Request $request, $id)
+    {
         $p = Produk::find($id);
         $p->no_akd = $request->no_akd;
         $p->nama_coo = $request->nama_coo;
@@ -987,7 +990,8 @@ class MasterController extends Controller
 
         echo json_encode($data);
     }
-    public function check_no_akd($id, $val){
+    public function check_no_akd($id, $val)
+    {
         $data = Produk::where('no_akd', $val)->whereNotIn('id', $id)->count();
         return $data;
     }
@@ -995,6 +999,15 @@ class MasterController extends Controller
     function select_m_sparepart(Request $request)
     {
         $data = Sparepart::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->where('kode', 'not like', '%jasa%')
+            ->orderby('nama', 'ASC')
+            ->get();
+        return response()->json($data);
+    }
+    function select_m_jasa(Request $request)
+    {
+        $data = Sparepart::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->where('kode', 'like', '%jasa%')
             ->orderby('nama', 'ASC')
             ->get();
         return response()->json($data);
