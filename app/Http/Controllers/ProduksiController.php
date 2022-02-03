@@ -2545,11 +2545,24 @@ class ProduksiController extends Controller
             })
             ->addColumn('aksi', function($d){
                 $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
-                return '
-                    <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '">
+                if (isset($d->keterangan)) {
+                    return '
+                    <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="'.$d->keterangan.'">
                         <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
                     </a>
                     ';
+                } else {
+                    return '
+                    <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="'.$d->keterangan_transfer.'">
+                        <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
+                    </a>
+                    ';
+                }
+                // return '
+                //     <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="'.$d->keterangan.'">
+                //         <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
+                //     </a>
+                //     ';
             })
             ->addColumn('start_filter', function ($d) {
                 if (isset($d->tanggal_mulai)) {

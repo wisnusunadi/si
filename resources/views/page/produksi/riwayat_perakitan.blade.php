@@ -110,7 +110,6 @@
                         <div class="form-group">
                             <label for="">Pilih Produk</label>
                             <select name="" id="produk_select2" class="form-control produk_select2" multiple>
-                                <option value="" selected="selected">All Produk</option>
                             </select>
                         </div>
                     </div>
@@ -319,24 +318,6 @@
             <div class="modal-body">
                 <div class="card">
                     <div class="card-header">
-                        <div class="row">
-                            <div class="col-sm">
-                                <label for="">Tanggal Masuk</label>
-                                <div class="card" style="background-color: #FFE0B4">
-                                    <div class="card-body" id="d_rakit1">
-                                        Senin 10-04-2021
-                                    </div>
-                                  </div>
-                            </div>
-                            <div class="col-sm">
-                                <label for="">Tanggal Keluar</label>
-                                <div class="card" style="background-color: #C8E1A7">
-                                    <div class="card-body" id="t_rakit1">
-                                        Senin 10-04-2021
-                                    </div>
-                                  </div>
-                            </div>
-                        </div>
                             <div class="row">
                                 <div class="col-sm">
                                     <label for="">Nomor BPPB</label>
@@ -658,7 +639,8 @@
         });
 
         // Transfer Lain lain
-        $('.tableLain').DataTable({
+        const produkTable = [];
+        var table2 = $('.tableLain').DataTable({
             destroy: true,
             "autoWidth": false,
             processing: true,
@@ -687,10 +669,20 @@
                     visible : false
                 }
             ],
+            initComplete: function () {
+                this.api().columns(3).data().unique().sort().each( function ( d, j ) {
+                    $('#produk_select2').select2({
+                        data: d,
+                        escapeMarkup: function (markup) {
+                            return markup;
+                        },
+                    });
+                });
+            },
         });
-        $('#produk_select2').select2({});
         $(document).on('click','.transferlain', function () {
             let jwdid = $(this).data('id');
+            let ket = $(this).data('ket');
             let jml_sisa = $(this).data('jml');
             let mulai = $(this).parent().prev().prev().prev().prev().prev().prev().text();
             let selesai = $(this).parent().prev().prev().prev().prev().prev().text();
@@ -701,22 +693,13 @@
             $('#bppb1').text(bppb);
             $('#produk1').text(produk);
             $('#jml1').text(jml_sisa + ' Unit');
-            $.ajax({
-                url: "/api/prd/detail_sisa_kirim",
-                type: "post",
-                data: {id: jwdid},
-                success: function(res) {
-                    console.log(res);
-                    $('.keterangan1').val(res.data[0].remark);
-                    $('.modalTransferLain').modal('show');
-                }
-            })
+            $('.keterangan1').val(ket);
 
             $('.tableNoseri').DataTable({
                 destroy: true,
                 "autoWidth": false,
                 processing: true,
-                scrollY: "100px",
+                scrollY: "250px",
                 lengthChange: false,
                 ajax: {
                     url: "/api/prd/detail_sisa_kirim",
@@ -727,13 +710,28 @@
                     {data: 'noseri'}
                 ],
             })
-
+            $('.modalTransferLain').modal('show');
+            $('.tableNoseri').DataTable().columns.adjust().draw();
             // console.log(jwdid);
         });
         $('.modalTransferLain').on('shown.bs.modal', function () {
             $('.tableNoseri').DataTable().columns.adjust().draw();
         });
 
-        
+        // Filter
+        $('.produk_select2').select2();
+        $('.produk_select2').change(function() {
+        var search2 = [];
+
+        $.each($('.produk_select2 option:selected'), function () {
+            const reg = '&quot;';
+            const a = $(this).val();
+            const b = a.replaceAll(reg, '"');
+            console.log(b);
+            search2.push(b);
+        });
+        search2 = search2.join('|');
+        table2.column(3).search(search2, true, false).draw();
+    });
 </script>
 @stop
