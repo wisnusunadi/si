@@ -160,9 +160,8 @@
                             <div class="card-body">
                                 <h4>Outgoing 2021</h4>
                                 <div class="row">
-
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="small-box bg-success">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
+                                        <div class="small-box bg-success flex-fill">
                                             <div class="inner">
                                                 <h3>{{$terbaru}}</h3>
                                                 <p>Pengujian Terbaru</p>
@@ -173,8 +172,8 @@
                                             <a class="small-box-footer active" id="pengujianterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="small-box warning-bg">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
+                                        <div class="small-box warning-bg flex-fill">
                                             <div class="inner">
                                                 <h3>{{$hasil}}</h3>
                                                 <p>Belum diuji</p>
@@ -185,8 +184,8 @@
                                             <a class="small-box-footer" id="belumdiuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12">
-                                        <div class="small-box bg-danger">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
+                                        <div class="small-box bg-danger flex-fill">
                                             <div class="inner">
                                                 <h3>{{$lewat_batas}}</h3>
                                                 <p>Lewat Batas Uji</p>
@@ -197,7 +196,6 @@
                                             <a class="small-box-footer" id="lewatbatasuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
@@ -274,8 +272,8 @@
                             <div class="card-body">
                                 <h4>Sales Order</h4>
                                 <div class="row">
-                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center">
-                                        <div class="small-box purple-text">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center d-flex">
+                                        <div class="small-box purple-text flex-fill">
                                             <div class="inner">
                                                 <h3>{{$po}}</h3>
                                                 <p>Dalam Proses PO</p>
@@ -285,8 +283,8 @@
                                             </div> -->
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center">
-                                        <div class="small-box orange-text">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center d-flex">
+                                        <div class="small-box orange-text flex-fill">
                                             <div class="inner">
                                                 <h3>{{$gudang}}</h3>
                                                 <p>Dalam Proses Gudang</p>
@@ -296,8 +294,8 @@
                                             </div> -->
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center">
-                                        <div class="small-box green-text">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 align-center d-flex">
+                                        <div class="small-box green-text flex-fill">
                                             <div class="inner">
                                                 <h3>{{$logistik}}</h3>
                                                 <p>Dalam Proses Logistik</p>

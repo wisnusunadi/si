@@ -118,6 +118,7 @@
     }
 
     @media screen and (max-width: 992px) {
+
         label,
         .row {
             font-size: 12px;
@@ -135,7 +136,7 @@
             font-size: 12px;
         }
 
-        .collapsable{
+        .collapsable {
             display: none;
         }
     }
@@ -232,6 +233,42 @@
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
+                                <span class="float-right filter hide" id="filter_form">
+                                    <button class="btn btn-outline-secondary dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
+                                        <i class="fas fa-filter"></i> Filter
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="filterpenjualan">
+                                        <form class="px-4" style="white-space:nowrap;">
+                                            <div class="dropdown-header">
+                                                Status
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus1" value="semua" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus1">
+                                                        Semua
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus2" value="belum" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus2">
+                                                        Belum di Uji
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="sudah" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus3">
+                                                        Sudah di Uji
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </span>
                                 <span class="float-right filter">
                                     <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
                                         <button class="btn btn-warning" id="cekbrg" disabled="true">
@@ -249,7 +286,7 @@
                                         <thead>
                                             <tr>
                                                 <th>
-                                                    <div class="form-check">
+                                                    <div class="form-check cek_header">
                                                         <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
                                                         <label class="form-check-label" for="check_all">
                                                         </label>
@@ -370,14 +407,19 @@
             dataid = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');
             datajenis = $(this).attr('data-jenis');
+            $(".cek_header").css("display", "block");
+            $('input[type=radio][name=filter]').prop('checked', false);
             $('.nosericheck').prop('checked', false);
             $('#cekbrg').prop('disabled', true);
             $('input[name ="check_all"]').prop('checked', false);
             if (datajenis == "produk") {
+
+                $('#filter_form').removeClass('hide')
                 $('#produk_detail').removeClass('hide');
                 $('#part_detail').addClass('hide');
-                $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + dataid + '/' + '{{$id}}').load();
+                $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/belum/' + dataid + '/' + '{{$id}}').load();
                 if (datacount == 0) {
+
                     // $('.sericheckbox').addClass("hide");
                     $('#noseritable').DataTable().column(0).visible(false);
                 } else {
@@ -386,6 +428,7 @@
                 }
 
             } else {
+                $('#filter_form').addClass('hide')
                 $('#produk_detail').addClass('hide');
                 $('#part_detail').removeClass('hide');
                 listcekpart(dataid);
@@ -402,7 +445,15 @@
         });
 
         $(document).on('submit', '#form-pengujian-update', function(e) {
-            if(datajenis == "produk"){
+            $('#btnsimpan').attr('disabled', true);
+            // var showLoading = swal.fire({
+            //     title: 'Sedang Proses',
+            //     html: 'Loading...',
+            //     allowOutsideClick: false,
+            //     showConfirmButton: false,
+            //     willOpen: () => {Swal.showLoading()}
+            // });
+            if (datajenis == "produk") {
                 e.preventDefault();
                 var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
                 var data = [];
@@ -427,6 +478,15 @@
                         noseri_id: data,
                     },
                     dataType: 'JSON',
+                    beforeSend: function() {
+                        swal.fire({
+                            title: 'Sedang Proses',
+                            html: 'Loading...',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {Swal.showLoading()}
+                        })
+                    },
                     success: function(response) {
                         console.log(response);
                         if (response['data'] == "success") {
@@ -446,50 +506,62 @@
                                 'Gagal melakukan Penambahan Data Pengujian',
                                 'error'
                             );
+                        } else{
+                            console.log(response['data']);
                         }
                     },
                     error: function(xhr, status, error) {
                         console.log(xhr);
                     }
                 });
-            }
-            else if(datajenis == "part"){
-            e.preventDefault();
-            var action = $(this).attr('action');
-            $.ajax({
-                headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-                type: "POST",
-                url: action,
-                data: $('#form-pengujian-update').serialize(),
-                success: function(response) {
-                    console.log(response);
-                    if (response['data'] == "success") {
-                        swal.fire(
-                            'Berhasil',
-                            'Berhasil melakukan Penambahan Data Pengujian',
-                            'success'
-                        );
-                        $("#editmodal").modal('hide');
-                        // $('#noseritable').DataTable().ajax.reload();
-                        // $('#parttable').DataTable().ajax.reload();
-                        // $('#showtable').DataTable().ajax.reload();
+            } else if (datajenis == "part") {
+                e.preventDefault();
+                var action = $(this).attr('action');
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    url: action,
+                    data: $('#form-pengujian-update').serialize(),
+                    beforeSend: function() {
+                        swal.fire({
+                            title: 'Sedang Proses',
+                            html: 'Loading...',
+                            allowOutsideClick: false,
+                            showConfirmButton: false,
+                            willOpen: () => {Swal.showLoading()}
+                        })
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        if (response['data'] == "success") {
+                            swal.fire(
+                                'Berhasil',
+                                'Berhasil melakukan Penambahan Data Pengujian',
+                                'success'
+                            );
+                            $("#editmodal").modal('hide');
+                            // $('#noseritable').DataTable().ajax.reload();
+                            // $('#parttable').DataTable().ajax.reload();
+                            // $('#showtable').DataTable().ajax.reload();
 
-                        location.reload();
-                    } else if (response['data'] == "error") {
-                        swal.fire(
-                            'Gagal',
-                            'Gagal melakukan Penambahan Data Pengujian',
-                            'error'
-                        );
+                            location.reload();
+                        } else if (response['data'] == "error") {
+                            swal.fire(
+                                'Gagal',
+                                'Gagal melakukan Penambahan Data Pengujian',
+                                'error'
+                            );
+                        } else{
+                            console.log(response['data']);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        alert($('#form-customer-update').serialize());
                     }
-                },
-                error: function(xhr, status, error) {
-                    alert($('#form-customer-update').serialize());
-                }
-            });
-        }
+                });
+            }
             return false;
         });
 
@@ -501,7 +573,7 @@
             ajax: {
                 'type': 'post',
                 'datatype': 'JSON',
-                'url': '/api/qc/so/seri/0/0',
+                'url': '/api/qc/so/seri/semua/0/0',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -646,50 +718,49 @@
         }
 
         $(document).on('click', '.editmodal', function(event) {
+            var href = "";
+            event.preventDefault();
+            if (datajenis == "produk") {
+                data = $(".nosericheck").data().value;
+            } else {
+                data = dataid
+            }
+            console.log(checkedAry);
+            console.log(data);
+            console.log(idpesanan);
+            if (datajenis == "produk") {
+                href = "/qc/so/edit/" + datajenis + '/' + data + "/" + '{{$id}}';
+            } else {
+                href = "/qc/so/edit/" + datajenis + '/' + dataid + "/" + '{{$id}}';
+            }
 
-                var href = "";
-                event.preventDefault();
-                if (datajenis == "produk") {
-                    data = $(".nosericheck").data().value;
-                } else {
-                    data = dataid
-                }
-                console.log(checkedAry);
-                console.log(data);
-                console.log(idpesanan);
-                if (datajenis == "produk") {
-                    href = "/qc/so/edit/" + datajenis + '/' + data + "/" + '{{$id}}';
-                } else {
-                    href = "/qc/so/edit/" + datajenis + '/' + dataid + "/" + '{{$id}}';
-                }
+            $.ajax({
+                url: href,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
 
-                $.ajax({
-                    url: href,
-                    beforeSend: function() {
-                        $('#loader').show();
-                    },
-                    // return the result
-                    success: function(result) {
+                    $('#editmodal').modal("show");
+                    $('#edit').html(result).show();
+                    if (datajenis == "produk") {
+                        listnoseri(checkedAry, data, '{{$id}}');
+                    }
+                    max_date();
+                    // $("#editform").attr("action", href);
+                },
+                complete: function() {
+                    $('#loader').hide();
 
-                        $('#editmodal').modal("show");
-                        $('#edit').html(result).show();
-                        if (datajenis == "produk") {
-                            listnoseri(checkedAry, data, '{{$id}}');
-                        }
-                        max_date();
-                        // $("#editform").attr("action", href);
-                    },
-                    complete: function() {
-                        $('#loader').hide();
-
-                    },
-                    error: function(jqXHR, testStatus, error) {
-                        console.log(error);
-                        alert("Page " + href + " cannot open. Error:" + error);
-                        $('#loader').hide();
-                    },
-                    timeout: 8000
-                })
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
 
         });
 
@@ -834,6 +905,22 @@
                 }
             }
         });
+
+
+
+        $('input[type=radio][name=filter]').change(function() {
+            $('input[name ="check_all"]').prop('checked', false);
+            $(".cek_header").css("display", "block");
+            var stat = this.value;
+            if (stat == 'sudah' || stat == 'semua') {
+                $('.cek_header').css('display', 'none')
+            }
+            console.log('/api/qc/so/seri/' + stat + '/' + dataid + '/{{$id}}');
+            var dat = $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + stat + '/' + dataid + '/{{$id}}').load();
+
+
+        });
+
     })
 </script>
 @stop

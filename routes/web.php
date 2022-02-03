@@ -91,6 +91,13 @@ Route::middleware('auth')->prefix('/produksi')->group(function () {
 //     Route::view('/penjualan/{any?}', 'page.penjualan.penjualan');
 //     Route::view('/po/{any?}', 'page.penjualan.po');
 // });
+Route::group(['prefix' => 'master', 'middleware' => 'auth'], function () {
+    Route::group(['prefix' => '/produk'], function () {
+        Route::view('/show', 'page.master.produk.show')->name('master.produk.show');
+        Route::post('/data', [App\Http\Controllers\MasterController::class, 'get_data_master_produk']);
+        Route::get('/edit_coo/{id}', [App\Http\Controllers\MasterController::class, 'edit_coo_data_produk'])->name('master.produk.edit_coo');
+    });
+});
 
 Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [App\Http\Controllers\PenjualanController::class, 'dashboard'])->name('penjualan.dashboard');
@@ -250,6 +257,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
         Route::view('/detail/{id}', 'page.dc.coo.detail')->name('dc.coo.detail');
         Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
         Route::get('/edit/{id}/{Value}', [App\Http\Controllers\DcController::class, 'edit_coo'])->name('dc.coo.edit');
+        Route::get('/edit_tglkirim/{Value}', [App\Http\Controllers\DcController::class, 'edit_tglkirim_coo'])->name('dc.coo.tglkirim_edit');
         Route::get('/pdf/so/{id}/{value}/{jenis}', [App\Http\Controllers\DcController::class, 'pdf_semua_so_coo'])->name('dc.coo.semua.so.pdf');
         Route::get('/pdf/semua/{id}/{value}/{jenis}', [App\Http\Controllers\DcController::class, 'pdf_semua_coo'])->name('dc.coo.semua.pdf');
         Route::get('/pdf/{id}/{value}/{jenis}', [App\Http\Controllers\DcController::class, 'pdf_seri_coo'])->name('dc.seri.coo.pdf');

@@ -137,6 +137,7 @@
     }
 
     @media screen and (max-width: 992px) {
+
         label,
         .row {
             font-size: 12px;
@@ -154,7 +155,7 @@
             font-size: 12px;
         }
 
-        .collapsable{
+        .collapsable {
             display: none;
         }
     }
@@ -260,6 +261,42 @@
                         <div class="row">
                             <div class="col-12">
                                 <span class="float-right filter">
+                                    <button class="btn btn-outline-secondary dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
+                                        <i class="fas fa-filter"></i> Filter
+                                    </button>
+                                    <div class="dropdown-menu" aria-labelledby="filterpenjualan">
+                                        <form class="px-4" style="white-space:nowrap;" id="filter">
+                                            <div class="dropdown-header">
+                                                Status
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus1" value="semua" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus1">
+                                                        Semua
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus2" value="belum" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus2">
+                                                        Belum di Uji
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="form-group">
+                                                <div class="form-check">
+                                                    <input type="radio" class="form-check-input" id="dropdownStatus3" value="sudah" name='filter' />
+                                                    <label class="form-check-label" for="dropdownStatus3">
+                                                        Sudah di Uji
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </span>
+                                <span class="float-right filter">
                                     <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
                                         <button class="btn btn-warning" id="cekbrg" disabled="true">
                                             <i class="fas fa-pencil-alt"></i> Cek Barang
@@ -277,7 +314,7 @@
                                         <thead>
                                             @if(Auth::user()->divisi_id == "23")
                                             <th>
-                                                <div class="form-check">
+                                                <div class="form-check cek_header">
                                                     <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
                                                     <label class="form-check-label" for="check_all">
                                                     </label>
@@ -367,11 +404,13 @@
             }]
 
         });
-
+        var dataid = "";
         $('#showtable').on('click', '.noserishow', function() {
             idpesanan = '{{$id}}';
-            var data = $(this).attr('data-id');
+            dataid = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');
+            $('input[type=radio][name=filter]').prop('checked', false);
+
             $('.nosericheck').prop('checked', false);
             console.log(datacount);
             if (datacount == 0) {
@@ -390,7 +429,7 @@
                 // $('.sericheckbox').removeClass("hide");
                 $('#noseritable').DataTable().column(0).visible(true);
             }
-            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + data + '/' + '{{$id}}').load();
+            $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/belum/' + dataid + '/' + '{{$id}}').load();
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseridetail').removeClass('hide');
@@ -398,7 +437,15 @@
         });
 
         $(document).on('submit', '#form-pengujian-update', function(e) {
+            $('#btnsimpan').attr('disabled', true);
             e.preventDefault();
+            // var showLoading = swal.fire({
+            //     title: 'Sedang Proses',
+            //     html: 'Loading...',
+            //     allowOutsideClick: false,
+            //     showConfirmButton: false,
+            //     willOpen: () => {Swal.showLoading()}
+            // });
             var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
             var data = [];
 
@@ -422,6 +469,15 @@
                     noseri_id: data,
                 },
                 dataType: 'JSON',
+                beforeSend: function() {
+                    swal.fire({
+                        title: 'Sedang Proses',
+                        html: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {Swal.showLoading()}
+                    })
+                },
                 success: function(response) {
                     console.log(response);
                     if (response['data'] == "success") {
@@ -441,6 +497,8 @@
                             'Gagal melakukan Penambahan Data Pengujian',
                             'error'
                         );
+                    } else{
+                        console.log(response['data']);
                     }
                 },
                 error: function(xhr, status, error) {
@@ -458,7 +516,7 @@
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
-                'url': '/api/qc/so/seri/0/0',
+                'url': '/api/qc/so/seri/belum/0/0',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}',
                 }
@@ -623,6 +681,19 @@
             } else {
                 $('#btnsimpan').attr('disabled', true);
             }
+        });
+
+        $('input[type=radio][name=filter]').change(function() {
+            $('input[name ="check_all"]').prop('checked', false);
+            $(".cek_header").css("display", "block");
+            var stat = this.value;
+            if (stat == 'sudah' || stat == 'semua') {
+                $('.cek_header').css('display', 'none')
+            }
+            console.log('/api/qc/so/seri/' + stat + '/' + dataid + '/{{$id}}');
+            var dat = $('#noseritable').DataTable().ajax.url('/api/qc/so/seri/' + stat + '/' + dataid + '/{{$id}}').load();
+
+
         });
     })
 </script>

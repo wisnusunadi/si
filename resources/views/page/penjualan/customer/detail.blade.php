@@ -117,6 +117,10 @@
         .dropdown-item {
             font-size: 14px;
         }
+
+        .labelinfo{
+            text-align: center;
+        }
     }
 
     @media screen and (max-width: 1439px) {
@@ -126,6 +130,22 @@
 
         .dropdown-item {
             font-size: 12px;
+        }
+
+        .labelinfo{
+            text-align: center;
+        }
+    }
+
+    @media screen and (max-width:991px){
+        .labelinfo{
+            text-align: left;
+        }
+    }
+
+    @media screen and (max-width:767px){
+        .labelinfo{
+            text-align: center;
         }
     }
 </style>
@@ -139,13 +159,15 @@
 <section class="section">
     <div class="container-fluid">
         <div class="row">
-            <div class="col-4">
+            <div class="col-lg-4 col-md-12">
                 <h5>Info</h5>
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-12 align-center">
+                            <div class="col-lg-12 col-md-4 align-center">
                                 <div id="profileImage" class="center margin-all"></div>
+                            </div>
+                            <div class="col-lg-12 col-md-8 labelinfo">
                                 <div class="margin-all">
                                     <h5><b>{{$customer->nama}}</b></h5>
                                 </div>
@@ -159,35 +181,10 @@
                                 <div class="margin-all"><a class="text-muted">{{$customer->ket}}</a></div>
                             </div>
                         </div>
-                        <!-- <ul class="list-group">
-                            <li class="list-group-item">
-                                <span style="font-size: 24px"><b>Info</b></span>
-                            </li>
-                            <li class="list-group-item">
-                                <a>Nama</a>
-                                <b class="float-right" id="nama_customer">{{$customer->nama}}</b>
-                            </li>
-                            <li class="list-group-item">
-                                <a>Alamat</a>
-                                <b class="float-right" id="alamat">{{$customer->alamat}}</b>
-                            </li>
-                            <li class="list-group-item">
-                                <a>Telepon</a>
-                                <b class="float-right" id="telepon">{{$customer->telp}}</b>
-                            </li>
-                            <li class="list-group-item">
-                                <a>NPWP</a>
-                                <b class="float-right" id="npwp">{{$customer->npwp}}</b>
-                            </li>
-                            <li class="list-group-item">
-                                <a>Keterangan</a>
-                                <b class="float-right" id="keterangan">{{$customer->ket}}</b>
-                            </li>
-                        </ul> -->
                     </div>
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8 col-md-12">
                 <h5>Histori Penjualan</h5>
                 <div class="card">
                     <div class="card-body">

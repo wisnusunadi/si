@@ -93,13 +93,35 @@ class QcController extends Controller
         }
         return view('page.qc.so.edit', ['jenis' => $jenis, 'pesanan_id' => $pesanan_id, 'produk_id' => $produk_id, 'data' => $data]);
     }
-    public function get_data_seri_ekatalog($id, $idpesanan)
+    public function get_data_seri_ekatalog($status, $id, $idpesanan)
     {
-        $data = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
-            $q->where(['gdg_brg_jadi_id' => $id]);
-        })->whereHas('detail.header', function ($q) use ($idpesanan) {
-            $q->where(['pesanan_id' => $idpesanan]);
-        });
+        if ($status == 'semua') {
+            $data = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
+                $q->where(['gdg_brg_jadi_id' => $id]);
+            })->whereHas('detail.header', function ($q) use ($idpesanan) {
+                $q->where(['pesanan_id' => $idpesanan]);
+            });
+        } elseif ($status == 'belum') {
+            $data = NoseriTGbj::DoesntHave('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
+                $q->where(['gdg_brg_jadi_id' => $id]);
+            })->whereHas('detail.header', function ($q) use ($idpesanan) {
+                $q->where(['pesanan_id' => $idpesanan]);
+            });
+        } elseif ($status == 'sudah') {
+            $data = NoseriTGbj::Has('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
+                $q->where(['gdg_brg_jadi_id' => $id]);
+            })->whereHas('detail.header', function ($q) use ($idpesanan) {
+                $q->where(['pesanan_id' => $idpesanan]);
+            });
+        }
+
+        // $data = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
+        //     $q->where(['gdg_brg_jadi_id' => $id]);
+        // })->whereHas('detail.header', function ($q) use ($idpesanan) {
+        //     $q->where(['pesanan_id' => $idpesanan]);
+        // });
+
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
@@ -1080,6 +1102,7 @@ class QcController extends Controller
         // $array_seri = explode(',', $replace_array_seri);
 
         $bool = true;
+        $bools = true;
         // for ($i = 0; $i < count($array_seri); $i++) {
 
         //     $data = NoseriTGbj::find($array_seri[$i]);
@@ -1119,6 +1142,7 @@ class QcController extends Controller
                     ]);
                     if (!$c) {
                         $bool = false;
+                        $bools = false;
                     }
                 } else {
                     $NoseriDetailPesanan = NoseriDetailPesanan::find($check->id);
@@ -1127,6 +1151,8 @@ class QcController extends Controller
                     $u = $NoseriDetailPesanan->save();
                     if (!$u) {
                         $bool = false;
+                        $bools = false;
+
                     }
                 }
             }
@@ -1140,62 +1166,105 @@ class QcController extends Controller
 
             if (!$data) {
                 $bool = false;
+                $bools = false;
             }
         }
 
-        $po = Pesanan::find($pesanan_id);
-        if ($po->log_id == "8") {
-
-            if (isset($po->DetailPesanan) && !isset($po->DetailPesananPart)) {
-                if ($po->getJumlahPesanan() == $po->getJumlahCek()) {
-                    if ($po->getJumlahKirim() == 0) {
-                        $po->log_id = '11';
-                        $po->save();
-                    } else {
-                        if ($po->getJumlahKirim() >= $po->getJumlahPesanan()) {
-                            $po->log_id = '10';
-                            $po->save();
-                        } else {
-                            $po->log_id = '13';
-                            $po->save();
-                        }
-                    }
-                }
-            } else if (!isset($po->DetailPesanan) && isset($po->DetailPesananPart)) {
-                if ($po->getJumlahPesananPart() == $po->getJumlahCekPart()) {
-                    if ($po->getJumlahKirimPart() == 0) {
-                        $po->log_id = '11';
-                        $po->save();
-                    } else {
-                        if ($po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
-                            $po->log_id = '10';
-                            $po->save();
-                        } else {
-                            $po->log_id = '13';
-                            $po->save();
-                        }
-                    }
-                }
-            } else if (isset($po->DetailPesanan) && isset($po->DetailPesananPart)) {
-                if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPart() == $po->getJumlahCekPart())) {
-                    if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
-                        $po->log_id = '11';
-                        $po->save();
-                    } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
-                        if ($po->getJumlahKirim() >= $po->getJumlahPesanan() &&  $po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
-                            $po->log_id = '10';
-                            $po->save();
-                        } else {
-                            $po->log_id = '13';
-                            $po->save();
-                        }
-                    }
-                }
-            }
-        }
         if ($bool == true) {
-            return response()->json(['data' => 'success']);
-        } else {
+            // $uk = "";
+            $po = Pesanan::find($pesanan_id);
+            if ($po->log_id == "8") {
+                // $uk = count($po->DetailPesanan)." ".count($po->DetailPesananPart);
+                if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) <= 0) {
+                    // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek();
+                    if ($po->getJumlahPesanan() == $po->getJumlahCek()) {
+                        if ($po->getJumlahKirim() == 0) {
+                            $pou = Pesanan::find($pesanan_id);
+                            $pou->log_id = '11';
+                            $u = $pou->save();
+                            if(!$u){
+                                $bools = false;
+                            }
+                        } else {
+                            if ($po->getJumlahKirim() >= $po->getJumlahPesanan()) {
+                                $pou = Pesanan::find($pesanan_id);
+                                $pou->log_id = '10';
+                                $u = $pou->save();
+                                if(!$u){
+                                    $bools = false;
+                                }
+                            } else {
+                                $pou = Pesanan::find($pesanan_id);
+                                $pou->log_id = '13';
+                                $u = $pou->save();
+                                if(!$u){
+                                    $bools = false;
+                                }
+                            }
+                        }
+                    }
+                } else if (count($po->DetailPesanan) <= 0 && count($po->DetailPesananPart) > 0) {
+                    // $uk = "Jumlah Pesan Part ".$po->getJumlahPesananPart()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
+                    if ($po->getJumlahPesananPart() == $po->getJumlahCekPart("ok")) {
+                        if ($po->getJumlahKirimPart() == 0) {
+                            $pou = Pesanan::find($pesanan_id);
+                            $pou->log_id = '11';
+                            $u = $pou->save();
+                            if(!$u){
+                                $bools = false;
+                            }
+                        } else {
+                            if ($po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                                $pou = Pesanan::find($pesanan_id);
+                                $pou->log_id = '10';
+                                $u = $pou->save();
+                                if(!$u){
+                                    $bools = false;
+                                }
+                            } else {
+                                $pou = Pesanan::find($pesanan_id);
+                                $pou->log_id = '13';
+                                $u = $pou->save();
+                                if(!$u){
+                                    $bools = false;
+                                }
+                            }
+                        }
+                    }
+                } else if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) > 0) {
+                    // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek()." Jumlah Pesan Part ".$po->getJumlahPesananPart()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
+                    if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPart() == $po->getJumlahCekPart("ok"))) {
+                        if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
+                            $pou = Pesanan::find($pesanan_id);
+                            $pou->log_id = '11';
+                            $u = $pou->save();
+                            if(!$u){
+                                $bools = false;
+                            }
+                        } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
+                            if ($po->getJumlahKirim() >= $po->getJumlahPesanan() && $po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                                $pou = Pesanan::find($pesanan_id);
+                                $pou->log_id = '10';
+                                $u = $pou->save();
+                                if(!$u){
+                                    $bools = false;
+                                }
+                            } else {
+                                $pou = Pesanan::find($pesanan_id);
+                                $pou->log_id = '13';
+                                $u = $pou->save();
+                                if(!$u){
+                                    $bools = false;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            if($bools == true){
+                return response()->json(['data' => 'success']);
+            }
+        } else if ($bool == false) {
             return response()->json(['data' =>  'error']);
         }
     }
