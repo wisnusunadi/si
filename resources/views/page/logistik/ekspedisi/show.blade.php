@@ -271,6 +271,15 @@
                 type: "POST",
                 url: action,
                 data: $('#form-ekspedisi-update').serialize(),
+                beforeSend: function() {
+                    swal.fire({
+                        title: 'Sedang Proses',
+                        html: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {Swal.showLoading()}
+                    })
+                },
                 success: function(response) {
                     if (response['data'] == "success") {
                         swal.fire(
@@ -298,18 +307,6 @@
             });
             return false;
         });
-
-
-
-
-
-
-
-
-
-
-
-
 
         var showtable = $('#showtable').DataTable({
             destroy: true,
@@ -488,7 +485,7 @@
             }
         })
 
-        $(document).on('keyup change', 'input[name="alamat"]', function() {
+        $(document).on('keyup change', "#alamat", function() {
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");

@@ -1175,7 +1175,6 @@
                     $('#detail').html(result).show();
 
                     if (label == 'ekatalog') {
-
                         $('#detailmodal').find(".modal-header").attr('id', '');
                         $('#detailmodal').find(".modal-header").attr('id', 'detailekat');
                         $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
