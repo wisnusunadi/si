@@ -68,8 +68,7 @@
                 <td>{{ item.stok }}</td>
                 <td>{{ item.total }}</td>
                 <td v-text="item.jumlah_kirim"></td>
-                <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
-                  {{ item.penjualan }}
+                <td v-html="item.penjualan">
                 </td>
               </tr>
             </tbody>

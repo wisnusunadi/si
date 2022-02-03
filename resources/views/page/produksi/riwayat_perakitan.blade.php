@@ -140,44 +140,23 @@
                 </div>
             </div>
             <div class="card-body">
-                {{-- <table class="table tablePerProduk">
-                    <thead class="thead-light">
-                        <tr>
-                            <th>No BPPB</th>
-                            <th>Nama Produk</th>
-                            <th>Aksi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table> --}}
                 <table class="table tableLain">
                     <thead class="thead-light">
                         <tr>
-                            <th colspan="2"><center>Tanggal</center></th>
-                            {{-- <th>Tanggal Keluar</th> --}}
+                            <th colspan="2" class="text-center">Tanggal</th>
                             <th rowspan="2">Nomor BPPB</th>
                             <th rowspan="2">Produk</th>
-                            <th colspan="2"><center>Jumlah</center></th>
+                            <th colspan="2" class="text-center">Jumlah</th>
                             <th rowspan="2">Aksi</th>
                         </tr>
-                        <tr align="center">
+                        <tr class="text-center">
                             <th>Masuk</th>
                             <th>Keluar</th>
                             <th>Rakit</th>
                             <th>Sisa</th>
                         </tr>
                     </thead>
-                    {{-- <tbody>
-                        <tr>
-                            <td>Kamis, 27 Januari 2022</td>
-                            <td>Jumat, 28 Januari 2022</td>
-                            <td>BPPB/TEST</td>
-                            <td>DIGIT ONE BACKLIGHT HIJAU</td>
-                            <td>1 Unit</td>
-                            <td><button class="btn btn-outline-secondary buttonTransfer"><i class="far fa-eye"></i> Detail</button></td>
-                        </tr>
-                    </tbody> --}}
+                    <tbody></tbody>
                 </table>
             </div>
         </div>
@@ -387,7 +366,7 @@
                         </div>
                     <div class="card-body">
                         <label for="">Keterangan</label>
-                        <textarea name="" class="form-control keterangan1" id="" cols="10" rows="5" disabled>Keterangan</textarea>
+                        <textarea name="" class="form-control keterangan1" id="" cols="5" rows="5" disabled>Keterangan</textarea>
                         <hr>
                         <table class="table tableNoseri">
                             <thead>
@@ -696,10 +675,18 @@
                 {data: 'jml_rakit'},
                 {data: 'jml_sisa'},
                 {data: 'aksi'},
+                {data: 'start_filter'},
+                {data: 'end_filter'},
             ],
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
+            },
+            columnDefs : [
+                {
+                    targets : [7,8],
+                    visible : false
+                }
+            ],
         });
         $('#produk_select2').select2({});
         $(document).on('click','.transferlain', function () {
@@ -736,7 +723,6 @@
             $('.tableNoseri').DataTable().columns.adjust().draw();
             // console.log(jwdid);
         });
-
 
 </script>
 @stop
