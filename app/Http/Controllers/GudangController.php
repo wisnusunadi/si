@@ -659,7 +659,16 @@ class GudangController extends Controller
             })
             ->addColumn('tgl_kontrak', function ($d) {
                 if (isset($d->pesanan->Ekatalog->tgl_kontrak)) {
-                    return Carbon::parse($d->pesanan->Ekatalog->tgl_kontrak)->format('d-m-Y');
+
+                    if ($d->pesanan->Ekatalog->Provinsi->status == 1) {
+                        // return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                        return Carbon::parse($d->pesanan->Ekatalog->tgl_kontrak)->subWeeks(5)->format('d-m-Y');
+                    }
+
+                    if ($d->pesanan->Ekatalog->Provinsi->status == 2) {
+                        // return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
+                        return Carbon::parse($d->pesanan->Ekatalog->tgl_kontrak)->subWeeks(4)->format('d-m-Y');
+                    }
                 } else {
                     return '-';
                 }

@@ -879,11 +879,13 @@
         }).then((success) => {
             $(this).prop('disabled', true);
             if (success) {
-                Swal.fire(
-                    'Data berhasil di transfer!',
-                    '',
-                    'success'
-                );
+                $(this).prop('disabled', false);
+                Swal.fire({
+                    title: 'Please wait',
+                    text: 'Data is transferring...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false
+                });
                 $.ajax({
                     url: "/api/gk/out-final",
                     type: "post",
@@ -898,6 +900,11 @@
                     },
                     success: function (res) {
                         console.log(res);
+                        Swal.fire(
+                    'Data berhasil di transfer!',
+                    '',
+                    'success'
+                );
                     },
                 })
                 setTimeout(() => {
@@ -932,11 +939,13 @@
             showCancelButton: true,
         }).then((success) => {
             if (success) {
-                Swal.fire(
-                    'Data berhasil di rancangan!',
-                    '',
-                    'success'
-                );
+                $(this).prop('disabled', false);
+                Swal.fire({
+                    title: 'Please wait',
+                    text: 'Data is transferring...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false
+                });
                 $.ajax({
                     url: "/api/gk/out-draft",
                     type: "post",
@@ -951,6 +960,11 @@
                     },
                     success: function (res) {
                         console.log(res);
+                        Swal.fire(
+                            'Data berhasil di rancangan!',
+                            '',
+                            'success'
+                        );
                     },
                 })
                 setTimeout(() => {

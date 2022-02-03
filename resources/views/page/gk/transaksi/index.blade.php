@@ -196,7 +196,7 @@
                             <table class="table table-bordered" id="gudang_barang">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
+                                        <th>No</th> 
                                         <th>Kode Produk</th>
                                         <th>Produk</th>
                                         <th>Jenis Produk</th>
