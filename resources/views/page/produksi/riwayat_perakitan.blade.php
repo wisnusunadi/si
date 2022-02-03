@@ -116,11 +116,16 @@
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
-                            <label for="">Tanggal Transfer</label>
+                            <label for="">Tanggal Masuk</label>
                             <input type="text" name="" id="" class="form-control daterange">
                         </div>
                     </div>
-                    <div class="col-sm-3"></div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="">Tanggal Keluar</label>
+                            <input type="text" name="" id="" class="form-control daterange">
+                        </div>
+                    </div>
                 </div>
                 <hr>
                 <div class="row text-center">
@@ -149,8 +154,8 @@
                 <table class="table tableLain">
                     <thead class="thead-light">
                         <tr>
-                            <th>Tanggal Transfer</th>
-                            <th>Waktu Transfer</th>
+                            <th>Tanggal Masuk</th>
+                            <th>Tanggal Keluar</th>
                             <th>Nomor BPPB</th>
                             <th>Produk</th>
                             <th>Jumlah</th>
@@ -160,7 +165,7 @@
                     <tbody>
                         <tr>
                             <td>Kamis, 27 Januari 2022</td>
-                            <td>11:24</td>
+                            <td>Jumat, 28 Januari 2022</td>
                             <td>BPPB/TEST</td>
                             <td>DIGIT ONE BACKLIGHT HIJAU</td>
                             <td>1 Unit</td>
