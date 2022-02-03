@@ -1240,6 +1240,15 @@
                 type: "POST",
                 url: action,
                 data: $('#form-pesanan-update').serialize(),
+                beforeSend: function() {
+                    swal.fire({
+                        title: 'Sedang Proses',
+                        html: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {Swal.showLoading()}
+                    })
+                },
                 success: function(response) {
                     if (response['data'] == "success") {
                         swal.fire(

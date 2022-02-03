@@ -345,123 +345,134 @@
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="form-horizontal">
-                                                    <div class="form-group row">
-                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Urut</label>
-                                                        <div class="col-lg-2 col-md-4">
-                                                            <input type="number" class="form-control col-form-label @error('no_urut') is-invalid @enderror" name="no_urut" id="no_urut" value="{{$e->no_urut}}" />
-                                                            <div class="invalid-feedback" id="msgno_urut">
-                                                                @if($errors->has('no_urut'))
-                                                                {{ $errors->first('no_urut')}}
-                                                                @endif
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="form-group row">
+                                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Urut</label>
+                                                                <div class="col-lg-2 col-md-4">
+                                                                    <input type="number" class="form-control col-form-label @error('no_urut') is-invalid @enderror" name="no_urut" id="no_urut" value="{{$e->no_urut}}" />
+                                                                    <div class="invalid-feedback" id="msgno_urut">
+                                                                        @if($errors->has('no_urut'))
+                                                                        {{ $errors->first('no_urut')}}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
+                                                                <div class="col-lg-5 col-md-12 col-form-label">
+                                                                    <!-- <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                        <label class="form-check-label" for="status_akn4">Draft</label>
+                                                                    </div> -->
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn1" value="sepakat" />
+                                                                        <label class="form-check-label" for="status_akn1">Sepakat</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn2" value="negosiasi" />
+                                                                        <label class="form-check-label" for="status_akn2">Negosiasi</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="batal" />
+                                                                        <label class="form-check-label" for="status_akn3">Batal</label>
+                                                                    </div>
+                                                                    <div class="form-check form-check-inline">
+                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="draft" />
+                                                                        <label class="form-check-label" for="status_akn3">Draft</label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Edit</label>
+                                                                <div class="col-lg-4 col-md-4">
+                                                                    <input type="date" class="form-control col-form-label @error('tgl_edit') is-invalid @enderror" name="tgl_edit" id="tgl_edit" value="{{$e->tgl_edit}}" />
+                                                                    <div class="invalid-feedback" id="msgtgl_edit">
+                                                                        @if($errors->has('tgl_edit'))
+                                                                        {{ $errors->first('tgl_edit')}}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row">
+                                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Delivery</label>
+                                                                <div class="col-lg-4 col-md-4">
+                                                                    <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" value="{{$e->tgl_kontrak}}" />
+                                                                    <div class="invalid-feedback" id="msgbatas_kontrak">
+                                                                        @if($errors->has('batas_kontrak'))
+                                                                        {{ $errors->first('batas_kontrak')}}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group row">
-                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
-
-                                                        <div class="col-lg-5 col-md-12 col-form-label">
-                                                            <!-- <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                                <label class="form-check-label" for="status_akn4">Draft</label>
-                                                            </div> -->
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn1" value="sepakat" />
-                                                                <label class="form-check-label" for="status_akn1">Sepakat</label>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="form-group row">
+                                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
+                                                                <div class="col-lg-7 col-md-12">
+                                                                    <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" value="{{$e->instansi}}" />
+                                                                    <div class="invalid-feedback" id="msginstansi">
+                                                                        @if($errors->has('instansi'))
+                                                                        {{ $errors->first('instansi')}}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn2" value="negosiasi" />
-                                                                <label class="form-check-label" for="status_akn2">Negosiasi</label>
+                                                            <div class="form-group row">
+                                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Satuan Kerja</label>
+                                                                <div class="col-lg-7 col-md-12">
+                                                                    <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" value="{{$e->satuan}}" />
+                                                                    <div class=" invalid-feedback" id="msgsatuan_kerja">
+                                                                        @if($errors->has('satuan_kerja'))
+                                                                        {{ $errors->first('satuan_kerja')}}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="batal" />
-                                                                <label class="form-check-label" for="status_akn3">Batal</label>
+                                                            <div class="form-group row">
+                                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat Instansi</label>
+                                                                <div class="col-lg-7 col-md-12">
+                                                                    <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" value="{{$e->alamat}}" />
+                                                                    <div class="invalid-feedback" id="msgalamatinstansi">
+                                                                        @if($errors->has('alamatinstansi'))
+                                                                        {{ $errors->first('alamatinstansi')}}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                            <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="draft" />
-                                                                <label class="form-check-label" for="status_akn3">Draft</label>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
-                                                        <div class="col-lg-7 col-md-12">
-                                                            <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" value="{{$e->instansi}}" />
-                                                            <div class="invalid-feedback" id="msginstansi">
-                                                                @if($errors->has('instansi'))
-                                                                {{ $errors->first('instansi')}}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat Instansi</label>
-                                                        <div class="col-lg-7 col-md-12">
-                                                            <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" value="{{$e->alamat}}" />
-                                                            <div class="invalid-feedback" id="msgalamatinstansi">
-                                                                @if($errors->has('alamatinstansi'))
-                                                                {{ $errors->first('alamatinstansi')}}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Provinsi</label>
-                                                        <div class="col-lg-7 col-md-12">
-                                                            <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
-                                                                @if(!empty($e->provinsi_id))
-                                                                <option value="{{$e->provinsi_id}}" selected>{{$e->provinsi->nama}}</option>
-                                                                @endif
-                                                            </select>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Satuan Kerja</label>
-                                                        <div class="col-lg-7 col-md-12">
-                                                            <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" value="{{$e->satuan}}" />
-                                                            <div class=" invalid-feedback" id="msgsatuan_kerja">
-                                                                @if($errors->has('satuan_kerja'))
-                                                                {{ $errors->first('satuan_kerja')}}
-                                                                @endif
+                                                            <div class="form-group row">
+                                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Provinsi</label>
+                                                                <div class="col-lg-7 col-md-12">
+                                                                    <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
+                                                                        @if(!empty($e->provinsi_id))
+                                                                        <option value="{{$e->provinsi_id}}" selected>{{$e->provinsi->nama}}</option>
+                                                                        @endif
+                                                                    </select>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group row">
-                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Edit</label>
-                                                        <div class="col-lg-4 col-md-4">
-                                                            <input type="date" class="form-control col-form-label @error('tgl_edit') is-invalid @enderror" name="tgl_edit" id="tgl_edit" value="{{$e->tgl_edit}}" />
-                                                            <div class="invalid-feedback" id="msgtgl_edit">
-                                                                @if($errors->has('tgl_edit'))
-                                                                {{ $errors->first('tgl_edit')}}
-                                                                @endif
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="form-group row">
+                                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Deskripsi</label>
+                                                                <div class="col-lg-5 col-md-12">
+                                                                    <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi">{{$e->deskripsi}}</textarea>
+                                                                    <div class="invalid-feedback" id="msgdeskripsi">
+                                                                        @if($errors->has('deskripsi'))
+                                                                        {{ $errors->first('deskripsi')}}
+                                                                        @endif
+                                                                    </div>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Delivery</label>
-                                                        <div class="col-lg-4 col-md-4">
-                                                            <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" value="{{$e->tgl_kontrak}}" />
-                                                            <div class="invalid-feedback" id="msgbatas_kontrak">
-                                                                @if($errors->has('batas_kontrak'))
-                                                                {{ $errors->first('batas_kontrak')}}
-                                                                @endif
+                                                            <div class="form-group row">
+                                                                <label for="keterangan" class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
+                                                                <div class="col-lg-5 col-md-12">
+                                                                    <textarea class="form-control col-form-label" name="keterangan">{{$e->ket}}</textarea>
+                                                                </div>
                                                             </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Deskripsi</label>
-                                                        <div class="col-lg-5 col-md-12">
-                                                            <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi">{{$e->deskripsi}}</textarea>
-                                                            <div class="invalid-feedback" id="msgdeskripsi">
-                                                                @if($errors->has('deskripsi'))
-                                                                {{ $errors->first('deskripsi')}}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="keterangan" class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
-                                                        <div class="col-lg-5 col-md-12">
-                                                            <textarea class="form-control col-form-label" name="keterangan">{{$e->ket}}</textarea>
                                                         </div>
                                                     </div>
                                                 </div>
