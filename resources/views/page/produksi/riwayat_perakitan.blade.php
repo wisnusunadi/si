@@ -396,21 +396,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>TB001</td>
-                                </tr>
-                                <tr>
-                                    <td>TB001</td>
-                                </tr>
-                                <tr>
-                                    <td>TB001</td>
-                                </tr>
-                                <tr>
-                                    <td>TB001</td>
-                                </tr>
-                                <tr>
-                                    <td>TB001</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -716,7 +701,7 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
-
+        $('#produk_select2').select2({});
         $(document).on('click','.transferlain', function () {
             let jwdid = $(this).data('id');
             let jml_sisa = $(this).data('jml');
@@ -756,12 +741,10 @@
                 ],
             })
 
+            $('.tableNoseri').DataTable().columns.adjust().draw();
             // console.log(jwdid);
         });
 
-        $('#produk_select2').select2({});
-        $('.modalTransferLain').on('shown.bs.modal', function () {
 
-        });
 </script>
 @stop
