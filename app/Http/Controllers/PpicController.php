@@ -311,7 +311,7 @@ class PpicController extends Controller
     public function get_data_so()
     {
         $getid = GudangBarangJadi::whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
-            $q->whereNotIn('log_id', ['7', '10']);
+            $q->whereNotIn('log_id', ['10']);
         })->get();
         $arrayid = array();
 

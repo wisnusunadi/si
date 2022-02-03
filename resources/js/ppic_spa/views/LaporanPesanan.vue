@@ -29,8 +29,8 @@
               <td>{{ item.DT_RowIndex }}</td>
               <td v-html="item.nama_produk"></td>
               <td>{{ item.stok }}</td>
-              <td>{{ item.total }}</td>
               <td v-html="item.penjualan"></td>
+              <td>{{ item.total }}</td>
               <td>{{ item.sepakat }}</td>
               <td>{{ item.nego }}</td>
               <td>{{ item.batal }}</td>
