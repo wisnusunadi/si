@@ -390,21 +390,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr>
-                                    <td>TB001</td>
-                                </tr>
-                                <tr>
-                                    <td>TB001</td>
-                                </tr>
-                                <tr>
-                                    <td>TB001</td>
-                                </tr>
-                                <tr>
-                                    <td>TB001</td>
-                                </tr>
-                                <tr>
-                                    <td>TB001</td>
-                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -709,16 +694,17 @@
         $(document).on('click','.buttonTransfer', function () {
             $('.modalTransferLain').modal('show');
         });
-
-        $('#produk_select2').select2({});
-        $('.modalTransferLain').on('shown.bs.modal', function () {
-            $('.tableNoseri').DataTable({
+        $('.tableNoseri').DataTable({
                 destroy: true,
                 "autoWidth": false,
                 processing: true,
                 scrollY: "100px",
                 lengthChange: false,
-            })
+        })
+
+        $('#produk_select2').select2({});
+        $('.modalTransferLain').on('shown.bs.modal', function () {
+            $('.tableNoseri').DataTable().columns.adjust().draw();
         });
 </script>
 @stop
