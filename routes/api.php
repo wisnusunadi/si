@@ -23,6 +23,11 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::prefix('/master')->group(function () {
+    Route::post('/produk/no_akd', [App\Http\Controllers\MasterController::class, 'check_no_akd']);
+    Route::put('/produk/update_coo/{id}', [App\Http\Controllers\MasterController::class, 'update_coo_master_produk'])->name('master.produk.update_coo');
+});
+
 Route::prefix('/ppic')->group(function () {
     Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data']);
     Route::post('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_stok']);
@@ -48,7 +53,6 @@ Route::prefix('/ppic')->group(function () {
     Route::post('/update/komentar', [App\Http\Controllers\PpicController::class, 'update_komentar_jadwal_perakitan']);
     Route::post('/send_notification', [App\Http\Controllers\PpicController::class, 'send_notification']);
     Route::get('/data/produk_so/{id}/{value}', [PpicController::class, 'get_data_pesanan_produk']);
-
     Route::get('/test/query', [App\Http\Controllers\PpicController::class, 'test_query']);
 });
 
@@ -104,6 +108,7 @@ Route::prefix('/penjualan')->group(function () {
 
     Route::prefix('/pesanan')->group(function () {
         Route::put('update/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'update_penjualan_pesanan']);
+        Route::post('produk/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_paket_pesanan_ekat']);
     });
 
     Route::prefix('/lacak')->group(function () {
@@ -232,6 +237,8 @@ Route::prefix('/tfp')->group(function () {
     Route::get('rakit-terima/{id}/{value}', [GudangController::class, 'getTerimaRakit']);
     Route::post('/seri-so', [ProduksiController::class, 'getNoseriSO']);
     Route::post('/seri-edit-so', [ProduksiController::class, 'getNoseriSOEdit']);
+    Route::post('/closeRakit', [ProduksiController::class, 'closeRakit']);
+    Route::post('/closeTransfer', [ProduksiController::class, 'closeTransfer']);
 
     // check
     Route::post('/cekStok', [ProduksiController::class, 'checkStok']);
@@ -271,6 +278,8 @@ Route::prefix('/prd')->group(function () {
     Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current']);
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
     Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
+    Route::get('/ajax_perproduk', [ProduksiController::class, 'ajax_perproduk']);
+    Route::get('/detail_perproduk/{id}', [ProduksiController::class, 'detail_perproduk']);
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
     Route::post('cek-noseri', [ProduksiController::class, 'cekDuplicateNoseri']);
@@ -284,6 +293,10 @@ Route::prefix('/prd')->group(function () {
     Route::get('/detailSeri1/{id}/{value}', [ProduksiController::class, 'detailSeri1']);
     Route::post('/send', [ProduksiController::class, 'kirimseri']);
     Route::post('/terimaseri', [ProduksiController::class, 'terimaseri']);
+    Route::post('/delete', [ProduksiController::class, 'deleteNoseri']);
+    Route::post('/deleteAll', [ProduksiController::class, 'deleteAllSeri']);
+    Route::post('/updateRakitseri', [ProduksiController::class, 'updateNoseri']);
+    Route::post('/cekUpdateNoseri', [ProduksiController::class, 'cekUbahNoseri']);
 
     // riwayat
     Route::prefix('/history')->group(function () {
@@ -440,7 +453,7 @@ Route::prefix('/qc')->group(function () {
         Route::put('create/{jenis}/{pesanan_id}/{produk_id}', [App\Http\Controllers\QcController::class, 'create_data_qc']);
         Route::post('data/{value}', [App\Http\Controllers\QcController::class, 'get_data_so']);
         Route::post('data/selesai/{value}', [App\Http\Controllers\QcController::class, 'get_data_selesai_so']);
-        Route::post('seri/{value}/{idpesanan}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
+        Route::post('seri/{status}/{value}/{idpesanan}', [App\Http\Controllers\QcController::class, 'get_data_seri_ekatalog']);
         Route::post('part/{value}', [App\Http\Controllers\QcController::class, 'get_data_part_cek']);
         Route::post('seri/select/{seri_id}/{produk_id}/{pesanan_id}', [App\Http\Controllers\QcController::class, 'get_data_select_seri']);
         Route::get('data_test', [App\Http\Controllers\QcController::class, 'get_data_so_qc']);
@@ -509,6 +522,7 @@ Route::prefix('/dc')->group(function () {
     Route::post('dashboard/data/{value}', [App\Http\Controllers\DcController::class, 'dashboard_data']);
     Route::prefix('/so')->group(function () {
         Route::post('create/{value}', [App\Http\Controllers\DcController::class, 'create_coo']);
+        Route::put('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);
         Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
         Route::post('detail/seri/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);

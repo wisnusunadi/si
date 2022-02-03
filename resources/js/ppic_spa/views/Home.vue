@@ -159,9 +159,9 @@
               </thead>
               <tbody>
                 <tr v-for="(item, index) in data_unit" :key="index">
-                  <td>{{ item.kode }}</td>
-                  <td>{{ item.nama }}</td>
-                  <td>{{ item.jml }}</td>
+                  <td><span v-if="item.kode_produk == null">-</span> <span v-else>{{item.kode_produk}}</span></td>
+                  <td v-html="item.nama_produk"></td>
+                  <td><span v-if="item.jml == null">0</span> <span v-else>{{item.jml}}</span></td>
                 </tr>
               </tbody>
             </table>
@@ -237,12 +237,12 @@ export default {
       await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
         this.data_sparepart = response.data;
       });
-      $("#table_sparepart").DataTable({
-        pagingType: "simple_numbers_no_ellipses",
-      });
 
       await axios.get("/api/ppic/data/gk/unit").then((response) => {
-        this.data_unit = response.data;
+        this.data_unit = response.data.data;
+      });
+      $("#table_sparepart").DataTable({
+        pagingType: "simple_numbers_no_ellipses",
       });
       $("#table_unit").DataTable({
         pagingType: "simple_numbers_no_ellipses",

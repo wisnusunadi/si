@@ -930,7 +930,7 @@ class LogistikController extends Controller
             ->addColumn('so', function ($data) {
                 return $data->so;
             })
-            ->addColumn('so', function ($data) {
+            ->addColumn('no_po', function ($data) {
                 return $data->no_po;
             })
             ->addColumn('nama_customer', function ($data) {
@@ -2446,7 +2446,6 @@ class LogistikController extends Controller
                     }
                 }
             }
-
             return view('page.logistik.so.detail_ekatalog', ['proses' => $proses, 'status' => $status, 'data' => $data, 'detail_id' => $detail_id, 'value' => $value, 'status' => $status]);
         }
     }
@@ -2697,7 +2696,7 @@ class LogistikController extends Controller
             }
             if ($ids) {
                 $iddp = DetailPesananProduk::find($ids);
-                $poid = strval($iddp->DetailPesanan->Pesanan->id);
+                $poid = $iddp->DetailPesanan->pesanan_id;
             }
         } else {
             if ($prd_id != '0' && $part_id == '0') {
@@ -2727,7 +2726,7 @@ class LogistikController extends Controller
                 }
                 if ($ids) {
                     $iddp = DetailPesananProduk::find($ids);
-                    $poid = strval($iddp->DetailPesanan->Pesanan->id);
+                    $poid = $iddp->DetailPesanan->pesanan_id;
                 }
             } else if ($prd_id == '0' && $part_id != '0') {
                 if ($Logistik) {
@@ -2744,7 +2743,7 @@ class LogistikController extends Controller
                 }
                 if ($ids) {
                     $iddp = DetailPesananPart::find($ids);
-                    $poid = strval($iddp->Pesanan->id);
+                    $poid = $iddp->pesanan_id;
                 }
             } else if ($prd_id != '0' && $part_id != '0') {
                 if ($Logistik) {
@@ -2788,16 +2787,14 @@ class LogistikController extends Controller
 
                 if ($ids) {
                     $iddp = DetailPesananPart::find($ids);
-                    $poid = strval($iddp->Pesanan->id);
+                    $poid = $iddp->pesanan_id;
                 }
             }
         }
 
-
         $po = Pesanan::find($poid);
         if ($po) {
             if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) <= 0) {
-
                 if ($po->log_id == "10" || $po->log_id == "11" || $po->log_id == "13") {
                     if ($po->getJumlahKirim() == 0) {
                         $po->log_id = '11';
@@ -2813,21 +2810,21 @@ class LogistikController extends Controller
                     }
                 }
             } else if (count($po->DetailPesanan) <= 0 && count($po->DetailPesananPart) > 0) {
-
-                if ($po->getJumlahKirimPart() == 0) {
-                    $po->log_id = '11';
-                    $po->save();
-                } else {
-                    if ($po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
-                        $po->log_id = '10';
+                if ($po->log_id == "10" || $po->log_id == "11" || $po->log_id == "13") {
+                    if ($po->getJumlahKirimPart() == 0) {
+                        $po->log_id = '11';
                         $po->save();
                     } else {
-                        $po->log_id = '13';
-                        $po->save();
+                        if ($po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                            $po->log_id = '10';
+                            $po->save();
+                        } else {
+                            $po->log_id = '13';
+                            $po->save();
+                        }
                     }
                 }
             } else if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) > 0) {
-
                 if ($po->log_id == "10" || $po->log_id == "11" || $po->log_id == "13") {
                     if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
                         $po->log_id = '11';

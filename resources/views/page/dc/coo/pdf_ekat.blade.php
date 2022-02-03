@@ -286,7 +286,7 @@
                                         @if(empty($data->nama) && $data->ket == 'spa')
                                         Kusmardiana Rahayu
                                         @elseif(empty($data->nama) && $data->ket == 'emiindo')
-                                        Bambang
+                                        Bambang Hendro M BE
                                         @else
                                         {{$data->nama}}
                                         @endif
@@ -295,11 +295,14 @@
                         <tr>
                             <td width="50%"></td>
                             <td class="align-center">
-                                @if(empty($data->nama))
-                                Q.A. Manager
+                                @if(empty($data->nama) && $data->ket == 'spa')
+                                Q.A Manager
+                                @elseif(empty($data->nama) && $data->ket == 'emiindo')
+                                Q.A Departement
                                 @else
                                 {{$data->jabatan}}
                                 @endif
+
                             </td>
                         </tr>
                     </tbody>

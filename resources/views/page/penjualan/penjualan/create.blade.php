@@ -54,11 +54,12 @@
 
     }
 
-    #produktable{
-        width:1371px !important;
+    #produktable {
+        width: 1371px !important;
     }
-    #parttable{
-        width:1371px !important;
+
+    #parttable {
+        width: 1371px !important;
     }
 
 
@@ -72,7 +73,7 @@
             font-size: 14px;
         }
 
-        .labelket{
+        .labelket {
             text-align: right;
         }
 
@@ -97,7 +98,7 @@
             font-size: 12px;
         }
 
-        .labelket{
+        .labelket {
             text-align: right;
         }
     }
@@ -120,11 +121,10 @@
             font-size: 12px;
         }
 
-        .labelket{
+        .labelket {
             text-align: left;
         }
     }
-
 </style>
 @stop
 
@@ -355,7 +355,7 @@
                                                 <div class="form-group row">
                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Urut</label>
                                                     <div class="col-lg-2 col-md-6">
-                                                        <input type="number" class="form-control col-form-label @error('no_urut') is-invalid @enderror" name="no_urut" id="no_urut"/>
+                                                        <input type="number" class="form-control col-form-label @error('no_urut') is-invalid @enderror" name="no_urut" id="no_urut" />
                                                         <div class="invalid-feedback" id="msgno_urut">
                                                             @if($errors->has('no_urut'))
                                                             {{ $errors->first('no_urut')}}
@@ -1338,7 +1338,7 @@
             var index = $(this).attr('id');
             var id = $(this).val();
             $.ajax({
-                url: '/api/penjualan_produk/select/'+id,
+                url: '/api/penjualan_produk/select/' + id,
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {

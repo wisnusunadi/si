@@ -57,6 +57,11 @@
         color: #997a00;
     }
 
+    .removeboxshadow {
+        box-shadow: none;
+        border: 1px;
+    }
+
     @media screen and (min-width: 1440px) {
         section {
             font-size: 14px;
@@ -64,6 +69,14 @@
 
         .dropdown-item {
             font-size: 14px;
+        }
+
+        .btn{
+            font-size:14px;
+        }
+
+        .labelket{
+            text-align: right;
         }
     }
 
@@ -74,6 +87,20 @@
 
         .dropdown-item {
             font-size: 12px;
+        }
+
+        .btn{
+            font-size:12px;
+        }
+
+        .labelket{
+            text-align: right;
+        }
+    }
+
+    @media screen and (max-width: 991px){
+        .labelket{
+            text-align: left;
         }
     }
 </style>
@@ -114,7 +141,7 @@
                                                 </button></a>
                                         </span>
                                         @endif
-                                        <span class="dropdown float-right filter">
+                                        <span class="float-right filter">
                                             <button class="btn btn-outline-secondary dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
                                                 <i class="fas fa-filter"></i> Filter
                                             </button>
@@ -170,6 +197,7 @@
                                                         <th>Email</th>
                                                         <th>Telp</th>
                                                         <th>NPWP</th>
+                                                        <th>KTP</th>
                                                         <th>Keterangan</th>
                                                         <th>Aksi</th>
                                                     </tr>
@@ -329,6 +357,12 @@
                     searchable: false
                 },
                 {
+                    data: 'ktp',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                },
+                {
                     data: 'ket',
                     className: 'minimizechar',
                     orderable: false,
@@ -357,6 +391,7 @@
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
                     $('#npwp').mask('00.000.000.0-000.000');
+                    $('#ktp').mask('0000000000000000');
                     console.log(id);
                     // $("#editform").attr("action", href);
                     select_data();

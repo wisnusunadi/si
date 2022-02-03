@@ -328,7 +328,7 @@
             <div class="column is-3">
               <div class="field">
                 <label class="label">Tanggal Mulai</label>
-                <div v-for="item in updated_events.events" class="control">
+                <div v-for="(item, index) in updated_events.events" :key="'start'+index" class="control">
                   <input
                     type="date"
                     :min="dateFormatter(year, month, 1)"
@@ -342,7 +342,7 @@
             <div class="column is-3">
               <div class="field">
                 <label class="label">Tanggal Selesai</label>
-                <div v-for="item in updated_events.events" class="control">
+                <div v-for="(item, index) in updated_events.events" :key="'end'+index" class="control">
                   <input
                     type="date"
                     :min="dateFormatter(year, month, 1)"
@@ -356,7 +356,7 @@
             <div class="column is-2">
               <div class="field">
                 <label class="label">Jumlah</label>
-                <div v-for="item in updated_events.events" class="control">
+                <div v-for="(item, index) in updated_events.events" :key="'jumlah'+index" class="control">
                   <input
                     class="input"
                     type="number"
@@ -369,7 +369,7 @@
             <div class="column is-2">
               <div class="field">
                 <label class="label">Progres</label>
-                <div v-for="item in updated_events.events" class="control">
+                <div v-for="(item, index) in updated_events.events" :key="'progress'+index" class="control">
                   <input
                     class="input"
                     type="number"
@@ -383,7 +383,7 @@
               <div class="field">
                 <label class="label">Aksi</label>
                 <div
-                  v-for="(item, index) in updated_events.events"
+                  v-for="(item, index) in updated_events.events" :key="'aksi'+index"
                   class="control"
                 >
                   <button

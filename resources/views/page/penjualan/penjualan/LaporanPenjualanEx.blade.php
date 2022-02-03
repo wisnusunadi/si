@@ -7,6 +7,7 @@
         </tr>
         <tr>
             <th>No</th>
+            <th>No SO</th>
             <th>No PO</th>
             <th>Tanggal PO</th>
             <th>Surat Jalan</th>
@@ -32,7 +33,7 @@
         @foreach ($data as $d)
         <tr>
             <td style="text-align:left">{{ $loop->iteration }}</td>
-
+            <td style="text-align:left">{{$d->Pesanan->so}}</td>
             <td style="text-align:left">{{$d->Pesanan->no_po}}</td>
             <td style="text-align:left">
                 {{$d->Pesanan->tgl_po}}
@@ -58,10 +59,9 @@
 
                 @else
 
-
+                @if(isset($d->DetailLogistikPart->Logistik))
                 {{$d->DetailLogistikPart->Logistik->nosurat}}
-
-
+                @endif
 
                 @endif
             </td>
@@ -86,10 +86,9 @@
 
                 @else
 
-
+                @if(isset($d->DetailLogistikPart->Logistik))
                 {{$d->DetailLogistikPart->Logistik->tgl_kirim}}
-
-
+                @endif
 
                 @endif
             </td>

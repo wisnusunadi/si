@@ -765,7 +765,7 @@ var authid = $('#authid').val();
                 Swal.fire({
                     position: 'center',
                     icon: 'success',
-                    title: 'Your data has been saved',
+                    title: 'Data Berhasil Disimpan',
                     showConfirmButton: false,
                     timer: 1500
                 });
@@ -799,7 +799,6 @@ var authid = $('#authid').val();
                 destroy: true,
                 "ordering":false,
                 "autoWidth": false,
-                searching: false,
                 "lengthChange": false,
                 processing: true,
                 serverSide: false,

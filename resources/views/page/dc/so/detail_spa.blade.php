@@ -99,6 +99,16 @@
             font-size: 12px;
         }
     }
+
+    @media screen and (max-width: 992px) {
+        .collapsable {
+            display: none;
+        }
+
+        .align-md {
+            text-align: center;
+        }
+    }
 </style>
 @stop
 
@@ -111,19 +121,29 @@
                     <div class="card-body">
                         <h5>Info</h5>
                         <div class="row">
-                            <div class="col-4">
+                            <div class="col-lg-5 col-md-12 align-md">
                                 <div class="filter">
                                     <div><small class="text-muted">Customer</small></div>
                                     <div><b>{{$data->spa->customer->nama}}</b></div>
+                                    <div><b>{{$data->spa->customer->alamat}}</b></div>
+                                    <div><b>{{$data->spa->customer->Provinsi->nama}}</b></div>
                                 </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-lg-4 col-md-6">
                                 <div class="filter">
                                     <div><small class="text-muted">No SO</small></div>
                                     <div><b>{{$data->so}}</b></div>
                                 </div>
+                                <div class="filter">
+                                    <div><small class="text-muted">No PO</small></div>
+                                    <div><b>{{$data->no_po}}</b></div>
+                                </div>
                             </div>
-                            <div class="col-4">
+                            <div class="col-lg-3 col-md-6">
+                                <div class="filter">
+                                    <div><small class="text-muted">Tanggal PO</small></div>
+                                    <div><b>{{date('d-m-Y', strtotime($data->tgl_po))}}</b></div>
+                                </div>
                                 <div class="filter">
                                     <div><small class="text-muted">Status</small></div>
                                     <div><b>{!!$status!!}</b></div>
@@ -136,7 +156,7 @@
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-7 col-12">
+        <div class="col-lg-7 col-md-6">
             <div class="card">
                 <div class="card-body">
                     <h5>Daftar Barang</h5>
@@ -202,7 +222,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-5 col-12 hide" id="noseri">
+        <div class="col-lg-5 col-md-6 hide" id="noseri">
             <div class="card">
                 <div class="card-body">
                     <div>
@@ -228,8 +248,8 @@
                                     </th>
                                     <th>No Seri</th>
                                     <th>Tgl Kirim</th>
-                                    <th>Ket</th>
-                                    <th>Laporan</th>
+                                    <th>Ttd Terima</th>
+                                    <th></th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -284,13 +304,28 @@
         <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
-                    <div class="modal-header bg-warning">
+                    <div class="modal-header bg-info">
                         <h4 class="modal-title">COO</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body" id="edit">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="tglkirim_modal" role="dialog" aria-labelledby="tglkirim_modal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-warning">
+                        <h4 class="modal-title">Tgl Kirim COO</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="tglkirim_edit">
 
                     </div>
                 </div>
@@ -326,16 +361,19 @@
                     searchable: false
                 }, {
                     data: 'tgl_surat',
+                    className: 'nowrap-text align-center collapsable',
                 },
                 {
                     data: 'nama_paket',
                 },
                 {
                     data: 'no_akd',
+                    className: 'nowrap-text align-center collapsable',
                 }, {
                     data: 'bulan',
                 }, {
                     data: 'status',
+                    className: 'nowrap-text align-center collapsable',
                 }, {
                     data: 'button',
                     orderable: false,
@@ -372,18 +410,19 @@
 
             }, {
                 data: 'tgl',
-
+                className: 'nowrap-text align-center collapsable',
             }, {
                 data: 'ket',
-
+                className: 'nowrap-text align-center collapsable',
             }, {
                 data: 'laporan',
+                orderable: false,
+                searchable: false
 
             }]
         });
 
         function listnoseri(seri_id, data) {
-
             $('#listnoseri').DataTable({
                 destroy: true,
                 processing: true,
@@ -465,7 +504,7 @@
                 url: action,
                 data: $('#form-create-coo').serialize(),
                 success: function(response) {
-                    //   alert(response);
+
                     if (response['data'] == "success") {
                         swal.fire(
                             'Berhasil',
@@ -475,7 +514,8 @@
                             location.reload();
                         });
                         $("#editmodal").modal('hide');
-                        //$('#noseritable').DataTable().ajax.reload();
+                        $('#cekbrg').attr("disabled", true);
+                        $('#noseritable').DataTable().ajax.reload();
 
                     } else if (response['data'] == "error") {
                         swal.fire(
@@ -487,6 +527,43 @@
                 },
                 error: function(xhr, status, error) {
                     alert($('#form-create-coo').serialize());
+                }
+            });
+            return false;
+        });
+        $(document).on('submit', '#form-update-coo', function(e) {
+            e.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-update-coo').serialize(),
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan Penambahan Data Pengujian',
+                            'success'
+                        ).then(function() {
+                            location.reload();
+                        });
+                        $("#editmodal").modal('hide');
+                        $('#cekbrg').attr("disabled", true);
+                        $('#noseritable').DataTable().ajax.reload();
+
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Penambahan Data Pengujian',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-update-coo').serialize());
                 }
             });
             return false;
@@ -543,6 +620,34 @@
                     });
                     listnoseri(checkedAry, data);
                     // $("#editform").attr("action", href);
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
+
+        $(document).on('click', '.tglkirim_modal', function(event) {
+            var id = $(this).data('id');
+            console.log(id);
+
+            $.ajax({
+                url: "/dc/coo/edit_tglkirim/" + id,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#tglkirim_modal').modal("show");
+                    $('#tglkirim_edit').html(result).show();
+                    //  alert('response);
+
                 },
                 complete: function() {
                     $('#loader').hide();

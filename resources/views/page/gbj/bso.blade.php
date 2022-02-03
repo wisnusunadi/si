@@ -812,11 +812,13 @@
             confirmButtonText: 'Yes, Draft it'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire(
-                        'Success!',
-                        'Data Rancangan Terkirim ke QC',
-                        'success'
-                    )
+                    $(this).prop('disabled', true);
+                    Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
                     $.ajax({
                         url: "/api/tfp/updateFinalSO",
                         type: "post",
@@ -827,12 +829,19 @@
                             data: editPrd,
                         },
                         success: function(res) {
-                            location.reload();
+                            Swal.fire(
+                            'Success!',
+                            'Data Rancangan Terkirim ke QC',
+                            'success'
+                        ).then((result) => {
+                            if (result.isConfirmed) {
+                                location.reload();
+                            }
+                            })
                         }
                     })
                 }
             })
-
     })
     $(document).on('click', '.detailmodal', function () {
         let jml = $(this).data('jml');

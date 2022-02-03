@@ -550,6 +550,7 @@
                                         <table class="table table-hover" id="ekatalogtable" style="width:100%">
                                             <thead>
                                                 <tr>
+                                                    <th>No</th>
                                                     <th>No Urut</th>
                                                     <th>Nomor SO</th>
                                                     <th>Nomor AKN</th>
@@ -1035,8 +1036,15 @@
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
-            columns: [{
-                    data: 'id'
+            columns: [
+                {
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'no_urut',
                 },
                 {
                     data: 'so',
