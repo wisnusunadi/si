@@ -1788,7 +1788,7 @@ class ProduksiController extends Controller
 
     function getSelesaiRakit()
     {
-        $data = JadwalPerakitan::whereIn('status_tf', [15, 13, 12])->where('status', 7)->get();
+        $data = JadwalPerakitan::whereIn('status_tf', [15, 13, 12])->whereNotIn('status', [6])->get();
         return datatables()->of($data)
             ->addColumn('periode', function ($d) {
                 if (isset($d->tanggal_mulai)) {
