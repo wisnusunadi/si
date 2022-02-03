@@ -283,6 +283,8 @@ Route::prefix('/prd')->group(function () {
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
     Route::post('/rakit-seri', [ProduksiController::class, 'storeRakitNoseri']);
     Route::post('cek-noseri', [ProduksiController::class, 'cekDuplicateNoseri']);
+    Route::post('/ajax_sisa', [ProduksiController::class, 'ajax_sisa_transfer']);
+    Route::post('/detail_sisa_kirim', [ProduksiController::class, 'detail_sisa_kirim']);
 
     Route::get('/testing', [ProduksiController::class, 'change_jadwal']);
 
