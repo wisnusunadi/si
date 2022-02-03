@@ -2543,8 +2543,8 @@ class ProduksiController extends Controller
             ->addColumn('aksi', function($d){
                 $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
                 return '
-                    <a data-toggle="modal" data-target="#rakitmodal" class="rakitmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '">
-                        <button class="btn btn-outline-warning btn-sm"><i class="far fa-edit"></i> Detail</button>
+                    <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '">
+                        <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
                     </a>
                     ';
             })

@@ -7,6 +7,9 @@
     #DataTables_Table_0_filter{
         display: none;
     }
+    #DataTables_Table_1_filter{
+        display: none;
+    }
 </style>
 <div class="content-header">
     <div class="container-fluid">
@@ -24,9 +27,9 @@
                 <nav>
                     <div class="nav nav-tabs topnav" id="nav-tab" role="tablist">
                         <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-                            aria-controls="nav-home" aria-selected="true">Per Tanggal</a>
+                            aria-controls="nav-home" aria-selected="true">Transfer Gudang Barang Jadi</a>
                         <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
-                            aria-controls="nav-profile" aria-selected="false">Per Produk</a>
+                            aria-controls="nav-profile" aria-selected="false">Transfer Lain Lain</a>
                     </div>
                 </nav>
             </div>
@@ -71,7 +74,7 @@
                             <div class="col-6">
                                 <h3 class="font-weight-bold" id="h_unit">{{ $unit }}</h3>
                                 <h4 class="font-weight-normal text-muted">Unit Dirakit</h4>
-                        </div>
+                            </div>
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
@@ -101,8 +104,38 @@
     </div>
     <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
         <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="">Pilih Produk</label>
+                            <select name="" id="produk_select2" class="form-control produk_select2" multiple>
+                                <option value="" selected="selected">All Produk</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="">Tanggal Transfer</label>
+                            <input type="text" name="" id="" class="form-control daterange">
+                        </div>
+                    </div>
+                    <div class="col-sm-3"></div>
+                </div>
+                <hr>
+                <div class="row text-center">
+                    <div class="col-6">
+                        <h3 class="font-weight-bold" id="h_rakit">{{ $rakit }}</h3>
+                        <h4 class="font-weight-normal text-muted">Perakitan</h4>
+                    </div>
+                    <div class="col-6">
+                        <h3 class="font-weight-bold" id="h_unit">{{ $unit }}</h3>
+                        <h4 class="font-weight-normal text-muted">Unit Dirakit</h4>
+                    </div>
+                </div>
+            </div>
             <div class="card-body">
-                <table class="table tablePerProduk">
+                {{-- <table class="table tablePerProduk">
                     <thead class="thead-light">
                         <tr>
                             <th>No BPPB</th>
@@ -111,6 +144,28 @@
                         </tr>
                     </thead>
                     <tbody>
+                    </tbody>
+                </table> --}}
+                <table class="table tableLain">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Tanggal Transfer</th>
+                            <th>Waktu Transfer</th>
+                            <th>Nomor BPPB</th>
+                            <th>Produk</th>
+                            <th>Jumlah</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Kamis, 27 Januari 2022</td>
+                            <td>11:24</td>
+                            <td>BPPB/TEST</td>
+                            <td>DIGIT ONE BACKLIGHT HIJAU</td>
+                            <td>1 Unit</td>
+                            <td><button class="btn btn-outline-secondary buttonTransfer"><i class="far fa-eye"></i> Detail</button></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -255,6 +310,72 @@
                                 </thead>
                                 <tbody></tbody>
                         </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal -->
+<div class="modal fade modalTransferLain" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm">
+                                <label for="">Tanggal & Waktu Transfer</label>
+                                <div class="card-group">
+                                    <div class="card" style="background-color: #C8E1A7">
+                                        <div class="card-body">
+                                            <p class="card-text" id="d_rakit">Senin 10-04-2021</p>
+                                        </div>
+                                    </div>
+                                    <div class="card" style="background-color: #C8E1A7">
+                                        <div class="card-body">
+                                            <p class="card-text" id="t_rakit">08.00 WIB</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm">
+                                    <label for="">Nomor BPPB</label>
+                                    <div class="card" style="background-color: #F89F81">
+                                        <div class="card-body" id="bppb">
+                                            516546546546546
+                                        </div>
+                                      </div>
+                                </div>
+                                <div class="col-sm">
+                                    <label for="">Nama Produk</label>
+                                    <div class="card" style="background-color: #FCF9C4">
+                                        <div class="card-body" id="produk">
+                                            Produk 1
+                                        </div>
+                                      </div>
+                                </div>
+                                <div class="col-sm">
+                                    <label for="">Jumlah</label>
+                                    <div class="card" style="background-color: #FFCC83">
+                                        <div class="card-body" id="jml">
+                                            100 Unit
+                                        </div>
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <label for="">Keterangan</label>
+                        <textarea name="" class="form-control keterangan" id="" cols="30" rows="10" disabled>Keterangan</textarea>
                     </div>
                 </div>
             </div>
@@ -534,5 +655,30 @@
             });
             $('.modalTableProduk').modal('show');
         });
+
+        // Transfer Lain lain
+        $('.tableLain').DataTable({
+            destroy: true,
+            "autoWidth": false,
+            processing: true,
+            lengthChange: false,
+            // ajax: {
+            //     url: "/api/prd/ajax_lain",
+            // },
+            // columns: [
+            //     {data: 'no_bppb'},
+            //     {data: 'produk'},
+            //     {data: 'aksi'},
+            // ],
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        });
+
+        $(document).on('click','.buttonTransfer', function () {
+            $('.modalTransferLain').modal('show');
+        });
+
+        $('#produk_select2').select2({});
 </script>
 @stop
