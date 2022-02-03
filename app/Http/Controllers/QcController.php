@@ -1229,7 +1229,7 @@ class QcController extends Controller
                     }
                 } else if (count($po->DetailPesanan) <= 0 && count($po->DetailPesananPart) > 0) {
                     // $uk = "Jumlah Pesan Part ".$po->getJumlahPesananPart()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
-                    if ($po->getJumlahPesananPart() == $po->getJumlahCekPart("ok")) {
+                    if ($po->getJumlahPesananPart() <= $po->getJumlahCekPart("ok")) {
                         if ($po->getJumlahKirimPart() == 0) {
                             $pou = Pesanan::find($pesanan_id);
                             $pou->log_id = '11';
@@ -1254,31 +1254,40 @@ class QcController extends Controller
                                 }
                             }
                         }
+                    }else if ($po->getJumlahPesananPart() > $po->getJumlahCekPart("ok")){
+                        $pou = Pesanan::find($pesanan_id);
+                        $pou->log_id = '8';
+                        $u = $pou->save();
+                        if(!$u){
+                            $bools = false;
+                        }
                     }
                 } else if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) > 0) {
                     // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek()." Jumlah Pesan Part ".$po->getJumlahPesananPart()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
-                    if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPart() == $po->getJumlahCekPart("ok"))) {
-                        if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
-                            $pou = Pesanan::find($pesanan_id);
-                            $pou->log_id = '11';
-                            $u = $pou->save();
-                            if(!$u){
-                                $bools = false;
-                            }
-                        } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
-                            if ($po->getJumlahKirim() >= $po->getJumlahPesanan() && $po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                    if ($po->log_id == "8") {
+                        if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPart() == $po->getJumlahCekPart("ok"))) {
+                            if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
                                 $pou = Pesanan::find($pesanan_id);
-                                $pou->log_id = '10';
+                                $pou->log_id = '11';
                                 $u = $pou->save();
                                 if(!$u){
                                     $bools = false;
                                 }
-                            } else {
-                                $pou = Pesanan::find($pesanan_id);
-                                $pou->log_id = '13';
-                                $u = $pou->save();
-                                if(!$u){
-                                    $bools = false;
+                            } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
+                                if ($po->getJumlahKirim() >= $po->getJumlahPesanan() && $po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '10';
+                                    $u = $pou->save();
+                                    if(!$u){
+                                        $bools = false;
+                                    }
+                                } else {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '13';
+                                    $u = $pou->save();
+                                    if(!$u){
+                                        $bools = false;
+                                    }
                                 }
                             }
                         }

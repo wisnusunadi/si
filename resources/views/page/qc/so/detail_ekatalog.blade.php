@@ -259,7 +259,16 @@
                     <div class="card-body">
                         @if(Auth::user()->divisi_id == "23")
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-6">
+                                <span class="float-right filter">
+                                    <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
+                                        <button class="btn btn-warning" id="cekbrg" disabled="true">
+                                            <i class="fas fa-pencil-alt"></i> Filter
+                                        </button>
+                                    </a>
+                                </span>
+                            </div>
+                            <div class="col-6">
                                 <span class="float-right filter">
                                     <button class="btn btn-outline-secondary dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
                                         <i class="fas fa-filter"></i> Filter

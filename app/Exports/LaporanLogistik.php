@@ -77,7 +77,6 @@ class LaporanLogistik implements FromView, ShouldAutoSize, WithStyles, WithColum
 
     public function styles(Worksheet $sheet)
     {
-
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A2:T2')->getFont()->setBold(true);
 

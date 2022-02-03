@@ -57,6 +57,10 @@
         width: 1371px !important;
     }
 
+    .removeshadow{
+        box-shadow: none;
+    }
+
     @media screen and (min-width: 1220px) {
 
         section {
@@ -324,7 +328,7 @@
                                                     <div class="form-group row">
                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat</label>
                                                         <div class="col-lg-7 col-md-12">
-                                                            <input type="text" class="form-control col-form-label" name="alamat" id="alamat_customer" readonly value="{{$e->customer->alamat}}" />
+                                                            <textarea class="form-control col-form-label @error('alamat') is-invalid @enderror" name="alamat" id="alamat_customer" readonly>{{$e->customer->alamat}}</textarea>
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
@@ -408,6 +412,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="card removeshadow">
+                                                        <div class="card-header"></div>
                                                         <div class="card-body">
                                                             <div class="form-group row">
                                                                 <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
@@ -434,7 +439,7 @@
                                                             <div class="form-group row">
                                                                 <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat Instansi</label>
                                                                 <div class="col-lg-7 col-md-12">
-                                                                    <input type="text" class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi" value="{{$e->alamat}}" />
+                                                                    <textarea class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi">{{$e->alamat}}</textarea>
                                                                     <div class="invalid-feedback" id="msgalamatinstansi">
                                                                         @if($errors->has('alamatinstansi'))
                                                                         {{ $errors->first('alamatinstansi')}}
@@ -455,6 +460,7 @@
                                                         </div>
                                                     </div>
                                                     <div class="card removeshadow">
+                                                        <div class="card-header"></div>
                                                         <div class="card-body">
                                                             <div class="form-group row">
                                                                 <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Deskripsi</label>
@@ -470,7 +476,7 @@
                                                             <div class="form-group row">
                                                                 <label for="keterangan" class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
                                                                 <div class="col-lg-5 col-md-12">
-                                                                    <textarea class="form-control col-form-label" name="keterangan">{{$e->ket}}</textarea>
+                                                                    <textarea class="form-control col-form-label" id="keterangan" name="keterangan">{{$e->ket}}</textarea>
                                                                 </div>
                                                             </div>
                                                         </div>
