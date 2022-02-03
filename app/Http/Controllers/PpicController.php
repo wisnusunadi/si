@@ -315,59 +315,66 @@ class PpicController extends Controller
         })->get();
         $arrayid = array();
 
-        // foreach ($getid as $i) {
-        //     $jumlahpesan = $i->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $i->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $i->getJumlahPermintaanPesanan("spa", "");
-        //     $jumlahtf = $i->getJumlahTransferPesanan("ekatalog") + $i->getJumlahTransferPesanan("ekatalog", "negosiasi") + $i->getJumlahTransferPesanan("spa");
-        //     if ($jumlahtf < $jumlahpesan) {
-        //         $arrayid[] = $i->id;
-        //     }
-        // }
+        foreach ($getid as $i) {
+            $jumlahpesan = $i->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $i->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $i->getJumlahPermintaanPesanan("ekatalog", "batal") + $i->getJumlahPermintaanPesanan("ekatalog_po", "") + $i->getJumlahPermintaanPesanan("spa", "") + $i->getJumlahPermintaanPesanan("spb", "");
+            $jumlahtf = $i->getJumlahTransferPesanan("ekatalog") + $i->getJumlahTransferPesanan("ekatalog", "negosiasi") + $i->getJumlahTransferPesanan("spa") + $i->getJumlahTransferPesanan("spb");
+            if ($jumlahtf < $jumlahpesan) {
+                $arrayid[] = $i->id;
+            }
+        }
+
 
         $data = GudangBarangJadi::whereIn('id', $arrayid)->get();
 
-        return DataTables::of($getid)
-            ->addIndexColumn()
-            ->addColumn('nama_produk', function ($data) {
-                if ($data->nama) {
-                    return $data->Produk->nama . " - <b>" . $data->nama . "</b>";
-                } else {
-                    return $data->Produk->nama;
-                }
-            })
-            ->addColumn('gbj', function ($data) {
-                return $data->stok;
-            })
-            ->addColumn('total', function ($data) {
-                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
-                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
-                $jumlah = $jumlahdiminta - $jumlahtf;
-                return $jumlah;
-            })
-            ->addColumn('penjualan', function ($data) {
-                $jumlah_gbj = $data->stok;
-                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
-                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
-                $jumlah_stok_permintaan = $jumlahdiminta - $jumlahtf;
-                $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
-                return $jumlah;
-            })
-            ->addColumn('sepakat', function ($data) {
-                return $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") - $data->getJumlahTransferPesanan("ekatalog");
-            })
-            ->addColumn('nego', function ($data) {
-                return $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") - $data->getJumlahTransferPesanan("ekatalog", "negosiasi");
-            })
-            ->addColumn('batal', function ($data) {
-                return $data->getJumlahPermintaanPesanan("ekatalog", "batal");
-            })
-            ->addColumn('po', function ($data) {
-                return $data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa");
-            })
-            ->addColumn('jumlah_kirim', function($data) {
-                return $data->getJumlahKirimPesanan();
-            })
-            ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
-            ->make(true);
+        return datatables()->of($data)
+        ->addIndexColumn()
+        ->addColumn('nama_produk', function ($data) {
+            if (!empty($data->nama)) {
+                return $data->Produk->nama . " - <b>" . $data->nama . "</b>";
+            } else {
+                return $data->Produk->nama;
+            }
+        })
+        ->addColumn('gbj', function ($data) {
+            return $data->stok;
+        })
+        ->addColumn('penjualan', function ($data) {
+            $jumlah_gbj = $data->stok;
+            $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+            $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
+            $jumlah_stok_permintaan = $jumlahdiminta - $jumlahtf;
+            $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
+            if ($jumlah >= 0) {
+                return "<div>" . $jumlah . "</div>";
+            } else {
+                return '<div class="has-text-danger">' . $jumlah . "</div>";
+            }
+        })
+        ->addColumn('total', function ($data) {
+            $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+            $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
+            $jumlah = $jumlahdiminta - $jumlahtf;
+            return $jumlah;
+        })
+        ->addColumn('sepakat', function ($data) {
+            // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") - $data->getJumlahTransferPesanan("ekatalog");
+            $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat");
+            return $jumlah;
+        })
+        ->addColumn('nego', function ($data) {
+            // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") - $data->getJumlahTransferPesanan("ekatalog", "negosiasi");
+            $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi");
+            return $jumlah;
+        })
+        ->addColumn('batal', function ($data) {
+            return $data->getJumlahPermintaanPesanan("ekatalog", "batal");
+        })
+        ->addColumn('po', function ($data) {
+            $jumlah = ($data->getJumlahPermintaanPesanan("ekatalog_po", "") - $data->getJumlahTransferPesanan("ekatalog")) + ($data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa")) + ($data->getJumlahPermintaanPesanan("spb", "") - $data->getJumlahTransferPesanan("spb"));
+            return $jumlah;
+        })
+        ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
+        ->make(true);
     }
 
     /**
