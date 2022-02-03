@@ -1,7 +1,7 @@
 <div class="row filter">
     <div class="col-12">
         <div class="row">
-            <div class="col-4">
+            <div class="col-lg-4 col-md-12">
                 <div class="card">
                     <div class="card-header">
                         <h5 class="card-title">Info Customer</h5>
@@ -13,8 +13,8 @@
                                 <div>
                                     <h6><b>{{$data->Customer->nama}}</b></h6>
                                 </div>
-                                <div><b>{{$data->Customer->alamat}}</b></div>
-                                <div><b>{{$data->Customer->Provinsi->nama}}</b></div>
+                                <div>{{$data->Customer->alamat}}</div>
+                                <div>{{$data->Customer->Provinsi->nama}}</div>
 
                             </div>
                         </div>
@@ -76,7 +76,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-8">
+            <div class="col-lg-8 col-md-12">
                 <h5>Detail Pemesanan</h5>
                 <div class="card overflowy" id="detailspb">
                     <div class="card-body">
@@ -85,7 +85,7 @@
                             <?php $totalharga = 0; ?>
                             <?php $no = 0; ?>
                             @if(isset($data->Pesanan))
-                            <div class="card removeshadow">
+                            <div class="card removeshadow" id="detailspb">
                                 <div class="card-body">
                                     <table class="table" style="max-width:100%; overflow-x: hidden; background-color:white;" id="tabledetailpesan">
                                         <thead>
@@ -137,7 +137,7 @@
                                             <?php $no = $no + 1; ?>
                                             <tr>
                                                 <td>{{$no}}</td>
-                                                <td class="wb"><b>{{$e->Sparepart->nama}}</b></td>
+                                                <td class="nowraptxt"><b>{{$e->Sparepart->nama}}</b></td>
                                                 <td class="nowraptxt"><span class="text-muted">{{$e->jumlah}}</span></td>
                                                 <td class="nowraptxt">@if(isset($e->detaillogistikpart)) {{$e->jumlah}} @else 0 @endif</td>
                                                 <td class="nowraptxt">@currency($e->harga)</td>

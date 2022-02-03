@@ -341,11 +341,13 @@
                 },
                 {
                     data: 'no_akd',
+                    className: 'nowrap-text align-center',
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: 'merk',
+                    className: 'nowrap-text align-center',
                     orderable: true,
                     searchable: true
                 },

@@ -83,24 +83,37 @@
         padding: 6px;
         border-radius: 0.3rem;
     }
-
-    @media screen and (min-width: 1440px) {
-        section {
-            font-size: 14px;
-        }
-
-        .dropdown-item {
-            font-size: 14px;
-        }
+    .removeboxshadow {
+        box-shadow: none;
+        border: 1px;
     }
 
-    @media screen and (max-width: 1439px) {
-        section {
-            font-size: 12px;
+    @media screen and (min-width: 993px){
+        .labelket{
+            text-align: right;
         }
-
+        section{
+            font-size:14px;
+        }
+        .btn{
+            font-size:14px;
+        }
+        .dropdown-item {
+            font-size: 14px;
+        }
+        }
+    @media screen and (max-width: 992px){
+        .labelket{
+            text-align: left;
+        }
+        section{
+            font-size:12px;
+        }
         .dropdown-item {
             font-size: 12px;
+        }
+        .btn{
+            font-size:12px;
         }
     }
 </style>
@@ -258,6 +271,15 @@
                 type: "POST",
                 url: action,
                 data: $('#form-ekspedisi-update').serialize(),
+                beforeSend: function() {
+                    swal.fire({
+                        title: 'Sedang Proses',
+                        html: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {Swal.showLoading()}
+                    })
+                },
                 success: function(response) {
                     if (response['data'] == "success") {
                         swal.fire(
@@ -285,18 +307,6 @@
             });
             return false;
         });
-
-
-
-
-
-
-
-
-
-
-
-
 
         var showtable = $('#showtable').DataTable({
             destroy: true,
@@ -475,7 +485,7 @@
             }
         })
 
-        $(document).on('keyup change', 'input[name="alamat"]', function() {
+        $(document).on('keyup change', "#alamat", function() {
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");

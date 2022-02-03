@@ -278,6 +278,15 @@
                 type: "POST",
                 url: action,
                 data: $('#form-customer-update').serialize(),
+                beforeSend: function() {
+                    swal.fire({
+                        title: 'Sedang Proses',
+                        html: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {Swal.showLoading()}
+                    })
+                },
                 success: function(response) {
                     if (response['data'] == "success") {
                         swal.fire(
@@ -426,6 +435,15 @@
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                 },
+                beforeSend: function() {
+                    swal.fire({
+                        title: 'Sedang Proses',
+                        html: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {Swal.showLoading()}
+                    })
+                },
                 success: function(response) {
                     if (response['data'] == "success") {
                         swal.fire(
@@ -434,7 +452,6 @@
                             'success'
                         );
                         $('#showtable').DataTable().ajax.reload();
-
                         $("#hapusmodal").modal('hide');
                     } else if (response['data'] == "error") {
                         swal.fire(
@@ -518,7 +535,7 @@
             }
         })
 
-        $(document).on('keyup change', 'input[name="alamat"]', function() {
+        $(document).on('keyup change', '#alamat', function() {
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");

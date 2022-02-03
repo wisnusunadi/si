@@ -313,7 +313,7 @@
             }
         })
 
-        $('input[name="alamat"]').on('keyup change', function() {
+        $("#alamat").on('keyup change', function() {
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");

@@ -637,7 +637,11 @@ class LogistikController extends Controller
     public function get_data_so($value)
     {
         $x = explode(',', $value);
-        $datas = Pesanan::orHas('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->orHas('DetailPesananPart')->whereNotIn('log_id', ['10'])->get();
+        $datanonjasa = Pesanan::orHas('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->orHas('DetailPesananPart.OutgoingPesananPart')->whereNotIn('log_id', ['10'])->get();
+        $datajasa = Pesanan::whereHas('DetailPesananPart.Sparepart', function($q){
+            $q->where('nama', 'like', '%JASA%');
+        })->get();
+        $datas = $datanonjasa->merge($datajasa);
         $array_id = array();
         foreach ($datas as $d) {
             if ($value == 'semua') {

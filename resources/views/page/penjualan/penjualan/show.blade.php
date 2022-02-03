@@ -1175,7 +1175,6 @@
                     $('#detail').html(result).show();
 
                     if (label == 'ekatalog') {
-
                         $('#detailmodal').find(".modal-header").attr('id', '');
                         $('#detailmodal').find(".modal-header").attr('id', 'detailekat');
                         $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
@@ -1241,6 +1240,15 @@
                 type: "POST",
                 url: action,
                 data: $('#form-pesanan-update').serialize(),
+                beforeSend: function() {
+                    swal.fire({
+                        title: 'Sedang Proses',
+                        html: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {Swal.showLoading()}
+                    })
+                },
                 success: function(response) {
                     if (response['data'] == "success") {
                         swal.fire(

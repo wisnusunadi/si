@@ -2167,7 +2167,6 @@ class PenjualanController extends Controller
                     $q->where('pesanan_id', $poid);
                 })->get();
                 if (count($dspap) > 0) {
-                    echo "yesdpp";
                     $deldspap = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
                         $q->where('pesanan_id', $poid);
                     })->delete();
@@ -2178,7 +2177,6 @@ class PenjualanController extends Controller
 
                 $dspa = DetailPesanan::where('pesanan_id', $poid)->get();
                 if (count($dspa) > 0) {
-                    echo "yes dp";
                     $deldspa = DetailPesanan::where('pesanan_id', $poid)->delete();
                     if (!$deldspa) {
                         $bool = false;
