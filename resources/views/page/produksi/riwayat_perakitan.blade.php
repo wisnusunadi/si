@@ -324,7 +324,7 @@
 
 <!-- Modal -->
 <div class="modal fade modalTransferLain" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog" role="document">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -336,20 +336,22 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-sm">
-                                <label for="">Tanggal & Waktu Transfer</label>
-                                <div class="card-group">
-                                    <div class="card" style="background-color: #C8E1A7">
-                                        <div class="card-body">
-                                            <p class="card-text" id="d_rakit">Senin 10-04-2021</p>
-                                        </div>
+                                <label for="">Tanggal Masuk</label>
+                                <div class="card" style="background-color: #FFE0B4">
+                                    <div class="card-body" id="d_rakit">
+                                        Senin 10-04-2021
                                     </div>
-                                    <div class="card" style="background-color: #C8E1A7">
-                                        <div class="card-body">
-                                            <p class="card-text" id="t_rakit">08.00 WIB</p>
-                                        </div>
-                                    </div>
-                                </div>
+                                  </div>
                             </div>
+                            <div class="col-sm">
+                                <label for="">Tanggal Keluar</label>
+                                <div class="card" style="background-color: #C8E1A7">
+                                    <div class="card-body" id="t_rakit">
+                                        Senin 10-04-2021
+                                    </div>
+                                  </div>
+                            </div>
+                        </div>
                             <div class="row">
                                 <div class="col-sm">
                                     <label for="">Nomor BPPB</label>
@@ -377,7 +379,6 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
                     <div class="card-body">
                         <label for="">Keterangan</label>
                         <textarea name="" class="form-control keterangan" id="" cols="30" rows="10" disabled>Keterangan</textarea>
