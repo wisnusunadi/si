@@ -345,7 +345,7 @@
                                         <div class="card">
                                             <div class="card-body">
                                                 <div class="form-horizontal">
-                                                    <div class="card">
+                                                    <div class="card removeshadow">
                                                         <div class="card-body">
                                                             <div class="form-group row">
                                                                 <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Urut</label>
@@ -407,7 +407,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="card">
+                                                    <div class="card removeshadow">
                                                         <div class="card-body">
                                                             <div class="form-group row">
                                                                 <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
@@ -454,7 +454,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="card">
+                                                    <div class="card removeshadow">
                                                         <div class="card-body">
                                                             <div class="form-group row">
                                                                 <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Deskripsi</label>
