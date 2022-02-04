@@ -5,13 +5,13 @@
     </div>
     <div class="tabs is-centered">
       <ul>
-        <li :class="{ 'is-active': view === 'sales_order'}" @click="loadData">
+        <li :class="{ 'is-active': !tabs}" @click="tabs = false">
         <a>
           <span class="icon is-small"><i class="fas fa-table" aria-hidden="true"></i></span>
           <span>Per SO</span>
         </a>
         </li>
-        <li :class="{ 'is-active': view === 'per_produk'}" @click="perProduk">
+        <li :class="{ 'is-active': tabs}" @click="tabs = true">
           <a>
             <span class="icon is-small">
               <i class="fas fa-table" aria-hidden="true"></i>
@@ -21,7 +21,7 @@
         </li>
       </ul>
     </div>
-    <template v-if="view == 'sales_order'">
+    <div :class="{'is-hidden': tabs}">
       <div class="columns is-multiline">
       <div class="column is-12">
         <table class="table is-fullwidth has-text-centered" id="table_so">
@@ -57,8 +57,8 @@
         </table>
       </div>
     </div>
-    </template>
-    <template v-if="view == 'per_produk'">
+    </div>
+    <div :class="{'is-hidden': !tabs}">
       <div class="columns is-multiline">
       <div class="column is-12">
         <table class="table is-fullwidth has-text-centered" id="table_produk">
@@ -79,8 +79,7 @@
               <td v-html="item.nama_produk"></td>
               <td>{{ item.stok }}</td>
               <td>{{ item.total }}</td>
-              <td v-html="item.penjualan">
-              </td>
+              <td><span :class="{ 'has-text-danger' : item.penjualan < 0 }">{{ item.penjualan }}</span></td>
               <td v-text="item.jumlah_kirim"></td>
               <td>
                 <button
@@ -95,7 +94,7 @@
         </table>
       </div>
     </div>
-    </template>
+    </div>
     <!-- modal -->
     <div class="modal" :class="{ 'is-active': showModal }">
       <div class="modal-background"></div>
@@ -201,18 +200,27 @@ export default {
 
       showModal: false,
       showModalSO: false,
-      view: "sales_order"
+      tabs: false
     };  
   },
 
   methods: {
-    loadData() {
+    async loadData() {
       this.$store.commit("setIsLoading", true);
-        axios.post("/api/prd/so").then((response) => {
+        await axios.post("/api/prd/so").then((response) => {
           this.salesOrder = response.data.data;
-        }).then(() => ($("#table_so").DataTable()))
-        .then(() => (this.$store.commit("setIsLoading", false)));
-        this.view = "sales_order";
+        }).then(() => ($("#table_so").DataTable({
+          pagingType: "simple_numbers_no_ellipses",
+        })))
+
+        await axios.get("/api/ppic/data/so2").then((response) => {
+        this.data = response.data.data;
+        }).then(() => ($("#table_produk").DataTable({
+          pagingType: "simple_numbers_no_ellipses",
+        })));
+
+      this.$store.commit("setIsLoading", false);
+      
     },
 
 
@@ -266,18 +274,6 @@ export default {
       this.showModalSO = true;
       
     },
-    perProduk(){
-        this.$store.commit("setIsLoading", true);
-        $("#table_produk").DataTable().destroy();
-        axios.get("/api/ppic/data/so").then((response) => {
-        this.data = response.data.data;
-      }).catch((error) => {
-        console.log(error);
-      })
-      .then(() => (this.$store.commit("setIsLoading", false)))
-      .then(() => ($("#table_produk").DataTable())) ;
-      this.view = "per_produk";
-    }
   },
 
   mounted() {

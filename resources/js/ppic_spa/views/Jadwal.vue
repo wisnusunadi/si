@@ -174,8 +174,5 @@ export default {
       return data;
     },
   },
-  beforeCreate() {
-    console.log("beforeCreate");
-  },
 };
 </script>
