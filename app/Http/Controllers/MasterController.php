@@ -313,6 +313,13 @@ class MasterController extends Controller
             ->editColumn('nama', function ($data) {
                 return $data->nama;
             })
+            ->addColumn('nama_alias', function ($data) {
+                $id = $data->id;
+                $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
+                    $q->where('id', $id);
+                })->first();
+                return $s->nama_coo;
+            })
             ->addColumn('no_akd', function ($data) {
                 $id = $data->id;
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
