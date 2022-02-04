@@ -6,29 +6,31 @@
     <div class="columns is-multiline">
       <div class="column is-12">
         <table class="table is-fullwidth has-text-centered" id="table_so">
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Nama Produk</th>
-              <th>Stok</th>
-              <th>Pesanan</th>
-              <th>Selisih stok dengan pesanan</th>
-              <th>Sepakat</th>
-              <th>Negosiasi</th>
-              <th>Batal</th>
-              <th>PO</th>
-              <th>Detail</th>
-            </tr>
-          </thead>
+            <thead>
+                <tr>
+                    <th rowspan="2">No</th>
+                    <th rowspan="2">Nama Produk</th>
+                    <th colspan="2">Stok</th>
+                    <th colspan="5">Penjualan</th>
+                    <th rowspan="2">Aksi</th>
+                </tr>
+                <tr>
+                    <th>GBJ</th>
+                    <th>Sisa</th>
+                    <th>Permintaan</th>
+                    <th>Sepakat</th>
+                    <th>Nego</th>
+                    <th>Batal</th>
+                    <th>PO</th>
+                </tr>
+            </thead>
           <tbody>
             <tr v-for="item in data" :key="item.id">
               <td>{{ item.DT_RowIndex }}</td>
               <td v-html="item.nama_produk"></td>
               <td>{{ item.stok }}</td>
+              <td v-html="item.penjualan"></td>
               <td>{{ item.total }}</td>
-              <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
-                {{ item.penjualan }}
-              </td>
               <td>{{ item.sepakat }}</td>
               <td>{{ item.nego }}</td>
               <td>{{ item.batal }}</td>

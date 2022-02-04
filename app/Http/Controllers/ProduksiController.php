@@ -2497,16 +2497,19 @@ class ProduksiController extends Controller
                     return '-';
                 }
             })
+            ->addColumn('no_bppb', function ($d) {
+                return $d->no_bppb == null ? '-' : $d->no_bppb;
+            })
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
-                    return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
+                    return Carbon::parse($d->tanggal_mulai)->isoFormat('dddd, D MMM YYYY');
                 } else {
                     return '-';
                 }
             })
             ->addColumn('end', function ($d) {
                 if (isset($d->tanggal_selesai)) {
-                    return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY');
+                    return Carbon::parse($d->tanggal_selesai)->isoFormat('dddd, D MMM YYYY');
                 } else {
                     return '-';
                 }
@@ -2529,7 +2532,7 @@ class ProduksiController extends Controller
                 $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
 
                 return '
-                <br><span class="badge badge-success">Sisa Kirim : ' . intval($seri_belum) . ' Unit</span>
+                <span class="badge badge-success">Sisa Kirim : ' . intval($seri_belum) . ' Unit</span>
                 <br><span class="badge badge-warning">Sisa Rakit : ' . intval($d->jumlah - $c_all) . ' Unit</span>
                 ';
             })
@@ -2542,11 +2545,38 @@ class ProduksiController extends Controller
             })
             ->addColumn('aksi', function($d){
                 $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
-                return '
-                    <a data-toggle="modal" data-target="#rakitmodal" class="rakitmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '">
-                        <button class="btn btn-outline-warning btn-sm"><i class="far fa-edit"></i> Detail</button>
+                if (isset($d->keterangan)) {
+                    return '
+                    <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="'.$d->keterangan.'">
+                        <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
                     </a>
                     ';
+                } else {
+                    return '
+                    <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="'.$d->keterangan_transfer.'">
+                        <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
+                    </a>
+                    ';
+                }
+                // return '
+                //     <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="'.$d->keterangan.'">
+                //         <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
+                //     </a>
+                //     ';
+            })
+            ->addColumn('start_filter', function ($d) {
+                if (isset($d->tanggal_mulai)) {
+                    return $d->tanggal_mulai;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('end_filter', function ($d) {
+                if (isset($d->tanggal_selesai)) {
+                    return $d->tanggal_selesai;
+                } else {
+                    return '-';
+                }
             })
             ->rawColumns(['aksi', 'jml_rakit', 'jml_sisa'])
             ->make(true);
@@ -2566,6 +2596,13 @@ class ProduksiController extends Controller
             })
             ->addColumn('waktu_masuk', function($d){
                 return Carbon::parse($d->date_in)->isoFormat('hh:ii:ss');
+            })
+            ->addColumn('remark', function($d){
+                if (isset($d->header->keterangan)) {
+                    return $d->header->keterangan;
+                } else {
+                    return $d->header->keterangan_transfer;
+                }
             })
             ->make(true);
     }

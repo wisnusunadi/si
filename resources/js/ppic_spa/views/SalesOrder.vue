@@ -5,13 +5,13 @@
     </div>
     <div class="tabs is-centered">
       <ul>
-        <li :class="{ 'is-active': view === 'sales_order'}" @click="view= 'sales_order'">
+        <li :class="{ 'is-active': view === 'sales_order'}" @click="loadData">
         <a>
           <span class="icon is-small"><i class="fas fa-table" aria-hidden="true"></i></span>
           <span>Per SO</span>
         </a>
         </li>
-        <li :class="{ 'is-active': view === 'per_produk'}" @click="view = 'per_produk'">
+        <li :class="{ 'is-active': view === 'per_produk'}" @click="perProduk">
           <a>
             <span class="icon is-small">
               <i class="fas fa-table" aria-hidden="true"></i>
@@ -21,7 +21,7 @@
         </li>
       </ul>
     </div>
-    <template v-if="view === 'sales_order'">
+    <template v-if="view == 'sales_order'">
       <div class="columns is-multiline">
       <div class="column is-12">
         <table class="table is-fullwidth has-text-centered" id="table_so">
@@ -58,7 +58,7 @@
       </div>
     </div>
     </template>
-    <template v-if="view === 'per_produk'">
+    <template v-if="view == 'per_produk'">
       <div class="columns is-multiline">
       <div class="column is-12">
         <table class="table is-fullwidth has-text-centered" id="table_produk">
@@ -79,8 +79,7 @@
               <td v-html="item.nama_produk"></td>
               <td>{{ item.stok }}</td>
               <td>{{ item.total }}</td>
-              <td :style="{ color: item.penjualan < 0 ? 'red' : '' }">
-                {{ item.penjualan }}
+              <td v-html="item.penjualan">
               </td>
               <td v-text="item.jumlah_kirim"></td>
               <td>
@@ -207,23 +206,13 @@ export default {
   },
 
   methods: {
-    async loadData() {
+    loadData() {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/data/so").then((response) => {
-        this.data = response.data.data;
-      });
-      try {
-        await axios.post("/api/prd/so").then((response) => {
+        axios.post("/api/prd/so").then((response) => {
           this.salesOrder = response.data.data;
-        });
-      } catch (error) {
-        console.log(error);
-      }
-
-        $("#table_so").DataTable();
-      $("#table_produk").DataTable();
-
-      this.$store.commit("setIsLoading", false);
+        }).then(() => ($("#table_so").DataTable()))
+        .then(() => (this.$store.commit("setIsLoading", false)));
+        this.view = "sales_order";
     },
 
 
@@ -276,6 +265,18 @@ export default {
       this.$store.commit("setIsLoading", false);
       this.showModalSO = true;
       
+    },
+    perProduk(){
+        this.$store.commit("setIsLoading", true);
+        $("#table_produk").DataTable().destroy();
+        axios.get("/api/ppic/data/so").then((response) => {
+        this.data = response.data.data;
+      }).catch((error) => {
+        console.log(error);
+      })
+      .then(() => (this.$store.commit("setIsLoading", false)))
+      .then(() => ($("#table_produk").DataTable())) ;
+      this.view = "per_produk";
     }
   },
 
