@@ -2566,14 +2566,14 @@ class ProduksiController extends Controller
             })
             ->addColumn('start_filter', function ($d) {
                 if (isset($d->tanggal_mulai)) {
-                    return $d->tanggal_mulai;
+                    return Carbon::createFromFormat('Y-m-d', $d->tanggal_mulai)->isoFormat('D-MM-Y');
                 } else {
                     return '-';
                 }
             })
             ->addColumn('end_filter', function ($d) {
                 if (isset($d->tanggal_selesai)) {
-                    return $d->tanggal_selesai;
+                    return Carbon::createFromFormat('Y-m-d', $d->tanggal_selesai)->isoFormat('D-MM-Y');
                 } else {
                     return '-';
                 }

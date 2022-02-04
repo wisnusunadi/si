@@ -30,6 +30,8 @@
                             aria-controls="nav-home" aria-selected="true">Transfer Gudang Barang Jadi</a>
                         <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
                             aria-controls="nav-profile" aria-selected="false">Transfer Lain Lain</a>
+                        <a class="nav-link" id="nav-produk-tab" data-toggle="tab" href="#nav-produk" role="tab"
+                            aria-controls="nav-produk" aria-selected="false">Per Produk</a>
                     </div>
                 </nav>
             </div>
@@ -116,13 +118,13 @@
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label for="">Tanggal Masuk</label>
-                            <input type="text" name="" id="" class="form-control daterange">
+                            <input type="text" name="" id="" class="form-control daterange3">
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label for="">Tanggal Keluar</label>
-                            <input type="text" name="" id="" class="form-control daterange">
+                            <input type="text" name="" id="" class="form-control daterange4">
                         </div>
                     </div>
                 </div>
@@ -153,9 +155,35 @@
                             <th>Keluar</th>
                             <th>Rakit</th>
                             <th>Sisa</th>
+                            <th>filter_rakit</th>
+                            <th>filter_kirim</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="tab-pane fade" id="nav-produk" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="card">
+            <div class="card-body">
+                <table class="table tableDetailProduk">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Tanggal Perakitan</th>
+                            <th>No BPPB</th>
+                            <th>Nama Produk</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jumat, 3 Des 2021</td>
+                            <td>BPPB/JKN01-00</td>
+                            <td>DIGIT ONE BACKLIGHT ABU</td>
+                            <td><button class="btn btn-outline-secondary btnClickDetailProduk"><i class="fas fa-eye"></i> Detail</button></td>
+                        </tr>
+                    </tbody>
                 </table>
             </div>
         </div>
@@ -306,7 +334,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal Transfer Lain-->
 <div class="modal fade modalTransferLain" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
@@ -350,6 +378,63 @@
                         <textarea name="" class="form-control keterangan1" id="" cols="5" rows="5" disabled>Keterangan</textarea>
                         <hr>
                         <table class="table tableNoseri">
+                            <thead>
+                                <tr>
+                                    <th>Nomor Seri</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Modal Per Produk --}}
+
+<div class="modal fade modalRakitProduk" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <label for="">Nomor BPPB</label>
+                                    <div class="card" style="background-color: #F89F81">
+                                        <div class="card-body" id="bppb1">
+                                            516546546546546
+                                        </div>
+                                      </div>
+                                </div>
+                                <div class="col-sm">
+                                    <label for="">Nama Produk</label>
+                                    <div class="card" style="background-color: #FCF9C4">
+                                        <div class="card-body" id="produk1">
+                                            Produk 1
+                                        </div>
+                                      </div>
+                                </div>
+                                <div class="col-sm">
+                                    <label for="">Jumlah</label>
+                                    <div class="card" style="background-color: #FFCC83">
+                                        <div class="card-body" id="jml1">
+                                            100 Unit
+                                        </div>
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="card-body">
+                        <table class="table tableNoseriProduk">
                             <thead>
                                 <tr>
                                     <th>Nomor Seri</th>
@@ -733,5 +818,112 @@
         search2 = search2.join('|');
         table2.column(3).search(search2, true, false).draw();
     });
+
+    var start_date3;
+    var end_date3;
+    var DateFilterFunction3 = (function (oSettings, aData, iDataIndex) {
+        var dateStart3 = parseDateValue3(start_date3);
+        var dateEnd3 = parseDateValue3(end_date3);
+
+        var evalDate3 = parseDateValue3(aData[7]);
+        if ((isNaN(dateStart3) && isNaN(dateEnd3)) ||
+            (isNaN(dateStart3) && evalDate3 <= dateEnd3) ||
+            (dateStart3 <= evalDate3 && isNaN(dateEnd3)) ||
+            (dateStart3 <= evalDate3 && evalDate3 <= dateEnd3)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue3(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
+    $('.daterange3').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('.daterange3').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date3 = picker.startDate.format('DD-MM-YYYY');
+            end_date3 = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction3);
+            table2.draw();
+        });
+
+        $('.daterange3').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date3 = '';
+            end_date3 = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction3, 1));
+            table2.draw();
+        });
+
+        var start_date4;
+    var end_date4;
+    var DateFilterFunction4 = (function (oSettings, aData, iDataIndex) {
+        var dateStart4 = parseDateValue4(start_date4);
+        var dateEnd4 = parseDateValue4(end_date4);
+
+        var evalDate4 = parseDateValue4(aData[8]);
+        if ((isNaN(dateStart4) && isNaN(dateEnd4)) ||
+            (isNaN(dateStart4) && evalDate4 <= dateEnd4) ||
+            (dateStart4 <= evalDate4 && isNaN(dateEnd4)) ||
+            (dateStart4 <= evalDate4 && evalDate4 <= dateEnd4)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue4(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
+    $('.daterange4').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('.daterange4').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date4 = picker.startDate.format('DD-MM-YYYY');
+            end_date4 = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction4);
+            table2.draw();
+        });
+
+        $('.daterange4').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date4 = '';
+            end_date4 = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction4, 1));
+            table2.draw();
+        });
+
+        // Per Produk
+        $('.tableDetailProduk').DataTable({});
+        $(document).on('click','.btnClickDetailProduk', function () {
+            $('.tableNoseriProduk').dataTable({
+                destroy: true,
+                "autoWidth": false,
+                processing: true,
+                lengthChange: false,
+                // ajax: {
+                //     url: "#",
+                //     type: "post",
+                // },
+                // columns: [
+                //     {data: 'noseri'}
+                // ],
+            })
+            $('.modalRakitProduk').modal('show');
+        });
 </script>
 @stop
