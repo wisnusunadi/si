@@ -9,6 +9,7 @@ use App\Models\DetailEkatalog;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananPart;
 use App\Models\DetailPesananProduk;
+use App\Models\DetailRencanaPenjualan;
 use App\Models\DetailSpa;
 use App\Models\DetailSpb;
 use App\Models\NoseriTGbj;
@@ -1588,6 +1589,24 @@ class PenjualanController extends Controller
             ->make(true);
     }
 
+    public function get_data_rencana_produk($customer_id, $instansi, $tahun){
+        $data = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function($q) use($customer_id, $instansi, $tahun){
+            $q->where(['customer_id' => $customer_id, 'instansi' => $instansi, 'tahun' => $tahun]);
+        })->whereNull('detail_pesanan_id')->get();
+
+        return datatables()->of($data)
+        ->addIndexColumn()
+        ->addColumn('nama_produk', function ($data) {
+            return $data->PenjualanProduk->nama;
+        })
+        ->addColumn('qty', function ($data) {
+            return $data->jumlah;
+        })
+        ->addColumn('harga', function ($data) {
+            return $data->harga;
+        })
+        ->make(true);
+    }
 
 
     // Create

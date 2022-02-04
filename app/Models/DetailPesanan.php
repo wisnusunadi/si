@@ -22,6 +22,10 @@ class DetailPesanan extends Model
     {
         return $this->hasMany(DetailPesananProduk::class);
     }
+    public function DetailRencanaPenjualan()
+    {
+        return $this->hasOne(DetailRencanaPenjualan::class);
+    }
     public function countNoSeri()
     {
         $id = $this->id;

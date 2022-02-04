@@ -9,6 +9,7 @@ use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\KelompokProduk;
 use App\Models\PenjualanProduk;
+use App\Models\RencanaPenjualan;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Provinsi;
@@ -368,6 +369,12 @@ class MasterController extends Controller
             return $c;
         }
     }
+
+    public function get_instansi_customer($id, $year){
+        $data = RencanaPenjualan::where([['customer_id', '=', $id], ['tahun', '=', $year]])->pluck('instansi');
+        return json_encode($data);
+    }
+
     //public function get_data_detail_penjualan_produk($id)
     //{
     // $data = DetailPenjualanProduk::where('penjualan_produk_id', $id)->get();
