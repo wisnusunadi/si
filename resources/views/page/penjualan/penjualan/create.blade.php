@@ -303,10 +303,10 @@
                                                     <a class="nav-link active" id="pills-penjualan-tab" data-toggle="pill" href="#pills-penjualan" role="tab" aria-controls="pills-penjualan" aria-selected="true">Deskripsi Ekatalog</a>
                                                     </li>
                                                     <li class="nav-item" role="presentation">
-                                                    <a class="nav-link disabled" id="pills-instansi-tab" data-toggle="pill" href="#pills-instansi" role="tab" aria-controls="pills-instansi" aria-selected="false" disabled>Instansi</a>
+                                                    <a class="nav-link disabled" id="pills-instansi-tab" data-toggle="pill" href="#pills-instansi" role="tab" aria-controls="pills-instansi" aria-selected="false">Instansi</a>
                                                     </li>
                                                     <li class="nav-item" role="presentation">
-                                                    <a class="nav-link disabled" id="pills-keterangan-tab" data-toggle="pill" href="#pills-keterangan" role="tab" aria-controls="pills-keterangan" aria-selected="false" disabled>Keterangan Tambahan</a>
+                                                    <a class="nav-link disabled" id="pills-keterangan-tab" data-toggle="pill" href="#pills-keterangan" role="tab" aria-controls="pills-keterangan" aria-selected="false">Keterangan Tambahan</a>
                                                     </li>
                                                     <li class="nav-item" role="presentation">
                                                         <a class="nav-link disabled" id="pills-produk-tab" data-toggle="pill" href="#pills-produk" role="tab" aria-controls="pills-produk" aria-selected="false">Perencanaan Produk</a>
@@ -488,7 +488,9 @@
                                                                                 <th>No</th>
                                                                                 <th>Nama Produk</th>
                                                                                 <th>Qty</th>
+                                                                                <th>Realisasi</th>
                                                                                 <th>Harga</th>
+                                                                                <th>Aksi</th>
                                                                             </tr>
                                                                         </thead>
                                                                         <tbody>
@@ -586,7 +588,7 @@
                                                 <div class="col-lg-12 col-md-12">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <div class="table-responsive d-flex justify-content-center">
+                                                            <div class="table-responsive justify-content-center">
                                                                 <table class="table" style="text-align: center;" id="produktable">
                                                                     <thead>
                                                                         <tr>
@@ -671,7 +673,7 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <div class="table-responsive d-flex justify-content-center">
+                                                    <div class="table-responsive justify-content-center">
                                                         <table class="table" style="text-align: center;" id="parttable">
                                                             <thead>
                                                                 <tr>
@@ -744,7 +746,7 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <div class="table-responsive d-flex justify-content-center">
+                                                    <div class="table-responsive justify-content-center">
                                                         <table class="table" style="text-align: center;" id="jasatable">
                                                             <thead>
                                                                 <tr>
@@ -861,8 +863,17 @@
                         className: 'align-center nowrap-text'
                     },
                     {
+                        data: 'realisasi',
+                        className: 'align-center nowrap-text'
+                    },
+                    {
                         data: 'harga',
+                        render: $.fn.dataTable.render.number( '.', ',', 0, 'Rp. ' ),
                         className: 'align-right nowrap-text'
+                    },
+                    {
+                        data: 'aksi',
+                        className: 'align-center nowrap-text'
                     },
                 ]
             });
@@ -958,7 +969,6 @@
                 }
             }
         }
-
 
 
         function checkvalidasi() {
@@ -1737,7 +1747,6 @@
                 var hargacvrt = replaceAll(harga, '.', '');
                 var ongkircvrt = replaceAll(ongkir, '.', '');
                 subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
-
                 totalhargaprd();
                 for (var i = 0; i < variasi.length; i++) {
                     var variasires = $('select[name="variasi[' + ppid + '][' + i + ']"]').select2('data')[0];
@@ -1799,6 +1808,128 @@
             }
         });
 
+
+        $('#perencanaantable').on('click', '#btntransfer', function() {
+            var id = $(this).closest('tr').find('#btntransfer').attr('data-id');
+            var nama_produk = $(this).closest('tr').find('#btntransfer').attr('data-nama_produk');
+            var produk_id = $(this).closest('tr').find('#btntransfer').attr('data-produk');
+            var jumlah = $(this).closest('tr').find('#btntransfer').attr('data-jumlah');
+            var harga = $(this).closest('tr').find('#btntransfer').attr('data-harga');
+            transferproduk(id, nama_produk, produk_id, jumlah, harga);
+        });
+
+        function transferproduk(id, nama_produk, produk_id, jumlah, harga){
+            var data = `<tr>
+                    <td></td>
+                    <td>
+                        <div class="form-group">
+                            <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                                <option value="`+produk_id+`">`+nama_produk+`</option>
+                            </select>
+                            <div class="detailjual" id="tes0">
+                            </div>
+                        </div>
+                        <div id="detail_produk" class="detail_produk"></div>
+                    </td>
+                    <td>
+                        <div class="form-group d-flex justify-content-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah0" value="`+jumlah+`" style="width:100%;">
+
+                            </div>
+                            <small id="produk_ketersediaan"></small>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group d-flex justify-content-center">
+
+                            <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" value="`+formatmoney(harga)+`" placeholder="Masukkan Harga" style="width:100%;"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group d-flex justify-content-center">
+
+                            <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Ongkir" style="width:100%;"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group d-flex justify-content-center">
+                            <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" value="`+ formatmoney(jumlah * parseInt(harga)) + `" style="width:100%;" readonly/>
+                        </div>
+                    </td>
+                    <td>
+                        <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
+                    </td>
+                </tr>`;
+
+            if ($('#produktable > tbody > tr').length <= 0) {
+                $('#produktable tbody').append(data);
+                select_data();
+                numberRowsProduk($("#produktable"));
+                totalhargaprd();
+            } else {
+                $('#produktable tbody tr:last').after(data);
+                select_data();
+                numberRowsProduk($("#produktable"));
+                totalhargaprd();
+            }
+            var index = $('#produktable > tbody > tr').length - 1;
+            $.ajax({
+                url: '/api/penjualan_produk/select/' + produk_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    var tes = $('#detail_produk' + index);
+                    tes.empty();
+                    var datas = "";
+                    tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
+                    for (var x = 0; x < res[0].produk.length; x++) {
+                        var data = [];
+                        tes.append(`<div>`);
+                        tes.append(`<div class="card-body blue-bg">
+                                        <h6>` + res[0].produk[x].nama + `</h6>
+                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" id="variasi` + index + `` + x + `" data-attr="variasi` + x + `" data-id="` + x + `"></select>
+                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
+                                      </div>`);
+                        if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
+                            data.push({
+                                id: res[0].produk[x].gudang_barang_jadi[0].id,
+                                text: res[0].produk[x].nama,
+                                jumlah: res[0].produk[x].pivot.jumlah,
+                                qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
+                            });
+                        } else {
+                            for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                data.push({
+                                    id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                    text: res[0].produk[x].gudang_barang_jadi[y].nama,
+                                    jumlah: res[0].produk[x].pivot.jumlah,
+                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
+                                });
+                            }
+                        }
+                        $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
+                            placeholder: 'Pilih Variasi',
+                            data: data,
+                            templateResult: function(data) {
+                                var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                return $span;
+                            },
+                            templateSelection: function(data) {
+                                var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                return $span;
+                            }
+                        });
+
+                        $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
+                        tes.append(`</div>`)
+                    }
+                    tes.append(`</fieldset>`);
+                    // tes.html(datas);
+                }
+            });
+        }
+
         //PRODUK TABLE
         function numberRowsProduk($t) {
             var c = 0 - 2;
@@ -1812,7 +1943,8 @@
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('name', 'variasi[' + j + '][' + k + ']');
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('id', 'variasi' + j + '' + k);
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('name', 'ketstok[' + j + '][' + k + ']');
-                    $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k);
+                    $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k)
+                    // $(`select[name="variasi[` + j + `][` + k + `]"]`).select2();
                 }
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
                 $(el).find('.produk_ongkir').attr('id', 'produk_ongkir' + j);

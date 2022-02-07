@@ -1602,9 +1602,21 @@ class PenjualanController extends Controller
         ->addColumn('qty', function ($data) {
             return $data->jumlah;
         })
+        ->addColumn('realisasi', function ($data) use ($customer_id, $instansi, $tahun) {
+            $res = DetailPesanan::whereHas('Pesanan.Ekatalog', function($q) use($customer_id, $instansi, $tahun){
+                $q->where(['customer_id' => $customer_id, 'instansi' => $instansi])->whereBetween('tgl_buat', [$tahun.'-01-01', $tahun.'-12-31']);
+            })->where('penjualan_produk_id', $data->PenjualanProduk->id)->sum('jumlah');
+
+            return $res;
+        })
         ->addColumn('harga', function ($data) {
             return $data->harga;
         })
+        ->addColumn('aksi', function ($data) {
+            $res = '<button type="button" class="btn btn-outline-primary btn-circle" id="btntransfer" data-id="'.$data->id.'" data-nama_produk="'.$data->penjualanproduk->nama.'" data-produk="'.$data->penjualanproduk->id.'" data-jumlah="'.$data->jumlah.'" data-harga="'.$data->harga.'"><i class="fas fa-paper-plane"></i></button>';
+            return $res;
+        })
+        ->rawColumns(['aksi'])
         ->make(true);
     }
 

@@ -699,13 +699,6 @@
 
         $(document).on('submit', '#form-logistik-create', function(e) {
             e.preventDefault();
-            var showLoading = swal.fire({
-                title: 'Sedang Proses',
-                html: 'Loading...',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {Swal.showLoading()}
-            });
             $('#btnsimpan').attr('disabled', true);
             var action = $(this).attr('action');
             $.ajax({
@@ -715,6 +708,15 @@
                 type: "POST",
                 url: action,
                 data: $('#form-logistik-create').serialize(),
+                beforeSend: function() {
+                    swal.fire({
+                        title: 'Sedang Proses',
+                        html: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {Swal.showLoading()}
+                    })
+                },
                 success: function(response) {
                     if (response['data'] == "success") {
                         swal.fire(
