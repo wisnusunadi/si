@@ -92,7 +92,7 @@
 
             events() {
                 axios.get("/api/ppic/data/perakitan/penyusunan").then(response => {
-                    this.event = this.convertJadwal(response.data);
+                    this.event = response.data;
                 })
             },
         },
