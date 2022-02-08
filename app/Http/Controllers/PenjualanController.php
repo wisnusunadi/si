@@ -1592,7 +1592,7 @@ class PenjualanController extends Controller
     public function get_data_rencana_produk($customer_id, $instansi, $tahun){
         $data = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function($q) use($customer_id, $instansi, $tahun){
             $q->where(['customer_id' => $customer_id, 'instansi' => $instansi, 'tahun' => $tahun]);
-        })->whereNull('detail_pesanan_id')->get();
+        })->get();
 
         return datatables()->of($data)
         ->addIndexColumn()
@@ -1613,7 +1613,7 @@ class PenjualanController extends Controller
             return $data->harga;
         })
         ->addColumn('aksi', function ($data) {
-            $res = '<button type="button" class="btn btn-outline-primary btn-circle" id="btntransfer" data-id="'.$data->id.'" data-nama_produk="'.$data->penjualanproduk->nama.'" data-produk="'.$data->penjualanproduk->id.'" data-jumlah="'.$data->jumlah.'" data-harga="'.$data->harga.'"><i class="fas fa-paper-plane"></i></button>';
+            $res = '<button type="button" class="btn btn-outline-primary btn-circle" id="btntransfer" data-id="'.$data->id.'" data-nama_produk="'.$data->penjualanproduk->nama.'" data-produk="'.$data->penjualanproduk->id.'" data-jumlah="'.$data->jumlah.'" data-harga="'.$data->harga.'"><i class="fas fa-plus"></i></button>';
             return $res;
         })
         ->rawColumns(['aksi'])
@@ -1694,6 +1694,7 @@ class PenjualanController extends Controller
                         $dekat = DetailPesanan::create([
                             'pesanan_id' => $x,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                            'detail_rencana_penjualan_id' => $request->rencana_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => $ongkir[$i],
@@ -2151,6 +2152,7 @@ class PenjualanController extends Controller
                             'jumlah' => $request->produk_jumlah[$i],
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => $ongkir[$i],
+                            'detail_rencana_penjualan_id' => $request->rencana_id[$i],
                         ]);
                         if ($c) {
                             for ($j = 0; $j < count($request->variasi[$i]); $j++) {

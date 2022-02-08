@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DetailPesanan extends Model
 {
     protected $table = 'detail_pesanan';
-    protected $fillable = ['pesanan_id', 'penjualan_produk_id', 'jumlah', 'harga', 'ongkir'];
+    protected $fillable = ['pesanan_id', 'detail_rencana_penjualan_id', 'penjualan_produk_id', 'jumlah', 'harga', 'ongkir'];
 
     public function Pesanan()
     {
@@ -24,7 +24,7 @@ class DetailPesanan extends Model
     }
     public function DetailRencanaPenjualan()
     {
-        return $this->hasOne(DetailRencanaPenjualan::class);
+        return $this->belongsTo(DetailRencanaPenjualan::class);
     }
     public function countNoSeri()
     {

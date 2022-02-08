@@ -11,7 +11,7 @@ class DetailRencanaPenjualan extends Model
 
     protected $table = 'detail_rencana_penjualan';
 
-    protected $fillable = ['rencana_penjualan_id', 'detail_pesanan_id', 'penjualan_produk_id', 'jumlah', 'harga', 'updated_at', 'created_at'];
+    protected $fillable = ['rencana_penjualan_id', 'penjualan_produk_id', 'jumlah', 'harga', 'updated_at', 'created_at'];
 
     public function RencanaPenjualan()
     {
@@ -20,7 +20,7 @@ class DetailRencanaPenjualan extends Model
 
     public function DetailPesanan()
     {
-        return $this->belongsTo(DetailPesanan::class);
+        return $this->hasMany(DetailPesanan::class);
     }
 
     public function PenjualanProduk()

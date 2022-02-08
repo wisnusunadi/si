@@ -37,6 +37,14 @@
         width: 100% !important;
     }
 
+    .select2-container{
+        width: 100%!important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
     legend {
         font-size: 14px;
     }
@@ -56,10 +64,20 @@
 
     #produktable {
         width: 1250px !important;
+        margin-left:auto;
+        margin-right:auto;
     }
 
     #parttable {
         width: 1250px !important;
+        margin-left:auto;
+        margin-right:auto;
+    }
+
+    #jasatable {
+        width: 1250px !important;
+        margin-left:auto;
+        margin-right:auto;
     }
 
     .removeshadow {
@@ -149,20 +167,21 @@
     }
 
     .autocomplete-items div {
-        padding: 5px;
+        padding: 7px;
         cursor: pointer;
         background-color: #fff;
         border-bottom: 1px solid #d4d4d4;
     }
 
         /*when hovering an item:*/
-    .autocomplete-items div:hover {
-        background-color: #e9e9e9;
+        .autocomplete-items div:hover {
+        background-color: steelblue;
+        color: #ffffff;
     }
 
         /*when navigating through the items using the arrow keys:*/
     .autocomplete-active {
-        background-color: DodgerBlue !important;
+        background-color: midnightblue !important;
         color: #ffffff;
     }
 
@@ -309,7 +328,7 @@
                                                     <a class="nav-link disabled" id="pills-keterangan-tab" data-toggle="pill" href="#pills-keterangan" role="tab" aria-controls="pills-keterangan" aria-selected="false">Keterangan Tambahan</a>
                                                     </li>
                                                     <li class="nav-item" role="presentation">
-                                                        <a class="nav-link disabled" id="pills-produk-tab" data-toggle="pill" href="#pills-produk" role="tab" aria-controls="pills-produk" aria-selected="false">Perencanaan Produk</a>
+                                                        <a class="nav-link disabled" id="pills-produk-tab" data-toggle="pill" href="#pills-produk" role="tab" aria-controls="pills-produk" aria-selected="false">Rencana Penjualan</a>
                                                     </li>
                                                 </ul>
                                                 <div class="tab-content" id="pills-tabContent">
@@ -478,7 +497,7 @@
                                                     </div>
                                                     <div class="tab-pane fade" id="pills-produk" role="tabpanel" aria-labelledby="pills-produk-tab">
                                                         <div class="card removeshadow">
-                                                            <div class="card-header"><h6>Perencanaan</h6></div>
+                                                            <div class="card-header"><h6>Rencana Penjualan</h6></div>
                                                             <div class="card-body">
                                                                 <div class="col-lg-12 col-md-12 perencanaan">
                                                                     <div class="table-responsive">
@@ -606,6 +625,7 @@
                                                                             <th width="15%">Harga</th>
                                                                             <th width="15%">Ongkir</th>
                                                                             <th width="15%">Subtotal</th>
+                                                                            <th hidden>ID_Rencana</th>
                                                                             <th width="5%">Aksi</th>
                                                                         </tr>
                                                                     </thead>
@@ -638,15 +658,15 @@
                                                                             </td>
                                                                             <td>
                                                                                 <div class="form-group d-flex justify-content-center">
-                                                                                    <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Harga" style="width:100%;" />
+                                                                                    <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Ongkir" style="width:100%;" />
                                                                                 </div>
                                                                             </td>
                                                                             <td>
                                                                                 <div class="form-group d-flex justify-content-center">
-
                                                                                     <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                                                                                 </div>
                                                                             </td>
+                                                                            <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly></td>
                                                                             <td>
                                                                                 <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
                                                                             </td>
@@ -1123,7 +1143,7 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
-        $('#instansi').on('keyup change select', function() {
+        $('#instansi').on('keyup change', function() {
             if ($(this).val() != "") {
                 var cust = $('#customer_id').val();
                 $("#msginstansi").text("");
@@ -1489,6 +1509,7 @@
 
             $('.penjualan_produk_id').select2({
                 placeholder: "Pilih Produk",
+                width: 'resolve',
                 ajax: {
                     minimumResultsForSearch: 20,
                     dataType: 'json',
@@ -1746,6 +1767,10 @@
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
                 var ongkircvrt = replaceAll(ongkir, '.', '');
+                if(ongkircvrt == ""){
+                    ongkircvrt = "0";
+                    $(this).closest('tr').find('.produk_ongkir').val("0");
+                }
                 subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
                 totalhargaprd();
                 for (var i = 0; i < variasi.length; i++) {
@@ -1783,6 +1808,10 @@
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
                 var ongkircvrt = replaceAll(ongkir, '.', '');
+                if(ongkircvrt == ""){
+                    ongkircvrt = "0";
+                    $(this).closest('tr').find('.produk_ongkir').val("0");
+                }
                 subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
                 totalhargaprd();
             } else {
@@ -1857,6 +1886,7 @@
                             <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" value="`+ formatmoney(jumlah * parseInt(harga)) + `" style="width:100%;" readonly/>
                         </div>
                     </td>
+                    <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly value="`+id+`"></td>
                     <td>
                         <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                     </td>
@@ -1955,6 +1985,8 @@
                 $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
                 $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
                 $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
+                $(el).find('.rencana_id').attr('id', 'rencana_id' + j);
+                $(el).find('.rencana_id').attr('name', 'rencana_id[' + j + ']');
                 $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
                 select_data();
             });
@@ -1991,7 +2023,7 @@
                 <td>
                     <div class="form-group d-flex justify-content-center">
 
-                        <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Harga" style="width:100%;"/>
+                        <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Ongkir" style="width:100%;"/>
                     </div>
                 </td>
                 <td>
@@ -2000,6 +2032,7 @@
                         <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
                     </div>
                 </td>
+                <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly></td>
                 <td>
                     <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                 </td>
