@@ -116,7 +116,7 @@ Route::prefix('/penjualan')->group(function () {
 
     Route::group(['prefix' => '/rencana'], function () {
         Route::get('select_tahun', [App\Http\Controllers\RencanaPenjualanController::class, 'select_tahun_rencana']);
-        Route::post('show/{customer}/{tahun}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_data_rencana']);
+        Route::get('show/{customer}/{tahun}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_data_rencana']);
     });
 });
 Route::prefix('/so')->group(function () {
