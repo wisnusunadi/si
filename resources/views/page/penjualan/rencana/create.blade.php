@@ -4,20 +4,21 @@
 
 @section('adminlte_css')
 <style>
-    .align-center{
+    .align-center {
         text-align: center;
     }
 
-    .align-right{
+    .align-right {
         text-align: right;
     }
+
     .select2 {
-        width:100%!important;
+        width: 100% !important;
     }
 
     @media (max-width: 992px) {
         body {
-                font-size: 14px;
+            font-size: 14px;
         }
 
         .btn {
@@ -48,102 +49,130 @@
 
 @section('content')
 <div class="container-fluid">
-    <form>
-    <div class="row">
-        <div class="col-lg-4 col-md-5 col-sm-12">
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header"><h6 class="card-title">Distributor</h6></div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="customer-id">Distributor</label>
-                                <select class="form-control custom-select" name="customer_id" id="customer_id">
-                                </select>
+    <form action="{{route('penjualan.rencana.store')}}" method="post">
+        {{csrf_field()}}
+        <div class="row">
+            <div class="col-lg-4 col-md-5 col-sm-12">
+                <div class="form-group row">
+                    @if(session('error') || count($errors) > 0 )
+                    <div class="alert alert-danger alert-dismissible show fade col-lg-12" role="alert">
+                        <strong>Gagal menambahkan!</strong> Periksa
+                        kembali data yang diinput
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    @elseif(session('success'))
+                    <div class="alert alert-success alert-dismissible show fade col-lg-12" role="alert">
+                        <strong>Berhasil menambahkan data</strong>,
+                        Terima kasih
+                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    @endif
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="card-title">Distributor</h6>
                             </div>
-                            <div class="form-group">
-                                <label for="customer-id">Tahun</label>
-                                <input type="number" class="form-control" name="tahun" id="tahun" placeholder="Masukkan Tahun">
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="customer-id">Distributor</label>
+                                    <select class="form-control custom-select" name="customer_id" id="customer_id">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customer-id">Tahun</label>
+                                    <input type="number" class="form-control" name="tahun" id="tahun" placeholder="Masukkan Tahun">
+                                </div>
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Instansi</label>
+                                    <textarea class="form-control" name="nama_instansi" id="nama_instansi" placeholder="Masukkan Instansi"></textarea>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleFormControlSelect1">Instansi</label>
-                                <textarea class="form-control" name="nama_instansi" id="nama_instansi" placeholder="Masukkan Instansi"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h6 class="card-title">Produk</h6>
+                            </div>
+                            <div class="card-body">
+                                <div class="form-group">
+                                    <label for="customer-id">Nama Produk</label>
+                                    <select class="form-control custom-select" name="produk_id" id="produk_id" disabled="true">
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="customer-id">Jumlah</label>
+                                    <input type="number" class="form-control" name="produk_jumlah" id="produk_jumlah" disabled="true" placeholder="Masukkan Jumlah">
+                                </div>
+                                <div class="form-group">
+                                    <label for="customer-id">Harga</label>
+                                    <input type="text" class="form-control" name="produk_harga" id="produk_harga" disabled="true" placeholder="Masukkan Harga">
+                                </div>
+                            </div>
+                            <div class="card-footer">
+                                <button type="button" class="btn btn-outline-danger" id="btnresetproduk">Reset</button>
+                                <button type="button" class="btn btn-info float-right" id="btntambahproduk" disabled="true">Tambah</button>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <div class="card">
-                        <div class="card-header"><h6 class="card-title">Produk</h6></div>
-                        <div class="card-body">
-                            <div class="form-group">
-                                <label for="customer-id">Nama Produk</label>
-                                <select class="form-control custom-select" name="produk_id" id="produk_id" disabled="true">
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="customer-id">Jumlah</label>
-                                <input type="number" class="form-control" name="produk_jumlah" id="produk_jumlah" disabled="true" placeholder="Masukkan Jumlah">
-                            </div>
-                            <div class="form-group">
-                                <label for="customer-id">Harga</label>
-                                <input type="text" class="form-control" name="produk_harga" id="produk_harga" disabled="true" placeholder="Masukkan Harga">
+            <div class="col-lg-8 col-md-7 col-sm-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h6 class="card-title">Daftar Produk</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="form-group">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" id="tableproduk">
+                                    <thead class="align-center">
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Instansi</th>
+                                            <th>Produk</th>
+                                            <th>Jumlah</th>
+                                            <th>Harga</th>
+                                            <th>Subtotal</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="emptycol">
+                                            <td colspan="7" class="align-center">Belum Ada Data</td>
+                                        </tr>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <th colspan="5" class="align-center">Total Harga</th>
+                                            <th colspan="2" id="totalhargaprd">Rp. 0</th>
+                                        </tr>
+                                    </tfoot>
+                                </table>
                             </div>
                         </div>
-                        <div class="card-footer">
-                            <button type="button" class="btn btn-outline-danger" id="btnresetproduk">Reset</button>
-                            <button type="button" class="btn btn-info float-right" id="btntambahproduk" disabled="true">Tambah</button>
-                        </div>
+                    </div>
+                    <div class="card-footer">
+                        <button type="submit" class="btn btn-success float-right" id="btnsubmit" disabled="true">Simpan</button>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-lg-8 col-md-7 col-sm-12">
-            <div class="card">
-                <div class="card-header"><h6 class="card-title">Daftar Produk</h6></div>
-                <div class="card-body">
-                    <div class="form-group">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-hover" id="tableproduk">
-                                <thead class="align-center">
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Instansi</th>
-                                        <th>Produk</th>
-                                        <th>Jumlah</th>
-                                        <th>Harga</th>
-                                        <th>Subtotal</th>
-                                        <th>Aksi</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr id="emptycol"><td colspan="7" class="align-center">Belum Ada Data</td></tr>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <th colspan="5" class="align-center">Total Harga</th>
-                                        <th colspan="2" id="totalhargaprd">Rp. 0</th>
-                                    </tr>
-                                </tfoot>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <button type="button" class="btn btn-success float-right" id="btnsubmit" disabled="true">Simpan</button>
-                </div>
-            </div>
-        </div>
-    </div>
     </form>
 </div>
 @endsection
 
 @section('adminlte_js')
 <script>
-    $(function(){
+    $(function() {
         function formatmoney(bilangan) {
             var number_string = bilangan.toString(),
                 sisa = number_string.length % 3,
@@ -242,7 +271,7 @@
                     };
                 },
             }
-        }).change(function(){
+        }).change(function() {
             var id = $(this).val();
             $.ajax({
                 url: '/api/penjualan_produk/select/' + id,
@@ -265,7 +294,7 @@
             }
         });
 
-        $('#btntambahproduk').on('click', function(){
+        $('#btntambahproduk').on('click', function() {
             $('#tableproduk').find('tr[id="emptycol"]').remove();
             var instansi = $('#nama_instansi').val();
             var id_produk = $('#produk_id').val();
@@ -275,11 +304,11 @@
             $('#tableproduk tbody').append(`
                 <tr>
                 <td class="align-center"></td>
-                <td><input type="hidden" class="instansi" name="instansi[]" id="instansi" value="`+instansi+`">`+instansi+`</td>
-                <td><input type="hidden" class="id_produk" name="id_produk[]" id="id_produk" value="`+id_produk+`">`+nama_produk+`</td>
-                <td><input type="hidden" class="jumlah" name="jumlah[]" id="jumlah" value="`+jumlah+`">`+jumlah+`</td>
-                <td><input type="hidden" class="harga" name="harga[]" id="harga" value="`+replaceAll(harga, '.', '')+`">`+harga+`</td>
-                <td><input type="hidden" class="subtotal" name="subtotal[]" id="subtotal" value="`+(jumlah * parseInt(replaceAll(harga, '.', '')))+`">`+formatmoney(jumlah * parseInt(replaceAll(harga, '.', '')))+`</td>
+                <td><input type="hidden" class="instansi" name="instansi[]" id="instansi" value="` + instansi + `">` + instansi + `</td>
+                <td><input type="hidden" class="id_produk" name="id_produk[]" id="id_produk" value="` + id_produk + `">` + nama_produk + `</td>
+                <td><input type="hidden" class="jumlah" name="jumlah[]" id="jumlah" value="` + jumlah + `">` + jumlah + `</td>
+                <td><input type="hidden" class="harga" name="harga[]" id="harga" value="` + replaceAll(harga, '.', '') + `">` + harga + `</td>
+                <td><input type="hidden" class="subtotal" name="subtotal[]" id="subtotal" value="` + (jumlah * parseInt(replaceAll(harga, '.', ''))) + `">` + formatmoney(jumlah * parseInt(replaceAll(harga, '.', ''))) + `</td>
                 <td><a id="removerow"><i style="color:red;" class="fas fa-minus"></a></td>
                 </tr>
             `);
@@ -287,30 +316,28 @@
             totalhargaprd();
         });
 
-        $('#btnresetproduk').on('click', function(){
+        $('#btnresetproduk').on('click', function() {
             $('#produk_id').val(null).trigger('change');
             $('#produk_jumlah').val("");
             $('#produk_harga').val("");
             $('#btntambahproduk').attr('disabled', true);
         });
 
-        function validasiall(){
-            if($('#customer_id').val() != "" && $('#nama_instansi').val() != "" && $('#tahun').val() != "" && $('#produk_id').val() != "" && $('#produk_jumlah').val() != "" && $('#produk_harga').val() != ""){
+        function validasiall() {
+            if ($('#customer_id').val() != "" && $('#nama_instansi').val() != "" && $('#tahun').val() != "" && $('#produk_id').val() != "" && $('#produk_jumlah').val() != "" && $('#produk_harga').val() != "") {
                 $('#btnsubmit').removeAttr('disabled');
                 $('#btntambahproduk').removeAttr('disabled');
-            }
-            else
-            {
+            } else {
                 $('#btntambahproduk').attr('disabled', true);
             }
         }
 
-        function validasicust(){
-            if($('#customer_id').val() != "" && $('#nama_instansi').val() != "" && $('#tahun').val() != ""){
+        function validasicust() {
+            if ($('#customer_id').val() != "" && $('#nama_instansi').val() != "" && $('#tahun').val() != "") {
                 $('#produk_id').removeAttr('disabled');
                 $('#produk_jumlah').removeAttr('disabled');
                 $('#produk_harga').removeAttr('disabled');
-            }else{
+            } else {
                 $('#produk_id').attr('disabled', true);
                 $('#produk_jumlah').attr('disabled', true);
                 $('#produk_harga').attr('disabled', true);
@@ -319,30 +346,30 @@
             }
         }
 
-        $('#customer_id').on('keyup change', function(){
+        $('#customer_id').on('keyup change', function() {
             validasiall();
             validasicust();
         });
 
-        $('#nama_instansi').on('keyup change', function(){
+        $('#nama_instansi').on('keyup change', function() {
             validasiall();
             validasicust();
         });
 
-        $('#tahun').on('keyup change', function(){
+        $('#tahun').on('keyup change', function() {
             validasiall();
             validasicust();
         });
 
-        $('#produk_id').on('keyup change', function(){
+        $('#produk_id').on('keyup change', function() {
             validasiall();
         });
 
-        $('#produk_jumlah').on('keyup change', function(){
+        $('#produk_jumlah').on('keyup change', function() {
             validasiall();
         });
 
-        $('#produk_harga').on('keyup change', function(){
+        $('#produk_harga').on('keyup change', function() {
             var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             $(this).val(result);
             validasiall();
@@ -352,4 +379,3 @@
     })
 </script>
 @stop
-

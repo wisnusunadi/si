@@ -19,4 +19,9 @@ class PenjualanProduk extends Model
         return $this->belongsToMany(Produk::class, 'detail_penjualan_produk')
             ->withPivot('jumlah');
     }
+
+    public function DetailRencanPenjualan()
+    {
+        return $this->hasMany(DetailRencanaPenjualan::class);
+    }
 }

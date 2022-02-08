@@ -23,32 +23,38 @@
 
 @section('adminlte_css')
 <style>
-.removeboxshadow {
-    box-shadow: none;
-    border: 1px;
-}
-@media screen and (min-width: 993px){
-    .labelket{
-        text-align: right;
+    .removeboxshadow {
+        box-shadow: none;
+        border: 1px;
     }
-    section{
-        font-size:14px;
+
+    @media screen and (min-width: 993px) {
+        .labelket {
+            text-align: right;
+        }
+
+        section {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
     }
-    .btn{
-        font-size:14px;
+
+    @media screen and (max-width: 992px) {
+        .labelket {
+            text-align: left;
+        }
+
+        section {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
     }
-}
-@media screen and (max-width: 992px){
-    .labelket{
-        text-align: left;
-    }
-    section{
-        font-size:12px;
-    }
-    .btn{
-        font-size:12px;
-    }
-}
 </style>
 @stop
 
