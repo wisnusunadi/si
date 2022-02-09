@@ -73,7 +73,7 @@
             font-size: 14px;
         }
 
-        .dropdown-item {
+        .dropdown-item{
             font-size: 14px;
         }
     }
@@ -95,6 +95,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
+
                 <div class="card">
                     <div class="card-body">
                         <h4>Info Penjualan</h4>

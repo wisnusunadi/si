@@ -67,6 +67,7 @@ Route::prefix('/customer')->group(function () {
     Route::post('data/{divisi_id}/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
     Route::get('nama/{id}/{val}', [App\Http\Controllers\MasterController::class, 'get_nama_customer']);
     Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_pesanan']);
+    Route::post('get_instansi/{id}/{year}', [App\Http\Controllers\MasterController::class, 'get_instansi_customer']);
     // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_customer']);
     Route::get('update_modal/{id}', [App\Http\Controllers\MasterController::class, 'update_customer_modal']);
     //Route::put('update/{id}', [App\Http\Controllers\MasterController::class, 'update_customer']);
@@ -107,6 +108,10 @@ Route::prefix('/penjualan')->group(function () {
     // Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::post('check_no_paket/{id}/{val}', [App\Http\Controllers\PenjualanController::class, 'check_no_paket']);
     //   Route::get('customer/data/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
+    Route::prefix('/rencana')->group(function () {
+        Route::post('produk/{customer_id}/{instansi}/{year}', [App\Http\Controllers\PenjualanController::class, 'get_data_rencana_produk']);
+    });
+
     Route::prefix('/pesanan')->group(function () {
         Route::put('update/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'update_penjualan_pesanan']);
         Route::post('produk/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_paket_pesanan_ekat']);

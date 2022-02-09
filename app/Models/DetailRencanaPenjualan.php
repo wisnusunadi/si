@@ -7,14 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetailRencanaPenjualan extends Model
 {
-    protected $table = 'detail_rencana_penjualan';
-    protected $fillable = ['rencana_penjualan_id', 'penjualan_produk_id', 'jumlah', 'harga'];
+    use HasFactory;
 
+    protected $table = 'detail_rencana_penjualan';
+
+    protected $fillable = ['rencana_penjualan_id', 'penjualan_produk_id', 'jumlah', 'harga', 'updated_at', 'created_at'];
 
     public function RencanaPenjualan()
     {
-        return $this->belongsTo(RencanaPenjualan::class, 'rencana_penjualan_id');
+        return $this->belongsTo(RencanaPenjualan::class);
     }
+
     public function DetailPesanan()
     {
         return $this->hasMany(DetailPesanan::class);

@@ -522,6 +522,12 @@
 
         $(document).on('click', '#btnSave', function (e) {
             e.preventDefault();
+            Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
             $(this).prop('disabled', true);
             let arr = [];
             const data = scanProduk.$('.noseri').map(function () {

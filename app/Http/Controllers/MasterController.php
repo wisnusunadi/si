@@ -9,6 +9,7 @@ use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\KelompokProduk;
 use App\Models\PenjualanProduk;
+use App\Models\RencanaPenjualan;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Provinsi;
@@ -231,11 +232,29 @@ class MasterController extends Controller
         }
         return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('email', function($data){
+                if(!empty($data->email)){
+                    return $data->email;
+                }else{
+                    return '-';
+                }
+            })
+            ->editColumn('telp', function($data){
+                if(!empty($data->telp)){
+                    return $data->telp;
+                }else{
+                    return '-';
+                }
+            })
             ->addColumn('prov', function ($data) {
                 return $data->provinsi->nama;
             })
             ->addColumn('ktp', function ($data) {
-                return $data->ktp;
+                if(!empty($data->ktp)){
+                    return $data->ktp;
+                }else{
+                    return '-';
+                }
             })
             ->addColumn('button', function ($data) use ($divisi) {
 
@@ -295,6 +314,13 @@ class MasterController extends Controller
             ->editColumn('nama', function ($data) {
                 return $data->nama;
             })
+            ->addColumn('nama_alias', function ($data) {
+                $id = $data->id;
+                $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
+                    $q->where('id', $id);
+                })->first();
+                return $s->nama_coo;
+            })
             ->addColumn('no_akd', function ($data) {
                 $id = $data->id;
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
@@ -343,6 +369,12 @@ class MasterController extends Controller
             return $c;
         }
     }
+
+    public function get_instansi_customer($id, $year){
+        $data = RencanaPenjualan::where([['customer_id', '=', $id], ['tahun', '=', $year]])->pluck('instansi');
+        return json_encode($data);
+    }
+
     //public function get_data_detail_penjualan_produk($id)
     //{
     // $data = DetailPenjualanProduk::where('penjualan_produk_id', $id)->get();

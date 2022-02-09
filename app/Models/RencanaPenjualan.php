@@ -7,13 +7,17 @@ use Illuminate\Database\Eloquent\Model;
 
 class RencanaPenjualan extends Model
 {
-    protected $table = 'rencana_penjualan';
-    protected $fillable = ['customer_id', 'instansi', 'tahun'];
+    use HasFactory;
+
+    protected $table = "rencana_penjualan";
+
+    protected $fillable = ['customer_id', 'tahun', 'instansi', 'created_at', 'updated_at'];
 
     public function Customer()
     {
-        return $this->belongsTo(Customer::class, 'customer_id');
+        return $this->belongsTo(Customer::class);
     }
+
     public function DetailRencanaPenjualan()
     {
         return $this->hasMany(DetailRencanaPenjualan::class);

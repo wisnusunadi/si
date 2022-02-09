@@ -9,6 +9,7 @@ use App\Models\DetailEkatalog;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananPart;
 use App\Models\DetailPesananProduk;
+use App\Models\DetailRencanaPenjualan;
 use App\Models\DetailSpa;
 use App\Models\DetailSpb;
 use App\Models\NoseriTGbj;
@@ -1588,6 +1589,36 @@ class PenjualanController extends Controller
             ->make(true);
     }
 
+    public function get_data_rencana_produk($customer_id, $instansi, $tahun){
+        $data = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function($q) use($customer_id, $instansi, $tahun){
+            $q->where(['customer_id' => $customer_id, 'instansi' => $instansi, 'tahun' => $tahun]);
+        })->get();
+
+        return datatables()->of($data)
+        ->addIndexColumn()
+        ->addColumn('nama_produk', function ($data) {
+            return $data->PenjualanProduk->nama;
+        })
+        ->addColumn('qty', function ($data) {
+            return $data->jumlah;
+        })
+        ->addColumn('realisasi', function ($data) use ($customer_id, $instansi, $tahun) {
+            $res = DetailPesanan::whereHas('Pesanan.Ekatalog', function($q) use($customer_id, $instansi, $tahun){
+                $q->where(['customer_id' => $customer_id, 'instansi' => $instansi])->whereBetween('tgl_buat', [$tahun.'-01-01', $tahun.'-12-31']);
+            })->where('penjualan_produk_id', $data->PenjualanProduk->id)->sum('jumlah');
+
+            return $res;
+        })
+        ->addColumn('harga', function ($data) {
+            return $data->harga;
+        })
+        ->addColumn('aksi', function ($data) {
+            $res = '<button type="button" class="btn btn-outline-primary btn-circle" id="btntransfer" data-id="'.$data->id.'" data-nama_produk="'.$data->penjualanproduk->nama.'" data-produk="'.$data->penjualanproduk->id.'" data-jumlah="'.$data->jumlah.'" data-harga="'.$data->harga.'"><i class="fas fa-plus"></i></button>';
+            return $res;
+        })
+        ->rawColumns(['aksi'])
+        ->make(true);
+    }
 
 
     // Create
@@ -1663,6 +1694,7 @@ class PenjualanController extends Controller
                         $dekat = DetailPesanan::create([
                             'pesanan_id' => $x,
                             'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                            'detail_rencana_penjualan_id' => $request->rencana_id[$i],
                             'jumlah' => $request->produk_jumlah[$i],
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => $ongkir[$i],
@@ -2120,6 +2152,7 @@ class PenjualanController extends Controller
                             'jumlah' => $request->produk_jumlah[$i],
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => $ongkir[$i],
+                            'detail_rencana_penjualan_id' => $request->rencana_id[$i],
                         ]);
                         if ($c) {
                             for ($j = 0; $j < count($request->variasi[$i]); $j++) {

@@ -1314,7 +1314,9 @@ class QcController extends Controller
         $terbaruprd = Pesanan::whereHas('TFProduksi', function ($q) {
             $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
         })->whereIN('id',  $this->check_input())->get();
-        $terbaruprt = Pesanan::has('DetailPesananPart')->where('tgl_po', '>=', Carbon::now()->subdays(7))->get();
+        $terbaruprt = Pesanan::wherehas('DetailPesananPart.Sparepart', function($q) {
+            $q->where('nama', 'not like', '%JASA%');
+        })->where('tgl_po', '>=', Carbon::now()->subdays(7))->get();
 
         $cekterbaru = $terbaruprd->merge($terbaruprt);
         foreach ($cekterbaru as $j) {
@@ -1322,7 +1324,9 @@ class QcController extends Controller
                 $terbaru++;
             }
         }
-        $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+        $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orWherehas('DetailPesananPart.Sparepart', function($q) {
+            $q->where('nama', 'not like', '%JASA%');
+        })->get();
 
         $arrayid = array();
         foreach ($cekhasil as $h) {
@@ -1366,7 +1370,9 @@ class QcController extends Controller
             $terbaruprd = Pesanan::whereHas('TFProduksi', function ($q) {
                 $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
             })->whereIN('id',  $this->check_input())->get();
-            $terbaruprt = Pesanan::has('DetailPesananPart')->where('tgl_po', '>=', Carbon::now()->subdays(7))->get();
+            $terbaruprt = Pesanan::wherehas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->where('tgl_po', '>=', Carbon::now()->subdays(7))->get();
             $terbaru_data = $terbaruprd->merge($terbaruprt);
             $terbaru_id = [];
             foreach ($terbaru_data as $j) {
@@ -1376,7 +1382,10 @@ class QcController extends Controller
             }
 
             $prd = Pesanan::has('DetailPesanan')->whereIN('id', $terbaru_id)->get();
-            $part = Pesanan::has('DetailPesananPart')->whereIN('id', $terbaru_id)->get();
+            $part = Pesanan::wherehas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->whereIN('id', $terbaru_id)->get();
+
             $data = $prd->merge($part);
 
             return datatables()->of($data)
@@ -1497,7 +1506,9 @@ class QcController extends Controller
         } else if ($value == 'belum_uji') {
 
 
-            $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orwherehas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get();
 
             $arrayid = array();
             foreach ($cekhasil as $h) {

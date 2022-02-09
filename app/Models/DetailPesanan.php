@@ -24,7 +24,7 @@ class DetailPesanan extends Model
     }
     public function DetailRencanaPenjualan()
     {
-        return $this->belongsTo(DetailRencanaPenjualan::class, 'detail_rencana_penjualan_id');
+        return $this->belongsTo(DetailRencanaPenjualan::class);
     }
     public function countNoSeri()
     {
