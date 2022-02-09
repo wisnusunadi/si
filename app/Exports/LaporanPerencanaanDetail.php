@@ -59,9 +59,9 @@ class LaporanPerencanaanDetail implements FromView, WithColumnFormatting, Should
 
     public function styles(Worksheet $sheet)
     {
-        $r = $this->row + 2;
+        $r = $this->row + 4;
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
-        // $sheet->getStyle('A3:J3')->getFont()->setBold(true);
+        $sheet->getStyle('A3:J3')->getFont()->setBold(true);
 
         $sheet->getStyle('A' . $r)->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
@@ -112,7 +112,7 @@ class LaporanPerencanaanDetail implements FromView, WithColumnFormatting, Should
 
         return [
 
-            $r    => ['font' => ['bold' => true]],
+            $r   => ['font' => ['bold' => true]],
             2    => ['font' => ['bold' => true]],
             3    => ['font' => ['bold' => true]],
 

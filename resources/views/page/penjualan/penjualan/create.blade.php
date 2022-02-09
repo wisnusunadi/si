@@ -215,7 +215,7 @@
                             </button>
                         </div>
                         @endif
-                        <form method="post" autocomplete="off" action="{{route('penjualan.penjualan.store')}}">
+                        <form method="post" autocomplete="on" action="{{route('penjualan.penjualan.store')}}">
                             {{csrf_field()}}
                             <div class="row d-flex justify-content-center">
                                 <div class="col-lg-11 col-md-12">
@@ -422,7 +422,7 @@
                                                                 <div class="form-group row">
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
                                                                     <div class="col-lg-7 col-md-12 autocomplete">
-                                                                        <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" />
+                                                                        <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" autocomplete="off"/>
                                                                         <div class="invalid-feedback" id="msginstansi">
                                                                             @if($errors->has('instansi'))
                                                                             {{ $errors->first('instansi')}}
@@ -947,6 +947,7 @@
             $('#btntambah').attr("disabled", true);
         }
 
+
         function checkpenjualanform(){
             if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
                 if($('#no_urut').val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "" && $("#batas_kontrak").val() != ""){
@@ -1143,7 +1144,7 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
-        $('#instansi').on('keyup change', function() {
+        $('#instansi').on('keyup change select', function() {
             if ($(this).val() != "") {
                 var cust = $('#customer_id').val();
                 $("#msginstansi").text("");
@@ -1156,6 +1157,12 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
+
+        $('#pills-produk-tab').on('click', function(){
+            var cust = $('#customer_id').val();
+            var instansi = $('#instansi').val();
+            perencanaan(cust, instansi);
+        })
 
         $('#alamatinstansi').on('keyup change', function() {
             if ($(this).val() != "") {
@@ -1404,6 +1411,7 @@
             }
         }).change(function() {
             var id = $(this).val();
+            instansi_array.length = 0
             $.ajax({
                 url: '/api/customer/select/' + id,
                 type: 'GET',
@@ -1425,8 +1433,15 @@
                 }
             });
 
-            if($('input[type="radio"][name="jenis_penjualan"]:checked').val() == "ekatalog"){
-                perencanaan(customer_id, $('#instansi').val());
+            if(id != "484"){
+                if($('input[type="radio"][name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                    var ins_cust = $('#instansi').val();
+                    if(ins_cust != ""){
+                        perencanaan(customer_id, $('#instansi').val());
+                    }else{
+                        perencanaan(customer_id, "0");
+                    }
+                }
             }
         });
 
@@ -1849,7 +1864,6 @@
             var produk_id = $(this).closest('tr').find('#btntransfer').attr('data-produk');
             var jumlah = $(this).closest('tr').find('#btntransfer').attr('data-jumlah');
             var harga = $(this).closest('tr').find('#btntransfer').attr('data-harga');
-            console.log("TES");
             transferproduk(id, nama_produk, produk_id, jumlah, harga);
         });
 
