@@ -129,7 +129,6 @@
     </div><!-- /.row -->
 </div><!-- /.container-fluid -->
 @stop
-
 @section('content')
 <div class="container-fluid">
     <div class="row">
@@ -162,6 +161,24 @@
                                     <div class="float-left"><a href="{{route('penjualan.rencana.laporan',['customer'=> '0','tahun'=> '0'])}}" class="btn btn-outline-success" id="btnexport"> <i class="far fa-file-excel"></i> &nbsp;Export</a></div>
                                     <div class="float-right" id="btntambah"><a href="{{route('penjualan.rencana.create')}}" class="btn btn-outline-info"><i class="fas fa-excel"></i>&nbsp;Tambah Rencana</a></div>
                                     <div class="table-responsive">
+                                        <?php
+                                        $i = 0;
+
+                                        foreach ($data as $d) {
+                                            $row[$i] = $d;
+                                            $i++;
+                                        }
+
+                                        foreach ($row as $cell) {
+                                            if (isset($total[$cell->detail_rencana_penjualan_id])) {
+                                                $total[$cell->detail_rencana_penjualan_id]++;
+                                            } else {
+                                                $total[$cell->detail_rencana_penjualan_id] = 1;
+                                            }
+                                        }
+
+
+                                        ?>
                                         <table class="table table-hover" id="showtable" style="width:100%;">
                                             <thead style="text-align:center;">
                                                 <tr>
@@ -174,12 +191,53 @@
                                                     <th>Qty</th>
                                                     <th>Harga</th>
                                                     <th class="borderright">Subtotal</th>
+                                                    <th>Tanggal PO</th>
                                                     <th>Qty</th>
                                                     <th>Harga</th>
                                                     <th>Subtotal</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <?php
+                                                $n = count($row);
+                                                $cekinstansi = "";
+                                                $totalharga = 0;
+                                                for ($i = 0; $i < $n; $i++) {
+                                                    $cell = $row[$i];
+                                                    echo '<tr>
+    ';
+                                                    if ($cekinstansi != $cell->detail_rencana_penjualan_id) {
+                                                        echo '<td' . ($total[$cell->detail_rencana_penjualan_id] > 1 ? ' rowspan="' . ($total[$cell->detail_rencana_penjualan_id]) . '">' : '>') . $cell->Pesanan->Ekatalog->instansi . '</td>';
+                                                        echo '<td' . ($total[$cell->detail_rencana_penjualan_id] > 1 ? ' rowspan="' . ($total[$cell->detail_rencana_penjualan_id]) . '">' : '>') . $cell->PenjualanProduk->nama_alias . '</td>';
+                                                        echo '<td' . ($total[$cell->detail_rencana_penjualan_id] > 1 ? ' rowspan="' . ($total[$cell->detail_rencana_penjualan_id]) . '">' : '>') . $cell->DetailRencanaPenjualan->jumlah . '</td>';
+                                                        echo '<td' . ($total[$cell->detail_rencana_penjualan_id] > 1 ? ' rowspan="' . ($total[$cell->detail_rencana_penjualan_id]) . '">' : '>') . $cell->DetailRencanaPenjualan->harga . '</td>';
+                                                        echo '<td' . ($total[$cell->detail_rencana_penjualan_id] > 1 ? ' rowspan="' . ($total[$cell->detail_rencana_penjualan_id]) . '">' : '>') . $cell->DetailRencanaPenjualan->harga * $cell->DetailRencanaPenjualan->jumlah . '</td>';
+                                                        $cekinstansi = $cell->detail_rencana_penjualan_id;
+                                                    }
+                                                    echo "<td>" . str_replace("&", "dan", $cell->Pesanan->tgl_po) . "</td>
+          <td>" . $cell->jumlah . "</td>
+        <td>" . $cell->harga . "</td>
+        <td>" . $cell->harga * $cell->jumlah . "</td>
+    </tr>";
+                                                    $totalharga += $cell->harga * $cell->jumlah;
+                                                }
+                                                ?>
+
+
+
+                                                <!-- @foreach ($data as $d)
+                                                <tr>
+                                                    <td>{{$d->id}}</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                </tr>
+                                                @endforeach -->
                                                 <!-- <tr>
                                                     <td>Dinkes Lombok Barat</td>
                                                     <td>MAP 380+UPS</td>
@@ -316,7 +374,6 @@
                         </div>
                     </div>
                 </div>
-
                 <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content" style="margin: 10px">
@@ -363,222 +420,4 @@
         </div>
     </div>
 </div>
-@stop
-
-@section('adminlte_js')
-<!-- <script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}"> -->
-
-<!-- <script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('assets/button/jszip.min.js') }}"></script>
-<script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
-<script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
-<script src="{{ asset('assets/button/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('assets/button/buttons.print.min.js') }} "></script>
-<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}"> -->
-<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script> -->
-
-
-
-<script>
-    $(function() {
-        var groupColumn = 0;
-        $('#showtable').DataTable({
-            destroy: true,
-            processing: true,
-            dom: 'Bfrtip',
-            serverSide: false,
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            ajax: {
-                'url': '/api/penjualan/rencana/show/0/0',
-                'dataType': 'json',
-                'type': 'POST',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-            },
-            // buttons: [{
-            //     extend: 'excel',
-            //     title: 'Laporan Penjualan',
-            //     text: '<i class="far fa-file-excel"></i> Export',
-            //     className: "btn btn-info"
-            // }, ],
-            columns: [{
-                data: 'instansi',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'produk',
-
-            }, {
-                data: 'jumlah',
-
-            }, {
-                data: 'harga',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'sub',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'jumlah_real',
-
-            }, {
-                data: 'harga_real',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'sub_real',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }],
-
-
-        });
-        //var table = $('#showtable').DataTable({
-        //     "ajax": {
-        //         'url': '/api/penjualan/rencana/show/0/0',
-        //         'dataType': 'json',
-        //         'type': 'POST',
-        //         'headers': {
-        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-        //         }
-        //     },
-        //     // "scrollY": true,
-        //     // "scrollX": true,
-        //     // "scrollCollapse": true,
-        //     // "fixedColumns": {
-        //     //     left: 0
-        //     // },
-        //     // "columnDefs": [{
-        //     //     "visible": false,
-        //     //     "targets": groupColumn
-        //     // }],
-        //     // "order": [
-        //     //     [groupColumn, 'asc']
-        //     // ],
-        //     // "displayLength": 10,
-        //     // "drawCallback": function(settings) {
-        //     //     var api = this.api();
-        //     //     var rows = api.rows({
-        //     //         page: 'current'
-        //     //     }).nodes();
-        //     //     var last = null;
-
-        //     //     api.column(groupColumn, {
-        //     //         page: 'current'
-        //     //     }).data().each(function(group, i) {
-        //     //         if (last !== group) {
-        //     //             $(rows).eq(i).before(
-        //     //                 '<tr class="group bg-secondary"><td colspan="8">' + group + '</td></tr>'
-        //     //             );
-        //     //             last = group;
-        //     //         }
-        //     //     });
-        //     // }
-        //});
-
-        // // Order by the grouping
-        // $('#showtable tbody').on('click', 'tr.group', function() {
-        //     var currentOrder = table.order()[0];
-        //     if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
-        //         table.order([groupColumn, 'desc']).draw();
-        //     } else {
-        //         table.order([groupColumn, 'asc']).draw();
-        //     }
-        // });
-
-        $('#customer_id').select2({
-            placeholder: "Pilih Distributor",
-            ajax: {
-                minimumResultsForSearch: 20,
-                dataType: 'json',
-                theme: "bootstrap",
-                delay: 250,
-                type: 'GET',
-                url: '/api/customer/select_rencana/',
-                data: function(params) {
-                    return {
-                        term: params.term
-                    }
-                },
-                processResults: function(data) {
-                    return {
-                        results: $.map(data, function(obj) {
-                            return {
-                                id: obj.id,
-                                text: obj.nama
-                            };
-                        })
-                    };
-                },
-            }
-        });
-
-
-        $("#tahun").autocomplete({
-            //source: pemrograman
-            source: function(request, response) {
-
-                $.ajax({
-                    dataType: 'json',
-                    url: "/api/penjualan/rencana/select_tahun",
-                    data: {
-                        term: request.term
-                    },
-                    success: function(data) {
-
-                        var transformed = $.map(data, function(el) {
-
-                            return {
-                                label: el.tahun,
-                                id: el.id
-                            };
-                        });
-                        response(transformed);
-                    },
-                    error: function() {
-                        response([]);
-                    }
-                });
-            }
-        });
-
-
-        $('#customer_id').on('keyup change', function() {
-            if ($(this).val() != "") {
-                $("#tahun").attr('disabled', false);
-            } else {
-                $("#tahun").attr('disabled', true);
-            }
-        });
-
-        $('#tahun').on('keyup change', function() {
-            if ($(this).val() != "") {
-                $("#btncari").attr('disabled', false);
-            } else {
-                $("#btncari").attr('disabled', true);
-            }
-        });
-
-
-        $('#filter').submit(function() {
-            var customer_id = $('#customer_id').val();
-            var tahun = $('#tahun').val();
-
-            $('#showtable').DataTable().ajax.url('/api/penjualan/rencana/show/' + customer_id + '/' + tahun).load();
-
-            var link = '/penjualan/rencana/laporan/' + customer_id + '/' + tahun;
-
-            console.log(link);
-            $('#btnexport').attr({
-                href: link
-            });
-
-            return false;
-        });
-
-    });
-</script>
-
 @stop

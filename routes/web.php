@@ -112,6 +112,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/rencana'], function () {
         Route::view('/show', 'page.penjualan.rencana.show')->name('penjualan.rencana.show');
+        Route::get('/result', [App\Http\Controllers\RencanaPenjualanController::class, 'show'])->name('penjualan.rencana.result');
         Route::view('/create', 'page.penjualan.rencana.create')->name('penjualan.rencana.create');
         Route::post('/store',  [App\Http\Controllers\RencanaPenjualanController::class, 'create_rencana'])->name('penjualan.rencana.store');
         Route::get('/laporan/{customer}/{tahun}',  [App\Http\Controllers\RencanaPenjualanController::class, 'show_laporan'])->name('penjualan.rencana.laporan');

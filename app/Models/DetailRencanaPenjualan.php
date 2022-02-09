@@ -23,4 +23,14 @@ class DetailRencanaPenjualan extends Model
     {
         return $this->belongsTo(PenjualanProduk::class, 'penjualan_produk_id');
     }
+    public function sum_prd()
+    {
+        $id = $this->id;
+        $jumlah = 0;
+        $data = DetailPesanan::where('detail_rencana_penjualan_id', $id)->get();
+        foreach ($data as $d) {
+            $jumlah += $d->jumlah;
+        }
+        return $jumlah;
+    }
 }

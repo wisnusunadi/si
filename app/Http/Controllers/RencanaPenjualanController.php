@@ -15,15 +15,19 @@ class RencanaPenjualanController extends Controller
     //Data
     public function get_data_rencana($customer, $tahun)
     {
+        $data = DetailPesanan::WhereHas('DetailRencanaPenjualan.RencanaPenjualan', function ($q) use ($customer) {
+            $q->where('customer_id', $customer);
+        })->groupby('detail_rencana_penjualan_id')->get();
 
-        $data = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function ($q) use ($customer, $tahun) {
-            $q->where('customer_id', $customer)
-                ->where('tahun', $tahun);
-        })->get();
+        // $data = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function ($q) use ($customer, $tahun) {
+        //     $q->where('customer_id', $customer)
+        //         ->where('tahun', $tahun);
+        // })->get();
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('instansi', function ($data) {
-                return $data->RencanaPenjualan->instansi;
+                return $data->DetailRencanaPenjualan->RencanaPenjualan->instansi;
             })
             ->addColumn('produk', function ($data) {
                 if ($data->PenjualanProduk->nama_alias != '') {
@@ -33,13 +37,22 @@ class RencanaPenjualanController extends Controller
                 }
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->jumlah;
+                return $data->DetailRencanaPenjualan->jumlah;
             })
             ->addColumn('harga', function ($data) {
-                return $data->harga;
+                return $data->DetailRencanaPenjualan->harga;
             })
             ->addColumn('sub', function ($data) {
-                return $data->harga * $data->jumlah;
+                return $data->DetailRencanaPenjualan->harga * $data->DetailRencanaPenjualan->jumlah;
+            })
+            ->addColumn('jumlah_real', function ($data) {
+                return $data->DetailRencanaPenjualan->sum_prd();
+            })
+            ->addColumn('harga_real', function ($data) {
+                return $data->harga;
+            })
+            ->addColumn('sub_real', function ($data) {
+                return $data->DetailRencanaPenjualan->sum_prd() * $data->harga;
             })
             ->make(true);
     }
@@ -88,6 +101,14 @@ class RencanaPenjualanController extends Controller
         return Excel::download(new LaporanPerencanaan($distributor, $tahun, $row_rencana, $row_realisasi), 'Laporan Perencanaan ' . $waktu->toDateTimeString() . '.xlsx');
     }
 
+    public function show()
+    {
+        $data = DetailPesanan::WhereHas('DetailRencanaPenjualan.RencanaPenjualan', function ($q) {
+            $q->where('customer_id', 213);
+        })->get();
+
+        return view('page.penjualan.rencana.result', ['data' => $data]);
+    }
     //Select
     public function select_tahun_rencana(Request $request)
     {
