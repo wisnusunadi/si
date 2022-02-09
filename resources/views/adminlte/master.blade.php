@@ -33,11 +33,9 @@
 
     <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/all.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/datepicker/datepicker.css') }}">
-     <!-- Include Bootstrap DateTimePicker CDN -->
-     <link
-         href=
- "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
-         rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('vendor/jquery-ui/jquery-ui.css') }}">
+    <!-- Include Bootstrap DateTimePicker CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     {{-- Custom Stylesheets (post AdminLTE) --}}
     @yield('master_css')
@@ -81,7 +79,7 @@
     <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('vendor/datepicker/moment.js') }}"></script>
     <script src="{{ asset('vendor/datepicker/datepicker.js') }}"></script>
-   
+    <script src="{{ asset('vendor/jquery-ui/jquery-ui.js') }}"></script>
     {{-- Custom Scripts --}}
     @yield('master_js')
 </body>

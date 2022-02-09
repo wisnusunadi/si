@@ -438,7 +438,6 @@
                 $("#btncetak").attr('disabled', true);
             }
         });
-
         $('input[type="checkbox"][name="penjualan"]').on('change', function() {
             if ($(this).val() != "") {
                 $('#tanggal_mulai').removeAttr('readonly');
@@ -451,7 +450,6 @@
                 $("#btncetak").attr('disabled', true);
             }
         });
-
         $('#tanggal_mulai').on('keyup change', function() {
             $("#tanggal_akhir").val("");
             $("#btncetak").removeAttr('disabled');

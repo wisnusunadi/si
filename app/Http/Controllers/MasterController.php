@@ -1008,6 +1008,11 @@ class MasterController extends Controller
         $data = Customer::where('id', $id)->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }
+    public function select_customer_rencana(Request $request)
+    {
+        $data = Customer::Has('RencanaPenjualan')->where('nama', 'LIKE', '%' . $request->input('term', '') . '%')->orderby('nama', 'ASC')->get();
+        echo json_encode($data);
+    }
     public function select_penjualan_produk(Request $request)
     {
         $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')

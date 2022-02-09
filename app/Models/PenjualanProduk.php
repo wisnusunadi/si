@@ -20,7 +20,7 @@ class PenjualanProduk extends Model
             ->withPivot('jumlah');
     }
 
-    public function DetailRencanaPenjualan()
+    public function DetailRencanPenjualan()
     {
         return $this->hasMany(DetailRencanaPenjualan::class);
     }

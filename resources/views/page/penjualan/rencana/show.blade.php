@@ -4,18 +4,25 @@
 
 @section('adminlte_css')
 <style>
-    table tr td:nth-child(2), table tr td:nth-child(5), table tr td:nth-child(6) {
-        text-align:center;
-    }
-    table tr td:nth-child(3), table tr td:nth-child(4), table tr td:nth-child(7), table tr td:nth-child(8)  {
-        text-align:right;
+    table tr td:nth-child(2),
+    table tr td:nth-child(5),
+    table tr td:nth-child(6) {
+        text-align: center;
     }
 
-    .align-center{
-        text-align:center;
+    table tr td:nth-child(3),
+    table tr td:nth-child(4),
+    table tr td:nth-child(7),
+    table tr td:nth-child(8) {
+        text-align: right;
     }
-    .align-right{
-        text-align:right;
+
+    .align-center {
+        text-align: center;
+    }
+
+    .align-right {
+        text-align: right;
     }
 
     .borderright {
@@ -23,22 +30,22 @@
     }
 
     .form-inline {
-    display: flex;
-    flex-flow: row wrap;
-    align-items: center;
-    margin: 20px;
+        display: flex;
+        flex-flow: row wrap;
+        align-items: center;
+        margin: 20px;
     }
 
     .form-inline label {
-    margin: 5px 10px 5px 0;
+        margin: 5px 10px 5px 0;
     }
 
     .form-inline input {
-    vertical-align: middle;
-    margin: 5px 10px 5px 0;
-    padding: 10px;
-    background-color: #fff;
-    border: 1px solid #ddd;
+        vertical-align: middle;
+        margin: 5px 10px 5px 0;
+        padding: 10px;
+        background-color: #fff;
+        border: 1px solid #ddd;
     }
 
     /* .form-inline button {
@@ -50,7 +57,7 @@
     } */
 
     .form-inline button:hover {
-    background-color: darkgrey;
+        background-color: darkgrey;
     }
 
     #customer_id {
@@ -61,12 +68,12 @@
         width: 70%;
     }
 
-    #btntambah{
+    #btntambah {
         margin-bottom: 10px;
     }
 
     @media (max-width: 992px) {
-        body{
+        body {
             font-size: 14px;
         }
 
@@ -84,18 +91,18 @@
         }
 
         #customer_id {
-            width: 100%; !important
+            width: 100%;
         }
 
         #tahun {
             width: 100%;
         }
 
-        .form-inline button{
+        .form-inline button {
             float: right;
         }
 
-        #btntambah{
+        #btntambah {
             margin-bottom: 5px;
         }
     }
@@ -124,227 +131,243 @@
 @stop
 
 @section('content')
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="row">
-                    <div class="col-12">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <form class="form-inline">
-                                            <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <form class="form-inline" id="filter">
+                                        <div class=" form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                             <label for="customer_id">Distributor: </label>
                                             <select class="form-control custom-select" name="customer_id" id="customer_id"></select>
-                                            </div>
-                                            <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
+                                        </div>
+                                        <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
                                             <label for="tahun">Tahun: </label>
-                                            <input class="form-control" type="number" id="tahun" placeholder="Masukkan Tahun" name="tahun">
+                                            <input class="form-control" type="number" id="tahun" placeholder="Masukkan Tahun" name="tahun" disabled>
+
+                                        </div>
+                                        <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-1">
+                                            <button class="btn btn-warning" type="submit" id="btncari" disabled>Cari</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-12">
+
+                                    <!-- <div class="float-left"><a href="{{route('penjualan.rencana.laporan',['customer'=> '0','tahun'=> '0'])}}" class="btn btn-outline-success" id="btnexport"> <i class="far fa-file-excel"></i> &nbsp;Semua</a></div> -->
+                                    <div class="float-left ">
+                                        <div class="input-group-prepend">
+                                            <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown">
+                                                <i class="far fa-file-excel"></i> &nbsp;Export
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="{{route('penjualan.rencana.laporan',['customer'=> '0','tahun'=> '0'])}}" id="lap_semua">Laporan Semua</a>
+                                                <a class="dropdown-item" href="{{route('penjualan.rencana.laporan_detail',['customer'=> '0','tahun'=> '0'])}}" id="lap_detail">Laporan Detail</a>
                                             </div>
-                                            <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-1">
-                                            <button class="btn btn-warning" type="button" id="btncari">Cari</button>
-                                            </div>
-                                        </form>
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="float-right" id="btntambah"><a href="{{route('penjualan.rencana.create')}}" class="btn btn-outline-info"><i class="fas fa-excel"></i>&nbsp;Tambah Rencana</a></div>
+                                    <div class="table-responsive">
+                                        <table class="table table-hover" id="showtable" style="width:100%;">
+                                            <thead style="text-align:center;">
+                                                <tr>
+                                                    <th rowspan="2">Instansi</th>
+                                                    <th rowspan="2" class="borderright">Produk</th>
+                                                    <th colspan="3" class="borderright">Rencana</th>
+                                                    <th colspan="4">Realisasi</th>
+                                                </tr>
+                                                <tr>
+                                                    <th>Qty</th>
+                                                    <th>Harga</th>
+                                                    <th class="borderright">Subtotal</th>
+                                                    <th>Qty</th>
+                                                    <th>Harga</th>
+                                                    <th>Subtotal</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <!-- <tr>
+                                                    <td>Dinkes Lombok Barat</td>
+                                                    <td>MAP 380+UPS</td>
+                                                    <td>3</td>
+                                                    <td>28.160.000</td>
+                                                    <td>-</td>
+                                                    <td>24-02-2022</td>
+                                                    <td>2</td>
+                                                    <td>27.500.000</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dinkes Lombok Barat</td>
+                                                    <td>ULTRA MIST</td>
+                                                    <td>4</td>
+                                                    <td>2.904.000</td>
+                                                    <td>-</td>
+                                                    <td>24-02-2022</td>
+                                                    <td>2</td>
+                                                    <td>3.000.000</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dinkes Lombok Barat</td>
+                                                    <td>ECG-1200G + TROLLEY + UPS</td>
+                                                    <td>6</td>
+                                                    <td>69.740.000</td>
+                                                    <td>-</td>
+                                                    <td>24-02-2022</td>
+                                                    <td>7</td>
+                                                    <td>69.740.000</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dinkes Batola</td>
+                                                    <td>CMS-600 PLUS + PRINTER + TROLLEY</td>
+                                                    <td>16</td>
+                                                    <td>135.740.000</td>
+                                                    <td>-</td>
+                                                    <td>24-02-2022</td>
+                                                    <td>11</td>
+                                                    <td>135.740.000</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dinkes Batola</td>
+                                                    <td>ANTROPOMETRI KIT</td>
+                                                    <td>15</td>
+                                                    <td>1.218.000</td>
+                                                    <td>-</td>
+                                                    <td>24-02-2022</td>
+                                                    <td>22</td>
+                                                    <td>1.096.000</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dinkes Kotabaru</td>
+                                                    <td>CMS-600 PLUS + PRINTER + TROLLEY</td>
+                                                    <td>7</td>
+                                                    <td>135.740.000</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dinkes Kab. Kayong Utara Alkes 2022</td>
+                                                    <td>TENSIONE</td>
+                                                    <td>8</td>
+                                                    <td>4.290.000</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dinkes Kab. Kayong Utara Alkes 2022</td>
+                                                    <td>TENSIONE</td>
+                                                    <td>8</td>
+                                                    <td>4.290.000</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dinkes Kab. Kayong Utara Alkes 2022</td>
+                                                    <td>TENSIONE</td>
+                                                    <td>8</td>
+                                                    <td>4.290.000</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dinkes Kab. Kayong Utara Alkes 2022</td>
+                                                    <td>TENSIONE</td>
+                                                    <td>8</td>
+                                                    <td>4.290.000</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Dinkes Kab. Kayong Utara Alkes 2022</td>
+                                                    <td>TENSIONE</td>
+                                                    <td>8</td>
+                                                    <td>4.290.000</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                    <td>-</td>
+                                                </tr> -->
+                                            </tbody>
+                                            <!-- <tfoot>
+                                                <tr>
+                                                    <th colspan="2" class="align-center">Total Penjualan</th>
+                                                    <th colspan="3" class="align-right">19.173.157.009</th>
+                                                    <th colspan="4" class="align-right">4.783.278.167</th>
+                                                </tr>
+                                            </tfoot> -->
+                                        </table>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin: 10px">
+                            <div class="modal-header yellow-bg">
+                                <h4 class="modal-title"><b>Ubah</b></h4>
+                            </div>
+                            <div class="modal-body" id="edit">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
+                    <div class="modal-dialog modal-lg" role="document">
+                        <div class="modal-content" style="margin: 10px">
+                            <div class="modal-header yellow-bg">
+                                <h4 class="modal-title"><b>Hapus</b></h4>
+                            </div>
+                            <div class="modal-body" id="hapus">
                                 <div class="row">
                                     <div class="col-12">
-                                        <div class="float-right" id="btntambah"><a href="{{route('penjualan.rencana.create')}}" class="btn btn-outline-info"><i class="fas fa-plus"></i>&nbsp;Tambah Rencana</a></div>
-                                        <div class="table-responsive">
-                                            <table class="table table-hover" id="showtable" style="width:100%;">
-                                                <thead style="text-align:center;">
-                                                    <tr>
-                                                        <th rowspan="2">Instansi</th>
-                                                        <th rowspan="2" class="borderright">Produk</th>
-                                                        <th colspan="3" class="borderright">Rencana</th>
-                                                        <th colspan="4">Realisasi</th>
-                                                    </tr>
-                                                    <tr>
-                                                        <th>Qty</th>
-                                                        <th>Harga</th>
-                                                        <th class="borderright">Subtotal</th>
-                                                        <th>Tanggal PO</th>
-                                                        <th>Qty</th>
-                                                        <th>Harga</th>
-                                                        <th>Subtotal</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>Dinkes Lombok Barat</td>
-                                                        <td>MAP 380+UPS</td>
-                                                        <td>3</td>
-                                                        <td>28.160.000</td>
-                                                        <td>-</td>
-                                                        <td>24-02-2022</td>
-                                                        <td>2</td>
-                                                        <td>27.500.000</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dinkes Lombok Barat</td>
-                                                        <td>ULTRA MIST</td>
-                                                        <td>4</td>
-                                                        <td>2.904.000</td>
-                                                        <td>-</td>
-                                                        <td>24-02-2022</td>
-                                                        <td>2</td>
-                                                        <td>3.000.000</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dinkes Lombok Barat</td>
-                                                        <td>ECG-1200G + TROLLEY + UPS</td>
-                                                        <td>6</td>
-                                                        <td>69.740.000</td>
-                                                        <td>-</td>
-                                                        <td>24-02-2022</td>
-                                                        <td>7</td>
-                                                        <td>69.740.000</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dinkes Batola</td>
-                                                        <td>CMS-600 PLUS + PRINTER + TROLLEY</td>
-                                                        <td>16</td>
-                                                        <td>135.740.000</td>
-                                                        <td>-</td>
-                                                        <td>24-02-2022</td>
-                                                        <td>11</td>
-                                                        <td>135.740.000</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dinkes Batola</td>
-                                                        <td>ANTROPOMETRI KIT</td>
-                                                        <td>15</td>
-                                                        <td>1.218.000</td>
-                                                        <td>-</td>
-                                                        <td>24-02-2022</td>
-                                                        <td>22</td>
-                                                        <td>1.096.000</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dinkes Kotabaru</td>
-                                                        <td>CMS-600 PLUS + PRINTER + TROLLEY</td>
-                                                        <td>7</td>
-                                                        <td>135.740.000</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dinkes Kab. Kayong Utara Alkes 2022</td>
-                                                        <td>TENSIONE</td>
-                                                        <td>8</td>
-                                                        <td>4.290.000</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dinkes Kab. Kayong Utara Alkes 2022</td>
-                                                        <td>TENSIONE</td>
-                                                        <td>8</td>
-                                                        <td>4.290.000</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dinkes Kab. Kayong Utara Alkes 2022</td>
-                                                        <td>TENSIONE</td>
-                                                        <td>8</td>
-                                                        <td>4.290.000</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dinkes Kab. Kayong Utara Alkes 2022</td>
-                                                        <td>TENSIONE</td>
-                                                        <td>8</td>
-                                                        <td>4.290.000</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Dinkes Kab. Kayong Utara Alkes 2022</td>
-                                                        <td>TENSIONE</td>
-                                                        <td>8</td>
-                                                        <td>4.290.000</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                        <td>-</td>
-                                                    </tr>
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <th colspan="2" class="align-center">Total Penjualan</th>
-                                                        <th colspan="3" class="align-right">19.173.157.009</th>
-                                                        <th colspan="4" class="align-right">4.783.278.167</th>
-                                                    </tr>
-                                                </tfoot>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content" style="margin: 10px">
-                                <div class="modal-header yellow-bg">
-                                    <h4 class="modal-title"><b>Ubah</b></h4>
-                                </div>
-                                <div class="modal-body" id="edit">
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
-                        <div class="modal-dialog modal-lg" role="document">
-                            <div class="modal-content" style="margin: 10px">
-                                <div class="modal-header yellow-bg">
-                                    <h4 class="modal-title"><b>Hapus</b></h4>
-                                </div>
-                                <div class="modal-body" id="hapus">
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <form method="post" action="" id="form-hapus" data-target="">
-                                                @method('DELETE')
-                                                @csrf
-                                                <div class="card">
-                                                    <div class="card-body">Apakah Anda yakin ingin menghapus data ini?</div>
-                                                    <div class="card-footer">
-                                                        <span class="float-left">
-                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                        </span>
-                                                        <span class="float-right">
-                                                            <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
-                                                        </span>
-                                                    </div>
+                                        <form method="post" action="" id="form-hapus" data-target="">
+                                            @method('DELETE')
+                                            @csrf
+                                            <div class="card">
+                                                <div class="card-body">Apakah Anda yakin ingin menghapus data ini?</div>
+                                                <div class="card-footer">
+                                                    <span class="float-left">
+                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                    </span>
+                                                    <span class="float-right">
+                                                        <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
+                                                    </span>
                                                 </div>
-                                            </form>
-                                        </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -354,61 +377,118 @@
             </div>
         </div>
     </div>
+</div>
 @stop
 
 @section('adminlte_js')
-<script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}">
 
-<!-- <script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('assets/button/jszip.min.js') }}"></script>
-<script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
-<script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
-<script src="{{ asset('assets/button/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('assets/button/buttons.print.min.js') }} "></script>
-<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}"> -->
 
 <script>
-    $(function(){
+    $(function() {
         var groupColumn = 0;
-        var table = $('#showtable').DataTable({
-            "scrollY":true,
-            "scrollX":true,
-            "scrollCollapse":true,
-            "fixedColumns":   {
-                left: 0
+        $('#showtable').DataTable({
+            destroy: true,
+            processing: true,
+            dom: 'Bfrtip',
+            serverSide: false,
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
-            "columnDefs": [
-                { "visible": false, "targets": groupColumn }
-            ],
-            "order": [[ groupColumn, 'asc' ]],
-            "displayLength": 10,
-            "drawCallback": function ( settings ) {
-                var api = this.api();
-                var rows = api.rows( {page:'current'} ).nodes();
-                var last=null;
+            ajax: {
+                'url': '/api/penjualan/rencana/show/0/0',
+                'dataType': 'json',
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            // buttons: [{
+            //     extend: 'excel',
+            //     title: 'Laporan Penjualan',
+            //     text: '<i class="far fa-file-excel"></i> Export',
+            //     className: "btn btn-info"
+            // }, ],
+            columns: [{
+                data: 'instansi',
+                orderable: false,
+                searchable: false
+            }, {
+                data: 'produk',
 
-                api.column(groupColumn, {page:'current'} ).data().each( function ( group, i ) {
-                    if ( last !== group ) {
-                        $(rows).eq( i ).before(
-                            '<tr class="group bg-secondary"><td colspan="8">'+group+'</td></tr>'
-                        );
-                        last = group;
-                    }
-                });
-            }
-        } );
+            }, {
+                data: 'jumlah',
 
-        // Order by the grouping
-        $('#showtable tbody').on( 'click', 'tr.group', function () {
-            var currentOrder = table.order()[0];
-            if ( currentOrder[0] === groupColumn && currentOrder[1] === 'asc' ) {
-                table.order( [ groupColumn, 'desc' ] ).draw();
-            }
-            else {
-                table.order( [ groupColumn, 'asc' ] ).draw();
-            }
+            }, {
+                data: 'harga',
+                render: $.fn.dataTable.render.number(',', '.', 2),
+            }, {
+                data: 'sub',
+                render: $.fn.dataTable.render.number(',', '.', 2),
+            }, {
+                data: 'jumlah_real',
+
+            }, {
+                data: 'harga_real',
+                render: $.fn.dataTable.render.number(',', '.', 2),
+            }, {
+                data: 'sub_real',
+                render: $.fn.dataTable.render.number(',', '.', 2),
+            }],
+
+
         });
+        //var table = $('#showtable').DataTable({
+        //     "ajax": {
+        //         'url': '/api/penjualan/rencana/show/0/0',
+        //         'dataType': 'json',
+        //         'type': 'POST',
+        //         'headers': {
+        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
+        //         }
+        //     },
+        //     // "scrollY": true,
+        //     // "scrollX": true,
+        //     // "scrollCollapse": true,
+        //     // "fixedColumns": {
+        //     //     left: 0
+        //     // },
+        //     // "columnDefs": [{
+        //     //     "visible": false,
+        //     //     "targets": groupColumn
+        //     // }],
+        //     // "order": [
+        //     //     [groupColumn, 'asc']
+        //     // ],
+        //     // "displayLength": 10,
+        //     // "drawCallback": function(settings) {
+        //     //     var api = this.api();
+        //     //     var rows = api.rows({
+        //     //         page: 'current'
+        //     //     }).nodes();
+        //     //     var last = null;
+
+        //     //     api.column(groupColumn, {
+        //     //         page: 'current'
+        //     //     }).data().each(function(group, i) {
+        //     //         if (last !== group) {
+        //     //             $(rows).eq(i).before(
+        //     //                 '<tr class="group bg-secondary"><td colspan="8">' + group + '</td></tr>'
+        //     //             );
+        //     //             last = group;
+        //     //         }
+        //     //     });
+        //     // }
+        //});
+
+        // // Order by the grouping
+        // $('#showtable tbody').on('click', 'tr.group', function() {
+        //     var currentOrder = table.order()[0];
+        //     if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
+        //         table.order([groupColumn, 'desc']).draw();
+        //     } else {
+        //         table.order([groupColumn, 'asc']).draw();
+        //     }
+        // });
 
         $('#customer_id').select2({
             placeholder: "Pilih Distributor",
@@ -418,7 +498,7 @@
                 theme: "bootstrap",
                 delay: 250,
                 type: 'GET',
-                url: '/api/customer/select/',
+                url: '/api/customer/select_rencana/',
                 data: function(params) {
                     return {
                         term: params.term
@@ -437,10 +517,75 @@
             }
         });
 
-        $('')
+
+        $("#tahun").autocomplete({
+            //source: pemrograman
+            source: function(request, response) {
+
+                $.ajax({
+                    dataType: 'json',
+                    url: "/api/penjualan/rencana/select_tahun",
+                    data: {
+                        term: request.term
+                    },
+                    success: function(data) {
+
+                        var transformed = $.map(data, function(el) {
+
+                            return {
+                                label: el.tahun,
+                                id: el.id
+                            };
+                        });
+                        response(transformed);
+                    },
+                    error: function() {
+                        response([]);
+                    }
+                });
+            }
+        });
+
+
+        $('#customer_id').on('keyup change', function() {
+            if ($(this).val() != "") {
+                $("#tahun").attr('disabled', false);
+            } else {
+                $("#tahun").attr('disabled', true);
+            }
+        });
+
+        $('#tahun').on('keyup change', function() {
+            if ($(this).val() != "") {
+                $("#btncari").attr('disabled', false);
+            } else {
+                $("#btncari").attr('disabled', true);
+            }
+        });
+
+
+        $('#filter').submit(function() {
+            var customer_id = $('#customer_id').val();
+            var tahun = $('#tahun').val();
+
+            $('#showtable').DataTable().ajax.url('/api/penjualan/rencana/show/' + customer_id + '/' + tahun).load();
+
+            var link = '/penjualan/rencana/laporan/' + customer_id + '/' + tahun;
+            var link2 = '/penjualan/rencana/laporan_detail/' + customer_id + '/' + tahun;
+
+            console.log(link);
+            $('#lap_semua').attr({
+                href: link
+            });
+
+            $('#lap_detail').attr({
+                href: link2
+            });
+
+            return false;
+        });
+
     });
 </script>
+
 @stop
-
-
-
