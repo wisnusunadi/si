@@ -1233,7 +1233,7 @@
             var harga = $(this).closest('tr').find('.produk_harga').val();
             var ongkir = $(this).closest('tr').find('.produk_ongkir').val();
             var subtotal = $(this).closest('tr').find('.produk_subtotal');
-
+            $(this).closest('tr').find('.rencana_id').val("");
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
                 var ongkircvrt = replaceAll(ongkir, '.', '');
@@ -1440,6 +1440,7 @@
                     success: function(res) {
                         $('#produk_harga' + index).val(formatmoney(res[0].harga));
                         $('#produk_subtotal' + index).val(formatmoney(res[0].harga * $('#produk_jumlah' + index).val()));
+                        $('#rencana_id' + index).val("");
                         totalhargaprd();
                         var tes = $('#detail_produk' + index);
                         tes.empty();

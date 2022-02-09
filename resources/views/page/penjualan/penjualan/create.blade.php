@@ -1699,6 +1699,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
+                    $('#rencana_id'+index).val("");
                     $('#produk_harga' + index).val(formatmoney(res[0].harga));
                     var jumlah_pesan = $('#produk_jumlah' + index).val();
                     if (jumlah_pesan == "") {
