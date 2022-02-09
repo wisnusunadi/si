@@ -159,7 +159,22 @@
                             <div class="row">
                                 <div class="col-12">
 
-                                    <div class="float-left"><a href="{{route('penjualan.rencana.laporan',['customer'=> '0','tahun'=> '0'])}}" class="btn btn-outline-success" id="btnexport"> <i class="far fa-file-excel"></i> &nbsp;Export</a></div>
+                                    <!-- <div class="float-left"><a href="{{route('penjualan.rencana.laporan',['customer'=> '0','tahun'=> '0'])}}" class="btn btn-outline-success" id="btnexport"> <i class="far fa-file-excel"></i> &nbsp;Semua</a></div> -->
+                                    <div class="float-left ">
+                                        <div class="input-group-prepend">
+                                            <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown">
+                                                <i class="far fa-file-excel"></i> &nbsp;Export
+                                            </button>
+                                            <div class="dropdown-menu">
+                                                <a class="dropdown-item" href="{{route('penjualan.rencana.laporan',['customer'=> '0','tahun'=> '0'])}}" id="lap_semua">Laporan Semua</a>
+                                                <a class="dropdown-item" href="{{route('penjualan.rencana.laporan_detail',['customer'=> '0','tahun'=> '0'])}}" id="lap_detail">Laporan Detail</a>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+
+
                                     <div class="float-right" id="btntambah"><a href="{{route('penjualan.rencana.create')}}" class="btn btn-outline-info"><i class="fas fa-excel"></i>&nbsp;Tambah Rencana</a></div>
                                     <div class="table-responsive">
                                         <table class="table table-hover" id="showtable" style="width:100%;">
@@ -366,19 +381,6 @@
 @stop
 
 @section('adminlte_js')
-<!-- <script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}"> -->
-
-<!-- <script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('assets/button/jszip.min.js') }}"></script>
-<script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
-<script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
-<script src="{{ asset('assets/button/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('assets/button/buttons.print.min.js') }} "></script>
-<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}"> -->
-<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
-<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script> -->
-
 
 
 <script>
@@ -569,10 +571,15 @@
             $('#showtable').DataTable().ajax.url('/api/penjualan/rencana/show/' + customer_id + '/' + tahun).load();
 
             var link = '/penjualan/rencana/laporan/' + customer_id + '/' + tahun;
+            var link2 = '/penjualan/rencana/laporan_detail/' + customer_id + '/' + tahun;
 
             console.log(link);
-            $('#btnexport').attr({
+            $('#lap_semua').attr({
                 href: link
+            });
+
+            $('#lap_detail').attr({
+                href: link2
             });
 
             return false;

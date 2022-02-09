@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\LaporanPerencanaan;
+use App\Exports\LaporanPerencanaanDetail;
 use App\Models\DetailPesanan;
 use App\Models\DetailRencanaPenjualan;
 use App\Models\RencanaPenjualan;
@@ -99,6 +100,15 @@ class RencanaPenjualanController extends Controller
 
         $waktu = Carbon::now();
         return Excel::download(new LaporanPerencanaan($distributor, $tahun, $row_rencana, $row_realisasi), 'Laporan Perencanaan ' . $waktu->toDateTimeString() . '.xlsx');
+    }
+    public function show_laporan_detail($distributor, $tahun)
+    {
+        $row = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($distributor) {
+            $q->where('customer_id', $distributor);
+        })->count();
+
+        $waktu = Carbon::now();
+        return Excel::download(new LaporanPerencanaanDetail($distributor, $tahun, $row), 'Laporan Perencanaan Detail ' . $waktu->toDateTimeString() . '.xlsx');
     }
 
     public function show()

@@ -30,4 +30,17 @@ class Customer extends Model
     {
         return $this->hasMany(RencanaPenjualan::class);
     }
+
+    public function sumSubtotal()
+    {
+        $id = $this->id;
+        $s = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function ($q) use ($id) {
+            $q->where('customer_id', $id);
+        })->get();
+        $total = 0;
+        foreach ($s as $i) {
+            $total +=  $i->jumlah *  $i->harga;
+        }
+        return $total;
+    }
 }
