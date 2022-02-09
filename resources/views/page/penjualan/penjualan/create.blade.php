@@ -1424,6 +1424,10 @@
                     });
                 }
             });
+
+            if($('input[type="radio"][name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                perencanaan(customer_id, $('#instansi').val());
+            }
         });
 
         $('#produktable').on('keyup change', '.variasi', function() {
@@ -1845,6 +1849,7 @@
             var produk_id = $(this).closest('tr').find('#btntransfer').attr('data-produk');
             var jumlah = $(this).closest('tr').find('#btntransfer').attr('data-jumlah');
             var harga = $(this).closest('tr').find('#btntransfer').attr('data-harga');
+            console.log("TES");
             transferproduk(id, nama_produk, produk_id, jumlah, harga);
         });
 
@@ -1899,6 +1904,7 @@
                 numberRowsProduk($("#produktable"));
                 totalhargaprd();
             } else {
+
                 $('#produktable tbody tr:last').after(data);
                 select_data();
                 numberRowsProduk($("#produktable"));
