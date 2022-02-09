@@ -162,7 +162,7 @@
                                     <!-- <div class="float-left"><a href="{{route('penjualan.rencana.laporan',['customer'=> '0','tahun'=> '0'])}}" class="btn btn-outline-success" id="btnexport"> <i class="far fa-file-excel"></i> &nbsp;Semua</a></div> -->
                                     <div class="float-left ">
                                         <div class="input-group-prepend">
-                                            <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown">
+                                            <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" disabled id="parent_export">
                                                 <i class="far fa-file-excel"></i> &nbsp;Export
                                             </button>
                                             <div class="dropdown-menu">
@@ -560,11 +560,13 @@
                 $("#btncari").attr('disabled', false);
             } else {
                 $("#btncari").attr('disabled', true);
+
             }
         });
 
 
         $('#filter').submit(function() {
+            $("#parent_export").attr('disabled', false);
             var customer_id = $('#customer_id').val();
             var tahun = $('#tahun').val();
 

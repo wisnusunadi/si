@@ -1,5 +1,4 @@
 <?php
-
 $i = 0;
 
 foreach ($detail as $d) {

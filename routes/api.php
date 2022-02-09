@@ -165,7 +165,7 @@ Route::prefix('/gbj')->group(function () {
     Route::post('ceknoseri', [GudangController::class, 'ceknoseri']);
     Route::post('ubahseri', [GudangController::class, 'updateSeriLayout']);
     Route::post('addSeri', [GudangController::class, 'addSeri']);
-    Route::post('readyseri', [GudangController::class, 'cekReadySeri']);
+    Route::post('readyseri', [GudangController::class, 'cekReadySeri` ']);
 });
 
 Route::prefix('/draft')->group(function () {

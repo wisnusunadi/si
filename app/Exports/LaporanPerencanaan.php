@@ -32,11 +32,6 @@ class LaporanPerencanaan implements WithMultipleSheets
     /**
      * @return \Illuminate\Support\Collection
      */
-
-
-
-
-
     public function __construct(string $distributor, string $tahun, string $row_rencana, string $row_realisasi)
     {
         $this->row_rencana = $row_rencana;
@@ -112,9 +107,18 @@ class LaporanPerencanaan implements WithMultipleSheets
 
     public function sheets(): array
     {
+        $dsb =  $this->distributor;
+        $detail = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($dsb) {
+            $q->where('customer_id', $dsb);
+        })->get();
         $sheets = [];
+
         $sheets[] = new SheetRencanaPenjualan($this->distributor, $this->tahun, $this->row_rencana);
-        $sheets[] = new SheetRealisasiPenjualan($this->distributor, $this->tahun, $this->row_realisasi);
+
+        if ($detail->Count() != 0) {
+            $sheets[] = new SheetRealisasiPenjualan($this->distributor, $this->tahun, $this->row_realisasi);
+        }
+
         return $sheets;
     }
 }

@@ -16,19 +16,19 @@ class RencanaPenjualanController extends Controller
     //Data
     public function get_data_rencana($customer, $tahun)
     {
-        $data = DetailPesanan::WhereHas('DetailRencanaPenjualan.RencanaPenjualan', function ($q) use ($customer) {
-            $q->where('customer_id', $customer);
-        })->groupby('detail_rencana_penjualan_id')->get();
+        // $data = DetailPesanan::WhereHas('DetailRencanaPenjualan.RencanaPenjualan', function ($q) use ($customer) {
+        //     $q->where('customer_id', $customer);
+        // })->groupby('detail_rencana_penjualan_id')->get();
 
-        // $data = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function ($q) use ($customer, $tahun) {
-        //     $q->where('customer_id', $customer)
-        //         ->where('tahun', $tahun);
-        // })->get();
+        $data = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function ($q) use ($customer, $tahun) {
+            $q->where('customer_id', $customer)
+                ->where('tahun', $tahun);
+        })->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('instansi', function ($data) {
-                return $data->DetailRencanaPenjualan->RencanaPenjualan->instansi;
+                return $data->RencanaPenjualan->instansi;
             })
             ->addColumn('produk', function ($data) {
                 if ($data->PenjualanProduk->nama_alias != '') {
@@ -38,22 +38,32 @@ class RencanaPenjualanController extends Controller
                 }
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->DetailRencanaPenjualan->jumlah;
+                return $data->jumlah;
             })
             ->addColumn('harga', function ($data) {
-                return $data->DetailRencanaPenjualan->harga;
-            })
-            ->addColumn('sub', function ($data) {
-                return $data->DetailRencanaPenjualan->harga * $data->DetailRencanaPenjualan->jumlah;
-            })
-            ->addColumn('jumlah_real', function ($data) {
-                return $data->DetailRencanaPenjualan->sum_prd();
-            })
-            ->addColumn('harga_real', function ($data) {
                 return $data->harga;
             })
+            ->addColumn('sub', function ($data) {
+                return $data->harga * $data->jumlah;
+            })
+            ->addColumn('jumlah_real', function ($data) {
+
+                return $data->sum_prd();
+            })
+            ->addColumn('harga_real', function ($data) {
+                if (isset($data->Detailpesanan->first()->harga)) {
+                    return $data->DetailPesanan->first()->harga;
+                } else {
+                    return '0';
+                }
+            })
             ->addColumn('sub_real', function ($data) {
-                return $data->DetailRencanaPenjualan->sum_prd() * $data->harga;
+                // return '';
+                if (isset($data->detailpesanan->first()->harga)) {
+                    return $data->sum_prd() * $data->DetailPesanan->first()->harga;
+                } else {
+                    return '0';
+                }
             })
             ->make(true);
     }
