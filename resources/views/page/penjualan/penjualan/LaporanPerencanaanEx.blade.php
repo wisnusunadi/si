@@ -25,12 +25,12 @@ foreach ($data->unique('customer_id') as $d) {
 <tr>";
 }
 echo "
-        <tr> 
-            <th>Instansi</th> 
-            <th>Produk</th> 
-            <th>Jumlah</th> 
-            <th>Harga</th> 
-            <th>Sub Total</th> 
+        <tr>
+            <th>Instansi</th>
+            <th>Produk</th>
+            <th>Jumlah</th>
+            <th>Harga</th>
+            <th>Sub Total</th>
         </tr>";
 $n = count($row);
 $cekinstansi = "";
@@ -43,7 +43,13 @@ for ($i = 0; $i < $n; $i++) {
         echo '<td' . ($total[$cell['rencana_penjualan_id']] > 1 ? ' rowspan="' . ($total[$cell['rencana_penjualan_id']]) . '">' : '>') . $cell->RencanaPenjualan->instansi . '</td>';
         $cekinstansi = $cell['rencana_penjualan_id'];
     }
-    echo "<td>" . str_replace("&", "dan", $cell->PenjualanProduk->nama_alias) . "</td>
+    echo "<td>" ;
+        if(!empty($cell->PenjualanProduk->nama_alias)){
+            echo str_replace("&", "dan", $cell->PenjualanProduk->nama_alias);
+        }else{
+            echo str_replace("&", "dan", $cell->PenjualanProduk->nama);
+        }
+         echo "</td>
         <td>" . $cell->jumlah . "</td>
         <td>" . $cell->harga . "</td>
         <td>" . $cell->harga * $cell->jumlah . "</td>
@@ -51,8 +57,8 @@ for ($i = 0; $i < $n; $i++) {
     $totalharga += $cell->harga * $cell->jumlah;
 }
 echo "
-<tr> 
+<tr>
 <td colspan=4 >TOTAL</td>
 <td>" . $totalharga . "</td>
-</tr> 
+</tr>
 </table>";

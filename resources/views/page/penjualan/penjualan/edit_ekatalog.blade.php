@@ -1120,6 +1120,12 @@
             }
         });
 
+        $('#pills-produk-tab').on('click', function(){
+            var cust = $('#customer_id').val();
+            var instansi = $('#instansi').val();
+            perencanaan(cust, instansi);
+        })
+
         $('input[name="instansi"]').on('keyup change', function() {
             if ($(this).val() != "") {
                 var cust = $('.customer_id').val();

@@ -111,11 +111,25 @@ class RencanaPenjualanController extends Controller
         $waktu = Carbon::now();
         return Excel::download(new LaporanPerencanaan($distributor, $tahun, $row_rencana, $row_realisasi), 'Laporan Perencanaan ' . $waktu->toDateTimeString() . '.xlsx');
     }
+
     public function show_laporan_detail($distributor, $tahun)
     {
-        $row = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($distributor) {
-            $q->where('customer_id', $distributor);
-        })->count();
+        // $row = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($distributor) {
+        //     $q->where('customer_id', $distributor);
+        // })->count();
+
+        $row = 0;
+        $rows = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function($q) use($distributor, $tahun){
+            $q->where(['customer_id' => $distributor, 'tahun' => $tahun]);
+        })->get();
+
+        foreach($rows as $i){
+            if(count($i->DetailPesanan) > 1){
+                $row += count($i->DetailPesanan);
+            }else{
+                $row += 1;
+            }
+        }
 
         $row_rencana = RencanaPenjualan::where(['customer_id' => $distributor, 'tahun' => $tahun])->count();
 
@@ -131,6 +145,7 @@ class RencanaPenjualanController extends Controller
 
         return view('page.penjualan.rencana.result', ['data' => $data]);
     }
+
     //Select
     public function select_tahun_rencana(Request $request)
     {

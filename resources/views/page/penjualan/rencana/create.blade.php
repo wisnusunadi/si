@@ -16,13 +16,23 @@
         width: 100% !important;
     }
 
-    @media (max-width: 992px) {
+    @media (min-width: 993px) {
         body {
             font-size: 14px;
         }
 
         .btn {
             font-size: 14px;
+        }
+    }
+
+    @media (max-width: 992px) {
+        body {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
         }
     }
 </style>
@@ -52,26 +62,30 @@
     <form action="{{route('penjualan.rencana.store')}}" method="post">
         {{csrf_field()}}
         <div class="row">
+            <div class="col-12">
+                @if(session('error') || count($errors) > 0 )
+                    <div class="form-group row">
+                        <div class="alert alert-danger alert-dismissible show fade col-lg-12" role="alert">
+                            <strong>Gagal menambahkan!</strong> Periksa
+                            kembali data yang diinput
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        @elseif(session('success'))
+                        <div class="alert alert-success alert-dismissible show fade col-lg-12" role="alert">
+                            <strong>Berhasil menambahkan data</strong>,
+                            Terima kasih
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                @endif
+            </div>
+        </div>
+        <div class="row">
             <div class="col-lg-4 col-md-5 col-sm-12">
-                <div class="form-group row">
-                    @if(session('error') || count($errors) > 0 )
-                    <div class="alert alert-danger alert-dismissible show fade col-lg-12" role="alert">
-                        <strong>Gagal menambahkan!</strong> Periksa
-                        kembali data yang diinput
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    @elseif(session('success'))
-                    <div class="alert alert-success alert-dismissible show fade col-lg-12" role="alert">
-                        <strong>Berhasil menambahkan data</strong>,
-                        Terima kasih
-                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    @endif
-                </div>
                 <div class="row">
                     <div class="col-12">
                         <div class="card">
