@@ -91,9 +91,6 @@ class LaporanPerencanaan implements WithMultipleSheets
 
     // public function view(): View
     // {
-
-
-
     //     $dsb = $this->distributor;
     //     $thn = $this->tahun;
 
@@ -118,7 +115,6 @@ class LaporanPerencanaan implements WithMultipleSheets
         if ($detail->Count() != 0) {
             $sheets[] = new SheetRealisasiPenjualan($this->distributor, $this->tahun, $this->row_realisasi);
         }
-
         return $sheets;
     }
 }

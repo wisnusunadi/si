@@ -117,8 +117,10 @@ class RencanaPenjualanController extends Controller
             $q->where('customer_id', $distributor);
         })->count();
 
+        $row_rencana = RencanaPenjualan::where(['customer_id' => $distributor, 'tahun' => $tahun])->count();
+
         $waktu = Carbon::now();
-        return Excel::download(new LaporanPerencanaanDetail($distributor, $tahun, $row), 'Laporan Perencanaan Detail ' . $waktu->toDateTimeString() . '.xlsx');
+        return Excel::download(new LaporanPerencanaanDetail($distributor, $tahun, $row, $row_rencana), 'Laporan Perencanaan Detail ' . $waktu->toDateTimeString() . '.xlsx');
     }
 
     public function show()

@@ -125,7 +125,7 @@ if ($detail->count() != 0) {
 
     echo "
     <tr> 
-    <td colspan=4 >TOTAL</td>
+    <td colspan=4 >" . $c . "</td>
     <td >" . $totalharga . "</td>
     </tr> </table>";
 }

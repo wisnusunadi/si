@@ -33,14 +33,10 @@ class LaporanPerencanaanDetail implements FromView, WithColumnFormatting, Should
     /**
      * @return \Illuminate\Support\Collection
      */
-
-
-
-
-
-    public function __construct(string $distributor, string $tahun, string $row)
+    public function __construct(string $distributor, string $tahun, string $row, string $row_rencana)
     {
         $this->row = $row;
+        $this->row_rencana = $row_rencana;
         $this->tahun = $tahun;
         $this->distributor = $distributor;
     }
@@ -59,22 +55,27 @@ class LaporanPerencanaanDetail implements FromView, WithColumnFormatting, Should
 
     public function styles(Worksheet $sheet)
     {
-        $r = $this->row + 2;
+        if ($this->row == 0) {
+            $r = $this->row_rencana + 2;
+        } else {
+            $r = 5;
+        }
+
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         // $sheet->getStyle('A3:J3')->getFont()->setBold(true);
 
         $sheet->getStyle('A' . $r)->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('f1fd1b');
-        $sheet->getStyle('E' . $r)->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('f1fd1b');
-        $sheet->getStyle('F' . $r)->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('f1fd1b');
-        $sheet->getStyle('J' . $r)->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('f1fd1b');
+        // $sheet->getStyle('E' . $r)->getFill()
+        //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+        //     ->getStartColor()->setRGB('f1fd1b');
+        // $sheet->getStyle('F' . $r)->getFill()
+        //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+        //     ->getStartColor()->setRGB('f1fd1b');
+        // $sheet->getStyle('J' . $r)->getFill()
+        //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+        //     ->getStartColor()->setRGB('f1fd1b');
 
 
         $sheet->getStyle('C2')->getFill()
@@ -123,13 +124,14 @@ class LaporanPerencanaanDetail implements FromView, WithColumnFormatting, Should
     {
         $dsb = $this->distributor;
         $thn = $this->tahun;
+        $c =  $this->row_rencana;
 
         $data = RencanaPenjualan::where(['customer_id' => $dsb, 'tahun' => $thn])->get();
         $detail = DetailPesanan::WhereHas('DetailRencanaPenjualan.RencanaPenjualan', function ($q) use ($dsb) {
             $q->where('customer_id', $dsb);
         })->get();
 
-        return view('page.penjualan.penjualan.LaporanPerencanaandetailEx', ['data' => $data, 'detail' => $detail]);
+        return view('page.penjualan.penjualan.LaporanPerencanaandetailEx', ['data' => $data, 'detail' => $detail, 'c' => $c]);
     }
 
     public function title(): string

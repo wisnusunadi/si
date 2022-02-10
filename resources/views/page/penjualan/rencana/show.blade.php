@@ -519,7 +519,6 @@
 
 
         $("#tahun").autocomplete({
-            //source: pemrograman
             source: function(request, response) {
 
                 $.ajax({
@@ -531,7 +530,6 @@
                     success: function(data) {
 
                         var transformed = $.map(data, function(el) {
-
                             return {
                                 label: el.tahun,
                                 id: el.id
