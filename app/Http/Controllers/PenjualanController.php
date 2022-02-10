@@ -1003,6 +1003,12 @@ class PenjualanController extends Controller
                     return '';
                 }
             })
+            ->addColumn('tgl_po', function($data){
+                return Carbon::createFromFormat('Y-m-d', $data->Pesanan->tgl_po)->format('d-m-Y');
+            })
+            ->addColumn('nama_customer', function($data){
+                return $data->Customer->nama;
+            })
             ->addColumn('status', function ($data) {
                 $datas = "";
                 if (!empty($data->Pesanan->log_id)) {

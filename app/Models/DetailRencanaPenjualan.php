@@ -36,4 +36,15 @@ class DetailRencanaPenjualan extends Model
         }
         return $jumlah;
     }
+
+    public function harga_prd()
+    {
+        $id = $this->id;
+        $harga = 0;
+        $data = DetailPesanan::where('detail_rencana_penjualan_id', $id)->get();
+        foreach ($data as $d) {
+            $harga = $d->harga;
+        }
+        return $harga;
+    }
 }

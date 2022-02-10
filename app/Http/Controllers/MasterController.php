@@ -315,25 +315,31 @@ class MasterController extends Controller
                 return $data->nama;
             })
             ->addColumn('nama_alias', function ($data) {
-                $id = $data->id;
-                $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
-                    $q->where('id', $id);
-                })->first();
-                return $s->nama_coo;
+                // $id = $data->id;
+                // $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
+                //     $q->where('id', $id);
+                // })->first();
+                return $data->nama_alias;
             })
             ->addColumn('no_akd', function ($data) {
                 $id = $data->id;
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
                     $q->where('id', $id);
                 })->first();
-                return $s->no_akd;
+                if(!empty($s->no_akd))
+                {
+                    return $s->no_akd;
+                }
             })
             ->addColumn('merk', function ($data) {
                 $id = $data->id;
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
                     $q->where('id', $id);
                 })->first();
-                return $s->merk;
+                if(!empty($s->merk))
+                {
+                    return $s->merk;
+                }
             })
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>

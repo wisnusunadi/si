@@ -40,9 +40,29 @@
         white-space: nowrap;
     }
 
-    @media screen and (min-width: 1440px) {
-        section {
+
+    @media screen and (min-width: 992px) {
+        .labelket{
+            text-align: right;
+        }
+
+        body {
             font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+        .overflowy {
+            max-height: 550px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
         }
 
         .dropdown-item {
@@ -50,9 +70,32 @@
         }
     }
 
-    @media screen and (max-width: 1439px) {
-        section {
+    @media screen and (max-width: 991px) {
+        .labelket{
+            text-align: left;
+        }
+
+        body {
             font-size: 12px;
+        }
+
+        h4 {
+            font-size: 18x;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .overflowy {
+            max-height: 450px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
         }
 
         .dropdown-item {
@@ -77,16 +120,16 @@
                             <div class="col-12">
                                 <div class="form-horizontal">
                                     <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Lacak</label>
-                                        <div class="col-4">
+                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Lacak</label>
+                                        <div class="col-lg-4 col-md-12">
                                             <input type="text" class="form-control col-form-label @error('data') is-invalid @enderror" id="data" name="data" placeholder="Masukkan data" />
                                             <div class="invalid-feedback" id="msgdata">
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label for="" class="col-form-label col-5" style="text-align: right">Pilih</label>
-                                        <div class="col-4">
+                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Pilih</label>
+                                        <div class="col-lg-4 col-md-12">
                                             <select name="pilih_data" id="pilih_data" class="select2 select-info form-control custom-select col-form-label pilih_data" placeholder="Pilih Data" disabled>
                                                 <option value=""></option>
                                                 <option value="produk">Produk</option>
@@ -100,8 +143,8 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <div class="col-5"></div>
-                                        <div class="col-4">
+                                        <div class="col-lg-5"></div>
+                                        <div class="col-lg-4 col-md-12">
                                             <span class="float-right filter"><button type="button" class="btn btn-success" id="btncari" disabled><i class="fas fa-search"></i> Cari</button></span>
                                             <span class="float-right filter"><button type="button" class="btn btn-outline-danger" id="btnbatal"><i class="fas fa-sync"></i> Reset</button></span>
                                         </div>

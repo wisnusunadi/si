@@ -135,7 +135,7 @@
 
     @media screen and (min-width: 1440px) {
 
-        section {
+        body {
             font-size: 14px;
         }
 
@@ -160,8 +160,7 @@
     }
 
     @media screen and (max-width: 1439px) {
-        label,
-        .row {
+        body {
             font-size: 12px;
         }
 
@@ -1072,6 +1071,7 @@
                 },
             ]
         });
+
         var spatable = $('#spatable').DataTable({
             destroy: true,
             processing: true,
@@ -1112,7 +1112,8 @@
                     data: 'button'
                 }
             ]
-        })
+        });
+
         var spbtable = $('#spbtable').DataTable({
             destroy: true,
             processing: true,
@@ -1153,7 +1154,7 @@
                     data: 'button'
                 }
             ]
-        })
+        });
     })
 </script>
 

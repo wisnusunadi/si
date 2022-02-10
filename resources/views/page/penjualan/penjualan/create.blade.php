@@ -87,7 +87,7 @@
 
     @media screen and (min-width: 1220px) {
 
-        section {
+        body {
             font-size: 14px;
         }
 
@@ -112,7 +112,7 @@
         h4 {
             font-size: 20px;
         } */
-        section {
+        body {
             font-size: 12px;
         }
 
@@ -215,7 +215,7 @@
                             </button>
                         </div>
                         @endif
-                        <form method="post" autocomplete="on" action="{{route('penjualan.penjualan.store')}}">
+                        <form method="post" autocomplete="off" action="{{route('penjualan.penjualan.store')}}">
                             {{csrf_field()}}
                             <div class="row d-flex justify-content-center">
                                 <div class="col-lg-11 col-md-12">
@@ -422,7 +422,7 @@
                                                                 <div class="form-group row">
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
                                                                     <div class="col-lg-7 col-md-12 autocomplete">
-                                                                        <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" autocomplete="off"/>
+                                                                        <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi"/>
                                                                         <div class="invalid-feedback" id="msginstansi">
                                                                             @if($errors->has('instansi'))
                                                                             {{ $errors->first('instansi')}}
@@ -1162,6 +1162,7 @@
             var cust = $('#customer_id').val();
             var instansi = $('#instansi').val();
             perencanaan(cust, instansi);
+            console.log($('.penjualan_produk_id > option:selected').length);
         })
 
         $('#alamatinstansi').on('keyup change', function() {
@@ -1898,7 +1899,7 @@
                     <td>
                         <div class="form-group d-flex justify-content-center">
 
-                            <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Ongkir" style="width:100%;"/>
+                            <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Ongkir" value="0" style="width:100%;"/>
                         </div>
                     </td>
                     <td>
@@ -1991,11 +1992,12 @@
                 $(el).find('.penjualan_produk_id').attr('id', j);
                 var variasi = $(el).find('.variasi');
                 for (var k = 0; k < variasi.length; k++) {
+                    $(el).find('select[name="variasi[' + j + '][' + k + ']"').select2();
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('name', 'variasi[' + j + '][' + k + ']');
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('id', 'variasi' + j + '' + k);
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('name', 'ketstok[' + j + '][' + k + ']');
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k)
-                    // $(`select[name="variasi[` + j + `][` + k + `]"]`).select2();
+
                 }
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
                 $(el).find('.produk_ongkir').attr('id', 'produk_ongkir' + j);

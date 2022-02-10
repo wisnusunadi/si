@@ -6,14 +6,14 @@
 <style>
     table tr td:nth-child(2),
     table tr td:nth-child(5),
-    table tr td:nth-child(6) {
+    {
         text-align: center;
     }
 
     table tr td:nth-child(3),
     table tr td:nth-child(4),
     table tr td:nth-child(7),
-    table tr td:nth-child(8) {
+    table tr td:nth-child(6), {
         text-align: right;
     }
 
@@ -26,7 +26,7 @@
     }
 
     .borderright {
-        border-right: 1px solid #F0ECE3;
+        border-right: 1px solid #E1EBF2;
     }
 
     .form-inline {
@@ -296,28 +296,28 @@
                 searchable: false
             }, {
                 data: 'produk',
-
+                className: 'borderright'
             }, {
                 data: 'jumlah',
-                className: 'nowraptxt'
+                className: 'nowraptxt align-center'
             }, {
                 data: 'harga',
-                className: 'nowraptxt',
+                className: 'nowraptxt align-right',
                 render: $.fn.dataTable.render.number(',', '.', 2),
             }, {
                 data: 'sub',
-                className: 'nowraptxt',
+                className: 'nowraptxt align-right borderright',
                 render: $.fn.dataTable.render.number(',', '.', 2),
             }, {
                 data: 'jumlah_real',
-                className: 'nowraptxt'
+                className: 'nowraptxt align-center'
             }, {
                 data: 'harga_real',
-                className: 'nowraptxt',
+                className: 'nowraptxt align-right',
                 render: $.fn.dataTable.render.number(',', '.', 2),
             }, {
                 data: 'sub_real',
-                className: 'nowraptxt',
+                className: 'nowraptxt align-right',
                 render: $.fn.dataTable.render.number(',', '.', 2),
             }],
             "fixedColumns": {

@@ -432,9 +432,9 @@ return [
         ],
         [
             'text' => 'Rencana Order',
-            'url'  => '',
-            'icon' => 'fas fa-users',
-            'auth' => [1]
+            'url'  => '/penjualan/rencana/show',
+            'icon' => 'fas fa-archive',
+            'auth' => [26]
         ],
         [
             'text' => 'Laporan',

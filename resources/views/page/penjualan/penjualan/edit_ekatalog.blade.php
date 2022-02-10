@@ -63,7 +63,7 @@
 
     @media screen and (min-width: 1220px) {
 
-        section {
+        body {
             font-size: 14px;
         }
 
@@ -88,7 +88,7 @@
         h4 {
             font-size: 20px;
         } */
-        section {
+        body {
             font-size: 12px;
         }
 
@@ -110,7 +110,7 @@
         h4 {
             font-size: 20px;
         } */
-        section {
+        body {
             font-size: 12px;
         }
 
@@ -1213,6 +1213,7 @@
                 $(el).find('.penjualan_produk_id').attr('id', j);
                 var variasi = $(el).find('.variasi');
                 for (var k = 0; k < variasi.length; k++) {
+                    $(el).find('select[name="variasi[' + j + '][' + k + ']"').select2();
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('name', 'variasi[' + j + '][' + k + ']');
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('id', 'variasi' + j + '' + k);
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('name', 'ketstok[' + j + '][' + k + ']');
