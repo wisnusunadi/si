@@ -28,6 +28,7 @@ class RencanaPenjualanController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('instansi', function ($data) {
+                // return $data->DetailRencanaPenjualan->RencanaPenjualan->instansi;
                 return $data->RencanaPenjualan->instansi;
             })
             ->addColumn('produk', function ($data) {
@@ -38,32 +39,27 @@ class RencanaPenjualanController extends Controller
                 }
             })
             ->addColumn('jumlah', function ($data) {
+                // return $data->DetailRencanaPenjualan->jumlah;
                 return $data->jumlah;
             })
             ->addColumn('harga', function ($data) {
+                // return $data->DetailRencanaPenjualan->harga;
                 return $data->harga;
             })
             ->addColumn('sub', function ($data) {
+                // return $data->DetailRencanaPenjualan->harga * $data->DetailRencanaPenjualan->jumlah;
                 return $data->harga * $data->jumlah;
             })
             ->addColumn('jumlah_real', function ($data) {
-
+                // return $data->DetailRencanaPenjualan->sum_prd();
                 return $data->sum_prd();
             })
             ->addColumn('harga_real', function ($data) {
-                if (isset($data->Detailpesanan->first()->harga)) {
-                    return $data->DetailPesanan->first()->harga;
-                } else {
-                    return '0';
-                }
+                // return $data->harga;
             })
             ->addColumn('sub_real', function ($data) {
-                // return '';
-                if (isset($data->detailpesanan->first()->harga)) {
-                    return $data->sum_prd() * $data->DetailPesanan->first()->harga;
-                } else {
-                    return '0';
-                }
+                // return $data->DetailRencanaPenjualan->sum_prd() * $data->harga;
+                // return $data->sum_prd() * $data->DetailPesanan->first()->harga;
             })
             ->make(true);
     }
@@ -119,14 +115,14 @@ class RencanaPenjualanController extends Controller
         // })->count();
 
         $row = 0;
-        $rows = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function($q) use($distributor, $tahun){
+        $rows = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function ($q) use ($distributor, $tahun) {
             $q->where(['customer_id' => $distributor, 'tahun' => $tahun]);
         })->get();
 
-        foreach($rows as $i){
-            if(count($i->DetailPesanan) > 1){
+        foreach ($rows as $i) {
+            if (count($i->DetailPesanan) > 1) {
                 $row += count($i->DetailPesanan);
-            }else{
+            } else {
                 $row += 1;
             }
         }
