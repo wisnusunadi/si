@@ -1252,13 +1252,13 @@ class PenjualanController extends Controller
                     </button>
                 </a>';
                 } else {
-                    $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                    // $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    // <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                    $return .= "-";
                 }
                 if ($divisi_id == "26") {
                     if (!empty($data->Pesanan->log_id)) {
-                        if ($data->Pesanan->State->nama == "Penjualan" || $data->Pesanan->State->nama == "PO" || empty($data->Pesanan->log_id)) {
-
+                        if ($data->Pesanan->State->nama == "Penjualan"){
                             $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">
                                 <button class="dropdown-item" type="button" >
                                 <i class="fas fa-pencil-alt"></i>
@@ -1266,7 +1266,6 @@ class PenjualanController extends Controller
                                 </button>
                             </a>
                             ';
-
                             if ($data->status == 'sepakat') {
                                 if ($data->Pesanan == '') {
                                     $return .= '<a href="' . route('penjualan.so.create', [$data->id]) . '" data-id="' . $data->id . '">
@@ -1286,14 +1285,13 @@ class PenjualanController extends Controller
                                     }
                                 }
                             }
-
                             $return .= '<a data-toggle="modal" data-target="ekatalog" class="deletemodal" data-id="' . $data->id . '">
-                                <button class="dropdown-item" type="button" >
-                                <i class="far fa-trash-alt"></i>
-                                Hapus
-                                </button>
-                            </a>
-                            ';
+                                    <button class="dropdown-item" type="button" >
+                                    <i class="far fa-trash-alt"></i>
+                                    Hapus
+                                    </button>
+                                </a>
+                                ';
                         } else {
                             $return .= '<a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="' . $data->id . '">
                                 <button class="dropdown-item" type="button" >
@@ -1304,10 +1302,10 @@ class PenjualanController extends Controller
                             ';
                         }
                     } else if (empty($data->Pesanan->log_id)) {
-                        $return .= '<a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="' . $data->id . '">
+                        $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">
                             <button class="dropdown-item" type="button" >
                             <i class="fas fa-pencil-alt"></i>
-                            Edit No Urut & DO
+                            Edit
                             </button>
                         </a>
                         <a data-toggle="modal" data-target="ekatalog" class="deletemodal" data-id="' . $data->id . '">
