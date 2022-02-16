@@ -240,6 +240,12 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     });
 });
 
+Route::middleware('auth')->prefix('/teknik')->group(function () {
+    Route::group(['prefix' => '/bom'], function () {
+        Route::view('/show', 'page.teknik.bom.show');
+    });
+});
+
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard'])->name('direksi.dashboard');
 });

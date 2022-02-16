@@ -109,6 +109,9 @@
 
     }
 
+    .tabnum{
+        font-variant-numeric: tabular-nums;
+    }
 
     .removeshadow {
         box-shadow: none;

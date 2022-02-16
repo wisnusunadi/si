@@ -4,17 +4,20 @@
 
 @section('adminlte_css')
 <style>
-    table tr td:nth-child(2),
-    table tr td:nth-child(5),
-    {
-        text-align: center;
+    .margin-right{
+        margin-right:5px;
+    }
+    .group0{
+        background-color: steelblue;
+        color: #fff;
+    }
+    .group1{
+        background-color: #DDE4EE;
+        color: #5487BA;
     }
 
-    table tr td:nth-child(3),
-    table tr td:nth-child(4),
-    table tr td:nth-child(7),
-    table tr td:nth-child(6), {
-        text-align: right;
+    table tr td:nth-child(3), table tr td:nth-child(4){
+        text-align: center;
     }
 
     .align-center {
@@ -157,57 +160,111 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12">
-                                    <form class="form-inline" id="filter">
-                                        <div class=" form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                            <label for="customer_id">Distributor: </label>
-                                            <select class="form-control custom-select" name="customer_id" id="customer_id"></select>
-                                        </div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-3">
-                                            <label for="tahun">Tahun: </label>
-                                            <input class="form-control" type="number" id="tahun" placeholder="Masukkan Tahun" name="tahun" disabled>
-
-                                        </div>
-                                        <div class="form-group col-xs-12 col-sm-6 col-md-4 col-lg-1">
-                                            <button class="btn btn-warning" type="submit" id="btncari" disabled>Cari</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-12">
                                     <div>
-                                        <span class="float-left ">
-                                            <div class="input-group-prepend">
-                                                <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown">
-                                                    <i class="far fa-file-excel"></i> &nbsp;Export
-                                                </button>
-                                                <div class="dropdown-menu">
-                                                    <a class="dropdown-item" href="{{route('penjualan.rencana.laporan',['customer'=> '0','tahun'=> '0'])}}" id="lap_semua">Laporan Semua</a>
-                                                    <a class="dropdown-item" href="{{route('penjualan.rencana.laporan_detail',['customer'=> '0','tahun'=> '0'])}}" id="lap_detail">Laporan Detail</a>
-                                                </div>
-                                            </div>
-                                        </span>
-                                        <span class="float-right" id="btntambah"><a href="{{route('penjualan.rencana.create')}}" class="btn btn-outline-info"><i class="fas fa-plus"></i>&nbsp;Tambah Rencana</a></span>
+                                        <span class="float-right" id="btntambah"><a href="{{route('penjualan.rencana.create')}}" class="btn btn-outline-info"><i class="fas fa-plus"></i>&nbsp;Tambah BOM</a></span>
+                                        <span class="float-right margin-right" id="btnfilter"><a href="{{route('penjualan.rencana.create')}}" class="btn btn-outline-warning"><i class="fas fa-filter"></i>&nbsp;Filter</a></span>
                                     </div>
                                     <div class="table-responsive">
                                         <table class="table table-hover" id="showtable" style="width:100%;">
                                             <thead style="text-align:center;">
                                                 <tr>
-                                                    <th rowspan="2">Instansi</th>
-                                                    <th rowspan="2" class="borderright">Produk</th>
-                                                    <th colspan="3" class="borderright">Rencana</th>
-                                                    <th colspan="4">Realisasi</th>
-                                                </tr>
-                                                <tr>
-                                                    <th>Qty</th>
-                                                    <th>Harga</th>
-                                                    <th class="borderright">Subtotal</th>
-                                                    <th>Qty</th>
-                                                    <th>Harga</th>
-                                                    <th>Subtotal</th>
+                                                    <th>Kelompok Produk</th>
+                                                    <th>Kategori Produk</th>
+                                                    <th>Kode Produk</th>
+                                                    <th>Nama Produk</th>
+                                                    <th>Jumlah BOM</th>
+                                                    <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
+                                                <tr>
+                                                    <td>Alat Kesehatan</td>
+                                                    <td>Cardiology</td>
+                                                    <td>M1903171001</td>
+                                                    <td>FOX-BABY</td>
+                                                    <td>2</td>
+                                                    <td><a class="fas fa-search"></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alat Kesehatan</td>
+                                                    <td>Cardiology</td>
+                                                    <td>M1903171002</td>
+                                                    <td>FOX-1(N)</td>
+                                                    <td>1</td>
+                                                    <td><a class="fas fa-search"></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alat Kesehatan</td>
+                                                    <td>Cardiology</td>
+                                                    <td>M1903171003</td>
+                                                    <td>FOX-3</td>
+                                                    <td>1</td>
+                                                    <td><a class="fas fa-search"></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alat Kesehatan</td>
+                                                    <td>Anesthesia</td>
+                                                    <td>M1235171001</td>
+                                                    <td>PROMIST 1</td>
+                                                    <td>1</td>
+                                                    <td><a class="fas fa-search"></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alat Kesehatan</td>
+                                                    <td>Anesthesia</td>
+                                                    <td>M1235171002</td>
+                                                    <td>Ultra Mist</td>
+                                                    <td>1</td>
+                                                    <td><a class="fas fa-search"></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alat Kesehatan</td>
+                                                    <td>Anesthesia</td>
+                                                    <td>M1235171003</td>
+                                                    <td>PROMIST 3</td>
+                                                    <td>1</td>
+                                                    <td><a class="fas fa-search"></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alat Kesehatan</td>
+                                                    <td>Anesthesia</td>
+                                                    <td>M1235171004</td>
+                                                    <td>SP10</td>
+                                                    <td>1</td>
+                                                    <td><a class="fas fa-search"></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alat Kesehatan</td>
+                                                    <td>Anesthesia</td>
+                                                    <td>M1235171005</td>
+                                                    <td>DS-PRO100</td>
+                                                    <td>1</td>
+                                                    <td><a class="fas fa-search"></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alat Kesehatan</td>
+                                                    <td>Patient Scale</td>
+                                                    <td>M1555171001</td>
+                                                    <td>Baby Digit One</td>
+                                                    <td>1</td>
+                                                    <td><a class="fas fa-search"></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alat Kesehatan</td>
+                                                    <td>Patient Scale</td>
+                                                    <td>M1555171002</td>
+                                                    <td>Digit Pro</td>
+                                                    <td>1</td>
+                                                    <td><a class="fas fa-search"></a></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Alat Kesehatan</td>
+                                                    <td>Patient Scale</td>
+                                                    <td>M1555171003</td>
+                                                    <td>Digit One Baby</td>
+                                                    <td>1</td>
+                                                    <td><a class="fas fa-search"></a></td>
+                                                </tr>
                                             </tbody>
                                         </table>
                                     </div>
@@ -270,89 +327,38 @@
 
 <script>
     $(function() {
-        var groupColumn = 0;
-        $('#showtable').DataTable({
-            destroy: true,
-            processing: true,
-            dom: 'Bfrtip',
-            serverSide: false,
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+
+        $('#showtable').DataTable( {
+            order: [[1, 'asc'], [0, 'asc']],
+            rowGroup: {
+                dataSrc: [ 1, 0 ]
             },
-            ajax: {
-                'url': '/api/penjualan/rencana/show/0/0',
-                'dataType': 'json',
-                'type': 'POST',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-            },
-            // buttons: [{
-            //     extend: 'excel',
-            //     title: 'Laporan Penjualan',
-            //     text: '<i class="far fa-file-excel"></i> Export',
-            //     className: "btn btn-info"
-            // }, ],
-            columns: [{
-                data: 'instansi',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'produk',
-                className: 'borderright'
-            }, {
-                data: 'jumlah',
-                className: 'nowraptxt align-center tabnum'
-            }, {
-                data: 'harga',
-                className: 'nowraptxt align-right tabnum',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'sub',
-                className: 'nowraptxt align-right borderright tabnum',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'jumlah_real',
-                className: 'nowraptxt align-center tabnum'
-            }, {
-                data: 'harga_real',
-                className: 'nowraptxt align-right tabnum',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'sub_real',
-                className: 'nowraptxt align-right tabnum',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }],
-            "fixedColumns": {
-                left: 0
-            },
-            "columnDefs": [{
-                "visible": false,
-                "targets": groupColumn
-            }],
-            "order": [
-                [groupColumn, 'asc']
-            ],
-            "displayLength": 10,
+            columnDefs: [ {
+                targets: [ 0, 1 ],
+                visible: false
+            } ],
             "drawCallback": function(settings) {
                 var api = this.api();
                 var rows = api.rows({
                     page: 'current'
                 }).nodes();
                 var last = null;
+                var columns = [0,1]
+                for (c = 0; c < columns.length; c++){
+                        api.column(columns[c], {
+                        page: 'current'
+                    }).data().each(function(group, i) {
+                            if (last !== group) {
+                                $(rows).eq(i).before(
+                                    '<tr class="group'+columns[c]+'" style=""><td colspan="8"><b>' + group +'</b></td></tr>'
+                                );
+                                last = group;
+                            }
+                    });
+                }
 
-                api.column(groupColumn, {
-                    page: 'current'
-                }).data().each(function(group, i) {
-                    if (last !== group) {
-                        $(rows).eq(i).before(
-                            '<tr class="group" style="background-color:steelblue; color:white;"><td colspan="8"><b>' + group + '</b></td></tr>'
-                        );
-                        last = group;
-                    }
-                });
             }
-        });
+        } );
         //var table = $('#showtable').DataTable({
         //     "ajax": {
         //         'url': '/api/penjualan/rencana/show/0/0',
