@@ -253,34 +253,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- <tr>
-                                    <td>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="1" id="1" name="no_seri_id[]" />
-                                            <label class="form-check-label" for="1">
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>-</td>
-                                    <td>FX012183103841</td>
-                                    <td>Kusmardiana Rahayu <div><small>Q.A. Manager</small></div>
-                                    </td>
-                                    <td>-</td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="2" id="2" name="no_seri_id[]" />
-                                            <label class="form-check-label" for="2">
-                                            </label>
-                                        </div>
-                                    </td>
-                                    <td>-</td>
-                                    <td>FX012183103826</td>
-                                    <td>Kusmardiana Rahayu <div><small>Q.A. Manager</small></div>
-                                    </td>
-                                    <td>-</td>
-                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -386,12 +358,11 @@
         $('#noseritable').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
                 'url': '/api/dc/so/detail/seri/' + 0,
-
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
@@ -426,7 +397,7 @@
             $('#listnoseri').DataTable({
                 destroy: true,
                 processing: true,
-                serverSide: true,
+                serverSide: false,
                 ajax: {
                     'type': 'POST',
                     'datatype': 'JSON',
@@ -451,13 +422,16 @@
 
         var checkedAry = [];
         $('#noseritable').on('click', 'input[name="check_all"]', function() {
+            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
             if ($('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
-                $('.nosericheck').prop('checked', true);
-                checkedAry = []
-                checkedAry.push('0');
+                $('.nosericheck', rows).prop('checked', true);
+                checkedAry = [];
+                $.each($(".nosericheck:checked", rows), function() {
+                    checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                });
             } else if ($('input[name="check_all"]:checked').length <= 0) {
-                $('.nosericheck').prop('checked', false);
+                $('.nosericheck', rows).prop('checked', false);
                 $('#cekbrg').prop('disabled', true);
             }
         });

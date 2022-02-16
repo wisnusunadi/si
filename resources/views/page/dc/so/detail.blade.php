@@ -317,13 +317,13 @@
             scrollX: true
         });
 
-
         $('#noseritable').on('change', 'input[name="check_all"]', function() {
+            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
             if ($('input[name="check_all"]:checked').length > 0) {
-                $('input[name="no_seri_id[]"]').prop('checked', true);
+                $('input[name="no_seri_id[]"]', rows).prop('checked', true);
                 $('#btnedit').removeClass('disabled');
             } else if ($('input[name="check_all"]:checked').length <= 0) {
-                $('input[name="no_seri_id[]"]').prop('checked', false);
+                $('input[name="no_seri_id[]"]', rows).prop('checked', false);
                 $('#btnedit').addClass('disabled', true);
             }
         });

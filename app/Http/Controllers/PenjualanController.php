@@ -1362,25 +1362,29 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if (!empty($data->Pesanan->log_id)) {
-                    if ($data->Pesanan->State->nama == "Penjualan") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->Pesanan->State->nama == "PO") {
-                        $datas .= '<span class="purple-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Gudang") {
-                        $datas .= '<span class="orange-text badge">';
-                    } else if ($data->Pesanan->State->nama == "QC") {
-                        $datas .= '<span class="yellow-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
-                        $datas .= '<span class="blue-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Kirim") {
-                        $datas .= '<span class="green-text badge">';
+                if($data->log != "batal"){
+                    if (!empty($data->Pesanan->log_id)) {
+                        if ($data->Pesanan->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->Pesanan->State->nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->Pesanan->State->nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        }
+                        $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                    } else {
+                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                     }
-                    $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
                 } else {
-                    $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                    $datas .= '<span class="red-text badge">Batal</span>';
                 }
                 return $datas;
             })
@@ -1410,44 +1414,55 @@ class PenjualanController extends Controller
                     </button>
                 </a>';
                 if ($divisi_id == "26") {
-                    if (!empty($data->Pesanan->log_id)) {
-                        if ($data->Pesanan->State->nama == "Penjualan" || $data->Pesanan->State->nama == "PO") {
-                            $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
-                        <button class="dropdown-item" type="button" >
-                          <i class="fas fa-pencil-alt"></i>
-                          Edit
-                        </button>
-                    </a>';
-                            $return .= '<a data-toggle="modal" data-target="spa" class="deletemodal" data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="far fa-trash-alt"></i>
-                            Hapus
-                            </button>
-                        </a>
-                        ';
+                    if($data->log != "batal"){
+                        if (!empty($data->Pesanan->log_id)) {
+                            if ($data->Pesanan->State->nama == "PO") {
+                                $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
+                                    <button class="dropdown-item" type="button" >
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Edit
+                                    </button>
+                                </a>';
+                                $return .= '<a data-toggle="modal" data-target="spa" class="deletemodal" data-id="' . $data->id . '">
+                                    <button class="dropdown-item" type="button" >
+                                    <i class="far fa-trash-alt"></i>
+                                    Hapus
+                                    </button>
+                                </a>
+                                ';
+                            } else {
+                                $return .= '<a data-toggle="modal" data-jenis="spa" class="editmodal" data-id="' . $data->id . '">
+                                    <button class="dropdown-item" type="button" >
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Edit DO
+                                    </button>
+                                </a>
+                                ';
+                                if($data->Pesanan->State->nama != "Terkirim Sebagian" && $data->Pesanan->State->nama != "Kirim"){
+                                    $return .= '<hr class="separator">
+                                    <a data-toggle="modal" data-jenis="spa" class="batalmodal" data-id="' . $data->id . '">
+                                        <button class="dropdown-item" type="button" >
+                                        <i class="fas fa-times"></i>
+                                        Batal
+                                        </button>
+                                    </a>';
+                                }
+                            }
                         } else {
-                            $return .= '<a data-toggle="modal" data-jenis="spa" class="editmodal" data-id="' . $data->id . '">
+                            $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
                                 <button class="dropdown-item" type="button" >
                                 <i class="fas fa-pencil-alt"></i>
-                                Edit DO
+                                Edit
+                                </button>
+                            </a>';
+                            $return .= '<a data-toggle="modal" data-target="spa" class="deletemodal" data-id="' . $data->id . '">
+                                <button class="dropdown-item" type="button" >
+                                <i class="far fa-trash-alt"></i>
+                                Hapus
                                 </button>
                             </a>
                             ';
                         }
-                    } else {
-                        $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
-                        <button class="dropdown-item" type="button" >
-                          <i class="fas fa-pencil-alt"></i>
-                          Edit
-                        </button>
-                    </a>';
-                        $return .= '<a data-toggle="modal" data-target="spa" class="deletemodal" data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="far fa-trash-alt"></i>
-                            Hapus
-                            </button>
-                        </a>
-                        ';
                     }
                 }
                 $return .= '</div>';
@@ -1483,26 +1498,30 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if (!empty($data->Pesanan->log_id)) {
-                    if ($data->Pesanan->State->nama == "Penjualan") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->Pesanan->State->nama == "PO") {
-                        $datas .= '<span class="purple-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Gudang") {
-                        $datas .= '<span class="orange-text badge">';
-                    } else if ($data->Pesanan->State->nama == "QC") {
-                        $datas .= '<span class="yellow-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
-                        $datas .= '<span class="blue-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Kirim") {
-                        $datas .= '<span class="green-text badge">';
-                    }
+                if($data->log != "batal"){
+                    if (!empty($data->Pesanan->log_id)) {
+                        if ($data->Pesanan->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->Pesanan->State->nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->Pesanan->State->nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        }
 
-                    $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                        $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                    } else {
+                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                    }
                 } else {
-                    $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                    $datas .= '<span class="red-text badge">Batal</span>';
                 }
                 return $datas;
             })
@@ -1539,9 +1558,46 @@ class PenjualanController extends Controller
                     </button>
                 </a>';
                 if ($divisi_id == "26" || $divisi_id == "8") {
-                    if (!empty($data->Pesanan->log_id)) {
-                        if ($data->Pesanan->State->nama == "Penjualan" || $data->Pesanan->State->nama == "PO") {
-                            $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">
+                    if($data->log != "batal"){
+                        if (!empty($data->Pesanan->log_id)) {
+                            if ($data->Pesanan->State->nama == "PO") {
+                                $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">
+                                    <button class="dropdown-item" type="button" >
+                                    <i class="fas fa-pencil-alt"></i>
+                                    Edit
+                                    </button>
+                                </a>';
+                                if ($divisi_id == "26") {
+                                    $return .= '<a data-toggle="modal" data-target="spb" class="deletemodal" data-id="' . $data->id . '">
+                                        <button class="dropdown-item" type="button" >
+                                        <i class="far fa-trash-alt"></i>
+                                        Hapus
+                                        </button>
+                                    </a>
+                                    ';
+                                }
+                            } else {
+                                if ($divisi_id == "26") {
+                                    $return .= '<a data-toggle="modal" data-jenis="spb" class="editmodal" data-id="' . $data->id . '">
+                                        <button class="dropdown-item" type="button" >
+                                        <i class="fas fa-pencil-alt"></i>
+                                        Edit DO
+                                        </button>
+                                    </a>
+                                    ';
+                                    if($data->Pesanan->State->nama != "Terkirim Sebagian" && $data->Pesanan->State->nama != "Kirim"){
+                                        $return .= '<hr class="separator">
+                                        <a data-toggle="modal" data-jenis="spb" class="batalmodal" data-id="' . $data->id . '">
+                                            <button class="dropdown-item" type="button" >
+                                            <i class="fas fa-times"></i>
+                                            Batal
+                                            </button>
+                                        </a>';
+                                    }
+                                }
+                            }
+                        } else {
+                                $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">
                                 <button class="dropdown-item" type="button" >
                                 <i class="fas fa-pencil-alt"></i>
                                 Edit
@@ -1549,40 +1605,13 @@ class PenjualanController extends Controller
                             </a>';
                             if ($divisi_id == "26") {
                                 $return .= '<a data-toggle="modal" data-target="spb" class="deletemodal" data-id="' . $data->id . '">
-                                    <button class="dropdown-item" type="button" >
-                                    <i class="far fa-trash-alt"></i>
-                                    Hapus
-                                    </button>
-                                </a>
-                                ';
+                                <button class="dropdown-item" type="button" >
+                                <i class="far fa-trash-alt"></i>
+                                Hapus
+                                </button>
+                            </a>
+                            ';
                             }
-                        } else {
-                            if ($divisi_id == "26") {
-                                $return .= '<a data-toggle="modal" data-jenis="spb" class="editmodal" data-id="' . $data->id . '">
-                                    <button class="dropdown-item" type="button" >
-                                    <i class="fas fa-pencil-alt"></i>
-                                    Edit DO
-                                    </button>
-                                </a>
-                                ';
-                            }
-                        }
-                    } else {
-
-                        $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">
-                        <button class="dropdown-item" type="button" >
-                          <i class="fas fa-pencil-alt"></i>
-                          Edit
-                        </button>
-                    </a>';
-                        if ($divisi_id == "26") {
-                            $return .= '<a data-toggle="modal" data-target="spb" class="deletemodal" data-id="' . $data->id . '">
-                            <button class="dropdown-item" type="button" >
-                            <i class="far fa-trash-alt"></i>
-                            Hapus
-                            </button>
-                        </a>
-                        ';
                         }
                     }
                 }
@@ -2633,6 +2662,27 @@ class PenjualanController extends Controller
     {
         $detail_spb = DetailSpb::findOrFail($id);
         $detail_spb->delete();
+    }
+    public function cancel_spa_spb($id, $jenis){
+        if($jenis == "spa"){
+            $spa = Spa::find($id);
+            $spa->log = "batal";
+            $u = $spa->save();
+            if ($u) {
+                return response()->json(['data' => 'success']);
+            } else if (!$u) {
+                return response()->json(['data' => 'error']);
+            }
+        }else if($jenis == "spb"){
+            $spb = Spb::find($id);
+            $spb->log = "batal";
+            $u = $spb->save();
+            if ($u) {
+                return response()->json(['data' => 'success']);
+            } else if (!$u) {
+                return response()->json(['data' => 'error']);
+            }
+        }
     }
     // public function delete_ekatalog($id)
     // {

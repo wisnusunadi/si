@@ -259,16 +259,7 @@
                     <div class="card-body">
                         @if(Auth::user()->divisi_id == "23")
                         <div class="row">
-                            <div class="col-6">
-                                <span class="float-right filter">
-                                    <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
-                                        <button class="btn btn-warning" id="cekbrg" disabled="true">
-                                            <i class="fas fa-pencil-alt"></i> Filter
-                                        </button>
-                                    </a>
-                                </span>
-                            </div>
-                            <div class="col-6">
+                            <div class="col-12">
                                 <span class="float-right filter">
                                     <button class="btn btn-outline-secondary dropdown-toggle " type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="filterpenjualan">
                                         <i class="fas fa-filter"></i> Filter
@@ -448,13 +439,7 @@
         $(document).on('submit', '#form-pengujian-update', function(e) {
             $('#btnsimpan').attr('disabled', true);
             e.preventDefault();
-            // var showLoading = swal.fire({
-            //     title: 'Sedang Proses',
-            //     html: 'Loading...',
-            //     allowOutsideClick: false,
-            //     showConfirmButton: false,
-            //     willOpen: () => {Swal.showLoading()}
-            // });
+
             var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
             var data = [];
 
@@ -568,7 +553,6 @@
                     'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + pesanan_id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}',
-
                     }
                 },
                 language: {
@@ -600,14 +584,18 @@
 
         var checkedAry = [];
         $('#noseritable').on('click', 'input[name="check_all"]', function() {
+            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
             if ($('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 $('.nosericheck').prop('checked', true);
-                checkedAry = []
-                checkedAry.push('0');
+                $('.nosericheck', rows).prop('checked', true);
+                checkedAry = [];
+                $.each($(".nosericheck:checked", rows), function() {
+                    checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                });
                 $('#btnedit').removeAttr('disabled');
             } else if ($('input[name="check_all"]:checked').length <= 0) {
-                $('.nosericheck').prop('checked', false);
+                $('.nosericheck', rows).prop('checked', false);
                 $('#cekbrg').prop('disabled', true);
             }
         });

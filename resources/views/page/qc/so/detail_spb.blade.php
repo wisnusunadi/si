@@ -585,7 +585,8 @@
             $('#listnoseri').DataTable({
                 destroy: true,
                 processing: true,
-                serverSide: true,
+                autowidth: true,
+                serverSide: false,
                 ajax: {
                     'type': 'post',
                     'datatype': 'JSON',
@@ -665,16 +666,19 @@
             if ($('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 $('.nosericheck', rows).prop('checked', true);
-                checkedAry = []
-                checkedAry.push('0');
+                checkedAry = [];
+                $.each($(".nosericheck:checked", rows), function() {
+                    checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                });
                 $('#btnedit').removeAttr('disabled');
             } else if ($('input[name="check_all"]:checked').length <= 0) {
-                $('#noseritable').find('.nosericheck').prop('checked', false);
+                $('.nosericheck', rows).prop('checked', false);
                 $('#cekbrg').prop('disabled', true);
             }
         });
 
         $('#noseritable').on('click', '.nosericheck', function() {
+            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
             $('#check_all').prop('checked', false);
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
