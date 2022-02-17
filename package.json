@@ -39,6 +39,7 @@
         "@fullcalendar/list": "^5.10.1",
         "@fullcalendar/timegrid": "^5.10.1",
         "@fullcalendar/vue": "^5.9.0",
+        "@kanety/jquery-simple-tree-table": "^0.5.1",
         "air-datepicker": "^3.0.1",
         "apexcharts": "^3.32.0",
         "bootstrap-vue": "^2.21.2",
