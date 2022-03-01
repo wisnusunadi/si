@@ -35,8 +35,12 @@
 
 <script>
     export default {
+        props: {
+            months: Number,
+        },
         data() {
             return {
+                prevmonths: null,
                 last_date: 1,
                 event: [],
                 weekend_date: [],
@@ -44,8 +48,10 @@
         },
         created() {
             let dateObj = new Date();
-            let month = dateObj.getUTCMonth() + 1;
+            let month = this.months + 1;
+            this.prevmonths = this.months;  
             let year = dateObj.getUTCFullYear();
+            console.log("month", month);
             let last_date = new Date(year, month + 1, 0).getDate();
             this.last_date = last_date;
 
@@ -55,8 +61,7 @@
             dateObj.setDate(i);
                 if (dateObj.getDay() == 6 || dateObj.getDay() == 0) this.weekend_date.push(i);
             }
-            console.log("created");
-            console.log(this.weekend_date);
+
         },
         methods: {
             isDate(start_date, end_date, i) {
@@ -99,7 +104,7 @@
         mounted() {
             this.events();
             console.log(this.weekend_date);
-        }
+        },
     }
 
 </script>
