@@ -31,9 +31,7 @@
                                 <td v-html="item.tanggal_selesai"></td>
                                 <td v-html="item.progres"></td>
                                 <td>
-                                    <span v-if="item.status = 6">Penyusunan</span>
-                                    <span v-else-if="item.status = 7">Pelaksanaan</span>
-                                    <span v-else>Selesai</span>
+                                    {{ item.status}}
                                 </td>
                                 <td><button class="button is-primary" @click="modal(item.aksi)">Aksi</button></td>
                             </tr>

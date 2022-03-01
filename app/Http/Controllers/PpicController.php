@@ -169,7 +169,13 @@ class PpicController extends Controller
                     "</small><br>";
             })
             ->addColumn('status', function ($data) {
-                return $data->status;
+                if ($data->status == 6) {
+                    return 'Penyusunan';
+                } elseif ($data->status == 7) {
+                    return 'Pelaksanaan';
+                } else {
+                    return 'Selesai';
+                }
             })
             ->addColumn('aksi', function ($data)
             {
