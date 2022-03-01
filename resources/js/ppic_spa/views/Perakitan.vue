@@ -30,12 +30,8 @@
                                 <td>{{item.tanggal_mulai}}</td>
                                 <td v-html="item.tanggal_selesai"></td>
                                 <td v-html="item.progres"></td>
-                                <td>
-                                    <span v-if="item.status = 6">Penyusunan</span>
-                                    <span v-else-if="item.status = 7">Pelaksanaan</span>
-                                    <span v-else>Selesai</span>
-                                </td>
-                                <td><button class="button is-primary" @click="modal(item.aksi)">Aksi</button></td>
+                                <td>{{item.status}}</td>
+                                <td><button class="button is-primary" @click="modal(item.aksi, item.nama)" v-if="item.keterangan || item.keterangan_transfer">Detail</button></td>
                             </tr>
                         </tbody>
                     </table>
@@ -48,11 +44,11 @@
             <div class="modal-background"></div>
             <div class="modal-card">
                 <header class="modal-card-head">
-                    <p class="modal-card-title">Modal title</p>
+                    <p class="modal-card-title">{{this.nama_produk}}</p>
                     <button class="delete" aria-label="close" @click="showModal = false"></button>
                 </header>
                 <section class="modal-card-body">
-                    <div v-if="loading">Loading...</div>
+                    <div v-if="this.loading">Loading...</div>
                     <div class="field" v-else>
                     <label class="label">Keterangan</label>
                     <div class="control">
@@ -61,8 +57,6 @@
                     </div>
                 </section>
                 <footer class="modal-card-foot">
-                    <button class="button is-success">Save changes</button>
-                    <button class="button" @click="showModal = false">Cancel</button>
                 </footer>
             </div>
         </div>
@@ -82,10 +76,11 @@
         data() {
             return {
                 tablePerakitan: null,
-                detail: [],
+                detail: null,
                 error: null,
                 showModal: false,
                 loading: false,
+                nama_produk: null
             }
         },
 
@@ -99,6 +94,7 @@
                     $('#table').DataTable({
                         "paging": true,
                         "lengthChange": false,
+                        "searching": false,
                         "ordering": true,
                         "info": true,
                         "autoWidth": false,
@@ -112,11 +108,11 @@
                     this.error = err;
                 }
             },
-            async modal(data) {
+            async modal(data, nama) {
                 this.showModal = true;
                 try {
                     this.loading = true;
-                    console.log(data);
+                    this.nama_produk = nama;
                     await axios.get("/api/ppic/datatables/perakitandetail/"+data).then((response) => {
                         this.detail = response.data;
                     });

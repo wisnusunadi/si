@@ -169,7 +169,13 @@ class PpicController extends Controller
                     "</small><br>";
             })
             ->addColumn('status', function ($data) {
-                return $data->status;
+                if ($data->status == 6) {
+                    return 'Penyusunan';
+                } elseif ($data->status == 7) {
+                    return 'Pelaksanaan';
+                } else {
+                    return 'Selesai';
+                }
             })
             ->addColumn('aksi', function ($data)
             {
@@ -1523,7 +1529,11 @@ class PpicController extends Controller
     }
     public function get_datatables_data_perakitan_detail($id)
     {
-        $data = JadwalPerakitan::where('id', $id)->pluck('keterangan','keterangan_transfer');
-        return $data;
+        $data = JadwalPerakitan::select('keterangan','keterangan_transfer')->where('id', $id)->first();
+        if ($data->keterangan != null) {
+            return $data->keterangan;
+        }else{
+            return $data->keterangan_transfer;
+        }
     }
 }
