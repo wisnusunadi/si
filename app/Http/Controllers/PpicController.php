@@ -166,12 +166,16 @@ class PpicController extends Controller
                     "</progress>" .
                     "<small>" .
                     $progres . " dari " . $max_value .
-                    "</small>";
+                    "</small><br>";
             })
             ->addColumn('status', function ($data) {
                 return $data->status;
             })
-            ->rawColumns(['nama', 'progres', 'tanggal_selesai'])
+            ->addColumn('aksi', function ($data)
+            {
+                return $data->id;
+            })
+            ->rawColumns(['nama', 'progres', 'tanggal_selesai', 'aksi'])
             ->make(true);
     }
 
@@ -677,6 +681,7 @@ class PpicController extends Controller
         $selected_color = $color[array_rand($color)];
 
         $data = [
+            'no_bppb' => $request->no_bppb,
             'produk_id' => $request->produk_id,
             'jumlah' => $request->jumlah,
             'tanggal_mulai' => $request->tanggal_mulai,
@@ -744,6 +749,7 @@ class PpicController extends Controller
 
         $object = new JadwalPerakitanLog();
         $object->jadwal_perakitan_id = $data->id;
+        $object->no_bppb = $data->no_bppb;
         $object->tanggal_mulai = $data->tanggal_mulai;
         $object->tanggal_selesai = $data->tanggal_selesai;
 
@@ -758,6 +764,13 @@ class PpicController extends Controller
             $object->tanggal_selesai_baru = $request->tanggal_selesai;
         } else {
             $object->tanggal_selesai_baru = $data->tanggal_selesai;
+        }
+
+        if (isset($request->no_bppb)) {
+            $data->no_bppb = $request->no_bppb;
+            $object->no_bppb = $request->no_bppb;
+        } else {
+            $object->no_bppb = $data->no_bppb;
         }
 
         if (isset($request->jumlah)) {
@@ -1508,5 +1521,9 @@ class PpicController extends Controller
         })->count();
         return $jumlah;
     }
-
+    public function get_datatables_data_perakitan_detail($id)
+    {
+        $data = JadwalPerakitan::where('id', $id)->pluck('keterangan','keterangan_transfer');
+        return $data;
+    }
 }
