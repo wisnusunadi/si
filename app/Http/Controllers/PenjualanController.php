@@ -2653,16 +2653,19 @@ class PenjualanController extends Controller
         $detail_ekatalog = DetailEkatalog::findOrFail($id);
         $detail_ekatalog->delete();
     }
+
     public function delete_detail_spa($id)
     {
         $detail_spa = DetailSpa::findOrFail($id);
         $detail_spa->delete();
     }
+
     public function delete_detail_spb($id)
     {
         $detail_spb = DetailSpb::findOrFail($id);
         $detail_spb->delete();
     }
+
     public function cancel_spa_spb($id, $jenis){
         if($jenis == "spa"){
             $spa = Spa::find($id);

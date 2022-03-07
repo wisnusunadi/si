@@ -27,7 +27,6 @@ class DcController extends Controller
     }
     public function pdf_semua_coo($id, $value, $jenis)
     {
-
         $data = NoseriCoo::whereHas('NoseriDetailLogistik', function ($q) use ($id) {
             $q->where('detail_logistik_id', $id);
         })->get();
@@ -42,12 +41,10 @@ class DcController extends Controller
     }
     public function pdf_semua_so_coo($id, $value, $jenis)
     {
-
         $data = NoseriCoo::whereHas('NoseriDetailLogistik.DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($id) {
             $q->where('pesanan.id', $id);
         })->get();
         $count = $data->count();
-
 
         if ($value == 'ekatalog') {
             $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_so', ['data' => $data, 'count' => $count, 'jenis' => $jenis])->setPaper('A4');
@@ -428,7 +425,7 @@ class DcController extends Controller
                 if ($data->DetailPesananProduk->GudangBarangJadi->nama == '') {
                     return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
                 } else {
-                    return $data->DetailPesananProduk->GudangBarangJadi->nama;
+                    return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama.' - '.$data->DetailPesananProduk->GudangBarangJadi->nama;
                 }
             })
             ->addColumn('no_akd', function ($data) {
@@ -533,7 +530,7 @@ class DcController extends Controller
                 if (isset($data->NoseriCoo)) {
                     return '';
                 } else {
-                    return '  <div class="form-check">
+                    return '<div class="form-check">
                     <input class=" form-check-input  nosericheck" type="checkbox" data-value="' . $data->detail_logistik_id . '" data-id="' . $data->id . '" />
                     </div>';
                 }
@@ -766,16 +763,30 @@ class DcController extends Controller
         $array_seri = explode(',', $replace_array_seri);
         $bool = true;
         for ($i = 0; $i < count($array_seri); $i++) {
-            $c = NoseriCoo::create([
-                'nama' => $nama,
-                'jabatan' => $jabatan,
-                'ket' => $ket,
-                'noseri_logistik_id' => $array_seri[$i],
-                'tgl_kirim' => $request->tgl_kirim,
-                'catatan' => $request->keterangan,
-            ]);
-            if (!$c) {
-                $bool = false;
+            $noseri = NoseriCoo::where('noseri_logistik_id', $array_seri[$i])->first();
+            if($noseri){
+                $l = NoseriCoo::find($noseri->id);
+                $l->nama = $nama;
+                $l->jabatan = $jabatan;
+                $l->ket = $ket;
+                $l->tgl_kirim = $request->tgl_kirim;
+                $l->catatan = $request->keterangan;
+                $l->save();
+                if (!$l) {
+                    $bool = false;
+                }
+            }else{
+                $c = NoseriCoo::create([
+                    'nama' => $nama,
+                    'jabatan' => $jabatan,
+                    'ket' => $ket,
+                    'noseri_logistik_id' => $array_seri[$i],
+                    'tgl_kirim' => $request->tgl_kirim,
+                    'catatan' => $request->keterangan,
+                ]);
+                if (!$c) {
+                    $bool = false;
+                }
             }
         }
         if ($bool == true) {

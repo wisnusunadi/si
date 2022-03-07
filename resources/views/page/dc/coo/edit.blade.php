@@ -56,10 +56,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="form-group hide" id="nama_label">
-                            <div class="card" style="box-shadow:none;">
-                                <div class="card-body" style="background-color: #a1c4ec">
-                                    <div class="row">
+                        <div class="form-row hide" id="nama_label">
+                            {{-- <div class="card" style="box-shadow:none;">
+                                <div class="card-body" style="background-color: #17a2b8">
+                                    <div class="row"> --}}
                                         <div class="form-group col-6">
                                             <label for="" class="col-form-label" style="text-align:right;">Nama</label>
                                             <input type="text" class="form-control col-form-label" id="nama" name="nama">
@@ -68,9 +68,9 @@
                                             <label for="" class="col-form-label" style="text-align:right;">Jabatan</label>
                                             <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan">
                                         </div>
-                                    </div>
-                                </div>
-                            </div>
+                                    {{-- </div> --}}
+                                {{-- </div>
+                            </div> --}}
                             {{-- <label for="" class="col-5 col-form-label" style="text-align:right;">Nama</label>
                             <div class="col-5">
                                 <input type="text" class="form-control col-form-label" id="nama" name="nama">
