@@ -244,6 +244,7 @@ Route::middleware('auth')->prefix('/teknik')->group(function () {
     Route::group(['prefix' => '/bom'], function () {
         Route::view('/show', 'page.teknik.bom.show')->name('teknik.bom.show');
         Route::get('/detail/{id}',  [App\Http\Controllers\TeknikController::class, 'bom_detail'])->name('teknik.bom.detail');
+        Route::get('/data/produk/{id}',  [App\Http\Controllers\TeknikController::class, 'bom_data_produk'])->name('teknik.bom.data.produk');
     });
 });
 

@@ -10,4 +10,9 @@ class TeknikController extends Controller
     {
         return view('page.teknik.bom.detail', ['id' => $id]);
     }
+
+    public function bom_data_produk($id)
+    {
+        return view('page.teknik.bom.data.produk', ['id' => $id]);
+    }
 }

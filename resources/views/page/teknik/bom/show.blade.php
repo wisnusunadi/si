@@ -180,10 +180,10 @@
                                                 <tr>
                                                     <td>Alat Kesehatan</td>
                                                     <td>Cardiology</td>
-                                                    <td>M1903171001</td>
+                                                    <td><a class="detailmodal" data-toggle="modal" data-target="detailmodal" data-id="1" data-attr="{{route('teknik.bom.data.produk', ['id' => '1'])}}">M1903171001</a></td>
                                                     <td>FOX-BABY</td>
                                                     <td>2</td>
-                                                    <td><a class="fas fa-search"></a></td>
+                                                    <td><a href="{{route('teknik.bom.detail', ['id' => '1'])}}" class="fas fa-search"></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Alat Kesehatan</td>
@@ -191,7 +191,7 @@
                                                     <td>M1903171002</td>
                                                     <td>FOX-1(N)</td>
                                                     <td>1</td>
-                                                    <td><a class="fas fa-search"></a></td>
+                                                    <td><a href="{{route('teknik.bom.detail', ['id' => '1'])}}" class="fas fa-search"></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Alat Kesehatan</td>
@@ -199,7 +199,7 @@
                                                     <td>M1903171003</td>
                                                     <td>FOX-3</td>
                                                     <td>1</td>
-                                                    <td><a class="fas fa-search"></a></td>
+                                                    <td><a href="{{route('teknik.bom.detail', ['id' => '1'])}}" class="fas fa-search"></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Alat Kesehatan</td>
@@ -207,7 +207,7 @@
                                                     <td>M1235171001</td>
                                                     <td>PROMIST 1</td>
                                                     <td>1</td>
-                                                    <td><a class="fas fa-search"></a></td>
+                                                    <td><a href="{{route('teknik.bom.detail', ['id' => '1'])}}" class="fas fa-search"></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Alat Kesehatan</td>
@@ -215,7 +215,7 @@
                                                     <td>M1235171002</td>
                                                     <td>Ultra Mist</td>
                                                     <td>1</td>
-                                                    <td><a class="fas fa-search"></a></td>
+                                                    <td><a href="{{route('teknik.bom.detail', ['id' => '1'])}}" class="fas fa-search"></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Alat Kesehatan</td>
@@ -223,7 +223,7 @@
                                                     <td>M1235171003</td>
                                                     <td>PROMIST 3</td>
                                                     <td>1</td>
-                                                    <td><a class="fas fa-search"></a></td>
+                                                    <td><a href="{{route('teknik.bom.detail', ['id' => '1'])}}" class="fas fa-search"></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Alat Kesehatan</td>
@@ -231,7 +231,7 @@
                                                     <td>M1235171004</td>
                                                     <td>SP10</td>
                                                     <td>1</td>
-                                                    <td><a class="fas fa-search"></a></td>
+                                                    <td><a href="{{route('teknik.bom.detail', ['id' => '1'])}}" class="fas fa-search"></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Alat Kesehatan</td>
@@ -239,7 +239,7 @@
                                                     <td>M1235171005</td>
                                                     <td>DS-PRO100</td>
                                                     <td>1</td>
-                                                    <td><a class="fas fa-search"></a></td>
+                                                    <td><a href="{{route('teknik.bom.detail', ['id' => '1'])}}" class="fas fa-search"></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Alat Kesehatan</td>
@@ -247,7 +247,7 @@
                                                     <td>M1555171001</td>
                                                     <td>Baby Digit One</td>
                                                     <td>1</td>
-                                                    <td><a class="fas fa-search"></a></td>
+                                                    <td><a href="{{route('teknik.bom.detail', ['id' => '1'])}}" class="fas fa-search"></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Alat Kesehatan</td>
@@ -255,7 +255,7 @@
                                                     <td>M1555171002</td>
                                                     <td>Digit Pro</td>
                                                     <td>1</td>
-                                                    <td><a class="fas fa-search"></a></td>
+                                                    <td><a href="{{route('teknik.bom.detail', ['id' => '1'])}}" class="fas fa-search"></a></td>
                                                 </tr>
                                                 <tr>
                                                     <td>Alat Kesehatan</td>
@@ -263,7 +263,7 @@
                                                     <td>M1555171003</td>
                                                     <td>Digit One Baby</td>
                                                     <td>1</td>
-                                                    <td><a class="fas fa-search"></a></td>
+                                                    <td><a href="{{route('teknik.bom.detail', ['id' => '1'])}}" class="fas fa-search"></a></td>
                                                 </tr>
                                             </tbody>
                                         </table>
@@ -274,44 +274,14 @@
                     </div>
                 </div>
 
-                <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
+                <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content" style="margin: 10px">
                             <div class="modal-header yellow-bg">
                                 <h4 class="modal-title"><b>Ubah</b></h4>
                             </div>
-                            <div class="modal-body" id="edit">
+                            <div class="modal-body" id="detail">
 
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
-                        <div class="modal-content" style="margin: 10px">
-                            <div class="modal-header yellow-bg">
-                                <h4 class="modal-title"><b>Hapus</b></h4>
-                            </div>
-                            <div class="modal-body" id="hapus">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <form method="post" action="" id="form-hapus" data-target="">
-                                            @method('DELETE')
-                                            @csrf
-                                            <div class="card">
-                                                <div class="card-body">Apakah Anda yakin ingin menghapus data ini?</div>
-                                                <div class="card-footer">
-                                                    <span class="float-left">
-                                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                                                    </span>
-                                                    <span class="float-right">
-                                                        <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
-                                                    </span>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -323,11 +293,8 @@
 @stop
 
 @section('adminlte_js')
-
-
 <script>
     $(function() {
-
         $('#showtable').DataTable( {
             order: [[1, 'asc'], [0, 'asc']],
             rowGroup: {
@@ -358,7 +325,33 @@
                 }
 
             }
-        } );
+        });
+
+        $(document).on('click', '.detailmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            $.ajax({
+                url: href,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#detailmodal').modal("show");
+                    $('#detail').html(result).show();
+                    console.log(result);
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            });
+        });
         //var table = $('#showtable').DataTable({
         //     "ajax": {
         //         'url': '/api/penjualan/rencana/show/0/0',
@@ -442,7 +435,6 @@
 
         $("#tahun").autocomplete({
             source: function(request, response) {
-
                 $.ajax({
                     dataType: 'json',
                     url: "/api/penjualan/rencana/select_tahun",
@@ -480,7 +472,6 @@
                 $("#btncari").attr('disabled', false);
             } else {
                 $("#btncari").attr('disabled', true);
-
             }
         });
 
