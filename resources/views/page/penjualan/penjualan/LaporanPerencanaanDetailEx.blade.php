@@ -46,7 +46,7 @@ foreach ($data as $i) {
     }
     $cdrp = 0;
     echo "<tr>
-            <td rowspan=" . $rowpesanan . ">" . $i->instansi . "</td>
+            <td rowspan=" . $rowpesanan . " style=vertical-align:text-top>" . $i->instansi . "</td>
             ";
     foreach ($i->DetailRencanaPenjualan as $j) {
         $rowdetailpesanan = 1;

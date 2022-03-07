@@ -25,6 +25,11 @@
 
 @section('adminlte_css')
 <style>
+    .separator {
+        border-top: 1px solid #bbb;
+        width: 90%;
+    }
+
     .wb {
         word-break: break-all;
         white-space: normal;
@@ -109,6 +114,9 @@
 
     }
 
+    .tabnum{
+        font-variant-numeric: tabular-nums;
+    }
 
     .removeshadow {
         box-shadow: none;
@@ -135,7 +143,7 @@
 
     @media screen and (min-width: 1440px) {
 
-        section {
+        body {
             font-size: 14px;
         }
 
@@ -160,8 +168,7 @@
     }
 
     @media screen and (max-width: 1439px) {
-        label,
-        .row {
+        body {
             font-size: 12px;
         }
 
@@ -1072,6 +1079,7 @@
                 },
             ]
         });
+
         var spatable = $('#spatable').DataTable({
             destroy: true,
             processing: true,
@@ -1112,7 +1120,8 @@
                     data: 'button'
                 }
             ]
-        })
+        });
+
         var spbtable = $('#spbtable').DataTable({
             destroy: true,
             processing: true,
@@ -1153,7 +1162,7 @@
                     data: 'button'
                 }
             ]
-        })
+        });
     })
 </script>
 
@@ -1227,6 +1236,78 @@
                     $('#loader').hide();
                 },
                 timeout: 8000
+            })
+        });
+
+        const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-danger margin',
+            cancelButton: 'btn btn-outline-secondary margin'
+        },
+        buttonsStyling: false
+        })
+
+
+        $(document).on('click', '.batalmodal', function(event) {
+            event.preventDefault();
+            var jenis = $(this).attr('data-jenis');
+            var id = $(this).attr("data-id");
+
+            swalWithBootstrapButtons.fire({
+            title: 'Batalkan Pesanan',
+            text: "Ingin membatalkan Pesanan ini?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Batalkan',
+            cancelButtonText: 'Tutup',
+            reverseButtons: true
+            }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                url: '/api/penjualan/penjualan/cancel/'+id+'/'+jenis,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Batal',
+                            'Sukses Batalkan Pesanan',
+                            'success'
+                        );
+                        $('#penjualantable').DataTable().ajax.reload();
+                        if (jenis == 'spa') {
+                            $('#spatable').DataTable().ajax.reload();
+                        } else if (jenis == 'spb') {
+                            $('#spbtable').DataTable().ajax.reload();
+                        }
+                        $("#deletemodal").modal('hide');
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Hapus Data',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    swal.fire(
+                        'Error',
+                        'Data telah digunakan dalam Transaksi Lain',
+                        'warning'
+                    );
+                    // console.log(action);
+                }
+            });
+            return false;
+                swalWithBootstrapButtons.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+                )
+            }
             })
         });
 

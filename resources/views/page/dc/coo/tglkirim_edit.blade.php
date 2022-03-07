@@ -35,8 +35,8 @@
                 <div class="card-body">
                     <div class="form-horizontal">
                         <div class="form-group row">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Diketahui Oleh</label>
-                            <div class="col-5 col-form-label">
+                            <label for="" class="col-12 col-form-label" style="text-align:right;">Diketahui Oleh</label>
+                            <div class="col-12 col-form-label">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="spa" {{ ($data->NoseriCoo->ket=="spa")? "checked" : "" }} disabled />
                                     <label class="form-check-label" for="diketahui1">PT Sinko Prima Alloy</label>
@@ -95,7 +95,7 @@
                         <button class="btn btn-danger float-left" data-dismiss="modal">Batal</button>
                     </span>
                     <span>
-                        <button type="submit" class="btn btn-warning float-right " id="btnsimpan">Update</button>
+                        <button type="submit" class="btn btn-warning float-right " id="btnsimpan">Ubah</button>
                     </span>
                 </div>
             </div>

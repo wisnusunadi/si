@@ -56,10 +56,11 @@ class RencanaPenjualanController extends Controller
             })
             ->addColumn('harga_real', function ($data) {
                 // return $data->harga;
+                return $data->harga_prd();
             })
             ->addColumn('sub_real', function ($data) {
                 // return $data->DetailRencanaPenjualan->sum_prd() * $data->harga;
-                // return $data->sum_prd() * $data->DetailPesanan->first()->harga;
+                return $data->sum_prd() * $data->harga_prd();
             })
             ->make(true);
     }

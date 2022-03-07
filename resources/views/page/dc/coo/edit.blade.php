@@ -25,7 +25,7 @@
                     </div>
                     <div class="col-3">
                         <div><small class="text-muted">Jumlah</small></div>
-                        <div><b>{{$jumlah}}</b></div>
+                        <div><b>{{$data->detaillogistik->DetailPesananProduk->DetailPesanan->jumlah}}</b></div>
                     </div>
                 </div>
             </div>

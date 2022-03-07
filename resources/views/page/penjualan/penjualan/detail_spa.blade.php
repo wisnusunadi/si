@@ -15,7 +15,6 @@
                                 </div>
                                 <div>{{$data->Customer->alamat}}</div>
                                 <div>{{$data->Customer->Provinsi->nama}}</div>
-
                             </div>
                         </div>
                     </div>
@@ -108,9 +107,9 @@
                                             <tr>
                                                 <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">{{$no}}</td>
                                                 <td><b class="wb">{{$e->PenjualanProduk->nama}}</b></td>
-                                                <td colspan="2" class="nowraptxt">{{$e->jumlah}}</td>
-                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency($e->harga)</td>
-                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency($e->harga * $e->jumlah)</td>
+                                                <td colspan="2" class="nowraptxt tabnum">{{$e->jumlah}}</td>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->harga)</td>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
                                                 <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
                                             </tr>
                                             @if(isset($e->DetailPesananProduk))
@@ -138,10 +137,10 @@
                                             <tr>
                                                 <td class="nowraptxt">{{$no}}</td>
                                                 <td class="wb"><b>{{$e->Sparepart->nama}}</b></td>
-                                                <td class="nowraptxt"><span class="text-muted">{{$e->jumlah}}</span></td>
-                                                <td class="nowraptxt">@if(isset($e->detaillogistikpart)) {{$e->jumlah}} @else 0 @endif</td>
-                                                <td class="nowraptxt">@currency($e->harga)</td>
-                                                <td class="nowraptxt">@currency($e->harga * $e->jumlah)</td>
+                                                <td class="nowraptxt tabnum"><span class="text-muted">{{$e->jumlah}}</span></td>
+                                                <td class="nowraptxt tabnum">@if(isset($e->detaillogistikpart)) {{$e->jumlah}} @else 0 @endif</td>
+                                                <td class="nowraptxt tabnum">@currency($e->harga)</td>
+                                                <td class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
                                                 <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
                                             </tr>
                                             @endforeach
@@ -150,7 +149,7 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="5">Total Harga</td>
-                                                <td>@currency($totalharga)</td>
+                                                <td class="tabnum nowraptxt">@currency($totalharga)</td>
                                             </tr>
                                         </tfoot>
 

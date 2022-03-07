@@ -392,7 +392,7 @@
         $('#noseritable').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
@@ -433,7 +433,7 @@
             $('#listnoseri').DataTable({
                 destroy: true,
                 processing: true,
-                serverSide: true,
+                serverSide: false,
                 searching: false,
                 info: false,
                 ajax: {
@@ -460,18 +460,21 @@
 
         var checkedAry = [];
         $('#noseritable').on('click', 'input[name="check_all"]', function() {
+            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
             if ($('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
-                $('.nosericheck').prop('checked', true);
-                checkedAry = []
-                checkedAry.push('0');
+                $('.nosericheck', rows).prop('checked', true);
+                checkedAry = [];
+                $.each($(".nosericheck:checked", rows), function() {
+                    checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                });
             } else if ($('input[name="check_all"]:checked').length <= 0) {
-                $('.nosericheck').prop('checked', false);
+                $('.nosericheck', rows).prop('checked', false);
                 $('#cekbrg').prop('disabled', true);
             }
         });
 
-        $('#noseritable ').on('click', '.nosericheck', function() {
+        $('#noseritable').on('click', '.nosericheck', function() {
             $('#check_all').prop('checked', false);
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
@@ -487,7 +490,6 @@
         $('#showtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');
-            console.log(datacount);
             if (datacount == 0) {
                 // $('.sericheckbox').addClass("hide");
                 $('#noseritable').DataTable().column(0).visible(false);
@@ -643,7 +645,6 @@
 
         $(document).on('click', '.tglkirim_modal', function(event) {
             var id = $(this).data('id');
-            console.log(id);
 
             $.ajax({
                 url: "/dc/coo/edit_tglkirim/" + id,
@@ -680,7 +681,6 @@
         $(document).on('change', 'input[type="radio"][name="diketahui"]', function() {
             $('#jabatan').val("");
             $('#nama').val("");
-            console.log($(this).val());
             if ($(this).val() != "custom") {
                 $('#jabatan_label').addClass('hide');
                 $('#nama_label').addClass('hide');

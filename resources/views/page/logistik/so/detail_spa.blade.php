@@ -382,6 +382,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $('#jenis_sj').select2();
         y = [];
         y = <?php echo json_encode($detail_id); ?>;
 

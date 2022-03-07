@@ -32,7 +32,7 @@ Route::get('/home', function () {
 Route::get("/test", function () {
     return view('test');
 });
-
+Route::view('/modul_dashboard/show', 'auth.dashboard');
 Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/{any?}', 'spa.ppic.spa');
     // Route::get('/data/{status}', function ($status) {
@@ -237,6 +237,14 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/laporan'], function () {
         Route::view('/show', 'page.logistik.laporan.show')->name('logistik.laporan.show');
         Route::get('/export/{jenis}/{ekspedisi}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\LogistikController::class, 'export_laporan'])->name('logistik.laporan.export');
+    });
+});
+
+Route::middleware('auth')->prefix('/teknik')->group(function () {
+    Route::group(['prefix' => '/bom'], function () {
+        Route::view('/show', 'page.teknik.bom.show')->name('teknik.bom.show');
+        Route::get('/detail/{id}',  [App\Http\Controllers\TeknikController::class, 'bom_detail'])->name('teknik.bom.detail');
+        Route::get('/data/produk/{id}',  [App\Http\Controllers\TeknikController::class, 'bom_data_produk'])->name('teknik.bom.data.produk');
     });
 });
 

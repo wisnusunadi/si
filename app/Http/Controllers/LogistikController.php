@@ -481,10 +481,12 @@ class LogistikController extends Controller
                 })
                 ->addColumn('pengirim', function ($data) {
                     if (isset($data->Logistik)) {
-                        if ($data->Logistik->nama_pengirim == "") {
+                        if ($data->Logistik->Ekspedisi) {
                             return $data->Logistik->ekspedisi['nama'];
-                        } else {
+                        } else if ($data->Logistik->nama_pengirim == ""){
                             return $data->Logistik->nama_pengirim;
+                        } else{
+                            return '-';
                         }
                     } else {
                         return '';
@@ -521,12 +523,12 @@ class LogistikController extends Controller
                     $q->where('pesanan_id', $id);
                 })->get();
             } else if ($c_prd > 0 && $c_prd > 0) {
-                $prd = collect(DetailLogistik::whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                $prd = DetailLogistik::whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
                     $q->where('pesanan_id', $id);
-                })->get());
-                $part = collect(DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($id) {
+                })->get();
+                $part = DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($id) {
                     $q->where('pesanan_id', $id);
-                })->get());
+                })->get();
                 $data = $prd->merge($part);
             }
 
@@ -548,10 +550,12 @@ class LogistikController extends Controller
                 })
                 ->addColumn('pengirim', function ($data) {
                     if (isset($data->Logistik)) {
-                        if ($data->Logistik->nama_pengirim == "") {
+                        if ($data->Logistik->Ekspedisi) {
                             return $data->Logistik->ekspedisi['nama'];
-                        } else {
+                        } else if ($data->Logistik->nama_pengirim != "") {
                             return $data->Logistik->nama_pengirim;
+                        } else{
+                            return '-';
                         }
                     } else {
                         return '';
@@ -2646,12 +2650,12 @@ class LogistikController extends Controller
         $ids = "";
         $iddp = "";
         $poid = "";
-        $kodesj = "";
-        if ($jenis != "SPB") {
-            $kodesj = "SPA-";
-        } else {
-            $kodesj = "B.";
-        }
+        $kodesj = $request->jenis_sj;
+        // if ($jenis != "SPB") {
+        //     $kodesj = "SPA-";
+        // } else {
+        //     $kodesj = "B.";
+        // }
         // return response()->json(['data' =>  $poid]);
 
         $bool = true;

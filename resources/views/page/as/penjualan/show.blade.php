@@ -125,9 +125,9 @@
         margin-bottom: 15px;
     }
 
-    @media screen and (min-width: 1440px) {
+    @media screen and (min-width: 992px) {
 
-        section {
+        body {
             font-size: 14px;
         }
 
@@ -136,7 +136,7 @@
         }
 
         .btn {
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .overflowy {
@@ -147,10 +147,9 @@
         }
     }
 
-    @media screen and (max-width: 1439px) {
+    @media screen and (max-width: 991px) {
 
-        label,
-        .row {
+        body {
             font-size: 12px;
         }
 
@@ -279,7 +278,7 @@
                                                     <span class="urgent">19-10-2021</span>
                                                 </td>
                                                 <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
-                                                <td> 
+                                                <td>
                                                     <span class="yellow-text badge">Gudang</span>
                                                 </td>
                                                 <td>
