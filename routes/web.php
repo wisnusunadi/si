@@ -314,7 +314,6 @@ Route::group(['prefix' => '/gk', 'middleware' => 'auth'], function () {
 });
 
 Route::view('/uit', 'page.login_page.index');
-
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
 //     Route::view('/stok', 'page.gbj.stok_show');
 // });

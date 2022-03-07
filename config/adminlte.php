@@ -418,23 +418,22 @@ return [
         ],
         // penjualan (26)
         [
+            'text' => 'Rencana Penjualan',
+            'url'  => '/penjualan/rencana/show',
+            'icon' => 'fas fa-calendar',
+            'auth' => [26]
+        ],
+        [
             'text' => 'Produk Penjualan',
             'url'  => '/penjualan/produk/show',
             'icon' => 'fas fa-box-open',
             'auth' => [26]
         ],
-
         [
             'text' => 'Customer',
             'url'  => '/penjualan/customer/show',
             'icon' => 'fas fa-users',
             'auth' => [26]
-        ],
-        [
-            'text' => 'Rencana Order',
-            'url'  => '',
-            'icon' => 'fas fa-users',
-            'auth' => [1]
         ],
         [
             'text' => 'Laporan',

@@ -1589,35 +1589,36 @@ class PenjualanController extends Controller
             ->make(true);
     }
 
-    public function get_data_rencana_produk($customer_id, $instansi, $tahun){
-        $data = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function($q) use($customer_id, $instansi, $tahun){
+    public function get_data_rencana_produk($customer_id, $instansi, $tahun)
+    {
+        $data = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function ($q) use ($customer_id, $instansi, $tahun) {
             $q->where(['customer_id' => $customer_id, 'instansi' => $instansi, 'tahun' => $tahun]);
         })->get();
 
         return datatables()->of($data)
-        ->addIndexColumn()
-        ->addColumn('nama_produk', function ($data) {
-            return $data->PenjualanProduk->nama;
-        })
-        ->addColumn('qty', function ($data) {
-            return $data->jumlah;
-        })
-        ->addColumn('realisasi', function ($data) use ($customer_id, $instansi, $tahun) {
-            $res = DetailPesanan::whereHas('Pesanan.Ekatalog', function($q) use($customer_id, $instansi, $tahun){
-                $q->where(['customer_id' => $customer_id, 'instansi' => $instansi])->whereBetween('tgl_buat', [$tahun.'-01-01', $tahun.'-12-31']);
-            })->where('penjualan_produk_id', $data->PenjualanProduk->id)->sum('jumlah');
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                return $data->PenjualanProduk->nama;
+            })
+            ->addColumn('qty', function ($data) {
+                return $data->jumlah;
+            })
+            ->addColumn('realisasi', function ($data) use ($customer_id, $instansi, $tahun) {
+                $res = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($customer_id, $instansi, $tahun) {
+                    $q->where(['customer_id' => $customer_id, 'instansi' => $instansi])->whereBetween('tgl_buat', [$tahun . '-01-01', $tahun . '-12-31']);
+                })->where('penjualan_produk_id', $data->PenjualanProduk->id)->sum('jumlah');
 
-            return $res;
-        })
-        ->addColumn('harga', function ($data) {
-            return $data->harga;
-        })
-        ->addColumn('aksi', function ($data) {
-            $res = '<button type="button" class="btn btn-outline-primary btn-circle" id="btntransfer" data-id="'.$data->id.'" data-nama_produk="'.$data->penjualanproduk->nama.'" data-produk="'.$data->penjualanproduk->id.'" data-jumlah="'.$data->jumlah.'" data-harga="'.$data->harga.'"><i class="fas fa-plus"></i></button>';
-            return $res;
-        })
-        ->rawColumns(['aksi'])
-        ->make(true);
+                return $res;
+            })
+            ->addColumn('harga', function ($data) {
+                return $data->harga;
+            })
+            ->addColumn('aksi', function ($data) {
+                $res = '<button type="button" class="btn btn-outline-primary btn-circle" id="btntransfer" data-id="' . $data->id . '" data-nama_produk="' . $data->penjualanproduk->nama . '" data-produk="' . $data->penjualanproduk->id . '" data-jumlah="' . $data->jumlah . '" data-harga="' . $data->harga . '"><i class="fas fa-plus"></i></button>';
+                return $res;
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 
 
@@ -3143,6 +3144,12 @@ class PenjualanController extends Controller
         $jumlah_po = $this->get_count_spa_po($id, $gbj->produk_id);
         $jumlah = $gbj->stok - ($jumlah_ekatalog + $jumlah_po);
         return $jumlah;
+    }
+
+    public function check_alamat(Request $request)
+    {
+        $data = Ekatalog::where('alamat', 'LIKE', '%' . $request->input('term', '') . '%')->groupby('alamat')->get();
+        echo json_encode($data);
     }
 
     public function get_count_ekatalog($id, $produk_id, $status)

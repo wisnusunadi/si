@@ -175,7 +175,7 @@
                                     <div>
                                         <span class="float-left ">
                                             <div class="input-group-prepend">
-                                                <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown">
+                                                <button type="button" class="btn btn-outline-success dropdown-toggle" data-toggle="dropdown" disabled id="export">
                                                     <i class="far fa-file-excel"></i> &nbsp;Export
                                                 </button>
                                                 <div class="dropdown-menu">
@@ -477,7 +477,7 @@
 
 
         $('#filter').submit(function() {
-            $("#parent_export").attr('disabled', false);
+           // $("#parent_export").attr('disabled', false);
             var customer_id = $('#customer_id').val();
             var tahun = $('#tahun').val();
 
@@ -494,7 +494,7 @@
             $('#lap_detail').attr({
                 href: link2
             });
-
+            $("#export").attr('disabled', false);
             return false;
         });
 
