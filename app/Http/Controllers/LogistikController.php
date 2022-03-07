@@ -2650,12 +2650,12 @@ class LogistikController extends Controller
         $ids = "";
         $iddp = "";
         $poid = "";
-        $kodesj = "";
-        if ($jenis != "SPB") {
-            $kodesj = "SPA-";
-        } else {
-            $kodesj = "B.";
-        }
+        $kodesj = $request->jenis_sj;
+        // if ($jenis != "SPB") {
+        //     $kodesj = "SPA-";
+        // } else {
+        //     $kodesj = "B.";
+        // }
         // return response()->json(['data' =>  $poid]);
 
         $bool = true;

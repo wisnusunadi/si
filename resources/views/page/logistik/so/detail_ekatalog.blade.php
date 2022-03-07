@@ -1009,6 +1009,7 @@
                     $('#edit').html(result).show();
                     detailpesanan(produk_id, part_id, pesanan_id);
                     console.log('/api/logistik/so/detail/select/' + produk_id + '/' + part_id + '/' + pesanan_id + '/' + jenis_penjualan)
+                    $('.jenis_sj').select2({minimumResultsForSearch: -1});
                     ekspedisi_select(provinsi);
                     $('#tgl_kirim').attr('max', today);
 

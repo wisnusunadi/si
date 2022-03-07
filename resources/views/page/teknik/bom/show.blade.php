@@ -162,7 +162,27 @@
                                 <div class="col-12">
                                     <div>
                                         <span class="float-right" id="btntambah"><a href="{{route('penjualan.rencana.create')}}" class="btn btn-outline-info"><i class="fas fa-plus"></i>&nbsp;Tambah BOM</a></span>
-                                        <span class="float-right margin-right" id="btnfilter"><a href="{{route('penjualan.rencana.create')}}" class="btn btn-outline-warning"><i class="fas fa-filter"></i>&nbsp;Filter</a></span>
+                                        <span class="float-right margin-right dropdown" id="btnfilter">
+                                            <button type="button" class="btn btn-outline-warning dropdown-toggle" id="dropdownMenu2" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;Filter</button>
+                                            <div class="dropdown-menu" aria-labelledby="dropdownMenu2">
+                                                <form class="px-4 py-3">
+                                                    <h6 class="dropdown-header">Kelompok Produk</h6>
+                                                    <div class="form-check">
+                                                      <input type="checkbox" class="form-check-input" id="kelompok_produk1" name="kelompok_produk[]">
+                                                      <label class="form-check-label" for="kelompok_produk1">
+                                                        Alat Kesehatan
+                                                      </label>
+                                                    </div>
+                                                    <div class="form-check">
+                                                        <input type="checkbox" class="form-check-input" id="kelompok_produk2" name="kelompok_produk[]">
+                                                        <label class="form-check-label" for="kelompok_produk2">
+                                                          Sarana Kesehatan
+                                                        </label>
+                                                    </div>
+                                                    <button type="submit" class="btn btn-primary float-right">Cari</button>
+                                                </form>
+                                            </div>
+                                        </span>
                                     </div>
                                     <div class="table-responsive">
                                         <table class="table table-hover" id="showtable" style="width:100%;">
