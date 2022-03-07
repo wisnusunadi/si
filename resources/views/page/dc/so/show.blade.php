@@ -115,7 +115,7 @@
                                     <table class="table nowraptext" style="text-align:center;" id="showtable">
                                         <thead>
                                             <th>No</th>
-                                            <th>No SO</th>
+                                            <th>No PO</th>
                                             <th>No AKN</th>
                                             <th>Batas Kontrak</th>
                                             <th>Customer</th>
@@ -275,7 +275,7 @@
                 orderable: false,
                 searchable: false
             }, {
-                data: 'so',
+                data: 'no_po',
             }, {
                 data: 'no_paket',
             }, {
