@@ -625,8 +625,6 @@
                 var y = ['kosong']
             }
 
-            console.log(y);
-
             $('#semuaform').removeClass('hide');
             $('#semuatable').DataTable().ajax.url('/api/laporan/penjualan/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir).load();
 
@@ -638,10 +636,7 @@
             return false;
         });
 
-        // $('#exportbutton').on('click', function(event) {
-        //     console.log($(this).attr("href"));
-        //     return false;
-        // });
+
     });
 </script>
 @endsection
