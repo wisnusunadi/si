@@ -193,8 +193,6 @@
     $(function() {
 
         $(document).on('submit',  function(e) {
-
-
             e.preventDefault();
             var action = $('#form-rencana-penjualan-create').attr('action');
             console.log(action);
