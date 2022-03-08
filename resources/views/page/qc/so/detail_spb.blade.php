@@ -84,8 +84,7 @@
 
     @media screen and (min-width: 993px) {
 
-        label,
-        .row {
+        body {
             font-size: 14px;
         }
 
@@ -100,12 +99,15 @@
         .btn {
             font-size: 14px;
         }
+
+        .cust{
+            max-width: 40%;
+        }
     }
 
     @media screen and (max-width: 992px) {
 
-        label,
-        .row {
+        body {
             font-size: 12px;
         }
 
@@ -136,8 +138,11 @@
                 <div class="card">
                     <div class="card-body">
                         <h4>Info Penjualan SPB</h4>
-                        @foreach($data as $d) <div class="row">
-                            <div class="col-lg-5 col-md-12 col-sm-12">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-12">
+                        @foreach($data as $d)
+                        <div class="row d-flex justify-content-between">
+                            <div class="p-2 cust">
                                 <div class="margin">
                                     <div><small class="text-muted">Customer</small></div>
                                 </div>
@@ -154,7 +159,7 @@
                                     <b id="distributor">{{$d->customer->telp}}</b>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="p-2">
                                 <div class="margin">
                                     <div><small class="text-muted">No SO</small></div>
                                     <div><b id="no_so">{{$d->pesanan->so}}</b></div>
@@ -164,7 +169,7 @@
                                     <div>{!!$status!!}</div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="p-2">
                                 <div class="margin">
                                     <div><small class="text-muted">No PO</small></div>
                                     <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
@@ -176,6 +181,8 @@
                             </div>
                         </div>
                         @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>

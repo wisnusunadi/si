@@ -29,7 +29,7 @@
 
     @media screen and (min-width: 1220px) {
 
-        section {
+        body {
             font-size: 14px;
         }
 
@@ -45,6 +45,10 @@
             max-height: 330px;
             overflow-y: scroll;
             box-shadow: none;
+        }
+
+        .cust{
+            max-width:40%;
         }
 
     }
@@ -59,7 +63,7 @@
         h4 {
             font-size: 20px;
         } */
-        section {
+        body {
             font-size: 12px;
         }
 
@@ -76,6 +80,10 @@
             overflow-y: scroll;
             box-shadow: none;
         }
+
+        .cust{
+            max-width:40%;
+        }
     }
 
     @media screen and (max-width: 991px) {
@@ -87,7 +95,7 @@
         h4 {
             font-size: 20px;
         } */
-        section {
+        body {
             font-size: 12px;
         }
 
@@ -149,43 +157,47 @@
                                     <div class="card">
                                         <div class="card-body">
                                             <h5>Info Penjualan</h5>
-                                            <div class="row align-md">
-                                                <div class="col-lg-4 col-md-12">
-                                                    <div>
-                                                        <b>{{$ekatalog->customer->nama}}</b>
-                                                    </div>
-                                                    <div>
-                                                        <b>{{$ekatalog->customer->alamat}}</b>
-                                                    </div>
-                                                    <div>
-                                                        <b>{{$ekatalog->customer->telp}}</b>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3 col-md-4 margin-md">
-                                                    <div class="text-muted">No AKN</div>
-                                                    <div>
-                                                        <b id="no_akn">{{$ekatalog->no_paket}}</b>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-3 col-md-4 margin-md">
-                                                    <div class="text-muted">Tanggal Pemesanan</div>
-                                                    <div>
-                                                        <b id="tanggal_pemesanan">{{date('d-m-Y', strtotime($ekatalog->tgl_buat))}}</b>
-                                                    </div>
-                                                </div>
-                                                <div class="col-lg-2 col-md-4 margin-md">
-                                                    <div class="text-muted">Status</div>
-                                                    <div>
-                                                        <b id="status">
-                                                            <span class="badge
-                                                            @if($ekatalog->status == 'batal')
-                                                                red-text
-                                                            @elseif($ekatalog->status == 'negosiasi')
-                                                                yellow-text
-                                                            @elseif($ekatalog->status == 'sepakat')
-                                                                green-text
-                                                            @endif
-                                                            ">{{ucfirst($ekatalog->status)}}</span></b>
+                                            <div class="row">
+                                                <div class="col-lg-11 col-md-12">
+                                                    <div class="row d-flex justify-content-between">
+                                                        <div class="p-2 cust">
+                                                            <div>
+                                                                <b>{{$ekatalog->customer->nama}}</b>
+                                                            </div>
+                                                            <div>
+                                                                <b>{{$ekatalog->customer->alamat}}</b>
+                                                            </div>
+                                                            <div>
+                                                                <b>{{$ekatalog->customer->telp}}</b>
+                                                            </div>
+                                                        </div>
+                                                        <div class="p-2">
+                                                            <div class="text-muted">No AKN</div>
+                                                            <div>
+                                                                <b id="no_akn">{{$ekatalog->no_paket}}</b>
+                                                            </div>
+                                                        </div>
+                                                        <div class="p-2">
+                                                            <div class="text-muted">Tanggal Pemesanan</div>
+                                                            <div>
+                                                                <b id="tanggal_pemesanan">{{date('d-m-Y', strtotime($ekatalog->tgl_buat))}}</b>
+                                                            </div>
+                                                        </div>
+                                                        <div class="p-2">
+                                                            <div class="text-muted">Status</div>
+                                                            <div>
+                                                                <b id="status">
+                                                                    <span class="badge
+                                                                    @if($ekatalog->status == 'batal')
+                                                                        red-text
+                                                                    @elseif($ekatalog->status == 'negosiasi')
+                                                                        yellow-text
+                                                                    @elseif($ekatalog->status == 'sepakat')
+                                                                        green-text
+                                                                    @endif
+                                                                    ">{{ucfirst($ekatalog->status)}}</span></b>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -280,8 +292,8 @@
                                                 <div class="card-body overflowy">
                                                     <div class="card">
                                                         <div class="card-body">
-                                                            <div class="row align-md">
-                                                                <div class="col-lg-6 col-md-6 margin-md">
+                                                            <div class="row d-flex justify-content-around">
+                                                                <div class="p-2">
                                                                     <?php $totalharga = 0; $ongkir = 0; ?>
                                                                             @foreach ($ekatalog->Pesanan->DetailPesanan as $i)
                                                                             <?php
@@ -294,7 +306,7 @@
                                                                         <h6><b>@currency($ongkir)</b></h6>
                                                                     </div>
                                                                 </div>
-                                                                <div class="col-lg-6 col-md-6 margin-md">
+                                                                <div class="p-2">
                                                                     <div class="text-muted">Total Harga</div>
                                                                     <div>
                                                                         <h6><b>

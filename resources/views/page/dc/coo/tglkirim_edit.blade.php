@@ -29,7 +29,7 @@
         </div>
     </div>
     <div class="col-8">
-        <form action="/api/dc/so/update/{{$data->NoseriCoo->id}}" id="form-update-coo" method="POST">
+        <form action="/api/dc/so/update_tgl_kirim_coo/{{$data->NoseriCoo->id}}" id="form-update-coo" method="POST">
             @method('PUT')
             <div class="card">
                 <div class="card-body">
