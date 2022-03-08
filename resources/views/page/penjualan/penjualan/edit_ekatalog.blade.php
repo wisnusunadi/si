@@ -399,9 +399,6 @@
                                                     <a class="nav-link" id="pills-instansi-tab" data-toggle="pill" href="#pills-instansi" role="tab" aria-controls="pills-instansi" aria-selected="false">Instansi</a>
                                                     </li>
                                                     <li class="nav-item" role="presentation">
-                                                    <a class="nav-link" id="pills-keterangan-tab" data-toggle="pill" href="#pills-keterangan" role="tab" aria-controls="pills-keterangan" aria-selected="false">Keterangan Tambahan</a>
-                                                    </li>
-                                                    <li class="nav-item" role="presentation">
                                                         <a class="nav-link" id="pills-produk-tab" data-toggle="pill" href="#pills-produk" role="tab" aria-controls="pills-produk" aria-selected="false">Rencana Penjualan</a>
                                                     </li>
                                                 </ul>
@@ -519,13 +516,6 @@
                                                                             </select>
                                                                         </div>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="tab-pane fade show" id="pills-keterangan" role="tabpanel" aria-labelledby="pills-keterangan-tab">
-                                                            <div class="card removeshadow">
-                                                                <div class="card-header"><h6>Keterangan Tambahan</h6></div>
-                                                                <div class="card-body">
                                                                     <div class="form-group row">
                                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Deskripsi</label>
                                                                         <div class="col-lg-5 col-md-12">
@@ -840,7 +830,7 @@
         var yyyy = today.getFullYear();
 
         today = yyyy + '-' + mm + '-' + dd;
-        var instansi_array = [];
+        // var instansi_array = [];
 
         $("#tgl_edit").attr("max", today);
         $("#batas_kontrak").attr("min", today);
@@ -848,20 +838,20 @@
         loop();
         load_variasi();
 
-        function getinstansi(id){
-            instansi_array = [];
-            $.ajax({
-                url: '/api/customer/get_instansi/' + id+'/'+yyyy,
-                type: 'POST',
-                dataType: 'json',
-                async: false,
-                success: function(data) {
-                    $.each(data, function( i, val ) {
-                        instansi_array.push(val);
-                    });
-                }
-            });
-        }
+        // function getinstansi(id){
+        //     instansi_array = [];
+        //     $.ajax({
+        //         url: '/api/customer/get_instansi/' + id+'/'+yyyy,
+        //         type: 'POST',
+        //         dataType: 'json',
+        //         async: false,
+        //         success: function(data) {
+        //             $.each(data, function( i, val ) {
+        //                 instansi_array.push(val);
+        //             });
+        //         }
+        //     });
+        // }
 
         function perencanaan(customer_id, instansi){
             $('#perencanaantable').DataTable({
@@ -911,7 +901,7 @@
             });
         }
 
-        getinstansi("{{$e->customer_id}}");
+        // getinstansi("{{$e->customer_id}}");
         perencanaan("{{$e->customer_id}}", "{{$e->instansi}}");
 
         function loop() {
@@ -974,7 +964,7 @@
                 }
             });
 
-            getinstansi(id);
+            // getinstansi(id);
             perencanaan(id, document.getElementById("instansi").value);
         });
 
@@ -1668,7 +1658,110 @@
             });
         }
 
-        autocomplete(document.getElementById("instansi"), instansi_array);
+        $("#alamatinstansi").autocomplete({
+                source: function(request, response) {
+
+                    $.ajax({
+                        dataType: 'json',
+                        url: "/api/penjualan/check_alamat",
+                        data: {
+                            term: request.term
+                        },
+
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.alamat,
+                                    id: el.id
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
+
+            $("#instansi").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        url: '/api/customer/get_instansi/' + $('#customer_id').val() + '/' + yyyy,
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el,
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
+
+            $("#satuan_kerja").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        url: "/api/ekatalog/all_satuan",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.satuan,
+                                    id: el.id
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
+
+            $("#deskripsi").autocomplete({
+                source: function(request, response) {
+
+                    $.ajax({
+                        dataType: 'json',
+                        url: "/api/ekatalog/all_deskripsi",
+                        data: {
+                            term: request.term
+                        },
+
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.deskripsi,
+                                    id: el.id
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
+
+        // autocomplete(document.getElementById("instansi"), instansi_array);
 
         $('#perencanaantable').on('click', '#btntransfer', function() {
             var id = $(this).closest('tr').find('#btntransfer').attr('data-id');
