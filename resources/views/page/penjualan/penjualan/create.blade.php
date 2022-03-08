@@ -338,9 +338,6 @@
                                                         <a class="nav-link disabled" id="pills-instansi-tab" data-toggle="pill" href="#pills-instansi" role="tab" aria-controls="pills-instansi" aria-selected="false">Instansi</a>
                                                     </li>
                                                     <li class="nav-item" role="presentation">
-                                                        <a class="nav-link disabled" id="pills-keterangan-tab" data-toggle="pill" href="#pills-keterangan" role="tab" aria-controls="pills-keterangan" aria-selected="false">Keterangan Tambahan</a>
-                                                    </li>
-                                                    <li class="nav-item" role="presentation">
                                                         <a class="nav-link disabled" id="pills-produk-tab" data-toggle="pill" href="#pills-produk" role="tab" aria-controls="pills-produk" aria-selected="false">Rencana Penjualan</a>
                                                     </li>
                                                 </ul>
@@ -481,19 +478,6 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
-                                                            </div>
-                                                            {{-- <div class="card-footer">
-                                                                <button type="button" class="btn btn-danger float-left" id="pills-penjualan-tab" data-toggle="pill" href="#pills-penjualan" role="tab" aria-controls="pills-penjualan" aria-selected="false">Kembali</button>
-                                                                <button type="button" class="btn btn-info float-right" id="pills-keterangan-tab" data-toggle="pill" href="#pills-keterangan" role="tab" aria-controls="pills-keterangan" aria-selected="false">Selanjutnya</button>
-                                                            </div> --}}
-                                                        </div>
-                                                    </div>
-                                                    <div class="tab-pane fade" id="pills-keterangan" role="tabpanel" aria-labelledby="pills-keterangan-tab">
-                                                        <div class="card removeshadow">
-                                                            <div class="card-header">
-                                                                <h6>Keterangan Tambahan</h6>
-                                                            </div>
-                                                            <div class="card-body">
                                                                 <div class="form-group row">
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Deskripsi</label>
                                                                     <div class="col-lg-5 col-md-12">
@@ -512,6 +496,10 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            {{-- <div class="card-footer">
+                                                                <button type="button" class="btn btn-danger float-left" id="pills-penjualan-tab" data-toggle="pill" href="#pills-penjualan" role="tab" aria-controls="pills-penjualan" aria-selected="false">Kembali</button>
+                                                                <button type="button" class="btn btn-info float-right" id="pills-keterangan-tab" data-toggle="pill" href="#pills-keterangan" role="tab" aria-controls="pills-keterangan" aria-selected="false">Selanjutnya</button>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
                                                     <div class="tab-pane fade" id="pills-produk" role="tabpanel" aria-labelledby="pills-produk-tab">
@@ -925,7 +913,7 @@
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
 
-        var instansi_array = [];
+        // var instansi_array = [];
         var alamat_instansi_array = [];
         today = yyyy + '-' + mm + '-' + dd;
         $("#tanggal_pemesanan").attr("max", today);
@@ -974,39 +962,25 @@
             if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
                 if ($('#no_urut').val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "" && $("#batas_kontrak").val() != "") {
                     $('#pills-instansi-tab').removeClass('disabled');
-                    if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "") {
-                        $('#pills-keterangan-tab').removeClass('disabled');
-                        if ($("#deskripsi").val() != "") {
-                            $('#pills-produk-tab').removeClass('disabled');
-                        } else {
-                            $('#pills-produk-tab').addClass('disabled');
-                        }
+                    if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
+                        $('#pills-produk-tab').removeClass('disabled');
                     } else {
-                        $('#pills-keterangan-tab').addClass('disabled');
                         $('#pills-produk-tab').addClass('disabled');
                     }
                 } else {
                     $('#pills-instansi-tab').addClass('disabled');
-                    $('#pills-keterangan-tab').addClass('disabled');
                     $('#pills-produk-tab').addClass('disabled');
                 }
             } else {
                 if ($('#no_urut').val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "") {
                     $('#pills-instansi-tab').removeClass('disabled');
-                    if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "") {
-                        $('#pills-keterangan-tab').removeClass('disabled');
-                        if ($("#deskripsi").val() != "") {
-                            $('#pills-produk-tab').removeClass('disabled');
-                        } else {
-                            $('#pills-produk-tab').addClass('disabled');
-                        }
+                    if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
+                        $('#pills-produk-tab').removeClass('disabled');
                     } else {
-                        $('#pills-keterangan-tab').addClass('disabled');
                         $('#pills-produk-tab').addClass('disabled');
                     }
                 } else {
                     $('#pills-instansi-tab').addClass('disabled');
-                    $('#pills-keterangan-tab').addClass('disabled');
                     $('#pills-produk-tab').addClass('disabled');
                 }
             }
@@ -1433,7 +1407,7 @@
             }
         }).change(function() {
             var id = $(this).val();
-            instansi_array.length = 0
+            // instansi_array.length = 0
             $.ajax({
                 url: '/api/customer/select/' + id,
                 type: 'GET',
@@ -1444,16 +1418,16 @@
                 }
             });
 
-            $.ajax({
-                url: '/api/customer/get_instansi/' + id + '/' + yyyy,
-                type: 'POST',
-                dataType: 'json',
-                success: function(data) {
-                    $.each(data, function(i, val) {
-                        instansi_array.push(val);
-                    });
-                }
-            });
+            // $.ajax({
+            //     url: '/api/customer/get_instansi/' + id + '/' + yyyy,
+            //     type: 'POST',
+            //     dataType: 'json',
+            //     success: function(data) {
+            //         $.each(data, function(i, val) {
+            //             instansi_array.push(val);
+            //         });
+            //     }
+            // });
 
             if (id != "484") {
                 if ($('input[type="radio"][name="jenis_penjualan"]:checked').val() == "ekatalog") {
@@ -2412,7 +2386,7 @@
 
 
 
-        $("#alamatinstansi").autocomplete({
+            $("#alamatinstansi").autocomplete({
                 source: function(request, response) {
 
                     $.ajax({
@@ -2438,8 +2412,84 @@
                     });
                 }
             });
+
+            $("#instansi").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        url: '/api/customer/get_instansi/' + $('#customer_id').val() + '/' + yyyy,
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el,
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
+
+            $("#satuan_kerja").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        url: "/api/ekatalog/all_satuan",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.satuan,
+                                    id: el.id
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
+
+            $("#deskripsi").autocomplete({
+                source: function(request, response) {
+
+                    $.ajax({
+                        dataType: 'json',
+                        url: "/api/ekatalog/all_deskripsi",
+                        data: {
+                            term: request.term
+                        },
+
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.deskripsi,
+                                    id: el.id
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
         /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
-        autocomplete(document.getElementById("instansi"), instansi_array);
+        // autocomplete(document.getElementById("instansi"), instansi_array);
 
     });
 </script>

@@ -376,10 +376,34 @@ class MasterController extends Controller
         }
     }
 
-    public function get_instansi_customer($id, $year){
-        $data = RencanaPenjualan::where([['customer_id', '=', $id], ['tahun', '=', $year]])->pluck('instansi');
-        return json_encode($data);
+    public function get_instansi_customer($id, $year, Request $request){
+        $datarc = RencanaPenjualan::where('instansi', 'LIKE', '%' . $request->input('term', '') . '%')->where([['customer_id', '=', $id], ['tahun', '=', $year]])->pluck('instansi');
+        $datarl = Ekatalog::where('instansi', 'LIKE', '%' . $request->input('term', '') . '%')->groupby('instansi')->pluck('instansi');
+
+        $data = $datarl->merge($datarc);
+
+        // return $data;
+        $datas1 = json_decode(json_encode($data));
+        $datass = array_unique($datas1);
+        return json_encode($datass);
+        // print_r(array_count_values($data));
+        // return json_encode($datas1);
     }
+
+    public function get_ekatalog_satuan(Request $request){
+        $data = Ekatalog::where('satuan', 'LIKE', '%' . $request->input('term', '') . '%')->groupby('satuan')->get();
+        return json_encode($data);
+        // print_r(array_count_values($data));
+        // return json_encode($datas1);
+    }
+
+    public function get_ekatalog_deskripsi(Request $request){
+        $data = Ekatalog::where('deskripsi', 'LIKE', '%' . $request->input('term', '') . '%')->groupby('deskripsi')->get();
+        return json_encode($data);
+        // print_r(array_count_values($data));
+        // return json_encode($datas1);
+    }
+
 
     //public function get_data_detail_penjualan_produk($id)
     //{

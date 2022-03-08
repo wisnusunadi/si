@@ -27,7 +27,6 @@ class DcController extends Controller
     }
     public function pdf_semua_coo($id, $value, $jenis)
     {
-
         $data = NoseriCoo::whereHas('NoseriDetailLogistik', function ($q) use ($id) {
             $q->where('detail_logistik_id', $id);
         })->get();
@@ -42,12 +41,10 @@ class DcController extends Controller
     }
     public function pdf_semua_so_coo($id, $value, $jenis)
     {
-
         $data = NoseriCoo::whereHas('NoseriDetailLogistik.DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($id) {
             $q->where('pesanan.id', $id);
         })->get();
         $count = $data->count();
-
 
         if ($value == 'ekatalog') {
             $pdf = PDF::loadView('page.dc.coo.pdf_semua_ekat_so', ['data' => $data, 'count' => $count, 'jenis' => $jenis])->setPaper('A4');
@@ -428,7 +425,7 @@ class DcController extends Controller
                 if ($data->DetailPesananProduk->GudangBarangJadi->nama == '') {
                     return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
                 } else {
-                    return $data->DetailPesananProduk->GudangBarangJadi->nama;
+                    return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama.' - '.$data->DetailPesananProduk->GudangBarangJadi->nama;
                 }
             })
             ->addColumn('no_akd', function ($data) {
@@ -530,13 +527,13 @@ class DcController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
-                if (isset($data->NoseriCoo)) {
-                    return '';
-                } else {
-                    return '  <div class="form-check">
+                // if (isset($data->NoseriCoo)) {
+                //     return '';
+                // } else {
+                    return '<div class="form-check">
                     <input class=" form-check-input  nosericheck" type="checkbox" data-value="' . $data->detail_logistik_id . '" data-id="' . $data->id . '" />
                     </div>';
-                }
+                // }
             })
             ->addColumn('noseri', function ($data) {
                 return  $data->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri;
@@ -716,6 +713,33 @@ class DcController extends Controller
             return view('page.dc.so.detail_spa', ['data' => $data, 'status' => $status]);
         }
     }
+    public function create_coo($id, $value)
+    {
+        $value2 = array();
+        $array_seri = explode(',', $id);
+        if ($id == 0) {
+            $data =  NoseriDetailLogistik::where('detail_logistik_id', $value)->first();
+            $jumlah = count($array_seri);
+
+            $seri_data = NoseriDetailLogistik::where('detail_logistik_id', $value)->get();
+            foreach ($seri_data as $d) {
+                $value2[] = $d->id;
+            }
+            $noseri_id =  json_encode($value2);
+        } else {
+            $data =  NoseriDetailLogistik::whereIN('id', $array_seri)->first();
+            $jumlah = count($array_seri);
+
+            $seri_data = NoseriDetailLogistik::whereIN('id', $array_seri)->get();
+            foreach ($seri_data as $d) {
+                $value2[] = $d->id;
+            }
+            $noseri_id =  json_encode($value2);
+        }
+
+        return view('page.dc.coo.create', ['data' => $data, 'id' => $id, 'jumlah' => $jumlah, 'noseri_id' => $noseri_id]);
+    }
+
     public function edit_coo($id, $value)
     {
         $value2 = array();
@@ -742,12 +766,13 @@ class DcController extends Controller
 
         return view('page.dc.coo.edit', ['data' => $data, 'id' => $id, 'jumlah' => $jumlah, 'noseri_id' => $noseri_id]);
     }
+
     public function edit_tglkirim_coo($id)
     {
         $data =  NoseriDetailLogistik::find($id);
         return view('page.dc.coo.tglkirim_edit', ['data' => $data]);
     }
-    public function create_coo(Request $request, $value)
+    public function store_coo(Request $request, $value)
     {
         if ($request->diketahui == 'spa') {
             $nama = NULL;
@@ -766,16 +791,30 @@ class DcController extends Controller
         $array_seri = explode(',', $replace_array_seri);
         $bool = true;
         for ($i = 0; $i < count($array_seri); $i++) {
-            $c = NoseriCoo::create([
-                'nama' => $nama,
-                'jabatan' => $jabatan,
-                'ket' => $ket,
-                'noseri_logistik_id' => $array_seri[$i],
-                'tgl_kirim' => $request->tgl_kirim,
-                'catatan' => $request->keterangan,
-            ]);
-            if (!$c) {
-                $bool = false;
+            $noseri = NoseriCoo::where('noseri_logistik_id', $array_seri[$i])->first();
+            if($noseri){
+                $l = NoseriCoo::find($noseri->id);
+                $l->nama = $nama;
+                $l->jabatan = $jabatan;
+                $l->ket = $ket;
+                $l->tgl_kirim = $request->tgl_kirim;
+                $l->catatan = $request->keterangan;
+                $l->save();
+                if (!$l) {
+                    $bool = false;
+                }
+            }else{
+                $c = NoseriCoo::create([
+                    'nama' => $nama,
+                    'jabatan' => $jabatan,
+                    'ket' => $ket,
+                    'noseri_logistik_id' => $array_seri[$i],
+                    'tgl_kirim' => $request->tgl_kirim,
+                    'catatan' => $request->keterangan,
+                ]);
+                if (!$c) {
+                    $bool = false;
+                }
             }
         }
         if ($bool == true) {
@@ -784,7 +823,32 @@ class DcController extends Controller
             return response()->json(['data' =>  'error']);
         }
     }
-    public function update_coo(Request $request, $id)
+
+    public function update_coo(Request $request, $value)
+    {
+        $replace_array_seri = strtr($value, array('[' => '', ']' => ''));
+        $array_seri = explode(',', $replace_array_seri);
+        $bool = true;
+        for ($i = 0; $i < count($array_seri); $i++) {
+            $noseri = NoseriCoo::where('noseri_logistik_id', $array_seri[$i])->first();
+            if($noseri){
+                $l = NoseriCoo::find($noseri->id);
+                $l->tgl_kirim = $request->edit_tgl_kirim;
+                $l->catatan = $request->edit_keterangan;
+                $l->save();
+                if (!$l) {
+                    $bool = false;
+                }
+            }
+        }
+        if ($bool == true) {
+            return response()->json(['data' =>  'success']);
+        } else {
+            return response()->json(['data' =>  'error']);
+        }
+    }
+
+    public function update_tgl_kirim_coo(Request $request, $id)
     {
         //  return response($id);
         $l = NoseriCoo::find($id);

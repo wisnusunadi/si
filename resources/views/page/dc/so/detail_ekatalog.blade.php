@@ -3,7 +3,24 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Sales Order</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Sales Order</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "9")
+                <li class="breadcrumb-item"><a href="{{route('dc.dashboard')}}">Beranda</a></li>
+                @elseif(Auth::user()->divisi_id == "9")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+                @endif
+                <li class="breadcrumb-item"><a href="{{route('dc.so.show')}}">Sales Order DC</a></li>
+                <li class="breadcrumb-item active">Detail</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
 @stop
 
 @section('adminlte_css')
@@ -94,6 +111,10 @@
         .dropdown-item {
             font-size: 14px;
         }
+
+        .cust{
+            max-width: 40%;
+        }
     }
 
     @media screen and (max-width: 1439px) {
@@ -103,6 +124,10 @@
 
         .dropdown-item {
             font-size: 12px;
+        }
+
+        .cust{
+            max-width: 40%;
         }
     }
 
@@ -127,34 +152,38 @@
                     <div class="card-body">
                         <h5>Info</h5>
                         <div class="row">
-                            <div class="col-lg-4 col-md-12">
-                                <div class="filter">
-                                    <div><small class="text-muted">Distributor</small></div>
-                                    <div><b>{{$data->ekatalog->customer->nama}}</b></div>
-                                </div>
-                                <div class="filter">
-                                    <div><small class="text-muted">Instansi</small></div>
-                                    <div><b>{{$data->ekatalog->instansi}}</b></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="filter">
-                                    <div><small class="text-muted">No SO</small></div>
-                                    <div><b>{{$data->so}}</b></div>
-                                </div>
-                                <div class="filter">
-                                    <div><small class="text-muted">No AKN</small></div>
-                                    <div><b>{{$data->ekatalog->no_paket}}</b></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="filter">
-                                    <div><small class="text-muted">Status</small></div>
-                                    <div><b>{!!$status!!}</b></div>
-                                </div>
-                                <div class="filter">
-                                    <div><small class="text-muted">Deskripsi</small></div>
-                                    <div><b>{{$data->ekatalog->deskripsi}}</b></div>
+                            <div class="col-lg-11 col-md-12">
+                                <div class="row d-flex justify-content-between">
+                                    <div class="p-2">
+                                        <div class="filter">
+                                            <div><small class="text-muted">Distributor</small></div>
+                                            <div><b>{{$data->ekatalog->customer->nama}}</b></div>
+                                        </div>
+                                        <div class="filter">
+                                            <div><small class="text-muted">Instansi</small></div>
+                                            <div><b>{{$data->ekatalog->instansi}}</b></div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <div class="filter">
+                                            <div><small class="text-muted">No SO</small></div>
+                                            <div><b>{{$data->so}}</b></div>
+                                        </div>
+                                        <div class="filter">
+                                            <div><small class="text-muted">No AKN</small></div>
+                                            <div><b>{{$data->ekatalog->no_paket}}</b></div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2 cust">
+                                        <div class="filter">
+                                            <div><small class="text-muted">Status</small></div>
+                                            <div><b>{!!$status!!}</b></div>
+                                        </div>
+                                        <div class="filter">
+                                            <div><small class="text-muted">Deskripsi</small></div>
+                                            <div><b>{{$data->ekatalog->deskripsi}}</b></div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -236,9 +265,14 @@
                     <div>
                         <h5 style="display: inline;" class="filter">No Seri</h5>
                         <span class="float-right filter">
-                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
-                                <button class="btn btn-warning" id="cekbrg" disabled="true">
-                                    <i class="fas fa-pencil-alt"></i> COO
+                            <a data-toggle="modal" data-target="#createmodal" class="createmodal hide" data-attr="" data-id="">
+                                <button class="btn btn-info" id="cekbrg" disabled="true">
+                                    <i class="fas fa-plus"></i> Tambah COO
+                                </button>
+                            </a>
+                            <a data-toggle="modal" data-target="#editmodal" class="editmodal hide" data-attr="" data-id="">
+                                <button class="btn btn-warning" id="cekbrgedit" disabled="true">
+                                    <i class="fas fa-pencil-alt"></i> Edit COO
                                 </button>
                             </a>
                         </span>
@@ -299,7 +333,7 @@
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header bg-info">
-                        <h4 class="modal-title">Tambah COO</h4>
+                        <h4 class="modal-title">COO</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -312,7 +346,7 @@
         <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
-                    <div class="modal-header bg-info">
+                    <div class="modal-header bg-warning">
                         <h4 class="modal-title">COO</h4>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
@@ -463,6 +497,7 @@
             var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
             if ($('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
+                $('#cekbrgedit').prop('disabled', false);
                 $('.nosericheck', rows).prop('checked', true);
                 checkedAry = [];
                 $.each($(".nosericheck:checked", rows), function() {
@@ -471,6 +506,7 @@
             } else if ($('input[name="check_all"]:checked').length <= 0) {
                 $('.nosericheck', rows).prop('checked', false);
                 $('#cekbrg').prop('disabled', true);
+                $('#cekbrgedit').prop('disabled', true);
             }
         });
 
@@ -478,12 +514,14 @@
             $('#check_all').prop('checked', false);
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
+                $('#cekbrgedit').prop('disabled', false);
                 checkedAry = [];
                 $.each($(".nosericheck:checked"), function() {
                     checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
                 });
             } else if ($('.nosericheck:checked').length <= 0) {
                 $('#cekbrg').prop('disabled', true);
+                $('#cekbrgedit').prop('disabled', true);
             }
         });
 
@@ -492,10 +530,13 @@
             var datacount = $(this).attr('data-count');
             if (datacount == 0) {
                 // $('.sericheckbox').addClass("hide");
-                $('#noseritable').DataTable().column(0).visible(false);
+                $('.createmodal').addClass("hide");
+                $('.editmodal').removeClass("hide");
+                // $('#noseritable').DataTable().column(0).visible(false);
             } else {
-                // $('.sericheckbox').removeClass("hide");
-                $('#noseritable').DataTable().column(0).visible(true);
+                $('.createmodal').removeClass("hide");
+                $('.editmodal').addClass("hide");
+                // $('#noseritable').DataTable().column(0).visible(true);
             }
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
@@ -503,6 +544,7 @@
             $('#noseritable').DataTable().ajax.url('/api/dc/so/detail/seri/' + data).load();
             //  console.log(data);
         });
+
         $(document).on('submit', '#form-create-coo', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
@@ -518,7 +560,7 @@
                     if (response['data'] == "success") {
                         swal.fire(
                             'Berhasil',
-                            'Berhasil melakukan Penambahan Data Pengujian',
+                            'Berhasil melakukan Penambahan Data COO',
                             'success'
                         ).then(function() {
                             location.reload();
@@ -530,7 +572,7 @@
                     } else if (response['data'] == "error") {
                         swal.fire(
                             'Gagal',
-                            'Gagal melakukan Penambahan Data Pengujian',
+                            'Gagal melakukan Penambahan Data COO',
                             'error'
                         );
                     }
@@ -541,6 +583,7 @@
             });
             return false;
         });
+
         $(document).on('submit', '#form-update-coo', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
@@ -579,12 +622,44 @@
             return false;
         });
 
+        // $(document).on('click', '.createmodal', function(event) {
+        //     event.preventDefault();
+        //     var href = $(this).attr('data-attr');
+        //     var id = $(this).data('id');
+        //     $.ajax({
+        //         url: "/dc/coo/create/" + id,
+        //         beforeSend: function() {
+        //             $('#loader').show();
+        //         },
+        //         // return the result
+        //         success: function(result) {
+        //             $('#createmodal').modal("show");
+        //             $('#create').html(result).show();
+        //             $('.bulan').select2({
+        //                 placeholder: 'Pilih Bulan',
+        //                 allowClear: true
+        //             });
+        //             // $("#editform").attr("action", href);
+        //         },
+        //         complete: function() {
+        //             $('#loader').hide();
+        //         },
+        //         error: function(jqXHR, testStatus, error) {
+        //             console.log(error);
+        //             alert("Page " + href + " cannot open. Error:" + error);
+        //             $('#loader').hide();
+        //         },
+        //         timeout: 8000
+        //     })
+        // });
+
         $(document).on('click', '.createmodal', function(event) {
             event.preventDefault();
-            var href = $(this).attr('data-attr');
+            console.log(checkedAry);
+            data = $(".nosericheck").data().value;
             var id = $(this).data('id');
             $.ajax({
-                url: "/dc/coo/create/" + id,
+                url: "/dc/coo/create/" + checkedAry + "/" + data,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -592,10 +667,11 @@
                 success: function(result) {
                     $('#createmodal').modal("show");
                     $('#create').html(result).show();
-                    $('.bulan').select2({
+                    $('.bulan_edit').select2({
                         placeholder: 'Pilih Bulan',
                         allowClear: true
                     });
+                    listnoseri(checkedAry, data);
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {

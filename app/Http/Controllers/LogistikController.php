@@ -2633,7 +2633,6 @@ class LogistikController extends Controller
     }
     public function create_logistik(Request $request, $prd_id, $part_id, $jenis)
     {
-
         if ($prd_id != '0') {
             $prd_array = array_values(json_decode($prd_id, true));
         } else {
