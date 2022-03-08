@@ -29,14 +29,14 @@
         </div>
     </div>
     <div class="col-8">
-        <form action="/api/dc/so/update/{{$data->NoseriCoo->id}}" id="form-update-coo" method="POST">
+        <form action="/api/dc/so/update_tgl_kirim_coo/{{$data->NoseriCoo->id}}" id="form-update-coo" method="POST">
             @method('PUT')
             <div class="card">
                 <div class="card-body">
                     <div class="form-horizontal">
                         <div class="form-group row">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Diketahui Oleh</label>
-                            <div class="col-5 col-form-label">
+                            <label for="" class="col-12 col-form-label">Diketahui Oleh</label>
+                            <div class="col-12 col-form-label">
                                 <div class="form-check form-check-inline">
                                     <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="spa" {{ ($data->NoseriCoo->ket=="spa")? "checked" : "" }} disabled />
                                     <label class="form-check-label" for="diketahui1">PT Sinko Prima Alloy</label>
@@ -52,21 +52,35 @@
                             </div>
                         </div>
                         @if($data->Nosericoo->nama != '')
-                        <div class="form-group row " id="nama_label">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Nama</label>
-                            <div class="col-5">
-                                <input type="text" class="form-control col-form-label" id="nama" name="nama" value="{{$data->NoseriCoo->nama}}" disabled>
-                            </div>
+                        <div class="form-row" id="nama_label">
+                            {{-- <div class="card" style="box-shadow:none;">
+                                <div class="card-body" style="background-color: #ffc107">
+                                    <div class="row"> --}}
+                                        <div class="form-group col-6">
+                                            <label for="nama" class="col-form-label" style="text-align:right;">Nama</label>
+                                            <input type="text" class="form-control col-form-label" id="nama" name="nama" value="{{$data->NoseriCoo->nama}}" disabled>
+                                        </div>
+                                        <div class="form-group col-6">
+                                            <label for="jabatan" class="col-form-label" style="text-align:right;">Jabatan</label>
+                                            <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan"  value="{{$data->NoseriCoo->jabatan}}" disabled>
+                                        </div>
+                                    {{-- </div>
+                                </div>
+                            </div> --}}
+                            {{-- <label for="" class="col-12 col-form-label">Nama</label>
+                            <div class="col-12">
+                                <input type="text" class="form-control col-form-label" id="nama" name="nama">
+                            </div> --}}
                         </div>
-                        <div class="form-group row " id="jabatan_label">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Jabatan</label>
-                            <div class="col-5">
-                                <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan" value="{{$data->NoseriCoo->jabatan}}" disabled>
+                        {{-- <div class="form-group row " id="jabatan_label">
+                            <label for="" class="col-12 col-form-label">Jabatan</label>
+                            <div class="col-12">
+                                <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan">
                             </div>
-                        </div>
+                        </div> --}}
                         @endif
                         <div class="form-group row" id="tgl_kirim">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Tgl Kirim</label>
+                            <label for="" class="col-12 col-form-label">Tgl Kirim</label>
                             <div class="col-5">
                                 @if($data->NoseriCoo->tgl_kirim != '')
                                 <input type="date" class="form-control col-form-label" name="tgl_kirim" value="{{$data->NoseriCoo->tgl_kirim}}">
@@ -79,7 +93,7 @@
                             </div>
                         </div>
                         <div class="form-group row" id="tgl_kirim">
-                            <label for="" class="col-5 col-form-label" style="text-align:right;">Tanda Terima</label>
+                            <label for="" class="col-12 col-form-label">Tanda Terima</label>
                             <div class="col-5">
                                 @if($data->NoseriCoo->catatan != '')
                                 <textarea class="form-control col-form-label" name="keterangan">{{$data->NoseriCoo->catatan}}</textarea>
@@ -95,7 +109,7 @@
                         <button class="btn btn-danger float-left" data-dismiss="modal">Batal</button>
                     </span>
                     <span>
-                        <button type="submit" class="btn btn-warning float-right " id="btnsimpan">Update</button>
+                        <button type="submit" class="btn btn-warning float-right " id="btnsimpan">Ubah</button>
                     </span>
                 </div>
             </div>

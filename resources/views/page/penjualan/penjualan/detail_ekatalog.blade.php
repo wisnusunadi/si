@@ -123,9 +123,9 @@
                                                 <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">{{$no}}</td>
                                                 <td><b class="wb">{{$e->PenjualanProduk->nama}}</b></td>
                                                 <td colspan="2" class="nowraptxt">{{$e->jumlah}}</td>
-                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency($e->harga)</td>
-                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency($e->ongkir)</td>
-                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">@currency(($e->harga * $e->jumlah )+ $e->ongkir)</td>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->harga)</td>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->ongkir)</td>
+                                                <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency(($e->harga * $e->jumlah )+ $e->ongkir)</td>
                                                 <?php $totalharga = $totalharga + (($e->harga * $e->jumlah) + $e->ongkir); ?>
                                             </tr>
                                             @if(isset($e->DetailPesananProduk))
@@ -150,7 +150,7 @@
                                         <tfoot>
                                             <tr>
                                                 <td colspan="6">Total Harga</td>
-                                                <td>@currency($totalharga)</td>
+                                                <td class="nowraptxt tabnum">@currency($totalharga)</td>
                                             </tr>
                                         </tfoot>
 

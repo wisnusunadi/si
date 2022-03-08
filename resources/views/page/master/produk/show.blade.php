@@ -276,6 +276,7 @@
                 $('#btnsimpan').attr('disabled', true);
             }
         }
+
         $(document).on('submit', '#form-update', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
@@ -371,6 +372,7 @@
                 }
             ]
         });
+
         $('#showtable tbody').on('click', '#showmodal', function() {
             var rows = showtable.rows($(this).parents('tr')).data();
             $('#nama_produk').text(rows[0].nama);

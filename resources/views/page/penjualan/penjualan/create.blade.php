@@ -37,6 +37,14 @@
         width: 100% !important;
     }
 
+    .select2-container {
+        width: 100% !important;
+    }
+
+    .select2-search--dropdown .select2-search__field {
+        width: 98%;
+    }
+
     legend {
         font-size: 14px;
     }
@@ -55,11 +63,21 @@
     }
 
     #produktable {
-        width: 1371px !important;
+        width: 1250px !important;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     #parttable {
-        width: 1371px !important;
+        width: 1250px !important;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    #jasatable {
+        width: 1250px !important;
+        margin-left: auto;
+        margin-right: auto;
     }
 
     .removeshadow {
@@ -69,7 +87,7 @@
 
     @media screen and (min-width: 1220px) {
 
-        section {
+        body {
             font-size: 14px;
         }
 
@@ -94,7 +112,7 @@
         h4 {
             font-size: 20px;
         } */
-        section {
+        body {
             font-size: 12px;
         }
 
@@ -129,6 +147,57 @@
             text-align: left;
         }
     }
+
+    .autocomplete {
+        position: relative;
+        display: inline-block;
+
+    }
+
+    .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        /*position the autocomplete items to be the same width as the container:*/
+        top: 100%;
+        left: 10px;
+        right: 10px;
+    }
+
+    .autocomplete-items div {
+        padding: 7px;
+        cursor: pointer;
+        background-color: #fff;
+        border-bottom: 1px solid #d4d4d4;
+    }
+
+    /*when hovering an item:*/
+    .autocomplete-items div:hover {
+        background-color: steelblue;
+        color: #ffffff;
+    }
+
+    /*when navigating through the items using the arrow keys:*/
+    .autocomplete-active {
+        background-color: midnightblue !important;
+        color: #ffffff;
+    }
+
+
+    .ui-widget-content.ui-autocomplete {
+            width: 350px;
+            max-height: 200px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+
+        .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+            background: #366aca !important;
+            font-weight: bold !important;
+            color: #ffffff !important;
+        }
 </style>
 @stop
 
@@ -159,7 +228,7 @@
                             </button>
                         </div>
                         @endif
-                        <form method="post" action="{{route('penjualan.penjualan.store')}}">
+                        <form method="post" autocomplete="off" action="{{route('penjualan.penjualan.store')}}">
                             {{csrf_field()}}
                             <div class="row d-flex justify-content-center">
                                 <div class="col-lg-11 col-md-12">
@@ -254,157 +323,210 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row d-flex justify-content-center hide" id="akn">
-                                <div class="col-lg-11 col-md-12">
-                                    <h4>Info AKN</h4>
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="form-horizontal">
-                                                <div class="card removeshadow">
-                                                    <div class="card-body">
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Urut</label>
-                                                            <div class="col-lg-2 col-md-6">
-                                                                <input type="number" class="form-control col-form-label @error('no_urut') is-invalid @enderror" name="no_urut" id="no_urut"/>
-                                                                <div class="invalid-feedback" id="msgno_urut">
-                                                                    @if($errors->has('no_urut'))
-                                                                    {{ $errors->first('no_urut')}}
-                                                                    @endif
+                            <div class="form-horizontal">
+                                <div class="row d-flex justify-content-center hide" id="akn">
+                                    <div class="col-lg-11 col-md-12">
+                                        <h4>Info AKN</h4>
+                                        <div class="card">
+                                            <div class="card-body">
+
+                                                <ul class="nav nav-pills mb-3 nav-justified" id="pills-tab" role="tablist">
+                                                    <li class="nav-item" role="presentation">
+                                                        <a class="nav-link active" id="pills-penjualan-tab" data-toggle="pill" href="#pills-penjualan" role="tab" aria-controls="pills-penjualan" aria-selected="true">Deskripsi Ekatalog</a>
+                                                    </li>
+                                                    <li class="nav-item" role="presentation">
+                                                        <a class="nav-link disabled" id="pills-instansi-tab" data-toggle="pill" href="#pills-instansi" role="tab" aria-controls="pills-instansi" aria-selected="false">Instansi</a>
+                                                    </li>
+                                                    <li class="nav-item" role="presentation">
+                                                        <a class="nav-link disabled" id="pills-produk-tab" data-toggle="pill" href="#pills-produk" role="tab" aria-controls="pills-produk" aria-selected="false">Rencana Penjualan</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content" id="pills-tabContent">
+                                                    <div class="tab-pane fade show active" id="pills-penjualan" role="tabpanel" aria-labelledby="pills-penjualan-tab">
+                                                        <div class="card removeshadow">
+                                                            <div class="card-header">
+                                                                <h6>Deskripsi Ekatalog</h6>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Urut</label>
+                                                                    <div class="col-lg-2 col-md-6">
+                                                                        <input type="number" class="form-control col-form-label @error('no_urut') is-invalid @enderror" name="no_urut" id="no_urut" />
+                                                                        <div class="invalid-feedback" id="msgno_urut">
+                                                                            @if($errors->has('no_urut'))
+                                                                            {{ $errors->first('no_urut')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Paket</label>
+                                                                    <div class="col-lg-5 col-md-12 input-group">
+                                                                        <div class="input-group-prepend">
+                                                                            <span class="input-group-text" id="ket_no_paket">AK1-</span>
+                                                                        </div>
+                                                                        <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" />
+                                                                        <div class="invalid-feedback" id="msgno_paket">
+                                                                            @if($errors->has('no_paket'))
+                                                                            {{ $errors->first('no_paket')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input" type="radio" name="status" id="satuan1" value="sepakat" />
+                                                                            <label class="form-check-label" for="satuan1">Sepakat</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input" type="radio" name="status" id="satuan2" value="negosiasi" />
+                                                                            <label class="form-check-label" for="satuan2">Negosiasi</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input" type="radio" name="status" id="satuan3" value="batal" />
+                                                                            <label class="form-check-label" for="satuan3">Batal</label>
+                                                                        </div>
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input" type="radio" name="status" id="satuan4" value="draft" />
+                                                                            <label class="form-check-label" for="satuan4">Draft</label>
+                                                                        </div>
+                                                                        <div class="invalid-feedback" id="msgstatus">
+                                                                            @if($errors->has('status'))
+                                                                            {{ $errors->first('status')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Pemesanan</label>
+                                                                    <div class="col-lg-4">
+                                                                        <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />
+                                                                        <div class="invalid-feedback" id="msgtanggal_pemesanan">
+                                                                            @if($errors->has('tanggal_pemesanan'))
+                                                                            {{ $errors->first('tanggal_pemesanan')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Delivery</label>
+                                                                    <div class="col-lg-4 col-md-12">
+                                                                        <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
+                                                                        <div class="invalid-feedback" id="msgbatas_kontrak">
+                                                                            @if($errors->has('batas_kontrak'))
+                                                                            {{ $errors->first('batas_kontrak')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Paket</label>
-                                                            <div class="col-lg-5 col-md-12 input-group">
-                                                                <div class="input-group-prepend">
-                                                                    <span class="input-group-text" id="ket_no_paket">AK1-</span>
-                                                                </div>
-                                                                <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" />
-                                                                <div class="invalid-feedback" id="msgno_paket">
-                                                                    @if($errors->has('no_paket'))
-                                                                    {{ $errors->first('no_paket')}}
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
-                                                            <div class="col-lg-6 col-md-12 col-form-label">
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="satuan1" value="sepakat" />
-                                                                    <label class="form-check-label" for="satuan1">Sepakat</label>
-                                                                </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="satuan2" value="negosiasi" />
-                                                                    <label class="form-check-label" for="satuan2">Negosiasi</label>
-                                                                </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="satuan3" value="batal" />
-                                                                    <label class="form-check-label" for="satuan3">Batal</label>
-                                                                </div>
-                                                                <div class="form-check form-check-inline">
-                                                                    <input class="form-check-input" type="radio" name="status" id="satuan4" value="draft" />
-                                                                    <label class="form-check-label" for="satuan4">Draft</label>
-                                                                </div>
-                                                                <div class="invalid-feedback" id="msgstatus">
-                                                                    @if($errors->has('status'))
-                                                                    {{ $errors->first('status')}}
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Pemesanan</label>
-                                                            <div class="col-lg-4">
-                                                                <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />
-                                                                <div class="invalid-feedback" id="msgtanggal_pemesanan">
-                                                                    @if($errors->has('tanggal_pemesanan'))
-                                                                    {{ $errors->first('tanggal_pemesanan')}}
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Delivery</label>
-                                                            <div class="col-lg-4 col-md-12">
-                                                                <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" />
-                                                                <div class="invalid-feedback" id="msgbatas_kontrak">
-                                                                    @if($errors->has('batas_kontrak'))
-                                                                    {{ $errors->first('batas_kontrak')}}
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                                <div class="card removeshadow">
-                                                    <div class="card-header"></div>
-                                                    <div class="card-body">
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
-                                                            <div class="col-lg-7 col-md-12">
-                                                                <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" />
-                                                                <div class="invalid-feedback" id="msginstansi">
-                                                                    @if($errors->has('instansi'))
-                                                                    {{ $errors->first('instansi')}}
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Satuan Kerja</label>
-                                                            <div class="col-lg-6 col-md-12">
-                                                                <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" />
-                                                                <div class="invalid-feedback" id="msgsatuan_kerja">
-                                                                    @if($errors->has('satuan_kerja'))
-                                                                    {{ $errors->first('satuan_kerja')}}
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat Instansi</label>
-                                                            <div class="col-lg-7 col-md-12">
-                                                                <textarea class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi"></textarea>
-                                                                <div class="invalid-feedback" id="msgalamatinstansi">
-                                                                    @if($errors->has('alamatinstansi'))
-                                                                    {{ $errors->first('alamatinstansi')}}
-                                                                    @endif
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Provinsi</label>
-                                                            <div class="col-lg-7 col-md-12">
-                                                                <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
-                                                                </select>
-                                                                <div class="invalid-feedback" id="msgprovinsi">
-                                                                    @if($errors->has('provinsi'))
-                                                                    {{ $errors->first('provinsi')}}
-                                                                    @endif
-                                                                </div>
-                                                            </div>
+                                                            {{-- <div class="card-footer">
+                                                                <button type="button" class="btn btn-info float-right" id="pills-instansi-tab" data-toggle="pill" href="#pills-instansi" role="tab" aria-controls="pills-instansi" aria-selected="false">Selanjutnya</button>
+                                                            </div> --}}
                                                         </div>
                                                     </div>
-                                                </div>
-                                                <div class="card removeshadow">
-                                                    <div class="card-header"></div>
-                                                    <div class="card-body">
-                                                        <div class="form-group row">
-                                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Deskripsi</label>
-                                                            <div class="col-lg-5 col-md-12">
-                                                                <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"></textarea>
-                                                                <div class="invalid-feedback" id="msgdeskripsi">
-                                                                    @if($errors->has('deskripsi'))
-                                                                    {{ $errors->first('deskripsi')}}
-                                                                    @endif
+                                                    <div class="tab-pane fade" id="pills-instansi" role="tabpanel" aria-labelledby="pills-instansi-tab">
+                                                        <div class="card removeshadow">
+                                                            <div class="card-header">
+                                                                <h6>Instansi</h6>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
+                                                                    <div class="col-lg-7 col-md-12 autocomplete">
+                                                                        <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" autocomplete="off" />
+                                                                        <div class="invalid-feedback" id="msginstansi">
+                                                                            @if($errors->has('instansi'))
+                                                                            {{ $errors->first('instansi')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Satuan Kerja</label>
+                                                                    <div class="col-lg-6 col-md-12">
+                                                                        <input type="text" class="form-control col-form-label @error('satuan_kerja') is-invalid @enderror" name="satuan_kerja" id="satuan_kerja" />
+                                                                        <div class="invalid-feedback" id="msgsatuan_kerja">
+                                                                            @if($errors->has('satuan_kerja'))
+                                                                            {{ $errors->first('satuan_kerja')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat Instansi</label>
+                                                                    <div class="col-lg-7 col-md-12">
+                                                                        <textarea class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi"></textarea>
+                                                                        <div class="invalid-feedback" id="msgalamatinstansi">
+                                                                            @if($errors->has('alamatinstansi'))
+                                                                            {{ $errors->first('alamatinstansi')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Provinsi</label>
+                                                                    <div class="col-lg-7 col-md-12">
+                                                                        <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
+                                                                        </select>
+                                                                        <div class="invalid-feedback" id="msgprovinsi">
+                                                                            @if($errors->has('provinsi'))
+                                                                            {{ $errors->first('provinsi')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Deskripsi</label>
+                                                                    <div class="col-lg-5 col-md-12">
+                                                                        <textarea class="form-control col-form-label @error('deskripsi') is-invalid @enderror" name="deskripsi" id="deskripsi"></textarea>
+                                                                        <div class="invalid-feedback" id="msgdeskripsi">
+                                                                            @if($errors->has('deskripsi'))
+                                                                            {{ $errors->first('deskripsi')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="keterangan" class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
+                                                                    <div class="col-lg-5 col-md-12">
+                                                                        <textarea class="form-control col-form-label" name="keterangan"></textarea>
+                                                                    </div>
                                                                 </div>
                                                             </div>
+                                                            {{-- <div class="card-footer">
+                                                                <button type="button" class="btn btn-danger float-left" id="pills-penjualan-tab" data-toggle="pill" href="#pills-penjualan" role="tab" aria-controls="pills-penjualan" aria-selected="false">Kembali</button>
+                                                                <button type="button" class="btn btn-info float-right" id="pills-keterangan-tab" data-toggle="pill" href="#pills-keterangan" role="tab" aria-controls="pills-keterangan" aria-selected="false">Selanjutnya</button>
+                                                            </div> --}}
                                                         </div>
-                                                        <div class="form-group row">
-                                                            <label for="keterangan" class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
-                                                            <div class="col-lg-5 col-md-12">
-                                                                <textarea class="form-control col-form-label" name="keterangan"></textarea>
+                                                    </div>
+                                                    <div class="tab-pane fade" id="pills-produk" role="tabpanel" aria-labelledby="pills-produk-tab">
+                                                        <div class="card removeshadow">
+                                                            <div class="card-header">
+                                                                <h6>Rencana Penjualan</h6>
+                                                            </div>
+                                                            <div class="card-body">
+                                                                <div class="col-lg-12 col-md-12 perencanaan">
+                                                                    <div class="table-responsive">
+                                                                        <table class="table" style="text-align: center; width: 100%;" id="perencanaantable">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>No</th>
+                                                                                    <th>Nama Produk</th>
+                                                                                    <th>Qty</th>
+                                                                                    <th>Realisasi</th>
+                                                                                    <th>Harga</th>
+                                                                                    <th>Aksi</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody>
+
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -413,74 +535,74 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row d-flex justify-content-center hide" id="nonakn">
-                                <div class="col-lg-11 col-md-12">
-                                    <h4>Info Penjualan</h4>
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Nomor PO</label>
-                                                <div class="col-lg-4 col-md-12">
-                                                    <input type="text" class="form-control col-form-label @error('no_po') is-invalid @enderror" id="no_po" name="no_po" />
-                                                    <div class="invalid-feedback" id="msgno_po">
-                                                        @if($errors->has('no_po'))
-                                                        {{ $errors->first('no_po')}}
-                                                        @endif
+                                <div class="row d-flex justify-content-center hide" id="nonakn">
+                                    <div class="col-lg-11 col-md-12">
+                                        <h4>Info Penjualan</h4>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Nomor PO</label>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <input type="text" class="form-control col-form-label @error('no_po') is-invalid @enderror" id="no_po" name="no_po" />
+                                                        <div class="invalid-feedback" id="msgno_po">
+                                                            @if($errors->has('no_po'))
+                                                            {{ $errors->first('no_po')}}
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal PO</label>
-                                                <div class="col-lg-4 col-md-12">
-                                                    <input type="date" class="form-control col-form-label @error('tanggal_po') is-invalid @enderror" id="tanggal_po" name="tanggal_po" />
-                                                    <div class="invalid-feedback" id="msgtanggal_po">
-                                                        @if($errors->has('tanggal_po'))
-                                                        {{ $errors->first('tanggal_po')}}
-                                                        @endif
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal PO</label>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <input type="date" class="form-control col-form-label @error('tanggal_po') is-invalid @enderror" id="tanggal_po" name="tanggal_po" />
+                                                        <div class="invalid-feedback" id="msgtanggal_po">
+                                                            @if($errors->has('tanggal_po'))
+                                                            {{ $errors->first('tanggal_po')}}
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Delivery Order</label>
-                                                <div class="col-lg-5 col-md-12 col-form-label">
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="do" id="yes" value="yes" />
-                                                        <label class="form-check-label" for="yes">Tersedia</label>
-                                                    </div>
-                                                    <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="do" id="no" value="no" />
-                                                        <label class="form-check-label" for="no">Tidak tersedia</label>
-                                                    </div>
+                                                <div class="form-group row">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Delivery Order</label>
+                                                    <div class="col-lg-5 col-md-12 col-form-label">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="do" id="yes" value="yes" />
+                                                            <label class="form-check-label" for="yes">Tersedia</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="do" id="no" value="no" />
+                                                            <label class="form-check-label" for="no">Tidak tersedia</label>
+                                                        </div>
 
-                                                </div>
-                                            </div>
-                                            <div class="form-group row hide" id="do_detail_no">
-                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Nomor DO</label>
-                                                <div class="col-lg-4 col-md-12">
-                                                    <input type="text" class="form-control col-form-label @error('no_do') is-invalid @enderror" id="no_do" name="no_do" />
-                                                    <div class="invalid-feedback" id="msgno_do">
-                                                        @if($errors->has('no_do'))
-                                                        {{ $errors->first('no_do')}}
-                                                        @endif
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row hide" id="do_detail_tgl">
-                                                <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal DO</label>
-                                                <div class="col-lg-4 col-md-12">
-                                                    <input type="date" class="form-control col-form-label @error('tanggal_do') is-invalid @enderror" id="tanggal_do" name="tanggal_do" />
-                                                    <div class="invalid-feedback" id="msgtanggal_do">
-                                                        @if($errors->has('tanggal_do'))
-                                                        {{ $errors->first('tanggal_do')}}
-                                                        @endif
+                                                <div class="form-group row hide" id="do_detail_no">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Nomor DO</label>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <input type="text" class="form-control col-form-label @error('no_do') is-invalid @enderror" id="no_do" name="no_do" />
+                                                        <div class="invalid-feedback" id="msgno_do">
+                                                            @if($errors->has('no_do'))
+                                                            {{ $errors->first('no_do')}}
+                                                            @endif
+                                                        </div>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="keterangan" class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
-                                                <div class="col-lg-5 col-md-12">
-                                                    <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan"></textarea>
+                                                <div class="form-group row hide" id="do_detail_tgl">
+                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal DO</label>
+                                                    <div class="col-lg-4 col-md-12">
+                                                        <input type="date" class="form-control col-form-label @error('tanggal_do') is-invalid @enderror" id="tanggal_do" name="tanggal_do" />
+                                                        <div class="invalid-feedback" id="msgtanggal_do">
+                                                            @if($errors->has('tanggal_do'))
+                                                            {{ $errors->first('tanggal_do')}}
+                                                            @endif
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="form-group row">
+                                                    <label for="keterangan" class="col-form-label col-lg-5 col-md-12 labelket">Keterangan</label>
+                                                    <div class="col-lg-5 col-md-12">
+                                                        <textarea class="form-control col-form-label" id="nonketerangan" name="keterangan"></textarea>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -490,11 +612,11 @@
                             <div class="row justify-content-center hide" id="dataproduk">
                                 <div class="col-lg-11 col-md-12">
                                     <h4>Data Produk</h4>
-                                    <div class="card">
-                                        <div class="card-body">
-                                            <div class="row">
-                                                <div class="col-12">
-                                                    <div class="table-responsive">
+                                    <div class="row">
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="card">
+                                                <div class="card-body">
+                                                    <div class="table-responsive justify-content-center">
                                                         <table class="table" style="text-align: center;" id="produktable">
                                                             <thead>
                                                                 <tr>
@@ -512,6 +634,7 @@
                                                                     <th width="15%">Harga</th>
                                                                     <th width="15%">Ongkir</th>
                                                                     <th width="15%">Subtotal</th>
+                                                                    <th hidden>ID_Rencana</th>
                                                                     <th width="5%">Aksi</th>
                                                                 </tr>
                                                             </thead>
@@ -544,15 +667,15 @@
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group d-flex justify-content-center">
-                                                                            <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Harga" style="width:100%;" />
+                                                                            <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Ongkir" style="width:100%;" />
                                                                         </div>
                                                                     </td>
                                                                     <td>
                                                                         <div class="form-group d-flex justify-content-center">
-
                                                                             <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly />
                                                                         </div>
                                                                     </td>
+                                                                    <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly></td>
                                                                     <td>
                                                                         <a id="removerowproduk"><i class="fas fa-minus" style="color: red"></i></a>
                                                                     </td>
@@ -579,7 +702,7 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <div class="table-responsive">
+                                                    <div class="table-responsive justify-content-center">
                                                         <table class="table" style="text-align: center;" id="parttable">
                                                             <thead>
                                                                 <tr>
@@ -652,7 +775,7 @@
                                         <div class="card-body">
                                             <div class="row">
                                                 <div class="col-12">
-                                                    <div class="table-responsive">
+                                                    <div class="table-responsive justify-content-center">
                                                         <table class="table" style="text-align: center;" id="jasatable">
                                                             <thead>
                                                                 <tr>
@@ -726,7 +849,6 @@
                                 </div>
                             </div>
                         </form>
-
                     </div>
                 </div>
             </div>
@@ -738,11 +860,61 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        function perencanaan(customer_id, instansi) {
+            $('#perencanaantable').DataTable({
+                searching: false,
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/penjualan/rencana/produk/' + customer_id + '/' + instansi + '/' + yyyy,
+                    'dataType': 'json',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'align-center nowrap-text',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_produk',
+                        className: 'align-center nowrap-text'
+                    },
+                    {
+                        data: 'qty',
+                        className: 'align-center nowrap-text'
+                    },
+                    {
+                        data: 'realisasi',
+                        className: 'align-center nowrap-text'
+                    },
+                    {
+                        data: 'harga',
+                        render: $.fn.dataTable.render.number('.', ',', 0, 'Rp. '),
+                        className: 'align-right nowrap-text'
+                    },
+                    {
+                        data: 'aksi',
+                        className: 'align-center nowrap-text'
+                    },
+                ]
+            });
+        }
+
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
         var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
         var yyyy = today.getFullYear();
 
+        // var instansi_array = [];
+        var alamat_instansi_array = [];
         today = yyyy + '-' + mm + '-' + dd;
         $("#tanggal_pemesanan").attr("max", today);
         $("#batas_kontrak").attr("min", today);
@@ -785,20 +957,52 @@
             $('#btntambah').attr("disabled", true);
         }
 
-        function checkvalidasi() {
+
+        function checkpenjualanform() {
             if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
-                if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "" && $('no_urut').val() != "") {
+                if ($('#no_urut').val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "" && $("#batas_kontrak").val() != "") {
+                    $('#pills-instansi-tab').removeClass('disabled');
+                    if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
+                        $('#pills-produk-tab').removeClass('disabled');
+                    } else {
+                        $('#pills-produk-tab').addClass('disabled');
+                    }
+                } else {
+                    $('#pills-instansi-tab').addClass('disabled');
+                    $('#pills-produk-tab').addClass('disabled');
+                }
+            } else {
+                if ($('#no_urut').val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "") {
+                    $('#pills-instansi-tab').removeClass('disabled');
+                    if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
+                        $('#pills-produk-tab').removeClass('disabled');
+                    } else {
+                        $('#pills-produk-tab').addClass('disabled');
+                    }
+                } else {
+                    $('#pills-instansi-tab').addClass('disabled');
+                    $('#pills-produk-tab').addClass('disabled');
+                }
+            }
+        }
+
+
+        function checkvalidasi() {
+
+            if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
+                if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "" && $('#no_urut').val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
             } else {
-                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "" && $('no_urut').val() != "") {
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "" && $('#no_urut').val() != "") {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
             }
+            checkpenjualanform();
         }
 
         function checkvalidasinonakn() {
@@ -935,10 +1139,12 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
-        $('#instansi').on('keyup change', function() {
+        $('#instansi').on('keyup change select', function() {
             if ($(this).val() != "") {
+                var cust = $('#customer_id').val();
                 $("#msginstansi").text("");
                 $("#instansi").removeClass('is-invalid');
+                perencanaan(cust, $(this).val());
                 checkvalidasi();
             } else if ($(this).val() == "") {
                 $("#msginstansi").text("Instansi Harus diisi");
@@ -946,6 +1152,13 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
+
+        $('#pills-produk-tab').on('click', function() {
+            var cust = $('#customer_id').val();
+            var instansi = $('#instansi').val();
+            perencanaan(cust, instansi);
+            console.log($('.penjualan_produk_id > option:selected').length);
+        })
 
         $('#alamatinstansi').on('keyup change', function() {
             if ($(this).val() != "") {
@@ -1194,6 +1407,7 @@
             }
         }).change(function() {
             var id = $(this).val();
+            // instansi_array.length = 0
             $.ajax({
                 url: '/api/customer/select/' + id,
                 type: 'GET',
@@ -1203,6 +1417,28 @@
                     $('#telepon').val(data[0].telp);
                 }
             });
+
+            // $.ajax({
+            //     url: '/api/customer/get_instansi/' + id + '/' + yyyy,
+            //     type: 'POST',
+            //     dataType: 'json',
+            //     success: function(data) {
+            //         $.each(data, function(i, val) {
+            //             instansi_array.push(val);
+            //         });
+            //     }
+            // });
+
+            if (id != "484") {
+                if ($('input[type="radio"][name="jenis_penjualan"]:checked').val() == "ekatalog") {
+                    var ins_cust = $('#instansi').val();
+                    if (ins_cust != "") {
+                        perencanaan(customer_id, $('#instansi').val());
+                    } else {
+                        perencanaan(customer_id, "0");
+                    }
+                }
+            }
         });
 
         $('#produktable').on('keyup change', '.variasi', function() {
@@ -1288,6 +1524,7 @@
 
             $('.penjualan_produk_id').select2({
                 placeholder: "Pilih Produk",
+                width: 'resolve',
                 ajax: {
                     minimumResultsForSearch: 20,
                     dataType: 'json',
@@ -1477,6 +1714,7 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(res) {
+                    $('#rencana_id' + index).val("");
                     $('#produk_harga' + index).val(formatmoney(res[0].harga));
                     var jumlah_pesan = $('#produk_jumlah' + index).val();
                     if (jumlah_pesan == "") {
@@ -1545,8 +1783,11 @@
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
                 var ongkircvrt = replaceAll(ongkir, '.', '');
+                if (ongkircvrt == "") {
+                    ongkircvrt = "0";
+                    $(this).closest('tr').find('.produk_ongkir').val("0");
+                }
                 subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
-
                 totalhargaprd();
                 for (var i = 0; i < variasi.length; i++) {
                     var variasires = $('select[name="variasi[' + ppid + '][' + i + ']"]').select2('data')[0];
@@ -1583,6 +1824,10 @@
             if (jumlah != "" && harga != "") {
                 var hargacvrt = replaceAll(harga, '.', '');
                 var ongkircvrt = replaceAll(ongkir, '.', '');
+                if (ongkircvrt == "") {
+                    ongkircvrt = "0";
+                    $(this).closest('tr').find('.produk_ongkir').val("0");
+                }
                 subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
                 totalhargaprd();
             } else {
@@ -1608,6 +1853,130 @@
             }
         });
 
+
+        $('#perencanaantable').on('click', '#btntransfer', function() {
+            var id = $(this).closest('tr').find('#btntransfer').attr('data-id');
+            var nama_produk = $(this).closest('tr').find('#btntransfer').attr('data-nama_produk');
+            var produk_id = $(this).closest('tr').find('#btntransfer').attr('data-produk');
+            var jumlah = $(this).closest('tr').find('#btntransfer').attr('data-jumlah');
+            var harga = $(this).closest('tr').find('#btntransfer').attr('data-harga');
+            transferproduk(id, nama_produk, produk_id, jumlah, harga);
+        });
+
+        function transferproduk(id, nama_produk, produk_id, jumlah, harga) {
+            var data = `<tr>
+                    <td></td>
+                    <td>
+                        <div class="form-group">
+                            <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
+                                <option value="` + produk_id + `">` + nama_produk + `</option>
+                            </select>
+                            <div class="detailjual" id="tes0">
+                            </div>
+                        </div>
+                        <div id="detail_produk" class="detail_produk"></div>
+                    </td>
+                    <td>
+                        <div class="form-group d-flex justify-content-center">
+                            <div class="input-group">
+                                <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah0" value="` + jumlah + `" style="width:100%;">
+
+                            </div>
+                            <small id="produk_ketersediaan"></small>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group d-flex justify-content-center">
+
+                            <input type="text" class="form-control produk_harga" name="produk_harga[]" id="produk_harga0" value="` + formatmoney(harga) + `" placeholder="Masukkan Harga" style="width:100%;"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group d-flex justify-content-center">
+
+                            <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Ongkir" value="0" style="width:100%;"/>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-group d-flex justify-content-center">
+                            <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" value="` + formatmoney(jumlah * parseInt(harga)) + `" style="width:100%;" readonly/>
+                        </div>
+                    </td>
+                    <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly value="` + id + `"></td>
+                    <td>
+                        <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
+                    </td>
+                </tr>`;
+
+            if ($('#produktable > tbody > tr').length <= 0) {
+                $('#produktable tbody').append(data);
+                select_data();
+                numberRowsProduk($("#produktable"));
+                totalhargaprd();
+            } else {
+
+                $('#produktable tbody tr:last').after(data);
+                select_data();
+                numberRowsProduk($("#produktable"));
+                totalhargaprd();
+            }
+            var index = $('#produktable > tbody > tr').length - 1;
+            $.ajax({
+                url: '/api/penjualan_produk/select/' + produk_id,
+                type: 'GET',
+                dataType: 'json',
+                success: function(res) {
+                    var tes = $('#detail_produk' + index);
+                    tes.empty();
+                    var datas = "";
+                    tes.append(`<fieldset><legend><b>Detail Produk</b></legend>`);
+                    for (var x = 0; x < res[0].produk.length; x++) {
+                        var data = [];
+                        tes.append(`<div>`);
+                        tes.append(`<div class="card-body blue-bg">
+                                        <h6>` + res[0].produk[x].nama + `</h6>
+                                        <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" id="variasi` + index + `` + x + `" data-attr="variasi` + x + `" data-id="` + x + `"></select>
+                                        <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
+                                      </div>`);
+                        if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
+                            data.push({
+                                id: res[0].produk[x].gudang_barang_jadi[0].id,
+                                text: res[0].produk[x].nama,
+                                jumlah: res[0].produk[x].pivot.jumlah,
+                                qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
+                            });
+                        } else {
+                            for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                data.push({
+                                    id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                    text: res[0].produk[x].gudang_barang_jadi[y].nama,
+                                    jumlah: res[0].produk[x].pivot.jumlah,
+                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
+                                });
+                            }
+                        }
+                        $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
+                            placeholder: 'Pilih Variasi',
+                            data: data,
+                            templateResult: function(data) {
+                                var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                return $span;
+                            },
+                            templateSelection: function(data) {
+                                var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.qt + `">` + data.qt + `</span></div>`);
+                                return $span;
+                            }
+                        });
+
+                        $(`select[name="variasi[` + index + `][` + x + `]"]`).trigger("change");
+                        tes.append(`</div>`)
+                    }
+                    tes.append(`</fieldset>`);
+                    // tes.html(datas);
+                }
+            });
+        }
+
         //PRODUK TABLE
         function numberRowsProduk($t) {
             var c = 0 - 2;
@@ -1618,10 +1987,12 @@
                 $(el).find('.penjualan_produk_id').attr('id', j);
                 var variasi = $(el).find('.variasi');
                 for (var k = 0; k < variasi.length; k++) {
+                    $(el).find('select[name="variasi[' + j + '][' + k + ']"').select2();
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('name', 'variasi[' + j + '][' + k + ']');
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('id', 'variasi' + j + '' + k);
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('name', 'ketstok[' + j + '][' + k + ']');
-                    $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k);
+                    $(el).find('span[data-attr="ketstok' + k + '"]').attr('id', 'ketstok' + j + '' + k)
+
                 }
                 $(el).find('.detail_produk').attr('id', 'detail_produk' + j);
                 $(el).find('.produk_ongkir').attr('id', 'produk_ongkir' + j);
@@ -1632,6 +2003,8 @@
                 $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
                 $(el).find('.produk_subtotal').attr('id', 'produk_subtotal' + j);
                 $(el).find('.produk_subtotal').attr('name', 'produk_subtotal[' + j + ']');
+                $(el).find('.rencana_id').attr('id', 'rencana_id' + j);
+                $(el).find('.rencana_id').attr('name', 'rencana_id[' + j + ']');
                 $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
                 select_data();
             });
@@ -1668,7 +2041,7 @@
                 <td>
                     <div class="form-group d-flex justify-content-center">
 
-                        <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Harga" style="width:100%;"/>
+                        <input type="text" class="form-control produk_ongkir" name="produk_ongkir[]" id="produk_ongkir0" placeholder="Masukkan Ongkir" style="width:100%;"/>
                     </div>
                 </td>
                 <td>
@@ -1677,6 +2050,7 @@
                         <input type="text" class="form-control produk_subtotal" name="produk_subtotal[]" id="produk_subtotal0" placeholder="Masukkan Subtotal" style="width:100%;" readonly/>
                     </div>
                 </td>
+                <td hidden><input type="hidden" class="rencana_id" name="rencana_id[]" id="rencana_id0" readonly></td>
                 <td>
                     <a id="removerowproduk"><i class="fas fa-minus" style="color: red;"></i></a>
                 </td>
@@ -1903,6 +2277,220 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
+
+
+
+        function autocomplete(inp, arr) {
+            /*the autocomplete function takes two arguments,
+            the text field element and an array of possible autocompleted values:*/
+            var currentFocus;
+            /*execute a function when someone writes in the text field:*/
+            inp.addEventListener("input", function(e) {
+                var a, b, i, val = this.value;
+                /*close any already open lists of autocompleted values*/
+                closeAllLists();
+                if (!val) {
+                    return false;
+                }
+                currentFocus = -1;
+                /*create a DIV element that will contain the items (values):*/
+                a = document.createElement("DIV");
+                a.setAttribute("id", this.id + "autocomplete-list");
+                a.setAttribute("class", "autocomplete-items");
+                /*append the DIV element as a child of the autocomplete container:*/
+                this.parentNode.appendChild(a);
+                /*for each item in the array...*/
+                for (i = 0; i < arr.length; i++) {
+                    /*check if the item starts with the same letters as the text field value:*/
+                    if (arr[i].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                        /*create a DIV element for each matching element:*/
+                        b = document.createElement("DIV");
+                        /*make the matching letters bold:*/
+                        b.innerHTML = "<strong>" + arr[i].substr(0, val.length) + "</strong>";
+                        b.innerHTML += arr[i].substr(val.length);
+                        /*insert a input field that will hold the current array item's value:*/
+                        b.innerHTML += "<input type='hidden' value='" + arr[i] + "'>";
+                        /*execute a function when someone clicks on the item value (DIV element):*/
+                        b.addEventListener("click", function(e) {
+                            /*insert the value for the autocomplete text field:*/
+                            inp.value = this.getElementsByTagName("input")[0].value;
+                            /*close the list of autocompleted values,
+                            or any other open lists of autocompleted values:*/
+                            closeAllLists();
+                        });
+                        a.appendChild(b);
+                    }
+                }
+            });
+            /*execute a function presses a key on the keyboard:*/
+            inp.addEventListener("keydown", function(e) {
+                var x = document.getElementById(this.id + "autocomplete-list");
+                if (x) x = x.getElementsByTagName("div");
+                if (e.keyCode == 40) {
+                    /*If the arrow DOWN key is pressed,
+                    increase the currentFocus variable:*/
+                    currentFocus++;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 38) { //up
+                    /*If the arrow UP key is pressed,
+                    decrease the currentFocus variable:*/
+                    currentFocus--;
+                    /*and and make the current item more visible:*/
+                    addActive(x);
+                } else if (e.keyCode == 13) {
+                    /*If the ENTER key is pressed, prevent the form from being submitted,*/
+                    e.preventDefault();
+                    if (currentFocus > -1) {
+                        /*and simulate a click on the "active" item:*/
+                        if (x) x[currentFocus].click();
+                    }
+                }
+            });
+
+            function addActive(x) {
+                /*a function to classify an item as "active":*/
+                if (!x) return false;
+                /*start by removing the "active" class on all items:*/
+                removeActive(x);
+                if (currentFocus >= x.length) currentFocus = 0;
+                if (currentFocus < 0) currentFocus = (x.length - 1);
+                /*add class "autocomplete-active":*/
+                x[currentFocus].classList.add("autocomplete-active");
+            }
+
+            function removeActive(x) {
+                /*a function to remove the "active" class from all autocomplete items:*/
+                for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                }
+            }
+
+            function closeAllLists(elmnt) {
+                /*close all autocomplete lists in the document,
+                except the one passed as an argument:*/
+                var x = document.getElementsByClassName("autocomplete-items");
+                for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                }
+            }
+            /*execute a function when someone clicks in the document:*/
+            document.addEventListener("click", function(e) {
+                closeAllLists(e.target);
+            });
+        }
+
+        /*An array containing all the country names in the world:*/
+
+
+
+            $("#alamatinstansi").autocomplete({
+                source: function(request, response) {
+
+                    $.ajax({
+                        dataType: 'json',
+                        url: "/api/penjualan/check_alamat",
+                        data: {
+                            term: request.term
+                        },
+
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.alamat,
+                                    id: el.id
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
+
+            $("#instansi").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        url: '/api/customer/get_instansi/' + $('#customer_id').val() + '/' + yyyy,
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el,
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
+
+            $("#satuan_kerja").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        url: "/api/ekatalog/all_satuan",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.satuan,
+                                    id: el.id
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
+
+            $("#deskripsi").autocomplete({
+                source: function(request, response) {
+
+                    $.ajax({
+                        dataType: 'json',
+                        url: "/api/ekatalog/all_deskripsi",
+                        data: {
+                            term: request.term
+                        },
+
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.deskripsi,
+                                    id: el.id
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
+        /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
+        // autocomplete(document.getElementById("instansi"), instansi_array);
+
     });
 </script>
 @stop

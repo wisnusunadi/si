@@ -107,6 +107,9 @@
         .labelket{
             text-align: right;
         }
+        .cust{
+            max-width:40%;
+        }
     }
 
     @media screen and (max-width: 1439px) {
@@ -124,6 +127,10 @@
 
         .labelket{
             text-align: right;
+        }
+
+        .cust{
+            max-width:40%;
         }
     }
 
@@ -148,90 +155,94 @@
                         <h4>Info Penjualan</h4>
                         @if($value == "EKAT")
                         <div class="row">
-                            <div class="col-lg-4 col-md-12 align-md">
-                                <div class="margin">
-                                    <div><small class="text-muted">Distributor & Instansi</small></div>
-                                </div>
-                                <div class="margin">
-                                    <b id="distributor">{{$data->customer->nama}}</b><small> (Distributor)</small>
-                                </div>
-                                <div class="margin">
-                                    <div><b id="no_akn">{{$data->satuan}}</b></div>
-                                    <!-- <small>({{$data->instansi}})</small> -->
-                                </div>
-                                <div class="margin">
-                                    <b id="distributor">{{$data->alamat}}</b>
-                                </div>
-                                <div class="margin">
-                                    <b id="distributor">{{$data->Provinsi->nama}}</b>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-4">
-                                <div class="margin">
-                                    <div><small class="text-muted">No AKN</small></div>
-                                    <div><b id="no_akn">{{$data->no_paket}}</b></div>
-                                </div>
-                                <div class="margin">
-                                    <div><small class="text-muted">No SO</small></div>
-                                    <div><b id="no_so">{{$data->pesanan->so}}</b></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-4">
-                                <div class="margin">
-                                    <div><small class="text-muted">No PO</small></div>
-                                    <div><b id="no_so">{{$data->pesanan->no_po}}</b></div>
-                                </div>
-                                <div class="margin">
-                                    <div><small class="text-muted">Batas Pengiriman</small></div>
-                                    <div><b>{!! $tgl_pengiriman !!}</b></div>
-                                </div>
-                            </div>
-
-                            <div class="col-lg-2 col-md-4">
-                                <div class="margin">
-                                    <div><small class="text-muted">Status</small></div>
-                                    <div>{!!$status!!}</div>
+                            <div class="col-lg-11 col-md-12">
+                                <div class="row d-flex justify-content-between">
+                                    <div class="p-2 cust">
+                                        <div class="margin">
+                                            <div><small class="text-muted">Distributor & Instansi</small></div>
+                                        </div>
+                                        <div class="margin">
+                                            <b id="distributor">{{$data->customer->nama}}</b><small> (Distributor)</small>
+                                        </div>
+                                        <div class="margin">
+                                            <div><b id="no_akn">{{$data->satuan}}</b></div>
+                                            <!-- <small>({{$data->instansi}})</small> -->
+                                        </div>
+                                        <div class="margin">
+                                            <b id="distributor">{{$data->alamat}}</b>
+                                        </div>
+                                        <div class="margin">
+                                            <b id="distributor">{{$data->Provinsi->nama}}</b>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <div class="margin">
+                                            <div><small class="text-muted">No AKN</small></div>
+                                            <div><b id="no_akn">{{$data->no_paket}}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">No SO</small></div>
+                                            <div><b id="no_so">{{$data->pesanan->so}}</b></div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <div class="margin">
+                                            <div><small class="text-muted">No PO</small></div>
+                                            <div><b id="no_so">{{$data->pesanan->no_po}}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Batas Pengiriman</small></div>
+                                            <div><b>{!! $tgl_pengiriman !!}</b></div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <div class="margin">
+                                            <div><small class="text-muted">Status</small></div>
+                                            <div>{!!$status!!}</div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         @elseif($value == "SPA" || $value == "SPB" )
                         <div class="row">
-                            <div class="col-lg-6 col-md-12 align-md">
-                                <div class="margin">
-                                    <div><small class="text-muted">Customer</small></div>
+                            <div class="col-lg-11 col-md-12">
+                                <div class="row  d-flex justify-content-between">
+                                    <div class="p-2">
+                                        <div class="margin">
+                                            <div><small class="text-muted">Customer</small></div>
+                                        </div>
+                                        <div class="margin">
+                                            <b id="distributor">{{$data->customer->nama}}</b>
+                                        </div>
+                                        <div class="margin">
+                                            <div><b id="no_akn">{{$data->customer->alamat}}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><b id="no_akn">{{$data->customer->Provinsi->nama}}</b></div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <div class="margin">
+                                            <div><small class="text-muted">No SO</small></div>
+                                            <div><b id="no_so">{{$data->pesanan->so}}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Status</small></div>
+                                            <div>{!!$status!!}</div>
+                                        </div>
+                                    </div>
+                                    <div class="p-2">
+                                        <div class="margin">
+                                            <div><small class="text-muted">No PO</small></div>
+                                            <div><b id="no_so">{{$data->pesanan->no_po}}</b></div>
+                                        </div>
+                                        <div class="margin">
+                                            <div><small class="text-muted">Tanggal PO</small></div>
+                                            <div><b>{{date('d-m-Y', strtotime($data->pesanan->tgl_po))}}</b></div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="margin">
-                                    <b id="distributor">{{$data->customer->nama}}</b>
-                                </div>
-                                <div class="margin">
-                                    <div><b id="no_akn">{{$data->customer->alamat}}</b></div>
-                                </div>
-                                <div class="margin">
-                                    <div><b id="no_akn">{{$data->customer->Provinsi->nama}}</b></div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <div class="margin">
-                                    <div><small class="text-muted">No SO</small></div>
-                                    <div><b id="no_so">{{$data->pesanan->so}}</b></div>
-                                </div>
-                                <div class="margin">
-                                    <div><small class="text-muted">Status</small></div>
-                                    <div>{!!$status!!}</div>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-md-6">
-                                <div class="margin">
-                                    <div><small class="text-muted">No PO</small></div>
-                                    <div><b id="no_so">{{$data->pesanan->no_po}}</b></div>
-                                </div>
-                                <div class="margin">
-                                    <div><small class="text-muted">Tanggal PO</small></div>
-                                    <div><b>{{date('d-m-Y', strtotime($data->pesanan->tgl_po))}}</b></div>
-                                </div>
-                            </div>
-                            <div class="col-2">
-
                             </div>
                         </div>
                         @endif
@@ -699,13 +710,6 @@
 
         $(document).on('submit', '#form-logistik-create', function(e) {
             e.preventDefault();
-            var showLoading = swal.fire({
-                title: 'Sedang Proses',
-                html: 'Loading...',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                willOpen: () => {Swal.showLoading()}
-            });
             $('#btnsimpan').attr('disabled', true);
             var action = $(this).attr('action');
             $.ajax({
@@ -715,6 +719,15 @@
                 type: "POST",
                 url: action,
                 data: $('#form-logistik-create').serialize(),
+                beforeSend: function() {
+                    swal.fire({
+                        title: 'Sedang Proses',
+                        html: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {Swal.showLoading()}
+                    })
+                },
                 success: function(response) {
                     if (response['data'] == "success") {
                         swal.fire(
@@ -1007,6 +1020,7 @@
                     $('#edit').html(result).show();
                     detailpesanan(produk_id, part_id, pesanan_id);
                     console.log('/api/logistik/so/detail/select/' + produk_id + '/' + part_id + '/' + pesanan_id + '/' + jenis_penjualan)
+                    $('.jenis_sj').select2({minimumResultsForSearch: -1});
                     ekspedisi_select(provinsi);
                     $('#tgl_kirim').attr('max', today);
 

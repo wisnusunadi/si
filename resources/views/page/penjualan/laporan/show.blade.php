@@ -3,7 +3,27 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Laporan</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Laporan</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                @if(Auth::user()->divisi_id == "26" || Auth::user()->divisi_id == "8")
+                <li class="breadcrumb-item"><a href="{{route('penjualan.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Laporan</li>
+                @elseif(Auth::user()->divisi_id == "15")
+                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Laporan</li>
+                @elseif(Auth::user()->divisi_id == "2")
+                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item active">Laporan</li>
+                @endif
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
 @stop
 
 @section('adminlte_css')
@@ -28,9 +48,13 @@
         white-space: nowrap;
     }
 
-    @media screen and (min-width: 1440px) {
 
-        section {
+    @media screen and (min-width: 992px) {
+        .labelket{
+            text-align: right;
+        }
+
+        body {
             font-size: 14px;
         }
 
@@ -39,7 +63,7 @@
         }
 
         .btn {
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .overflowy {
@@ -48,17 +72,23 @@
             overflow-y: scroll;
             box-shadow: none;
         }
+
+        .dropdown-item {
+            font-size: 14px;
+        }
     }
 
-    @media screen and (max-width: 1439px) {
+    @media screen and (max-width: 991px) {
+        .labelket{
+            text-align: left;
+        }
 
-        label,
-        .row {
+        body {
             font-size: 12px;
         }
 
         h4 {
-            font-size: 20px;
+            font-size: 18x;
         }
 
         #detailmodal {
@@ -74,6 +104,10 @@
             width: auto;
             overflow-y: scroll;
             box-shadow: none;
+        }
+
+        .dropdown-item {
+            font-size: 12px;
         }
     }
 </style>
@@ -93,8 +127,8 @@
                                 <form id="filter">
                                     <div class="form-horizontal">
                                         <div class="form-group row">
-                                            <label for="" class="col-form-label col-5" style="text-align: right">Distributor / Customer</label>
-                                            <div class="col-4">
+                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Distributor / Customer</label>
+                                            <div class="col-lg-4 col-md-12">
                                                 <select class="select2 select-info form-control customer_id" name="customer_id" id="customer_id">
                                                     <option value="semua">Semua Distributor</option>
                                                 </select>
@@ -104,7 +138,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="penjualan" class="col-form-label col-5" style="text-align: right">Penjualan</label>
+                                            <label for="penjualan" class="col-form-label col-lg-5 col-md-12 labelket">Penjualan</label>
                                             <div class="col-5 col-form-label">
                                                 <div class="form-check form-check-inline">
                                                     <input class="form-check-input" type="checkbox" id="penjualan" value="ekatalog" name="penjualan">
@@ -120,25 +154,35 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="form-group row">
-                                            <label for="tanggal_mulai" class="col-form-label col-5" style="text-align: right">Tanggal Awal</label>
-                                            <div class="col-2">
+                                            <label for="tanggal_mulai" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Awal</label>
+                                            <div class="col-lg-2 col-md-12">
                                                 <input type="date" class="form-control col-form-label @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" name="tanggal_mulai" readonly />
                                                 <div class="invalid-feedback" id="msgtanggal_mulai">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="tanggal_akhir" class="col-form-label col-5" style="text-align: right">Tanggal Akhir</label>
-                                            <div class="col-2">
+                                            <label for="tanggal_akhir" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Akhir</label>
+                                            <div class="col-lg-2 col-md-12">
                                                 <input type="date" class="form-control col-form-label @error('tanggal_akhir') is-invalid @enderror" id="tanggal_akhir" name="tanggal_akhir" readonly />
                                                 <div class="invalid-feedback" id="msgtanggal_akhir">
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group row">
+                                            <label for="tambahan" class="col-form-label col-lg-5 col-md-12 labelket"></label>
+                                            <div class="col-5 col-form-label">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="tambahan" value="seri" name="tambahan">
+                                                    <label class="form-check-label" for="inlineCheckbox1">Sertakan nomer seri</label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
                                             <div class="col-5"></div>
-                                            <div class="col-4">
+                                            <div class="col-lg-4 col-md-12">
                                                 <span class="float-right filter"><button type="submit" class="btn btn-success" id="btncetak" disabled>Cetak</button></span>
                                                 <span class="float-right filter"><button type="button" class="btn btn-outline-danger" id="btnbatal">Batal</button></span>
                                             </div>
@@ -157,7 +201,7 @@
                     <div class="card-body">
                         <h5>Laporan Penjualan</h5>
                         <div class="table-responsive">
-                            <a id="exportbutton" href="{{route('penjualan.penjualan.export',['jenis'=> 'semua','customer_id'=> 'semua','tgl_awal'=> '0','tgl_akhir'=>'0'])}}"><button class="btn btn-success">
+                            <a id="exportbutton" href="{{route('penjualan.penjualan.export',['jenis'=> 'semua','customer_id'=> 'semua','tgl_awal'=> '0','tgl_akhir'=>'0','seri' => 'kosong'])}}"><button class="btn btn-success">
                                     <i class="far fa-file-excel"></i> Export
                                 </button>
                             </a>
@@ -438,7 +482,6 @@
                 $("#btncetak").attr('disabled', true);
             }
         });
-
         $('input[type="checkbox"][name="penjualan"]').on('change', function() {
             if ($(this).val() != "") {
                 $('#tanggal_mulai').removeAttr('readonly');
@@ -451,7 +494,6 @@
                 $("#btncetak").attr('disabled', true);
             }
         });
-
         $('#tanggal_mulai').on('keyup change', function() {
             $("#tanggal_akhir").val("");
             $("#btncetak").removeAttr('disabled');
@@ -557,6 +599,7 @@
         // })
         $('#filter').submit(function() {
             var penjualan = [];
+            var tambahan = [];
             var exportbutton = $('#exportbutton').val();
             var tanggal_mulai = $('#tanggal_mulai').val();
             var tanggal_akhir = $('#tanggal_akhir').val();
@@ -566,17 +609,26 @@
                 penjualan.push($(this).val());
             });
 
+            $("input[name=tambahan]:checked").each(function() {
+                tambahan.push($(this).val());
+            });
+
             if (penjualan != 0) {
                 var x = penjualan;
             } else {
                 var x = ['kosong']
             }
-            console.log(x);
+
+            if (tambahan != 0) {
+                var y = tambahan;
+            } else {
+                var y = ['kosong']
+            }
 
             $('#semuaform').removeClass('hide');
             $('#semuatable').DataTable().ajax.url('/api/laporan/penjualan/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir).load();
 
-            var link = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir;
+            var link = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y;
 
             $('#exportbutton').attr({
                 href: link
@@ -584,10 +636,7 @@
             return false;
         });
 
-        // $('#exportbutton').on('click', function(event) {
-        //     console.log($(this).attr("href"));
-        //     return false;
-        // });
+
     });
 </script>
 @endsection

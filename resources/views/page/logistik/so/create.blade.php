@@ -17,13 +17,23 @@
                                             <div class="col-lg-6 col-md-12">
                                                 <div class="input-group mb-3">
                                                     <div class="input-group-prepend">
-                                                        <span class="input-group-text">
-                                                            @if($jenis != "SPB")
+                                                        {{-- <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Dropdown</button> --}}
+
+                                                        {{-- <span class="input-group-text"> --}}
+                                                            <select class="form-control jenis_sj" name="jenis_sj" id="jenis_sj">
+                                                                @if($jenis != "SPB")
+                                                                <option value="SPA-" selected>SPA-</option>
+                                                                @elseif($jenis == "SPB")
+                                                                <option value="B." selected>B.</option>
+                                                                @endif
+                                                                <option value="NBT">NBT</option>
+                                                            </select>
+                                                            {{-- @if($jenis != "SPB")
                                                             SPA-
                                                             @else
                                                             B.
-                                                            @endif
-                                                        </span>
+                                                            @endif --}}
+                                                        {{-- </span> --}}
                                                     </div>
                                                     <input type="text" class="form-control col-form-label" name="no_invoice" id="no_invoice">
                                                     <div class="invalid-feedback" id="msgnoinvoice"></div>

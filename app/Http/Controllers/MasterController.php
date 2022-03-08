@@ -9,6 +9,7 @@ use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\KelompokProduk;
 use App\Models\PenjualanProduk;
+use App\Models\RencanaPenjualan;
 use App\Models\Pesanan;
 use App\Models\Produk;
 use App\Models\Provinsi;
@@ -231,11 +232,29 @@ class MasterController extends Controller
         }
         return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('email', function($data){
+                if(!empty($data->email)){
+                    return $data->email;
+                }else{
+                    return '-';
+                }
+            })
+            ->editColumn('telp', function($data){
+                if(!empty($data->telp)){
+                    return $data->telp;
+                }else{
+                    return '-';
+                }
+            })
             ->addColumn('prov', function ($data) {
                 return $data->provinsi->nama;
             })
             ->addColumn('ktp', function ($data) {
-                return $data->ktp;
+                if(!empty($data->ktp)){
+                    return $data->ktp;
+                }else{
+                    return '-';
+                }
             })
             ->addColumn('button', function ($data) use ($divisi) {
 
@@ -295,19 +314,32 @@ class MasterController extends Controller
             ->editColumn('nama', function ($data) {
                 return $data->nama;
             })
+            ->addColumn('nama_alias', function ($data) {
+                // $id = $data->id;
+                // $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
+                //     $q->where('id', $id);
+                // })->first();
+                return $data->nama_alias;
+            })
             ->addColumn('no_akd', function ($data) {
                 $id = $data->id;
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
                     $q->where('id', $id);
                 })->first();
-                return $s->no_akd;
+                if(!empty($s->no_akd))
+                {
+                    return $s->no_akd;
+                }
             })
             ->addColumn('merk', function ($data) {
                 $id = $data->id;
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
                     $q->where('id', $id);
                 })->first();
-                return $s->merk;
+                if(!empty($s->merk))
+                {
+                    return $s->merk;
+                }
             })
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
@@ -343,6 +375,36 @@ class MasterController extends Controller
             return $c;
         }
     }
+
+    public function get_instansi_customer($id, $year, Request $request){
+        $datarc = RencanaPenjualan::where('instansi', 'LIKE', '%' . $request->input('term', '') . '%')->where([['customer_id', '=', $id], ['tahun', '=', $year]])->pluck('instansi');
+        $datarl = Ekatalog::where('instansi', 'LIKE', '%' . $request->input('term', '') . '%')->groupby('instansi')->pluck('instansi');
+
+        $data = $datarl->merge($datarc);
+
+        // return $data;
+        $datas1 = json_decode(json_encode($data));
+        $datass = array_unique($datas1);
+        return json_encode($datass);
+        // print_r(array_count_values($data));
+        // return json_encode($datas1);
+    }
+
+    public function get_ekatalog_satuan(Request $request){
+        $data = Ekatalog::where('satuan', 'LIKE', '%' . $request->input('term', '') . '%')->groupby('satuan')->get();
+        return json_encode($data);
+        // print_r(array_count_values($data));
+        // return json_encode($datas1);
+    }
+
+    public function get_ekatalog_deskripsi(Request $request){
+        $data = Ekatalog::where('deskripsi', 'LIKE', '%' . $request->input('term', '') . '%')->groupby('deskripsi')->get();
+        return json_encode($data);
+        // print_r(array_count_values($data));
+        // return json_encode($datas1);
+    }
+
+
     //public function get_data_detail_penjualan_produk($id)
     //{
     // $data = DetailPenjualanProduk::where('penjualan_produk_id', $id)->get();
@@ -974,6 +1036,11 @@ class MasterController extends Controller
     public function select_customer_id($id)
     {
         $data = Customer::where('id', $id)->orderby('nama', 'ASC')->get();
+        echo json_encode($data);
+    }
+    public function select_customer_rencana(Request $request)
+    {
+        $data = Customer::Has('RencanaPenjualan')->where('nama', 'LIKE', '%' . $request->input('term', '') . '%')->orderby('nama', 'ASC')->get();
         echo json_encode($data);
     }
     public function select_penjualan_produk(Request $request)

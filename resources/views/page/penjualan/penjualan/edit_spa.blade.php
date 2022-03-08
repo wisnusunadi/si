@@ -63,7 +63,7 @@
 
     @media screen and (min-width: 1220px) {
 
-        section {
+        body {
             font-size: 14px;
         }
 
@@ -73,6 +73,9 @@
 
         .labelket {
             text-align: right;
+        }
+        .cust{
+            max-width:40%;
         }
 
 
@@ -88,7 +91,7 @@
         h4 {
             font-size: 20px;
         } */
-        section {
+        body {
             font-size: 12px;
         }
 
@@ -98,6 +101,10 @@
 
         .labelket {
             text-align: right;
+        }
+
+        .cust{
+            max-width:40%;
         }
     }
 
@@ -111,7 +118,7 @@
         h4 {
             font-size: 20px;
         } */
-        section {
+        body {
             font-size: 12px;
         }
 
@@ -135,10 +142,10 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-12">
+                            <div class="col-lg-11 col-md-12">
                                 <h5 class="margin">Info Penjualan SPA</h5>
-                                <div class="row">
-                                    <div class="col-lg-5 col-md-12">
+                                <div class="row d-flex justify-content-between">
+                                    <div class="p-2 cust">
                                         <div class="margin">
                                             <small>Info Customer</small>
                                         </div>
@@ -147,7 +154,7 @@
                                         <div id="provinsi" class="margin"><b>{{$e->customer->provinsi->nama}}</b></div>
                                         <div id="telepon" class="margin"><b>{{$e->customer->telp}}</b></div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4">
+                                    <div class="p-2">
                                         <div class="margin">
                                             <div><small class="text-muted">No PO</small></div>
                                             <div id="no_po">
@@ -173,8 +180,7 @@
                                             </b>
                                         </div>
                                     </div>
-
-                                    <div class="col-lg-2 col-md-4">
+                                    <div class="p-2">
                                         <div class="margin">
                                             <div><small class="text-muted">No DO</small></div>
                                             <div id="no_po">
@@ -204,7 +210,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-2 col-md-4">
+                                    <div class="p-2">
                                         <div class="margin">
                                             <div><small class="text-muted">No SO</small></div>
                                             <div id="no_so">

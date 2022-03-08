@@ -57,23 +57,31 @@
     }
 
 
-    @media screen and (min-width: 1440px) {
-        section {
-            font-size: 12px;
+    @media screen and (min-width: 992px) {
+        body {
+            font-size: 14px;
         }
 
         .dropdown-item {
-            font-size: 12px;
+            font-size: 14px;
+        }
+
+        .btn{
+            font-size: 14px;
         }
     }
 
-    @media screen and (max-width: 1439px) {
-        section {
-            font-size: 10px;
+    @media screen and (max-width: 991px) {
+        body {
+            font-size: 12x;
         }
 
         .dropdown-item {
-            font-size: 10px;
+            font-size: 12px;
+        }
+
+        .btn{
+            font-size: 12px;
         }
     }
 </style>
@@ -156,7 +164,6 @@
                                                     <th>Customer</th>
                                                     <th>Alamat</th>
                                                     <th>Provinsi</th>
-                                                    <th>Telepon</th>
                                                     <th>Keterangan</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
@@ -475,9 +482,6 @@
                     className: 'minimizechar',
                 }, {
                     data: 'provinsi',
-                },
-                {
-                    data: 'telepon',
                 }, {
                     data: 'keterangan',
                     className: 'minimizechar',

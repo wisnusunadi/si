@@ -67,11 +67,14 @@ Route::prefix('/customer')->group(function () {
     Route::post('data/{divisi_id}/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
     Route::get('nama/{id}/{val}', [App\Http\Controllers\MasterController::class, 'get_nama_customer']);
     Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_pesanan']);
+    Route::get('get_instansi/{id}/{year}', [App\Http\Controllers\MasterController::class, 'get_instansi_customer']);
     // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_customer']);
     Route::get('update_modal/{id}', [App\Http\Controllers\MasterController::class, 'update_customer_modal']);
     //Route::put('update/{id}', [App\Http\Controllers\MasterController::class, 'update_customer']);
     Route::delete('delete/{id}', [App\Http\Controllers\MasterController::class, 'delete_customer']);
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_customer']);;
+    Route::get('select_rencana', [App\Http\Controllers\MasterController::class, 'select_customer_rencana']);;
+
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_customer_id']);;
     Route::get('check/{id}', [App\Http\Controllers\MasterController::class, 'check_customer']);
 });
@@ -97,24 +100,34 @@ Route::prefix('/penjualan_produk')->group(function () {
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk']);
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk_id']);
 });
+
 Route::prefix('/penjualan')->group(function () {
     // Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);
     Route::post('/penjualan/data/{jenis}/{status}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::get('chart', [App\Http\Controllers\PenjualanController::class, 'chart_penjualan']);
-    // Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
+    // Rout    Route::post('/penjualan/cancel/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'cancel_spa_spb']);
+    Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::post('check_no_paket/{id}/{val}', [App\Http\Controllers\PenjualanController::class, 'check_no_paket']);
-
+    Route::get('check_alamat', [App\Http\Controllers\PenjualanController::class, 'check_alamat']);
     //   Route::get('customer/data/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
+    Route::prefix('/rencana')->group(function () {
+        Route::post('produk/{customer_id}/{instansi}/{year}', [App\Http\Controllers\PenjualanController::class, 'get_data_rencana_produk']);
+    });
 
     Route::prefix('/pesanan')->group(function () {
         Route::put('update/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'update_penjualan_pesanan']);
         Route::post('produk/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_paket_pesanan_ekat']);
     });
-
     Route::prefix('/lacak')->group(function () {
         Route::post('data/{parameter}/{value}', [App\Http\Controllers\PenjualanController::class, 'get_lacak_penjualan']);
     });
+
+    Route::group(['prefix' => '/rencana'], function () {
+        Route::get('select_tahun', [App\Http\Controllers\RencanaPenjualanController::class, 'select_tahun_rencana']);
+        Route::post('show/{customer}/{tahun}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_data_rencana']);
+    });
 });
+
 Route::prefix('/so')->group(function () {
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'get_data_so']);
     Route::post('/cek', [App\Http\Controllers\GudangController::class, 'storeCekSO']);
@@ -125,6 +138,7 @@ Route::prefix('/laporan')->group(function () {
     Route::post('/qc/{jenis}/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_data_laporan_qc']);
     Route::post('/logistik/{pengiriman}/{ekspedisi}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\LogistikController::class, 'get_data_laporan_logistik']);
 });
+
 Route::prefix('/gbj')->group(function () {
     Route::post('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
     Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
@@ -153,7 +167,7 @@ Route::prefix('/gbj')->group(function () {
     Route::post('ceknoseri', [GudangController::class, 'ceknoseri']);
     Route::post('ubahseri', [GudangController::class, 'updateSeriLayout']);
     Route::post('addSeri', [GudangController::class, 'addSeri']);
-    Route::post('readyseri', [GudangController::class, 'cekReadySeri']);
+    Route::post('readyseri', [GudangController::class, 'cekReadySeri` ']);
 });
 
 Route::prefix('/draft')->group(function () {
@@ -422,6 +436,8 @@ Route::prefix('/produk')->group(function () {
 Route::prefix('/ekatalog')->group(function () {
     // Route::get('data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
     Route::post('pengiriman/data', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog_pengiriman']);
+    Route::get('all_satuan', [App\Http\Controllers\MasterController::class, 'get_ekatalog_satuan']);
+    Route::get('all_deskripsi', [App\Http\Controllers\MasterController::class, 'get_ekatalog_deskripsi']);
 
     // Route::post('update/{id}', [App\Http\Controllers\PenjualanController::class, 'update_ekatalog']);
     Route::get('detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog']);
@@ -525,8 +541,9 @@ Route::prefix('/dc')->group(function () {
     Route::post('dashboard/data/{value}', [App\Http\Controllers\DcController::class, 'dashboard_data']);
     Route::post('dashboard/so', [App\Http\Controllers\DcController::class, 'dashboard_so']);
     Route::prefix('/so')->group(function () {
-        Route::post('create/{value}', [App\Http\Controllers\DcController::class, 'create_coo']);
-        Route::put('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);
+        Route::post('store/{value}', [App\Http\Controllers\DcController::class, 'store_coo']);
+        Route::post('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);
+        Route::put('update_tgl_kirim_coo/{value}', [App\Http\Controllers\DcController::class, 'update_tgl_kirim_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);
         Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
         Route::post('detail/seri/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);
