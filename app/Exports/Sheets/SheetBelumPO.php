@@ -17,7 +17,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SheetBelumPO implements WithTitle, FromView, ShouldAutoSize
+class SheetBelumPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, WithColumnFormatting
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -29,6 +29,44 @@ class SheetBelumPO implements WithTitle, FromView, ShouldAutoSize
         $this->distributor = $distributor;
         $this->tgl_awal = $tgl_awal;
         $this->tgl_akhir = $tgl_akhir;
+    }
+
+    public function columnFormats(): array
+    {
+        return [
+            'J' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+            'K' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+            'L' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+            'M' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+        ];
+    }
+
+    public function styles(Worksheet $sheet)
+    {
+        // return [
+
+        //     1    => ['font' => ['bold' => true, 'size' => 16]],
+
+        // ];
+        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+        $sheet->getStyle('A2:u2')->getFont()->setBold(true);
+
+
+        $sheet->getStyle('b2:e2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('00ff7f');
+        $sheet->getStyle('a2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('00ff7f');
+        $sheet->getStyle('f2:g2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('00b359');
+        $sheet->getStyle('h2:m2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('89d0b4');
+        $sheet->getStyle('n2:p2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('f99c83');
     }
 
 
@@ -43,12 +81,14 @@ class SheetBelumPO implements WithTitle, FromView, ShouldAutoSize
 
         if ($dsb == 'semua') {
             $ekatalog = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) {
-                $q->whereNUll('no_po');
+                $q->whereNUll('no_po')
+                    ->wherenotIN('status', ['batal']);
             })->get();
         } else {
             $ekatalog = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($dsb) {
                 $q->whereNUll('no_po')
-                    ->where('customer_id', $dsb);
+                    ->where('customer_id', $dsb)
+                    ->wherenotIN('status', ['batal']);
             })->get();
         }
 

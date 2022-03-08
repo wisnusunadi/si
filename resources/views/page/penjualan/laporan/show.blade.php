@@ -598,15 +598,11 @@
                 penjualan.push($(this).val());
             });
 
-
-
             if (penjualan != 0) {
                 var x = penjualan;
             } else {
                 var x = ['kosong']
             }
-
-
 
             $('#semuaform').removeClass('hide');
             $('#semuatable').DataTable().ajax.url('/api/laporan/penjualan/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir).load();
