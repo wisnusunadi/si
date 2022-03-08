@@ -1252,9 +1252,9 @@ class PenjualanController extends Controller
                     </button>
                 </a>';
                 } else {
-                    // $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    // <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
-                    $return .= "-";
+                    $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                    // $return .= "-";
                 }
                 if ($divisi_id == "26") {
                     if (!empty($data->Pesanan->log_id)) {
