@@ -603,7 +603,6 @@
             } else {
                 var x = ['kosong']
             }
-            console.log(x);
 
             $('#semuaform').removeClass('hide');
             $('#semuatable').DataTable().ajax.url('/api/laporan/penjualan/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir).load();

@@ -423,7 +423,6 @@ return [
             'icon' => 'fas fa-box-open',
             'auth' => [26]
         ],
-
         [
             'text' => 'Customer',
             'url'  => '/penjualan/customer/show',
