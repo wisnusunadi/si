@@ -85,10 +85,11 @@ class RencanaPenjualanController extends Controller
             }
         }
 
+
         if ($bool == true) {
-            return redirect()->back()->with('success', 'success');
+            return response()->json(['data' =>  'success']);
         } else {
-            return redirect()->back()->with('error', 'error');
+            return response()->json(['data' =>  'error']);
         }
     }
 

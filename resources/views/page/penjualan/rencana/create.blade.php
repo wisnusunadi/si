@@ -59,10 +59,12 @@
 
 @section('content')
 <div class="container-fluid">
-    <form action="{{route('penjualan.rencana.store')}}" method="post">
-        {{csrf_field()}}
-        <div class="row">
-            <div class="col-12">
+    <form action="/penjualan/rencana/store" method="post" id="form-rencana-penjualan-create">
+        @csrf
+        @method('PUT')
+        <div class="content">
+            {{-- <div class="row">
+                <div class="col-12">
                 @if(session('error') || count($errors) > 0 )
                     <div class="form-group row">
                         <div class="alert alert-danger alert-dismissible show fade col-lg-12" role="alert">
@@ -82,9 +84,9 @@
                         </div>
                     </div>
                 @endif
-            </div>
-        </div>
-        <div class="row">
+            </div> --}}
+         </div>
+          <div class="row">
             <div class="col-lg-4 col-md-5 col-sm-12">
                 <div class="row">
                     <div class="col-12">
@@ -180,13 +182,60 @@
                 </div>
             </div>
         </div>
+        </div>
     </form>
 </div>
 @endsection
 
 @section('adminlte_js')
 <script>
+
     $(function() {
+
+        $(document).on('submit',  function(e) {
+
+
+            e.preventDefault();
+            var action = $('#form-rencana-penjualan-create').attr('action');
+            console.log(action);
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: $('#form-rencana-penjualan-create').serialize(),
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil menambahkan Rencana Penjualan',
+                            'success'
+                        ).then(function(){
+                        location.reload();
+
+                         });
+                         $('#tahun').val('');
+                         $('#nama_instansi').val('');
+                      $('#produk_jumlah').val('');
+                      $('#produk_harga').val('');
+
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal menambahkan Rencana Penjualan',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    alert($('#form-rencana-penjualan-create').serialize());
+                }
+            });
+            return false;
+        });
+
+
         function formatmoney(bilangan) {
             var number_string = bilangan.toString(),
                 sisa = number_string.length % 3,
