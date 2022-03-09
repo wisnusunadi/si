@@ -53,6 +53,20 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <div class="form-group row">
+                                                <label for="nama_produk" class="col-5 col-form-label" style="text-align: right">Nama Alias</label>
+                                                <div class="col-6">
+                                                    <textarea type="text" class="form-control @error('nama_alias') is-invalid @enderror" name="nama_alias" id="nama_alias" placeholder="Masukkan Nama Alias / Panjang"></textarea>
+                                                    <div class="invalid-feedback" id="msgnama_alias">
+                                                        @if($errors->has('nama_alias'))
+                                                        {{ $errors->first('nama_alias')}}
+                                                        @endif
+                                                    </div>
+                                                    <div class="feedback" id="msgcustomer_id">
+                                                        <small class="text-muted">Kosongi bila tidak ada</small>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
                                                 <label for="nama_produk" class="col-5 col-form-label" style="text-align: right">Nama Paket</label>
                                                 <div class="col-6">
                                                     <input type="text" class="form-control @error('nama_paket') is-invalid @enderror" name="nama_paket" id="nama_paket" placeholder="Masukkan Nama Paket" />
@@ -142,13 +156,12 @@
                     <div class="row d-flex justify-content-center">
                         <div class="col-11">
                             <span>
-
                                 <a type="button" class="btn btn-danger" href="{{route('penjualan.produk.show')}}">
                                     Batal
                                 </a>
                             </span>
                             <span class="float-right">
-                                <button type="submit" class="btn btn-info float-right disabled" id="btntambah">Tambah</button>
+                                <button type="submit" class="btn btn-info float-right " id="btntambah" disabled>Tambah</button>
                             </span>
                         </div>
                     </div>
@@ -217,14 +230,14 @@
                 $('#harga').removeClass("is-invalid");
                 console.log($("#createtable tbody").length);
                 if (($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $("#createtable tbody").length > 0) {
-                    $('#btntambah').removeClass('disabled');
+                    $("#btntambah").attr('disabled', false);
                 } else {
-                    $('#btntambah').addClass('disabled');
+                    $("#btntambah").attr('disabled', true);
                 }
             } else if ($(this).val() == "") {
                 $('#msgharga').text("Harga Harus diisi");
                 $('#harga').addClass("is-invalid");
-                $('#btntambah').addClass('disabled');
+                $("#btntambah").attr('disabled', true);
             }
         });
 
@@ -238,15 +251,15 @@
                         if (data.jumlah >= 1) {
                             $("#msgnama_paket").text("Nama sudah terpakai");
                             $('#nama_paket').addClass('is-invalid');
-                            $('#btntambah').addClass('disabled');
+                            $("#btntambah").attr('disabled', true);
                         } else {
                             $('#msgnama_paket').text("");
                             $('#nama_paket').removeClass("is-invalid");
                             console.log($("#createtable tbody").length);
                             if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
-                                $('#btntambah').removeClass('disabled');
+                                $("#btntambah").attr('disabled', false);
                             } else {
-                                $('#btntambah').addClass('disabled');
+                                $("#btntambah").attr('disabled', true);
                             }
                         }
                     }
@@ -255,7 +268,7 @@
             } else if ($(this).val() == "") {
                 $('#msgnama_paket').text("Nama Paket Harus diisi");
                 $('#nama_paket').addClass("is-invalid");
-                $('#btntambah').addClass('disabled');
+                $("#btntambah").attr('disabled', true);
             }
         });
 

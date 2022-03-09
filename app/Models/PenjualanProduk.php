@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PenjualanProduk extends Model
 {
     protected $table = 'penjualan_produk';
-    protected $fillable = ['nama', 'harga'];
+    protected $fillable = ['nama_alias', 'nama', 'harga'];
 
     public function DetailPesanan()
     {

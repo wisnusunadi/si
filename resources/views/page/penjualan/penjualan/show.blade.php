@@ -498,46 +498,14 @@
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="po" id="status4" />
-                                                        <label class="form-check-label" for="status4">
-                                                            PO
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="draft" id="status4" name="status_ekatalog[]" />
+                                                            <label class="form-check-label" for="status4">
+                                                                Draft
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
-                                                        <label class="form-check-label" for="status5">
-                                                            Gudang
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="qc" id="status6" />
-                                                        <label class="form-check-label" for="status6">
-                                                            QC
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
-                                                        <label class="form-check-label" for="status7">
-                                                            Logistik
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
-                                                        <label class="form-check-label" for="status8">
-                                                            Pengiriman
-                                                        </label>
-                                                    </div>
-                                                </div> -->
                                                     <div class="form-group">
                                                         <span class="float-right">
                                                             <button class="btn btn-primary" type="submit" id="filter_ekatalog">
@@ -1779,7 +1747,6 @@
             } else {
                 var x = ['semua'];
             }
-            console.log(x);
             $('#spatable').DataTable().ajax.url('/penjualan/penjualan/spa/data/' + x).load();
             return false;
 
@@ -1797,7 +1764,7 @@
             } else {
                 var x = ['semua'];
             }
-            console.log(x);
+
             $('#spbtable').DataTable().ajax.url('/penjualan/penjualan/spb/data/' + x).load();
             return false;
         });
