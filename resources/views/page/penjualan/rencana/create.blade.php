@@ -177,7 +177,7 @@
                         </div>
                     </div>
                     <div class="card-footer">
-                        <button type="submit" class="btn btn-success float-right" id="btnsubmit" disabled="true">Simpan</button>
+                        <button type="submit" class="btn btn-success float-right" id="btnsubmit" disabled="true"> <i id="load" class=""></i> Simpan</button>
                     </div>
                 </div>
             </div>
@@ -193,6 +193,8 @@
     $(function() {
 
         $(document).on('submit',  function(e) {
+            $('#btnsubmit').attr('disabled', true);
+            $('#load').addClass('fas fa-circle-notch fa-spin');
             e.preventDefault();
             var action = $('#form-rencana-penjualan-create').attr('action');
             console.log(action);
