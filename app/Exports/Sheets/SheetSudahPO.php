@@ -41,12 +41,18 @@ class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
     {
         return $this->tgl_akhir;
     }
-    public function __construct(string $jenis_penjualan, string $distributor, string $tgl_awal,  string $tgl_akhir)
+    public function seri()
+    {
+        return $this->seri;
+    }
+
+    public function __construct(string $jenis_penjualan, string $distributor, string $tgl_awal,  string $tgl_akhir, string $seri)
     {
         $this->jenis_penjualan = $jenis_penjualan;
         $this->distributor = $distributor;
         $this->tgl_awal = $tgl_awal;
         $this->tgl_akhir = $tgl_akhir;
+        $this->seri = $seri;
     }
 
     public function columnFormats(): array
@@ -94,6 +100,7 @@ class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
 
     public function view(): View
     {
+        $seri = $this->seri;
         $dsb = $this->distributor;
         $tanggal_awal = $this->tgl_awal;
         $tanggal_akhir = $this->tgl_akhir;
@@ -169,7 +176,9 @@ class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
             $header = 'Laporan Penjualan SPB';
         }
 
-        return view('page.penjualan.penjualan.LaporanPenjualanEx', ['data' => $data, 'header' => $header]);
+
+
+        return view('page.penjualan.penjualan.LaporanPenjualanEx', ['data' => $data, 'header' => $header, 'seri' => $seri]);
     }
     public function title(): string
     {

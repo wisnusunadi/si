@@ -3248,25 +3248,25 @@ class PenjualanController extends Controller
     }
 
 
-    public function export_laporan($jenis, $dsb, $tgl_awal, $tgl_akhir)
+    public function export_laporan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri)
     {
         $x = explode(',', $jenis);
         $waktu = Carbon::now();
 
         if ($x == ['ekatalog', 'spa', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir), 'Laporan Penjualan Semua ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan Semua ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['ekatalog', 'spa']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir), 'Laporan Penjualan Ekatalog dan SPA ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan Ekatalog dan SPA ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['ekatalog', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir), 'Laporan Penjualan Ekatalog dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan Ekatalog dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['spa', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir), 'Laporan Penjualan SPA dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan SPA dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'ekatalog') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir), 'Laporan Penjualan Ekatalog ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan Ekatalog ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'spa') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir), 'Laporan Penjualan SPA ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan SPA ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'spb') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir), 'Laporan Penjualan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         }
     }
 }

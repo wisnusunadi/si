@@ -154,6 +154,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                         <div class="form-group row">
                                             <label for="tanggal_mulai" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Awal</label>
                                             <div class="col-lg-2 col-md-12">
@@ -167,6 +168,15 @@
                                             <div class="col-lg-2 col-md-12">
                                                 <input type="date" class="form-control col-form-label @error('tanggal_akhir') is-invalid @enderror" id="tanggal_akhir" name="tanggal_akhir" readonly />
                                                 <div class="invalid-feedback" id="msgtanggal_akhir">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label for="tambahan" class="col-form-label col-lg-5 col-md-12 labelket"></label>
+                                            <div class="col-5 col-form-label">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="checkbox" id="tambahan" value="seri" name="tambahan">
+                                                    <label class="form-check-label" for="inlineCheckbox1">Sertakan nomer seri</label>
                                                 </div>
                                             </div>
                                         </div>
@@ -191,7 +201,7 @@
                     <div class="card-body">
                         <h5>Laporan Penjualan</h5>
                         <div class="table-responsive">
-                            <a id="exportbutton" href="{{route('penjualan.penjualan.export',['jenis'=> 'semua','customer_id'=> 'semua','tgl_awal'=> '0','tgl_akhir'=>'0'])}}"><button class="btn btn-success">
+                            <a id="exportbutton" href="{{route('penjualan.penjualan.export',['jenis'=> 'semua','customer_id'=> 'semua','tgl_awal'=> '0','tgl_akhir'=>'0','seri' => 'kosong'])}}"><button class="btn btn-success">
                                     <i class="far fa-file-excel"></i> Export
                                 </button>
                             </a>
@@ -589,6 +599,7 @@
         // })
         $('#filter').submit(function() {
             var penjualan = [];
+            var tambahan = [];
             var exportbutton = $('#exportbutton').val();
             var tanggal_mulai = $('#tanggal_mulai').val();
             var tanggal_akhir = $('#tanggal_akhir').val();
@@ -598,16 +609,26 @@
                 penjualan.push($(this).val());
             });
 
+            $("input[name=tambahan]:checked").each(function() {
+                tambahan.push($(this).val());
+            });
+
             if (penjualan != 0) {
                 var x = penjualan;
             } else {
                 var x = ['kosong']
             }
 
+            if (tambahan != 0) {
+                var y = tambahan;
+            } else {
+                var y = ['kosong']
+            }
+
             $('#semuaform').removeClass('hide');
             $('#semuatable').DataTable().ajax.url('/api/laporan/penjualan/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir).load();
 
-            var link = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir;
+            var link = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y;
 
             $('#exportbutton').attr({
                 href: link
@@ -615,10 +636,7 @@
             return false;
         });
 
-        // $('#exportbutton').on('click', function(event) {
-        //     console.log($(this).attr("href"));
-        //     return false;
-        // });
+
     });
 </script>
 @endsection
