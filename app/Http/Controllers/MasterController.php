@@ -232,17 +232,17 @@ class MasterController extends Controller
         }
         return datatables()->of($data)
             ->addIndexColumn()
-            ->editColumn('email', function($data){
-                if(!empty($data->email)){
+            ->editColumn('email', function ($data) {
+                if (!empty($data->email)) {
                     return $data->email;
-                }else{
+                } else {
                     return '-';
                 }
             })
-            ->editColumn('telp', function($data){
-                if(!empty($data->telp)){
+            ->editColumn('telp', function ($data) {
+                if (!empty($data->telp)) {
                     return $data->telp;
-                }else{
+                } else {
                     return '-';
                 }
             })
@@ -250,9 +250,9 @@ class MasterController extends Controller
                 return $data->provinsi->nama;
             })
             ->addColumn('ktp', function ($data) {
-                if(!empty($data->ktp)){
+                if (!empty($data->ktp)) {
                     return $data->ktp;
-                }else{
+                } else {
                     return '-';
                 }
             })
@@ -326,8 +326,7 @@ class MasterController extends Controller
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
                     $q->where('id', $id);
                 })->first();
-                if(!empty($s->no_akd))
-                {
+                if (!empty($s->no_akd)) {
                     return $s->no_akd;
                 }
             })
@@ -336,8 +335,7 @@ class MasterController extends Controller
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
                     $q->where('id', $id);
                 })->first();
-                if(!empty($s->merk))
-                {
+                if (!empty($s->merk)) {
                     return $s->merk;
                 }
             })
@@ -376,7 +374,8 @@ class MasterController extends Controller
         }
     }
 
-    public function get_instansi_customer($id, $year, Request $request){
+    public function get_instansi_customer($id, $year, Request $request)
+    {
         $datarc = RencanaPenjualan::where('instansi', 'LIKE', '%' . $request->input('term', '') . '%')->where([['customer_id', '=', $id], ['tahun', '=', $year]])->pluck('instansi');
         $datarl = Ekatalog::where('instansi', 'LIKE', '%' . $request->input('term', '') . '%')->groupby('instansi')->pluck('instansi');
 
@@ -390,14 +389,16 @@ class MasterController extends Controller
         // return json_encode($datas1);
     }
 
-    public function get_ekatalog_satuan(Request $request){
+    public function get_ekatalog_satuan(Request $request)
+    {
         $data = Ekatalog::where('satuan', 'LIKE', '%' . $request->input('term', '') . '%')->groupby('satuan')->get();
         return json_encode($data);
         // print_r(array_count_values($data));
         // return json_encode($datas1);
     }
 
-    public function get_ekatalog_deskripsi(Request $request){
+    public function get_ekatalog_deskripsi(Request $request)
+    {
         $data = Ekatalog::where('deskripsi', 'LIKE', '%' . $request->input('term', '') . '%')->groupby('deskripsi')->get();
         return json_encode($data);
         // print_r(array_count_values($data));
@@ -736,6 +737,7 @@ class MasterController extends Controller
 
         $PenjualanProduk = PenjualanProduk::create([
             'nama' => $request->nama_paket,
+            'nama_alias' => $request->nama_alias,
             'harga' => $harga_convert
         ]);
         $bool = true;
@@ -898,6 +900,7 @@ class MasterController extends Controller
     {
         $harga_convert =  str_replace(['.', ','], "", $request->harga);
         $PenjualanProduk = PenjualanProduk::find($id);
+        $PenjualanProduk->nama_alias = $request->nama_alias;
         $PenjualanProduk->nama = $request->nama_paket;
         $PenjualanProduk->harga = $harga_convert;
         $PenjualanProduk->save();
