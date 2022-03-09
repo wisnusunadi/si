@@ -205,6 +205,7 @@
                                                     <th>Qty</th>
                                                     <th>Harga</th>
                                                     <th>Subtotal</th>
+                                                    <th></th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -239,7 +240,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <form method="post" action="" id="form-hapus" data-target="">
-                                            @method('DELETE')
+                                            @method('delete')
                                             @csrf
                                             <div class="card">
                                                 <div class="card-body">Apakah Anda yakin ingin menghapus data ini?</div>
@@ -248,7 +249,7 @@
                                                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                                                     </span>
                                                     <span class="float-right">
-                                                        <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
+                                                        <button type="submit" class="btn btn-danger " id="btnhapus"><i id="load" class=""></i> Hapus</button>
                                                     </span>
                                                 </div>
                                             </div>
@@ -322,6 +323,10 @@
                 data: 'sub_real',
                 className: 'nowraptxt align-right tabnum',
                 render: $.fn.dataTable.render.number(',', '.', 2),
+            }, {
+                data: 'hapus',
+                className: 'nowraptxt align-right ',
+
             }],
             "fixedColumns": {
                 left: 0
@@ -353,58 +358,58 @@
                 });
             }
         });
-        //var table = $('#showtable').DataTable({
-        //     "ajax": {
-        //         'url': '/api/penjualan/rencana/show/0/0',
-        //         'dataType': 'json',
-        //         'type': 'POST',
-        //         'headers': {
-        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-        //         }
-        //     },
-        //     // "scrollY": true,
-        //     // "scrollX": true,
-        //     // "scrollCollapse": true,
-        //     // "fixedColumns": {
-        //     //     left: 0
-        //     // },
-        //     // "columnDefs": [{
-        //     //     "visible": false,
-        //     //     "targets": groupColumn
-        //     // }],
-        //     // "order": [
-        //     //     [groupColumn, 'asc']
-        //     // ],
-        //     // "displayLength": 10,
-        //     // "drawCallback": function(settings) {
-        //     //     var api = this.api();
-        //     //     var rows = api.rows({
-        //     //         page: 'current'
-        //     //     }).nodes();
-        //     //     var last = null;
 
-        //     //     api.column(groupColumn, {
-        //     //         page: 'current'
-        //     //     }).data().each(function(group, i) {
-        //     //         if (last !== group) {
-        //     //             $(rows).eq(i).before(
-        //     //                 '<tr class="group blue-text"><td colspan="8">' + group + '</td></tr>'
-        //     //             );
-        //     //             last = group;
-        //     //         }
-        //     //     });
-        //     // }
-        //});
-
-        // // Order by the grouping
-        // $('#showtable tbody').on('click', 'tr.group', function() {
-        //     var currentOrder = table.order()[0];
-        //     if (currentOrder[0] === groupColumn && currentOrder[1] === 'asc') {
-        //         table.order([groupColumn, 'desc']).draw();
-        //     } else {
-        //         table.order([groupColumn, 'asc']).draw();
-        //     }
-        // });
+        $(document).on('submit', '#form-hapus', function(e) {
+            e.preventDefault();
+            $('#btnhapus').attr('disabled', true);
+            $('#load').addClass('fas fa-circle-notch fa-spin');
+            var action = $(this).attr('action');
+            console.log(action);
+            $.ajax({
+                url: action,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan Hapus Data',
+                            'success'
+                        );
+                        $('#showtable').DataTable().ajax.reload();
+                        $("#hapusmodal").modal('hide')
+                        $('#load').removeClass();
+                         $('#btnhapus').attr('disabled', false);
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Penambahan Data Pengujian',
+                            'error'
+                        );
+                    } else {
+                        swal.fire(
+                            'Error',
+                            'Data telah digunakan dalam Transaksi Lain',
+                            'warning'
+                        );
+                        $('#load').removeClass();
+                         $('#btnhapus').attr('disabled', false);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    swal.fire(
+                        'Error',
+                        'Data telah digunakan dalam Transaksi Lain',
+                        'warning'
+                    );
+                    $('#load').removeClass();
+                    $('#btnhapus').attr('disabled', false);
+                }
+            });
+            return false;
+        });
 
         $('#customer_id').select2({
             placeholder: "Pilih Distributor",
@@ -476,6 +481,15 @@
                 $("#btncari").attr('disabled', true);
 
             }
+        });
+
+        $(document).on('click', '.hapusmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data("id");
+            console.log(id);
+            $('#hapusmodal').modal("show");
+         $('#hapusmodal').find('form').attr('action', '/api/penjualan/rencana/delete/' + id);
         });
 
 
