@@ -622,7 +622,7 @@
                                                                                             <select class="form-control variasi" name="variasi[{{$produkpenjualan}}][{{$variasi}}]" id="variasi{{$produkpenjualan}}{{$variasi}}" style="width:100%;" data-attr="variasi{{$variasi}}" data-id="{{$variasi}}">
                                                                                                 <option value="{{$g->GudangBarangJadi->id}}">
                                                                                                     @if(!empty($g->GudangBarangJadi->nama))
-                                                                                                    {{$g->GudangBarangJadi->Produk->nama}} {{$g->GudangBarangJadi->nama}}
+                                                                                                    {{$g->GudangBarangJadi->nama}}
                                                                                                     @else
                                                                                                     {{$g->GudangBarangJadi->Produk->nama}}
                                                                                                     @endif
