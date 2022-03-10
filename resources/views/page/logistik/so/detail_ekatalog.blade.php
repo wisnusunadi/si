@@ -1081,12 +1081,48 @@
             });
             return hasil;
         }
+
+        $(document).on('change', '#jenis_sj', function(event) {
+            if ($(this).val() != "") {
+                var kode = $(this).val();
+                var val = $('#no_invoice').val();
+                if(val != ""){
+                    var value = kode+val;
+                    $.ajax({
+                        type: "POST",
+                        url: '/api/logistik/cek/no_sj/0/' + value + '/' + jenis_penjualan,
+                        dataType: 'json',
+                        success: function(data) {
+                            if (data > 0) {
+                                $('#no_invoice').addClass('is-invalid');
+                                $('#msgnoinvoice').text("No Surat Jalan sudah terpakai");
+                                $('#btnsimpan').attr('disabled', true);
+                            } else {
+                                $('#no_invoice').removeClass('is-invalid');
+                                $('#msgnoinvoice').text("");
+                                if (($('#no_invoice').val() != "" && !$('#no_invoice').hasClass('is-invalid')) && $('#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $('#ekspedisi_id').val() != "")) {
+                                    $('#btnsimpan').removeAttr('disabled');
+                                } else {
+                                    $('#btnsimpan').attr('disabled', true);
+                                }
+                            }
+                        },
+                        error: function() {
+                            alert('Error occured');
+                        }
+                    });
+                }
+            }
+        });
+
         $(document).on('change keyup', '#no_invoice', function(event) {
             if ($(this).val() != "") {
+                var kode = $('#jenis_sj').val();
                 var val = $(this).val();
+                var value = kode+val;
                 $.ajax({
                     type: "POST",
-                    url: '/api/logistik/cek/no_sj/0/' + val + '/' + jenis_penjualan,
+                    url: '/api/logistik/cek/no_sj/0/' + value + '/' + jenis_penjualan,
                     dataType: 'json',
                     success: function(data) {
                         if (data > 0) {
