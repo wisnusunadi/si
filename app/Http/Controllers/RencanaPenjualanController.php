@@ -62,6 +62,12 @@ class RencanaPenjualanController extends Controller
                 // return $data->DetailRencanaPenjualan->sum_prd() * $data->harga;
                 return $data->sum_prd() * $data->harga_prd();
             })
+            ->addColumn('hapus', function ($data) {
+                return '   <a data-toggle="modal" class="hapusmodal" data-id="' . $data->id . '" data-target="#hapusmodal"><button type="button" class="btn btn-danger">
+                <i class="far fa-trash-alt"></i>
+               </button> </a>';
+            })
+            ->rawColumns(['hapus'])
             ->make(true);
     }
     //Insert
@@ -112,10 +118,6 @@ class RencanaPenjualanController extends Controller
 
     public function show_laporan_detail($distributor, $tahun)
     {
-        // $row = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($distributor) {
-        //     $q->where('customer_id', $distributor);
-        // })->count();
-
         $row = 0;
         $rows = DetailRencanaPenjualan::whereHas('RencanaPenjualan', function ($q) use ($distributor, $tahun) {
             $q->where(['customer_id' => $distributor, 'tahun' => $tahun]);
@@ -143,6 +145,33 @@ class RencanaPenjualanController extends Controller
 
         return view('page.penjualan.rencana.result', ['data' => $data]);
     }
+    //Hapus
+    public function delete_detail_rencana($id)
+    {
+        $DetailRencanaPenjualan = DetailRencanaPenjualan::findOrFail($id);
+        $Count = DetailRencanaPenjualan::where('rencana_penjualan_id', $DetailRencanaPenjualan->rencana_penjualan_id)->count();
+
+
+        if ($Count > 1) {
+            $d_detail_rencana = $DetailRencanaPenjualan->delete();
+
+            if ($d_detail_rencana) {
+                return response()->json(['data' => 'success']);
+            } else {
+                return response()->json(['data' => 'error']);
+            }
+        } else {
+            $d_detail_rencana = $DetailRencanaPenjualan->delete();
+            $d_rencana = RencanaPenjualan::findOrFail($DetailRencanaPenjualan->rencana_penjualan_id)->delete();
+
+            if ($d_detail_rencana && $d_rencana) {
+                return response()->json(['data' => 'success']);
+            } else {
+                return response()->json(['data' => 'error']);
+            }
+        }
+    }
+
 
     //Select
     public function select_tahun_rencana(Request $request)
