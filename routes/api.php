@@ -514,6 +514,7 @@ Route::prefix('/logistik')->group(function () {
         // Route::get('/data', [App\Http\Controllers\MasterController::class, 'get_data_ekspedisi']);
         Route::get('select/{provinsi}', [App\Http\Controllers\MasterController::class, 'select_ekspedisi']);
         Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_detail_ekspedisi']);
+        Route::delete('delete/{id}', [App\Http\Controllers\MasterController::class, 'delete_ekspedisi']);
         // Route::post('create', [App\Http\Controllers\MasterController::class, 'create_ekspedisi']);
     });
 

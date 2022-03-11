@@ -253,6 +253,36 @@
                     </div>
                 </div>
             </div>
+            <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
+                <div class="modal-dialog modal-lg" role="document">
+                    <div class="modal-content" style="margin: 10px">
+                        <div class="modal-header yellow-bg">
+                            <h4 class="modal-title"><b>Hapus</b></h4>
+                        </div>
+                        <div class="modal-body" id="hapus">
+                            <div class="row">
+                                <div class="col-12">
+                                    <form method="post" action="" id="form-hapus" data-target="">
+                                        @method('delete')
+                                        @csrf
+                                        <div class="card">
+                                            <div class="card-body">Apakah Anda yakin ingin menghapus data ini?</div>
+                                            <div class="card-footer">
+                                                <span class="float-left">
+                                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                                                </span>
+                                                <span class="float-right">
+                                                    <button type="submit" class="btn btn-danger " id="btnhapus"><i id="load" class=""></i> Hapus</button>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>
@@ -396,6 +426,66 @@
             }
         }
 
+        $(document).on('submit', '#form-hapus', function(e) {
+            e.preventDefault();
+            $('#btnhapus').attr('disabled', true);
+            $('#load').addClass('fas fa-circle-notch fa-spin');
+            var action = $(this).attr('action');
+            console.log(action);
+            $.ajax({
+                url: action,
+                type: 'DELETE',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil melakukan Hapus Data',
+                            'success'
+                        );
+                        $('#showtable').DataTable().ajax.reload();
+                        $("#hapusmodal").modal('hide')
+                        $('#load').removeClass();
+                         $('#btnhapus').attr('disabled', false);
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Error',
+                            'Data telah digunakan dalam Transaksi Lain',
+                            'warning'
+                        );
+                    } else {
+                        swal.fire(
+                            'Error',
+                            'Data telah digunakan dalam Transaksi Lain',
+                            'warning'
+                        );
+                        $('#load').removeClass();
+                         $('#btnhapus').attr('disabled', false);
+                    }
+                },
+                error: function(xhr, status, error) {
+                    swal.fire(
+                        'Error',
+                        'Data telah digunakan dalam Transaksi Lain',
+                        'warning'
+                    );
+                    $('#load').removeClass();
+                    $('#btnhapus').attr('disabled', false);
+                }
+            });
+            return false;
+        });
+
+        $(document).on('click', '.hapusmodal', function(event) {
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data("id");
+            console.log(id);
+            $('#hapusmodal').modal("show");
+            $('#hapusmodal').find('form').attr('action', '/api/logistik/ekspedisi/delete/' + id);
+        });
 
         $(document).on('click', '.editmodal', function(event) {
             var k = "provinsi";
