@@ -400,12 +400,23 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group row">
-                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Pemesanan</label>
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Buat</label>
                                                                     <div class="col-lg-4">
                                                                         <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />
                                                                         <div class="invalid-feedback" id="msgtanggal_pemesanan">
                                                                             @if($errors->has('tanggal_pemesanan'))
                                                                             {{ $errors->first('tanggal_pemesanan')}}
+                                                                            @endif
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Edit</label>
+                                                                    <div class="col-lg-4">
+                                                                        <input type="date" class="form-control col-form-label @error('tanggal_edit') is-invalid @enderror" name="tanggal_edit" id="tanggal_edit" />
+                                                                        <div class="invalid-feedback" id="msgtanggal_edit">
+                                                                            @if($errors->has('tanggal_edit'))
+                                                                            {{ $errors->first('tanggal_edit')}}
                                                                             @endif
                                                                         </div>
                                                                     </div>
