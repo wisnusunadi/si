@@ -3408,13 +3408,13 @@ class LogistikController extends Controller
         if ($id != "0") {
             $e = Logistik::where([['id', '!=', $id], ['nosurat', '=', $val]])->count();
         } else {
-            $vjenis = "";
-            if ($jenis == "SPB") {
-                $vjenis = "B.";
-            } else {
-                $vjenis = "SPA-";
-            }
-            $e = Logistik::where('nosurat', $vjenis . $val)->count();
+            // $vjenis = "";
+            // if ($jenis == "SPB") {
+            //     $vjenis = "B.";
+            // } else {
+            //     $vjenis = "SPA-";
+            // }
+            $e = Logistik::where('nosurat', $val)->count();
         }
         return $e;
     }
