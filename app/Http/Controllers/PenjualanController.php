@@ -167,15 +167,11 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('tgl_order', function ($data) {
-                if (isset($data->tgl_buat)) {
-                    return Carbon::createFromFormat('Y-m-d', $data->tgl_buat)->format('d-m-Y');
-                    // return $data->tgl_buat;
+
+                if (!empty($data->Pesanan->tgl_po)) {
+                    return Carbon::createFromFormat('Y-m-d', $data->Pesanan->tgl_po)->format('d-m-Y');
                 } else {
-                    if (!empty($data->Pesanan->tgl_po)) {
-                        return Carbon::createFromFormat('Y-m-d', $data->Pesanan->tgl_po)->format('d-m-Y');
-                    } else {
-                        return "-";
-                    }
+                    return "-";
                 }
             })
             ->addColumn('tgl_kontrak', function ($data) {
@@ -1168,6 +1164,11 @@ class PenjualanController extends Controller
                 if (!empty($data->tgl_buat)) {
                     return Carbon::createFromFormat('Y-m-d', $data->tgl_buat)->format('d-m-Y');
                 }
+            })
+            ->editColumn('tgl_edit', function ($data) {
+                if (!empty($data->tgl_edit)) {
+                    return Carbon::createFromFormat('Y-m-d', $data->tgl_edit)->format('d-m-Y');
+                }
             })->editColumn('tgl_kontrak', function ($data) {
                 if (isset($data->tgl_kontrak)) {
                     $tgl_sekarang = Carbon::now()->format('Y-m-d');
@@ -1712,6 +1713,7 @@ class PenjualanController extends Controller
                 'status' => $request->status,
                 'tgl_kontrak' => $request->batas_kontrak,
                 'tgl_buat' => $request->tanggal_pemesanan,
+                'tgl_edit' => $request->tanggal_edit,
                 'ket' => $request->keterangan,
                 'log' => 'penjualan'
             ]);
@@ -2145,6 +2147,7 @@ class PenjualanController extends Controller
         $ekatalog->instansi = $request->instansi;
         $ekatalog->alamat = $request->alamatinstansi;
         $ekatalog->tgl_kontrak = $request->batas_kontrak;
+        $ekatalog->tgl_buat = $request->tgl_buat;
         $ekatalog->tgl_edit = $request->tgl_edit;
         $ekatalog->no_urut = $request->no_urut;
         $ekatalog->satuan = $request->satuan_kerja;

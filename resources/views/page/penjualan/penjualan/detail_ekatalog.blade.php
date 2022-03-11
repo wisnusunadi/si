@@ -43,8 +43,12 @@
                             <b class="float-right">{{ $data->no_urut}}</b>
                         </div>
                         <div class="margin">
-                            <a class="text-muted">Tgl Order</a>
+                            <a class="text-muted">Tgl Buat</a>
                             <b class="float-right">{{ date('d-m-Y', strtotime($data->tgl_buat)) }}</b>
+                        </div>
+                        <div class="margin">
+                            <a class="text-muted">Tgl Edit</a>
+                            <b class="float-right">{{ date('d-m-Y', strtotime($data->tgl_edit)) }}</b>
                         </div>
                         <div class="margin">
                             <a class="text-muted">Tgl Kontrak</a>
