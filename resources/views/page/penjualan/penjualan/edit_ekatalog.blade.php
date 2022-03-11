@@ -445,6 +445,17 @@
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
+                                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Buat</label>
+                                                                        <div class="col-lg-4 col-md-4">
+                                                                            <input type="date" class="form-control col-form-label @error('tgl_buat') is-invalid @enderror" name="tgl_buat" id="tgl_buat" value="{{$e->tgl_buat}}" />
+                                                                            <div class="invalid-feedback" id="msgtgl_buat">
+                                                                                @if($errors->has('tgl_buat'))
+                                                                                {{ $errors->first('tgl_buat')}}
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row">
                                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Edit</label>
                                                                         <div class="col-lg-4 col-md-4">
                                                                             <input type="date" class="form-control col-form-label @error('tgl_edit') is-invalid @enderror" name="tgl_edit" id="tgl_edit" value="{{$e->tgl_edit}}" />

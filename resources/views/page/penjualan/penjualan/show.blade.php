@@ -345,7 +345,7 @@
                                                     <th>No SO</th>
                                                     <th>Nomor AKN</th>
                                                     <th>Nomor PO</th>
-                                                    <th>Tanggal Order</th>
+                                                    <th>Tanggal PO</th>
                                                     <th>Tanggal Delivery</th>
                                                     <th>Customer</th>
                                                     <th>Jenis</th>
@@ -530,7 +530,8 @@
                                                     <th>Nomor SO</th>
                                                     <th>Nomor AKN</th>
                                                     <th>Nomor PO</th>
-                                                    <th>Tanggal Order</th>
+                                                    <th>Tanggal Buat</th>
+                                                    <th>Tanggal Edit</th>
                                                     <th>Tanggal Delivery</th>
                                                     <th>Customer</th>
                                                     <th>Status</th>
@@ -1032,6 +1033,9 @@
                 },
                 {
                     data: 'tgl_buat',
+                },
+                {
+                    data: 'tgl_edit',
                 },
                 {
                     data: 'tgl_kontrak',
