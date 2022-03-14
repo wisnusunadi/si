@@ -127,6 +127,7 @@ Route::prefix('/penjualan')->group(function () {
         Route::get('select_tahun', [App\Http\Controllers\RencanaPenjualanController::class, 'select_tahun_rencana']);
         Route::post('show/{customer}/{tahun}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_data_rencana']);
 
+        Route::post('real/show/{id}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_show_data_real']);
         Route::post('real/data/{id}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_data_real']);
         Route::post('realisasi/update/{id}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_update_realisasi']);
     });

@@ -3,7 +3,19 @@
 @section('title', 'ERP')
 
 @section('adminlte_css')
+{{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.11.4/css/jquery.dataTables.min.css"> --}}
 <style>
+
+    td.dt-control {
+        background: url("/assets/image/logo/plus.png") no-repeat center center;
+        cursor: pointer;
+        background-size: 15px 15px;
+    }
+    tr.shown td.dt-control {
+        background: url("/assets/image/logo/minus.png") no-repeat center center;
+        background-size: 15px 15px;
+    }
+
     table tr td:nth-child(2),
     table tr td:nth-child(5),
     {
@@ -77,6 +89,10 @@
 
     #btntambah {
         margin-bottom: 10px;
+    }
+
+    .va-mid{
+        vertical-align: middle !important;
     }
 
     @media (min-width: 993px) {
@@ -194,17 +210,18 @@
                                             <thead style="text-align:center;">
                                                 <tr>
                                                     <th rowspan="2">Instansi</th>
+                                                    <th rowspan="2"></th>
                                                     <th rowspan="2" class="borderright">Produk</th>
-                                                    <th colspan="3" class="borderright">Rencana</th>
-                                                    <th colspan="4">Realisasi</th>
+                                                    <th colspan="4" class="borderright">Rencana</th>
+                                                    {{-- <th colspan="4">Realisasi</th> --}}
                                                 </tr>
                                                 <tr>
                                                     <th>Qty</th>
                                                     <th>Harga</th>
                                                     <th class="borderright">Subtotal</th>
-                                                    <th>Qty</th>
+                                                    {{-- <th>Qty</th>
                                                     <th>Harga</th>
-                                                    <th>Subtotal</th>
+                                                    <th>Subtotal</th> --}}
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -267,12 +284,56 @@
 @stop
 
 @section('adminlte_js')
-
-
+{{-- <script src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script>
+<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> --}}
 <script>
+    var editor;
     $(function() {
+        // editor = new $.fn.dataTable.Editor({
+        //     ajax: {
+        //         'url': '/api/penjualan/rencana/show/0/0',
+        //         'dataType': 'json',
+        //         'type': 'POST',
+        //         'headers': {
+        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
+        //         },
+        //     },
+        //     table: "#showtable",
+        //     fields: [ {
+        //             label: "Instansi:",
+        //             name: "instansi"
+        //         }, {
+        //             label: "",
+        //             name: "",
+        //             class:"disabled",
+        //         }, {
+        //             label: "produk:",
+        //             name: "produk"
+        //         }, {
+        //             label: "jumlah:",
+        //             name: "jumlah",
+        //             type: "number"
+        //         }, {
+        //             label: "harga:",
+        //             name: "harga",
+        //             type: "number"
+        //         }, {
+        //             label: "sub:",
+        //             name: "start_date",
+        //             type: "datetime"
+        //         }, {
+        //             label: "Salary:",
+        //             name: "salary"
+        //         }
+        //     ]
+        // });
+
+        // $('#showtable').on( 'click', 'tbody td:not(:second-child)', function (e) {
+        //     editor.inline( this );
+        // });
+
         var groupColumn = 0;
-        $('#showtable').DataTable({
+        var showtable = $('#showtable').DataTable({
             destroy: true,
             processing: true,
             dom: 'Bfrtip',
@@ -299,33 +360,40 @@
                 orderable: false,
                 searchable: false
             }, {
+                "className": 'dt-control',
+                "orderable": false,
+                "data": null,
+                "defaultContent": ''
+            }, {
                 data: 'produk',
-                className: 'borderright'
+                className: 'borderright va-mid'
             }, {
                 data: 'jumlah',
-                className: 'nowraptxt align-center tabnum'
+                className: 'nowraptxt align-center tabnum va-mid'
             }, {
                 data: 'harga',
-                className: 'nowraptxt align-right tabnum',
+                className: 'nowraptxt align-right tabnum va-mid',
                 render: $.fn.dataTable.render.number(',', '.', 2),
             }, {
                 data: 'sub',
-                className: 'nowraptxt align-right borderright tabnum',
+                className: 'nowraptxt align-right borderright tabnum va-mid',
                 render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'jumlah_real',
-                className: 'nowraptxt align-center tabnum'
-            }, {
-                data: 'harga_real',
-                className: 'nowraptxt align-right tabnum',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
-                data: 'sub_real',
-                className: 'nowraptxt align-right tabnum',
-                render: $.fn.dataTable.render.number(',', '.', 2),
-            }, {
+            },
+            // {
+            //     data: 'jumlah_real',
+            //     className: 'nowraptxt align-center tabnum va-mid'
+            // }, {
+            //     data: 'harga_real',
+            //     className: 'nowraptxt align-right tabnum va-mid',
+            //     render: $.fn.dataTable.render.number(',', '.', 2),
+            // }, {
+            //     data: 'sub_real',
+            //     className: 'nowraptxt align-right tabnum va-mid',
+            //     render: $.fn.dataTable.render.number(',', '.', 2),
+            // },
+            {
                 data: 'hapus',
-                className: 'nowraptxt align-center',
+                className: 'nowraptxt align-center va-mid',
 
             }],
             "fixedColumns": {
@@ -351,13 +419,140 @@
                 }).data().each(function(group, i) {
                     if (last !== group) {
                         $(rows).eq(i).before(
-                            '<tr class="group" style="background-color:steelblue; color:white;"><td colspan="8"><b>' + group + '</b></td></tr>'
+                            '<tr class="group" style="background-color:steelblue; color:white;"><td colspan="9"><b>' + group + '</b></td></tr>'
                         );
                         last = group;
                     }
                 });
             }
         });
+
+        function format ( data ) {
+            return `
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow-none">
+                        <div class="card-header"><h6 class="card-title">Realisasi</h6></div>
+                        <div class="card-body">
+
+                    <table class="table table-hover" id="detailtable`+data.id+`">
+                        <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>No SO</th>
+                                <th>No AKN</th>
+                                <th>Jumlah</th>
+                                <th>Harga</th>
+                                <th>Subtotal</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                        <tfoot>
+                            <tr>
+                                <th colspan="5" class="align-center">Total</th>
+                                <th></th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    </div>
+                </div>
+                </div>
+            </div>`;
+        }
+
+        function detailtable(id){
+            $('#detailtable'+id).DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: false,
+                paging: false,
+                info:false,
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                ajax: {
+                    'url': '/api/penjualan/rencana/real/show/'+id,
+                    'dataType': 'json',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                footerCallback: function ( row, data, start, end, display ) {
+                    var api = this.api();
+
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function ( i ) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '')*1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+
+                    // Total over all pages
+                    total = api
+                        .column(5)
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0 );
+
+                    // Total over this page
+                    pageTotal = api
+                        .column(5, { page: 'current'} )
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(5).footer() ).html(
+                        'Rp. '+ $.fn.dataTable.render.number(',', '.', 2).display(total)
+                    );
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: false
+                },{
+                    data: 'no_so',
+                    className: 'nowrap-text align-center',
+                }, {
+                    data: 'no_akn',
+                    className: 'nowrap-text align-center',
+                }, {
+                    data: 'jumlah',
+                    className: 'nowraptxt align-center tabnum'
+                }, {
+                    data: 'harga',
+                    className: 'nowraptxt align-right tabnum',
+                    render: $.fn.dataTable.render.number(',', '.', 2),
+                }, {
+                    data: 'sub',
+                    className: 'nowraptxt align-right borderright tabnum',
+                    render: $.fn.dataTable.render.number(',', '.', 2),
+                }],
+            });
+        }
+
+        $('#showtable tbody').on('click', 'td.dt-control', function () {
+            var tr = $(this).closest('tr');
+            var row = showtable.row( tr );
+
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child( format(row.data()) ).show();
+                detailtable(row.data().id);
+                tr.addClass('shown');
+            }
+        });
+
 
         $(document).on('submit', '#form-hapus', function(e) {
             e.preventDefault();
