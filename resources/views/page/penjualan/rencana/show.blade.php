@@ -205,7 +205,7 @@
                                                     <th>Qty</th>
                                                     <th>Harga</th>
                                                     <th>Subtotal</th>
-                                                    <th></th>
+                                                    <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -325,7 +325,7 @@
                 render: $.fn.dataTable.render.number(',', '.', 2),
             }, {
                 data: 'hapus',
-                className: 'nowraptxt align-right ',
+                className: 'nowraptxt align-center',
 
             }],
             "fixedColumns": {
