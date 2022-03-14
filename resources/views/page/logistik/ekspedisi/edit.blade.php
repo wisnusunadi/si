@@ -92,26 +92,6 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row hide" id="kota_kabupaten_select">
-                                        <label for="jurusan" class="col-lg-4 col-md-12 col-form-label labelket">Kota / Kabupaten</label>
-                                        <div class="col-8">
-                                            <select class="select-info form-control custom-select kota_kabupaten" name="kota_kabupaten" id="kota_kabupaten" style="width: 100%;">
-                                            </select>
-                                            <div class="invalid-feedback" id="msgkota_kabupaten">
-                                                @if($errors->has('kota_kabupaten'))
-                                                {{ $errors->first('kota_kabupaten')}}
-                                                @endif
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="form-group row">
-                                        <label for="keterangan" class="col-lg-4 col-md-12 col-form-label labelket">Keterangan</label>
-                                        <div class="col-lg-5 col-md-10">
-                                            <textarea class="form-control" name="keterangan" id="keterangan">{{$e->ket}}</textarea>
-                                        </div>
-                                    </div>
-
                                     <div class="form-group row">
                                         <label for="" class="col-lg-4 col-md-12 col-form-label labelket">Jurusan</label>
                                         <div class="col-lg-8 col-md-12 col-form-label">
@@ -129,49 +109,34 @@
                                         </div>
                                     </div>
 
-                                    <div class="form-group row" id="provinsi_select">
-                                        <div class="col-lg-12 col-md-12">
-                                            <div class="table-responsive">
-                                                <table class="table" style="text-align: center;" id="createtable">
-                                                    <thead>
-                                                        <tr>
-                                                            <th colspan="5">
-                                                                <button type="button" class="btn btn-primary float-right" id="addrow">
-                                                                    <i class="fas fa-plus"></i>
-                                                                    Tambah
-                                                                </button>
-                                                            </th>
-                                                        </tr>
-                                                        <tr>
-                                                            <th>No</th>
-                                                            <th width="50%">Nama Provinsi</th>
-                                                            <th>Aksi</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                        @foreach($e->provinsi as $s)
-                                                        <tr>
-                                                            <td>{{$loop->iteration}}</td>
-                                                            <td>
-                                                                <div class="form-group row">
-                                                                    <div class="col-12">
-                                                                        <select class="select-info select2 form-control " name="provinsi_id[]" id="{{$loop->iteration-1}}" style="width:100%">
-                                                                            <option value="{{$s->id}}" selected>{{$s->nama}}</option>
-                                                                        </select>
-                                                                    </div>
-                                                                </div>
-                                                            </td>
-                                                            <td>
-                                                                <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
-                                                            </td>
-                                                        </tr>
-                                                        @endforeach
-                                                        @endforeach
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                    <div class="form-group row" id="prov_select">
+                                        <label for="keterangan" class="col-lg-4 col-md-12 col-form-label labelket">Provinsi</label>
+                                        <div class="col-lg-8">
+                                            <select class="provinsi form-control" name="provinsi_id[]" id="provinsi" style="width: 100%;" >
+                                            </select>
                                         </div>
                                     </div>
+
+                                    {{-- <div class="form-group row hide" id="kota_kabupaten_select">
+                                        <label for="jurusan" class="col-lg-4 col-md-12 col-form-label labelket">Kota / Kabupaten</label>
+                                        <div class="col-8">
+                                            <select class="select-info form-control custom-select kota_kabupaten" name="kota_kabupaten" id="kota_kabupaten" style="width: 100%;">
+                                            </select>
+                                            <div class="invalid-feedback" id="msgkota_kabupaten">
+                                                @if($errors->has('kota_kabupaten'))
+                                                {{ $errors->first('kota_kabupaten')}}
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div> --}}
+
+                                    <div class="form-group row">
+                                        <label for="keterangan" class="col-lg-4 col-md-12 col-form-label labelket">Keterangan</label>
+                                        <div class="col-lg-5 col-md-10">
+                                            <textarea class="form-control" name="keterangan" id="keterangan">{{$e->ket}}</textarea>
+                                        </div>
+                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>

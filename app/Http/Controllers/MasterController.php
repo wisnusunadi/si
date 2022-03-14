@@ -189,6 +189,7 @@ class MasterController extends Controller
                 if ($divisi_id == "15") {
                     $x = array();
                     $y = array();
+                    $n = array();
 
                     $return .= '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="' . $data->id . '" data-value="';
                     foreach ($data->jalurekspedisi as $s) {
@@ -202,6 +203,12 @@ class MasterController extends Controller
                     }
                     $return .= implode(',', $y);
 
+                    $return .= '" data-provinsi_nama="';
+                    foreach ($data->provinsi as $u) {
+                        $n[] = $u->nama;
+                    }
+                    $return .= implode(',', $n);
+
                     $return .= '">
                     <button class="dropdown-item" type="button">
                         <i class="fas fa-pencil-alt"></i>
@@ -209,7 +216,12 @@ class MasterController extends Controller
                     </button>
                 </a>';
                 }
-                $return .= '</div>';
+                $return .= ' <a data-toggle="modal" class="hapusmodal" data-id="' . $data->id . '" data-target="#hapusmodal">
+                <button class="dropdown-item" type="button">
+                <i class="far fa-trash-alt"></i>
+                    Hapus
+                </button>
+            </a></div>';
                 return $return;
             })
             ->rawColumns(['button', 'jurusan', 'via'])
@@ -851,6 +863,17 @@ class MasterController extends Controller
         $customer->delete();
 
         if ($customer) {
+            return response()->json(['data' => 'success']);
+        } else {
+            return response()->json(['data' => 'error']);
+        }
+    }
+    public function delete_ekspedisi($id)
+    {
+        $ekspedisi = Ekspedisi::find($id);
+        $ekspedisi->delete();
+
+        if ($ekspedisi) {
             return response()->json(['data' => 'success']);
         } else {
             return response()->json(['data' => 'error']);
