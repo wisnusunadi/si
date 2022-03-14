@@ -205,7 +205,7 @@
                                                     <th>Qty</th>
                                                     <th>Harga</th>
                                                     <th>Subtotal</th>
-                                                    <th></th>
+                                                    <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -218,13 +218,13 @@
                     </div>
                 </div>
 
-                <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
-                    <div class="modal-dialog modal-lg" role="document">
+                <div class="modal fade" id="realmodal" role="dialog" aria-labelledby="realmodal" aria-hidden="true">
+                    <div class="modal-dialog modal-xl" role="document">
                         <div class="modal-content" style="margin: 10px">
-                            <div class="modal-header yellow-bg">
-                                <h4 class="modal-title"><b>Ubah</b></h4>
+                            <div class="modal-header bg-warning">
+                                <h4 class="modal-title"><b>Realisasi Penjualan</b></h4>
                             </div>
-                            <div class="modal-body" id="edit">
+                            <div class="modal-body" id="real">
 
                             </div>
                         </div>
@@ -233,7 +233,7 @@
                 <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content" style="margin: 10px">
-                            <div class="modal-header yellow-bg">
+                            <div class="modal-header bg-danger">
                                 <h4 class="modal-title"><b>Hapus</b></h4>
                             </div>
                             <div class="modal-body" id="hapus">
@@ -325,7 +325,7 @@
                 render: $.fn.dataTable.render.number(',', '.', 2),
             }, {
                 data: 'hapus',
-                className: 'nowraptxt align-right ',
+                className: 'nowraptxt align-center',
 
             }],
             "fixedColumns": {
@@ -395,7 +395,7 @@
                             'warning'
                         );
                         $('#load').removeClass();
-                         $('#btnhapus').attr('disabled', false);
+                        $('#btnhapus').attr('disabled', false);
                     }
                 },
                 error: function(xhr, status, error) {
@@ -512,6 +512,159 @@
                 href: link2
             });
             $("#export").attr('disabled', false);
+            return false;
+        });
+
+        function realtable(id){
+            $('#realtable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: false,
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                ajax: {
+                    'url': '/api/penjualan/rencana/real/data/'+id,
+                    'dataType': 'json',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                columns: [{
+                    data: 'checkbox',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'no_so',
+                    className: 'nowraptxt',
+                }, {
+                    data: 'no_akn',
+                }, {
+                    data: 'jumlah',
+                    className: 'nowraptxt align-center tabnum'
+                }, {
+                    data: 'harga',
+                    className: 'nowraptxt align-right tabnum',
+                    render: $.fn.dataTable.render.number(',', '.', 2),
+                }, {
+                    data: 'sub',
+                    className: 'nowraptxt align-right borderright tabnum',
+                    render: $.fn.dataTable.render.number(',', '.', 2),
+                }]
+            });
+        }
+
+        $(document).on('click', '.realmodal', function(event) {
+            event.preventDefault();
+            var id = $(this).attr("data-id");
+            $.ajax({
+                url: '/penjualan/rencana/real/show/'+id,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#realmodal').modal("show");
+                    $('#real').html(result).show();
+                    realtable(id);
+
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + '/penjualan/rencana/real/show/'+ id + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
+
+        $(document).on('click', '#realtable input[name="check_all"]', function() {
+            var rows = $('#realtable').DataTable().rows({ 'search': 'applied' }).nodes();
+            if ($('input[name="check_all"]:checked').length > 0) {
+                $('.so_id', rows).prop('checked', true);
+                // checkedAry = [];
+                // $.each($(".so_id:checked", rows), function() {
+                //     checkedAry.push($(this).closest('tr').find('.so_id').attr('data-id'));
+                // });
+            } else if ($('input[name="check_all"]:checked').length <= 0) {
+                $('.so_id', rows).prop('checked', false);
+            }
+        });
+
+        $(document).on('click', '#realtable .so_id', function() {
+            $('#check_all').prop('checked', false);
+            if ($('.so_id:checked').length > 0) {
+                // $('#btnsubmit').attr('disabled', false);
+                // $('#cekbrg').prop('disabled', false);
+                // $('#cekbrgedit').prop('disabled', false);
+                // checkedAry = [];
+                // $.each($(".so_id:checked"), function() {
+                //     checkedAry.push($(this).closest('tr').find('.so_id').attr('data-id'));
+                // });
+            } else if ($('.so_id:checked').length <= 0) {
+                // $('#btnsubmit').attr('disabled', true);
+                // $('#cekbrg').prop('disabled', true);
+                // $('#cekbrgedit').prop('disabled', true);
+            }
+        });
+
+        $(document).on('submit', '#formsubmit', function(e) {
+            $('#btnsubmit').attr('disabled', true);
+            e.preventDefault();
+
+            var detail_pesanan_id = $('#realtable').DataTable().$('tr').find('input[type="checkbox"][name="detail_pesanan_id[]"]').serializeArray();
+            var data = [];
+
+            $.each(detail_pesanan_id, function() {
+                data.push(this.value);
+            });
+            console.log(data);
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: {detail_pesanan_id:data},
+                dataType: 'JSON',
+                beforeSend: function() {
+                    swal.fire({
+                        title: 'Sedang Proses',
+                        html: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {Swal.showLoading()}
+                    })
+                },
+                success: function(response) {
+                    console.log(response);
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Berhasil',
+                            'Berhasil mengubah Realisasi Penjualan',
+                            'success'
+                        );
+                        $('#showtable').DataTable().ajax.reload();
+                        $("#realmodal").modal('hide')
+                        $('#load').removeClass();
+                        $('#btnsubmit').attr('disabled', false);
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal mengubah Realisasi Penjualan',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.log(xhr);
+                }
+            });
             return false;
         });
 
