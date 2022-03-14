@@ -63,9 +63,13 @@ class RencanaPenjualanController extends Controller
                 return $data->sum_prd() * $data->harga_prd();
             })
             ->addColumn('hapus', function ($data) {
-                return '   <a data-toggle="modal" class="hapusmodal" data-id="' . $data->id . '" data-target="#hapusmodal"><button type="button" class="btn btn-danger">
+                return '<a data-toggle="modal" class="realmodal" data-id="' . $data->id . '" data-target="#realmodal"><button type="button" class="btn btn-info btn-circle" alt="Tambah Realisasi">
+                <i class="far fa-plus-square"></i>
+               </button> </a>
+               <a data-toggle="modal" class="hapusmodal" data-id="' . $data->id . '" data-target="#hapusmodal"><button type="button" class="btn btn-danger btn-circle">
                 <i class="far fa-trash-alt"></i>
-               </button> </a>';
+               </button> </a>
+               ';
             })
             ->rawColumns(['hapus'])
             ->make(true);
@@ -172,6 +176,103 @@ class RencanaPenjualanController extends Controller
         }
     }
 
+    public function get_show_real($id){
+        $data = DetailRencanaPenjualan::find($id);
+        return view('page.penjualan.rencana.real', ['id' => $id, 'data' => $data]);
+    }
+
+    public function get_data_real($id){
+        $datarencana = DetailRencanaPenjualan::find($id);
+
+        $cust = $datarencana->RencanaPenjualan->customer_id;
+        $ins = $datarencana->RencanaPenjualan->instansi;
+        $prd = $datarencana->penjualan_produk_id;
+
+        $datareal = DetailPesanan::where('detail_rencana_penjualan_id', $id)->get();
+        $datapenj = DetailPesanan::whereNull('detail_rencana_penjualan_id')->where('penjualan_produk_id', $prd)->whereHas('Pesanan.Ekatalog', function($q) use($cust, $ins){
+            $q->where([['customer_id', '=', $cust], ['instansi', '=', $ins]]);
+        })->get();
+
+        $data = $datareal->merge($datapenj);
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('checkbox', function ($data) {
+                // return $data->DetailRencanaPenjualan->RencanaPenjualan->instansi;
+                if(!empty($data->detail_rencana_penjualan_id)){
+                    return '  <div class="form-check">
+                    <input class="form-check-input so_id" name="detail_pesanan_id[]" value="' . $data->id . '" type="checkbox" checked/>
+                    </div>';
+                }else{
+                    return '  <div class="form-check">
+                    <input class="form-check-input so_id" name="detail_pesanan_id[]" value="' . $data->id . '" type="checkbox"/>
+                    </div>';
+                }
+            })
+            ->addColumn('no_so', function ($data) {
+                // return $data->DetailRencanaPenjualan->RencanaPenjualan->instansi;
+                return $data->Pesanan->so;
+            })
+            ->addColumn('no_akn', function ($data) {
+                // return $data->DetailRencanaPenjualan->RencanaPenjualan->instansi;
+                return $data->Pesanan->Ekatalog->no_paket;
+            })
+            ->addColumn('produk', function ($data) {
+                if ($data->PenjualanProduk->nama_alias != '') {
+                    return $data->PenjualanProduk->nama_alias;
+                } else {
+                    return $data->PenjualanProduk->nama;
+                }
+            })
+            ->addColumn('jumlah', function ($data) {
+                // return $data->DetailRencanaPenjualan->jumlah;
+                return $data->jumlah;
+            })
+            ->addColumn('harga', function ($data) {
+                // return $data->DetailRencanaPenjualan->harga;
+                return $data->harga;
+            })
+            ->addColumn('sub', function ($data) {
+                // return $data->DetailRencanaPenjualan->harga * $data->DetailRencanaPenjualan->jumlah;
+                return $data->harga * $data->jumlah;
+            })
+            ->rawColumns(['checkbox'])
+            ->make(true);
+    }
+
+    public function get_update_realisasi($id, Request $request){
+        $bool = true;
+        $data = DetailPesanan::where('detail_rencana_penjualan_id', $id)->get();
+        if(count($data) > 0){
+            foreach($data as $i){
+                $update = DetailPesanan::find($i->id);
+                $update->detail_rencana_penjualan_id = NULL;
+                $u = $update->save();
+                if(!$u){
+                    $bool = false;
+                }
+            }
+        }
+
+
+        if(isset($request->detail_pesanan_id)){
+            if($bool == true){
+                for($i = 0; $i < count($request->detail_pesanan_id); $i++){
+                    $update = DetailPesanan::find($request->detail_pesanan_id[$i]);
+                    $update->detail_rencana_penjualan_id = $id;
+                    $u = $update->save();
+                    if(!$u){
+                        $bool = false;
+                    }
+                }
+            }
+        }
+
+        if ($bool == true) {
+            return response()->json(['data' =>  'success']);
+        } else {
+            return response()->json(['data' =>  'error']);
+        }
+    }
 
     //Select
     public function select_tahun_rencana(Request $request)
