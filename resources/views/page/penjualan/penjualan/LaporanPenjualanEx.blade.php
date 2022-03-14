@@ -196,6 +196,9 @@
             <th>Produk</th>
             <th>Jumlah</th>
             <th>Seri</th>
+            <th>Harga</th>
+            <th>Ongkir</th>
+            <th>Subtotal</th>
             <th>Status Penjualan</th>
             <th>Status AKN</th>
             <th>Keterangan</th>
@@ -314,7 +317,9 @@
                 @endforeach
                 @endif
             </td>
-
+            <td style="text-align:left">{{$d->harga}}</td>
+            <td style="text-align:left">{{$d->ongkir}}</td>
+            <td style="text-align:left">{{($d->jumlah * $d->harga) + $d->total}}</td>
             <td style="text-align:left">{{$d->pesanan->state->nama}}</td>
             <td style="text-align:left">
                 @if(isset($d->Pesanan->Ekatalog))
