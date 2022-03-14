@@ -25,6 +25,7 @@
     <link href="{{ asset('native/css/plugin.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/select2/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+
     <link href="{{ asset('assets/css/select2/select2-bootstrap4.min.css') }}" rel="stylesheet" />
     <link type="text/css" href="{{ asset('vendor/select2/checkbox/check.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.css') }}">
@@ -36,7 +37,7 @@
     <link rel="stylesheet" href="{{ asset('vendor/jquery-ui/jquery-ui.css') }}">
     <!-- Include Bootstrap DateTimePicker CDN -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
-
+    
     {{-- Custom Stylesheets (post AdminLTE) --}}
     @yield('master_css')
     <link rel="stylesheet" href="{{ asset('assets/css/font.css') }}">

@@ -181,6 +181,40 @@ class RencanaPenjualanController extends Controller
         return view('page.penjualan.rencana.real', ['id' => $id, 'data' => $data]);
     }
 
+    public function get_show_data_real($id){
+        $data = DetailPesanan::where('detail_rencana_penjualan_id', $id)->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('no_so', function ($data) {
+                // return $data->DetailRencanaPenjualan->RencanaPenjualan->instansi;
+                return $data->Pesanan->so;
+            })
+            ->addColumn('no_akn', function ($data) {
+                // return $data->DetailRencanaPenjualan->RencanaPenjualan->instansi;
+                return $data->Pesanan->Ekatalog->no_paket;
+            })
+            ->addColumn('produk', function ($data) {
+                if ($data->PenjualanProduk->nama_alias != '') {
+                    return $data->PenjualanProduk->nama_alias;
+                } else {
+                    return $data->PenjualanProduk->nama;
+                }
+            })
+            ->addColumn('jumlah', function ($data) {
+                // return $data->DetailRencanaPenjualan->jumlah;
+                return $data->jumlah;
+            })
+            ->addColumn('harga', function ($data) {
+                // return $data->DetailRencanaPenjualan->harga;
+                return $data->harga;
+            })
+            ->addColumn('sub', function ($data) {
+                // return $data->DetailRencanaPenjualan->harga * $data->DetailRencanaPenjualan->jumlah;
+                return $data->harga * $data->jumlah;
+            })
+            ->make(true);
+    }
+
     public function get_data_real($id){
         $datarencana = DetailRencanaPenjualan::find($id);
 
