@@ -62,6 +62,9 @@ class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
             'P' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
             'Q' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
             'R' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+            'K' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+            'L' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+            'M' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
         ];
     }
 
