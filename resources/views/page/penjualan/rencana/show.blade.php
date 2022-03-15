@@ -890,6 +890,7 @@
             var data = showtable.row(this.parentElement).data();
             if(data.jumlah_real <= 0){
                 $(this).closest('#produk_id').editable({
+                    value: data.penjualan_produk_id,
                     select2: {
                         dropdownParent: '.editable-inline',
                         placeholder:'Pilih Produk',
@@ -925,8 +926,8 @@
                 // $("#produk").select2('data', { id:data.penjualan_produk_id, text: data.produk});
                 // $('#produk').append(data.penjualan_produk_id).trigger('change')
                 // $('#produk option').eq(data.penjualan_produk_id).prop('selected',true);
-                $('#produk').append($("<option selected='selected'></option>").val(data.penjualan_produk_id).text(data.produk));
-                $('#produk').trigger('change');
+                // $('#produk').append($("<option selected='selected'></option>").val(data.penjualan_produk_id).text(data.produk));
+                // $('#produk').trigger('change');
                 // $('#produk').append('<option value="'+data.penjualan_produk_id+'">'+data.produk+'</option>').trigger('change');
                 // $('#produk').val('data.penjualan_produk_id');
                 // map= {option : new Option(data.produk,data.produk_penjualan_id,true, true) };
