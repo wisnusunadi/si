@@ -140,6 +140,32 @@
             margin-bottom: 5px;
         }
     }
+
+
+
+ .editable-container.editable-inline {
+     max-width: 100%
+ }
+
+ .editable-container.editable-inline .editableform {
+     max-width: 100%
+ }
+
+ .editable-container.editable-inline .editableform .control-group {
+     max-width: 100%;
+     white-space: initial
+ }
+
+ .editable-container.editable-inline .editableform .control-group>div {
+     max-width: 100%
+ }
+
+ .editable-container.editable-inline .editableform .control-group .editable-input input,
+ .editable-container.editable-inline .editableform .control-group .editable-input textarea {
+     max-width: 100%;
+     width: 100%
+
+ }
 </style>
 @stop
 
@@ -218,7 +244,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Qty</th>
-                                                    <th>Harga</th>
+                                                    <th width="15%">Harga</th>
                                                     <th class="borderright">Subtotal</th>
                                                     {{-- <th>Qty</th>
                                                     <th>Harga</th>
@@ -285,13 +311,74 @@
 @stop
 
 @section('adminlte_js')
-<link href="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/css/jquery-editable.css" rel="stylesheet"/>
-<script src="//cdnjs.cloudflare.com/ajax/libs/x-editable/1.5.0/jquery-editable/js/jquery-editable-poshytip.min.js"></script>
+
 <script>
+    	$(document).ready(function () {
+
+            $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': '{{csrf_token()}}'
+          }
+      });
+
+        $("#showtable").on('keyup change', '.harga', function() {
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
+
+        });
+
+            $('#showtable').on('click', '.update_harga', function() {
+                harga_action();
+
+            });
+
+            function harga_action(){
+            $('.update_harga').editable({
+            url : '{{route('penjualan.rencana.update')}}',
+            inputclass: 'form-control harga',
+            type:'text',
+            success : function (){
+                $('#showtable').DataTable().ajax.reload();
+            }
+
+                })
+            }
+
+
+
+
+         $.fn.editable.defaults.mode = 'inline';
+        $.fn.editableform.buttons =
+`<button type="submit" class="editable-submit  btn btn-primary btn-sm">
+    <i class="fa fa-fw fa-check"></i>
+    </button>
+<button type="button" class="editable-cancel btn btn-danger btn-sm">
+    <i class="fa fa-fw fa-times"></i>
+    </button>`;
+
+
+    $.fn.editableform.template =
+`<form class="form-inline editableform ">
+    <div class="control-group">
+         <div class="form-group">
+         <div class="editable-input"></div>
+         <div class="editable-buttons"></div>
+         </div>
+         <div class="editable-error-block"></div>
+    </div>
+</form>`;
+
+        })
+</script>
+<script>
+
+
+
+
 
     var editor;
     $(function() {
-        $.fn.editable.defaults.mode = 'inline';
+        // $.fn.editable.defaults.mode = 'inline';
         var groupColumn = 0;
         var showtable = $('#showtable').DataTable({
             destroy: true,
@@ -342,19 +429,40 @@
             createdRow: function( row, data, dataIndex ) {
                 // $(row).find('td:eq(1)').attr('data-type', "select");
                 $(row).find('td:eq(1)').attr('data-title', "Pilih Produk");
-                $(row).find('td:eq(1)').attr('id', "produk_id");
-                $(row).find('td:eq(1)').attr('name', "produk_id");
-                $(row).find('td:eq(2)').attr('data-title', "Masukkan Jumlah");
-                $(row).find('td:eq(2)').attr('data-type', "number");
-                $(row).find('td:eq(2)').attr('id', "jumlah");
-                $(row).find('td:eq(2)').attr('name', "jumlah");
-                $(row).find('td:eq(3)').attr('data-title', "Masukkan Harga");
-                $(row).find('td:eq(3)').attr('data-type', "number");
-                $(row).find('td:eq(3)').attr('id', "harga");
-                $(row).find('td:eq(3)').attr('name', "harga");
-                $(row).find('td:eq(1) td:eq(2) td:eq(3)').attr('data-pk', data.id);
-                $(row).find('td:eq(1) td:eq(2) td:eq(3)').attr('data-url', "/post");
+                $(row).find('td:eq(1)').attr('data-id', "produk_id");
+                $(row).find('td:eq(1)').attr('data-name', "produk_id");
+                $(row).find('td:eq(1)').attr('data-pk', data.id);
             },
+            // buttons: [{
+            //     extend: 'excel',
+            //     title: 'Laporan Penjualan',
+            //     text: '<i class="far fa-file-excel"></i> Export',
+            //     className: "btn btn-info"
+            // }, ],
+            // columns: [{
+            //     data: 'instansi',
+            //     orderable: false,
+            //     searchable: false
+            // }, {
+            //     "className": 'dt-control',
+            //     "orderable": false,
+            //     "data": null,
+            //     "defaultContent": ''
+            // }, {
+            //     data: 'produk',
+            //     className: 'borderright va-mid'
+            // }, {
+            //     data: 'jumlah',
+            //     className: 'nowraptxt align-center tabnum va-mid'
+            // }, {
+            //     data: 'harga',
+            //     className: 'nowraptxt align-right tabnum va-mid',
+
+            // }, {
+            //     data: 'sub',
+            //     className: 'nowraptxt align-right borderright tabnum va-mid',
+            //     render: $.fn.dataTable.render.number('.', '.', 0),
+            // },
             "fixedColumns": {
                 left: 0
             },
@@ -823,38 +931,38 @@
         });
 
         //EDIT TABLE
-        function produkid(){
-            $('select').select2({
-                placeholder: "Pilih Produk",
-                ajax: {
-                    minimumResultsForSearch: 20,
-                    dataType: 'json',
-                    theme: "bootstrap",
-                    delay: 250,
-                    type: 'GET',
-                    url: '/api/penjualan_produk/select/',
-                    data: function(params) {
-                        return {
-                            term: params.term
-                        }
-                    },
-                    processResults: function(data) {
+        // function produkid(){
+        //     $('select').select2({
+        //         placeholder: "Pilih Produk",
+        //         ajax: {
+        //             minimumResultsForSearch: 20,
+        //             dataType: 'json',
+        //             theme: "bootstrap",
+        //             delay: 250,
+        //             type: 'GET',
+        //             url: '/api/penjualan_produk/select/',
+        //             data: function(params) {
+        //                 return {
+        //                     term: params.term
+        //                 }
+        //             },
+        //             processResults: function(data) {
 
-                        return {
-                            results: $.map(data, function(obj) {
-                                return {
-                                    id: obj.id,
-                                    text: obj.nama_alias
-                                };
-                            })
-                        };
-                    },
-                }
-            });
-        }
+        //                 return {
+        //                     results: $.map(data, function(obj) {
+        //                         return {
+        //                             id: obj.id,
+        //                             text: obj.nama_alias
+        //                         };
+        //                     })
+        //                 };
+        //             },
+        //         }
+        //     });
+        // }
 
-        $.fn.editableform.buttons = '<button type="submit" class="btn btn-info btn-sm editable-submit"><i class="fas fa-check"></i></button>' +
-                                    '<button type="button" class="btn btn-danger btn-sm editable-cancel"><i class="fas fa-times"></i></button>';
+        // $.fn.editableform.buttons = '<button type="submit" class="btn btn-info btn-sm editable-submit"><i class="fas fa-check"></i></button>' +
+        //                             '<button type="button" class="btn btn-danger btn-sm editable-cancel"><i class="fas fa-times"></i></button>';
         // function changeinlineformcss(){
         //     $('.editableform').addClass('va-mid');
         //     $('input').addClass('form-control');
@@ -889,7 +997,7 @@
         $('#showtable tbody').on('click', '.produk_id', function() {
             var data = showtable.row(this.parentElement).data();
             if(data.jumlah_real <= 0){
-                $(this).closest('#produk_id').editable({
+                $(this).closest('.produk_id').editable({
                     value: data.penjualan_produk_id,
                     select2: {
                         dropdownParent: '.editable-inline',
@@ -922,6 +1030,10 @@
                     },
                     tpl: '<select id="produk"></select>',
                     type: 'select2',
+                    url : '{{route('penjualan.rencana.update')}}',
+                    success : function (){
+                        $('#showtable').DataTable().ajax.reload();
+                    }
                 });
                 // $("#produk").select2('data', { id:data.penjualan_produk_id, text: data.produk});
                 // $('#produk').append(data.penjualan_produk_id).trigger('change')

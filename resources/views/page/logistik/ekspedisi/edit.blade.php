@@ -137,12 +137,10 @@
                                         </div>
                                     </div>
                                     @endforeach
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+>
+                                        </div>
+                                    </div>
+          </div>
                 <div class="card-footer">
                     <span class="float-right filter">
                         <button type="submit" class="btn btn-warning" id="btnsimpan">
