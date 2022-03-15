@@ -124,7 +124,7 @@
 
                         </td>
                         <td class="td">
-                            @foreach ($s->seri as $seri)
+                            @foreach ($s->seri->sortBy('seri.noseri') as $seri)
                             {{ $seri->seri->noseri }},
                             @endforeach
                         </td>
