@@ -284,8 +284,7 @@
 @stop
 
 @section('adminlte_js')
-{{-- <script src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> --}}
+
 <script>
     var editor;
     $(function() {
@@ -373,7 +372,7 @@
             }, {
                 data: 'harga',
                 className: 'nowraptxt align-right tabnum va-mid',
-                render: $.fn.dataTable.render.number(',', '.', 2),
+
             }, {
                 data: 'sub',
                 className: 'nowraptxt align-right borderright tabnum va-mid',
