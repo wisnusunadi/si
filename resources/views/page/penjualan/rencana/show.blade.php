@@ -139,6 +139,32 @@
             margin-bottom: 5px;
         }
     }
+
+
+
+ .editable-container.editable-inline {
+     max-width: 100%
+ }
+
+ .editable-container.editable-inline .editableform {
+     max-width: 100%
+ }
+
+ .editable-container.editable-inline .editableform .control-group {
+     max-width: 100%;
+     white-space: initial
+ }
+
+ .editable-container.editable-inline .editableform .control-group>div {
+     max-width: 100%
+ }
+
+ .editable-container.editable-inline .editableform .control-group .editable-input input,
+ .editable-container.editable-inline .editableform .control-group .editable-input textarea {
+     max-width: 100%;
+     width: 100%
+
+ }
 </style>
 @stop
 
@@ -217,7 +243,7 @@
                                                 </tr>
                                                 <tr>
                                                     <th>Qty</th>
-                                                    <th>Harga</th>
+                                                    <th width="15%">Harga</th>
                                                     <th class="borderright">Subtotal</th>
                                                     {{-- <th>Qty</th>
                                                     <th>Harga</th>
@@ -284,9 +310,71 @@
 @stop
 
 @section('adminlte_js')
-{{-- <script src="https://editor.datatables.net/extensions/Editor/js/dataTables.editor.min.js"></script>
-<script src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script> --}}
+
 <script>
+    	$(document).ready(function () {
+
+            $.ajaxSetup({
+          headers: {
+              'X-CSRF-TOKEN': '{{csrf_token()}}'
+          }
+      });
+
+        $("#showtable").on('keyup change', '.harga', function() {
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
+
+        });
+
+            $('#showtable').on('click', '.update_harga', function() {
+                harga_action();
+
+            });
+
+            function harga_action(){
+            $('.update_harga').editable({
+            url : '{{route('penjualan.rencana.update')}}',
+            inputclass: 'form-control harga',
+            type:'text',
+            success : function (){
+                $('#showtable').DataTable().ajax.reload();
+            }
+
+                })
+            }
+
+
+
+
+         $.fn.editable.defaults.mode = 'inline';
+        $.fn.editableform.buttons =
+`<button type="submit" class="editable-submit  btn btn-primary btn-sm">
+    <i class="fa fa-fw fa-check"></i>
+    </button>
+<button type="button" class="editable-cancel btn btn-danger btn-sm">
+    <i class="fa fa-fw fa-times"></i>
+    </button>`;
+
+
+    $.fn.editableform.template =
+`<form class="form-inline editableform ">
+    <div class="control-group">
+         <div class="form-group">
+         <div class="editable-input"></div>
+         <div class="editable-buttons"></div>
+         </div>
+         <div class="editable-error-block"></div>
+    </div>
+</form>`;
+
+        })
+</script>
+<script>
+
+
+
+
+
     var editor;
     $(function() {
         // editor = new $.fn.dataTable.Editor({
@@ -373,11 +461,11 @@
             }, {
                 data: 'harga',
                 className: 'nowraptxt align-right tabnum va-mid',
-                render: $.fn.dataTable.render.number(',', '.', 2),
+
             }, {
                 data: 'sub',
                 className: 'nowraptxt align-right borderright tabnum va-mid',
-                render: $.fn.dataTable.render.number(',', '.', 2),
+                render: $.fn.dataTable.render.number('.', '.', 0),
             },
             // {
             //     data: 'jumlah_real',

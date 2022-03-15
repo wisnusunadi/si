@@ -41,10 +41,12 @@ class RencanaPenjualanController extends Controller
             ->addColumn('jumlah', function ($data) {
                 // return $data->DetailRencanaPenjualan->jumlah;
                 return $data->jumlah;
+                //  return '<a  class="update_jumlah" data-name="jumlah" data-type="text" data-pk="' . $data->id . '" data-title="Masukkan Jumlah">' . $data->jumlah . '</a>';
             })
             ->addColumn('harga', function ($data) {
                 // return $data->DetailRencanaPenjualan->harga;
-                return $data->harga;
+                return '<a  class="update_harga" data-name="harga" data-type="text" data-pk="' . $data->id . '" data-title="Masukkan Harga">' . number_format($data->harga, 0, '.', '.') . '</a>';
+                //return $data->harga;
             })
             ->addColumn('sub', function ($data) {
                 // return $data->DetailRencanaPenjualan->harga * $data->DetailRencanaPenjualan->jumlah;
@@ -71,7 +73,7 @@ class RencanaPenjualanController extends Controller
                </button> </a>
                ';
             })
-            ->rawColumns(['hapus'])
+            ->rawColumns(['hapus', 'harga'])
             ->make(true);
     }
     //Insert
@@ -100,6 +102,16 @@ class RencanaPenjualanController extends Controller
             return response()->json(['data' =>  'success']);
         } else {
             return response()->json(['data' =>  'error']);
+        }
+    }
+
+    public function update_rencana(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $harga_convert =  str_replace('.', "", $request->input('value'));
+            DetailRencanaPenjualan::find($request->input('pk'))->update([$request->input('name') => $harga_convert]);
+            return response()->json(['success' => true]);
         }
     }
 
@@ -176,12 +188,14 @@ class RencanaPenjualanController extends Controller
         }
     }
 
-    public function get_show_real($id){
+    public function get_show_real($id)
+    {
         $data = DetailRencanaPenjualan::find($id);
         return view('page.penjualan.rencana.real', ['id' => $id, 'data' => $data]);
     }
 
-    public function get_show_data_real($id){
+    public function get_show_data_real($id)
+    {
         $data = DetailPesanan::where('detail_rencana_penjualan_id', $id)->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -215,7 +229,8 @@ class RencanaPenjualanController extends Controller
             ->make(true);
     }
 
-    public function get_data_real($id){
+    public function get_data_real($id)
+    {
         $datarencana = DetailRencanaPenjualan::find($id);
 
         $cust = $datarencana->RencanaPenjualan->customer_id;
@@ -223,7 +238,7 @@ class RencanaPenjualanController extends Controller
         $prd = $datarencana->penjualan_produk_id;
 
         $datareal = DetailPesanan::where('detail_rencana_penjualan_id', $id)->get();
-        $datapenj = DetailPesanan::whereNull('detail_rencana_penjualan_id')->where('penjualan_produk_id', $prd)->whereHas('Pesanan.Ekatalog', function($q) use($cust, $ins){
+        $datapenj = DetailPesanan::whereNull('detail_rencana_penjualan_id')->where('penjualan_produk_id', $prd)->whereHas('Pesanan.Ekatalog', function ($q) use ($cust, $ins) {
             $q->where([['customer_id', '=', $cust], ['instansi', '=', $ins]]);
         })->get();
 
@@ -232,11 +247,11 @@ class RencanaPenjualanController extends Controller
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
                 // return $data->DetailRencanaPenjualan->RencanaPenjualan->instansi;
-                if(!empty($data->detail_rencana_penjualan_id)){
+                if (!empty($data->detail_rencana_penjualan_id)) {
                     return '  <div class="form-check">
                     <input class="form-check-input so_id" name="detail_pesanan_id[]" value="' . $data->id . '" type="checkbox" checked/>
                     </div>';
-                }else{
+                } else {
                     return '  <div class="form-check">
                     <input class="form-check-input so_id" name="detail_pesanan_id[]" value="' . $data->id . '" type="checkbox"/>
                     </div>';
@@ -273,28 +288,29 @@ class RencanaPenjualanController extends Controller
             ->make(true);
     }
 
-    public function get_update_realisasi($id, Request $request){
+    public function get_update_realisasi($id, Request $request)
+    {
         $bool = true;
         $data = DetailPesanan::where('detail_rencana_penjualan_id', $id)->get();
-        if(count($data) > 0){
-            foreach($data as $i){
+        if (count($data) > 0) {
+            foreach ($data as $i) {
                 $update = DetailPesanan::find($i->id);
                 $update->detail_rencana_penjualan_id = NULL;
                 $u = $update->save();
-                if(!$u){
+                if (!$u) {
                     $bool = false;
                 }
             }
         }
 
 
-        if(isset($request->detail_pesanan_id)){
-            if($bool == true){
-                for($i = 0; $i < count($request->detail_pesanan_id); $i++){
+        if (isset($request->detail_pesanan_id)) {
+            if ($bool == true) {
+                for ($i = 0; $i < count($request->detail_pesanan_id); $i++) {
                     $update = DetailPesanan::find($request->detail_pesanan_id[$i]);
                     $update->detail_rencana_penjualan_id = $id;
                     $u = $update->save();
-                    if(!$u){
+                    if (!$u) {
                         $bool = false;
                     }
                 }
