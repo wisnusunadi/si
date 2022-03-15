@@ -32,11 +32,16 @@ class RencanaPenjualanController extends Controller
                 return $data->RencanaPenjualan->instansi;
             })
             ->addColumn('produk', function ($data) {
+                $datas = "";
                 if ($data->PenjualanProduk->nama_alias != '') {
-                    return $data->PenjualanProduk->nama_alias;
+                    $datas .= $data->PenjualanProduk->nama_alias;
                 } else {
-                    return $data->PenjualanProduk->nama;
+                    $datas .= $data->PenjualanProduk->nama;
                 }
+                // if(count($data->DetailPesanan) <= 0){
+                //     $datas .= ' <a id="produk_id" class="produk_id" data-pk="'.$data->id.'" data-url="/post"><i class="fas fa-pencil-alt"></i></a>';
+                // }
+                return $datas;
             })
             ->addColumn('jumlah', function ($data) {
                 // return $data->DetailRencanaPenjualan->jumlah;
@@ -71,7 +76,7 @@ class RencanaPenjualanController extends Controller
                </button> </a>
                ';
             })
-            ->rawColumns(['hapus'])
+            ->rawColumns(['hapus', 'produk'])
             ->make(true);
     }
     //Insert
@@ -194,11 +199,13 @@ class RencanaPenjualanController extends Controller
                 return $data->Pesanan->Ekatalog->no_paket;
             })
             ->addColumn('produk', function ($data) {
+                $datas = "";
                 if ($data->PenjualanProduk->nama_alias != '') {
-                    return $data->PenjualanProduk->nama_alias;
+                    $datas .= $data->PenjualanProduk->nama_alias;
                 } else {
-                    return $data->PenjualanProduk->nama;
+                    $datas .= $data->PenjualanProduk->nama;
                 }
+                return $datas;
             })
             ->addColumn('jumlah', function ($data) {
                 // return $data->DetailRencanaPenjualan->jumlah;
