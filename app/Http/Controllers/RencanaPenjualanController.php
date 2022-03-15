@@ -41,10 +41,11 @@ class RencanaPenjualanController extends Controller
             ->addColumn('jumlah', function ($data) {
                 // return $data->DetailRencanaPenjualan->jumlah;
                 return $data->jumlah;
+                //  return '<a  class="update_jumlah" data-name="jumlah" data-type="text" data-pk="' . $data->id . '" data-title="Masukkan Jumlah">' . $data->jumlah . '</a>';
             })
             ->addColumn('harga', function ($data) {
                 // return $data->DetailRencanaPenjualan->harga;
-                return '<a href="#" class="update editable" data-name="name" data-type="text" data-pk="' . $data->id . '" data-title="Enter name">' . $data->harga . '</a>';
+                return '<a  class="update_harga" data-name="harga" data-type="text" data-pk="' . $data->id . '" data-title="Masukkan Harga">' . number_format($data->harga, 0, '.', '.') . '</a>';
                 //return $data->harga;
             })
             ->addColumn('sub', function ($data) {
@@ -101,6 +102,16 @@ class RencanaPenjualanController extends Controller
             return response()->json(['data' =>  'success']);
         } else {
             return response()->json(['data' =>  'error']);
+        }
+    }
+
+    public function update_rencana(Request $request)
+    {
+        if ($request->ajax()) {
+
+            $harga_convert =  str_replace('.', "", $request->input('value'));
+            DetailRencanaPenjualan::find($request->input('pk'))->update([$request->input('name') => $harga_convert]);
+            return response()->json(['success' => true]);
         }
     }
 
