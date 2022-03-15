@@ -7,6 +7,7 @@ use App\Exports\LaporanPerencanaanDetail;
 use App\Models\DetailPesanan;
 use App\Models\DetailRencanaPenjualan;
 use App\Models\RencanaPenjualan;
+use App\Models\PenjualanProduk;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Maatwebsite\Excel\Facades\Excel;
@@ -32,24 +33,23 @@ class RencanaPenjualanController extends Controller
                 return $data->RencanaPenjualan->instansi;
             })
             ->addColumn('produk', function ($data) {
-
+                $datas = '<a class="produk_id" data-name="penjualan_produk_id" data-pk="' . $data->id . '" data-value="'.$data->PenjualanProduk->id.'" data-title="Pilih Produk">';
                 if ($data->PenjualanProduk->nama_alias != '') {
-                    return $data->PenjualanProduk->nama_alias;
+                    $datas .= $data->PenjualanProduk->nama_alias;
                 } else {
-                    return $data->PenjualanProduk->nama;
+                    $datas .= $data->PenjualanProduk->nama;
                 }
-                // if(count($data->DetailPesanan) <= 0){
-                //     $datas .= ' <a id="produk_id" class="produk_id" data-pk="'.$data->id.'" data-url="/post"><i class="fas fa-pencil-alt"></i></a>';
-                // }
+                $datas .= '</a>';
+                return $datas;
             })
             ->addColumn('jumlah', function ($data) {
                 // return $data->DetailRencanaPenjualan->jumlah;
-                return $data->jumlah;
+                return '<a class="update_jumlah" data-name="jumlah" data-type="number" data-pk="' . $data->id . '" data-title="Masukkan Jumlah">' . $data->jumlah. '</a>';
                 //  return '<a  class="update_jumlah" data-name="jumlah" data-type="text" data-pk="' . $data->id . '" data-title="Masukkan Jumlah">' . $data->jumlah . '</a>';
             })
-            ->addColumn('harga', function ($data) {
+            ->addColumn('hargas', function ($data) {
                 // return $data->DetailRencanaPenjualan->harga;
-                return '<a  class="update_harga" data-name="harga" data-type="text" data-pk="' . $data->id . '" data-title="Masukkan Harga">' . number_format($data->harga, 0, '.', '.') . '</a>';
+                return '<a class="update_harga" data-name="harga" data-type="text" data-pk="' . $data->id . '" data-title="Masukkan Harga">' . number_format($data->harga, 0, '.', '.') . '</a>';
                 //return $data->harga;
             })
             ->addColumn('sub', function ($data) {
@@ -70,14 +70,14 @@ class RencanaPenjualanController extends Controller
             })
             ->addColumn('hapus', function ($data) {
                 return '<a data-toggle="modal" class="realmodal" data-id="' . $data->id . '" data-target="#realmodal"><button type="button" class="btn btn-info btn-circle" alt="Tambah Realisasi">
-                <i class="far fa-plus-square"></i>
+               <i class="far fa-plus-square"></i>
                </button> </a>
                <a data-toggle="modal" class="hapusmodal" data-id="' . $data->id . '" data-target="#hapusmodal"><button type="button" class="btn btn-danger btn-circle">
-                <i class="far fa-trash-alt"></i>
-               </button> </a>
+               <i class="far fa-trash-alt"></i>
+               </button></a>
                ';
             })
-            ->rawColumns(['hapus', 'harga'])
+            ->rawColumns(['hargas','hapus','produk', 'jumlah'])
             ->make(true);
     }
     //Insert
@@ -112,10 +112,18 @@ class RencanaPenjualanController extends Controller
     public function update_rencana(Request $request)
     {
         if ($request->ajax()) {
-
-            $harga_convert =  str_replace('.', "", $request->input('value'));
-            DetailRencanaPenjualan::find($request->input('pk'))->update([$request->input('name') => $harga_convert]);
-            return response()->json(['success' => true]);
+            if($request->input('name') == "harga"){
+                $harga_convert =  str_replace('.', "", $request->input('value'));
+                DetailRencanaPenjualan::find($request->input('pk'))->update([$request->input('name') => $harga_convert]);
+                return response()->json(['success' => true]);
+            }else if($request->input('name') == "penjualan_produk_id"){
+                $p = PenjualanProduk::find($request->input('value'));
+                DetailRencanaPenjualan::find($request->input('pk'))->update([$request->input('name') => $request->input('value'), 'harga' => $p->harga]);
+                return response()->json(['success' => true]);
+            }else if($request->input('name') == "jumlah"){
+                DetailRencanaPenjualan::find($request->input('pk'))->update([$request->input('name') => $request->input('value')]);
+                return response()->json(['success' => true]);
+            }
         }
     }
 

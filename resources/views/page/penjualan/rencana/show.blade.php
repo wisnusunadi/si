@@ -344,39 +344,43 @@
                 })
             }
 
+        $('#showtable').on('click', '.update_jumlah', function() {
+            $('.update_jumlah').editable({
+                url : '{{route("penjualan.rencana.update")}}',
+                inputclass: 'form-control jumlah',
+                type:'number',
+                success : function (){
+                    $('#showtable').DataTable().ajax.reload();
+                }
+            })
+        });
+
 
 
 
          $.fn.editable.defaults.mode = 'inline';
         $.fn.editableform.buttons =
-`<button type="submit" class="editable-submit  btn btn-primary btn-sm">
-    <i class="fa fa-fw fa-check"></i>
-    </button>
-<button type="button" class="editable-cancel btn btn-danger btn-sm">
-    <i class="fa fa-fw fa-times"></i>
-    </button>`;
+            `<button type="submit" class="editable-submit  btn btn-primary btn-sm">
+                <i class="fa fa-fw fa-check"></i>
+                </button>
+            <button type="button" class="editable-cancel btn btn-danger btn-sm">
+                <i class="fa fa-fw fa-times"></i>
+                </button>`;
 
 
-    $.fn.editableform.template =
-`<form class="form-inline editableform ">
-    <div class="control-group">
-         <div class="form-group">
-         <div class="editable-input"></div>
-         <div class="editable-buttons"></div>
-         </div>
-         <div class="editable-error-block"></div>
-    </div>
-</form>`;
-
-        })
+        $.fn.editableform.template =
+            `<form class="form-inline editableform ">
+                <div class="control-group">
+                    <div class="form-group">
+                    <div class="editable-input"></div>
+                    <div class="editable-buttons"></div>
+                    </div>
+                    <div class="editable-error-block"></div>
+                </div>
+            </form>`;
+        });
 </script>
 <script>
-
-
-
-
-
-    var editor;
     $(function() {
         // $.fn.editable.defaults.mode = 'inline';
         var groupColumn = 0;
@@ -409,14 +413,14 @@
                     "defaultContent": ''
                 }, {
                     data: 'produk',
-                    className: 'borderright va-mid produk_id'
+                    className: 'borderright va-mid nowraptxt',
                 }, {
                     data: 'jumlah',
                     className: 'nowraptxt align-center tabnum va-mid jumlah'
                 }, {
-                    data: 'harga',
-                    className: 'nowraptxt align-right tabnum va-mid harga',
-                    render: $.fn.dataTable.render.number(',', '.', 2),
+                    data: 'hargas',
+                    className: 'nowraptxt align-right tabnum va-mid',
+                    // render: $.fn.dataTable.render.number(',', '.', 2),
                 }, {
                     data: 'sub',
                     className: 'nowraptxt align-right borderright tabnum va-mid',
@@ -426,13 +430,13 @@
                     className: 'nowraptxt align-center va-mid',
                 }
             ],
-            createdRow: function( row, data, dataIndex ) {
-                // $(row).find('td:eq(1)').attr('data-type', "select");
-                $(row).find('td:eq(1)').attr('data-title', "Pilih Produk");
-                $(row).find('td:eq(1)').attr('data-id', "produk_id");
-                $(row).find('td:eq(1)').attr('data-name', "produk_id");
-                $(row).find('td:eq(1)').attr('data-pk', data.id);
-            },
+            // createdRow: function( row, data, dataIndex ) {
+            //     // $(row).find('td:eq(1)').attr('data-type', "select");
+            //     $(row).find('td:eq(1)').attr('data-title', "Pilih Produk");
+            //     $(row).find('td:eq(1)').attr('data-id', "produk_id");
+            //     $(row).find('td:eq(1)').attr('data-name', "produk_id");
+            //     $(row).find('td:eq(1)').attr('data-pk', data.id);
+            // },
             // buttons: [{
             //     extend: 'excel',
             //     title: 'Laporan Penjualan',
@@ -751,7 +755,7 @@
             var id = $(this).data("id");
             console.log(id);
             $('#hapusmodal').modal("show");
-         $('#hapusmodal').find('form').attr('action', '/api/penjualan/rencana/delete/' + id);
+            $('#hapusmodal').find('form').attr('action', '/api/penjualan/rencana/delete/' + id);
         });
 
 
@@ -971,38 +975,19 @@
         //     $('.editable-cancel').addClass('btn btn-danger btn-sm');
         //     $(".editable-cancel").html('<i class="fas fa-times"></i>');
         // }
-        var src = [];
-        function select_prd(){
-            $.ajax({
-                dataType: 'json',
-                type: 'GET',
-                url: '/api/penjualan_produk/select/',
-                success: function(data) {
-                    var k = 0;
-                    $.each(data, function (key, value) {
-                        var values = value.id;
-                        if(value.nama_alias == null){
-                            var texts = value.nama;
-                        }else{
-                            var texts = value.nama_alias;
-                        }
-                        src.push({value: values, text: texts})
-                    });
-                }
-            });
-        }
 
-        select_prd();
 
         $('#showtable tbody').on('click', '.produk_id', function() {
             var data = showtable.row(this.parentElement).data();
+            console.log(data);
+            var id_produk = data.penjualan_produk_id;
             if(data.jumlah_real <= 0){
                 $(this).closest('.produk_id').editable({
-                    value: data.penjualan_produk_id,
+                    tpl: '<select id="produk"><option value="'+data.penjualan_produk_id+'" selected="selected">'+data.produk+'</option></select>',
                     select2: {
                         dropdownParent: '.editable-inline',
                         placeholder:'Pilih Produk',
-                        width: 200,
+                        width: 250,
                         ajax: {
                             minimumResultsForSearch: 20,
                             dataType: 'json',
@@ -1016,25 +1001,33 @@
                                 }
                             },
                             processResults: function(data) {
-
                                 return {
                                     results: $.map(data, function(obj) {
                                         return {
                                             id: obj.id,
-                                            text: obj.nama
+                                            text: obj.nama,
+                                            selected: obj.id == id_produk ? 'selected' : '',
+
                                         };
                                     })
                                 };
+                                // console.log($(this).select2('val', id_produk).trigger('change'));
                             },
                         },
                     },
-                    tpl: '<select id="produk"></select>',
+
                     type: 'select2',
-                    url : '{{route('penjualan.rencana.update')}}',
+                    url : '{{route("penjualan.rencana.update")}}',
                     success : function (){
                         $('#showtable').DataTable().ajax.reload();
-                    }
+                    },
+
                 });
+                // map = {option : new Option(data.produk,data.produk_penjualan_id, true, true) };
+                // var option = new Option(data.produk, data.produk_penjualan_id);
+                // option.selected = true;
+                // $('#produk').val(1);
+                // $('#produk').trigger('change');
                 // $("#produk").select2('data', { id:data.penjualan_produk_id, text: data.produk});
                 // $('#produk').append(data.penjualan_produk_id).trigger('change')
                 // $('#produk option').eq(data.penjualan_produk_id).prop('selected',true);
