@@ -54,7 +54,7 @@ class RencanaPenjualanController extends Controller
             })
             ->addColumn('sub', function ($data) {
                 // return $data->DetailRencanaPenjualan->harga * $data->DetailRencanaPenjualan->jumlah;
-                return $data->harga * $data->jumlah;
+                return number_format($data->harga * $data->jumlah, 0, '.', '.');
             })
             ->addColumn('jumlah_real', function ($data) {
                 // return $data->DetailRencanaPenjualan->sum_prd();

@@ -313,36 +313,32 @@
 @section('adminlte_js')
 
 <script>
-    	$(document).ready(function () {
-
-            $.ajaxSetup({
-          headers: {
-              'X-CSRF-TOKEN': '{{csrf_token()}}'
-          }
-      });
+    $(document).ready(function () {
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+        });
 
         $("#showtable").on('keyup change', '.harga', function() {
             var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             $(this).val(result);
-
         });
 
-            $('#showtable').on('click', '.update_harga', function() {
-                harga_action();
+        $('#showtable').on('click', '.update_harga', function() {
+            harga_action();
+        });
 
-            });
-
-            function harga_action(){
+        function harga_action(){
             $('.update_harga').editable({
-            url : '{{route('penjualan.rencana.update')}}',
-            inputclass: 'form-control harga',
-            type:'text',
-            success : function (){
-                $('#showtable').DataTable().ajax.reload();
-            }
-
-                })
-            }
+                url : '{{route('penjualan.rencana.update')}}',
+                inputclass: 'form-control harga',
+                type:'text',
+                success : function (){
+                    $('#showtable').DataTable().ajax.reload();
+                }
+            })
+        }
 
         $('#showtable').on('click', '.update_jumlah', function() {
             $('.update_jumlah').editable({
@@ -355,12 +351,9 @@
             })
         });
 
-
-
-
-         $.fn.editable.defaults.mode = 'inline';
+        $.fn.editable.defaults.mode = 'inline';
         $.fn.editableform.buttons =
-            `<button type="submit" class="editable-submit  btn btn-primary btn-sm">
+            `<button type="submit" class="editable-submit btn btn-primary btn-sm">
                 <i class="fa fa-fw fa-check"></i>
                 </button>
             <button type="button" class="editable-cancel btn btn-danger btn-sm">
@@ -369,7 +362,7 @@
 
 
         $.fn.editableform.template =
-            `<form class="form-inline editableform ">
+            `<form class="form-inline editableform justify-content-center">
                 <div class="control-group">
                     <div class="form-group">
                     <div class="editable-input"></div>
@@ -378,7 +371,7 @@
                     <div class="editable-error-block"></div>
                 </div>
             </form>`;
-        });
+    });
 </script>
 <script>
     $(function() {
@@ -424,7 +417,7 @@
                 }, {
                     data: 'sub',
                     className: 'nowraptxt align-right borderright tabnum va-mid',
-                    render: $.fn.dataTable.render.number(',', '.', 2),
+                    // render: $.fn.dataTable.render.number(',', '.', 2),
                 }, {
                     data: 'hapus',
                     className: 'nowraptxt align-center va-mid',
