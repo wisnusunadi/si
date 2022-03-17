@@ -45,7 +45,7 @@
             <div class="modal-card">
                 <header class="modal-card-head">
                     <p class="modal-card-title">{{this.nama_produk}}</p>
-                    <button class="delete" aria-label="close" @click="showModal = false"></button>
+                    <button class="delete" aria-label="close"></button>
                 </header>
                 <section class="modal-card-body">
                     <div v-if="this.loading">Loading...</div>
