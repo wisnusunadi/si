@@ -458,7 +458,7 @@
             "pageLength": 10,
             processing: true,
             ajax: {
-                url: "/api/prd/historySeri/" + id + "/" + time + "/" + rakit,
+                url: "/api/prd/historySeri/" + id + "/" + time,
             },
             columns: [
                 {data: 'no_seri'}

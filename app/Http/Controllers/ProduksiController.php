@@ -1993,11 +1993,14 @@ class ProduksiController extends Controller
         ]);
     }
 
-    function historySeri($id, $dd, $rakit)
+    function historySeri($id, $dd)
     {
         $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
             $q->where('produk_id', $id);
-        })->whereRaw("date_format(waktu_tf, '%Y-%m-%d %H:%i') = ?", [$dd])->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])->get();
+        })
+        ->whereRaw("date_format(waktu_tf, '%Y-%m-%d %H:%i') = ?", [$dd])
+        // ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])
+        ->get();
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
@@ -2197,7 +2200,7 @@ class ProduksiController extends Controller
         $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'), 'jadwal_perakitan.no_bppb')
             ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
             ->groupBy('jadwal_rakit_noseri.jadwal_id')
-            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
+            // ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
             ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
             ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
             ->get()->sortByDesc('date_in');
