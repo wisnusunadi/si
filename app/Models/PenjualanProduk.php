@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class PenjualanProduk extends Model
 {
     protected $table = 'penjualan_produk';
-    protected $fillable = ['nama', 'harga'];
+    protected $fillable = ['nama_alias', 'nama', 'harga'];
 
     public function DetailPesanan()
     {
@@ -17,6 +17,12 @@ class PenjualanProduk extends Model
     public function Produk()
     {
         return $this->belongsToMany(Produk::class, 'detail_penjualan_produk')
-            ->withPivot('jumlah');
+            ->withPivot('jumlah')
+            ->orderBy('id', 'ASC');
+    }
+
+    public function DetailRencanPenjualan()
+    {
+        return $this->hasMany(DetailRencanaPenjualan::class);
     }
 }

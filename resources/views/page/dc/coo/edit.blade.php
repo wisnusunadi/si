@@ -25,57 +25,20 @@
                     </div>
                     <div class="col-3">
                         <div><small class="text-muted">Jumlah</small></div>
-                        <div><b>{{$jumlah}}</b></div>
+                        <div><b>{{$data->detaillogistik->DetailPesananProduk->DetailPesanan->jumlah}}</b></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
     <div class="col-lg-7 col-md-6">
-        <form action="/api/dc/so/create/{{$noseri_id}}" id="form-create-coo" method="POST">
+        <form action="/api/dc/so/update/{{$noseri_id}}" id="form-update-coo" method="POST">
             <div class="card">
                 <div class="card-header">
                     <h6 class="card-title">Tambah</h6>
                 </div>
                 <div class="card-body">
                     <div class="form-horizontal">
-                        <div class="form-group">
-                            <label for="" class="col-form-label">Diketahui Oleh</label>
-                            <div class="col-form-label d-flex justify-content-between">
-                                <div class="form-check form-check-inline ">
-                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="spa" />
-                                    <label class="form-check-label" for="diketahui1">PT Sinko Prima Alloy</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui1" value="emiindo" />
-                                    <label class="form-check-label" for="diketahui1">PT. EMIINDO Jaya Bersama</label>
-                                </div>
-                                <div class="form-check form-check-inline">
-                                    <input class="form-check-input" type="radio" name="diketahui" id="diketahui2" value="custom" />
-                                    <label class="form-check-label" for="diketahui2">Custom</label>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group hide" id="nama_label">
-                            <div class="card" style="box-shadow:none;">
-                                <div class="card-body" style="background-color: #a1c4ec">
-                                    <div class="row">
-                                        <div class="form-group col-6">
-                                            <label for="" class="col-form-label" style="text-align:right;">Nama</label>
-                                            <input type="text" class="form-control col-form-label" id="nama" name="nama">
-                                        </div>
-                                        <div class="form-group col-6">
-                                            <label for="" class="col-form-label" style="text-align:right;">Jabatan</label>
-                                            <input type="text" class="form-control col-form-label" id="jabatan" name="jabatan">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            {{-- <label for="" class="col-5 col-form-label" style="text-align:right;">Nama</label>
-                            <div class="col-5">
-                                <input type="text" class="form-control col-form-label" id="nama" name="nama">
-                            </div> --}}
-                        </div>
                         {{-- <div class="form-group row hide" id="jabatan_label">
                             <label for="" class="col-5 col-form-label" style="text-align:right;">Jabatan</label>
                             <div class="col-5">
@@ -84,7 +47,7 @@
                         </div> --}}
                         <div class="form-group" for="tgl_kirim">
                             <label for="" class="col-form-label" style="text-align:right;">Tgl Kirim</label>
-                            <input type="date" class="form-control col-form-label col-lg-4 col-md-6" name="tgl_kirim">
+                            <input type="date" class="form-control col-form-label col-lg-4 col-md-6" name="edit_tgl_kirim">
                             <div class="feedback" id="msgpart_id">
                                 <small class="text-muted">*Boleh dikosongi jika tidak ada</small>
                             </div>
@@ -100,7 +63,7 @@
                         </div> --}}
                         <div class="form-group" for="keterangan">
                             <label for="" class="col-form-label">Tanda Terima</label>
-                            <textarea class="form-control col-form-label" name="keterangan"></textarea>
+                            <textarea class="form-control col-form-label" name="edit_keterangan"></textarea>
                         </div>
 
                     </div>
@@ -110,7 +73,7 @@
                         <button class="btn btn-danger float-left" data-dismiss="modal">Batal</button>
                     </span>
                     <span>
-                        <button type="submit" class="btn btn-info float-right disabled" id="btnsimpan">Simpan</button>
+                        <button type="submit" class="btn btn-warning float-right" id="btnsimpan">Simpan</button>
                     </span>
                 </div>
             </div>

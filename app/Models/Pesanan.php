@@ -186,6 +186,7 @@ class Pesanan extends Model
         return $jumlah;
     }
 
+
     function log()
     {
         return $this->belongsTo(State::class, 'log_id');

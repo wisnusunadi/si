@@ -1,10 +1,10 @@
 <div class="row">
-    <div class="col-3">
+    <div class="col-lg-3 col-md-12">
         <div class="card">
             <div class="card-body">
                 <h5>Detail</h5>
                 <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-12 col-md-6 col-sm-6">
                         <div><small class="text-muted">Nama Produk</small></div>
                         <div>
                             <b>
@@ -16,21 +16,15 @@
                             </b>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-12 col-md-6 col-sm-6">
                         <div><small class="text-muted">Jumlah Pesanan</small></div>
                         <div><b>{{$jumlah}} pcs</b></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-12 col-md-6 col-sm-6">
                         <div><small class="text-muted">Jumlah Selesai Dikirim</small></div>
                         <div><b>{{$jumlahselesai}} pcs</b></div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
+                    <div class="col-lg-12 col-md-6 col-sm-6">
                         <div><small class="text-muted">Jumlah Belum Dikirim</small></div>
                         <div><b>{{$jumlahproses}} pcs</b></div>
                     </div>
@@ -38,7 +32,7 @@
             </div>
         </div>
     </div>
-    <div class="col-9">
+    <div class="col-lg-9 col-md-12">
         <div class="card">
             <div class="card-body">
                 <h5>Laporan</h5>

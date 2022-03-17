@@ -10,11 +10,21 @@
                     <div class="row">
                         <div class="col-12">
                             <div class="form-group row">
+                                <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Nama Alias</label>
+                                <div class="col-6">
+                                    <textarea type="text" class="form-control " name="nama_alias" id="nama_alias" placeholder="Masukkan Nama Alias / Panjang">{{$p->nama_alias}}</textarea>
+                                    <div class="invalid-feedback" id="msgnama_alias">
+                                    </div>
+                                    <div class="feedback" id="msgcustomer_id">
+                                        <small class="text-muted">Kosongi bila tidak ada</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
                                 <label for="nama_produk" class="col-4 col-form-label" style="text-align: right">Nama Paket</label>
                                 <div class="col-6">
                                     <input type="text" class="form-control" name="nama_paket" id="nama_paket" placeholder="Masukkan Nama Paket" value="{{$p->nama}}" />
                                     <div class="invalid-feedback" id="msgnama_paket">
-
                                     </div>
                                 </div>
                             </div>

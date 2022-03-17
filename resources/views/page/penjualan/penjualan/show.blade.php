@@ -25,6 +25,11 @@
 
 @section('adminlte_css')
 <style>
+    .separator {
+        border-top: 1px solid #bbb;
+        width: 90%;
+    }
+
     .wb {
         word-break: break-all;
         white-space: normal;
@@ -109,6 +114,9 @@
 
     }
 
+    .tabnum{
+        font-variant-numeric: tabular-nums;
+    }
 
     .removeshadow {
         box-shadow: none;
@@ -135,7 +143,7 @@
 
     @media screen and (min-width: 1440px) {
 
-        section {
+        body {
             font-size: 14px;
         }
 
@@ -160,8 +168,7 @@
     }
 
     @media screen and (max-width: 1439px) {
-        label,
-        .row {
+        body {
             font-size: 12px;
         }
 
@@ -338,7 +345,7 @@
                                                     <th>No SO</th>
                                                     <th>Nomor AKN</th>
                                                     <th>Nomor PO</th>
-                                                    <th>Tanggal Order</th>
+                                                    <th>Tanggal PO</th>
                                                     <th>Tanggal Delivery</th>
                                                     <th>Customer</th>
                                                     <th>Jenis</th>
@@ -491,46 +498,14 @@
                                                             </label>
                                                         </div>
                                                     </div>
-                                                    <!-- <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="po" id="status4" />
-                                                        <label class="form-check-label" for="status4">
-                                                            PO
-                                                        </label>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="draft" id="status4" name="status_ekatalog[]" />
+                                                            <label class="form-check-label" for="status4">
+                                                                Draft
+                                                            </label>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="gudang" id="status5" />
-                                                        <label class="form-check-label" for="status5">
-                                                            Gudang
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="qc" id="status6" />
-                                                        <label class="form-check-label" for="status6">
-                                                            QC
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="logistik" id="status7" />
-                                                        <label class="form-check-label" for="status7">
-                                                            Logistik
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="checkbox" value="pengiriman" id="status8" />
-                                                        <label class="form-check-label" for="status8">
-                                                            Pengiriman
-                                                        </label>
-                                                    </div>
-                                                </div> -->
                                                     <div class="form-group">
                                                         <span class="float-right">
                                                             <button class="btn btn-primary" type="submit" id="filter_ekatalog">
@@ -555,7 +530,8 @@
                                                     <th>Nomor SO</th>
                                                     <th>Nomor AKN</th>
                                                     <th>Nomor PO</th>
-                                                    <th>Tanggal Order</th>
+                                                    <th>Tanggal Buat</th>
+                                                    <th>Tanggal Edit</th>
                                                     <th>Tanggal Delivery</th>
                                                     <th>Customer</th>
                                                     <th>Status</th>
@@ -1059,6 +1035,9 @@
                     data: 'tgl_buat',
                 },
                 {
+                    data: 'tgl_edit',
+                },
+                {
                     data: 'tgl_kontrak',
                 },
                 {
@@ -1072,6 +1051,7 @@
                 },
             ]
         });
+
         var spatable = $('#spatable').DataTable({
             destroy: true,
             processing: true,
@@ -1112,7 +1092,8 @@
                     data: 'button'
                 }
             ]
-        })
+        });
+
         var spbtable = $('#spbtable').DataTable({
             destroy: true,
             processing: true,
@@ -1153,7 +1134,7 @@
                     data: 'button'
                 }
             ]
-        })
+        });
     })
 </script>
 
@@ -1175,7 +1156,6 @@
                     $('#detail').html(result).show();
 
                     if (label == 'ekatalog') {
-
                         $('#detailmodal').find(".modal-header").attr('id', '');
                         $('#detailmodal').find(".modal-header").attr('id', 'detailekat');
                         $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
@@ -1231,6 +1211,78 @@
             })
         });
 
+        const swalWithBootstrapButtons = Swal.mixin({
+        customClass: {
+            confirmButton: 'btn btn-danger margin',
+            cancelButton: 'btn btn-outline-secondary margin'
+        },
+        buttonsStyling: false
+        })
+
+
+        $(document).on('click', '.batalmodal', function(event) {
+            event.preventDefault();
+            var jenis = $(this).attr('data-jenis');
+            var id = $(this).attr("data-id");
+
+            swalWithBootstrapButtons.fire({
+            title: 'Batalkan Pesanan',
+            text: "Ingin membatalkan Pesanan ini?",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Batalkan',
+            cancelButtonText: 'Tutup',
+            reverseButtons: true
+            }).then((result) => {
+            if (result.isConfirmed) {
+
+                $.ajax({
+                url: '/api/penjualan/penjualan/cancel/'+id+'/'+jenis,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        swal.fire(
+                            'Batal',
+                            'Sukses Batalkan Pesanan',
+                            'success'
+                        );
+                        $('#penjualantable').DataTable().ajax.reload();
+                        if (jenis == 'spa') {
+                            $('#spatable').DataTable().ajax.reload();
+                        } else if (jenis == 'spb') {
+                            $('#spbtable').DataTable().ajax.reload();
+                        }
+                        $("#deletemodal").modal('hide');
+                    } else if (response['data'] == "error") {
+                        swal.fire(
+                            'Gagal',
+                            'Gagal melakukan Hapus Data',
+                            'error'
+                        );
+                    }
+                },
+                error: function(xhr, status, error) {
+                    swal.fire(
+                        'Error',
+                        'Data telah digunakan dalam Transaksi Lain',
+                        'warning'
+                    );
+                    // console.log(action);
+                }
+            });
+            return false;
+                swalWithBootstrapButtons.fire(
+                'Deleted!',
+                'Your file has been deleted.',
+                'success'
+                )
+            }
+            })
+        });
+
         $(document).on('submit', '#form-pesanan-update', function(e) {
             e.preventDefault();
             var action = $(this).attr('action');
@@ -1241,6 +1293,15 @@
                 type: "POST",
                 url: action,
                 data: $('#form-pesanan-update').serialize(),
+                beforeSend: function() {
+                    swal.fire({
+                        title: 'Sedang Proses',
+                        html: 'Loading...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        willOpen: () => {Swal.showLoading()}
+                    })
+                },
                 success: function(response) {
                     if (response['data'] == "success") {
                         swal.fire(
@@ -1690,7 +1751,6 @@
             } else {
                 var x = ['semua'];
             }
-            console.log(x);
             $('#spatable').DataTable().ajax.url('/penjualan/penjualan/spa/data/' + x).load();
             return false;
 
@@ -1708,7 +1768,7 @@
             } else {
                 var x = ['semua'];
             }
-            console.log(x);
+
             $('#spbtable').DataTable().ajax.url('/penjualan/penjualan/spb/data/' + x).load();
             return false;
         });

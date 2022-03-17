@@ -217,9 +217,14 @@
                             </div>
                         </div>
                     </div>
+
+                    <div class="card-footer">
+                        No Seri Yang Diisi : <span id="no_seri"></span>
+                    </div>
                 </div>
             </div>
             <div class="modal-footer">
+                <button type="button" id="btnCheck" class="btn btn-info">Check</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                 <button type="button" id="btnSave" class="btn btn-primary">Simpan</button>
             </div>
@@ -623,6 +628,53 @@
                         }
                     }
                 })
+            }
+        })
+
+        $('#btnCheck').click(function(){
+            let arr = [];
+            const data = scanProduk.$('.noseri').map(function () {
+                return $(this).val();
+            }).get();
+
+            data.forEach(function (item) {
+                if (item != '') {
+                    arr.push(item);
+                }
+            })
+
+            const count = arr =>
+                arr.reduce((a, b) => ({
+                    ...a,
+                    [b]: (a[b] || 0) + 1
+                }), {})
+
+            const duplicates = dict =>
+                Object.keys(dict).filter((a) => dict[a] > 1)
+
+            if (duplicates(count(arr)).length > 0) {
+                $('.noseri').removeClass('is-invalid');
+                $('.noseri').filter(function () {
+                    for (let index = 0; index < duplicates(count(arr))
+                        .length; index++) {
+                        if ($(this).val() == duplicates(count(arr))[index]) {
+                            return true;
+                        }
+                    }
+                }).addClass('is-invalid');
+
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Nomor seri ' + duplicates(count(arr)) +
+                        ' ada yang sama.',
+                }).then((result) => {
+                    if (result.value) {
+                        $(this).prop('disabled', false);
+                    }
+                });
+            } else {
+                $('#no_seri').text(arr.length);
             }
         })
     });

@@ -59,6 +59,46 @@
         background-color: #ffe680;
         color: #997a00;
     }
+
+    .tabnum{
+        font-variant-numeric: tabular-nums;
+    }
+
+    @media screen and (min-width: 1440px) {
+        body {
+            font-size: 14px;
+        }
+
+        .dropdown-item {
+            font-size: 14px;
+        }
+
+        .btn{
+            font-size:14px;
+        }
+
+        .labelket{
+            text-align: right;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+        body {
+            font-size: 12px;
+        }
+
+        .dropdown-item {
+            font-size: 12px;
+        }
+
+        .btn{
+            font-size:12px;
+        }
+
+        .labelket{
+            text-align: right;
+        }
+    }
 </style>
 @stop
 @section('content')
@@ -167,6 +207,7 @@
                                                         <th width="5%">No</th>
                                                         <th width="16%">No AKD</th>
                                                         <th width="12%">Merk</th>
+                                                        <th width="50%">Nama Alias</th>
                                                         <th width="50%">Nama Produk</th>
                                                         <th width="12%">Harga</th>
                                                         <th width="5%">Aksi</th>
@@ -341,11 +382,18 @@
                 },
                 {
                     data: 'no_akd',
+                    className: 'nowrap-text align-center tabnum',
                     orderable: true,
                     searchable: true
                 },
                 {
                     data: 'merk',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'nama_alias',
                     orderable: true,
                     searchable: true
                 },
@@ -356,7 +404,7 @@
                 },
                 {
                     data: 'harga',
-                    className: 'nowrap-text align-right',
+                    className: 'nowrap-text align-right tabnum',
                     render: $.fn.dataTable.render.number(',', '.', 2)
                         // function(data) {
                         //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';

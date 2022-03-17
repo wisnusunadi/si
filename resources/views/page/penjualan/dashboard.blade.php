@@ -4,25 +4,12 @@
 
 @section('content_header')
 <h1 class="m-0 text-dark">Dashboard</h1>
-
 @stop
 
 @section('adminlte_css')
 <style lang="scss">
     #pengirimantable thead {
         text-align: center;
-    }
-
-    #pengirimantable td:nth-child(5) {
-        text-align: right;
-        white-space: nowrap;
-    }
-
-    #pengirimantable td:nth-child(1),
-    td:nth-child(4),
-    td:nth-child(6) {
-        text-align: center;
-        white-space: nowrap;
     }
 
     .nowrap {
@@ -168,9 +155,9 @@
         margin-bottom: 15px;
     }
 
-    @media screen and (min-width: 1440px) {
+    @media screen and (min-width: 992px) {
 
-        section {
+        body {
             font-size: 14px;
         }
 
@@ -179,7 +166,7 @@
         }
 
         .btn {
-            font-size: 12px;
+            font-size: 14px;
         }
 
         .overflowy {
@@ -190,15 +177,14 @@
         }
     }
 
-    @media screen and (max-width: 1439px) {
+    @media screen and (max-width: 991px) {
 
-        label,
-        .row {
+        body {
             font-size: 12px;
         }
 
         h4 {
-            font-size: 20px;
+            font-size: 18x;
         }
 
         #detailmodal {
@@ -250,7 +236,7 @@
                                             <p>Belum Memiliki SO</p>
                                         </div>
                                         <div class="icon">
-                                            <i class="fas fa-tasks"></i>
+                                            <i class="fas fa-receipt"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -272,7 +258,7 @@
                                             <p>SO Belum Diproses QC</p>
                                         </div>
                                         <div class="icon">
-                                            <i class="fas fa-exclamation-circle"></i>
+                                            <i class="fas fa-tasks"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -283,7 +269,7 @@
                                             <p>SO Belum Diproses Logistik</p>
                                         </div>
                                         <div class="icon">
-                                            <i class="fas fa-exclamation-circle"></i>
+                                            <i class="fas fa-truck-loading"></i>
                                         </div>
                                     </div>
                                 </div>
@@ -310,6 +296,8 @@
                                                     <th>No</th>
                                                     <th>No SO</th>
                                                     <th>No PO</th>
+                                                    <th>Tanggal PO</th>
+                                                    <th>Distibutor</th>
                                                     <th>Status</th>
                                                     <th>Tanggal Delivery</th>
                                                     <th>Aksi</th>
@@ -443,14 +431,18 @@
                 {
                     data: 'so',
                     className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
                 },
                 {
                     data: 'no_po',
                     className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
+                },
+                {
+                    data: 'tgl_po',
+                    className: 'nowrap-text align-center',
+                },
+                {
+                    data: 'nama_customer',
+                    className: 'align-center',
                 },
                 {
                     data: 'status',

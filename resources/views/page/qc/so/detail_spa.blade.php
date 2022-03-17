@@ -99,8 +99,7 @@
 
     @media screen and (min-width: 993px) {
 
-        label,
-        .row {
+        body {
             font-size: 14px;
         }
 
@@ -115,12 +114,15 @@
         .btn {
             font-size: 14px;
         }
+
+        .cust{
+            max-width:40%;
+        }
     }
 
     @media screen and (max-width: 992px) {
 
-        label,
-        .row {
+        body {
             font-size: 12px;
         }
 
@@ -151,9 +153,11 @@
                 <div class="card">
                     <div class="card-body">
                         <h4>Info Penjualan SPA</h4>
-                        @foreach($data as $d)
                         <div class="row">
-                            <div class="col-lg-5 col-md-12 col-sm-6">
+                            <div class="col-lg-11 col-md-12">
+                        @foreach($data as $d)
+                        <div class="row d-flex justify-content-between">
+                            <div class="p-2 cust">
                                 <div class="margin">
                                     <div><small class="text-muted">Customer</small></div>
                                 </div>
@@ -170,7 +174,7 @@
                                     {{$d->customer->telp}}
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6 col-sm-12">
+                            <div class="p-2">
                                 <div class="margin">
                                     <div><small class="text-muted">No SO</small></div>
                                     <div><b id="no_so">{{$d->pesanan->so}}</b></div>
@@ -180,7 +184,7 @@
                                     <div id="status">{!!$status!!}</div>
                                 </div>
                             </div>
-                            <div class="col-lg-3 col-md-6 col-md-12">
+                            <div class="p-2">
                                 <div class="margin">
                                     <div><small class="text-muted">No PO</small></div>
                                     <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
@@ -193,6 +197,8 @@
 
                         </div>
                         @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -484,7 +490,9 @@
                             html: 'Loading...',
                             allowOutsideClick: false,
                             showConfirmButton: false,
-                            willOpen: () => {Swal.showLoading()}
+                            willOpen: () => {
+                                Swal.showLoading()
+                            }
                         })
                     },
                     success: function(response) {
@@ -506,7 +514,7 @@
                                 'Gagal melakukan Penambahan Data Pengujian',
                                 'error'
                             );
-                        } else{
+                        } else {
                             console.log(response['data']);
                         }
                     },
@@ -530,7 +538,9 @@
                             html: 'Loading...',
                             allowOutsideClick: false,
                             showConfirmButton: false,
-                            willOpen: () => {Swal.showLoading()}
+                            willOpen: () => {
+                                Swal.showLoading()
+                            }
                         })
                     },
                     success: function(response) {
@@ -553,7 +563,7 @@
                                 'Gagal melakukan Penambahan Data Pengujian',
                                 'error'
                             );
-                        } else{
+                        } else {
                             console.log(response['data']);
                         }
                     },
@@ -608,7 +618,7 @@
             $('#listnoseri').DataTable({
                 destroy: true,
                 processing: true,
-                serverSide: true,
+                serverSide: false,
                 autowidth: true,
                 ajax: {
                     'type': 'post',
@@ -682,14 +692,18 @@
 
         var checkedAry = [];
         $('#noseritable').on('click', 'input[name="check_all"]', function() {
+            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
+            // $('.nosericheck').prop('checked', this.checked);
             if ($('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
-                $('.nosericheck').prop('checked', true);
-                checkedAry = []
-                checkedAry.push('0');
+                $('.nosericheck', rows).prop('checked', true);
+                checkedAry = [];
+                $.each($(".nosericheck:checked", rows), function() {
+                    checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                });
                 $('#btnedit').removeAttr('disabled');
             } else if ($('input[name="check_all"]:checked').length <= 0) {
-                $('.nosericheck').prop('checked', false);
+                $('.nosericheck', rows).prop('checked', false);
                 $('#cekbrg').prop('disabled', true);
             }
         });

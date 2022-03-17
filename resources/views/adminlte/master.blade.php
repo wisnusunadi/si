@@ -22,22 +22,25 @@
     {{-- Custom stylesheets (pre AdminLTE) --}}
     @yield('adminlte_css_pre')
     {{-- Configured Stylesheets --}}
+    <link href="{{ asset('vendor/x-editable/jquery-editable.css') }}" rel="stylesheet"/>
     <link href="{{ asset('native/css/plugin.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/select2/select2.min.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/datatables-bs4/css/dataTables.bootstrap4.min.css') }}" rel="stylesheet" />
+
     <link href="{{ asset('assets/css/select2/select2-bootstrap4.min.css') }}" rel="stylesheet" />
     <link type="text/css" href="{{ asset('vendor/select2/checkbox/check.css') }}" rel="stylesheet" />
     <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.css') }}">
 
     <link rel="stylesheet" href="{{ asset('assets/adminlte/dist/css/adminlte.min.css') }}" />
 
+
+
     <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/all.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/datepicker/datepicker.css') }}">
-     <!-- Include Bootstrap DateTimePicker CDN -->
-     <link
-         href=
- "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css"
-         rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('vendor/jquery-ui/jquery-ui.css') }}">
+
+    <!-- Include Bootstrap DateTimePicker CDN -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/css/bootstrap-datetimepicker.min.css" rel="stylesheet">
 
     {{-- Custom Stylesheets (post AdminLTE) --}}
     @yield('master_css')
@@ -74,6 +77,7 @@
     @yield('body')
 
     {{-- Configured Scripts --}}
+
     <script src="{{ asset('native/js/plugin.js') }}"></script>
     <script src="{{ asset('assets/adminlte/dist/js/adminlte.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('vendor/select2/checkbox/check.js') }}"></script>
@@ -81,7 +85,8 @@
     <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
     <script src="{{ asset('vendor/datepicker/moment.js') }}"></script>
     <script src="{{ asset('vendor/datepicker/datepicker.js') }}"></script>
-   
+    <script src="{{ asset('vendor/jquery-ui/jquery-ui.js') }}"></script>
+    <script src="{{ asset('vendor/x-editable/jquery-editable-poshytip.min.js') }}"></script>
     {{-- Custom Scripts --}}
     @yield('master_js')
 </body>

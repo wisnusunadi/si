@@ -386,27 +386,49 @@ class QcController extends Controller
         $data = "";
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get();
         } else if ($x == ['ekatalog', 'spa']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Ekatalog')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Spa')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get());
             $data = $Ekat->merge($Spa);
         } else if ($x == ['ekatalog', 'spb']) {
-            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Ekatalog')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Spb')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get());
             $data = $Ekat->merge($Spb);
         } else if ($x == ['spa', 'spb']) {
-            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
-            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get());
+            $Spa = collect(Pesanan::whereIN('id', $this->check_input())->has('Spa')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get());
+            $Spb = collect(Pesanan::whereIN('id', $this->check_input())->has('Spb')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get());
             $data = $Spa->merge($Spb);
         } else if ($value == 'ekatalog') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('Ekatalog')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Ekatalog')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get();
         } else if ($value == 'spa') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('Spa')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Spa')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get();
         } else if ($value == 'spb') {
-            $data = Pesanan::whereIN('id', $this->check_input())->has('Spb')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->has('Spb')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get();
         } else {
-            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get();
         }
 
 
@@ -1173,39 +1195,41 @@ class QcController extends Controller
         if ($bool == true) {
             // $uk = "";
             $po = Pesanan::find($pesanan_id);
-            if ($po->log_id == "8") {
+
                 // $uk = count($po->DetailPesanan)." ".count($po->DetailPesananPart);
                 if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) <= 0) {
+                    if ($po->log_id == "8") {
                     // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek();
-                    if ($po->getJumlahPesanan() == $po->getJumlahCek()) {
-                        if ($po->getJumlahKirim() == 0) {
-                            $pou = Pesanan::find($pesanan_id);
-                            $pou->log_id = '11';
-                            $u = $pou->save();
-                            if(!$u){
-                                $bools = false;
-                            }
-                        } else {
-                            if ($po->getJumlahKirim() >= $po->getJumlahPesanan()) {
+                        if ($po->getJumlahPesanan() == $po->getJumlahCek()) {
+                            if ($po->getJumlahKirim() == 0) {
                                 $pou = Pesanan::find($pesanan_id);
-                                $pou->log_id = '10';
+                                $pou->log_id = '11';
                                 $u = $pou->save();
                                 if(!$u){
                                     $bools = false;
                                 }
                             } else {
-                                $pou = Pesanan::find($pesanan_id);
-                                $pou->log_id = '13';
-                                $u = $pou->save();
-                                if(!$u){
-                                    $bools = false;
+                                if ($po->getJumlahKirim() >= $po->getJumlahPesanan()) {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '10';
+                                    $u = $pou->save();
+                                    if(!$u){
+                                        $bools = false;
+                                    }
+                                } else {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '13';
+                                    $u = $pou->save();
+                                    if(!$u){
+                                        $bools = false;
+                                    }
                                 }
                             }
                         }
                     }
                 } else if (count($po->DetailPesanan) <= 0 && count($po->DetailPesananPart) > 0) {
                     // $uk = "Jumlah Pesan Part ".$po->getJumlahPesananPart()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
-                    if ($po->getJumlahPesananPart() == $po->getJumlahCekPart("ok")) {
+                    if ($po->getJumlahPesananPart() <= $po->getJumlahCekPart("ok")) {
                         if ($po->getJumlahKirimPart() == 0) {
                             $pou = Pesanan::find($pesanan_id);
                             $pou->log_id = '11';
@@ -1230,37 +1254,46 @@ class QcController extends Controller
                                 }
                             }
                         }
+                    }else if ($po->getJumlahPesananPart() > $po->getJumlahCekPart("ok")){
+                        $pou = Pesanan::find($pesanan_id);
+                        $pou->log_id = '8';
+                        $u = $pou->save();
+                        if(!$u){
+                            $bools = false;
+                        }
                     }
                 } else if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) > 0) {
                     // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek()." Jumlah Pesan Part ".$po->getJumlahPesananPart()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
-                    if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPart() == $po->getJumlahCekPart("ok"))) {
-                        if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
-                            $pou = Pesanan::find($pesanan_id);
-                            $pou->log_id = '11';
-                            $u = $pou->save();
-                            if(!$u){
-                                $bools = false;
-                            }
-                        } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
-                            if ($po->getJumlahKirim() >= $po->getJumlahPesanan() && $po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                    if ($po->log_id == "8") {
+                        if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPart() == $po->getJumlahCekPart("ok"))) {
+                            if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
                                 $pou = Pesanan::find($pesanan_id);
-                                $pou->log_id = '10';
+                                $pou->log_id = '11';
                                 $u = $pou->save();
                                 if(!$u){
                                     $bools = false;
                                 }
-                            } else {
-                                $pou = Pesanan::find($pesanan_id);
-                                $pou->log_id = '13';
-                                $u = $pou->save();
-                                if(!$u){
-                                    $bools = false;
+                            } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
+                                if ($po->getJumlahKirim() >= $po->getJumlahPesanan() && $po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '10';
+                                    $u = $pou->save();
+                                    if(!$u){
+                                        $bools = false;
+                                    }
+                                } else {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '13';
+                                    $u = $pou->save();
+                                    if(!$u){
+                                        $bools = false;
+                                    }
                                 }
                             }
                         }
                     }
                 }
-            }
+
             if($bools == true){
                 return response()->json(['data' => 'success']);
             }
@@ -1281,7 +1314,9 @@ class QcController extends Controller
         $terbaruprd = Pesanan::whereHas('TFProduksi', function ($q) {
             $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
         })->whereIN('id',  $this->check_input())->get();
-        $terbaruprt = Pesanan::has('DetailPesananPart')->where('tgl_po', '>=', Carbon::now()->subdays(7))->get();
+        $terbaruprt = Pesanan::wherehas('DetailPesananPart.Sparepart', function($q) {
+            $q->where('nama', 'not like', '%JASA%');
+        })->where('tgl_po', '>=', Carbon::now()->subdays(7))->get();
 
         $cekterbaru = $terbaruprd->merge($terbaruprt);
         foreach ($cekterbaru as $j) {
@@ -1289,7 +1324,9 @@ class QcController extends Controller
                 $terbaru++;
             }
         }
-        $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+        $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orWherehas('DetailPesananPart.Sparepart', function($q) {
+            $q->where('nama', 'not like', '%JASA%');
+        })->get();
 
         $arrayid = array();
         foreach ($cekhasil as $h) {
@@ -1333,7 +1370,9 @@ class QcController extends Controller
             $terbaruprd = Pesanan::whereHas('TFProduksi', function ($q) {
                 $q->where('tgl_keluar', '>=', Carbon::now()->subdays(7));
             })->whereIN('id',  $this->check_input())->get();
-            $terbaruprt = Pesanan::has('DetailPesananPart')->where('tgl_po', '>=', Carbon::now()->subdays(7))->get();
+            $terbaruprt = Pesanan::wherehas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->where('tgl_po', '>=', Carbon::now()->subdays(7))->get();
             $terbaru_data = $terbaruprd->merge($terbaruprt);
             $terbaru_id = [];
             foreach ($terbaru_data as $j) {
@@ -1343,7 +1382,10 @@ class QcController extends Controller
             }
 
             $prd = Pesanan::has('DetailPesanan')->whereIN('id', $terbaru_id)->get();
-            $part = Pesanan::has('DetailPesananPart')->whereIN('id', $terbaru_id)->get();
+            $part = Pesanan::wherehas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->whereIN('id', $terbaru_id)->get();
+
             $data = $prd->merge($part);
 
             return datatables()->of($data)
@@ -1464,7 +1506,9 @@ class QcController extends Controller
         } else if ($value == 'belum_uji') {
 
 
-            $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orHas('DetailPesananPart')->get();
+            $cekhasil = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orwherehas('DetailPesananPart.Sparepart', function($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get();
 
             $arrayid = array();
             foreach ($cekhasil as $h) {

@@ -25,11 +25,13 @@ class Produk extends Model
         return $this->belongsTo(KelompokProduk::class, 'kelompok_produk_id');
     }
 
-    public function Satuan() {
+    public function Satuan()
+    {
         return $this->belongsTo(Satuan::class, 'satuan_id');
     }
 
-    function product() {
+    function product()
+    {
         return $this->belongsTo(Mproduk::class, 'produk_id');
     }
 }

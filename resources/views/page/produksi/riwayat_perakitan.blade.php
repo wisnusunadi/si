@@ -500,7 +500,7 @@
         0]);
         return parsedDate;
     }
-    $('.produk_select').select2();
+    $('.produk_select').select2({});
     $.ajax({
         type: "get",
         url: "/api/prd/product_his_rakit",
@@ -543,7 +543,7 @@
             "pageLength": 10,
             processing: true,
             ajax: {
-                url: "/api/prd/historySeri/" + id + "/" + time + "/" + rakit,
+                url: "/api/prd/historySeri/" + id + "/" + time,
             },
             columns: [
                 {data: 'no_seri'}
@@ -798,9 +798,6 @@
             $('.modalTransferLain').modal('show');
             $('.tableNoseri').DataTable().columns.adjust().draw();
             // console.log(jwdid);
-        });
-        $('.modalTransferLain').on('shown.bs.modal', function () {
-            $('.tableNoseri').DataTable().columns.adjust().draw();
         });
 
         // Filter

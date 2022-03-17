@@ -30,190 +30,230 @@
     .hide {
         display: none !important;
     }
+    .removeboxshadow {
+        box-shadow: none;
+        border: 1px;
+    }
+    @media screen and (min-width: 993px){
+        .labelket{
+            text-align: right;
+        }
+        section{
+            font-size:14px;
+        }
+        .btn{
+            font-size:14px;
+        }
+    }
+    @media screen and (max-width: 992px){
+        .labelket{
+            text-align: left;
+        }
+        section{
+            font-size:12px;
+        }
+        .btn{
+            font-size:12px;
+        }
+    }
 </style>
 @stop
 
 @section('content')
-<div class="row">
-    <div class="col-12">
-        <div class="content">
-            <form action="{{route('logistik.ekspedisi.store')}}" method="post">
-                {{csrf_field()}}
-                <div class="row d-flex justify-content-center">
-                    <div class="col-8">
-                        <h5>Data Ekspedisi</h5>
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="form-group row">
-                                            @if(session('error') || count($errors) > 0 )
-                                            <div class="alert alert-danger alert-dismissible show fade col-12" role="alert">
-                                                <strong>Gagal menambahkan!</strong> Periksa
-                                                kembali data yang diinput
-                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            @elseif(session('success'))
-                                            <div class="alert alert-success alert-dismissible show fade col-12" role="alert">
-                                                <strong>Berhasil menambahkan data</strong>,
-                                                Terima kasih
-                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            @endif
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="nama_ekspedisi" class="col-4 col-form-label" style="text-align:right;">Nama Ekspedisi</label>
-                                            <div class="col-6">
-                                                <input type="text" class="form-control @error('nama_ekspedisi') is-invalid @enderror" placeholder="Masukkan Nama Ekspedisi" id="nama_ekspedisi" name="nama_ekspedisi" />
-                                                <div class="invalid-feedback" id="msgnama_ekspedisi">
-                                                    @if($errors->has('nama_ekspedisi'))
-                                                    {{ $errors->first('nama_ekspedisi')}}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="content">
+                    <form action="{{route('logistik.ekspedisi.store')}}" method="post">
+                        {{csrf_field()}}
+                        <div class="row d-flex justify-content-center">
+                            <div class="col-lg-10 co-md-12">
+                                <div class="card">
+                                    <div class="card-header bg-info"><h5 class="card-title">Tambah Ekspedisi</h5></div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12">
+                                                <div class="form-group row">
+                                                    @if(session('error') || count($errors) > 0 )
+                                                    <div class="alert alert-danger alert-dismissible show fade col-lg-12" role="alert">
+                                                        <strong>Gagal menambahkan!</strong> Periksa
+                                                        kembali data yang diinput
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
+                                                    @elseif(session('success'))
+                                                    <div class="alert alert-success alert-dismissible show fade col-lg-12" role="alert">
+                                                        <strong>Berhasil menambahkan data</strong>,
+                                                        Terima kasih
+                                                        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                            <span aria-hidden="true">&times;</span>
+                                                        </button>
+                                                    </div>
                                                     @endif
                                                 </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="alamat" class="col-4 col-form-label" style="text-align:right;">Alamat</label>
-                                            <div class="col-8">
-                                                <input type="text" class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan Alamat" id="alamat" name="alamat" />
-                                                <div class="invalid-feedback" id="msgalamat">
-                                                    @if($errors->has('alamat'))
-                                                    {{ $errors->first('alamat')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="email" class="col-4 col-form-label" style="text-align:right;">Email</label>
-                                            <div class="col-8">
-                                                <input type="text" class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan Email" id="email" name="email" />
-                                                <div class="invalid-feedback" id="msgemail">
-                                                    @if($errors->has('email'))
-                                                    {{ $errors->first('email')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="telepon" class="col-4 col-form-label" style="text-align:right;">No Telp</label>
-                                            <div class="col-5">
-                                                <input type="text" class="form-control @error('telepon') is-invalid @enderror" value="" placeholder="Masukkan Telepon" id="telepon" name="telepon" />
-                                                <div class="invalid-feedback" id="msgtelepon">
-                                                    @if($errors->has('telepon'))
-                                                    {{ $errors->first('telepon')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-4" style="text-align: right">Jalur</label>
-                                            <div class="col-5 col-form-label">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input jalur" type="checkbox" id="jalur1" value="1" name="jalur[]">
-                                                    <label class="form-check-label" for="jalur1">Darat</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input jalur" type="checkbox" id="jalur2" value="2" name="jalur[]">
-                                                    <label class="form-check-label" for="jalur2">Laut</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input jalur" type="checkbox" id="jalur3" value="3" name="jalur[]">
-                                                    <label class="form-check-label" for="jalur3">Udara</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input jalur" type="checkbox" id="jalur4" value="4" name="jalur[]">
-                                                    <label class="form-check-label" for="jalur4">Lain</label>
-                                                </div>
-                                                <div class="invalid-feedback" id="msgjalur">
-                                                    @if($errors->has('jalur'))
-                                                    {{ $errors->first('jalur')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="form-group row">
-                                            <label for="" class="col-form-label col-4" style="text-align: right">Jurusan</label>
-                                            <div class="col-8 col-form-label">
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan1" value="indonesia" />
-                                                    <label class="form-check-label" for="jurusan1">Seluruh Indonesia</label>
-                                                </div>
-                                                <div class="form-check form-check-inline">
-                                                    <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan2" value="provinsi" />
-                                                    <label class="form-check-label" for="jurusan2">Per Provinsi</label>
-                                                </div>
-                                                <!-- <div class="form-check form-check-inline">
-                                                    <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan3" value="kota_kabupaten" />
-                                                    <label class="form-check-label" for="jurusan3">Per Kota / Kabupaten</label>
-                                                </div> -->
 
-                                                <div class="invalid-feedback" id="msgjurusan">
+                                                <div class="card removeboxshadow">
+                                                    <div class="card-body">
+                                                        <div class="form-group row">
+                                                            <label for="nama_ekspedisi" class="col-lg-4 col-md-12 col-form-label labelket">Nama Ekspedisi</label>
+                                                            <div class="col-6">
+                                                                <input type="text" class="form-control @error('nama_ekspedisi') is-invalid @enderror" placeholder="Masukkan Nama Ekspedisi" id="nama_ekspedisi" name="nama_ekspedisi" />
+                                                                <div class="invalid-feedback" id="msgnama_ekspedisi">
+                                                                    @if($errors->has('nama_ekspedisi'))
+                                                                    {{ $errors->first('nama_ekspedisi')}}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="alamat" class="col-lg-4 col-md-12 col-form-label labelket">Alamat</label>
+                                                            <div class="col-lg-7 col-md-8">
+                                                                <textarea class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan Alamat" id="alamat" name="alamat"></textarea>
+                                                                <div class="invalid-feedback" id="msgalamat">
+                                                                    @if($errors->has('alamat'))
+                                                                    {{ $errors->first('alamat')}}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="email" class="col-lg-4 col-md-12 col-form-label labelket">Email</label>
+                                                            <div class="col-8">
+                                                                <input type="text" class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan Email" id="email" name="email" />
+                                                                <div class="invalid-feedback" id="msgemail">
+                                                                    @if($errors->has('email'))
+                                                                    {{ $errors->first('email')}}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row">
+                                                            <label for="telepon" class="col-lg-4 col-md-12 col-form-label labelket">No Telp</label>
+                                                            <div class="col-5">
+                                                                <input type="text" class="form-control @error('telepon') is-invalid @enderror" value="" placeholder="Masukkan Telepon" id="telepon" name="telepon" />
+                                                                <div class="invalid-feedback" id="msgtelepon">
+                                                                    @if($errors->has('telepon'))
+                                                                    {{ $errors->first('telepon')}}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div class="card removeboxshadow">
+                                                    <div class="card-header"></div>
+                                                    <div class="card-body">
+                                                        <div class="form-group row">
+                                                            <label for="" class="col-lg-4 col-md-12 col-form-label labelket">Jalur</label>
+                                                            <div class="col-lg-5 col-md-12 col-form-label">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input jalur" type="checkbox" id="jalur1" value="1" name="jalur[]">
+                                                                    <label class="form-check-label" for="jalur1">Darat</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input jalur" type="checkbox" id="jalur2" value="2" name="jalur[]">
+                                                                    <label class="form-check-label" for="jalur2">Laut</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input jalur" type="checkbox" id="jalur3" value="3" name="jalur[]">
+                                                                    <label class="form-check-label" for="jalur3">Udara</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input jalur" type="checkbox" id="jalur4" value="4" name="jalur[]">
+                                                                    <label class="form-check-label" for="jalur4">Lain</label>
+                                                                </div>
+                                                                <div class="invalid-feedback" id="msgjalur">
+                                                                    @if($errors->has('jalur'))
+                                                                    {{ $errors->first('jalur')}}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="" class="col-lg-4 col-md-12 col-form-label labelket">Jurusan</label>
+                                                            <div class="col-lg-8 col-md-12 col-form-label">
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan1" value="indonesia" />
+                                                                    <label class="form-check-label" for="jurusan1">Seluruh Indonesia</label>
+                                                                </div>
+                                                                <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan2" value="provinsi" />
+                                                                    <label class="form-check-label" for="jurusan2">Per Provinsi</label>
+                                                                </div>
+                                                                <!-- <div class="form-check form-check-inline">
+                                                                    <input class="form-check-input jurusan" type="radio" name="jurusan" id="jurusan3" value="kota_kabupaten" />
+                                                                    <label class="form-check-label" for="jurusan3">Per Kota / Kabupaten</label>
+                                                                </div> -->
+
+                                                                <div class="invalid-feedback" id="msgjurusan">
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row hide" id="provinsi_select">
+                                                            <label for="jurusan" class="col-lg-4 col-md-12 col-form-label labelket">Provinsi</label>
+                                                            <div class="col-lg-8 col-md-12">
+                                                                <select class="provinsi form-control" name="provinsi[]" id="provinsi" style="width: 100%;">
+                                                                </select>
+                                                                <div class="invalid-feedback" id="msgprovinsi">
+                                                                    @if($errors->has('provinsi'))
+                                                                    {{ $errors->first('provinsi')}}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row hide" id="kota_kabupaten_select">
+                                                            <label for="jurusan" class="col-lg-4 col-md-12 col-form-label labelket">Kota / Kabupaten</label>
+                                                            <div class="col-lg-8 col-md-12">
+                                                                <select class="select-info form-control custom-select kota_kabupaten" name="kota_kabupaten" id="kota_kabupaten" style="width: 100%;">
+                                                                </select>
+                                                                <div class="invalid-feedback" id="msgkota_kabupaten">
+                                                                    @if($errors->has('kota_kabupaten'))
+                                                                    {{ $errors->first('kota_kabupaten')}}
+                                                                    @endif
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                        <div class="form-group row">
+                                                            <label for="telepon" class="col-lg-4 col-md-12 col-form-label labelket">Keterangan</label>
+                                                            <div class="col-lg-5 col-md-8">
+                                                                <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="card-footer">
+                                        <span class="float-left">
+                                            <a type="button" class="btn btn-danger" href="{{route('logistik.ekspedisi.show')}}">
+                                                Batal
+                                            </a>
+                                        </span>
 
-                                        <div class="form-group row hide" id="provinsi_select">
-                                            <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Provinsi</label>
-                                            <div class="col-8">
-                                                <select class="provinsi form-control" name="provinsi[]" id="provinsi" style="width: 100%;">
-                                                </select>
-                                                <div class="invalid-feedback" id="msgprovinsi">
-                                                    @if($errors->has('provinsi'))
-                                                    {{ $errors->first('provinsi')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row hide" id="kota_kabupaten_select">
-                                            <label for="jurusan" class="col-4 col-form-label" style="text-align:right;">Kota / Kabupaten</label>
-                                            <div class="col-8">
-                                                <select class="select-info form-control custom-select kota_kabupaten" name="kota_kabupaten" id="kota_kabupaten" style="width: 100%;">
-                                                </select>
-                                                <div class="invalid-feedback" id="msgkota_kabupaten">
-                                                    @if($errors->has('kota_kabupaten'))
-                                                    {{ $errors->first('kota_kabupaten')}}
-                                                    @endif
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="form-group row">
-                                            <label for="telepon" class="col-4 col-form-label" style="text-align:right;">Keterangan</label>
-                                            <div class="col-5">
-                                                <textarea class="form-control" name="keterangan" id="keterangan"></textarea>
-                                            </div>
-                                        </div>
+                                        <span class="float-right">
+                                            <button type="submit" class="btn btn-info" id="btntambah" disabled>
+                                                Tambah
+                                            </button>
+                                        </span>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
-                <div class="row d-flex justify-content-center">
-                    <div class="col-8">
-
-                        <span class="float-left">
-                            <a type="button" class="btn btn-danger" href="{{route('logistik.ekspedisi.show')}}">
-                                Batal
-                            </a>
-                        </span>
-
-                        <span class="float-right">
-                            <button type="submit" class="btn btn-info" id="btntambah" disabled>
-                                Tambah
-                            </button>
-                        </span>
-                    </div>
-                </div>
-            </form>
+            </div>
         </div>
     </div>
-</div>
+</section>
 @stop
 
 @section('adminlte_js')
@@ -276,7 +316,7 @@
             }
         })
 
-        $('input[name="alamat"]').on('keyup change', function() {
+        $('#alamat').on('keyup change', function() {
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");

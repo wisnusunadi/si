@@ -148,6 +148,7 @@ import axios from "axios";
 
 /**
  * @vue-prop {Array} events - array of schedule data
+ * 
  * @vue-prop {String} status - status string
  *
  * @vue-data {Object} calendarOPtions - option for fullcalendar object

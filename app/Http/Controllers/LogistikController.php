@@ -481,10 +481,12 @@ class LogistikController extends Controller
                 })
                 ->addColumn('pengirim', function ($data) {
                     if (isset($data->Logistik)) {
-                        if ($data->Logistik->nama_pengirim == "") {
+                        if ($data->Logistik->Ekspedisi) {
                             return $data->Logistik->ekspedisi['nama'];
-                        } else {
+                        } else if ($data->Logistik->nama_pengirim == ""){
                             return $data->Logistik->nama_pengirim;
+                        } else{
+                            return '-';
                         }
                     } else {
                         return '';
@@ -521,12 +523,12 @@ class LogistikController extends Controller
                     $q->where('pesanan_id', $id);
                 })->get();
             } else if ($c_prd > 0 && $c_prd > 0) {
-                $prd = collect(DetailLogistik::whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                $prd = DetailLogistik::whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
                     $q->where('pesanan_id', $id);
-                })->get());
-                $part = collect(DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($id) {
+                })->get();
+                $part = DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($id) {
                     $q->where('pesanan_id', $id);
-                })->get());
+                })->get();
                 $data = $prd->merge($part);
             }
 
@@ -548,10 +550,12 @@ class LogistikController extends Controller
                 })
                 ->addColumn('pengirim', function ($data) {
                     if (isset($data->Logistik)) {
-                        if ($data->Logistik->nama_pengirim == "") {
+                        if ($data->Logistik->Ekspedisi) {
                             return $data->Logistik->ekspedisi['nama'];
-                        } else {
+                        } else if ($data->Logistik->nama_pengirim != "") {
                             return $data->Logistik->nama_pengirim;
+                        } else{
+                            return '-';
                         }
                     } else {
                         return '';
@@ -637,7 +641,11 @@ class LogistikController extends Controller
     public function get_data_so($value)
     {
         $x = explode(',', $value);
-        $datas = Pesanan::orHas('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->orHas('DetailPesananPart')->whereNotIn('log_id', ['10'])->get();
+        $datanonjasa = Pesanan::orHas('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->orHas('DetailPesananPart.OutgoingPesananPart')->whereNotIn('log_id', ['10'])->get();
+        $datajasa = Pesanan::whereHas('DetailPesananPart.Sparepart', function($q){
+            $q->where('nama', 'like', '%JASA%');
+        })->get();
+        $datas = $datanonjasa->merge($datajasa);
         $array_id = array();
         foreach ($datas as $d) {
             if ($value == 'semua') {
@@ -2625,7 +2633,6 @@ class LogistikController extends Controller
     }
     public function create_logistik(Request $request, $prd_id, $part_id, $jenis)
     {
-
         if ($prd_id != '0') {
             $prd_array = array_values(json_decode($prd_id, true));
         } else {
@@ -2642,12 +2649,12 @@ class LogistikController extends Controller
         $ids = "";
         $iddp = "";
         $poid = "";
-        $kodesj = "";
-        if ($jenis != "SPB") {
-            $kodesj = "SPA-";
-        } else {
-            $kodesj = "B.";
-        }
+        $kodesj = $request->jenis_sj;
+        // if ($jenis != "SPB") {
+        //     $kodesj = "SPA-";
+        // } else {
+        //     $kodesj = "B.";
+        // }
         // return response()->json(['data' =>  $poid]);
 
         $bool = true;
@@ -3401,13 +3408,13 @@ class LogistikController extends Controller
         if ($id != "0") {
             $e = Logistik::where([['id', '!=', $id], ['nosurat', '=', $val]])->count();
         } else {
-            $vjenis = "";
-            if ($jenis == "SPB") {
-                $vjenis = "B.";
-            } else {
-                $vjenis = "SPA-";
-            }
-            $e = Logistik::where('nosurat', $vjenis . $val)->count();
+            // $vjenis = "";
+            // if ($jenis == "SPB") {
+            //     $vjenis = "B.";
+            // } else {
+            //     $vjenis = "SPA-";
+            // }
+            $e = Logistik::where('nosurat', $val)->count();
         }
         return $e;
     }

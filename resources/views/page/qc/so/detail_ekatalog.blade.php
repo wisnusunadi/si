@@ -118,8 +118,7 @@
 
     @media screen and (min-width: 993px) {
 
-        label,
-        .row {
+        body {
             font-size: 14px;
         }
 
@@ -134,12 +133,15 @@
         .btn {
             font-size: 14px;
         }
+
+        .cust{
+            max-width: 40%;
+        }
     }
 
     @media screen and (max-width: 992px) {
 
-        label,
-        .row {
+        body {
             font-size: 12px;
         }
 
@@ -170,10 +172,12 @@
                 <div class="card">
                     <div class="card-body">
                         <h4>Info Penjualan Ekatalog</h4>
+                        <div class="row">
+                            <div class="col-lg-11 col-md-12">
                         <?php $item = array(); ?>
                         @foreach($data as $d)
-                        <div class="row">
-                            <div class="col-lg-5 col-md-8 col-sm-12">
+                        <div class="row d-flex justify-content-between">
+                            <div class="p-2 cust">
                                 <div class="margin">
                                     <div><small class="text-muted">Distributor & Instansi</small></div>
                                 </div>
@@ -190,7 +194,7 @@
                                     <div><b id="no_akn">@if($d->provinsi_id) {{$d->Provinsi->nama}} @else - @endif</b></div>
                                 </div>
                             </div>
-                            <div class="col-lg-2 col-md-4 col-sm-12">
+                            <div class="p-2">
                                 <div class="margin">
                                     <div><small class="text-muted">No AKN</small></div>
                                     <div><b id="no_akn">{{$d->no_paket}}</b></div>
@@ -201,7 +205,7 @@
                                             {{$d->pesanan->so}}</b></div>
                                 </div>
                             </div>
-                            <div class="col-lg-2 col-md-8 col-sm-12">
+                            <div class="p-2">
                                 <div class="margin">
                                     <div><small class="text-muted">No PO</small></div>
                                     <div><b id="no_so">{{$d->pesanan->no_po}}</b></div>
@@ -211,7 +215,7 @@
                                     <div class="urgent"><b>{!!$param!!}</b></div>
                                 </div>
                             </div>
-                            <div class="col-lg-2 col-md-4 col-sm-12">
+                            <div class="p-2">
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
                                     <div>{!!$status!!}</div>
@@ -219,6 +223,8 @@
                             </div>
                         </div>
                         @endforeach
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -439,13 +445,7 @@
         $(document).on('submit', '#form-pengujian-update', function(e) {
             $('#btnsimpan').attr('disabled', true);
             e.preventDefault();
-            // var showLoading = swal.fire({
-            //     title: 'Sedang Proses',
-            //     html: 'Loading...',
-            //     allowOutsideClick: false,
-            //     showConfirmButton: false,
-            //     willOpen: () => {Swal.showLoading()}
-            // });
+
             var no_seri = $('#listnoseri').DataTable().$('tr').find('input[name="noseri_id[]"]').serializeArray();
             var data = [];
 
@@ -559,7 +559,6 @@
                     'url': '/api/qc/so/seri/select/' + seri_id + '/' + produk_id + '/' + pesanan_id,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}',
-
                     }
                 },
                 language: {
@@ -591,14 +590,18 @@
 
         var checkedAry = [];
         $('#noseritable').on('click', 'input[name="check_all"]', function() {
+            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
             if ($('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 $('.nosericheck').prop('checked', true);
-                checkedAry = []
-                checkedAry.push('0');
+                $('.nosericheck', rows).prop('checked', true);
+                checkedAry = [];
+                $.each($(".nosericheck:checked", rows), function() {
+                    checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                });
                 $('#btnedit').removeAttr('disabled');
             } else if ($('input[name="check_all"]:checked').length <= 0) {
-                $('.nosericheck').prop('checked', false);
+                $('.nosericheck', rows).prop('checked', false);
                 $('#cekbrg').prop('disabled', true);
             }
         });

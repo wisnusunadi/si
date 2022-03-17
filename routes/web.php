@@ -32,7 +32,7 @@ Route::get('/home', function () {
 Route::get("/test", function () {
     return view('test');
 });
-
+Route::view('/modul_dashboard/show', 'auth.dashboard');
 Route::middleware('auth')->prefix('/ppic')->group(function () {
     Route::view('/{any?}', 'spa.ppic.spa');
     // Route::get('/data/{status}', function ($status) {
@@ -112,7 +112,13 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/rencana'], function () {
         Route::view('/show', 'page.penjualan.rencana.show')->name('penjualan.rencana.show');
+        Route::get('/result', [App\Http\Controllers\RencanaPenjualanController::class, 'show'])->name('penjualan.rencana.result');
+        Route::get('/real/show/{id}', [App\Http\Controllers\RencanaPenjualanController::class, 'get_show_real'])->name('penjualan.rencana.real');
         Route::view('/create', 'page.penjualan.rencana.create')->name('penjualan.rencana.create');
+        Route::put('/store',  [App\Http\Controllers\RencanaPenjualanController::class, 'create_rencana'])->name('penjualan.rencana.store');
+        Route::post('/update',  [App\Http\Controllers\RencanaPenjualanController::class, 'update_rencana'])->name('penjualan.rencana.update');
+        Route::get('/laporan/{customer}/{tahun}',  [App\Http\Controllers\RencanaPenjualanController::class, 'show_laporan'])->name('penjualan.rencana.laporan');
+        Route::get('/laporan_detail/{customer}/{tahun}',  [App\Http\Controllers\RencanaPenjualanController::class, 'show_laporan_detail'])->name('penjualan.rencana.laporan_detail');
     });
 
     Route::group(['prefix' => '/pesanan'], function () {
@@ -150,7 +156,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/edit_spa', 'page.penjualan.penjualan.edit_spa')->name('penjualan.penjualan.edit_spa');
 
         //Export Laporan
-        Route::get('/export/{jenis}/{customer_id}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\PenjualanController::class, 'export_laporan'])->name('penjualan.penjualan.export');
+        Route::get('/export/{jenis}/{customer_id}/{tgl_awal}/{tgl_akhir}/{seri}', [App\Http\Controllers\PenjualanController::class, 'export_laporan'])->name('penjualan.penjualan.export');
     });
 
     Route::group(['prefix' => '/so'], function () {
@@ -236,6 +242,14 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     });
 });
 
+Route::middleware('auth')->prefix('/teknik')->group(function () {
+    Route::group(['prefix' => '/bom'], function () {
+        Route::view('/show', 'page.teknik.bom.show')->name('teknik.bom.show');
+        Route::get('/detail/{id}',  [App\Http\Controllers\TeknikController::class, 'bom_detail'])->name('teknik.bom.detail');
+        Route::get('/data/produk/{id}',  [App\Http\Controllers\TeknikController::class, 'bom_data_produk'])->name('teknik.bom.data.produk');
+    });
+});
+
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
     Route::get('/dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard'])->name('direksi.dashboard');
 });
@@ -256,6 +270,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
         Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');
         Route::view('/detail/{id}', 'page.dc.coo.detail')->name('dc.coo.detail');
         Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
+        Route::get('/create/{id}/{Value}', [App\Http\Controllers\DcController::class, 'create_coo'])->name('dc.coo.create');
         Route::get('/edit/{id}/{Value}', [App\Http\Controllers\DcController::class, 'edit_coo'])->name('dc.coo.edit');
         Route::get('/edit_tglkirim/{Value}', [App\Http\Controllers\DcController::class, 'edit_tglkirim_coo'])->name('dc.coo.tglkirim_edit');
         Route::get('/pdf/so/{id}/{value}/{jenis}', [App\Http\Controllers\DcController::class, 'pdf_semua_so_coo'])->name('dc.coo.semua.so.pdf');
@@ -310,7 +325,6 @@ Route::group(['prefix' => '/gk', 'middleware' => 'auth'], function () {
 });
 
 Route::view('/uit', 'page.login_page.index');
-
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
 //     Route::view('/stok', 'page.gbj.stok_show');
 // });
