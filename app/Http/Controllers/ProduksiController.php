@@ -2260,7 +2260,7 @@ class ProduksiController extends Controller
         $produk = [];
         foreach ($d as $item) {
             $a = GudangBarangJadi::find($item->produk_id);
-            array_push($produk, $a->produk->nama);
+            array_push($produk, $a->produk->nama.' '.$a->nama);
         }
         $data = array_unique($produk);
         return response()->json($data);

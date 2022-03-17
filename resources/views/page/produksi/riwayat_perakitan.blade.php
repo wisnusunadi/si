@@ -415,7 +415,7 @@
         0]);
         return parsedDate;
     }
-    $('.produk_select').select2();
+    $('.produk_select').select2({});
     $.ajax({
         type: "get",
         url: "/api/prd/product_his_rakit",
