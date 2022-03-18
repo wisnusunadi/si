@@ -527,13 +527,13 @@
 
         $(document).on('click', '#btnSave', function (e) {
             e.preventDefault();
-            // Swal.fire({
-            //             title: 'Please wait',
-            //             text: 'Data is transferring...',
-            //             allowOutsideClick: false,
-            //             showConfirmButton: false
-            //         });
-            // $(this).prop('disabled', true);
+            Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
+            $(this).prop('disabled', true);
             let arr = [];
             const data = scanProduk.$('.noseri').map(function () {
                 return $(this).val();
@@ -590,7 +590,7 @@
                                 text: res.msg,
                             }).then((result) => {
                                 if (result.value) {
-                                    // $('#btnSave').prop('disabled', false);
+                                    $('#btnSave').prop('disabled', false);
                                 }
                             });
                         } else {
@@ -611,23 +611,18 @@
                                     tgl_perakitan: datetime,
                                 },
                                 success: function (res) {
-                                    // if (arr.length == 5) {
-                                    //     console.log('semua');
-                                    // } else {
-                                    //     console.log('part');
-                                    // }
                                     console.log(res);
-                                    // Swal.fire({
-                                    //     icon: 'success',
-                                    //     title: 'Berhasil',
-                                    //     text: 'Data berhasil disimpan.',
-                                    // })
-                                    // $('.modalRakit').modal('hide');
-                                    // $('.scan-produk').DataTable().destroy();
-                                    // $('.scan-produk tbody').empty();
-                                    // $('#table_produk_perakitan').DataTable().ajax
-                                    //     .reload();
-                                    // location.reload();
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Berhasil',
+                                        text: 'Data berhasil disimpan.',
+                                    })
+                                    $('.modalRakit').modal('hide');
+                                    $('.scan-produk').DataTable().destroy();
+                                    $('.scan-produk tbody').empty();
+                                    $('#table_produk_perakitan').DataTable().ajax
+                                        .reload();
+                                    location.reload();
                                 }
                             })
                         }
@@ -692,7 +687,9 @@
         $(document).on('keydown','input.noseri',function(e){
             const a = $(this).val();
             const length = $('#lengthNoSeri').val();
-            if (a.length == length) {
+            if (e.keyCode == 8) {
+                // $(this).parent().parent().prev().find('input.noseri').focus();
+            }else if (a.length == length) {
                 $(this).parent().parent().next().find('input.noseri').focus();
             }
         });
