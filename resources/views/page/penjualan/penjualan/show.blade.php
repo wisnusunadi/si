@@ -536,6 +536,7 @@
                                                     <th>Customer</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
+                                                    <th>Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -1013,6 +1014,7 @@
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
             columns: [
+
                 {
                     data: 'DT_RowIndex',
                     className: 'nowrap-text align-center',
@@ -1033,12 +1035,18 @@
                 },
                 {
                     data: 'tgl_buat',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'tgl_edit',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'tgl_kontrak',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'nama_customer',
@@ -1048,8 +1056,18 @@
                 },
                 {
                     data: 'button',
+                    orderable: false,
+                    searchable: false
                 },
-            ]
+                {
+                    data: 'instansi',
+                },
+            ],
+            "columnDefs": [{
+                "visible": false,
+                "targets": [11]
+            }],
+
         });
 
         var spatable = $('#spatable').DataTable({
@@ -1080,7 +1098,9 @@
                     data: 'nopo'
                 },
                 {
-                    data: 'tglpo'
+                    data: 'tglpo',
+                     orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'nama_customer'
@@ -1089,7 +1109,9 @@
                     data: 'status'
                 },
                 {
-                    data: 'button'
+                    data: 'button',
+                    orderable: false,
+                    searchable: false
                 }
             ]
         });
@@ -1122,7 +1144,9 @@
                     data: 'nopo'
                 },
                 {
-                    data: 'tglpo'
+                    data: 'tglpo',
+                    orderable: false,
+                    searchable: false
                 },
                 {
                     data: 'nama_customer'
@@ -1131,9 +1155,12 @@
                     data: 'status'
                 },
                 {
-                    data: 'button'
+                    data: 'button',
+                    orderable: false,
+                    searchable: false
                 }
-            ]
+            ],
+
         });
     })
 </script>
