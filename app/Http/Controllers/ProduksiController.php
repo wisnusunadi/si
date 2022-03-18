@@ -2609,4 +2609,9 @@ class ProduksiController extends Controller
             })
             ->make(true);
     }
+
+    function h_pengiriman()
+    {
+        return JadwalPerakitan::whereNotNull('keterangan_transfer')->orWhereNotNull('keterangan')->get();
+    }
 }
