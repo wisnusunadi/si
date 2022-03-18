@@ -398,7 +398,7 @@
                     data: 'instansi',
                     className: "instansi",
                     orderable: false,
-                    searchable: false
+                    searchable: true
                 }, {
                     "className": 'dt-control',
                     "orderable": false,
