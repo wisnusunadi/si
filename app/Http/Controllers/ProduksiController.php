@@ -1713,7 +1713,7 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereNotIn('status', [6])->whereIn('status_tf', [11, 12, 13])->orderByDesc('created_at')->get();
+        $data = JadwalPerakitan::whereNotIn('status', [6])->whereIn('status_tf', [11, 12])->orderByDesc('created_at')->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -1945,12 +1945,15 @@ class ProduksiController extends Controller
 
                     $d = JadwalPerakitan::find($request->jadwal_id);
                     $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
+
                     if ($d->jumlah == $jj) {
+                        // return 'all';
                         $d->status_tf = 15;
                         $d->no_bppb = strtoupper($request->no_bppb);
                         $d->filled_by = $request->userid;
                         $d->save();
                     } else {
+                        // return 'part1';
                         $d->status_tf = 12;
                         $d->no_bppb = strtoupper($request->no_bppb);
                         $d->filled_by = $request->userid;
@@ -2087,25 +2090,24 @@ class ProduksiController extends Controller
         })->get()->count();
         $total_rakit = JadwalPerakitan::find($request->jadwal_id);
         $now = intval($total_rakit->jumlah - $sdh_terkirim);
-        if ($now == $total_rakit->jumlah) {
-            // return 'a';
+        if ($sdh_terkirim == $total_rakit->jumlah) {
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
+            $total_rakit->updated_at = Carbon::now();
             $total_rakit->save();
-        } elseif ($total_rakit->jumlah == $sdh_terkirim) {
-            // return 'b';
-            $total_rakit->status_tf = 14;
-            $total_rakit->filled_by = $request->userid;
-            $total_rakit->save();
-        } elseif ($sdh_terisi != $total_rakit->jumlah) {
-            $total_rakit->status_tf = 12;
-            $total_rakit->filled_by = $request->userid;
-            $total_rakit->save();
-        } else {
-            // return 'c';
-            $total_rakit->status_tf = 13;
-            $total_rakit->filled_by = $request->userid;
-            $total_rakit->save();
+        }
+        else {
+            if ($sdh_terisi == $total_rakit->jumlah) {
+                $total_rakit->status_tf = 13;
+                $total_rakit->filled_by = $request->userid;
+                $total_rakit->updated_at = Carbon::now();
+                $total_rakit->save();
+            } else {
+                $total_rakit->status_tf = 12;
+                $total_rakit->filled_by = $request->userid;
+                $total_rakit->updated_at = Carbon::now();
+                $total_rakit->save();
+            }
         }
 
         return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
