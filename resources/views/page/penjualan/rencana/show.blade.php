@@ -238,18 +238,18 @@
                                                 <tr>
                                                     <th rowspan="2">Instansi</th>
                                                     <th rowspan="2"></th>
-                                                    <th rowspan="2" class="borderright">Produk</th>
+                                                    <th rowspan="2" class="borderright"  width="30%">Produk</th>
                                                     <th colspan="4" class="borderright">Rencana</th>
                                                     {{-- <th colspan="4">Realisasi</th> --}}
                                                 </tr>
                                                 <tr>
-                                                    <th>Qty</th>
-                                                    <th width="15%">Harga</th>
+                                                    <th  width="10%">Qty</th>
+                                                    <th width="18%">Harga</th>
                                                     <th class="borderright">Subtotal</th>
                                                     {{-- <th>Qty</th>
                                                     <th>Harga</th>
                                                     <th>Subtotal</th> --}}
-                                                    <th>Aksi</th>
+                                                    <th width="10%">Aksi</th>
                                                 </tr>
                                             </thead>
                                             <tbody>
@@ -397,8 +397,7 @@
                 {
                     data: 'instansi',
                     className: "instansi",
-                    orderable: false,
-                    searchable: false
+
                 }, {
                     "className": 'dt-control',
                     "orderable": false,
@@ -406,21 +405,29 @@
                     "defaultContent": ''
                 }, {
                     data: 'produk',
-                    className: 'borderright va-mid nowraptxt',
+                    className: 'borderright va-mid  wrap',
                 }, {
                     data: 'jumlah',
-                    className: 'nowraptxt align-center tabnum va-mid jumlah'
+                    className: 'nowraptxt align-center tabnum va-mid jumlah',
+                    orderable: false,
+                    searchable: false
                 }, {
                     data: 'hargas',
                     className: 'nowraptxt align-right tabnum va-mid',
                     // render: $.fn.dataTable.render.number(',', '.', 2),
+                    orderable: false,
+                    searchable: false
                 }, {
                     data: 'sub',
                     className: 'nowraptxt align-right borderright tabnum va-mid',
+                    orderable: false,
+                    searchable: false
                     // render: $.fn.dataTable.render.number(',', '.', 2),
                 }, {
                     data: 'hapus',
                     className: 'nowraptxt align-center va-mid',
+                    orderable: false,
+                    searchable: false
                 }
             ],
             // createdRow: function( row, data, dataIndex ) {

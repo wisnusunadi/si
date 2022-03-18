@@ -35,6 +35,18 @@
             font-size: 12px;
         }
     }
+
+    .ui-widget-content.ui-autocomplete {
+            width: 350px;
+            max-height: 200px;
+            overflow-y: scroll;
+            overflow-x: hidden;
+        }
+        .ui-menu-item .ui-menu-item-wrapper.ui-state-active {
+            background: #366aca !important;
+            font-weight: bold !important;
+            color: #ffffff !important;
+        }
 </style>
 @endsection
 
@@ -437,7 +449,31 @@
             $(this).val(result);
             validasiall();
         });
+        var today = new Date();
+        var yyyy = today.getFullYear();
+        $("#nama_instansi").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        url: '/api/customer/get_instansi/' + $('#customer_id').val() + '/' + yyyy,
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
 
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el,
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
 
     })
 </script>
