@@ -2,6 +2,7 @@
 
 namespace App\Exports\Sheets;
 
+use App\Models\Pesanan;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananPart;
 use App\Models\DetailRencanaPenjualan;
@@ -17,7 +18,7 @@ use Maatwebsite\Excel\Concerns\WithStyles;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, WithColumnFormatting
+class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -55,133 +56,124 @@ class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
         $this->seri = $seri;
     }
 
-    public function columnFormats(): array
-    {
-        return [
-            'O' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
-            'P' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
-            'Q' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
-            'R' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
-            'K' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
-            'L' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
-            'M' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
-        ];
-    }
+    // public function columnFormats(): array
+    // {
+    //     return [
+    //         'O' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+    //         'P' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+    //         'Q' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+    //         'R' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+    //         'K' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+    //         'L' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+    //         'M' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+    //     ];
+    // }
 
-    public function styles(Worksheet $sheet)
-    {
-        // return [
+    //public function styles(Worksheet $sheet)
+    // {
+    // return [
 
-        //     1    => ['font' => ['bold' => true, 'size' => 16]],
+    //     1    => ['font' => ['bold' => true, 'size' => 16]],
 
-        // ];
-        $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
-        $sheet->getStyle('A2:u2')->getFont()->setBold(true);
+    // ];
+    //ff
+    // $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
+    // $sheet->getStyle('A2:u2')->getFont()->setBold(true);
 
-        $sheet->getStyle('b2:f2')->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('51adb9');
-        $sheet->getStyle('f2:g2')->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('51adb9');
-        $sheet->getStyle('m2:r2')->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('89d0b4');
-        $sheet->getStyle('g2:j2')->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('00ff7f');
-        $sheet->getStyle('a2')->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('00ff7f');
-        $sheet->getStyle('k2:l2')->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('00b359');
-        $sheet->getStyle('s2:u2')->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('f99c83');
-    }
+    // $sheet->getStyle('b2:f2')->getFill()
+    //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+    //     ->getStartColor()->setRGB('51adb9');
+    // $sheet->getStyle('f2:g2')->getFill()
+    //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+    //     ->getStartColor()->setRGB('51adb9');
+    // $sheet->getStyle('m2:r2')->getFill()
+    //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+    //     ->getStartColor()->setRGB('89d0b4');
+    // $sheet->getStyle('g2:j2')->getFill()
+    //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+    //     ->getStartColor()->setRGB('00ff7f');
+    // $sheet->getStyle('a2')->getFill()
+    //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+    //     ->getStartColor()->setRGB('00ff7f');
+    // $sheet->getStyle('k2:l2')->getFill()
+    //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+    //     ->getStartColor()->setRGB('00b359');
+    // $sheet->getStyle('s2:u2')->getFill()
+    //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+    //     ->getStartColor()->setRGB('f99c83');
+    //}
 
     public function view(): View
     {
-        $seri = $this->seri;
+        // $seri = $this->seri;
         $dsb = $this->distributor;
         $tanggal_awal = $this->tgl_awal;
         $tanggal_akhir = $this->tgl_akhir;
         $x = explode(',', $this->jenis_penjualan);
 
-
         if ($dsb == 'semua') {
-            $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-            })->orderBy('pesanan_id', 'ASC')->get();
-            $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-            })->orderBy('pesanan_id', 'ASC')->get();
-            $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-            })->orderBy('pesanan_id', 'ASC')->get();
-            $Part_Spa  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-            })->orderBy('pesanan_id', 'ASC')->get();
-            $Part_Spb  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-            })->orderBy('pesanan_id', 'ASC')->get();
+            if ($x == ['ekatalog', 'spa', 'spb']) {
+                $data = Pesanan::wherenotnull('no_po')
+                    ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    ->orderby('so', 'ASC')
+                    ->get();
+                $header = 'Laporan Penjualan Semua';
+            } else if ($x == ['ekatalog', 'spa']) {
+                $data = Pesanan::wherenotnull('no_po')->with('Spa', 'Ekatalog')
+                    ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    ->orderby('so', 'ASC')
+                    ->get();
+                $header = 'Laporan Penjualan Ekatalog dan SPA';
+            } else if ($x == ['ekatalog', 'spb']) {
+
+                $header = 'Laporan Penjualan Ekatalog dan SPB';
+            } else if ($x == ['spa', 'spb']) {
+
+                $header = 'Laporan Penjualan SPA dan SPB';
+            } else if ($this->jenis_penjualan == 'ekatalog') {
+
+                $header = 'Laporan Penjualan Ekatalog ';
+            } else if ($this->jenis_penjualan == 'spa') {
+
+                $header = 'Laporan Penjualan SPA';
+            } else if ($this->jenis_penjualan == 'spb') {
+
+                $header = 'Laporan Penjualan SPB';
+            }
         } else {
-            $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
-                $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                    ->where('customer_id', $dsb);
-            })->orderBy('pesanan_id', 'ASC')->get();
-            $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
-                $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                    ->where('customer_id', $dsb);
-            })->orderBy('pesanan_id', 'ASC')->get();
-            $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
-                $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                    ->where('customer_id', $dsb);
-            })->orderBy('pesanan_id', 'ASC')->get();
-            $Part_Spa  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
-                $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                    ->where('customer_id', $dsb);
-            })->orderBy('pesanan_id', 'ASC')->get();
-            $Part_Spb  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
-                $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                    ->where('customer_id', $dsb);
-            })->orderBy('pesanan_id', 'ASC')->get();
+            if ($x == ['ekatalog', 'spa', 'spb']) {
+                $header = 'Laporan Penjualan Semua';
+            } else if ($x == ['ekatalog', 'spa']) {
+
+                $header = 'Laporan Penjualan Ekatalog dan SPA';
+            } else if ($x == ['ekatalog', 'spb']) {
+
+                $header = 'Laporan Penjualan Ekatalog dan SPB';
+            } else if ($x == ['spa', 'spb']) {
+
+                $header = 'Laporan Penjualan SPA dan SPB';
+            } else if ($this->jenis_penjualan == 'ekatalog') {
+
+                $header = 'Laporan Penjualan Ekatalog ';
+            } else if ($this->jenis_penjualan == 'spa') {
+
+                $header = 'Laporan Penjualan SPA';
+            } else if ($this->jenis_penjualan == 'spb') {
+                $header =
+                    $header = 'Laporan Penjualan SPB';
+            }
         }
 
-
-        if ($x == ['ekatalog', 'spa', 'spb']) {
-            $prd = $Ekatalog->merge($Spa)->merge($Spb);
-            $part = $Part_Spa->merge($Part_Spb);
-            $data = $prd->merge($part);
-            $header = 'Laporan Penjualan Semua';
-        } else if ($x == ['ekatalog', 'spa']) {
-            $prd = $Ekatalog->merge($Spa);
-            $data = $prd->merge($Part_Spa);
-            $header = 'Laporan Penjualan Ekatalog dan SPA';
-        } else if ($x == ['ekatalog', 'spb']) {
-            $prd = $Ekatalog->merge($Spb);
-            $data = $prd->merge($Part_Spb);
-            $header = 'Laporan Penjualan Ekatalog dan SPB';
-        } else if ($x == ['spa', 'spb']) {
-            $prd = $Spa->merge($Spb);
-            $part = $Part_Spa->merge($Part_Spb);
-            $data = $prd->merge($part);
-            $header = 'Laporan Penjualan SPA dan SPB';
-        } else if ($this->jenis_penjualan == 'ekatalog') {
-            $data = $Ekatalog;
-            $header = 'Laporan Penjualan Ekatalog ';
-        } else if ($this->jenis_penjualan == 'spa') {
-            $data = $Spa->merge($Part_Spa);
-            $header = 'Laporan Penjualan SPA';
-        } else if ($this->jenis_penjualan == 'spb') {
-            $data = $Spb->merge($Part_Spb);
-            $header = 'Laporan Penjualan SPB';
-        }
+        // $data = Pesanan::wherenotnull('no_po')
+        //     ->whereHas('Spa', function ($q) {
+        //         $q->where('customer_id', 49);
+        //     })
+        //     ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+        //     ->orderby('so', 'ASC')
+        //     ->get();
 
 
-
-        return view('page.penjualan.penjualan.LaporanPenjualanEx', ['data' => $data, 'header' => $header, 'seri' => $seri]);
+        return view('page.penjualan.penjualan.LaporanPenjualanEx', ['data' => $data]);
     }
     public function title(): string
     {

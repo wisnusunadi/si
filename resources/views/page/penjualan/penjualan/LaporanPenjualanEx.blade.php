@@ -1,9 +1,13 @@
-@if($seri == 'kosong')
+<style>
+.va {
+  vertical-align: bottom;
+}
+</style>
 <table border="1">
     <thead>
         <tr>
-            <th colspan="17" style="text-align:center">
-                {{$header}}
+            <th  style="text-align:center">
+
             </th>
         </tr>
         <tr>
@@ -31,119 +35,142 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($data as $d)
+        @foreach ($data as $index => $d)
+        <?php
+        $cPrd = $d->DetailPesanan->count();
+        $cPart = $d->DetailPesananPart->count();
+        $tot = $cPrd + $cPart;
+        ?>
         <tr>
-            <td style="text-align:left">{{ $loop->iteration }}</td>
-            <td style="text-align:left">{{$d->Pesanan->so}}</td>
-            <td style="text-align:left">{{$d->Pesanan->no_po}}</td>
-            <td style="text-align:left">
-                {{$d->Pesanan->tgl_po}}
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                {{$index + 1}}
             </td>
-            <td style="text-align:left">
-                @if(isset($d->PenjualanProduk))
-
-                @if($d->getJumlahProduk() > 1)
-
-                @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
-                @foreach( $p->DetailLogistik as $q)
-                {{$q->Logistik->nosurat}}
-                @endforeach
-                @endforeach
-
-                @else
-                @foreach($d->DetailPesananProduk as $p)
-                @foreach( $p->DetailLogistik as $q)
-                {{$q->Logistik->nosurat}}
-                @endforeach
-                @endforeach
-                @endif
-
-                @else
-
-                @if(isset($d->DetailLogistikPart->Logistik))
-                {{$d->DetailLogistikPart->Logistik->nosurat}}
-                @endif
-
-                @endif
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                {{$d->so}}
             </td>
-            <td style="text-align:left">
-                @if(isset($d->PenjualanProduk))
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                {{$d->no_po}}
+            </td>
 
-                @if($d->getJumlahProduk() > 1)
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                {{$d->tgl_po}}
+            </td>
 
-                @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                @if(count($d->DetailPesanan) > 0)
+                    @if($d->DetailPesanan[0]->getJumlahProduk() > 1)
+
+                    @foreach($d->DetailPesanan[0]->DetailPesananProduk->unique('detail_pesanan_id') as $p)
+                    @foreach( $p->DetailLogistik as $q)
+                    {{$q->Logistik->nosurat}}
+                    @endforeach
+                    @endforeach
+
+
+                    @else
+
+                    @foreach($d->DetailPesanan[0]->DetailPesananProduk as $p)
+                    @foreach( $p->DetailLogistik as $q)
+                    {{$q->Logistik->nosurat}}
+                    @endforeach
+                    @endforeach
+
+
+                    @endif
+            @else
+                @if(isset($d->DetailPesananPart[0]->DetailLogistikPart->Logistik))
+                {{$d->DetailPesananPart[0]->DetailLogistikPart->Logistik->nosurat}}
+                @endif
+            @endif
+
+            </td>
+
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                @if(count($d->DetailPesanan) > 0)
+                @if($d->DetailPesanan[0]->getJumlahProduk() > 1)
+
+                @foreach($d->DetailPesanan[0]->DetailPesananProduk->unique('detail_pesanan_id') as $p)
                 @foreach( $p->DetailLogistik as $q)
                 {{$q->Logistik->tgl_kirim}}
                 @endforeach
                 @endforeach
 
+
                 @else
-                @foreach($d->DetailPesananProduk as $p)
+
+                @foreach($d->DetailPesanan[0]->DetailPesananProduk as $p)
                 @foreach( $p->DetailLogistik as $q)
                 {{$q->Logistik->tgl_kirim}}
                 @endforeach
                 @endforeach
+
+
                 @endif
+        @else
+            @if(isset($d->DetailPesananPart[0]->DetailLogistikPart->Logistik))
+            {{$d->DetailPesananPart[0]->DetailLogistikPart->Logistik->tgl_kirim}}
+            @endif
+        @endif
+            </td>
+
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                        @if(isset($d->Ekatalog))
+                        {{$d->Ekatalog->no_paket}}
+                        @endif
+            </td>
+
+
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                        @if(isset($d->Ekatalog))
+                        {{$d->Ekatalog->Customer->nama}}
+                        @elseif(isset($d->Spa))
+                        {{$d->Spa->Customer->nama}}
+                        @elseif(isset($d->Spb))
+                        {{$d->Spb->Customer->nama}}
+                        @endif
+            </td>
+
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                        @if(isset($d->Ekatalog))
+                        {{$d->Ekatalog->instansi}}
+                        @endif
+            </td>
+
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                        @if(isset($d->Ekatalog))
+                        {{$d->Ekatalog->satuan}}
+                        @endif
+            </td>
+
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                        @if(isset($d->Ekatalog))
+                        {{$d->Ekatalog->tgl_buat}}
+                        @endif
+            </td>
+
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                        @if(isset($d->Ekatalog))
+                        {{$d->Ekatalog->tgl_kontrak}}
+                        @endif
+            </td>
+
+            <td>
+                @if(count($d->DetailPesanan) > 0)
+
+                    @if($d->DetailPesanan[0]->PenjualanProduk->nama_alias != '')
+                    {{ $d->DetailPesanan[0]->PenjualanProduk->nama_alias }}
+                    @else
+                    {{ $d->DetailPesanan[0]->PenjualanProduk->nama }}
+                    @endif
 
                 @else
+                {{ $d->DetailPesananPart[0]->Sparepart->nama}}
+                @endif
+            </td>
+            <td>
+                @if(count($d->DetailPesanan) > 0)
 
-                @if(isset($d->DetailLogistikPart->Logistik))
-                {{$d->DetailLogistikPart->Logistik->tgl_kirim}}
-                @endif
-
-                @endif
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->Pesanan->Ekatalog))
-                {{$d->Pesanan->Ekatalog->no_paket}}
-                @endif
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->Pesanan->Ekatalog))
-                {{$d->Pesanan->Ekatalog->Customer->nama}}
-                @elseif(isset($d->Pesanan->Spa))
-                {{$d->Pesanan->Spa->Customer->nama}}
-                @else
-                {{$d->Pesanan->Spb->Customer->nama}}
-                @endif
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->Pesanan->Ekatalog))
-                {{$d->Pesanan->Ekatalog->instansi}}
-                @endif
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->Pesanan->Ekatalog))
-                {{$d->Pesanan->Ekatalog->satuan}}
-                @endif
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->Pesanan->Ekatalog))
-                {{$d->Pesanan->Ekatalog->tgl_buat}}
-                @endif
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->Pesanan->Ekatalog))
-                {{$d->Pesanan->Ekatalog->tgl_kontrak}}
-                @endif
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->PenjualanProduk))
-
-                @if($d->PenjualanProduk->nama_alias != '')
-                {{$d->PenjualanProduk->nama_alias}}
-                @else
-                {{$d->PenjualanProduk->nama}}
-                @endif
-
-                @else
-                {{$d->Sparepart->nama}}
-                @endif
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->PenjualanProduk))
-
-                @foreach($d->DetailPesananProduk as $p)
+                @foreach($d->DetailPesanan[0]->DetailPesananProduk as $p)
                 {{ $p->gudangbarangjadi->produk->nama}}
 
                 @if ($p->gudangbarangjadi->nama != '')
@@ -156,184 +183,111 @@
 
                 @endforeach
 
+
+                @endif
+            </td>
+            <td>
+                @if(count($d->DetailPesanan) > 0)
+                {{ $d->DetailPesanan[0]->jumlah}}
                 @else
-                {{$d->Sparepart->nama}}
+                {{ $d->DetailPesananPart[0]->jumlah}}
                 @endif
             </td>
-            <td style="text-align:left">
-                {{$d->jumlah}}
-            </td>
-            <td style="text-align:left">{{$d->harga}}</td>
-            <td style="text-align:left">{{$d->ongkir}}</td>
-            <td style="text-align:left">{{($d->jumlah * $d->harga) + $d->total}}</td>
-            <td style="text-align:left">{{$d->pesanan->state->nama}}</td>
-            <td style="text-align:left">
-                @if(isset($d->Pesanan->Ekatalog))
-                {{$d->Pesanan->Ekatalog->status}}
+            <td>
+                @if(count($d->DetailPesanan) > 0)
+                {{ $d->DetailPesanan[0]->harga}}
+                @else
+                {{ $d->DetailPesananPart[0]->harga}}
                 @endif
             </td>
-            <td style="text-align:left">{{$d->Pesanan->ket}}</td>
+            <td>
+                @if(count($d->DetailPesanan) > 0)
+                {{ $d->DetailPesanan[0]->ongkir}}
+                @else
+                {{ $d->DetailPesananPart[0]->ongkir}}
+                @endif
+            </td>
+            <td>
+                @if(count($d->DetailPesanan) > 0)
+                {{ $d->DetailPesanan[0]->harga *  $d->DetailPesanan[0]->jumlah}}
+                @else
+                {{ $d->DetailPesananPart[0]->harga *  $d->DetailPesananPart[0]->jumlah}}
+                @endif
+            </td>
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                {{$d->state->nama}}
+            </td>
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                @if(isset($d->Ekatalog))
+                {{$d->Ekatalog->status}}
+                @endif
+            </td>
+            <td rowspan="{{$tot}}" style="vertical-align: center;">
+                {{$d->ket}}
+            </td>
+
         </tr>
-        @endforeach
-    </tbody>
-</table>
-@else
-<table border="1">
-    <thead>
-        <tr>
-            <th colspan="13" style="text-align:center">
-                {{$header}}
-            </th>
-        </tr>
-        <tr>
-            <th>No</th>
-            <th>No PO</th>
-            <th>Tanggal PO</th>
-            <th>Surat Jalan</th>
-            <th>Tgl Surat Jalan</th>
-            <th>No AKN</th>
-            <th>Customer / Distributor</th>
-            <th>Produk</th>
-            <th>Jumlah</th>
-            <th>Seri</th>
-            <th>Harga</th>
-            <th>Ongkir</th>
-            <th>Subtotal</th>
-            <th>Status Penjualan</th>
-            <th>Status AKN</th>
-            <th>Keterangan</th>
-        </tr>
-    </thead>
-    <tbody>
-        @foreach ($data as $d)
-        <tr>
-            <td style="text-align:left">{{ $loop->iteration }}</td>
 
-            <td style="text-align:left">{{$d->Pesanan->no_po}}</td>
-            <td style="text-align:left">
-                {{$d->Pesanan->tgl_po}}
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->PenjualanProduk))
+        {{-- Rowspan --}}
+        @if(count($d->DetailPesanan) > 0)
+             @for($i=1;$i<$d->DetailPesanan->count();$i++)
+             <tr>
+                <td>
+                    @if($d->DetailPesanan[$i]->PenjualanProduk->nama_alias != '')
+                    {{ $d->DetailPesanan[$i]->PenjualanProduk->nama_alias }}
+                    @else
+                    {{ $d->DetailPesanan[$i]->PenjualanProduk->nama }}
+                    @endif
+                </td>
+                <td>
+                    @foreach($d->DetailPesanan[$i]->DetailPesananProduk as $p)
+                {{ $p->gudangbarangjadi->produk->nama}}
 
-                @if($d->getJumlahProduk() > 1)
-
-                @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
-                @foreach( $p->DetailLogistik as $q)
-                {{$q->Logistik->nosurat}}
-                @endforeach
-                @endforeach
-
-                @else
-                @foreach($d->DetailPesananProduk as $p)
-                @foreach( $p->DetailLogistik as $q)
-                {{$q->Logistik->nosurat}}
-                @endforeach
-                @endforeach
+                @if ($p->gudangbarangjadi->nama != '')
+                {{ $p->gudangbarangjadi->nama}}
                 @endif
 
-                @else
-
-                @if(isset($d->DetailLogistikPart->Logistik))
-                {{$d->DetailLogistikPart->Logistik->nosurat}}
-                @endif
-
-                @endif
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->PenjualanProduk))
-
-                @if($d->getJumlahProduk() > 1)
-
-                @foreach($d->DetailPesananProduk->unique('detail_pesanan_id') as $p)
-                @foreach( $p->DetailLogistik as $q)
-                {{$q->Logistik->tgl_kirim}}
-                @endforeach
-                @endforeach
-
-                @else
-                @foreach($d->DetailPesananProduk as $p)
-                @foreach( $p->DetailLogistik as $q)
-                {{$q->Logistik->tgl_kirim}}
-                @endforeach
-                @endforeach
-                @endif
-
-                @else
-
-                @if(isset($d->DetailLogistikPart->Logistik))
-                {{$d->DetailLogistikPart->Logistik->tgl_kirim}}
-                @endif
-
-                @endif
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->Pesanan->Ekatalog))
-                {{$d->Pesanan->Ekatalog->no_paket}}
-                @endif
-            </td>
-            <td style="text-align:left">
-                @if(isset($d->Pesanan->Ekatalog))
-                {{$d->Pesanan->Ekatalog->Customer->nama}}
-                @elseif(isset($d->Pesanan->Spa))
-                {{$d->Pesanan->Spa->Customer->nama}}
-                @else
-                {{$d->Pesanan->Spb->Customer->nama}}
-                @endif
-            </td>
-
-
-
-            <td style="text-align:left">
-                @if(isset($d->PenjualanProduk))
-
-                @if($d->PenjualanProduk->nama_alias != '')
-                {{$d->PenjualanProduk->nama_alias}}
-                @else
-                {{$d->PenjualanProduk->nama}}
-                @endif
-
-                @else
-                {{$d->Sparepart->nama}}
-                @endif
-            </td>
-
-            <td style="text-align:left">
-                {{$d->jumlah}}
-            </td>
-
-            <td style="text-align:left">
-                @if(isset($d->PenjualanProduk))
-                    @foreach($d->DetailPesananProduk as $p)
-                    @foreach ( $p->NoseriDetailPesanan as $n )
-                        {{$n->NoseriTGbj->NoseriBarangJadi->noseri}}
-                            @if( !$loop->last)
+                @if( !$loop->last)
                 ,
                 @endif
-                    @endforeach
-                    @if( !$loop->last)
-                    ,
-                    @endif
+
                 @endforeach
-                @endif
+                </td>
+                <td>
+                    {{ $d->DetailPesanan[$i]->jumlah}}
+                </td>
+                <td>
+                    {{ $d->DetailPesanan[$i]->harga}}
+                </td>
+                <td>
+                    {{ $d->DetailPesanan[$i]->ongkir}}
+                </td>
+                <td>
+                    {{ $d->DetailPesanan[$i]->harga *  $d->DetailPesanan[$i]->jumlah }}
+                </td>
+             </tr>
+             @endfor
+        @else
+            @for($i=1;$i<$d->DetailPesananPart->count();$i++)
+            <tr>
+              <td> {{ $d->DetailPesananPart[$i]->Sparepart->nama }}</td>
+              <td></td>
+              <td>
+                {{ $d->DetailPesananPart[$i]->jumlah}}
             </td>
-            <td style="text-align:left">{{$d->harga}}</td>
-            <td style="text-align:left">{{$d->ongkir}}</td>
-            <td style="text-align:left">{{($d->jumlah * $d->harga) + $d->total}}</td>
-            <td style="text-align:left">{{$d->pesanan->state->nama}}</td>
-            <td style="text-align:left">
-                @if(isset($d->Pesanan->Ekatalog))
-                {{$d->Pesanan->Ekatalog->status}}
-                @endif
+              <td>
+                {{ $d->DetailPesananPart[$i]->harga}}
             </td>
-            <td style="text-align:left">{{$d->Pesanan->ket}}</td>
-        </tr>
+              <td>
+                {{ $d->DetailPesananPart[$i]->ongkir}}
+            </td>
+              <td>
+                {{ $d->DetailPesananPart[$i]->harga *  $d->DetailPesananPart[$i]->jumlah }}
+            </td>
+            </tr>
+            @endfor
+        @endif
         @endforeach
     </tbody>
-@endif
-
-
-
-
 
 
