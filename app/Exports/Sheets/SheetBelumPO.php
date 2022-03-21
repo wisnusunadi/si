@@ -14,6 +14,7 @@ use Maatwebsite\Excel\Concerns\FromView;
 use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStyles;
+use App\Models\Pesanan;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
@@ -74,22 +75,34 @@ class SheetBelumPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
     public function view(): View
     {
         $dsb = $this->distributor;
-        $tanggal_awal = $this->tgl_awal;
-        $tanggal_akhir = $this->tgl_akhir;
         $x = explode(',', $this->jenis_penjualan);
 
 
         if ($dsb == 'semua') {
-            $ekatalog = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) {
-                $q->whereNUll('no_po')
-                    ->wherenotIN('status', ['batal']);
-            })->get();
+            $ekatalog = Pesanan::whereHas('Ekatalog', function ($q) {
+                $q->wherenotIN('status', ['batal']);
+            })->wherenull('no_po')
+                ->orderby('so', 'ASC')
+                ->get();
+
+
+            // $ekatalog = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) {
+            //     $q->whereNUll('no_po')
+            //         ->wherenotIN('status', ['batal']);
+            // })->get();
         } else {
-            $ekatalog = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($dsb) {
-                $q->whereNUll('no_po')
-                    ->where('customer_id', $dsb)
-                    ->wherenotIN('status', ['batal']);
-            })->get();
+            $ekatalog = Pesanan::whereHas('Ekatalog', function ($q) use ($dsb) {
+                $q->wherenotIN('status', ['batal'])
+                    ->where('customer_id', $dsb);
+            })->wherenull('no_po')
+                ->orderby('so', 'ASC')
+                ->get();
+
+            // $ekatalog = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($dsb) {
+            //     $q->whereNUll('no_po')
+            //         ->where('customer_id', $dsb)
+            //         ->wherenotIN('status', ['batal']);
+            // })->get();
         }
 
 
