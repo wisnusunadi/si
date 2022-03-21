@@ -598,7 +598,7 @@
                             let today = new Date();
                             let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                             let datetime = tgl + ' ' + time;
-                            console.log('a');
+                            // console.log('a');
                             $.ajax({
                                 url: "/api/prd/rakit-seri",
                                 type: "post",
@@ -687,7 +687,9 @@
         $(document).on('keydown','input.noseri',function(e){
             const a = $(this).val();
             const length = $('#lengthNoSeri').val();
-            if (a.length == length) {
+            if (e.keyCode == 8) {
+                // $(this).parent().parent().prev().find('input.noseri').focus();
+            }else if (a.length == length) {
                 $(this).parent().parent().next().find('input.noseri').focus();
             }
         });
