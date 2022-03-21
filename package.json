@@ -13,7 +13,7 @@
     "devDependencies": {
         "axios": "^0.21",
         "bootstrap": "^4.6.1",
-        "browser-sync": "^2.27.7",
+        "browser-sync": "^2.27.9",
         "browser-sync-webpack-plugin": "^2.3.0",
         "jquery": "^3.6",
         "jsdoc": "^3.6.7",
@@ -64,6 +64,7 @@
         "vue-apexcharts": "^1.6.2",
         "vue-bulma-table": "^1.6.3",
         "vue-select": "^3.15.1",
-        "vue-sweetalert2": "^5.0.2"
+        "vue-sweetalert2": "^5.0.2",
+        "vue-time-date-range-picker": "^1.5.1"
     }
 }

@@ -1,4 +1,5 @@
 @extends('adminlte.page')
+@section('title', 'ERP')
 
 @section('content')
 <div id="app">
