@@ -1713,7 +1713,7 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereNotIn('status', [6])->whereIn('status_tf', [11, 12, 13])->orderByDesc('created_at')->get();
+        $data = JadwalPerakitan::whereNotIn('status', [6])->whereIn('status_tf', [11, 12])->orderByDesc('created_at')->get();
         $res = datatables()->of($data)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -1945,12 +1945,15 @@ class ProduksiController extends Controller
 
                     $d = JadwalPerakitan::find($request->jadwal_id);
                     $jj = JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->get()->count();
+
                     if ($d->jumlah == $jj) {
+                        // return 'all';
                         $d->status_tf = 15;
                         $d->no_bppb = strtoupper($request->no_bppb);
                         $d->filled_by = $request->userid;
                         $d->save();
                     } else {
+                        // return 'part1';
                         $d->status_tf = 12;
                         $d->no_bppb = strtoupper($request->no_bppb);
                         $d->filled_by = $request->userid;
@@ -1993,11 +1996,14 @@ class ProduksiController extends Controller
         ]);
     }
 
-    function historySeri($id, $dd, $rakit)
+    function historySeri($id, $dd)
     {
         $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
             $q->where('produk_id', $id);
-        })->whereRaw("date_format(waktu_tf, '%Y-%m-%d %H:%i') = ?", [$dd])->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])->get();
+        })
+        ->whereRaw("date_format(waktu_tf, '%Y-%m-%d %H:%i') = ?", [$dd])
+        // ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])
+        ->get();
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
@@ -2084,25 +2090,24 @@ class ProduksiController extends Controller
         })->get()->count();
         $total_rakit = JadwalPerakitan::find($request->jadwal_id);
         $now = intval($total_rakit->jumlah - $sdh_terkirim);
-        if ($now == $total_rakit->jumlah) {
-            // return 'a';
+        if ($sdh_terkirim == $total_rakit->jumlah) {
             $total_rakit->status_tf = 14;
             $total_rakit->filled_by = $request->userid;
+            $total_rakit->updated_at = Carbon::now();
             $total_rakit->save();
-        } elseif ($total_rakit->jumlah == $sdh_terkirim) {
-            // return 'b';
-            $total_rakit->status_tf = 14;
-            $total_rakit->filled_by = $request->userid;
-            $total_rakit->save();
-        } elseif ($sdh_terisi != $total_rakit->jumlah) {
-            $total_rakit->status_tf = 12;
-            $total_rakit->filled_by = $request->userid;
-            $total_rakit->save();
-        } else {
-            // return 'c';
-            $total_rakit->status_tf = 13;
-            $total_rakit->filled_by = $request->userid;
-            $total_rakit->save();
+        }
+        else {
+            if ($sdh_terisi == $total_rakit->jumlah) {
+                $total_rakit->status_tf = 13;
+                $total_rakit->filled_by = $request->userid;
+                $total_rakit->updated_at = Carbon::now();
+                $total_rakit->save();
+            } else {
+                $total_rakit->status_tf = 12;
+                $total_rakit->filled_by = $request->userid;
+                $total_rakit->updated_at = Carbon::now();
+                $total_rakit->save();
+            }
         }
 
         return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
@@ -2197,7 +2202,7 @@ class ProduksiController extends Controller
         $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'), 'jadwal_perakitan.no_bppb')
             ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
             ->groupBy('jadwal_rakit_noseri.jadwal_id')
-            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
+            // ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
             ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
             ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
             ->get()->sortByDesc('date_in');
@@ -2260,7 +2265,7 @@ class ProduksiController extends Controller
         $produk = [];
         foreach ($d as $item) {
             $a = GudangBarangJadi::find($item->produk_id);
-            array_push($produk, $a->produk->nama);
+            array_push($produk, $a->produk->nama.' '.$a->nama);
         }
         $data = array_unique($produk);
         return response()->json($data);
