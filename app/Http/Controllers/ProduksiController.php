@@ -438,9 +438,9 @@ class ProduksiController extends Controller
 
     function getSOCek()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10])->get());
-        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
-        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10, 20])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10, 20])->Has('DetailPesanan')->get());
+        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10, 20])->Has('DetailPesanan')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
@@ -581,9 +581,9 @@ class ProduksiController extends Controller
 
     function getOutSO()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10])->get());
-        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10])->get());
-        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10])->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10, 20])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10, 20])->get());
+        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10, 20])->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
