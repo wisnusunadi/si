@@ -8,6 +8,7 @@
         <tr>
             <th>No</th>
             <th>No AKN</th>
+            <th>No Urut</th>
             <th>Customer / Distributor</th>
             <th>Instansi</th>
             <th>Satuan</th>
@@ -25,36 +26,233 @@
         </tr>
     </thead>
     <tbody>
-        @foreach ($data as $index => $d )
+        @foreach ($data as $index => $d)
+        <?php $countsoprd = 0; $countsopart = 0;
+        if(isset($d->DetailPesanan))
+        {
+            $countsoprd = $d->DetailPesanan->count();
+        }
+        if(isset($d->DetailPesananPart))
+        {
+            $countsopart = $d->DetailPesananPart->count();
+        }
+        $rowspan = $countsoprd + $countsopart;
+        ?>
+        <?php $countprd = 0; ?>
+        <tr>
+            <td rowspan="{{$rowspan}}">{{$index + 1}}</td>
+            <td rowspan="{{$rowspan}}">
+            @if($d->Ekatalog)
+            {{$d->Ekatalog->no_paket}}
+            @else
+            -
+            @endif
+            </td>
+            <td rowspan="{{$rowspan}}">
+                @if($d->Ekatalog)
+                {{$d->Ekatalog->no_urut}}
+                @else
+                -
+                @endif
+            </td>
+            <td rowspan="{{$rowspan}}">
+                @if($d->Ekatalog)
+                {{$d->Ekatalog->Customer->nama}}
+                @elseif($d->Spa)
+                {{$d->Spa->Customer->nama}}
+                @elseif($d->Spb)
+                {{$d->Spb->Customer->nama}}
+                @endif
+            </td>
+            <td rowspan="{{$rowspan}}">
+                @if($d->Ekatalog)
+                {{$d->Ekatalog->instansi}}
+                @else
+                -
+                @endif
+            </td>
+            <td rowspan="{{$rowspan}}">
+                @if($d->Ekatalog)
+                {{$d->Ekatalog->satuan}}
+                @else
+                -
+                @endif
+            </td>
+            <td rowspan="{{$rowspan}}">
+                @if($d->Ekatalog)
+                {{ date('d-m-Y', strtotime($d->Ekatalog->tgl_buat)) }}
+                @else
+                -
+                @endif
+            </td>
+            <td rowspan="{{$rowspan}}">
+                @if($d->Ekatalog)
+                {{ date('d-m-Y', strtotime($d->Ekatalog->tgl_kontrak)) }}
+                @else
+                -
+                @endif
+            </td>
+
+            @if(isset($d->DetailPesanan))
+                @foreach ($d->DetailPesanan as $e)
+                @if($countprd <= 0)
+                <td>-</td>
+                <td>{{$e->PenjualanProduk->nama}}</td>
+                <td>{{$e->jumlah}}</td>
+                <td>{{$e->harga}}</td>
+                <td>{{$e->ongkir}}</td>
+                <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
+                <td rowspan="{{$rowspan}}">
+                    {{$d->State->nama}}
+                </td>
+                <td rowspan="{{$rowspan}}">
+                    @if($d->Ekatalog)
+                    {{$d->Ekatalog->status}}
+                    @else
+                    -
+                    @endif
+                </td>
+                <td rowspan="{{$rowspan}}">
+                    @if($d->Ekatalog)
+                    {{$d->Ekatalog->ket}}
+                    @elseif($d->Spa)
+                    {{$d->Spa->ket}}
+                    @elseif($d->Spb)
+                    {{$d->Spb->ket}}
+                    @endif</td>
+                @else
+                <tr>
+                    <td>-</td>
+                    <td>{{$e->PenjualanProduk->nama}}</td>
+                    <td>{{$e->jumlah}}</td>
+                    <td>{{$e->harga}}</td>
+                    <td>{{$e->ongkir}}</td>
+                    <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
+
+                @endif
+            </tr>
+                <?php $countprd++ ?>
+                @endforeach
+            @endif
+            @if(isset($d->DetailPesananPart))
+                @foreach ($d->DetailPesananPart as $e)
+                @if($countprd <= 0)
+                <td>-</td>
+                <td>{{$e->Sparepart->nama}}</td>
+                <td>{{$e->jumlah}}</td>
+                <td>{{$e->harga}}</td>
+                <td>{{$e->ongkir}}</td>
+                <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
+                <td rowspan="{{$rowspan}}">
+                    {{$d->State->nama}}
+                </td>
+                <td rowspan="{{$rowspan}}">
+                    @if($d->Ekatalog)
+                    {{$d->Ekatalog->status}}
+                    @else
+                    -
+                    @endif
+                </td>
+                <td rowspan="{{$rowspan}}">
+                    @if($d->Ekatalog)
+                    {{$d->Ekatalog->ket}}
+                    @elseif($d->Spa)
+                    {{$d->Spa->ket}}
+                    @elseif($d->Spb)
+                    {{$d->Spb->ket}}
+                    @endif</td>
+                @else
+                <tr>
+                    <td>-</td>
+                    <td>{{$e->Sparepart->nama}}</td>
+                    <td>{{$e->jumlah}}</td>
+                    <td>{{$e->harga}}</td>
+                    <td>{{$e->ongkir}}</td>
+                    <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
+
+                @endif
+            </tr>
+                <?php $countprd++ ?>
+                @endforeach
+            @endif
+
+            @if(!isset($d->DetailPesanan) && !isset($d->DetailPesananPart))
+                <td rowspan="{{$rowspan}}">-</td>
+                <td rowspan="{{$rowspan}}">-</td>
+                <td rowspan="{{$rowspan}}">-</td>
+                <td rowspan="{{$rowspan}}">-</td>
+                <td rowspan="{{$rowspan}}">-</td>
+                <td rowspan="{{$rowspan}}">-</td>
+                <td rowspan="{{$rowspan}}">
+                    {{$d->State->nama}}
+                </td>
+                <td rowspan="{{$rowspan}}">
+                    @if($d->Ekatalog)
+                    {{$d->Ekatalog->status}}
+                    @else
+                    -
+                    @endif
+                </td>
+                <td rowspan="{{$rowspan}}">
+                    @if($d->Ekatalog)
+                    {{$d->Ekatalog->ket}}
+                    @elseif($d->Spa)
+                    {{$d->Spa->ket}}
+                    @elseif($d->Spb)
+                    {{$d->Spb->ket}}
+                    @endif</td>
+            @endif
+            {{-- <td rowspan="{{$rowspan}}"></td>
+            <td rowspan="{{$rowspan}}"></td>
+            <td rowspan="{{$rowspan}}"></td>
+            <td rowspan="{{$rowspan}}"></td>
+            <td rowspan="{{$rowspan}}"></td>
+            <td rowspan="{{$rowspan}}"></td> --}}
+
+
+        @endforeach
+        {{--@foreach ($data as $index => $d )
         <tr>
             <td rowspan="{{$d->DetailPesanan->count()}}"  style="vertical-align: center;" >
                 {{$index + 1}}
             </td>
             <td rowspan="{{$d->DetailPesanan->count()}}"  style="vertical-align: center;">
+                @if($d->Ekatalog)
                 {{$d->Ekatalog->no_paket}}
+                @endif
             </td>
             <td rowspan="{{$d->DetailPesanan->count()}}"  style="vertical-align: center;">
+                @if($d->Ekatalog)
                 {{$d->Ekatalog->Customer->nama}}
+                @endif
             </td>
             <td rowspan="{{$d->DetailPesanan->count()}}"  style="vertical-align: center;">
+                @if($d->Ekatalog)
                 {{$d->Ekatalog->instansi}}
+                @endif
             </td>
             <td rowspan="{{$d->DetailPesanan->count()}}"  style="vertical-align: center;">
+                @if($d->Ekatalog)
                 {{$d->Ekatalog->satuan}}
+                @endif
             </td>
             <td rowspan="{{$d->DetailPesanan->count()}}"  style="vertical-align: center;">
+                @if($d->Ekatalog)
                 {{$d->Ekatalog->tgl_buat}}
+                @endif
             </td>
             <td rowspan="{{$d->DetailPesanan->count()}}"  style="vertical-align: center;">
+                @if($d->Ekatalog)
                 {{$d->Ekatalog->tgl_kontrak}}
+                @endif
             </td>
             <td >
-                @if($d->DetailPesanan[0]->PenjualanProduk->nama_alias != '')
+                {{-- @if($d->DetailPesanan[0]->PenjualanProduk->nama_alias != '')
                 {{ $d->DetailPesanan[0]->PenjualanProduk->nama_alias }}
                 @else
                 {{ $d->DetailPesanan[0]->PenjualanProduk->nama }}
-                @endif
-            </td>
+                @endif --}}
+             {{-- </td>
             <td >
                 @if(count($d->DetailPesanan) > 0)
 
@@ -76,17 +274,17 @@
 
             </td>
             <td >
-                {{ $d->DetailPesanan[0]->jumlah}}
-            </td>
+                {{-- {{ $d->DetailPesanan[0]->jumlah}} --}}
+            {{-- </td>
             <td >
-                {{ $d->DetailPesanan[0]->harga}}
-            </td>
-            <td >
-                {{ $d->DetailPesanan[0]->ongkir}}
-            </td>
-            <td >
-                {{ $d->DetailPesanan[0]->harga *  $d->DetailPesanan[0]->jumlah}}
-            </td>
+                {{-- {{ $d->DetailPesanan[0]->harga}} --}}
+            {{-- </td> --}}
+            {{-- <td > --}}
+                {{-- {{ $d->DetailPesanan[0]->ongkir}} --}}
+            {{-- </td>
+            <td > --}}
+                {{-- {{ $d->DetailPesanan[0]->harga *  $d->DetailPesanan[0]->jumlah}} --}}
+            {{-- </td>
             <td rowspan="{{$d->DetailPesanan->count()}}" style="vertical-align: center;">
                 {{$d->state->nama}}
             </td>
@@ -96,9 +294,9 @@
             <td rowspan="{{$d->DetailPesanan->count()}}" style="vertical-align: center;">
                 {{$d->ket}}
             </td>
-        </tr>
+        </tr> --}}
 
-        @for($i=1;$i<$d->DetailPesanan->count();$i++)
+        {{-- @for($i=1;$i<$d->DetailPesanan->count();$i++)
         <tr>
             <td>
                 @if($d->DetailPesanan[$i]->PenjualanProduk->nama_alias != '')
@@ -136,11 +334,11 @@
             <td >
                 {{ $d->DetailPesanan[$i]->ongkir}}
             </td>
-            <td >
-                {{ $d->DetailPesanan[0]->harga *  $d->DetailPesanan[0]->jumlah}}
-            </td>
+            <td > --}}
+                {{-- {{ $d->DetailPesanan[0]->harga *  $d->DetailPesanan[0]->jumlah}} --}}
+            {{-- </td>
         </tr>
         @endfor
-        @endforeach
-    </tbody>
+        @endforeach --}}
+    {{-- </tbody> --}}
 </table>
