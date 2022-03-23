@@ -2628,6 +2628,13 @@ class ProduksiController extends Controller
                     return '-';
                 }
             })
+            ->addColumn('day_kirim_filter', function ($d) {
+                if (isset($d->waktu_tf)) {
+                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('Y-m-d');
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('time_kirim', function ($d) {
                 if (isset($d->waktu_tf)) {
                     return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i');
