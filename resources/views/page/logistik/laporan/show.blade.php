@@ -49,9 +49,26 @@
         margin: 5px;
     }
 
+    .childrowbg{
+        background-color: #E8E8E8;
+    }
+
     .hide {
         display: none !important;
     }
+    .nowrap-text{
+        white-space: nowrap;
+    }
+    .minimizechar {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 50ch;
+    }
+    .align-center{
+        text-align: center;
+    }
+
 
     @media screen and (min-width: 1440px) {
         section {
@@ -177,6 +194,7 @@
                                         <th>Status</th> --}}
                                         <th></th>
                                         <th>No SO</th>
+                                        <th>No AKN</th>
                                         <th>No PO</th>
                                         <th>Tanggal PO</th>
                                         <th>Customer</th>
@@ -215,9 +233,78 @@
 
         ekspedisi_select();
         var showtable = "";
+        var sjtable = "";
 
         function table(pengiriman, ekspedisi, tgl_awal, tgl_akhir) {
             // console.log('/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir);
+            // showtable = $('#showtable').DataTable({
+            //     destroy: true,
+            //     processing: true,
+            //     dom: 'Bfrtip',
+            //     serverSide: false,
+            //     language: {
+            //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            //     },
+            //     ajax: {
+            //         'url': '/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir,
+            //         'dataType': 'json',
+            //         'type': 'POST',
+            //         'headers': {
+            //             'X-CSRF-TOKEN': '{{csrf_token()}}'
+            //         }
+            //     },
+            //     columns: [{
+            //             data: 'DT_RowIndex',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //         {
+            //             data: 'so',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //         {
+            //             data: 'po',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //         {
+            //             data: 'sj'
+            //         },
+            //         {
+            //             data: 'tgl_kirim',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //         {
+            //             data: 'no_resi'
+            //         },
+            //         {
+            //             data: 'customer'
+            //         },
+            //         {
+            //             data: 'alamat'
+            //         },
+            //         {
+            //             data: 'provinsi',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //         {
+            //             data: 'ekspedisi',
+            //             className: 'nowrap-text align-center'
+            //         },
+
+            //         {
+            //             data: 'produk',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //         {
+            //             data: 'jumlah',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //         {
+            //             data: 'status',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //     ],
+            // });
+
             showtable = $('#showtable').DataTable({
                 destroy: true,
                 processing: true,
@@ -235,11 +322,17 @@
                     }
                 },
                 columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center'
+                        "className": 'dt-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
                     },
                     {
                         data: 'so',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'no_paket',
                         className: 'nowrap-text align-center'
                     },
                     {
@@ -247,14 +340,8 @@
                         className: 'nowrap-text align-center'
                     },
                     {
-                        data: 'sj'
-                    },
-                    {
-                        data: 'tgl_kirim',
+                        data: 'tgl_po',
                         className: 'nowrap-text align-center'
-                    },
-                    {
-                        data: 'no_resi'
                     },
                     {
                         data: 'customer'
@@ -266,13 +353,169 @@
                         data: 'provinsi',
                         className: 'nowrap-text align-center'
                     },
+                ],
+            });
+        }
+
+        function format ( data ) {
+            return `
+            <div class="row childrowbg">
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-7">
+                            <div class="card shadow-none">
+                                <!-- <div class="card-header"><h6 class="card-title">Daftar Produk</h6></div> -->
+
+                                <div class="card-body">
+                                    <h5>Surat Jalan</h5>
+                                    <div class="table-responsive">
+                                    <table class="table table-hover sjtable" id="sjtable`+data+`" width="100%">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>No SJ</th>
+                                                <th>Tgl Kirim</th>
+                                                <th>No Resi</th>
+                                                <th>Ekspedisi / Pengirim</th>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-5">
+                            <div class="card shadow-none hide">
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function sjtabledata(id){
+            sjtable = $('#sjtable'+id).DataTable({
+                destroy: true,
+                processing: true,
+                dom: 'Bfrtip',
+                serverSide: false,
+                searching: false,
+                paging: false,
+                info: false,
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                ajax: {
+                    'url': '/api/logistik/so/data/sj/' + id,
+                    'dataType': 'json',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
                     {
-                        data: 'ekspedisi',
+                        data: 'nosurat',
                         className: 'nowrap-text align-center'
                     },
-
                     {
-                        data: 'produk',
+                        data: 'tgl_kirim',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'noresi',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'ekspedisi_id',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'status_id',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'btn',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+            });
+        }
+
+
+        $('#showtable tbody').on('click', 'td.dt-control', function () {
+            var tr = $(this).closest('tr');
+            var row = showtable.row( tr );
+
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child( format(row.data().id), 'childrowbg').show();
+                tr.addClass('shown');
+                sjtabledata(row.data().id);
+            }
+        });
+
+        function formatchild ( data ) {
+            return `
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow-none">
+                        <div class="card-header"><h6 class="card-title">Daftar Produk</h6></div>
+                        <div class="card-body">
+                            <div class="table-responsive">
+                            <table class="table table-hover" id="detailsjtable`+data+`">
+                                <thead>
+                                    <tr>
+                                        <th>Nama produk</th>
+                                        <th>Jumlah</th>
+                                        <th>No Seri</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function detailsjtabledata(id){
+            $('#detailsjtable'+id).DataTable({
+                destroy: true,
+                processing: true,
+                dom: 'Bfrtip',
+                serverSide: false,
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                ajax: {
+                    'url': '/api/logistik/pengiriman/data/' + id+'/0',
+                    'dataType': 'json',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                columns: [
+                    {
+                        data: 'nama_produk',
                         className: 'nowrap-text align-center'
                     },
                     {
@@ -280,12 +523,32 @@
                         className: 'nowrap-text align-center'
                     },
                     {
-                        data: 'status',
-                        className: 'nowrap-text align-center'
+                        data: 'no_seri',
+                        className: 'align-center minimizechar'
                     },
                 ],
             });
         }
+
+
+        $(document).on('click', '.sjtable tbody td.dt-child-control', function () {
+            console.log("tessss");
+            var tr = $(this).closest('tr');
+            var row = sjtable.row( tr );
+
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown-child');
+            }
+            else {
+                // Open this row
+                row.child( formatchild(row.data().id) ).show();
+                tr.addClass('shown-child');
+                detailsjtabledata(row.data().id);
+            }
+        });
+
 
         function ekspedisi_select() {
             $('.ekspedisi_id').select2({
