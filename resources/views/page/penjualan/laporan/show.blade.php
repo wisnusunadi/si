@@ -37,6 +37,7 @@
         background: url("/assets/image/logo/minus.png") no-repeat center center;
         background-size: 15px 15px;
     }
+
     .filter {
         margin: 5px;
     }
@@ -240,24 +241,34 @@
                             <table class="table table-hover" id="semuatable" style="width:100%">
                                 <thead style="text-align: center;">
                                     <tr>
+                                        <th>No PO</th>
+                                        <th>No AKN</th>
+                                        <th>Customer / Distributor</th>
+                                        <th>Tanggal Pesan</th>
+                                        <th>Batas Kontrak</th>
+                                        <th>Tanggal PO</th>
+                                        <th>Instansi</th>
+                                        <th>Satuan</th>
+                                        <th>Produk</th>
+                                        <th>No Seri</th>
+                                        <th>Jumlah</th>
+                                        <th>Harga</th>
+                                        <th>Subtotal</th>
+                                        <th>Status</th>
+                                        <th>Keterangan</th>
+                                    </tr>
+
+                                    {{-- <tr>
                                         <th></th>
                                         <th>No SO</th>
                                         <th>No PO</th>
                                         <th>No AKN</th>
                                         <th>Customer / Distributor</th>
-                                        {{-- <th>Tanggal Pesan</th> --}}
                                         <th>Batas Kontrak</th>
-                                        {{-- <th>Tanggal PO</th> --}}
                                         <th>Instansi</th>
-                                        {{-- <th>Satuan</th>
-                                        <th>Produk</th>
-                                        <th>No Seri</th>
-                                        <th>Jumlah</th>
-                                        <th>Harga</th>
-                                        <th>Subtotal</th> --}}
                                         <th>Status</th>
                                         <th>Keterangan</th>
-                                    </tr>
+                                    </tr> --}}
                                 </thead>
                                 <tbody>
 
@@ -376,10 +387,10 @@
 @endsection
 
 @section('adminlte_js')
-{{-- <script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
+<script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
 <link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}"> --}}
 
-{{-- <!-- <script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
+{{-- {{-- <!-- <script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('assets/button/jszip.min.js') }}"></script>
 <script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
 <script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
@@ -400,109 +411,7 @@
         $("#tanggal_mulai").attr("max", today);
         $("#tanggal_akhir").attr("max", today);
 
-        // $('#semuatable').DataTable({
-        //     destroy: true,
-        //     processing: true,
-        //     dom: 'Bfrtip',
-        //     serverSide: false,
-        //     language: {
-        //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-        //     },
-        //     ajax: {
-        //         'url': '/api/laporan/penjualan/ekatalog,spa,spb/semua/0/0',
-        //         'dataType': 'json',
-        //         'type': 'POST',
-        //         'headers': {
-        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-        //         }
-        //     },
-        //     // buttons: [{
-        //     //     extend: 'excel',
-        //     //     title: 'Laporan Penjualan',
-        //     //     text: '<i class="far fa-file-excel"></i> Export',
-        //     //     className: "btn btn-info"
-        //     // }, ],
-        //     columns: [{
-        //             data: 'kosong'
-        //         },
-        //         {
-        //             data: 'no_paket',
-        //             className: 'nowraptext',
-        //             searchable: true
-        //         },
-        //         {
-        //             data: 'nama_customer',
-        //             className: 'nowraptext'
-        //         },
-        //         {
-        //             data: 'tgl_kirim',
-        //             className: 'nowraptext'
-        //         },
-        //         {
-        //             data: 'tgl_kontrak',
-        //             className: 'nowraptext'
-        //         },
-        //         {
-        //             data: 'tgl_po',
-        //             className: 'nowraptext'
-        //         },
-        //         {
-        //             data: 'instansi'
-        //         },
-        //         {
-        //             data: 'satuan'
-        //         },
-        //         {
-        //             data: 'nama_produk'
-        //         },
-        //         {
-        //             data: 'no_seri',
-        //             className: 'nowraptext'
-        //         },
-        //         {
-        //             data: 'jumlah'
-        //         },
-        //         {
-        //             data: 'harga',
-        //             render: $.fn.dataTable.render.number(',', '.', 2),
-        //         },
-        //         {
-        //             data: 'subtotal',
-        //             render: $.fn.dataTable.render.number(',', '.', 2),
-        //         },
-        //         {
-        //             data: 'log'
-        //         },
-        //         {
-        //             data: 'ket'
-        //         }
-        //     ],
-        //     rowGroup: {
-        //         startRender: function(rows, group) {
-        //             var i = 0;
-        //             //console.log(group);
-        //             return $('<tr/>')
-        //                 .append('<td class="tes" colspan="1"><p style="font-weight:50;">' + group + '</td>');
-        //         },
-        //         endRender: function(rows, group) {
-        //             var totalPenjualan = rows
-        //                 .data()
-        //                 .pluck('subtotal')
-        //                 .reduce(function(a, b) {
-        //                     return a + b * 1;
-        //                 }, 0);
-        //             totalPenjualan = $.fn.dataTable.render.number(',', '.', 2).display(totalPenjualan);
-        //             return $('<tr/>')
-        //                 .append('<td colspan="12">Total Penjualan Produk: ' + rows.count() + '</td>')
-        //                 .append('<td colspan="3">' + totalPenjualan + '</td>');
-        //         },
-        //         dataSrc: function(row) {
-        //             return row.no_po;
-        //         },
-        //     }
-
-        // });
-        var semuatable = $('#semuatable').DataTable({
+        $('#semuatable').DataTable({
             destroy: true,
             processing: true,
             dom: 'Bfrtip',
@@ -524,103 +433,206 @@
             //     text: '<i class="far fa-file-excel"></i> Export',
             //     className: "btn btn-info"
             // }, ],
-            columns: [
-                {
-                    "className": 'dt-control',
-                    "orderable": false,
-                    "data": null,
-                    "defaultContent": ''
-                },
-                {
-                    data: 'so',
-                    className: 'nowraptext align-center',
-                    searchable: true
-                },
-                {
-                    data: 'no_po',
-                    className: 'nowraptext align-center',
-                    searchable: true
+            columns: [{
+                    data: 'kosong'
                 },
                 {
                     data: 'no_paket',
-                    className: 'nowraptext align-center',
+                    className: 'nowraptext',
                     searchable: true
                 },
                 {
                     data: 'nama_customer',
-                    className: 'nowraptext align-center'
+                    className: 'nowraptext'
                 },
-                // {
-                //     data: 'tgl_kirim',
-                //     className: 'nowraptext'
-                // },
+                {
+                    data: 'tgl_kirim',
+                    className: 'nowraptext'
+                },
                 {
                     data: 'tgl_kontrak',
-                    className: 'nowraptext align-center'
-                },
-                // {
-                //     data: 'tgl_po',
-                //     className: 'nowraptext'
-                // },
-                {
-                    data: 'instansi',
-                    className: 'align-center'
-                },
-                // {
-                //     data: 'satuan'
-                // },
-                // {
-                //     data: 'nama_produk'
-                // },
-                // {
-                //     data: 'no_seri',
-                //     className: 'nowraptext'
-                // },
-                // {
-                //     data: 'jumlah'
-                // },
-                // {
-                //     data: 'harga',
-                //     render: $.fn.dataTable.render.number(',', '.', 2),
-                // },
-                // {
-                //     data: 'subtotal',
-                //     render: $.fn.dataTable.render.number(',', '.', 2),
-                // },
-                {
-                    data: 'log',
-                    className: 'align-center'
+                    className: 'nowraptext'
                 },
                 {
-                    data: 'ket',
-                    className: 'align-center'
+                    data: 'tgl_po',
+                    className: 'nowraptext'
+                },
+                {
+                    data: 'instansi'
+                },
+                {
+                    data: 'satuan'
+                },
+                {
+                    data: 'nama_produk'
+                },
+                {
+                    data: 'no_seri',
+                    className: 'nowraptext'
+                },
+                {
+                    data: 'jumlah'
+                },
+                {
+                    data: 'harga',
+                    render: $.fn.dataTable.render.number(',', '.', 2),
+                },
+                {
+                    data: 'subtotal',
+                    render: $.fn.dataTable.render.number(',', '.', 2),
+                },
+                {
+                    data: 'log'
+                },
+                {
+                    data: 'ket'
                 }
             ],
-            // rowGroup: {
-            //     startRender: function(rows, group) {
-            //         var i = 0;
-            //         //console.log(group);
-            //         return $('<tr/>')
-            //             .append('<td class="tes" colspan="1"><p style="font-weight:50;">' + group + '</td>');
-            //     },
-            //     endRender: function(rows, group) {
-            //         var totalPenjualan = rows
-            //             .data()
-            //             .pluck('subtotal')
-            //             .reduce(function(a, b) {
-            //                 return a + b * 1;
-            //             }, 0);
-            //         totalPenjualan = $.fn.dataTable.render.number(',', '.', 2).display(totalPenjualan);
-            //         return $('<tr/>')
-            //             .append('<td colspan="12">Total Penjualan Produk: ' + rows.count() + '</td>')
-            //             .append('<td colspan="3">' + totalPenjualan + '</td>');
-            //     },
-            //     dataSrc: function(row) {
-            //         return row.no_po;
-            //     },
-            // }
+            rowGroup: {
+                startRender: function(rows, group) {
+                    var i = 0;
+                    //console.log(group);
+                    return $('<tr/>')
+                        .append('<td class="tes" colspan="1"><p style="font-weight:50;">' + group + '</td>');
+                },
+                endRender: function(rows, group) {
+                    var totalPenjualan = rows
+                        .data()
+                        .pluck('subtotal')
+                        .reduce(function(a, b) {
+                            return a + b * 1;
+                        }, 0);
+                    totalPenjualan = $.fn.dataTable.render.number(',', '.', 2).display(totalPenjualan);
+                    return $('<tr/>')
+                        .append('<td colspan="12">Total Penjualan Produk: ' + rows.count() + '</td>')
+                        .append('<td colspan="3">' + totalPenjualan + '</td>');
+                },
+                dataSrc: function(row) {
+                    return row.no_po;
+                },
+            }
 
         });
+
+        // var semuatable = $('#semuatable').DataTable({
+        //     destroy: true,
+        //     processing: true,
+        //     dom: 'Bfrtip',
+        //     serverSide: false,
+        //     language: {
+        //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+        //     },
+        //     ajax: {
+        //         'url': '/api/laporan/penjualan/ekatalog,spa,spb/semua/0/0',
+        //         'dataType': 'json',
+        //         'type': 'POST',
+        //         'headers': {
+        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
+        //         }
+        //     },
+        //     // buttons: [{
+        //     //     extend: 'excel',
+        //     //     title: 'Laporan Penjualan',
+        //     //     text: '<i class="far fa-file-excel"></i> Export',
+        //     //     className: "btn btn-info"
+        //     // }, ],
+        //     columns: [
+        //         {
+        //             "className": 'dt-control',
+        //             "orderable": false,
+        //             "data": null,
+        //             "defaultContent": ''
+        //         },
+        //         {
+        //             data: 'so',
+        //             className: 'nowraptext align-center',
+        //             searchable: true
+        //         },
+        //         {
+        //             data: 'no_po',
+        //             className: 'nowraptext align-center',
+        //             searchable: true
+        //         },
+        //         {
+        //             data: 'no_paket',
+        //             className: 'nowraptext align-center',
+        //             searchable: true
+        //         },
+        //         {
+        //             data: 'nama_customer',
+        //             className: 'nowraptext align-center'
+        //         },
+        //         // {
+        //         //     data: 'tgl_kirim',
+        //         //     className: 'nowraptext'
+        //         // },
+        //         {
+        //             data: 'tgl_kontrak',
+        //             className: 'nowraptext align-center'
+        //         },
+        //         // {
+        //         //     data: 'tgl_po',
+        //         //     className: 'nowraptext'
+        //         // },
+        //         {
+        //             data: 'instansi',
+        //             className: 'align-center'
+        //         },
+        //         // {
+        //         //     data: 'satuan'
+        //         // },
+        //         // {
+        //         //     data: 'nama_produk'
+        //         // },
+        //         // {
+        //         //     data: 'no_seri',
+        //         //     className: 'nowraptext'
+        //         // },
+        //         // {
+        //         //     data: 'jumlah'
+        //         // },
+        //         // {
+        //         //     data: 'harga',
+        //         //     render: $.fn.dataTable.render.number(',', '.', 2),
+        //         // },
+        //         // {
+        //         //     data: 'subtotal',
+        //         //     render: $.fn.dataTable.render.number(',', '.', 2),
+        //         // },
+        //         {
+        //             data: 'log',
+        //             className: 'align-center'
+        //         },
+        //         {
+        //             data: 'ket',
+        //             className: 'align-center'
+        //         }
+        //     ],
+        //     // rowGroup: {
+        //     //     startRender: function(rows, group) {
+        //     //         var i = 0;
+        //     //         //console.log(group);
+        //     //         return $('<tr/>')
+        //     //             .append('<td class="tes" colspan="1"><p style="font-weight:50;">' + group + '</td>');
+        //     //     },
+        //     //     endRender: function(rows, group) {
+        //     //         var totalPenjualan = rows
+        //     //             .data()
+        //     //             .pluck('subtotal')
+        //     //             .reduce(function(a, b) {
+        //     //                 return a + b * 1;
+        //     //             }, 0);
+        //     //         totalPenjualan = $.fn.dataTable.render.number(',', '.', 2).display(totalPenjualan);
+        //     //         return $('<tr/>')
+        //     //             .append('<td colspan="12">Total Penjualan Produk: ' + rows.count() + '</td>')
+        //     //             .append('<td colspan="3">' + totalPenjualan + '</td>');
+        //     //     },
+        //     //     dataSrc: function(row) {
+        //     //         return row.no_po;
+        //     //     },
+        //     // }
+
+        // });
 
         function format ( data ) {
             return `
