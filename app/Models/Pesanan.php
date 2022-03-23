@@ -42,6 +42,19 @@ class Pesanan extends Model
         return $this->hasOne(TFProduksi::class);
     }
 
+    public function getJumlahPaket()
+    {
+        $id = $this->id;
+        $jumlah = 0;
+        $data = DetailPesanan::where('pesanan_id', $id)->get();
+        foreach ($data as $i) {
+            foreach ($i->PenjualanProduk->Produk as $j) {
+                $jumlah = $jumlah + 1;
+            }
+        }
+        return $jumlah;
+    }
+
     public function getJumlahPaketPesanan()
     {
         $id = $this->id;

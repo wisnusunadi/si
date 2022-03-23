@@ -199,69 +199,71 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
-                                        <table class="table table-hover " id="pengujianterbarutable" style="width:100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan=5>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover " id="pengujianterbarutable" style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan=5>
 
-                                                        <h5><b>Pengujian Terbaru</b></h5>
+                                                            <h5><b>Pengujian Terbaru</b></h5>
 
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>No PO</th>
-                                                    <th>Batas Pengujian</th>
-                                                    <th>Status</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>No PO</th>
+                                                        <th>Batas Pengujian</th>
+                                                        <th>Status</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
 
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
 
+                                            <table class="table table-hover hide" id="belumdiujitable" style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan=4>
 
-                                        <table class="table table-hover hide" id="belumdiujitable" style="width:100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan=4>
+                                                            <h5><b>Belum Diuji</b></h5>
 
-                                                        <h5><b>Belum Diuji</b></h5>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>No PO</th>
+                                                        <th>Batas Pengujian</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
 
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>No PO</th>
-                                                    <th>Batas Pengujian</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                                </tbody>
+                                            </table>
 
-                                            </tbody>
-                                        </table>
+                                            <table class="table table-hover hide" id="lewatbatasujitable" style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan=5>
+                                                            <h5><b>Lewat Batas Uji</b></h5>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>No PO</th>
+                                                        <th>Batas Pengujian</th>
+                                                        <th>Status</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
 
-                                        <table class="table table-hover hide" id="lewatbatasujitable" style="width:100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan=5>
-                                                        <h5><b>Lewat Batas Uji</b></h5>
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>No PO</th>
-                                                    <th>Batas Pengujian</th>
-                                                    <th>Status</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
 
-                                            </tbody>
-                                        </table>
                                     </div>
                                 </div>
                             </div>

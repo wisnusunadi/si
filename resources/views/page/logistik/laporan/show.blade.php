@@ -26,6 +26,25 @@
 
 @section('adminlte_css')
 <style>
+    td.dt-control {
+        background: url("/assets/image/logo/plus.png") no-repeat center center;
+        cursor: pointer;
+        background-size: 15px 15px;
+    }
+    tr.shown td.dt-control {
+        background: url("/assets/image/logo/minus.png") no-repeat center center;
+        background-size: 15px 15px;
+    }
+
+    td.dt-child-control {
+        background: url("/assets/image/logo/arrow_down.png") no-repeat center center;
+        cursor: pointer;
+        background-size: 15px 15px;
+    }
+    tr.shown-child td.dt-child-control {
+        background: url("/assets/image/logo/arrow_up.png") no-repeat center center;
+        background-size: 15px 15px;
+    }
     .filter {
         margin: 5px;
     }
@@ -53,6 +72,8 @@
             font-size: 12px;
         }
     }
+
+
 </style>
 @stop
 
@@ -141,7 +162,7 @@
                             <table class="table table-hover" id="showtable">
                                 <thead style="text-align: center;">
                                     <tr>
-                                        <th>No</th>
+                                        {{-- <th>No</th>
                                         <th>No SO</th>
                                         <th>No PO</th>
                                         <th>No SJ</th>
@@ -153,7 +174,14 @@
                                         <th>Jasa Ekspedisi</th>
                                         <th>Nama Produk</th>
                                         <th>Jumlah</th>
-                                        <th>Status</th>
+                                        <th>Status</th> --}}
+                                        <th></th>
+                                        <th>No SO</th>
+                                        <th>No PO</th>
+                                        <th>Tanggal PO</th>
+                                        <th>Customer</th>
+                                        <th>Alamat</th>
+                                        <th>Provinsi</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -186,10 +214,11 @@
         $("#tanggal_akhir").attr("max", today);
 
         ekspedisi_select();
+        var showtable = "";
 
         function table(pengiriman, ekspedisi, tgl_awal, tgl_akhir) {
             // console.log('/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir);
-            $('#showtable').DataTable({
+            showtable = $('#showtable').DataTable({
                 destroy: true,
                 processing: true,
                 dom: 'Bfrtip',

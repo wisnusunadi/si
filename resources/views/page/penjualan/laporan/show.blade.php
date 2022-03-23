@@ -28,10 +28,30 @@
 
 @section('adminlte_css')
 <style>
+     td.dt-control {
+        background: url("/assets/image/logo/plus.png") no-repeat center center;
+        cursor: pointer;
+        background-size: 15px 15px;
+    }
+    tr.shown td.dt-control {
+        background: url("/assets/image/logo/minus.png") no-repeat center center;
+        background-size: 15px 15px;
+    }
+
     .filter {
         margin: 5px;
     }
 
+    #urgent{
+        color: #dc3545;
+        font-weight: 600;
+    }
+    #info{
+        color: steelblue;
+    }
+    #warning{
+        color: #ffc107;
+    }
     .hide {
         display: none !important;
     }
@@ -48,6 +68,17 @@
         white-space: nowrap;
     }
 
+    .align-center {
+        text-align: center;
+    }
+
+    .align-right {
+        text-align: right;
+    }
+
+    .tabnum{
+        font-variant-numeric: tabular-nums;
+    }
 
     @media screen and (min-width: 992px) {
         .labelket{
@@ -226,6 +257,18 @@
                                         <th>Status</th>
                                         <th>Keterangan</th>
                                     </tr>
+
+                                    {{-- <tr>
+                                        <th></th>
+                                        <th>No SO</th>
+                                        <th>No PO</th>
+                                        <th>No AKN</th>
+                                        <th>Customer / Distributor</th>
+                                        <th>Batas Kontrak</th>
+                                        <th>Instansi</th>
+                                        <th>Status</th>
+                                        <th>Keterangan</th>
+                                    </tr> --}}
                                 </thead>
                                 <tbody>
 
@@ -345,15 +388,15 @@
 
 @section('adminlte_js')
 <script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}">
+<link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}"> --}}
 
-<!-- <script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
+{{-- {{-- <!-- <script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('assets/button/jszip.min.js') }}"></script>
 <script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
 <script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
 <script src="{{ asset('assets/button/buttons.html5.min.js') }}"></script>
 <script src="{{ asset('assets/button/buttons.print.min.js') }} "></script>
-<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}"> -->
+<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}"> --> --}}
 
 <script>
     $(function() {
@@ -470,6 +513,251 @@
             }
 
         });
+
+        // var semuatable = $('#semuatable').DataTable({
+        //     destroy: true,
+        //     processing: true,
+        //     dom: 'Bfrtip',
+        //     serverSide: false,
+        //     language: {
+        //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+        //     },
+        //     ajax: {
+        //         'url': '/api/laporan/penjualan/ekatalog,spa,spb/semua/0/0',
+        //         'dataType': 'json',
+        //         'type': 'POST',
+        //         'headers': {
+        //             'X-CSRF-TOKEN': '{{csrf_token()}}'
+        //         }
+        //     },
+        //     // buttons: [{
+        //     //     extend: 'excel',
+        //     //     title: 'Laporan Penjualan',
+        //     //     text: '<i class="far fa-file-excel"></i> Export',
+        //     //     className: "btn btn-info"
+        //     // }, ],
+        //     columns: [
+        //         {
+        //             "className": 'dt-control',
+        //             "orderable": false,
+        //             "data": null,
+        //             "defaultContent": ''
+        //         },
+        //         {
+        //             data: 'so',
+        //             className: 'nowraptext align-center',
+        //             searchable: true
+        //         },
+        //         {
+        //             data: 'no_po',
+        //             className: 'nowraptext align-center',
+        //             searchable: true
+        //         },
+        //         {
+        //             data: 'no_paket',
+        //             className: 'nowraptext align-center',
+        //             searchable: true
+        //         },
+        //         {
+        //             data: 'nama_customer',
+        //             className: 'nowraptext align-center'
+        //         },
+        //         // {
+        //         //     data: 'tgl_kirim',
+        //         //     className: 'nowraptext'
+        //         // },
+        //         {
+        //             data: 'tgl_kontrak',
+        //             className: 'nowraptext align-center'
+        //         },
+        //         // {
+        //         //     data: 'tgl_po',
+        //         //     className: 'nowraptext'
+        //         // },
+        //         {
+        //             data: 'instansi',
+        //             className: 'align-center'
+        //         },
+        //         // {
+        //         //     data: 'satuan'
+        //         // },
+        //         // {
+        //         //     data: 'nama_produk'
+        //         // },
+        //         // {
+        //         //     data: 'no_seri',
+        //         //     className: 'nowraptext'
+        //         // },
+        //         // {
+        //         //     data: 'jumlah'
+        //         // },
+        //         // {
+        //         //     data: 'harga',
+        //         //     render: $.fn.dataTable.render.number(',', '.', 2),
+        //         // },
+        //         // {
+        //         //     data: 'subtotal',
+        //         //     render: $.fn.dataTable.render.number(',', '.', 2),
+        //         // },
+        //         {
+        //             data: 'log',
+        //             className: 'align-center'
+        //         },
+        //         {
+        //             data: 'ket',
+        //             className: 'align-center'
+        //         }
+        //     ],
+        //     // rowGroup: {
+        //     //     startRender: function(rows, group) {
+        //     //         var i = 0;
+        //     //         //console.log(group);
+        //     //         return $('<tr/>')
+        //     //             .append('<td class="tes" colspan="1"><p style="font-weight:50;">' + group + '</td>');
+        //     //     },
+        //     //     endRender: function(rows, group) {
+        //     //         var totalPenjualan = rows
+        //     //             .data()
+        //     //             .pluck('subtotal')
+        //     //             .reduce(function(a, b) {
+        //     //                 return a + b * 1;
+        //     //             }, 0);
+        //     //         totalPenjualan = $.fn.dataTable.render.number(',', '.', 2).display(totalPenjualan);
+        //     //         return $('<tr/>')
+        //     //             .append('<td colspan="12">Total Penjualan Produk: ' + rows.count() + '</td>')
+        //     //             .append('<td colspan="3">' + totalPenjualan + '</td>');
+        //     //     },
+        //     //     dataSrc: function(row) {
+        //     //         return row.no_po;
+        //     //     },
+        //     // }
+
+        // });
+
+        function format ( data ) {
+            return `
+            <div class="row">
+                <div class="col-12">
+                    <div class="card shadow-none">
+                        <div class="card-header"><h6 class="card-title">Daftar Produk</h6></div>
+                        <div class="card-body">
+                            <table class="table table-hover" id="prodtable`+data+`">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Produk</th>
+                                        <th>Jumlah</th>
+                                        <th>Harga</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                                <tfoot>
+                                    <tr>
+                                        <th colspan="4" class="align-center">Total</th>
+                                        <th></th>
+                                    </tr>
+                                </tfoot>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        function detailtable(id){
+            $('#prodtable'+id).DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: false,
+                paging: false,
+                info:false,
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                ajax: {
+                    'url': '/api/penjualan/pesanan/produk/detail/'+id,
+                    'dataType': 'json',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                footerCallback: function ( row, data, start, end, display ) {
+                    var api = this.api();
+
+                    // Remove the formatting to get integer data for summation
+                    var intVal = function ( i ) {
+                        return typeof i === 'string' ?
+                            i.replace(/[\$,]/g, '')*1 :
+                            typeof i === 'number' ?
+                                i : 0;
+                    };
+
+                    // Total over all pages
+                    total = api
+                        .column(4)
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0 );
+
+                    // Total over this page
+                    pageTotal = api
+                        .column(4, { page: 'current'} )
+                        .data()
+                        .reduce( function (a, b) {
+                            return intVal(a) + intVal(b);
+                        }, 0);
+
+                    // Update footer
+                    $(api.column(4).footer() ).html(
+                        'Rp. '+ $.fn.dataTable.render.number(',', '.', 2).display(total)
+                    );
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: false
+                }, {
+                    data: 'nama_produk',
+                    className: 'nowrap-text align-center',
+                }, {
+                    data: 'jumlah',
+                    className: 'nowraptxt align-center tabnum',
+                }, {
+                    data: 'harga',
+                    className: 'nowraptxt align-right tabnum',
+                    render: $.fn.dataTable.render.number(',', '.', 2),
+                }, {
+                    data: 'sub',
+                    className: 'nowraptxt align-right borderright tabnum',
+                    render: $.fn.dataTable.render.number(',', '.', 2),
+                }],
+            });
+        }
+
+        $('#semuatable tbody').on('click', 'td.dt-control', function () {
+            var tr = $(this).closest('tr');
+            var row = semuatable.row( tr );
+
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+
+                row.child( format(row.data().id) ).show();
+                tr.addClass('shown');
+                detailtable(row.data().id);
+
+            }
+        });
+
+
         $('.customer_id').on('keyup change', function() {
             if ($(this).val() != "") {
                 $('input[type="checkbox"][name="penjualan"]').removeAttr('disabled');
@@ -597,6 +885,8 @@
         //         $('#spbform').removeClass('hide');
         //     }
         // })
+
+
         $('#filter').submit(function() {
             var penjualan = [];
             var tambahan = [];
