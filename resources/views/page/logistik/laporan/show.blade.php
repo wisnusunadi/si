@@ -179,7 +179,7 @@
                             <table class="table table-hover" id="showtable">
                                 <thead style="text-align: center;">
                                     <tr>
-                                        {{-- <th>No</th>
+                                        <th>No</th>
                                         <th>No SO</th>
                                         <th>No PO</th>
                                         <th>No SJ</th>
@@ -191,15 +191,15 @@
                                         <th>Jasa Ekspedisi</th>
                                         <th>Nama Produk</th>
                                         <th>Jumlah</th>
-                                        <th>Status</th> --}}
-                                        <th></th>
+                                        <th>Status</th>
+                                        {{-- <th></th>
                                         <th>No SO</th>
                                         <th>No AKN</th>
                                         <th>No PO</th>
                                         <th>Tanggal PO</th>
                                         <th>Customer</th>
                                         <th>Alamat</th>
-                                        <th>Provinsi</th>
+                                        <th>Provinsi</th> --}}
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -236,75 +236,7 @@
         var sjtable = "";
 
         function table(pengiriman, ekspedisi, tgl_awal, tgl_akhir) {
-            // console.log('/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir);
-            // showtable = $('#showtable').DataTable({
-            //     destroy: true,
-            //     processing: true,
-            //     dom: 'Bfrtip',
-            //     serverSide: false,
-            //     language: {
-            //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            //     },
-            //     ajax: {
-            //         'url': '/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir,
-            //         'dataType': 'json',
-            //         'type': 'POST',
-            //         'headers': {
-            //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-            //         }
-            //     },
-            //     columns: [{
-            //             data: 'DT_RowIndex',
-            //             className: 'nowrap-text align-center'
-            //         },
-            //         {
-            //             data: 'so',
-            //             className: 'nowrap-text align-center'
-            //         },
-            //         {
-            //             data: 'po',
-            //             className: 'nowrap-text align-center'
-            //         },
-            //         {
-            //             data: 'sj'
-            //         },
-            //         {
-            //             data: 'tgl_kirim',
-            //             className: 'nowrap-text align-center'
-            //         },
-            //         {
-            //             data: 'no_resi'
-            //         },
-            //         {
-            //             data: 'customer'
-            //         },
-            //         {
-            //             data: 'alamat'
-            //         },
-            //         {
-            //             data: 'provinsi',
-            //             className: 'nowrap-text align-center'
-            //         },
-            //         {
-            //             data: 'ekspedisi',
-            //             className: 'nowrap-text align-center'
-            //         },
-
-            //         {
-            //             data: 'produk',
-            //             className: 'nowrap-text align-center'
-            //         },
-            //         {
-            //             data: 'jumlah',
-            //             className: 'nowrap-text align-center'
-            //         },
-            //         {
-            //             data: 'status',
-            //             className: 'nowrap-text align-center'
-            //         },
-            //     ],
-            // });
-
+            console.log('/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir);
             showtable = $('#showtable').DataTable({
                 destroy: true,
                 processing: true,
@@ -322,17 +254,11 @@
                     }
                 },
                 columns: [{
-                        "className": 'dt-control',
-                        "orderable": false,
-                        "data": null,
-                        "defaultContent": ''
-                    },
-                    {
-                        data: 'so',
+                        data: 'DT_RowIndex',
                         className: 'nowrap-text align-center'
                     },
                     {
-                        data: 'no_paket',
+                        data: 'so',
                         className: 'nowrap-text align-center'
                     },
                     {
@@ -340,8 +266,14 @@
                         className: 'nowrap-text align-center'
                     },
                     {
-                        data: 'tgl_po',
+                        data: 'sj'
+                    },
+                    {
+                        data: 'tgl_kirim',
                         className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'no_resi'
                     },
                     {
                         data: 'customer'
@@ -353,8 +285,76 @@
                         data: 'provinsi',
                         className: 'nowrap-text align-center'
                     },
+                    {
+                        data: 'ekspedisi',
+                        className: 'nowrap-text align-center'
+                    },
+
+                    {
+                        data: 'produk',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'jumlah',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'status',
+                        className: 'nowrap-text align-center'
+                    },
                 ],
             });
+
+            // showtable = $('#showtable').DataTable({
+            //     destroy: true,
+            //     processing: true,
+            //     dom: 'Bfrtip',
+            //     serverSide: false,
+            //     language: {
+            //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            //     },
+            //     ajax: {
+            //         'url': '/api/laporan/logistik/' + pengiriman + '/' + ekspedisi + '/' + tgl_awal + '/' + tgl_akhir,
+            //         'dataType': 'json',
+            //         'type': 'POST',
+            //         'headers': {
+            //             'X-CSRF-TOKEN': '{{csrf_token()}}'
+            //         }
+            //     },
+            //     columns: [{
+            //             "className": 'dt-control',
+            //             "orderable": false,
+            //             "data": null,
+            //             "defaultContent": ''
+            //         },
+            //         {
+            //             data: 'so',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //         {
+            //             data: 'no_paket',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //         {
+            //             data: 'po',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //         {
+            //             data: 'tgl_po',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //         {
+            //             data: 'customer'
+            //         },
+            //         {
+            //             data: 'alamat'
+            //         },
+            //         {
+            //             data: 'provinsi',
+            //             className: 'nowrap-text align-center'
+            //         },
+            //     ],
+            // });
         }
 
         function format ( data ) {
@@ -388,8 +388,8 @@
                             </div>
                         </div>
                         <div class="col-5">
-                            <div class="card shadow-none hide">
-
+                            <div class="card shadow-none det_prd hide">
+                                <h5>Detail Produk</h5>
                             </div>
                         </div>
                     </div>
@@ -531,23 +531,29 @@
         }
 
 
-        $(document).on('click', '.sjtable tbody td.dt-child-control', function () {
-            console.log("tessss");
-            var tr = $(this).closest('tr');
-            var row = sjtable.row( tr );
+        // $(document).on('click', '.sjtable tbody .detail', function () {
 
-            if ( row.child.isShown() ) {
-                // This row is already open - close it
-                row.child.hide();
-                tr.removeClass('shown-child');
-            }
-            else {
-                // Open this row
-                row.child( formatchild(row.data().id) ).show();
-                tr.addClass('shown-child');
-                detailsjtabledata(row.data().id);
-            }
-        });
+        //     var tr = $(this).closest('tr');
+        //     var dataid = tr.find('#detail').attr('data-id');
+        //     var dataparent = tr.find('#detail').attr('data-id');
+
+        //     console.log(dataid);
+        //     if(dataid){
+        //         var trparent = showtable.row(tr).
+        //     }
+
+        //     // if ( row.child.isShown() ) {
+        //     //     // This row is already open - close it
+        //     //     row.child.hide();
+        //     //     tr.removeClass('shown-child');
+        //     // }
+        //     // else {
+        //     //     // Open this row
+        //     //     row.child( formatchild(row.data().id) ).show();
+        //     //     tr.addClass('shown-child');
+        //     //     detailsjtabledata(row.data().id);
+        //     // }
+        // });
 
 
         function ekspedisi_select() {
