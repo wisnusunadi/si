@@ -141,6 +141,10 @@
             font-size: 12px;
         }
     }
+
+    div.ui-tooltip {
+    max-width: 400px;
+}
 </style>
 @stop
 @section('content')
@@ -202,6 +206,25 @@
                                                 </div>
                                             </div>
                                         </div>
+
+                                        <div class="form-group row">
+                                            <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tampilan Export</label>
+                                            <div class="col-lg-5 col-md-12 col-form-label">
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="tampilan_export" id="tampilan_export" value="merge" data-toggle="tooltip_merge" title="merge" />
+                                                    <label class="form-check-label" for="tampilan_export1">Merge</label>
+                                                </div>
+                                                <div class="form-check form-check-inline">
+                                                    <input class="form-check-input" type="radio" name="tampilan_export" id="tampilan_export" value="unmerge"  data-toggle="tooltip_unmerge" title="unmerge" checked />
+                                                    <label class="form-check-label" for="tampilan_export2">Unmerge</label>
+                                                </div>
+                                                <div class="invalid-feedback" id="msgtampilan_export">
+                                                    @if($errors->has('tampilan_export'))
+                                                    {{ $errors->first('tampilan_export')}}
+                                                    @endif
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="form-group row">
                                             <label for="tambahan" class="col-form-label col-lg-5 col-md-12 labelket"></label>
                                             <div class="col-5 col-form-label">
@@ -232,7 +255,7 @@
                     <div class="card-body">
                         <h5>Laporan Penjualan</h5>
                         <div class="table-responsive">
-                            <a id="exportbutton" href="{{route('penjualan.penjualan.export',['jenis'=> 'semua','customer_id'=> 'semua','tgl_awal'=> '0','tgl_akhir'=>'0','seri' => 'kosong'])}}"><button class="btn btn-success">
+                            <a id="exportbutton" href="{{route('penjualan.penjualan.export',['jenis'=> 'semua','customer_id'=> 'semua','tgl_awal'=> '0','tgl_akhir'=>'0','seri' => 'kosong','tampilan' => 'unmerge'])}}"><button class="btn btn-success">
                                     <i class="far fa-file-excel" id="load"></i> Export
                                 </button>
                             </a>
@@ -811,6 +834,7 @@
             }
         });
 
+
         $('.customer_id').select2({
             allowClear: false,
             placeholder: 'Pilih Data',
@@ -894,6 +918,7 @@
             var tanggal_mulai = $('#tanggal_mulai').val();
             var tanggal_akhir = $('#tanggal_akhir').val();
             var customer_id = $('#customer_id').val();
+            var tampilan_export = $('input[type="radio"][name="tampilan_export"]:checked').val();
 
             $("input[name=penjualan]:checked").each(function() {
                 penjualan.push($(this).val());
@@ -918,7 +943,7 @@
             $('#semuaform').removeClass('hide');
             $('#semuatable').DataTable().ajax.url('/api/laporan/penjualan/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir).load();
 
-            var link = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y;
+            var link = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y + '/' + tampilan_export;
 
             $('#exportbutton').attr({
                 href: link
@@ -929,4 +954,11 @@
 
     });
 </script>
+<script>
+    $(document).ready(function(){
+      $('[data-toggle="tooltip_merge"]').tooltip({ content: '<img src="{{url('assets/image/tooltip/merge.png')}}" />' });
+      $('[data-toggle="tooltip_unmerge"]').tooltip({ content: '<img src="{{url('assets/image/tooltip/unmerge.png')}}" />' });
+    });
+    </script>
+
 @endsection
