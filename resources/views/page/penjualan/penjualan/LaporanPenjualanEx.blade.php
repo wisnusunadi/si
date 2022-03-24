@@ -44,8 +44,48 @@
                 <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">{{$d->so}}</td>
                 <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">{{$d->no_po}}</td>
                 <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">{{date('d-m-Y', strtotime($d->tgl_po))}}</td>
-                <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">-</td>
-                <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">-</td>
+                <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
+                    @if(count($d->DetailPesanan) > 0)
+                        @if($d->DetailPesanan[0]->getJumlahProduk() > 1)
+                            @foreach($d->DetailPesanan[0]->DetailPesananProduk->unique('detail_pesanan_id') as $p)
+                                @foreach( $p->DetailLogistik as $q)
+                                    {{$q->Logistik->nosurat}}
+                                @endforeach
+                            @endforeach
+                        @else
+                            @foreach($d->DetailPesanan[0]->DetailPesananProduk as $p)
+                                @foreach( $p->DetailLogistik as $q)
+                                    {{$q->Logistik->nosurat}}
+                                @endforeach
+                            @endforeach
+                        @endif
+                    @else
+                        @if(isset($d->DetailPesananPart[0]->DetailLogistikPart->Logistik))
+                            {{$d->DetailPesananPart[0]->DetailLogistikPart->Logistik->nosurat}}
+                        @endif
+                    @endif
+                </td>
+                <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
+                @if(count($d->DetailPesanan) > 0)
+                    @if($d->DetailPesanan[0]->getJumlahProduk() > 1)
+                        @foreach($d->DetailPesanan[0]->DetailPesananProduk->unique('detail_pesanan_id') as $p)
+                            @foreach( $p->DetailLogistik as $q)
+                                {{date('d-m-Y', strtotime($q->Logistik->tgl_kirim))}}
+                            @endforeach
+                        @endforeach
+                    @else
+                        @foreach($d->DetailPesanan[0]->DetailPesananProduk as $p)
+                            @foreach( $p->DetailLogistik as $q)
+                                {{date('d-m-Y', strtotime($q->Logistik->tgl_kirim))}}
+                            @endforeach
+                        @endforeach
+                    @endif
+                @else
+                    @if(isset($d->DetailPesananPart[0]->DetailLogistikPart->Logistik))
+                        {{date('d-m-Y', strtotime($d->DetailPesananPart[0]->DetailLogistikPart->Logistik->tgl_kirim))}}
+                    @endif
+                @endif
+                </td>
                 <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
                     @if($d->Ekatalog)
                     {{$d->Ekatalog->no_urut}}
@@ -501,8 +541,48 @@
             <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">{{$d->so}}</td>
             <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">{{$d->no_po}}</td>
             <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">{{date('d-m-Y', strtotime($d->tgl_po))}}</td>
-            <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">-</td>
-            <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">-</td>
+            <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
+                @if(count($d->DetailPesanan) > 0)
+                    @if($d->DetailPesanan[0]->getJumlahProduk() > 1)
+                        @foreach($d->DetailPesanan[0]->DetailPesananProduk->unique('detail_pesanan_id') as $p)
+                            @foreach( $p->DetailLogistik as $q)
+                                {{$q->Logistik->nosurat}}
+                            @endforeach
+                        @endforeach
+                    @else
+                        @foreach($d->DetailPesanan[0]->DetailPesananProduk as $p)
+                            @foreach( $p->DetailLogistik as $q)
+                                {{$q->Logistik->nosurat}}
+                            @endforeach
+                        @endforeach
+                    @endif
+                @else
+                    @if(isset($d->DetailPesananPart[0]->DetailLogistikPart->Logistik))
+                        {{$d->DetailPesananPart[0]->DetailLogistikPart->Logistik->nosurat}}
+                    @endif
+                @endif
+            </td>
+            <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
+            @if(count($d->DetailPesanan) > 0)
+                @if($d->DetailPesanan[0]->getJumlahProduk() > 1)
+                    @foreach($d->DetailPesanan[0]->DetailPesananProduk->unique('detail_pesanan_id') as $p)
+                        @foreach( $p->DetailLogistik as $q)
+                            {{date('d-m-Y', strtotime($q->Logistik->tgl_kirim))}}
+                        @endforeach
+                    @endforeach
+                @else
+                    @foreach($d->DetailPesanan[0]->DetailPesananProduk as $p)
+                        @foreach( $p->DetailLogistik as $q)
+                            {{date('d-m-Y', strtotime($q->Logistik->tgl_kirim))}}
+                        @endforeach
+                    @endforeach
+                @endif
+            @else
+                @if(isset($d->DetailPesananPart[0]->DetailLogistikPart->Logistik))
+                    {{date('d-m-Y', strtotime($d->DetailPesananPart[0]->DetailLogistikPart->Logistik->tgl_kirim))}}
+                @endif
+            @endif
+            </td>
             <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
                 @if($d->Ekatalog)
                 {{$d->Ekatalog->no_urut}}

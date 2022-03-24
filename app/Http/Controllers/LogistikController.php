@@ -1101,7 +1101,12 @@ class LogistikController extends Controller
                     <i class="fas fa-file"></i>
                 </a>';
             })
-            ->rawColumns(['status_id', 'aksi'])
+            ->addColumn('btn', function ($data) use($id) {
+                return '<a id="detail" class="detail" data-id="'.$data->id.'" data-parent='.$id.'>
+                            <i class="fas fa-eye"></i>
+                        </a>';
+            })
+            ->rawColumns(['status_id', 'aksi', 'btn'])
             ->make(true);;
     }
     public function get_data_pengiriman($pengiriman, $provinsi, $jenis_penjualan)
@@ -2156,7 +2161,7 @@ class LogistikController extends Controller
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
                 if (isset($data->DetailPesananProduk)) {
-                    return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama;
+                    return $data->DetailPesananProduk->GudangBarangJadi->Produk->nama.' '.$data->DetailPesananProduk->GudangBarangJadi->nama;
                 } else {
                     return $data->DetailPesananPart->Sparepart->nama;
                 }
@@ -2191,6 +2196,7 @@ class LogistikController extends Controller
                     return '-';
                 }
             })
+
             ->rawColumns(['aksi'])
             ->make(true);
     }
@@ -3223,6 +3229,14 @@ class LogistikController extends Controller
                 $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
                     $q->where('ekspedisi_id', $ekspedisi)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
                 })->get();
+
+                // $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($ekspedisi, $tgl_awal, $tgl_akhir){
+                //     $q->where('ekspedisi_id', $ekspedisi)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+                // })->get();
+                // $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($ekspedisi, $tgl_awal, $tgl_akhir){
+                //     $q->where('ekspedisi_id', $ekspedisi)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+                // })->get();
+
             } else {
                 $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
                     $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
@@ -3230,6 +3244,13 @@ class LogistikController extends Controller
                 $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($ekspedisi, $tgl_awal, $tgl_akhir) {
                     $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
                 })->get();
+
+                // $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($tgl_awal, $tgl_akhir){
+                //     $q->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+                // })->get();
+                // $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($tgl_awal, $tgl_akhir){
+                //     $q->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+                // })->get();
             }
 
 
@@ -3241,6 +3262,13 @@ class LogistikController extends Controller
             $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
             })->get();
+
+            // $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($tgl_awal, $tgl_akhir){
+            //     $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+            // })->get();
+            // $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($tgl_awal, $tgl_akhir){
+            //     $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+            // })->get();
             $s = $prd->merge($prt);
         } else {
             $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
@@ -3249,6 +3277,13 @@ class LogistikController extends Controller
             $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($tgl_awal, $tgl_akhir) {
                 $q->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
             })->get();
+
+            // $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($tgl_awal, $tgl_akhir){
+            //     $q->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+            // })->get();
+            // $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($tgl_awal, $tgl_akhir){
+            //     $q->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir]);
+            // })->get();
             $s = $prd->merge($prt);
         }
 
@@ -3262,6 +3297,20 @@ class LogistikController extends Controller
                 } else {
                     return $data->DetailPesananPart->Pesanan->so;
                 }
+                // return $data->so;
+            })
+            ->addColumn('no_paket', function ($data) {
+                if (isset($data->DetailPesananProduk)) {
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                } else {
+                    return $data->DetailPesananPart->Pesanan->so;
+                }
+                // if(isset($data->Ekatalog)){
+                //     return $data->Ekatalog->no_paket;
+                // }else{
+                //     return '-';
+                // }
+
             })
             ->addColumn('po', function ($data) {
                 if (isset($data->DetailPesananProduk)) {
@@ -3269,6 +3318,15 @@ class LogistikController extends Controller
                 } else {
                     return $data->DetailPesananPart->Pesanan->no_po;
                 }
+                // return $data->no_po;
+            })
+            ->addColumn('tgl_po', function ($data) {
+                if (isset($data->DetailPesananProduk)) {
+                    return $data->DetailPesananProduk->DetailPesanan->Pesanan->no_po;
+                } else {
+                    return $data->DetailPesananPart->Pesanan->no_po;
+                }
+                // return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
             })
             ->addColumn('sj', function ($data) {
                 return $data->Logistik->nosurat;
@@ -3301,6 +3359,14 @@ class LogistikController extends Controller
                         return $data->DetailPesananPart->Pesanan->Spb->Customer->nama;
                     }
                 }
+
+                // if ($data->Ekatalog) {
+                //     return $data->Ekatalog->instansi;
+                // } else if ($data->Spa) {
+                //     return $data->Spa->Customer->nama;
+                // } else if ($data->Spb) {
+                //     return $data->Spb->Customer->nama;
+                // }
             })
             ->addColumn('alamat', function ($data) {
                 if (isset($data->DetailPesananProduk)) {
@@ -3320,6 +3386,13 @@ class LogistikController extends Controller
                         return $data->DetailPesananPart->Pesanan->Spb->Customer->alamat;
                     }
                 }
+                // if ($data->Ekatalog) {
+                //     return $data->Ekatalog->alamat;
+                // } else if ($data->Spa) {
+                //     return $data->Spa->Customer->alamat;
+                // } else if ($data->Spb) {
+                //     return $data->Spb->Customer->alamat;
+                // }
             })
             ->addColumn('provinsi', function ($data) {
                 if (isset($data->DetailPesananProduk)) {
@@ -3339,6 +3412,13 @@ class LogistikController extends Controller
                         return $data->DetailPesananPart->Pesanan->Spb->Customer->Provinsi->nama;
                     }
                 }
+                // if ($data->Ekatalog) {
+                //     return $data->Ekatalog->Provinsi->nama;
+                // } else if ($data->Spa) {
+                //     return $data->Spa->Customer->Provinsi->nama;
+                // } else if ($data->Spb) {
+                //     return $data->Spb->Customer->Provinsi->nama;
+                // }
             })
             ->addColumn('telp', function ($data) {
                 if (isset($data->DetailPesananProduk)) {
