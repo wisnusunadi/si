@@ -36,9 +36,9 @@ class LogistikController extends Controller
     {
         $data = Logistik::find($id);
         $data_produk = "";
-        if (isset($data->DetailLogistik) && !isset($data->DetailLogistikPart)) {
+        if (isset($data->DetailLogistik[0]) && !isset($data->DetailLogistikPart)) {
             $data_produk = DetailLogistik::where('logistik_id', $id)->get();
-        } else if (!isset($data->DetailLogistik) && isset($data->DetailLogistikPart)) {
+        } else if (!isset($data->DetailLogistik[0]) && isset($data->DetailLogistikPart)) {
             $data_produk = DetailLogistikPart::where('logistik_id', $id)->get();
         } else {
             $data_prd = DetailLogistik::where('logistik_id', $id)->get();
@@ -1520,8 +1520,8 @@ class LogistikController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                if (isset($data->DetailLogistik)) {
-                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                if (isset($data->DetailLogistik[0])) {
+                    return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so;
                 } else if (isset($data->DetailLogistikPart)) {
                     return $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so;
                 }
@@ -1543,14 +1543,14 @@ class LogistikController extends Controller
                 return Carbon::createFromFormat('Y-m-d', $data->tgl_kirim)->format('d-m-Y');
             })
             ->addColumn('nama_customer', function ($data) {
-                if (isset($data->DetailLogistik)) {
-                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                if (isset($data->DetailLogistik[0])) {
+                    $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                     if ($name[1] == 'EKAT') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama;
                     } elseif ($name[1] == 'SPA') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                     } elseif ($name[1] == 'SPB') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                     }
                 } else if (isset($data->DetailLogistikPart)) {
                     $name = explode('/',  $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
@@ -1562,14 +1562,14 @@ class LogistikController extends Controller
                 }
             })
             ->addColumn('provinsi', function ($data) {
-                if (isset($data->DetailLogistik)) {
-                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                if (isset($data->DetailLogistik[0])) {
+                    $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                     if ($name[1] == 'EKAT') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama;
                     } elseif ($name[1] == 'SPA') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama;
                     } elseif ($name[1] == 'SPB') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama;
                     }
                 } else if (isset($data->DetailLogistikPart)) {
                     $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
@@ -1595,14 +1595,14 @@ class LogistikController extends Controller
                 $string = "";
                 $name = "";
                 $provinsi = "";
-                if (isset($data->DetailLogistik)) {
-                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                if (isset($data->DetailLogistik[0])) {
+                    $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                     if ($name[1] == 'EKAT') {
-                        $provinsi =  $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->id;
+                        $provinsi =  $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->id;
                     } elseif ($name[1] == 'SPA') {
-                        $provinsi =  $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->id;
+                        $provinsi =  $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->id;
                     } elseif ($name[1] == 'SPB') {
-                        $provinsi =  $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->id;
+                        $provinsi =  $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->id;
                     }
                 } else if (isset($data->DetailLogistikPart)) {
                     $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
@@ -2050,8 +2050,8 @@ class LogistikController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                if (isset($data->DetailLogistik)) {
-                    return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                if (isset($data->DetailLogistik[0])) {
+                    return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so;
                 } else {
                     return $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so;
                 }
@@ -2077,14 +2077,14 @@ class LogistikController extends Controller
                 return  Carbon::createFromFormat('Y-m-d', $data->tgl_kirim)->format('d-m-Y');
             })
             ->addColumn('nama_customer', function ($data) {
-                if (isset($data->DetailLogistik)) {
-                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                if (isset($data->DetailLogistik[0])) {
+                    $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                     if ($name[1] == 'EKAT') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama;
                     } elseif ($name[1] == 'SPA') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                     } elseif ($name[1] == 'SPB') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                     }
                 } else {
                     $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
@@ -2096,14 +2096,14 @@ class LogistikController extends Controller
                 }
             })
             ->addColumn('provinsi', function ($data) {
-                if (isset($data->DetailLogistik)) {
-                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                if (isset($data->DetailLogistik[0])) {
+                    $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                     if ($name[1] == 'EKAT') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama;
                     } else if ($name[1] == 'SPA') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama;
                     } else if ($name[1] == 'SPB') {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama;
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama;
                     }
                 } else {
                     $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);
@@ -2119,8 +2119,8 @@ class LogistikController extends Controller
             })
             ->addColumn('button', function ($data) {
                 $name = "";
-                if (isset($data->DetailLogistik)) {
-                    $names = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                if (isset($data->DetailLogistik[0])) {
+                    $names = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                     $name = $names[1];
                 } else {
                     $names = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);

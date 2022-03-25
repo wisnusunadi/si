@@ -815,8 +815,8 @@ class PenjualanController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('no_so', function ($data) {
-                    if (isset($data->DetailLogistik)) {
-                        return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so;
+                    if (isset($data->DetailLogistik[0])) {
+                        return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so;
                     } else if (isset($data->DetailLogistikPart)) {
                         $list = array();
                         foreach ($data->DetailLogistikPart as $s) {
@@ -832,14 +832,14 @@ class PenjualanController extends Controller
                 })
                 ->addColumn('customer', function ($data) {
                     // if (isset($data->DetailLogistik)) {
-                    //     $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                    //     $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                     //     if ($name[1] == 'EKAT') {
-                    //         return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
+                    //         return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi;
                     //     } else if ($name[1] == 'SPA') {
-                    //         return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                    //         return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                     //     }
                     // } else if (!isset($data->DetailLogistik)) {
-                    //     return $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                    //     return $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                     // } else {
                     //     return '-';
                     // }
@@ -858,7 +858,7 @@ class PenjualanController extends Controller
                         return '<div class="badge red-text">' . $data->State->nama . '</div>';
                     }
                 })
-                ->rawColumns(['status'])
+                ->rawColumns(['status', 'no_so'])
                 ->make(true);
         }
     }
