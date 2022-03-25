@@ -147,7 +147,7 @@ class ProduksiController extends Controller
             foreach ($request->data as $key => $values) {
                 $b = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $values['prd'])->where('detail_pesanan_produk_id', $key)->get()->count();
                 $c = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $values['prd'])->where('detail_pesanan_produk_id', $key)->first();
-                if ($c) {
+                if ($b > 0) {
                     foreach ($values['noseri'] as $k => $v) {
                         $nn = new NoseriTGbj();
                         $nn->t_gbj_detail_id = $c->id;
