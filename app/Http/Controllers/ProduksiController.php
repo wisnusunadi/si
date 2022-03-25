@@ -259,17 +259,22 @@ class ProduksiController extends Controller
                 $did = $dd->id;
                 $checked = $request->noseri_id;
                 foreach ($value1['noseri'] as $k => $v) {
-                    $nn = new NoseriTGbj();
-                    $nn->t_gbj_detail_id = $did;
-                    $nn->noseri_id = $v;
-                    $nn->status_id = 2;
-                    $nn->state_id = 8;
-                    $nn->jenis = 'keluar';
-                    $nn->created_at = Carbon::now();
-                    $nn->created_by = $request->userid;
-                    $nn->save();
+                    if (NoseriTGbj::where('noseri_id', $v)->get()->count() > 0) {
+                        # code...
+                    } else {
+                        $nn = new NoseriTGbj();
+                        $nn->t_gbj_detail_id = $did;
+                        $nn->noseri_id = $v;
+                        $nn->status_id = 2;
+                        $nn->state_id = 8;
+                        $nn->jenis = 'keluar';
+                        $nn->created_at = Carbon::now();
+                        $nn->created_by = $request->userid;
+                        $nn->save();
 
-                    NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+                        NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+                    }
+
                 }
 
                 $gdg = GudangBarangJadi::whereIn('id', [$key1])->get()->toArray();
