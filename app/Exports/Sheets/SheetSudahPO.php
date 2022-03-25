@@ -45,14 +45,19 @@ class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
     {
         return $this->seri;
     }
+    public function tampilan()
+    {
+        return $this->tampilan;
+    }
 
-    public function __construct(string $jenis_penjualan, string $distributor, string $tgl_awal,  string $tgl_akhir, string $seri)
+    public function __construct(string $jenis_penjualan, string $distributor, string $tgl_awal,  string $tgl_akhir, string $seri, string $tampilan)
     {
         $this->jenis_penjualan = $jenis_penjualan;
         $this->distributor = $distributor;
         $this->tgl_awal = $tgl_awal;
         $this->tgl_akhir = $tgl_akhir;
         $this->seri = $seri;
+        $this->tampilan = $tampilan;
     }
 
     public function columnFormats(): array
@@ -104,134 +109,209 @@ class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
         $sheet->getStyle('N')->getAlignment()->setWrapText(true);
         $sheet->getColumnDimension('O')->setAutoSize(false)->setWidth(38);
         $sheet->getStyle('O')->getAlignment()->setWrapText(true);
-        if($this->seri != "kosong"){
+
+        if ($this->seri != "kosong") {
             $sheet->getColumnDimension('P')->setAutoSize(false)->setWidth(70);
             $sheet->getStyle('P')->getAlignment()->setWrapText(true);
             $sheet->getStyle('n2:t2')->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('89d0b4');
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setRGB('89d0b4');
             $sheet->getStyle('u2:w2')->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('f99c83');
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setRGB('f99c83');
             $sheet->getStyle('U:V')->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        }else{
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        } else {
             $sheet->getStyle('n2:s2')->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('89d0b4');
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setRGB('89d0b4');
             $sheet->getStyle('t2:v2')->getFill()
-            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
-            ->getStartColor()->setRGB('f99c83');
+                ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+                ->getStartColor()->setRGB('f99c83');
             $sheet->getStyle('T:U')->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         }
 
         $sheet->getStyle('A:W')->getAlignment()
-        ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
+            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
         $sheet->getStyle('A:H')->getAlignment()
-        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('L:M')->getAlignment()
-        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
     }
 
     public function view(): View
     {
+        $tampilan = $this->tampilan;
         $seri = $this->seri;
         $dsb = $this->distributor;
         $tanggal_awal = $this->tgl_awal;
         $tanggal_akhir = $this->tgl_akhir;
         $x = explode(',', $this->jenis_penjualan);
         $data = "";
-        if ($dsb == 'semua') {
-            $ekatalog = Pesanan::has('Ekatalog')->wherenotnull('no_po')
-            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-            ->orderby('so', 'ASC')
-            ->get();
-            $spa = Pesanan::has('Spa')->wherenotnull('no_po')
-            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-            ->orderby('so', 'ASC')
-            ->get();
-            $spb = Pesanan::has('Spb')->wherenotnull('no_po')
-            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-            ->orderby('so', 'ASC')
-            ->get();
-            if ($x == ['ekatalog', 'spa', 'spb']) {
-                $data = $ekatalog->merge($spa)->merge($spb)->sortBy('created_at');
-                $header = 'Laporan Penjualan Semua';
-            } else if ($x == ['ekatalog', 'spa']) {
-                $data = Pesanan::has('Spb', 'Ekatalog')->wherenotnull('no_po')
+
+
+        if ($tampilan == 'merge') {
+            if ($dsb == 'semua') {
+                $ekatalog = Pesanan::has('Ekatalog')->wherenotnull('no_po')
                     ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                     ->orderby('so', 'ASC')
                     ->get();
-                $header = 'Laporan Penjualan Ekatalog dan SPA';
-            } else if ($x == ['ekatalog', 'spb']) {
-                $data = $ekatalog->merge($spb)->sortBy('created_at');
-                $header = 'Laporan Penjualan Ekatalog dan SPB';
-            } else if ($x == ['spa', 'spb']) {
-                $data = $spa->merge($spb)->sortBy('created_at');
-                $header = 'Laporan Penjualan SPA dan SPB';
-            } else if ($this->jenis_penjualan == 'ekatalog') {
-                $data = $ekatalog;
-                $header = 'Laporan Penjualan Ekatalog ';
-            } else if ($this->jenis_penjualan == 'spa') {
-                $data = $spa;
-                $header = 'Laporan Penjualan SPA';
-            } else if ($this->jenis_penjualan == 'spb') {
-                $data = $spb;
-                $header = 'Laporan Penjualan SPB';
-            } else{
-                $data = $ekatalog->merge($spa)->merge($spb)->sortBy('created_at');
-                $header = 'Laporan Penjualan Semua';
+                $spa = Pesanan::has('Spa')->wherenotnull('no_po')
+                    ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    ->orderby('so', 'ASC')
+                    ->get();
+                $spb = Pesanan::has('Spb')->wherenotnull('no_po')
+                    ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    ->orderby('so', 'ASC')
+                    ->get();
+                if ($x == ['ekatalog', 'spa', 'spb']) {
+                    $data = $ekatalog->merge($spa)->merge($spb)->sortBy('created_at');
+                    $header = 'Laporan Penjualan Semua';
+                } else if ($x == ['ekatalog', 'spa']) {
+                    $data = Pesanan::has('Spb', 'Ekatalog')->wherenotnull('no_po')
+                        ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->orderby('so', 'ASC')
+                        ->get();
+                    $header = 'Laporan Penjualan Ekatalog dan SPA';
+                } else if ($x == ['ekatalog', 'spb']) {
+                    $data = $ekatalog->merge($spb)->sortBy('created_at');
+                    $header = 'Laporan Penjualan Ekatalog dan SPB';
+                } else if ($x == ['spa', 'spb']) {
+                    $data = $spa->merge($spb)->sortBy('created_at');
+                    $header = 'Laporan Penjualan SPA dan SPB';
+                } else if ($this->jenis_penjualan == 'ekatalog') {
+                    $data = $ekatalog;
+                    $header = 'Laporan Penjualan Ekatalog ';
+                } else if ($this->jenis_penjualan == 'spa') {
+                    $data = $spa;
+                    $header = 'Laporan Penjualan SPA';
+                } else if ($this->jenis_penjualan == 'spb') {
+                    $data = $spb;
+                    $header = 'Laporan Penjualan SPB';
+                } else {
+                    $data = $ekatalog->merge($spa)->merge($spb)->sortBy('created_at');
+                    $header = 'Laporan Penjualan Semua';
+                }
+            } else {
+                $Ekatalog = Pesanan::wherehas('Ekatalog', function ($q) use ($dsb) {
+                    $q->where('customer_id', $dsb);
+                })->wherenotnull('no_po')
+                    ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    ->orderby('so', 'ASC')
+                    ->get();
+                $Spa = Pesanan::wherehas('Spa', function ($q) use ($dsb) {
+                    $q->where('customer_id', $dsb);
+                })->wherenotnull('no_po')
+                    ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    ->orderby('so', 'ASC')
+                    ->get();
+                $Spb = Pesanan::wherehas('Spb', function ($q) use ($dsb) {
+                    $q->where('customer_id', $dsb);
+                })->wherenotnull('no_po')
+                    ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                    ->orderby('so', 'ASC')
+                    ->get();
+
+                if ($x == ['ekatalog', 'spa', 'spb']) {
+                    $data = $Ekatalog->merge($Spa)->merge($Spb);
+                    $header = 'Laporan Penjualan Semua';
+                } else if ($x == ['ekatalog', 'spa']) {
+                    $data = $Ekatalog->merge($Spa);
+                    $header = 'Laporan Penjualan Ekatalog dan SPA';
+                } else if ($x == ['ekatalog', 'spb']) {
+                    $data = $Ekatalog->merge($Spb);
+                    $header = 'Laporan Penjualan Ekatalog dan SPB';
+                } else if ($x == ['spa', 'spb']) {
+                    $data = $Spa->merge($Spb);
+                    $header = 'Laporan Penjualan SPA dan SPB';
+                } else if ($this->jenis_penjualan == 'ekatalog') {
+                    $data = $Ekatalog;
+                    $header = 'Laporan Penjualan Ekatalog ';
+                } else if ($this->jenis_penjualan == 'spa') {
+                    $data = $Spa;
+                    $header = 'Laporan Penjualan SPA';
+                } else if ($this->jenis_penjualan == 'spb') {
+                    $data = $Spb;
+                    $header = 'Laporan Penjualan SPB';
+                } else {
+                    $data = $Ekatalog->merge($Spa)->merge($Spb);
+                    $header = 'Laporan Penjualan Semua';
+                }
             }
         } else {
-            $Ekatalog = Pesanan::wherehas('Ekatalog', function ($q) use ($dsb) {
-                $q->where('customer_id', $dsb);
-            })->wherenotnull('no_po')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->orderby('so', 'ASC')
-                ->get();
-            $Spa = Pesanan::wherehas('Spa', function ($q) use ($dsb) {
-                $q->where('customer_id', $dsb);
-            })->wherenotnull('no_po')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->orderby('so', 'ASC')
-                ->get();
-            $Spb = Pesanan::wherehas('Spb', function ($q) use ($dsb) {
-                $q->where('customer_id', $dsb);
-            })->wherenotnull('no_po')
-                ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-                ->orderby('so', 'ASC')
-                ->get();
+            if ($dsb == 'semua') {
+                $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->orderBy('pesanan_id', 'ASC')->get();
+                $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->orderBy('pesanan_id', 'ASC')->get();
+                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->orderBy('pesanan_id', 'ASC')->get();
+                $Part_Spa  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->orderBy('pesanan_id', 'ASC')->get();
+                $Part_Spb  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
+                })->orderBy('pesanan_id', 'ASC')->get();
+            } else {
+                $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('customer_id', $dsb);
+                })->orderBy('pesanan_id', 'ASC')->get();
+                $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('customer_id', $dsb);
+                })->orderBy('pesanan_id', 'ASC')->get();
+                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('customer_id', $dsb);
+                })->orderBy('pesanan_id', 'ASC')->get();
+                $Part_Spa  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('customer_id', $dsb);
+                })->orderBy('pesanan_id', 'ASC')->get();
+                $Part_Spb  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('customer_id', $dsb);
+                })->orderBy('pesanan_id', 'ASC')->get();
+            }
+
 
             if ($x == ['ekatalog', 'spa', 'spb']) {
-                $data = $Ekatalog->merge($Spa)->merge($Spb);
+                $prd = $Ekatalog->merge($Spa)->merge($Spb);
+                $part = $Part_Spa->merge($Part_Spb);
+                $data = $prd->merge($part);
                 $header = 'Laporan Penjualan Semua';
             } else if ($x == ['ekatalog', 'spa']) {
-                $data = $Ekatalog->merge($Spa);
+                $prd = $Ekatalog->merge($Spa);
+                $data = $prd->merge($Part_Spa);
                 $header = 'Laporan Penjualan Ekatalog dan SPA';
             } else if ($x == ['ekatalog', 'spb']) {
-                $data = $Ekatalog->merge($Spb);
+                $prd = $Ekatalog->merge($Spb);
+                $data = $prd->merge($Part_Spb);
                 $header = 'Laporan Penjualan Ekatalog dan SPB';
             } else if ($x == ['spa', 'spb']) {
-                $data = $Spa->merge($Spb);
+                $prd = $Spa->merge($Spb);
+                $part = $Part_Spa->merge($Part_Spb);
+                $data = $prd->merge($part);
                 $header = 'Laporan Penjualan SPA dan SPB';
             } else if ($this->jenis_penjualan == 'ekatalog') {
                 $data = $Ekatalog;
                 $header = 'Laporan Penjualan Ekatalog ';
             } else if ($this->jenis_penjualan == 'spa') {
-                $data = $Spa;
+                $data = $Spa->merge($Part_Spa);
                 $header = 'Laporan Penjualan SPA';
             } else if ($this->jenis_penjualan == 'spb') {
-                $data = $Spb;
+                $data = $Spb->merge($Part_Spb);
                 $header = 'Laporan Penjualan SPB';
-            } else{
-                $data = $Ekatalog->merge($Spa)->merge($Spb);
-                $header = 'Laporan Penjualan Semua';
             }
         }
 
 
-        return view('page.penjualan.penjualan.LaporanPenjualanEx', ['data' => $data, 'header' => $header, 'seri' => $seri]);
+        return view('page.penjualan.penjualan.LaporanPenjualanEx', ['data' => $data, 'header' => $header, 'seri' => $seri, 'tampilan' => $tampilan]);
     }
     public function title(): string
     {

@@ -40,7 +40,7 @@
         ?>
         <?php $countprd = 0; ?>
         <tr>
-            <td rowspan="{{$rowspan}}">{{$index + 1}}</td>
+            <td rowspan="{{$rowspan}}">{{$loop->iteration}}</td>
             <td rowspan="{{$rowspan}}">
             @if($d->Ekatalog)
             {{$d->Ekatalog->no_paket}}
@@ -86,7 +86,7 @@
                 @endif
             </td>
             <td rowspan="{{$rowspan}}">
-                @if($d->Ekatalog)
+                @if($d->Ekatalog->tgl_kontrak != '')
                 {{ date('d-m-Y', strtotime($d->Ekatalog->tgl_kontrak)) }}
                 @else
                 -
@@ -96,8 +96,27 @@
             @if(isset($d->DetailPesanan))
                 @foreach ($d->DetailPesanan as $e)
                 @if($countprd <= 0)
-                <td>-</td>
-                <td>{{$e->PenjualanProduk->nama}}</td>
+                <td>
+                    @if($e->PenjualanProduk->nama_alias != '')
+                    {{$e->PenjualanProduk->nama_alias}}
+                    @else
+                    {{$e->PenjualanProduk->nama}}
+                    @endif
+                </td>
+                <td>
+                    @foreach($e->DetailPesananProduk as $p)
+                    {{ $p->gudangbarangjadi->produk->nama}}
+
+                    @if ($p->gudangbarangjadi->nama != '')
+                    {{ $p->gudangbarangjadi->nama}}
+                    @endif
+
+                    @if( !$loop->last)
+                    ,
+                    @endif
+
+                    @endforeach
+                </td>
                 <td>{{$e->jumlah}}</td>
                 <td>{{$e->harga}}</td>
                 <td>{{$e->ongkir}}</td>
@@ -122,8 +141,25 @@
                     @endif</td>
                 @else
                 <tr>
-                    <td>-</td>
-                    <td>{{$e->PenjualanProduk->nama}}</td>
+                    <td> @if($e->PenjualanProduk->nama_alias != '')
+                        {{$e->PenjualanProduk->nama_alias}}
+                        @else
+                        {{$e->PenjualanProduk->nama}}
+                        @endif</td>
+                    <td>
+                        @foreach($e->DetailPesananProduk as $p)
+                        {{ $p->gudangbarangjadi->produk->nama}}
+
+                        @if ($p->gudangbarangjadi->nama != '')
+                        {{ $p->gudangbarangjadi->nama}}
+                        @endif
+
+                        @if( !$loop->last)
+                        ,
+                        @endif
+
+                        @endforeach
+                    </td>
                     <td>{{$e->jumlah}}</td>
                     <td>{{$e->harga}}</td>
                     <td>{{$e->ongkir}}</td>

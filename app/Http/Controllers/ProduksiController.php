@@ -144,11 +144,11 @@ class ProduksiController extends Controller
         $a = TFProduksi::where('pesanan_id', $request->pesanan_id)->first();
         if (isset($a->id)) {
 
-            foreach ($request->data as $key => $value) {
-                $b = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $value['prd'])->where('detail_pesanan_produk_id', $key)->get()->count();
-                $c = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $value['prd'])->where('detail_pesanan_produk_id', $key)->first();
+            foreach ($request->data as $key => $values) {
+                $b = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $values['prd'])->where('detail_pesanan_produk_id', $key)->get()->count();
+                $c = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $values['prd'])->where('detail_pesanan_produk_id', $key)->first();
                 if ($b > 0) {
-                    foreach ($value['noseri'] as $k => $v) {
+                    foreach ($values['noseri'] as $k => $v) {
                         $nn = new NoseriTGbj();
                         $nn->t_gbj_detail_id = $c->id;
                         $nn->noseri_id = $v;
@@ -162,16 +162,16 @@ class ProduksiController extends Controller
                         NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
                     }
 
-                    $gdg = GudangBarangJadi::whereIn('id', [$value['prd']])->get()->toArray();
+                    $gdg = GudangBarangJadi::whereIn('id', [$values['prd']])->get()->toArray();
                     $i = 0;
                     foreach ($gdg as $vv) {
-                        $vv['stok'] = $vv['stok'] - $value['jumlah'];
+                        $vv['stok'] = $vv['stok'] - $values['jumlah'];
                         // print_r($vv['stok']);
                         $i++;
                         GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
                         GudangBarangJadiHis::create([
                             'gdg_brg_jadi_id' => $vv['id'],
-                            'stok' => $value['jumlah'],
+                            'stok' => $values['jumlah'],
                             'tgl_masuk' => Carbon::now(),
                             'jenis' => 'KELUAR',
                             'created_by' => $request->userid,
@@ -181,12 +181,23 @@ class ProduksiController extends Controller
                         ]);
                     }
                 } else {
-                    foreach ($request->data as $key => $value) {
+                    foreach ($request->data as $key => $valuess) {
+                        // $dd = TFProduksiDetail::create([
+                        //     't_gbj_id' => $a->id,
+                        //     'detail_pesanan_produk_id' => $key,
+                        //     'gdg_brg_jadi_id' => $valuess['prd'],
+                        //     'qty' => $valuess['jumlah'],
+                        //     'jenis' => 'keluar',
+                        //     'status_id' => 2,
+                        //     'state_id' => 8,
+                        //     'created_at' => Carbon::now(),
+                        //     'created_by' => $request->userid
+                        // ]);
                         $dd = new TFProduksiDetail();
                         $dd->t_gbj_id = $a->id;
                         $dd->detail_pesanan_produk_id = $key;
-                        $dd->gdg_brg_jadi_id = $value['prd'];
-                        $dd->qty = $value['jumlah'];
+                        $dd->gdg_brg_jadi_id = $valuess['prd'];
+                        $dd->qty = $valuess['jumlah'];
                         $dd->jenis = 'keluar';
                         $dd->status_id = 2;
                         $dd->state_id = 8;
@@ -196,30 +207,34 @@ class ProduksiController extends Controller
 
                         $did = $dd->id;
                         $checked = $request->noseri_id;
-                        foreach ($value['noseri'] as $k => $v) {
-                            $nn = new NoseriTGbj();
-                            $nn->t_gbj_detail_id = $did;
-                            $nn->noseri_id = $v;
-                            $nn->status_id = 2;
-                            $nn->state_id = 8;
-                            $nn->jenis = 'keluar';
-                            $nn->created_at = Carbon::now();
-                            $nn->created_by = $request->userid;
-                            $nn->save();
+                        foreach ($valuess['noseri'] as $k => $v) {
+                            // if (NoseriTGbj::where('noseri_id', $v)->get()->count() > 0) {
+                            //     # code...
+                            // } else {
+                                $nn = new NoseriTGbj();
+                                $nn->t_gbj_detail_id = $did;
+                                $nn->noseri_id = $v;
+                                $nn->status_id = 2;
+                                $nn->state_id = 8;
+                                $nn->jenis = 'keluar';
+                                $nn->created_at = Carbon::now();
+                                $nn->created_by = $request->userid;
+                                $nn->save();
 
-                            NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+                                NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+                            // }
                         }
 
-                        $gdg = GudangBarangJadi::whereIn('id', [$value['prd']])->get()->toArray();
+                        $gdg = GudangBarangJadi::whereIn('id', [$valuess['prd']])->get()->toArray();
                         $i = 0;
                         foreach ($gdg as $vv) {
-                            $vv['stok'] = $vv['stok'] - $value['jumlah'];
+                            $vv['stok'] = $vv['stok'] - $valuess['jumlah'];
                             // print_r($vv['stok']);
                             $i++;
                             GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
                             GudangBarangJadiHis::create([
                                 'gdg_brg_jadi_id' => $vv['id'],
-                                'stok' => $value['jumlah'],
+                                'stok' => $valuess['jumlah'],
                                 'tgl_masuk' => Carbon::now(),
                                 'jenis' => 'KELUAR',
                                 'created_by' => $request->userid,
@@ -243,12 +258,23 @@ class ProduksiController extends Controller
             $d->created_by = $request->userid;
             $d->save();
 
-            foreach ($request->data as $key => $value) {
+            foreach ($request->data as $key1 => $value1) {
+                // $dd = TFProduksiDetail::create([
+                //     't_gbj_id' => $d->id,
+                //     'detail_pesanan_produk_id' => $key1,
+                //     'gdg_brg_jadi_id' => $value1['prd'],
+                //     'qty' => $value1['jumlah'],
+                //     'jenis' => 'keluar',
+                //     'status_id' => 2,
+                //     'state_id' => 8,
+                //     'created_at' => Carbon::now(),
+                //     'created_by' => $request->userid
+                // ]);
                 $dd = new TFProduksiDetail();
                 $dd->t_gbj_id = $d->id;
-                $dd->detail_pesanan_produk_id = $key;
-                $dd->gdg_brg_jadi_id = $value['prd'];
-                $dd->qty = $value['jumlah'];
+                $dd->detail_pesanan_produk_id = $key1;
+                $dd->gdg_brg_jadi_id = $value1['prd'];
+                $dd->qty = $value1['jumlah'];
                 $dd->jenis = 'keluar';
                 $dd->status_id = 2;
                 $dd->state_id = 8;
@@ -258,7 +284,7 @@ class ProduksiController extends Controller
 
                 $did = $dd->id;
                 $checked = $request->noseri_id;
-                foreach ($value['noseri'] as $k => $v) {
+                foreach ($value1['noseri'] as $k => $v) {
                     $nn = new NoseriTGbj();
                     $nn->t_gbj_detail_id = $did;
                     $nn->noseri_id = $v;
@@ -272,16 +298,16 @@ class ProduksiController extends Controller
                     NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
                 }
 
-                $gdg = GudangBarangJadi::whereIn('id', [$key])->get()->toArray();
+                $gdg = GudangBarangJadi::whereIn('id', [$key1])->get()->toArray();
                 $i = 0;
                 foreach ($gdg as $vv) {
-                    $vv['stok'] = $vv['stok'] - $value['jumlah'];
+                    $vv['stok'] = $vv['stok'] - $value1['jumlah'];
                     // print_r($vv['stok']);
                     $i++;
                     GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
                     GudangBarangJadiHis::create([
                         'gdg_brg_jadi_id' => $vv['id'],
-                        'stok' => $value['jumlah'],
+                        'stok' => $value1['jumlah'],
                         'tgl_masuk' => Carbon::now(),
                         'jenis' => 'KELUAR',
                         'created_by' => $request->userid,
@@ -438,9 +464,9 @@ class ProduksiController extends Controller
 
     function getSOCek()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10])->get());
-        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
-        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10, 20])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10, 20])->Has('DetailPesanan')->get());
+        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10, 20])->Has('DetailPesanan')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
 
@@ -581,9 +607,9 @@ class ProduksiController extends Controller
 
     function getOutSO()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10])->get());
-        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10])->get());
-        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10])->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10, 20])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10, 20])->get());
+        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10, 20])->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
