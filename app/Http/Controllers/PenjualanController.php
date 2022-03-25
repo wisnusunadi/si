@@ -969,6 +969,36 @@ class PenjualanController extends Controller
             ->rawColumns(['paket_produk', 'nama_produk'])
             ->make(true);
     }
+
+    public function get_data_pesanan_detail($id)
+    {
+        $dp = DetailPesanan::where('pesanan_id', $id)->get();
+        $dpp = DetailPesananPart::where('pesanan_id', $id)->get();
+
+        $data = $dp->merge($dpp);
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                if (isset($data->DetailPesananProduk)) {
+                    return $data->PenjualanProduk->nama;
+                } else {
+                    return $data->Sparepart->nama;
+                }
+            })
+            ->addColumn('jumlah', function ($data) {
+                if ($data->jumlah) {
+                    return $data->jumlah;
+                }
+            })
+            ->addColumn('harga', function ($data) {
+                return $data->harga;
+            })
+            ->addColumn('sub', function ($data) {
+                return $data->harga * $data->jumlah;
+            })
+            ->make(true);
+    }
+
     public function getHariBatasKontrak($value, $limit)
     {
         if ($limit == 2) {
@@ -2707,7 +2737,7 @@ class PenjualanController extends Controller
     //     $ekatalog->delete();
     // }
 
-    //Laporan
+    // Laporan
     public function  get_data_laporan_penjualan($penjualan, $distributor, $tanggal_awal, $tanggal_akhir)
     {
         $x = explode(',', $penjualan);
@@ -2999,6 +3029,283 @@ class PenjualanController extends Controller
             })
             ->make(true);
     }
+
+    // public function get_data_laporan_penjualan($penjualan, $distributor, $tanggal_awal, $tanggal_akhir){
+    //     $x = explode(',', $penjualan);
+    //     $data = [];
+    //     if($distributor == 'semua'){
+    //         $ekat = Pesanan::whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])->Has('Ekatalog')->get();
+    //         $ekatnopo = Pesanan::whereNull('no_po')->Has('Ekatalog')->get();
+    //         $spa = Pesanan::whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])->Has('Spa')->get();
+    //         $spanopo = Pesanan::whereNull('no_po')->Has('Spa')->get();
+    //         $spb = Pesanan::whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])->Has('Spb')->get();
+    //         $spbnopo = Pesanan::whereNull('no_po')->Has('Spb')->get();
+    //         if($x == ['ekatalog']){
+    //             $data = $ekat->merge($ekatnopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['spa']){
+    //             $data = $spa->merge($spanopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['spb']){
+    //             $data = $spb->merge($spbnopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['ekatalog', 'spa']){
+    //             $data = $ekat->merge($spa)->merge($ekatnopo)->merge($spanopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['ekatalog', 'spb']){
+    //             $data = $ekat->merge($spb)->merge($ekatnopo)->merge($spbnopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['spa', 'spb']){
+    //             $data = $spa->merge($spb)->merge($spanopo)->merge($spbnopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['ekatalog', 'spa', 'spb']){
+    //             $data = $data = $ekat->merge($spa)->merge($spb)->merge($ekatnopo)->merge($spanopo)->merge($spbnopo)->sortBy('created_at');
+    //         }
+    //     }
+    //     else{
+    //         $ekat = Pesanan::whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])->whereHas('Ekatalog', function($q) use($distributor){
+    //             $q->where('customer_id', $distributor);
+    //         })->get();
+    //         $ekatnopo = Pesanan::whereNull('no_po')->whereHas('Ekatalog', function($q) use($distributor){
+    //             $q->where('customer_id', $distributor);
+    //         })->get();
+    //         $spa = $data = Pesanan::whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])->whereHas('Spa', function($q) use($distributor){
+    //             $q->where('customer_id', $distributor);
+    //         })->get();
+    //         $spanopo = Pesanan::whereNull('no_po')->whereHas('Spa', function($q) use($distributor){
+    //             $q->where('customer_id', $distributor);
+    //         })->get();
+    //         $spb = Pesanan::whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])->whereHas('Spb', function($q) use($distributor){
+    //             $q->where('customer_id', $distributor);
+    //         })->get();
+    //         $spbnopo = Pesanan::whereNull('no_po')->whereHas('Spb', function($q) use($distributor){
+    //             $q->where('customer_id', $distributor);
+    //         })->get();
+    //         if($x == ['ekatalog']){
+    //             $data = $ekat->merge($ekatnopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['spa']){
+    //             $data = $spa->merge($spanopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['spb']){
+    //             $data = $spb->merge($spbnopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['ekatalog', 'spa']){
+    //             $data = $ekat->merge($spa)->merge($ekatnopo)->merge($spanopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['ekatalog', 'spb']){
+    //             $data = $ekat->merge($spb)->merge($ekatnopo)->merge($spbnopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['spa', 'spb']){
+    //             $data = $spa->merge($spb)->merge($spanopo)->merge($spbnopo)->sortBy('created_at');
+    //         }
+    //         else if($x == ['ekatalog', 'spa', 'spb']){
+    //             $data = $data = $ekat->merge($spa)->merge($spb)->merge($ekatnopo)->merge($spanopo)->merge($spbnopo)->sortBy('created_at');
+    //         }
+    //     }
+
+    //     return datatables()->of($data)
+    //         ->addIndexColumn()
+    //         ->addColumn('so', function ($data) {
+    //             return $data->so;
+    //         })
+    //         ->addColumn('no_paket', function ($data) {
+    //             // if($data->so){
+    //             //     $name = explode('/', $data->so);
+    //                 if ($data->Ekatalog) {
+    //                     return $data->Ekatalog->no_paket;
+    //                 } else {
+    //                     return '';
+    //                 }
+    //             // }
+    //         })
+    //         ->addColumn('no_po', function ($data) {
+    //             if($data->no_po){
+    //                 return '<div>'.$data->no_po.'</div><small>Tanggal PO '.Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y').'</small>';
+    //             }
+    //         })
+    //         ->addColumn('no_sj', function () {
+    //             return '-';
+    //         })
+    //         ->addColumn('nama_customer', function ($data) {
+    //             // if($data->so){
+    //                 // $name = explode('/', $data->so);
+    //                 if ($data->Ekatalog) {
+    //                     return $data->Ekatalog->Customer->nama;
+    //                 } elseif ($data->Spa) {
+    //                     return $data->Spa->Customer->nama;
+    //                 } else {
+    //                     return $data->Spb->Customer->nama;
+    //                 }
+    //             // }
+    //         })
+    //         ->addColumn('tgl_kontrak', function ($data) {
+    //             if($data->so){
+    //                 $name = explode('/', $data->so);
+    //                 if ($name[1] == 'EKAT') {
+    //                     if (isset($data->Ekatalog->tgl_kontrak)) {
+    //                         $tgl_sekarang = Carbon::now()->format('Y-m-d');
+    //                         $tgl_parameter = $data->Ekatalog->tgl_kontrak;
+
+    //                         if (isset($data->Pesanan->so)) {
+    //                             if ($data->Pesanan->getJumlahPesanan() == $data->Pesanan->getJumlahKirim()) {
+    //                                 return Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
+    //                             } else {
+    //                                 if ($tgl_sekarang < $tgl_parameter) {
+    //                                     $to = Carbon::now();
+    //                                     $from = $data->Ekatalog->tgl_kontrak;
+    //                                     $hari = $to->diffInDays($from);
+    //                                     if ($hari > 7) {
+    //                                         return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+    //                                         <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+    //                                     } else if ($hari > 0 && $hari <= 7) {
+    //                                         return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+    //                                         <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+    //                                     } else {
+    //                                         return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+    //                                         <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+    //                                     }
+    //                                 } else if ($tgl_sekarang == $tgl_parameter) {
+    //                                     return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+    //                                     <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+    //                                 } else {
+    //                                     $to = Carbon::now();
+    //                                     $from = $data->Ekatalog->tgl_kontrak;
+    //                                     $hari = $to->diffInDays($from);
+    //                                     return '<div id="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+    //                                     <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
+    //                                 }
+    //                             }
+    //                         } else {
+    //                             if ($tgl_sekarang < $tgl_parameter) {
+    //                                 $to = Carbon::now();
+    //                                 $from = $data->Ekatalog->tgl_kontrak;
+    //                                 $hari = $to->diffInDays($from);
+    //                                 if ($hari > 7) {
+    //                                     return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+    //                                     <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+    //                                 } else if ($hari > 0 && $hari <= 7) {
+    //                                     return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+    //                                     <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+    //                                 } else {
+    //                                     return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+    //                                     <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+    //                                 }
+    //                             } else if ($tgl_sekarang == $tgl_parameter) {
+    //                                 return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+    //                                 <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+    //                             } else {
+    //                                 $to = Carbon::now();
+    //                                 $from = $data->Ekatalog->tgl_kontrak;
+    //                                 $hari = $to->diffInDays($from);
+    //                                 return '<div id="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+    //                                 <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
+    //                             }
+    //                         }
+    //                     } else {
+    //                         return '-';
+    //                     }
+    //                 } else {
+    //                     return '';
+    //                 }
+    //             }
+    //         })
+    //         ->addColumn('tgl_kirim', function () {
+    //             return '-';
+    //         })
+    //         ->addColumn('tgl_po', function ($data) {
+    //             if($data->tgl_po){
+    //                 return $data->tgl_po;
+    //             }
+    //         })
+    //         ->addColumn('instansi', function ($data) {
+    //             // if($data->so){
+    //             //     $name = explode('/', $data->so);
+    //                 if ($data->Ekatalog) {
+    //                     return '<div>'.$data->Ekatalog->instansi.'</div><small>'.$data->Ekatalog->satuan.'</small>';
+    //                 } else {
+    //                     return '-';
+    //                 }
+    //             // }
+    //         })
+    //         ->addColumn('satuan', function ($data) {
+    //             // $name = explode('/', $data->so);
+    //             // if ($name[1] == 'EKAT') {
+    //             //     return $data->Ekatalog->satuan;
+    //             // } else {
+    //             //     return '-';
+    //             // }
+    //         })
+    //         ->addColumn('nama_produk', function ($data) {
+    //         //     if ($data->PenjualanProduk) {
+    //         //         return $data->penjualanproduk->nama;
+    //         //     } else {
+    //         //         return $data->Sparepart->nama;
+    //         //     }
+    //         })
+    //         ->addColumn('no_seri', function () {
+    //             return '-';
+    //         })
+    //         ->addColumn('jumlah', function ($data) {
+    //             return '-';
+    //         })
+    //         ->addColumn('harga', function ($data) {
+    //             return '-';
+    //         })
+    //         ->addColumn('subtotal', function ($data) {
+    //             return '-';
+    //         })
+    //         ->addColumn('total', function ($data) {
+    //             return '-';
+    //         })
+    //         ->addColumn('log', function ($data) {
+    //             $datas = "";
+    //             if ($data->log != "batal") {
+    //                 if (!empty($data->log_id)) {
+    //                     if ($data->State->nama == "Penjualan") {
+    //                         $datas .= '<span class="red-text badge">';
+    //                     } else if ($data->State->nama == "PO") {
+    //                         $datas .= '<span class="purple-text badge">';
+    //                     } else if ($data->State->nama == "Gudang") {
+    //                         $datas .= '<span class="orange-text badge">';
+    //                     } else if ($data->State->nama == "QC") {
+    //                         $datas .= '<span class="yellow-text badge">';
+    //                     } else if ($data->State->nama == "Belum Terkirim") {
+    //                         $datas .= '<span class="red-text badge">';
+    //                     } else if ($data->State->nama == "Terkirim Sebagian") {
+    //                         $datas .= '<span class="blue-text badge">';
+    //                     } else if ($data->State->nama == "Kirim") {
+    //                         $datas .= '<span class="green-text badge">';
+    //                     }
+
+    //                     $datas .= ucfirst($data->State->nama) . '</span>';
+    //                 } else {
+    //                     $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+    //                 }
+    //             } else {
+    //                 $datas .= '<span class="red-text badge">Batal</span>';
+    //             }
+    //             return $datas;
+    //         })
+    //         ->addColumn('ket', function ($data) {
+    //             if($data->so){
+    //                 $name = explode('/', $data->so);
+    //                 if ($name[1] == 'EKAT') {
+    //                     return $data->Ekatalog->ket;
+    //                 } elseif ($name[1] == 'SPA') {
+    //                     return $data->Spa->ket;
+    //                 } else {
+    //                     return $data->Spb->ket;
+    //                 }
+    //             }
+    //         })
+    //         ->addColumn('kosong', function () {
+    //             return '';
+    //         })
+    //         ->rawColumns(['tgl_kontrak', 'log', 'no_po', 'instansi'])
+    //         ->make(true);
+    // }
+
     // public function laporan(Request $request)
     // {
     //     return Excel::download(new LaporanPenjualan($request->customer_id ?? '', $request->penjualan ?? '', $request->tanggal_mulai  ?? '', $request->tanggal_akhir ?? ''), 'laporan_penjualan.xlsx');
@@ -3251,25 +3558,25 @@ class PenjualanController extends Controller
     }
 
 
-    public function export_laporan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri)
+    public function export_laporan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan)
     {
         $x = explode(',', $jenis);
         $waktu = Carbon::now();
 
         if ($x == ['ekatalog', 'spa', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan Semua ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Semua ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['ekatalog', 'spa']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan Ekatalog dan SPA ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Ekatalog dan SPA ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['ekatalog', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan Ekatalog dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Ekatalog dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['spa', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan SPA dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan SPA dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'ekatalog') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan Ekatalog ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Ekatalog ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'spa') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan SPA ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan SPA ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'spb') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri), 'Laporan Penjualan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         }
     }
 }
