@@ -263,7 +263,6 @@
                                 ?>
                             @endforeach
                         @endif
-
                     @endif
                     <?php
                     $clog++;
