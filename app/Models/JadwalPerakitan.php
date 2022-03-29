@@ -43,4 +43,13 @@ class JadwalPerakitan extends Model
         })->count();
         return $jumlah;
     }
+
+    function cekTotalKirim()
+    {
+        $id = $this->id;
+        $jumlah = JadwalRakitNoseri::whereHas('header', function($q) use($id) {
+            $q->where('id', $id);
+        })->where('status', 14)->count();
+        return $jumlah;
+    }
 }
