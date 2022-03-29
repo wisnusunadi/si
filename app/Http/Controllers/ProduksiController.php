@@ -1739,8 +1739,16 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereNotIn('status', [6])->whereIn('status_tf', [11, 12])->orderByDesc('created_at')->get();
-        $res = datatables()->of($data)
+        $data = JadwalPerakitan::whereNotIn('status', [6])->whereNotIn('status_tf', [14])->get();
+        $x = [];
+        foreach($data as $k) {
+            if ($k->jumlah != $k->cekTotalRakit()) {
+                    $x[] = $k->id;
+            }
+        }
+        $datax = JadwalPerakitan::whereIn('id', $x)->get();
+        // $data = JadwalPerakitan::whereNotIn('status', [6])->whereIn('status_tf', [11, 12])->orderByDesc('created_at')->get();
+        $res = datatables()->of($datax)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
                     return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');

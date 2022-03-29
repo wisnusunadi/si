@@ -23,4 +23,24 @@ class JadwalPerakitan extends Model
     {
         return $this->hasMany(JadwalPerakitanLog::class, 'jadwal_perakitan_id');
     }
+
+    function getTotalRakit()
+    {
+        $id = $this->id;
+        $s = JadwalPerakitan::where('id', $id)->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            $jumlah++;
+        }
+        return $jumlah;
+    }
+
+    function cekTotalRakit()
+    {
+        $id = $this->id;
+        $jumlah = JadwalRakitNoseri::whereHas('header', function($q) use($id) {
+            $q->where('id', $id);
+        })->count();
+        return $jumlah;
+    }
 }
