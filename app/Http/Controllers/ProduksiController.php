@@ -211,17 +211,17 @@ class ProduksiController extends Controller
                             // if (NoseriTGbj::where('noseri_id', $v)->get()->count() > 0) {
                             //     # code...
                             // } else {
-                                $nn = new NoseriTGbj();
-                                $nn->t_gbj_detail_id = $did;
-                                $nn->noseri_id = $v;
-                                $nn->status_id = 2;
-                                $nn->state_id = 8;
-                                $nn->jenis = 'keluar';
-                                $nn->created_at = Carbon::now();
-                                $nn->created_by = $request->userid;
-                                $nn->save();
+                            $nn = new NoseriTGbj();
+                            $nn->t_gbj_detail_id = $did;
+                            $nn->noseri_id = $v;
+                            $nn->status_id = 2;
+                            $nn->state_id = 8;
+                            $nn->jenis = 'keluar';
+                            $nn->created_at = Carbon::now();
+                            $nn->created_by = $request->userid;
+                            $nn->save();
 
-                                NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+                            NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
                             // }
                         }
 
@@ -1741,9 +1741,9 @@ class ProduksiController extends Controller
     {
         $data = JadwalPerakitan::whereNotIn('status', [6])->whereNotIn('status_tf', [14])->get();
         $x = [];
-        foreach($data as $k) {
+        foreach ($data as $k) {
             if ($k->jumlah != $k->cekTotalRakit()) {
-                    $x[] = $k->id;
+                $x[] = $k->id;
             }
         }
         $datax = JadwalPerakitan::whereIn('id', $x)->get();
@@ -1764,17 +1764,17 @@ class ProduksiController extends Controller
 
                 if (isset($d->tanggal_selesai)) {
                     if ($x >= -10 && $x < -5) {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
                     } elseif ($x >= -5 && $x <= -2) {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
                     } elseif ($x > -2 && $x <= 0) {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Kurang ' . $x . ' Hari</span>';
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Kurang ' . $x . ' Hari</span>';
                     } elseif ($x > 0) {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Lebih ' . $x . ' Hari</span>';
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Lebih ' . $x . ' Hari</span>';
                     } elseif ($x < -10) {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
                     } else {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
                     }
                     // return date('d-m-Y', strtotime($d->tanggal_selesai)).' '.$x;
                 } else {
@@ -1800,7 +1800,7 @@ class ProduksiController extends Controller
                 $c = count($seri);
                 return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $c) . '">
                                 <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
-                            </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $c) . '" data-prd="'.$d->produk->produk->nama . ' ' . $d->produk->nama.'">
+                            </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $c) . '" data-prd="' . $d->produk->produk->nama . ' ' . $d->produk->nama . '">
                             <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
                         </a>';
             })
@@ -1824,16 +1824,16 @@ class ProduksiController extends Controller
 
     function getSelesaiRakit()
     {
-        $data = JadwalPerakitan::whereNotIn('status', [6])->whereNotIn('status_tf', [14,11])->get();
+        $data = JadwalPerakitan::whereNotIn('status', [6])->whereNotIn('status_tf', [14, 11])->get();
         $x = [];
-        foreach($data as $k) {
+        foreach ($data as $k) {
             if ($k->jumlah != $k->cekTotalKirim()) {
-                    $x[] = $k->id;
+                $x[] = $k->id;
             }
         }
         $datax = JadwalPerakitan::whereIn('id', $x)->get();
         // return $datax;
-    //     $data = JadwalPerakitan::whereIn('status_tf', [15, 13, 12])->whereNotIn('status', [6])->get();
+        //     $data = JadwalPerakitan::whereIn('status_tf', [15, 13, 12])->whereNotIn('status', [6])->get();
         return datatables()->of($datax)
             ->addColumn('periode', function ($d) {
                 if (isset($d->tanggal_mulai)) {
@@ -2009,7 +2009,6 @@ class ProduksiController extends Controller
         } else {
             return response()->json(['msg' => 'Noseri Sudah Ada, Silahkan Gunakan yang lain.']);
         }
-
     }
 
     function closeRakit(Request $request)
@@ -2044,9 +2043,9 @@ class ProduksiController extends Controller
         $data = JadwalRakitNoseri::whereHas('header', function ($q) use ($id) {
             $q->where('produk_id', $id);
         })
-        ->whereRaw("date_format(waktu_tf, '%Y-%m-%d %H:%i') = ?", [$dd])
-        // ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])
-        ->get();
+            ->whereRaw("date_format(waktu_tf, '%Y-%m-%d %H:%i') = ?", [$dd])
+            // ->whereRaw("date_format(date_in, '%Y-%m-%d %H:%i') = ?", [$rakit])
+            ->get();
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) {
                 return '<input type="checkbox" name="noseri[]" id="noseri" value="' . $d->id . '" class="cb-child">';
@@ -2138,8 +2137,7 @@ class ProduksiController extends Controller
             $total_rakit->filled_by = $request->userid;
             $total_rakit->updated_at = Carbon::now();
             $total_rakit->save();
-        }
-        else {
+        } else {
             if ($sdh_terisi == $total_rakit->jumlah) {
                 $total_rakit->status_tf = 13;
                 $total_rakit->filled_by = $request->userid;
@@ -2308,7 +2306,7 @@ class ProduksiController extends Controller
         $produk = [];
         foreach ($d as $item) {
             $a = GudangBarangJadi::find($item->produk_id);
-            array_push($produk, $a->produk->nama.' '.$a->nama);
+            array_push($produk, $a->produk->nama . ' ' . $a->nama);
         }
         $data = array_unique($produk);
         return response()->json($data);
@@ -2471,21 +2469,21 @@ class ProduksiController extends Controller
 
     function ajax_perproduk()
     {
-    //    $data = JadwalRakitNoseri::whereHas('header', function($q) {
-    //        $q->groupBy('produk_id');
-    //    })->with('header')->groupBy('jadwal_id')->get();
+        //    $data = JadwalRakitNoseri::whereHas('header', function($q) {
+        //        $q->groupBy('produk_id');
+        //    })->with('header')->groupBy('jadwal_id')->get();
         $data = JadwalPerakitan::groupBy('produk_id')->groupBy('no_bppb')->has('noseri')->get();
-       return datatables()->of($data)
+        return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('no_bppb', function($d) {
+            ->addColumn('no_bppb', function ($d) {
                 return $d->no_bppb == null ? '-' : $d->no_bppb;
             })
-            ->addColumn('produk', function($d) {
+            ->addColumn('produk', function ($d) {
                 if (isset($d->produk_id)) {
                     return $d->produk->produk->nama . ' ' . $d->produk->nama;
                 }
             })
-            ->addColumn('aksi', function($d) {
+            ->addColumn('aksi', function ($d) {
                 return $d->produk_id;
             })
             ->rawColumns(['aksi'])
@@ -2495,42 +2493,42 @@ class ProduksiController extends Controller
     function detail_perproduk($id)
     {
         $d = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'), 'jadwal_perakitan.no_bppb')
-        ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-        ->groupBy('jadwal_rakit_noseri.jadwal_id')
-        ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
-        ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
-        // ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
-        ->where('produk_id', $id)
-        ->get()->sortByDesc('date_in');
+            ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+            ->groupBy('jadwal_rakit_noseri.jadwal_id')
+            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
+            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
+            // ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
+            ->where('produk_id', $id)
+            ->get()->sortByDesc('date_in');
         return datatables()->of($d)
-        ->addColumn('day_rakit', function ($d) {
-            return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('dddd, D MMMM Y');
-        })
-        ->addColumn('day_kirim', function ($d) {
-            if (isset($d->waktu_tf)) {
-                return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y');
-            } else {
-                return '-';
-            }
-        })
-        ->addColumn('time_rakit', function ($d) {
-            return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('H:i');
-        })
-        ->addColumn('time_kirim', function ($d) {
-            if (isset($d->waktu_tf)) {
-                return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i');
-            } else {
-                return '-';
-            }
-        })
-        ->addColumn('bppb', function ($d) {
-            return $d->no_bppb == null ? '-' : $d->no_bppb;
-        })
-        ->addColumn('jml', function ($d) {
-            return $d->jml . ' Unit';
-        })
-        ->rawColumns(['action'])
-        ->make(true);
+            ->addColumn('day_rakit', function ($d) {
+                return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->isoFormat('dddd, D MMMM Y');
+            })
+            ->addColumn('day_kirim', function ($d) {
+                if (isset($d->waktu_tf)) {
+                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->isoFormat('dddd, D MMMM Y');
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('time_rakit', function ($d) {
+                return Carbon::createFromFormat('Y-m-d H:i:s', $d->date_in)->format('H:i');
+            })
+            ->addColumn('time_kirim', function ($d) {
+                if (isset($d->waktu_tf)) {
+                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->waktu_tf)->format('H:i');
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('bppb', function ($d) {
+                return $d->no_bppb == null ? '-' : $d->no_bppb;
+            })
+            ->addColumn('jml', function ($d) {
+                return $d->jml . ' Unit';
+            })
+            ->rawColumns(['action'])
+            ->make(true);
     }
 
     function ajax_sisa_transfer()
@@ -2584,24 +2582,24 @@ class ProduksiController extends Controller
                 <br><span class="badge badge-warning">Sisa Rakit : ' . intval($d->jumlah - $c_all) . ' Unit</span>
                 ';
             })
-            ->addColumn('remark', function($d){
+            ->addColumn('remark', function ($d) {
                 if (isset($d->keterangan)) {
                     return $d->keterangan;
                 } else {
                     return $d->keterangan_transfer;
                 }
             })
-            ->addColumn('aksi', function($d){
+            ->addColumn('aksi', function ($d) {
                 $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
                 if (isset($d->keterangan)) {
                     return '
-                    <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="'.$d->keterangan.'">
+                    <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="' . $d->keterangan . '">
                         <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
                     </a>
                     ';
                 } else {
                     return '
-                    <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="'.$d->keterangan_transfer.'">
+                    <a data-toggle="modal" data-target="#rakitmodal" class="transferlain" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '" data-ket="' . $d->keterangan_transfer . '">
                         <button class="btn btn-outline-secondary"><i class="far fa-eye"></i> Detail</button>
                     </a>
                     ';
@@ -2636,16 +2634,16 @@ class ProduksiController extends Controller
 
         return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('noseri', function($d) {
+            ->addColumn('noseri', function ($d) {
                 return $d->noseri;
             })
-            ->addColumn('tgl_masuk', function($d){
+            ->addColumn('tgl_masuk', function ($d) {
                 return Carbon::parse($d->date_in)->isoFormat('dddd, D MMM YYYY hh:ii:ss');
             })
-            ->addColumn('waktu_masuk', function($d){
+            ->addColumn('waktu_masuk', function ($d) {
                 return Carbon::parse($d->date_in)->isoFormat('hh:ii:ss');
             })
-            ->addColumn('remark', function($d){
+            ->addColumn('remark', function ($d) {
                 if (isset($d->header->keterangan)) {
                     return $d->header->keterangan;
                 } else {
