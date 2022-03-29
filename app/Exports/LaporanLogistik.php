@@ -127,83 +127,85 @@ class LaporanLogistik implements FromView, ShouldAutoSize, WithStyles, WithColum
         $eks = $this->ekspedisi;
         $awal = $this->tgl_awal;
         $akhir = $this->tgl_akhir;
+        $prd = "";
+        $prt = "";
 
-        // if ($header == "ekspedisi") {
-        //     if ($eks != '0') {
-        //         // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($eks, $awal, $akhir) {
-        //         //     $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
-        //         // })->get();
-        //         // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($eks, $awal, $akhir) {
-        //         //     $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
-        //         // })->get();
+        if ($header == "ekspedisi") {
+            if ($eks != '0') {
+                // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($eks, $awal, $akhir) {
+                //     $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                // })->get();
+                // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($eks, $awal, $akhir) {
+                //     $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                // })->get();
 
-        //         $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($eks, $awal, $akhir){
-        //             $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir]);
-        //         })->get();
-        //         $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($eks, $awal, $akhir){
-        //             $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir]);
-        //         })->get();
-        //     } else {
-        //         // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-        //         //     $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
-        //         // })->get();
-        //         // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-        //         //     $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
-        //         // })->get();
+                $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($eks, $awal, $akhir){
+                    $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir]);
+                })->get();
+                $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($eks, $awal, $akhir){
+                    $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir]);
+                })->get();
+            } else {
+                // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+                //     $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                // })->get();
+                // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+                //     $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                // })->get();
 
-        //         $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($awal, $akhir){
-        //             $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir]);
-        //         })->get();
-        //         $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($awal, $akhir){
-        //             $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir]);
-        //         })->get();
+                $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($awal, $akhir){
+                    $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir]);
+                })->get();
+                $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($awal, $akhir){
+                    $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir]);
+                })->get();
+            }
+        } else if ($header == "nonekspedisi") {
+
+            // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+            //     $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+            // })->get();
+            // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+            //     $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+            // })->get();
+            $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($awal, $akhir){
+                $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir]);
+            })->get();
+            $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($awal, $akhir){
+                $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir]);
+            })->get();
+        } else {
+            // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+            //     $q->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+            // })->get();
+            // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+            //     $q->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+            // })->get();
+            $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($awal, $akhir){
+                $q->whereBetween('tgl_kirim', [$awal, $akhir]);
+            })->get();
+            $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($awal, $akhir){
+                $q->whereBetween('tgl_kirim', [$awal, $akhir]);
+            })->get();
+        }
+
+        $data = $prd->merge($prt);
+
+        // if($header == "ekspedisi"){
+        //     if($eks != '0'){
+        //         $data = Logistik::where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->get();
         //     }
-        // } else if ($header == "nonekspedisi") {
-
-        //     // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-        //     //     $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
-        //     // })->get();
-        //     // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-        //     //     $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
-        //     // })->get();
-        //     $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($awal, $akhir){
-        //         $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir]);
-        //     })->get();
-        //     $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($awal, $akhir){
-        //         $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir]);
-        //     })->get();
-        // } else {
-        //     // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-        //     //     $q->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
-        //     // })->get();
-        //     // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-        //     //     $q->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
-        //     // })->get();
-        //     $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($awal, $akhir){
-        //         $q->whereBetween('tgl_kirim', [$awal, $akhir]);
-        //     })->get();
-        //     $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($awal, $akhir){
-        //         $q->whereBetween('tgl_kirim', [$awal, $akhir]);
-        //     })->get();
+        //     else{
+        //         $data = Logistik::whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->get();
+        //     }
+        // }
+        // else if($header == "nonekspedisi"){
+        //     $data = Logistik::whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->get();
+        // }
+        // else{
+        //     $data = Logistik::whereBetween('tgl_kirim', [$awal, $akhir])->orderByRaw('logistik.detail_logistik.detail_pesanan_produk.detail_pesanan.pesanan.id ASC')->orderByRaw('logistik.detail_logistik_part.detail_pesanan_part.pesanan.id ASC')->get();
         // }
 
-        // $data = $prd->merge($prt);
-
-        if($header == "ekspedisi"){
-            if($eks != '0'){
-                $data = Logistik::where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->get();
-            }
-            else{
-                $data = Logistik::whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->get();
-            }
-        }
-        else if($header == "nonekspedisi"){
-            $data = Logistik::whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->get();
-        }
-        else{
-            $data = Logistik::whereBetween('tgl_kirim', [$awal, $akhir])->get();
-        }
-
-        return view('page.logistik.laporan.LaporanLogistikEx', ['header' => $header, 'data' => $data]);
+        return view('page.logistik.laporan.LaporanLogistikEx', ['header' => $header, 'data' => $data, 'eks' => $eks, 'awal' => $awal, 'akhir' => $akhir]);
     }
 }
