@@ -1824,8 +1824,17 @@ class ProduksiController extends Controller
 
     function getSelesaiRakit()
     {
-        $data = JadwalPerakitan::whereIn('status_tf', [15, 13, 12])->whereNotIn('status', [6])->get();
-        return datatables()->of($data)
+        $data = JadwalPerakitan::whereNotIn('status', [6])->whereNotIn('status_tf', [14,11])->get();
+        $x = [];
+        foreach($data as $k) {
+            if ($k->jumlah != $k->cekTotalKirim()) {
+                    $x[] = $k->id;
+            }
+        }
+        $datax = JadwalPerakitan::whereIn('id', $x)->get();
+        // return $datax;
+    //     $data = JadwalPerakitan::whereIn('status_tf', [15, 13, 12])->whereNotIn('status', [6])->get();
+        return datatables()->of($datax)
             ->addColumn('periode', function ($d) {
                 if (isset($d->tanggal_mulai)) {
                     return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
