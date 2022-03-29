@@ -1250,7 +1250,7 @@ class ProduksiController extends Controller
 
     function getNoseriSO(Request $request)
     {
-        $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->get();
+        $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->orderBy('noseri')->get();
         $i = 0;
         return datatables()->of($data)
             ->addColumn('ids', function ($d) {
@@ -1739,8 +1739,16 @@ class ProduksiController extends Controller
     }
     function on_rakit()
     {
-        $data = JadwalPerakitan::whereNotIn('status', [6])->whereIn('status_tf', [11, 12])->orderByDesc('created_at')->get();
-        $res = datatables()->of($data)
+        $data = JadwalPerakitan::whereNotIn('status', [6])->whereNotIn('status_tf', [14])->get();
+        $x = [];
+        foreach($data as $k) {
+            if ($k->jumlah != $k->cekTotalRakit()) {
+                    $x[] = $k->id;
+            }
+        }
+        $datax = JadwalPerakitan::whereIn('id', $x)->get();
+        // $data = JadwalPerakitan::whereNotIn('status', [6])->whereIn('status_tf', [11, 12])->orderByDesc('created_at')->get();
+        $res = datatables()->of($datax)
             ->addColumn('start', function ($d) {
                 if (isset($d->tanggal_mulai)) {
                     return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
@@ -1816,8 +1824,17 @@ class ProduksiController extends Controller
 
     function getSelesaiRakit()
     {
-        $data = JadwalPerakitan::whereIn('status_tf', [15, 13, 12])->whereNotIn('status', [6])->get();
-        return datatables()->of($data)
+        $data = JadwalPerakitan::whereNotIn('status', [6])->whereNotIn('status_tf', [14,11])->get();
+        $x = [];
+        foreach($data as $k) {
+            if ($k->jumlah != $k->cekTotalKirim()) {
+                    $x[] = $k->id;
+            }
+        }
+        $datax = JadwalPerakitan::whereIn('id', $x)->get();
+        // return $datax;
+    //     $data = JadwalPerakitan::whereIn('status_tf', [15, 13, 12])->whereNotIn('status', [6])->get();
+        return datatables()->of($datax)
             ->addColumn('periode', function ($d) {
                 if (isset($d->tanggal_mulai)) {
                     return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
