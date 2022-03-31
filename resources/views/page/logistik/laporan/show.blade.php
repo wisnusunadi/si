@@ -63,7 +63,7 @@
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 50ch;
+        max-width: 30ch;
     }
     .align-center{
         text-align: center;
@@ -517,6 +517,8 @@
                 processing: true,
                 dom: 'Bfrtip',
                 serverSide: false,
+                searching: false,
+                info: false,
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
