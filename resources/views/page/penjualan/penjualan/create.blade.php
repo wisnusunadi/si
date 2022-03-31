@@ -1087,11 +1087,11 @@
                 $("input[name=jenis_penj][value='sparepart']").prop("checked", false);
 
                 //++
-                $("input[id=jenis_pen]").prop("checked",false);
-                $("input[id=jenis_pen][value='produk']").prop("checked", true);
-                $("input[id=jenis_pen][value='produk']").attr("disabled", false);
-                $("input[id=jenis_pen][value='sparepart']").attr("disabled", true);
-                $("input[id=jenis_pen][value='jasa']").attr("disabled", true);
+                // $("input[id=jenis_pen]").prop("checked",false);
+                // $("input[id=jenis_pen][value='produk']").prop("checked", true);
+                // $("input[id=jenis_pen][value='produk']").attr("disabled", false);
+                // $("input[id=jenis_pen][value='sparepart']").attr("disabled", true);
+                // $("input[id=jenis_pen][value='jasa']").attr("disabled", true);
             } else if ($(this).val() == "spa") {
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
@@ -1109,10 +1109,10 @@
                 $("input[name=jenis_penj][value='produk']").prop("checked", true);
                 $("input[name=jenis_penj][value='sparepart']").prop("checked", false);
                   //++
-                $("input[id=jenis_pen][value='produk']").prop("checked", true);
-                $("input[id=jenis_pen][value='produk']").attr("disabled", false);
-                $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
-                $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
+                // $("input[id=jenis_pen][value='produk']").prop("checked", true);
+                // $("input[id=jenis_pen][value='produk']").attr("disabled", false);
+                // $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
+                // $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
             } else if ($(this).val() == "spb") {
                 $("#datapart").removeClass("hide");
                 $("#dataproduk").addClass("hide");
@@ -1127,13 +1127,13 @@
                 $("#penj_sem").removeClass("hide");
                 $("#penj_jas").removeClass("hide");
                 $("input[name=namadistributor][value='sudah']").prop("checked", true);
-                $("input[name=jenis_penj][value='produk']").prop("checked", false);
-                $("input[name=jenis_penj][value='sparepart']").prop("checked", true);
+                // $("input[name=jenis_penj][value='produk']").prop("checked", false);
+                // $("input[name=jenis_penj][value='sparepart']").prop("checked", true);
                 //++
-                $("input[id=jenis_pen][value='produk']").prop("checked", true);
-                $("input[id=jenis_pen][value='produk']").attr("disabled", false);
-                $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
-                $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
+                // $("input[id=jenis_pen][value='produk']").prop("checked", true);
+                // $("input[id=jenis_pen][value='produk']").attr("disabled", false);
+                // $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
+                // $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
             }
         });
 
@@ -1144,13 +1144,13 @@
         //         }
         //     });
 
-        $('input[type="checkbox"][name="jenis_pen[]"]').on('change', function() {
-            var x = $(this).val();
-            if ($(":checkbox:checked").length == 0) {
-                $("input[id=jenis_pen][value="+x+"]").prop("checked", true);
-                }
-                console.log(x);
-            });
+        // $('input[type="checkbox"][name="jenis_pen[]"]').on('change', function() {
+        //     var x = $(this).val();
+        //     if ($(":checkbox:checked").length == 0) {
+        //         $("input[id=jenis_pen][value="+x+"]").prop("checked", true);
+        //         }
+        //         console.log(x);
+        //     });
 
         $('input[type="radio"][name="jenis_penj"]').on('change', function() {
             var x = $(this).val();
