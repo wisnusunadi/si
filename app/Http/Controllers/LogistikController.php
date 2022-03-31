@@ -1109,6 +1109,90 @@ class LogistikController extends Controller
             ->rawColumns(['status_id', 'aksi', 'btn'])
             ->make(true);;
     }
+
+
+
+    public function get_data_pesanan_filter_sj($id, Request $r)
+    {
+        $pengiriman = $r->pengiriman;
+        $eks = $r->ekspedisi;
+        $tgl_awal = $r->tgl_awal;
+        $tgl_akhir = $r->tgl_akhir;
+        if($pengiriman == "ekspedisi"){
+            if($eks != '0'){
+                $data = Logistik::where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->get();
+                $data = Logistik::where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->get();
+            }
+            else{
+                $data = Logistik::whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->get();
+                $data = Logistik::whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->get();
+            }
+        }
+        else if($pengiriman == "nonekspedisi"){
+            $data = Logistik::whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $data = Logistik::whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+        }
+        else{
+            $prd = Logistik::whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $part = Logistik::whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->whereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+            $data = $prd->merge($part);
+        }
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->editColumn('noresi', function ($data) {
+                if (!empty($data->noresi)) {
+                    return $data->noresi;
+                } else {
+                    return '-';
+                }
+            })->editColumn('tgl_kirim', function ($data) {
+                if (!empty($data->tgl_kirim)) {
+                    return Carbon::createFromFormat('Y-m-d', $data->tgl_kirim)->format('d-m-Y');
+                } else {
+                    return '-';
+                }
+            })->editColumn('status_id', function ($data) {
+                if ($data->status_id == "10") {
+                    return '<span class="badge green-text">Selesai</span>';
+                } else if ($data->status_id == "11") {
+                    return '<span class="badge red-text">Belum Kirim</span>';
+                }
+            })->editColumn('ekspedisi_id', function ($data) {
+                if (!empty($data->ekspedisi_id)) {
+                    return $data->Ekspedisi->nama;
+                } else {
+                    return $data->nama_pengirim;
+                }
+            })->addColumn('aksi', function ($data) {
+                return '<a href="' . route('logistik.pengiriman.print', ['id' => $data->id]) . '" target="_blank">
+                    <i class="fas fa-file"></i>
+                </a>';
+            })
+            ->addColumn('btn', function ($data) use($id) {
+                return '<a id="detail" class="detail" data-id="'.$data->id.'" data-parent='.$id.'>
+                            <i class="fas fa-eye"></i>
+                        </a>';
+            })
+            ->rawColumns(['status_id', 'aksi', 'btn'])
+            ->make(true);;
+    }
     public function get_data_pengiriman($pengiriman, $provinsi, $jenis_penjualan)
     {
         $x = explode(',', $pengiriman);

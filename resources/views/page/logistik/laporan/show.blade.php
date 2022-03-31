@@ -69,6 +69,10 @@
         text-align: center;
     }
 
+    .bgcolor {
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    }
+
 
     @media screen and (min-width: 1440px) {
         section {
@@ -412,7 +416,7 @@
             </div>`;
         }
 
-        function sjtabledata(id){
+        function sjtabledata(id, pengiriman, ekspedisi, tgl_awal, tgl_akhir){
             sjtable = $('#sjtable'+id).DataTable({
                 destroy: true,
                 processing: true,
@@ -425,7 +429,8 @@
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 ajax: {
-                    'url': '/api/logistik/so/data/sj/' + id,
+                    'url': '/api/logistik/so/data/sj_filter/' + id,
+                    'data': {'pengiriman': pengiriman, 'ekspedisi': ekspedisi, 'tgl_awal': tgl_awal, 'tgl_akhir': tgl_akhir},
                     'dataType': 'json',
                     'type': 'POST',
                     'headers': {
@@ -482,7 +487,24 @@
                 // Open this row
                 row.child( format(row.data().id), ['childrowbg', "childrow"+row.data().id]).show();
                 tr.addClass('shown');
-                sjtabledata(row.data().id);
+                var ekspedisi = "0";
+                var pengiriman = "0";
+                if ($('input[type="radio"][name="pengiriman"]:checked').length > 0) {
+                    pengiriman = $('input[type="radio"][name="pengiriman"]:checked').val();
+                    if (pengiriman == "ekspedisi") {
+                        if ($(".ekspedisi_id").val() != "") {
+                            ekspedisi = $(".ekspedisi_id").val();
+                        } else {
+                            ekspedisi = "0";
+                        }
+                    }
+                } else {
+                    pengiriman = "0";
+                }
+
+                var tgl_awal = $('#tanggal_mulai').val();
+                var tgl_akhir = $('#tanggal_akhir').val();
+                sjtabledata(row.data().id, pengiriman, ekspedisi, tgl_awal, tgl_akhir);
             }
         });
 
@@ -557,9 +579,12 @@
             console.log(dataparent);
             if(dataid){
                 $('#showtable .childrow'+dataparent).find('.det_prd').removeClass('hide');
+                $('#sjtable'+dataparent).find('tr').removeClass('bgcolor');
+                tr.addClass('bgcolor');
                 detailsjtabledata(dataparent, dataid);
             }else{
                 $('#showtable .childrow'+dataparent).find('.det_prd').addClass('hide');
+                $('#sjtable'+dataparent).find('tr').removeClass('bgcolor');
             }
 
             // if ( row.child.isShown() ) {
@@ -694,10 +719,10 @@
             var tgl_awal = $('#tanggal_mulai').val();
             var tgl_akhir = $('#tanggal_akhir').val();
 
-            console.log(pengiriman);
-            console.log(ekspedisi);
-            console.log(tgl_awal);
-            console.log(tgl_akhir);
+            // console.log(pengiriman);
+            // console.log(ekspedisi);
+            // console.log(tgl_awal);
+            // console.log(tgl_akhir);
 
             table(pengiriman, ekspedisi, tgl_awal, tgl_akhir);
 
