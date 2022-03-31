@@ -258,7 +258,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                {{-- <div class="form-group row">
+                                                <div class="form-group row">
                                                     <label for="penjualan" class="col-form-label col-lg-5 col-md-12 labelket">Pilih Barang</label>
                                                     <div class="col-5 col-form-label">
                                                         <div class="form-check form-check-inline">
@@ -274,7 +274,7 @@
                                                             <label class="form-check-label" for="inlineCheckbox1">Jasa</label>
                                                         </div>
                                                     </div>
-                                                </div> --}}
+                                                </div>
                                                 <div class="form-group row">
                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Pilih Barang</label>
                                                     <div class="col-lg-5 col-md-12 col-form-label">
