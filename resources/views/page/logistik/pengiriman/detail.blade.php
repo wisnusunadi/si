@@ -157,18 +157,20 @@
                                         <div class="margin">
                                             <div><small class="text-muted">Subjek Pengiriman</small></div>
                                         </div>
+                                        @if(isset($l->DetailLogistik[0]))
                                         <div class="margin">
-                                            <b id="customer">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}</b>
+                                            <b id="customer">{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}</b>
                                         </div>
                                         <div class="margin">
-                                            <b id="alamat">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat}}</b>
+                                            <b id="alamat">{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat}}</b>
                                         </div>
                                         <div class="margin">
-                                            <b id="provinsi">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama}}</b>
+                                            <b id="provinsi">{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama}}</b>
                                         </div>
                                         <div class="margin">
-                                            <b id="telepon">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->telp}}</b>
+                                            <b id="telepon">{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->telp}}</b>
                                         </div>
+                                        @endif
                                     </div>
                                     <div class="p-2">
                                         <div class="margin">
@@ -192,15 +194,15 @@
                                     <div class="p-2">
                                         <div class="margin">
                                             <div><small class="text-muted">No Sales Order</small></div>
-                                            <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}</b></div>
+                                            <div><b id="no_so">{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}</b></div>
                                         </div>
                                         <div class="margin">
                                             <div><small class="text-muted">No PO</small></div>
-                                            <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</b></div>
+                                            <div><b id="no_so">{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}</b></div>
                                         </div>
                                         <div class="margin">
                                             <div><small class="text-muted">Tanggal PO</small></div>
-                                            <div><b id="no_so">{{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}</b></div>
+                                            <div><b id="no_so">{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}</b></div>
                                         </div>
                                     </div>
                                     <div class="p-2">
@@ -249,11 +251,11 @@
                                         </div>
                                         <div class="margin">
                                             <b id="customer">
-                                                @if(isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}
+                                                @if(isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}
 
-                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}
+                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}
 
                                                 @elseif(isset($l->DetailLogistikPart))
                                                 {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->nama}}
@@ -263,11 +265,11 @@
                                         </div>
                                         <div class="margin">
                                             <b id="alamat">
-                                                @if(isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}
+                                                @if(isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}
 
-                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}
+                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}
 
                                                 @elseif(isset($l->DetailLogistikPart))
                                                 {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->alamat}}
@@ -277,11 +279,11 @@
                                         </div>
                                         <div class="margin">
                                             <b id="provinsi">
-                                                @if(isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->provinsi->nama}}
+                                                @if(isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->provinsi->nama}}
 
-                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->provinsi->nama}}
+                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->provinsi->nama}}
 
                                                 @elseif(isset($l->DetailLogistikPart))
                                                 {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->provinsi->nama}}
@@ -291,11 +293,11 @@
                                         </div>
                                         <div class="margin">
                                             <b id="telepon">
-                                                @if(isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->telp}}
+                                                @if(isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->telp}}
 
-                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->telp}}
+                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->telp}}
 
                                                 @elseif(isset($l->DetailLogistikPart))
                                                 {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->telp}}
@@ -329,11 +331,11 @@
                                         <div class="margin">
                                             <div><small class="text-muted">No Sales Order</small></div>
                                             <div><b id="no_so">
-                                                    @if(isset($l->DetailLogistik))
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}
+                                                    @if(isset($l->DetailLogistik[0]))
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}
 
-                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}
+                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}
 
                                                     @elseif(isset($l->DetailLogistikPart))
                                                     {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so}}
@@ -344,11 +346,11 @@
                                         <div class="margin">
                                             <div><small class="text-muted">No PO</small></div>
                                             <div><b id="no_so">
-                                                    @if(isset($l->DetailLogistik))
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                                                    @if(isset($l->DetailLogistik[0]))
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
 
-                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
 
                                                     @elseif(isset($l->DetailLogistikPart))
                                                     {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po}}
@@ -359,11 +361,11 @@
                                         <div class="margin">
                                             <div><small class="text-muted">Tanggal PO</small></div>
                                             <div><b id="no_so">
-                                                    @if(isset($l->DetailLogistik))
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}
+                                                    @if(isset($l->DetailLogistik[0]))
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}
 
-                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}
+                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}
 
                                                     @elseif(isset($l->DetailLogistikPart))
                                                     {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->tgl_po}}
@@ -420,10 +422,10 @@
                                             <b id="customer">
                                                 @if(isset($l->DetailLogistikPart))
                                                 {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->nama}}
-                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}
+                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}
                                                 @else
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}
                                                 @endif
                                             </b>
                                         </div>
@@ -431,10 +433,10 @@
                                             <b id="alamat">
                                                 @if(isset($l->DetailLogistikPart))
                                                 {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->alamat}}
-                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}
+                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}
                                                 @else
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}
                                                 @endif
                                             </b>
                                         </div>
@@ -442,10 +444,10 @@
                                             <b id="provinsi">
                                                 @if(isset($l->DetailLogistikPart))
                                                 {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->Provinsi->nama}}
-                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}
+                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}
                                                 @else
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}
                                                 @endif
                                             </b>
                                         </div>
@@ -453,10 +455,10 @@
                                             <b id="telepon">
                                                 @if(isset($l->DetailLogistikPart))
                                                 {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->telp}}
-                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->telp}}
+                                                @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->telp}}
                                                 @else
-                                                {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->telp}}
+                                                {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->telp}}
                                                 @endif
                                             </b>
                                         </div>
@@ -486,10 +488,10 @@
                                             <div><b id="no_so">
                                                     @if(isset($l->DetailLogistikPart))
                                                     {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so}}
-                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}
+                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}
                                                     @else
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}
                                                     @endif
                                                 </b></div>
                                         </div>
@@ -498,10 +500,10 @@
                                             <div><b id="no_po">
                                                     @if(isset($l->DetailLogistikPart))
                                                     {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po}}
-                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
                                                     @else
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
                                                     @endif
                                                 </b></div>
                                         </div>
@@ -510,10 +512,10 @@
                                             <div><b id="no_so">
                                                     @if(isset($l->DetailLogistikPart))
                                                     {{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->tgl_po}}
-                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik))
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}
+                                                    @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}
                                                     @else
-                                                    {{$l->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}
+                                                    {{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->tgl_po}}
                                                     @endif
                                                 </b></div>
                                         </div>

@@ -259,7 +259,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="penjualan" class="col-form-label col-lg-5 col-md-12 labelket">Pilih Barang</label>
+                                                    <label for="penjualan" class="col-form-label col-lg-5 col-md-12 labelket">Barang</label>
                                                     <div class="col-5 col-form-label">
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="checkbox" id="jenis_pen" value="produk" name="jenis_pen[]" disabled>
@@ -275,7 +275,7 @@
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group row">
+                                                {{-- <div class="form-group row">
                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Pilih Barang</label>
                                                     <div class="col-lg-5 col-md-12 col-form-label">
                                                         <div class="form-check form-check-inline hide" id="penj_prd">
@@ -295,7 +295,7 @@
                                                             <label class="form-check-label" for="jenis_penj3">Jasa</label>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div> --}}
                                                 <div class="form-group row">
                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Nama Customer / Distributor</label>
                                                     <div class="col-lg-5 col-md-12 col-form-label">
@@ -1060,10 +1060,12 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
+
         $('input[type="radio"][name="jenis_penjualan"]').on('change', function() {
             reset_akn();
             reset_penjualan();
             if ($(this).val() == "ekatalog") {
+                $("#datajasa").addClass("hide");
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
                 $("#nonakn").addClass("hide");
@@ -1087,12 +1089,14 @@
                 $("input[name=jenis_penj][value='sparepart']").prop("checked", false);
 
                 //++
-                // $("input[id=jenis_pen]").prop("checked",false);
-                // $("input[id=jenis_pen][value='produk']").prop("checked", true);
-                // $("input[id=jenis_pen][value='produk']").attr("disabled", false);
-                // $("input[id=jenis_pen][value='sparepart']").attr("disabled", true);
-                // $("input[id=jenis_pen][value='jasa']").attr("disabled", true);
+                $("input[id=jenis_pen]").prop("checked",false);
+                $("input[id=jenis_pen][value='produk']").prop("checked", true);
+                $("input[id=jenis_pen][value='produk']").attr("disabled", false);
+                $("input[id=jenis_pen][value='sparepart']").attr("disabled", true);
+                $("input[id=jenis_pen][value='jasa']").attr("disabled", true);
+
             } else if ($(this).val() == "spa") {
+                $("#datajasa").addClass("hide");
                 $("#datapart").addClass("hide");
                 $("#dataproduk").removeClass("hide");
                 $("#nonakn").removeClass("hide");
@@ -1108,14 +1112,24 @@
                 $("input[name=namadistributor][value='sudah']").prop("checked", true);
                 $("input[name=jenis_penj][value='produk']").prop("checked", true);
                 $("input[name=jenis_penj][value='sparepart']").prop("checked", false);
-                  //++
-                // $("input[id=jenis_pen][value='produk']").prop("checked", true);
-                // $("input[id=jenis_pen][value='produk']").attr("disabled", false);
-                // $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
-                // $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
+
+
+                //Reset
+                $("input[id=jenis_pen][value='produk']").prop("checked", false);
+                $("input[id=jenis_pen][value='sparepart']").prop("checked", false);
+                $("input[id=jenis_pen][value='jasa']").prop("checked", false);
+
+
+                //++
+                $("input[id=jenis_pen][value='produk']").prop("checked", true);
+                $("input[id=jenis_pen][value='produk']").attr("disabled", false);
+                $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
+                $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
+
             } else if ($(this).val() == "spb") {
                 $("#datapart").removeClass("hide");
                 $("#dataproduk").addClass("hide");
+                $("#datajasa").addClass("hide");
                 $("#nonakn").removeClass("hide");
                 $("#akn").addClass("hide");
                 $(".os-content-arrange").remove();
@@ -1127,51 +1141,58 @@
                 $("#penj_sem").removeClass("hide");
                 $("#penj_jas").removeClass("hide");
                 $("input[name=namadistributor][value='sudah']").prop("checked", true);
-                // $("input[name=jenis_penj][value='produk']").prop("checked", false);
-                // $("input[name=jenis_penj][value='sparepart']").prop("checked", true);
+                $("input[name=jenis_penj][value='produk']").prop("checked", false);
+                $("input[name=jenis_penj][value='sparepart']").prop("checked", true);
+
+                //Reset
+                $("input[id=jenis_pen][value='produk']").prop("checked", false);
+                $("input[id=jenis_pen][value='sparepart']").prop("checked", false);
+                $("input[id=jenis_pen][value='jasa']").prop("checked", false);
+
                 //++
-                // $("input[id=jenis_pen][value='produk']").prop("checked", true);
-                // $("input[id=jenis_pen][value='produk']").attr("disabled", false);
-                // $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
-                // $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
+                $("input[id=jenis_pen][value='sparepart']").prop("checked", true);
+
+                $("input[id=jenis_pen][value='produk']").attr("disabled", false);
+                $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
+                $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
+
             }
         });
 
-        // $("input[id=jenis_pen]:checked").each(function() {
-        //     var x = $(this).val();
-        //     if ($(":checkbox:checked").length == 0) {
-        //         $("input[id=jenis_pen][value="+x+"]").prop("checked", true);
-        //         }
-        //     });
 
-        // $('input[type="checkbox"][name="jenis_pen[]"]').on('change', function() {
-        //     var x = $(this).val();
-        //     if ($(":checkbox:checked").length == 0) {
-        //         $("input[id=jenis_pen][value="+x+"]").prop("checked", true);
-        //         }
-        //         console.log(x);
-        //     });
 
-        $('input[type="radio"][name="jenis_penj"]').on('change', function() {
+        $('input[type="checkbox"][name="jenis_pen[]"]').on('change', function() {
+            var jenis_arry = [];
             var x = $(this).val();
-            if ($(this).val() == "produk") {
-                $("#datapart").addClass("hide");
+
+            $("input[id=jenis_pen]:checked").each(function() {
+                    jenis_arry.push($(this).val());
+            });
+
+            if ($(":checkbox:checked").length == 0) {
+                jenis_arry.push(x);
+                $("input[id=jenis_pen][value="+x+"]").prop("checked", true);
+                }
+                filter_jenis(jenis_arry);
+            });
+
+            function filter_jenis(x){
+              if( $.inArray("produk", x) !== -1 ) {
                 $("#dataproduk").removeClass("hide");
-                $("#datajasa").addClass("hide");
-            } else if ($(this).val() == "sparepart") {
-                $("#datapart").removeClass("hide");
+                }else{
                 $("#dataproduk").addClass("hide");
-                $("#datajasa").addClass("hide");
-            } else if ($(this).val() == "semua") {
-                $("#datapart").removeClass("hide");
-                $("#dataproduk").removeClass("hide");
-                $("#datajasa").addClass("hide");
-            } else if ($(this).val() == "jasa") {
-                $("#datapart").addClass("hide");
-                $("#dataproduk").addClass("hide");
+                }
+              if( $.inArray("jasa", x) !== -1 ) {
                 $("#datajasa").removeClass("hide");
+                }else{
+                $("#datajasa").addClass("hide");
+                }
+              if( $.inArray("sparepart", x) !== -1 ) {
+                $("#datapart").removeClass("hide");
+                }else{
+                $("#datapart").addClass("hide");
+                }
             }
-        });
 
         $('input[type="radio"][name="do"]').on('change', function() {
             $('#btntambah').attr("disabled", true);
@@ -2047,7 +2068,7 @@
                 $(el).find('.penjualan_produk_id').attr('id', j);
                 var variasi = $(el).find('.variasi');
                 for (var k = 0; k < variasi.length; k++) {
-                    $(el).find('select[name="variasi[' + j + '][' + k + ']"').select2();
+                    $(el).find('select[name="variasi[' + j + '][' + k + ']]"').select2();
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('name', 'variasi[' + j + '][' + k + ']');
                     $(el).find('select[data-attr="variasi' + k + '"]').attr('id', 'variasi' + j + '' + k);
                     $(el).find('span[data-attr="ketstok' + k + '"]').attr('name', 'ketstok[' + j + '][' + k + ']');

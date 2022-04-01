@@ -22,7 +22,7 @@ class Logistik extends Model
 
     public function DetailLogistik()
     {
-        return $this->hasOne(DetailLogistik::class);
+        return $this->hasMany(DetailLogistik::class);
     }
 
     public function DetailLogistikPart()
