@@ -2205,7 +2205,9 @@ class PenjualanController extends Controller
                         $q->where('kode', 'not like', '%Jasa%');
                     })->where('pesanan_id', $poid)->get();
                     if (count($dspb) > 0) {
-                        $deldspb = DetailPesananPart::where('pesanan_id', $poid)->delete();
+                        $deldspb = DetailPesananPart::whereHas('Sparepart', function ($q) {
+                            $q->where('kode', 'not like', '%Jasa%');
+                        })->where('pesanan_id', $poid)->delete();
                         if (!$deldspb) {
                             $bool = false;
                         }
@@ -2328,7 +2330,9 @@ class PenjualanController extends Controller
                         $q->where('kode', 'not like', '%Jasa%');
                     })->where('pesanan_id', $poid)->get();
                     if (count($dspb) > 0) {
-                        $deldspb = DetailPesananPart::where('pesanan_id', $poid)->delete();
+                        $deldspb = DetailPesananPart::whereHas('Sparepart', function ($q) {
+                            $q->where('kode', 'not like', '%Jasa%');
+                        })->where('pesanan_id', $poid)->delete();
                         if (!$deldspb) {
                             $bool = false;
                         }

@@ -735,7 +735,16 @@
                                                                 <tfoot>
                                                                     <tr>
                                                                         <th colspan="3" style="text-align:right;">Total Harga</th>
-                                                                        <th id="totalhargajasa" class="align-right">Rp. 0</th>
+                                                                        <th id="totalhargajasa" class="align-right">Rp.
+                                                                            @if($e->pesanan->getJumlahPesananJasa() > 0)
+                                                                        <?php $x = 0;
+                                                                        foreach ($e->pesanan->DetailPesananPartJasa() as $f) {
+                                                                            $x += $f->harga * $f->jumlah;
+                                                                        }
+                                                                        ?>
+                                                                        {{number_format($x,0,',','.')}}
+                                                                        @endif
+                                                                        </th>
                                                                     </tr>
                                                                 </tfoot>
                                                             </table>
