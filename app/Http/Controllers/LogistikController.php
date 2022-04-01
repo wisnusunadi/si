@@ -356,17 +356,23 @@ class LogistikController extends Controller
                     $array_id[] = $i->id;
                 }
             }
+            $datas_part = DetailPesananPart::where('pesanan_id', $pesanan_id)->Has('OutgoingPesananPart')->DoesntHave('DetailLogistikPart')->get();
+            $datas_jasa = DetailPesananPart::where('pesanan_id', $pesanan_id)->whereHas('Sparepart', function($q){
+                $q->where('kode', 'LIKE', '%JASA%');
+            })->DoesntHave('DetailLogistikPart')->get();
 
             $c_prd = DetailPesanan::where('pesanan_id', $pesanan_id)->get()->count();
             $c_prt = DetailPesananPart::where('pesanan_id', $pesanan_id)->get()->count();
 
             if ($c_prd <= 0 && $c_prt > 0) {
-                $data = DetailPesananPart::DoesntHave('DetailLogistikPart')->where('pesanan_id', $pesanan_id)->get();
+                // $data = DetailPesananPart::DoesntHave('DetailLogistikPart')->where('pesanan_id', $pesanan_id)->get();
+                $data = $datas_part->merge($datas_jasa);
             } else if ($c_prt <= 0 && $c_prd > 0) {
                 $data = DetailPesananProduk::whereIN('id', $array_id)->get();
             } else if ($c_prd > 0 && $c_prd > 0) {
                 $Produk = collect(DetailPesananProduk::whereIN('id', $array_id)->get());
-                $Part = collect(DetailPesananPart::DoesntHave('DetailLogistikPart')->where('pesanan_id', $pesanan_id)->get());
+                // $Part = collect(DetailPesananPart::DoesntHave('DetailLogistikPart')->where('pesanan_id', $pesanan_id)->get());
+                $Part = $datas_part->merge($datas_jasa);
                 $data = $Produk->merge($Part);
             }
 
@@ -641,11 +647,12 @@ class LogistikController extends Controller
     public function get_data_so($value)
     {
         $x = explode(',', $value);
-        $datanonjasa = Pesanan::orHas('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->orHas('DetailPesananPart.OutgoingPesananPart')->whereNotIn('log_id', ['10'])->get();
+        $datanonjasaprd = Pesanan::Has('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->whereNotIn('log_id', ['10'])->get();
+        $datanonjasaprt = Pesanan::Has('DetailPesananPart.OutgoingPesananPart')->whereNotIn('log_id', ['10'])->get();
         $datajasa = Pesanan::whereHas('DetailPesananPart.Sparepart', function($q){
-            $q->where('nama', 'like', '%JASA%');
+            $q->where('kode', 'like', '%JASA%');
         })->get();
-        $datas = $datanonjasa->merge($datajasa);
+        $datas = $datanonjasaprd->merge($datanonjasaprt)->merge($datajasa);
         $array_id = array();
         foreach ($datas as $d) {
             if ($value == 'semua') {
