@@ -197,7 +197,9 @@ class QcController extends Controller
         $dataprd = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($id) {
             $q->where('pesanan_id', $id);
         })->groupby('gudang_barang_jadi_id')->get();
-        $datapart = DetailPesananPart::where('pesanan_id', $id)->get();
+        $datapart = DetailPesananPart::where('pesanan_id', $id)->whereHas('Sparepart', function($q){
+            $q->where('kode', 'NOT LIKE', '%JASA%');
+        })->get();
         $data = $dataprd->merge($datapart);
 
         return datatables()->of($data)
