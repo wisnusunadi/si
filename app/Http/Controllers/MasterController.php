@@ -48,8 +48,8 @@ class MasterController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                if (isset($data->detaillogistik)) {
-                    return $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so;
+                if (isset($data->detaillogistik[0])) {
+                    return $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->so;
                 } else {
                     return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->so;
                 }
@@ -68,12 +68,12 @@ class MasterController extends Controller
                 return $data->tgl_kirim;
             })
             ->addColumn('nama_customer', function ($data) {
-                if (isset($data->detaillogistik)) {
-                    $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
+                if (isset($data->detaillogistik[0])) {
+                    $name = explode('/', $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->so);
                     if ($name[1] == 'EKAT') {
-                        return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->nama;
+                        return   $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->nama;
                     } elseif ($name[1] == 'SPA') {
-                        return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->nama;
+                        return  $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spa->customer->nama;
                     }
                 } else {
                     return  $data->detaillogistikpart->first()->detailpesananpart->pesanan->spb->customer->nama;
@@ -81,12 +81,12 @@ class MasterController extends Controller
                 return;
             })
             ->addColumn('alamat', function ($data) {
-                if (isset($data->detaillogistik)) {
-                    $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
+                if (isset($data->detaillogistik[0])) {
+                    $name = explode('/', $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->so);
                     if ($name[1] == 'EKAT') {
-                        return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->alamat;
+                        return   $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->alamat;
                     } elseif ($name[1] == 'SPA') {
-                        return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->alamat;
+                        return  $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spa->customer->alamat;
                     }
                 } else {
                     return  $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->alamat;
@@ -94,12 +94,12 @@ class MasterController extends Controller
                 return;
             })
             ->addColumn('telp', function ($data) {
-                if (isset($data->detaillogistik)) {
-                    $name = explode('/', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->so);
+                if (isset($data->detaillogistik[0])) {
+                    $name = explode('/', $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->so);
                     if ($name[1] == 'EKAT') {
-                        return   $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->telp;
+                        return   $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->telp;
                     } elseif ($name[1] == 'SPA') {
-                        return  $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->spa->customer->telp;
+                        return  $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spa->customer->telp;
                     }
                 } else {
                     return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->telp;
@@ -114,7 +114,7 @@ class MasterController extends Controller
                 }
                 // $y = array();
                 // $count = 0;
-                // $x = DetailPesananProduk::where('pesanan_id', $data->detaillogistik->DetailPesananProduk->detailpesanan->pesanan->id)->get();
+                // $x = DetailPesananProduk::where('pesanan_id', $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->id)->get();
                 // foreach ($x  as $d) {
                 //     $y[] = $d->id;
                 //     $count++;

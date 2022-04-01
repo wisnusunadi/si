@@ -12,45 +12,45 @@
                                 <div class="row">
                                     <div class="col-12 align-center">
                                         <!-- <div id="profileImage" class="center margin-all"></div> -->
-                                        @if(isset($data->DetailLogistik))
-                                        @if(isset($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog))
+                                        @if(isset($data->DetailLogistik[0]))
+                                        @if(isset($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog))
                                         <div>
-                                            <h6><b>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}</b></h6>
+                                            <h6><b>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}</b></h6>
                                         </div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat}}</div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama}}</div>
-                                        @elseif(isset($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa))
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat}}</div>
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama}}</div>
+                                        @elseif(isset($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa))
                                         <div>
-                                            <h6><b>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}</b></h6>
+                                            <h6><b>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}</b></h6>
                                         </div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}</div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama}}</div>
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}</div>
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama}}</div>
                                         @else
                                         <div>
-                                            <h6><b>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}</b></h6>
+                                            <h6><b>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}</b></h6>
                                         </div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}</div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}</div>
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}</div>
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}</div>
                                         @endif
-                                        @elseif(isset($data->DetailLogistik) && isset($data->DetailLogistikPart))
-                                        @if(isset($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog))
+                                        @elseif(isset($data->DetailLogistik[0]) && isset($data->DetailLogistikPart))
+                                        @if(isset($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog))
                                         <div>
-                                            <h6><b>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}</b></h6>
+                                            <h6><b>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}</b></h6>
                                         </div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat}}</div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama}}</div>
-                                        @elseif(isset($data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa))
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat}}</div>
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama}}</div>
+                                        @elseif(isset($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa))
                                         <div>
-                                            <h6><b>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}</b></h6>
+                                            <h6><b>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}</b></h6>
                                         </div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}</div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama}}</div>
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}</div>
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama}}</div>
                                         @else
                                         <div>
-                                            <h6><b>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}</b></h6>
+                                            <h6><b>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}</b></h6>
                                         </div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}</div>
-                                        <div>{{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}</div>
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}</div>
+                                        <div>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}</div>
                                         @endif
                                         @else
                                         @if(isset($data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa))
@@ -83,12 +83,12 @@
                                 <div class="margin">
                                     <a class="text-muted">No SO</a>
                                     <b class="float-right">@if($jenis == "EKAT")
-                                        {{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}
+                                        {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}
                                         @else
-                                        @if(isset($data->DetailLogistik))
-                                        {{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}
-                                        @elseif(isset($data->DetailLogistik) && isset($data->DetailLogistikPart))
-                                        {{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so}}
+                                        @if(isset($data->DetailLogistik[0]))
+                                        {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}
+                                        @elseif(isset($data->DetailLogistik[0]) && isset($data->DetailLogistikPart))
+                                        {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}
                                         @else
                                         {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so}}
                                         @endif
@@ -98,12 +98,12 @@
                                     <a class="text-muted">No PO</a>
                                     <b class="float-right">
                                         @if($jenis == "EKAT")
-                                        {{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                                        {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
                                         @else
-                                        @if(isset($data->DetailLogistik))
-                                        {{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
-                                        @elseif(isset($data->DetailLogistik) && isset($data->DetailLogistikPart))
-                                        {{$data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                                        @if(isset($data->DetailLogistik[0]))
+                                        {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                                        @elseif(isset($data->DetailLogistik[0]) && isset($data->DetailLogistikPart))
+                                        {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
                                         @else
                                         {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po}}
                                         @endif

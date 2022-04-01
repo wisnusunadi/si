@@ -235,6 +235,116 @@ class Pesanan extends Model
         return $jumlah;
     }
 
+    public function LogistikLaporan($jenis, $eks, $awal, $akhir){
+        $id = $this->id;
+
+        $prd = "";
+        $part = "";
+
+        if($jenis == "ekspedisi"){
+            if($eks != '0'){
+                $prd = Logistik::where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function($q) use($id) {
+                    $q->where('pesanan_id', $id);
+                })->get();
+
+                $part = Logistik::where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->whereHas('DetailLogistikPart.DetailPesananPart', function($q) use($id) {
+                    $q->where('pesanan_id', $id);
+                })->get();
+            }
+            else{
+                $prd = Logistik::whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function($q) use($id) {
+                    $q->where('pesanan_id', $id);
+                })->get();
+
+                $part = Logistik::whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->whereHas('DetailLogistikPart.DetailPesananPart', function($q) use($id) {
+                    $q->where('pesanan_id', $id);
+                })->get();
+            }
+        } else if($jenis == "nonekspedisi"){
+            $prd = Logistik::whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function($q) use($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+
+            $part = Logistik::whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->whereHas('DetailLogistikPart.DetailPesananPart', function($q) use($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+        } else{
+            $prd = Logistik::whereBetween('tgl_kirim', [$awal, $akhir])->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function($q) use($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+
+            $part = Logistik::whereBetween('tgl_kirim', [$awal, $akhir])->whereHas('DetailLogistikPart.DetailPesananPart', function($q) use($id) {
+                $q->where('pesanan_id', $id);
+            })->get();
+        }
+        $data = $prd->merge($part);
+        return $data;
+
+
+    }
+
+    public function AllProdukKirim($jenis, $eks, $awal, $akhir){
+        $id = $this->id;
+
+        $prd = "";
+        $part = "";
+
+        if($jenis == "ekspedisi"){
+            if($eks != '0'){
+                $prd = DetailLogistik::whereHas('Logistik', function($q) use($eks, $awal, $akhir){
+                    $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir]);
+                })->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($id) {
+                    $q->where('pesanan_id', $id);
+                })->count();
+
+                $part = DetailLogistikPart::whereHas('Logistik', function($q) use($eks, $awal, $akhir){
+                    $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir]);
+                })->whereHas('DetailPesananPart', function($q) use($id) {
+                    $q->where('pesanan_id', $id);
+                })->count();
+            }
+            else{
+                $prd = DetailLogistik::whereHas('Logistik', function($q) use($awal, $akhir){
+                    $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir]);
+                })->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($id) {
+                    $q->where('pesanan_id', $id);
+                })->count();
+
+                $part = DetailLogistikPart::whereHas('Logistik', function($q) use($awal, $akhir){
+                    $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir]);
+                })->whereHas('DetailPesananPart', function($q) use($id) {
+                    $q->where('pesanan_id', $id);
+                })->count();
+            }
+        } else if($jenis == "nonekspedisi"){
+            $prd = DetailLogistik::whereHas('Logistik', function($q) use($awal, $akhir){
+                $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir]);
+            })->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($id) {
+                $q->where('pesanan_id', $id);
+            })->count();
+
+            $part = DetailLogistikPart::whereHas('Logistik', function($q) use($awal, $akhir){
+                $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir]);
+            })->whereHas('DetailPesananPart', function($q) use($id) {
+                $q->where('pesanan_id', $id);
+            })->count();
+        } else{
+            $prd = DetailLogistik::whereHas('Logistik', function($q) use($awal, $akhir){
+                $q->whereBetween('tgl_kirim', [$awal, $akhir]);
+            })->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($id) {
+                $q->where('pesanan_id', $id);
+            })->count();
+
+            $part = DetailLogistikPart::whereHas('Logistik', function($q) use($awal, $akhir){
+                $q->whereBetween('tgl_kirim', [$awal, $akhir]);
+            })->whereHas('DetailPesananPart', function($q) use($id) {
+                $q->where('pesanan_id', $id);
+            })->count();
+        }
+
+        return $prd + $part;
+    }
+
 
     function log()
     {
