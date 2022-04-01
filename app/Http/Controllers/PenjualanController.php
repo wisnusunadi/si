@@ -328,7 +328,7 @@ class PenjualanController extends Controller
                     }
                     return $datas;
                 })
-                ->addColumn('so', function ($data) { 
+                ->addColumn('so', function ($data) {
                     if ($data->Pesanan) {
                         return $data->Pesanan->so;
                     } else {
@@ -2312,13 +2312,7 @@ class PenjualanController extends Controller
                     }
                 }
 
-                $dspb = DetailPesananPart::where('pesanan_id', $poid)->get();
-                if (count($dspb) > 0) {
-                    $deldspb = DetailPesananPart::where('pesanan_id', $poid)->delete();
-                    if (!$deldspb) {
-                        $bool = false;
-                    }
-                }
+
 
                 if (isset($request->part_id) > 0) {
                     $dspb = DetailPesananPart::where('pesanan_id', $poid)->get();
