@@ -309,6 +309,29 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
+                                                        <label for="penjualan" class="col-form-label col-lg-5 col-md-12 labelket">Barang</label>
+                                                        <div class="col-5 col-form-label">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="jenis_pen" value="produk" name="jenis_pen[]" @if(count($e->pesanan->detailpesanan) > 0 )checked  @endif>
+                                                                <label class="form-check-label" for="inlineCheckbox1">Produk</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="jenis_pen" value="sparepart" name="jenis_pen[]" @if($e->pesanan->getJumlahPesananNonJasa())checked  @endif>
+                                                                <label class="form-check-label" for="inlineCheckbox1">Sparepart</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="checkbox" id="jasacheck"  name="jasacheck[]" @if($e->pesanan->getJumlahPesananJasa())  checked    @endif  disabled  >
+                                                                <label class="form-check-label" for="inlineCheckbox1">Jasa </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <div class="col-7">
+                                                            <input type="text" class="d-none" id="c_produk"value="{{count($e->pesanan->detailpesanan)}}" />
+                                                            <input type="text" class="d-none" id="c_part"value="{{$e->pesanan->getJumlahPesananNonJasa()}}" />
+                                                        </div>
+                                                    </div>
+                                                    {{-- <div class="form-group row">
                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Barang</label>
                                                         <div class="col-lg-5 col-md-12">
                                                             <div class="form-check form-check-inline col-form-label" id="penj_prd">
@@ -324,7 +347,7 @@
                                                                 <label class="form-check-label" for="jenis_penj3">Produk + Sparepart</label>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                                 </div>
                                             </div>
                                         </div>
@@ -562,7 +585,7 @@
                                 </div>
 
 
-                                <div class="row d-flex justify-content-center @if(count($e->pesanan->detailpesananpart) <= 0) hide @endif" id="datapart">
+                                <div class="row d-flex justify-content-center @if($e->pesanan->getJumlahPesananNonJasa() <= 0) hide @endif" id="datapart">
                                     <div class="col-lg-10 col-md-12">
                                         <h4>Data Part</h4>
                                         <div class="card">
@@ -592,7 +615,7 @@
 
                                                                 <tbody>
                                                                     @if(isset($e->pesanan->detailpesananpart))
-                                                                    @foreach($e->pesanan->detailpesananpart as $f)
+                                                                    @foreach($e->pesanan->DetailPesananPartNonJasa() as $f)
                                                                     <tr>
                                                                         <td>{{$loop->iteration}}</td>
                                                                         <td>
@@ -659,6 +682,82 @@
                                     </div>
                                 </div>
                                 @endif
+
+
+                                <div class="row d-flex justify-content-center  @if($e->pesanan->getJumlahPesananJasa() <= 0) hide @endif" id="datajasa">
+                                    <div class="col-lg-10 col-md-12">
+                                        <h4>Jasa</h4>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="row">
+                                                    <div class="col-12">
+                                                        <div class="table-responsive justify-content-center">
+                                                            <table class="table" style="text-align: center;" id="jasatable">
+                                                                <thead>
+
+                                                                    <tr>
+                                                                        <th width="5%">No</th>
+                                                                        <th width="35%">Nama Jasa</th>
+                                                                        <th width="20%">Harga</th>
+                                                                        <th width="20%">Subtotal</th>
+
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+
+                                                                    @foreach($e->pesanan->DetailPesananPartJasa() as $f)
+                                                                    <tr>
+                                                                        <td>{{$loop->iteration}}</td>
+                                                                        <td>
+                                                                            <div class="form-group">
+                                                                                    <input  width="100%" class="form-control "  style="text-align: center" value="{{$f->sparepart->nama}}" readonly>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group d-flex justify-content-center">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Rp</span>
+                                                                                </div>
+                                                                                <input type="text" class="form-control " style="width:100%;" value="{{number_format($f->harga,0,',','.')}}" readonly />
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-group d-flex justify-content-center">
+                                                                                <div class="input-group-prepend">
+                                                                                    <span class="input-group-text">Rp</span>
+                                                                                </div>
+                                                                                <input type="text" class="form-control "  style="width:100%;" value="{{number_format($f->jumlah * $f->harga,0,',','.')}}" readonly />
+                                                                            </div>
+                                                                        </td>
+
+                                                                    </tr>
+                                                                    @endforeach
+
+                                                                </tbody>
+                                                                <tfoot>
+                                                                    <tr>
+                                                                        <th colspan="3" style="text-align:right;">Total Harga</th>
+                                                                        <th id="totalhargajasa" class="align-right">Rp.
+                                                                            @if($e->pesanan->getJumlahPesananJasa() > 0)
+                                                                        <?php $x = 0;
+                                                                        foreach ($e->pesanan->DetailPesananPartJasa() as $f) {
+                                                                            $x += $f->harga * $f->jumlah;
+                                                                        }
+                                                                        ?>
+                                                                        {{number_format($x,0,',','.')}}
+                                                                        @endif
+                                                                        </th>
+                                                                    </tr>
+                                                                </tfoot>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
 
                                 <div class="row d-flex justify-content-center">
                                     <div class="col-lg-10 col-md-12">
@@ -731,39 +830,97 @@
             }
         });
 
-        $('input[type="radio"][name="jenis_penj"]').on('change', function() {
+        // $('input[type="radio"][name="jenis_penj"]').on('change', function() {
+        //     var x = $(this).val();
+        //     if ($(this).val() == "produk") {
+        //         $("#datapart").addClass("hide");
+        //         $("#dataproduk").removeClass("hide");
+
+        //         $('#produktable tbody').empty();
+        //         $('#produktable tbody').append(trproduktable());
+        //         numberRowsProduk($("#produktable"));
+
+        //         $('#parttable tbody').empty();
+        //     } else if ($(this).val() == "sparepart") {
+        //         $("#datapart").removeClass("hide");
+        //         $("#dataproduk").addClass("hide");
+
+        //         $('#produktable tbody').empty();
+
+        //         $('#parttable tbody').empty();
+        //         $('#parttable tbody').append(trparttable());
+        //         numberRowsPart($("#parttable"));
+        //     } else if ($(this).val() == "semua") {
+        //         $("#datapart").removeClass("hide");
+        //         $("#dataproduk").removeClass("hide");
+
+        //         $('#produktable tbody').empty();
+        //         $('#produktable tbody').append(trproduktable());
+        //         numberRowsProduk($("#produktable"));
+
+        //         $('#parttable tbody').empty();
+        //         $('#parttable tbody').append(trparttable());
+        //         numberRowsPart($("#parttable"));
+        //     }
+        // });
+
+        $('input[type="checkbox"][name="jenis_pen[]"]').on('change', function() {
+            var jenis_arry = [];
             var x = $(this).val();
-            if ($(this).val() == "produk") {
-                $("#datapart").addClass("hide");
+
+
+            $("input[id=jenis_pen]:checked").each(function() {
+                    jenis_arry.push($(this).val());
+            });
+            $("input[id=jasacheck]:checked").each(function() {
+                    jenis_arry.push('jasa');
+            });
+
+            if ($("input[name='jenis_pen[]']:checked").length == 0) {
+                jenis_arry.push(x);
+                $("input[id=jenis_pen][value="+x+"]").prop("checked", true);
+                }
+            filter_jenis(jenis_arry);
+            });
+
+
+            function filter_jenis(x){
+              if( $.inArray("produk", x) !== -1 ) {
                 $("#dataproduk").removeClass("hide");
 
-                $('#produktable tbody').empty();
-                $('#produktable tbody').append(trproduktable());
-                numberRowsProduk($("#produktable"));
+                if ($('#c_produk').val() <= 0){
+                    ($("#c_produk").val(1))
+                    $('#produktable tbody').append(trproduktable());
+                 numberRowsProduk($("#produktable"));
+                }
 
-                $('#parttable tbody').empty();
-            } else if ($(this).val() == "sparepart") {
-                $("#datapart").removeClass("hide");
+                }else{
+                ($("#c_produk").val(0))
+                $('#produktable tbody').empty();
                 $("#dataproduk").addClass("hide");
+                }
 
-                $('#produktable tbody').empty();
+              if( $.inArray("jasa", x) !== -1 ) {
+                $("#datajasa").removeClass("hide");
+                }else{
+                $("#datajasa").addClass("hide");
+                }
 
-                $('#parttable tbody').empty();
-                $('#parttable tbody').append(trparttable());
-                numberRowsPart($("#parttable"));
-            } else if ($(this).val() == "semua") {
+              if( $.inArray("sparepart", x) !== -1 ) {
                 $("#datapart").removeClass("hide");
-                $("#dataproduk").removeClass("hide");
 
-                $('#produktable tbody').empty();
-                $('#produktable tbody').append(trproduktable());
-                numberRowsProduk($("#produktable"));
-
-                $('#parttable tbody').empty();
+                if ($('#c_part').val() <= 0){
+                ($("#c_part").val(1))
                 $('#parttable tbody').append(trparttable());
                 numberRowsPart($("#parttable"));
+                }
+
+                }else{
+                ($("#c_part").val(0))
+                $('#parttable tbody').empty();
+                $("#datapart").addClass("hide");
+                }
             }
-        });
 
         $('input[type="radio"][name="do"]').on('change', function() {
             if ($(this).val() == "yes") {
