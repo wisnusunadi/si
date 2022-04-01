@@ -186,11 +186,26 @@ class Pesanan extends Model
         return $jumlah;
     }
 
+    public function getJumlahPesananPartNonJasa()
+    {
+        $id = $this->id;
+        $s = DetailPesananPart::where('pesanan_id', $id)->whereHas('Sparepart', function($q){
+            $q->where('kode', 'not like', '%JASA%');
+        })->get();
+        $jumlah = 0;
+        foreach ($s as $i) {
+            $jumlah = $jumlah + $i->jumlah;
+        }
+        return $jumlah;
+    }
+
     public function getJumlahCekPart($status)
     {
         $id = $this->id;
         $s = OutgoingPesananPart::whereHas('DetailPesananPart', function ($q) use ($id) {
             $q->where('pesanan_id', $id);
+        })->whereHas('DetailPesananPart.Sparepart', function ($q) use ($id) {
+            $q->where('kode', 'not like', '%JASA%');
         })->get();
         $jumlah = 0;
         foreach ($s as $i) {

@@ -328,7 +328,7 @@ class PenjualanController extends Controller
                     }
                     return $datas;
                 })
-                ->addColumn('so', function ($data) { 
+                ->addColumn('so', function ($data) {
                     if ($data->Pesanan) {
                         return $data->Pesanan->so;
                     } else {

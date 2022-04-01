@@ -442,11 +442,11 @@ class QcController extends Controller
                     $arrayid[] = $i->id;
                 }
             } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
-                if ($i->getJumlahPesananPart() > $i->getJumlahCekPart("ok")) {
+                if ($i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
                     $arrayid[] = $i->id;
                 }
             } else {
-                if (($i->getJumlahSeri() > 0 && $i->getJumlahPesanan() > $i->getJumlahCek()) || $i->getJumlahPesananPart() > $i->getJumlahCekPart("ok")) {
+                if (($i->getJumlahSeri() > 0 && $i->getJumlahPesanan() > $i->getJumlahCek()) || $i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
                     $arrayid[] = $i->id;
                 }
             }
@@ -520,7 +520,7 @@ class QcController extends Controller
                     if ($data->getJumlahCekPart('ok') == 0) {
                         return '<span class="badge red-text">Belum diuji</span>';
                     } else {
-                        if ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPart()) {
+                        if ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa()) {
                             return  '<span class="badge green-text">Selesai</span>';
                         } else {
                             return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
@@ -530,7 +530,7 @@ class QcController extends Controller
                     if ($data->getJumlahCek() == 0 && $data->getJumlahCekPart('ok') == 0) {
                         return '<span class="badge red-text">Belum diuji</span>';
                     } else {
-                        if (($data->getJumlahCek() >= $data->getJumlahPesanan()) && ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPart())) {
+                        if (($data->getJumlahCek() >= $data->getJumlahPesanan()) && ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa())) {
                             return  '<span class="badge green-text">Selesai</span>';
                         } else {
                             return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
@@ -593,11 +593,11 @@ class QcController extends Controller
                     $arrayid[] = $i->id;
                 }
             } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
-                if ($i->getJumlahPesananPart() == $i->getJumlahCekPart("ok")) {
+                if ($i->getJumlahPesananPartNonJasa() == $i->getJumlahCekPart("ok")) {
                     $arrayid[] = $i->id;
                 }
             } else {
-                if (($i->getJumlahPesanan() == $i->getJumlahCek()) && ($i->getJumlahPesananPart() == $i->getJumlahCekPart("ok"))) {
+                if (($i->getJumlahPesanan() == $i->getJumlahCek()) && ($i->getJumlahPesananPartNonJasa() == $i->getJumlahCekPart("ok"))) {
                     $arrayid[] = $i->id;
                 }
             }
@@ -671,7 +671,7 @@ class QcController extends Controller
                     if ($data->getJumlahCekPart('ok') == 0) {
                         return '<span class="badge red-text">Belum diuji</span>';
                     } else {
-                        if ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPart()) {
+                        if ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa()) {
                             return  '<span class="badge green-text">Selesai</span>';
                         } else {
                             return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
@@ -681,7 +681,7 @@ class QcController extends Controller
                     if ($data->getJumlahCek() == 0 && $data->getJumlahCekPart('ok') == 0) {
                         return '<span class="badge red-text">Belum diuji</span>';
                     } else {
-                        if (($data->getJumlahCek() >= $data->getJumlahPesanan()) && ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPart())) {
+                        if (($data->getJumlahCek() >= $data->getJumlahPesanan()) && ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa())) {
                             return  '<span class="badge green-text">Selesai</span>';
                         } else {
                             return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
@@ -734,7 +734,7 @@ class QcController extends Controller
         //             $c++;
         //         }
         //     } else {
-        //         if ($i->getJumlahPesananPart() == $i->getJumlahCekPart('ok')) {
+        //         if ($i->getJumlahPesananPartNonJasa() == $i->getJumlahCekPart('ok')) {
         //             $data[$c]['id'] = $i->id;
         //             $data[$c]['so'] = $i->Pesanan->so;
         //             $data[$c]['nama_produk'] = $i->Sparepart->nama;
@@ -948,7 +948,7 @@ class QcController extends Controller
                 if ($ds->getJumlahCekPart('ok') == 0) {
                     $status = '<span class="badge red-text">Belum diuji</span>';
                 } else {
-                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart()) {
+                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa()) {
                         $status =  '<span class="badge green-text">Selesai</span>';
                     } else {
                         $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
@@ -958,7 +958,7 @@ class QcController extends Controller
                 if ($ds->getJumlahCek() == 0 && $ds->getJumlahCekPart('ok') == 0) {
                     $status = '<span class="badge red-text">Belum diuji</span>';
                 } else {
-                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart())) {
+                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa())) {
                         $status =  '<span class="badge green-text">Selesai</span>';
                     } else {
                         $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
@@ -1027,7 +1027,7 @@ class QcController extends Controller
                 if ($ds->getJumlahCekPart('ok') == 0) {
                     $status = '<span class="badge red-text">Belum diuji</span>';
                 } else {
-                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart()) {
+                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa()) {
                         $status =  '<span class="badge green-text">Selesai</span>';
                     } else {
                         $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
@@ -1037,7 +1037,7 @@ class QcController extends Controller
                 if ($ds->getJumlahCek() == 0 && $ds->getJumlahCekPart('ok') == 0) {
                     $status = '<span class="badge red-text">Belum diuji</span>';
                 } else {
-                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart())) {
+                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa())) {
                         $status =  '<span class="badge green-text">Selesai</span>';
                     } else {
                         $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
@@ -1082,7 +1082,7 @@ class QcController extends Controller
                 if ($ds->getJumlahCekPart('ok') == 0) {
                     $status = '<span class="badge red-text">Belum diuji</span>';
                 } else {
-                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart()) {
+                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa()) {
                         $status =  '<span class="badge green-text">Selesai</span>';
                     } else {
                         $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
@@ -1092,7 +1092,7 @@ class QcController extends Controller
                 if ($ds->getJumlahCek() == 0 && $ds->getJumlahCekPart('ok') == 0) {
                     $status = '<span class="badge red-text">Belum diuji</span>';
                 } else {
-                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPart())) {
+                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa())) {
                         $status =  '<span class="badge green-text">Selesai</span>';
                     } else {
                         $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
@@ -1229,8 +1229,8 @@ class QcController extends Controller
                     }
                 }
             } else if (count($po->DetailPesanan) <= 0 && count($po->DetailPesananPart) > 0) {
-                // $uk = "Jumlah Pesan Part ".$po->getJumlahPesananPart()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
-                if ($po->getJumlahPesananPart() <= $po->getJumlahCekPart("ok")) {
+                // $uk = "Jumlah Pesan Part ".$po->getJumlahPesananPartNonJasa()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
+                if ($po->getJumlahPesananPartNonJasa() <= $po->getJumlahCekPart("ok")) {
                     if ($po->getJumlahKirimPart() == 0) {
                         $pou = Pesanan::find($pesanan_id);
                         $pou->log_id = '11';
@@ -1239,7 +1239,7 @@ class QcController extends Controller
                             $bools = false;
                         }
                     } else {
-                        if ($po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                        if ($po->getJumlahKirimPart() >= $po->getJumlahPesananPartNonJasa()) {
                             $pou = Pesanan::find($pesanan_id);
                             $pou->log_id = '10';
                             $u = $pou->save();
@@ -1255,7 +1255,7 @@ class QcController extends Controller
                             }
                         }
                     }
-                } else if ($po->getJumlahPesananPart() > $po->getJumlahCekPart("ok")) {
+                } else if ($po->getJumlahPesananPartNonJasa() > $po->getJumlahCekPart("ok")) {
                     $pou = Pesanan::find($pesanan_id);
                     $pou->log_id = '8';
                     $u = $pou->save();
@@ -1264,9 +1264,9 @@ class QcController extends Controller
                     }
                 }
             } else if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) > 0) {
-                // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek()." Jumlah Pesan Part ".$po->getJumlahPesananPart()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
+                // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek()." Jumlah Pesan Part ".$po->getJumlahPesananPartNonJasa()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
                 if ($po->log_id == "8") {
-                    if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPart() == $po->getJumlahCekPart("ok"))) {
+                    if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPartNonJasa() == $po->getJumlahCekPart("ok"))) {
                         if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
                             $pou = Pesanan::find($pesanan_id);
                             $pou->log_id = '11';
@@ -1275,7 +1275,7 @@ class QcController extends Controller
                                 $bools = false;
                             }
                         } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
-                            if ($po->getJumlahKirim() >= $po->getJumlahPesanan() && $po->getJumlahKirimPart() >= $po->getJumlahPesananPart()) {
+                            if ($po->getJumlahKirim() >= $po->getJumlahPesanan() && $po->getJumlahKirimPart() >= $po->getJumlahPesananPartNonJasa()) {
                                 $pou = Pesanan::find($pesanan_id);
                                 $pou->log_id = '10';
                                 $u = $pou->save();
@@ -1336,11 +1336,11 @@ class QcController extends Controller
                     $arrayid[] = $h->id;
                 }
             } else if (count($h->DetailPesanan) <= 0 && count($h->DetailPesananPart) > 0) {
-                if ($h->getJumlahPesananPart() > $h->getJumlahCekPart("ok")) {
+                if ($h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
                     $arrayid[] = $h->id;
                 }
             } else {
-                if (($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) || $h->getJumlahPesananPart() > $h->getJumlahCekPart("ok")) {
+                if (($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) || $h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
                     $arrayid[] = $h->id;
                 }
             }
@@ -1438,7 +1438,7 @@ class QcController extends Controller
                             }
                         }
                     } else if (!isset($data->DetailPesanan) && isset($data->DetailPesananPart)) {
-                        if ($data->getJumlahPesananPart() <= $data->getJumlahCekPart("ok")) {
+                        if ($data->getJumlahPesananPartNonJasa() <= $data->getJumlahCekPart("ok")) {
                             return '<span class="badge green-text">Selesai</span>';
                         } else {
                             if ($data->getJumlahCekPart("ok") == 0) {
@@ -1448,7 +1448,7 @@ class QcController extends Controller
                             }
                         }
                     } else if (isset($data->DetailPesanan) && isset($data->DetailPesananPart)) {
-                        if ($data->getJumlahPesanan() <= $data->getJumlahCek() && $data->getJumlahPesananPart() <= $data->getJumlahCekPart("ok")) {
+                        if ($data->getJumlahPesanan() <= $data->getJumlahCek() && $data->getJumlahPesananPartNonJasa() <= $data->getJumlahCekPart("ok")) {
                             return '<span class="badge green-text">Selesai</span>';
                         } else {
                             if ($data->getJumlahCek() == 0 && $data->getJumlahCekPart("ok") == 0) {
@@ -1518,11 +1518,11 @@ class QcController extends Controller
                         $arrayid[] = $h->id;
                     }
                 } else if (count($h->DetailPesanan) <= 0 && count($h->DetailPesananPart) > 0) {
-                    if ($h->getJumlahPesananPart() > $h->getJumlahCekPart("ok")) {
+                    if ($h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
                         $arrayid[] = $h->id;
                     }
                 } else {
-                    if (($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) || $h->getJumlahPesananPart() > $h->getJumlahCekPart("ok")) {
+                    if (($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) || $h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
                         $arrayid[] = $h->id;
                     }
                 }
