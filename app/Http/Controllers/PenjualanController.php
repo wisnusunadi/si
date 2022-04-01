@@ -1800,7 +1800,7 @@ class PenjualanController extends Controller
             }
             if ($request->jenis_penjualan == 'spa') {
                 $var = 'SPA';
-            } else {
+            } else if ($request->jenis_penjualan == 'spb') {
                 $var = 'SPB';
             }
             $pesanan = Pesanan::create([
@@ -1813,14 +1813,23 @@ class PenjualanController extends Controller
                 'log_id' => $k
             ]);
             $x = $pesanan->id;
-            $Spa = Spa::create([
-                'customer_id' => $request->customer_id,
-                'pesanan_id' => $x,
-                'ket' => $request->keterangan,
-                'log' => 'po'
-            ]);
+            if ($request->jenis_penjualan == 'spa') {
+                $p = Spa::create([
+                    'customer_id' => $request->customer_id,
+                    'pesanan_id' => $x,
+                    'ket' => $request->keterangan,
+                    'log' => 'po'
+                ]);
+            } else if ($request->jenis_penjualan == 'spb') {
+                $p = Spb::create([
+                    'customer_id' => $request->customer_id,
+                    'pesanan_id' => $x,
+                    'ket' => $request->keterangan,
+                    'log' => 'po'
+                ]);
+            }
             $bool = true;
-            if ($Spa) {
+            if ($p) {
                 if (in_array("produk", $request->jenis_pen)) {
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                         $dspa = DetailPesanan::create([
@@ -2105,6 +2114,7 @@ class PenjualanController extends Controller
             $pesanan->tgl_do = $request->tanggal_do;
             $pesanan->ket = $request->keterangan;
             $po = $pesanan->save();
+
             if ($po) {
                 $dspap = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
                     $q->where('pesanan_id', $poid);
@@ -2125,8 +2135,7 @@ class PenjualanController extends Controller
                         $bool = false;
                     }
                 }
-
-                if (isset($request->penjualan_produk_id) > 0) {
+                if (in_array("produk", $request->jenis_pen)) {
                     if ($dspa) {
                         for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                             $c = DetailPesanan::create([
@@ -2153,20 +2162,24 @@ class PenjualanController extends Controller
                     } else {
                         $bool = false;
                     }
-                }
-
-                $dspb = DetailPesananPart::where('pesanan_id', $poid)->get();
-                if (count($dspb) > 0) {
-                    $deldspb = DetailPesananPart::where('pesanan_id', $poid)->delete();
-                    if (!$deldspb) {
-                        $bool = false;
+                } else {
+                    $dspa = DetailPesanan::where('pesanan_id', $poid)->get();
+                    if (count($dspa) > 0) {
+                        $deldspa = DetailPesanan::where('pesanan_id', $poid)->delete();
+                        if (!$deldspa) {
+                            $bool = false;
+                        }
                     }
                 }
 
-                if (isset($request->part_id) > 0) {
-                    $dspb = DetailPesananPart::where('pesanan_id', $poid)->get();
+                if (in_array("sparepart", $request->jenis_pen)) {
+                    $dspb = DetailPesananPart::whereHas('Sparepart', function ($q) {
+                        $q->where('kode', 'not like', '%Jasa%');
+                    })->where('pesanan_id', $poid)->get();
                     if (count($dspb) > 0) {
-                        $deldspb = DetailPesananPart::where('pesanan_id', $poid)->delete();
+                        $deldspb = DetailPesananPart::whereHas('Sparepart', function ($q) {
+                            $q->where('kode', 'not like', '%Jasa%');
+                        })->where('pesanan_id', $poid)->delete();
                         if (!$deldspb) {
                             $bool = false;
                         }
@@ -2186,6 +2199,16 @@ class PenjualanController extends Controller
                         }
                     } else {
                         $bool = false;
+                    }
+                } else {
+                    $dspb = DetailPesananPart::whereHas('Sparepart', function ($q) {
+                        $q->where('kode', 'not like', '%Jasa%');
+                    })->where('pesanan_id', $poid)->get();
+                    if (count($dspb) > 0) {
+                        $deldspb = DetailPesananPart::where('pesanan_id', $poid)->delete();
+                        if (!$deldspb) {
+                            $bool = false;
+                        }
                     }
                 }
             } else {
@@ -2203,13 +2226,13 @@ class PenjualanController extends Controller
     }
     public function update_spb(Request $request, $id)
     {
-        $spb = Spb::find($id);
-        $poid = $spb->pesanan_id;
-        $spb->customer_id = $request->customer_id;
-        $uspb = $spb->save();
+        $spa = Spb::find($id);
+        $poid = $spa->pesanan_id;
+        $spa->customer_id = $request->customer_id;
+        $uspa = $spa->save();
         $bool = true;
-        if ($uspb) {
-            $pesanan = Pesanan::find($spb->pesanan_id);
+        if ($uspa) {
+            $pesanan = Pesanan::find($spa->pesanan_id);
             $pesanan->no_do = $request->no_do;
             $pesanan->tgl_do = $request->tanggal_do;
             $pesanan->ket = $request->keterangan;
@@ -2220,7 +2243,6 @@ class PenjualanController extends Controller
                     $q->where('pesanan_id', $poid);
                 })->get();
                 if (count($dspap) > 0) {
-                    echo "yesdpp";
                     $deldspap = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
                         $q->where('pesanan_id', $poid);
                     })->delete();
@@ -2231,14 +2253,12 @@ class PenjualanController extends Controller
 
                 $dspa = DetailPesanan::where('pesanan_id', $poid)->get();
                 if (count($dspa) > 0) {
-                    echo "yes dp";
                     $deldspa = DetailPesanan::where('pesanan_id', $poid)->delete();
                     if (!$deldspa) {
                         $bool = false;
                     }
                 }
-
-                if (isset($request->penjualan_produk_id) > 0) {
+                if (in_array("produk", $request->jenis_pen)) {
                     if ($dspa) {
                         for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                             $c = DetailPesanan::create([
@@ -2265,20 +2285,24 @@ class PenjualanController extends Controller
                     } else {
                         $bool = false;
                     }
-                }
-
-                $dspb = DetailPesananPart::where('pesanan_id', $poid)->get();
-                if (count($dspb) > 0) {
-                    $deldspb = DetailPesananPart::where('pesanan_id', $poid)->delete();
-                    if (!$deldspb) {
-                        $bool = false;
+                } else {
+                    $dspa = DetailPesanan::where('pesanan_id', $poid)->get();
+                    if (count($dspa) > 0) {
+                        $deldspa = DetailPesanan::where('pesanan_id', $poid)->delete();
+                        if (!$deldspa) {
+                            $bool = false;
+                        }
                     }
                 }
 
-                if (isset($request->part_id) > 0) {
-                    $dspb = DetailPesananPart::where('pesanan_id', $poid)->get();
+                if (in_array("sparepart", $request->jenis_pen)) {
+                    $dspb = DetailPesananPart::whereHas('Sparepart', function ($q) {
+                        $q->where('kode', 'not like', '%Jasa%');
+                    })->where('pesanan_id', $poid)->get();
                     if (count($dspb) > 0) {
-                        $deldspb = DetailPesananPart::where('pesanan_id', $poid)->delete();
+                        $deldspb = DetailPesananPart::whereHas('Sparepart', function ($q) {
+                            $q->where('kode', 'not like', '%Jasa%');
+                        })->where('pesanan_id', $poid)->delete();
                         if (!$deldspb) {
                             $bool = false;
                         }
@@ -2299,6 +2323,16 @@ class PenjualanController extends Controller
                     } else {
                         $bool = false;
                     }
+                } else {
+                    $dspb = DetailPesananPart::whereHas('Sparepart', function ($q) {
+                        $q->where('kode', 'not like', '%Jasa%');
+                    })->where('pesanan_id', $poid)->get();
+                    if (count($dspb) > 0) {
+                        $deldspb = DetailPesananPart::where('pesanan_id', $poid)->delete();
+                        if (!$deldspb) {
+                            $bool = false;
+                        }
+                    }
                 }
             } else {
                 $bool = false;
@@ -2308,9 +2342,9 @@ class PenjualanController extends Controller
         }
 
         if ($bool == true) {
-            return redirect()->back()->with('success', 'Berhasil mengubah SPB');
+            return redirect()->back()->with('success', 'Berhasil mengubah SPA');
         } else if ($bool == false) {
-            return redirect()->back()->with('error', 'Gagal mengubah SPB');
+            return redirect()->back()->with('error', 'Gagal mengubah SPA');
         }
     }
 

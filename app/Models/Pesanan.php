@@ -31,6 +31,23 @@ class Pesanan extends Model
     {
         return $this->hasMany(DetailPesananPart::class);
     }
+    public function DetailPesananPartJasa()
+    {
+        $id = $this->id;
+        $s = DetailPesananPart::whereHas('Sparepart', function ($q) {
+            $q->where('kode', 'like', '%Jasa%');
+        })->where('pesanan_id', $id)->get();
+        return $s;
+    }
+
+    public function DetailPesananPartNonJasa()
+    {
+        $id = $this->id;
+        $s = DetailPesananPart::whereHas('Sparepart', function ($q) {
+            $q->where('kode', 'not like', '%Jasa%');
+        })->where('pesanan_id', $id)->get();
+        return $s;
+    }
 
     public function DetailLogistikPart()
     {
@@ -185,6 +202,25 @@ class Pesanan extends Model
         }
         return $jumlah;
     }
+
+
+    public function getJumlahPesananJasa()
+    {
+        $id = $this->id;
+        $s = DetailPesananPart::whereHas('Sparepart', function ($q) {
+            $q->where('kode', 'like', '%Jasa%');
+        })->where('pesanan_id', $id)->count();
+        return $s;
+    }
+    public function getJumlahPesananNonJasa()
+    {
+        $id = $this->id;
+        $s = DetailPesananPart::whereHas('Sparepart', function ($q) {
+            $q->where('kode', 'not like', '%Jasa%');
+        })->where('pesanan_id', $id)->count();
+        return $s;
+    }
+
 
     public function getJumlahKirimPart()
     {

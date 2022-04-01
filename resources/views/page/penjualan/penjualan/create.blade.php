@@ -259,7 +259,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="penjualan" class="col-form-label col-lg-5 col-md-12 labelket">Pilih Barang</label>
+                                                    <label for="penjualan" class="col-form-label col-lg-5 col-md-12 labelket">Barang</label>
                                                     <div class="col-5 col-form-label">
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="checkbox" id="jenis_pen" value="produk" name="jenis_pen[]" disabled>
@@ -1174,67 +1174,25 @@
                 $("input[id=jenis_pen][value="+x+"]").prop("checked", true);
                 }
                 filter_jenis(jenis_arry);
-
             });
 
             function filter_jenis(x){
-              var q = x.toString();
-              console.log(q);
-
-            if (q == ['produk','sparepart','jasa']) {
-                $("#datapart").removeClass("hide");
+              if( $.inArray("produk", x) !== -1 ) {
                 $("#dataproduk").removeClass("hide");
-                $("#datajasa").removeClass("hide");
-            }else if(q == ['produk','jasa']){
-                $("#datapart").addClass("hide");
-                $("#dataproduk").removeClass("hide");
-                $("#datajasa").removeClass("hide");
-            }else if(q == ["produk","sparepart"]){
-                $("#datapart").removeClass("hide");
-                $("#dataproduk").removeClass("hide");
-                $("#datajasa").addClass("hide");
-            }else if(q == ['sparepart','jasa']){
-                $("#datapart").removeClass("hide");
+                }else{
                 $("#dataproduk").addClass("hide");
+                }
+              if( $.inArray("jasa", x) !== -1 ) {
                 $("#datajasa").removeClass("hide");
-            }else if(q == ['produk']){
-                $("#datapart").addClass("hide");
-                $("#dataproduk").removeClass("hide");
+                }else{
                 $("#datajasa").addClass("hide");
-            }else if(q == ['jasa']){
-                $("#datapart").addClass("hide");
-                $("#dataproduk").addClass("hide");
-                $("#datajasa").removeClass("hide");
-            }else if(q == ['sparepart']){
+                }
+              if( $.inArray("sparepart", x) !== -1 ) {
                 $("#datapart").removeClass("hide");
-                $("#dataproduk").addClass("hide");
-                $("#datajasa").addClass("hide");
+                }else{
+                $("#datapart").addClass("hide");
+                }
             }
-            }
-
-        // $('input[type="radio"][name="jenis_penj"]').on('change', function() {
-        //     var x = $(this).val();
-        //     if ($(this).val() == "produk") {
-        //         $("#datapart").addClass("hide");
-        //         $("#dataproduk").removeClass("hide");
-        //         $("#datajasa").addClass("hide");
-        //     } else if ($(this).val() == "sparepart") {
-        //         $("#datapart").removeClass("hide");
-        //         $("#dataproduk").addClass("hide");
-        //         $("#datajasa").addClass("hide");
-        //     } else if ($(this).val() == "semua") {
-        //         $("#datapart").removeClass("hide");
-        //         $("#dataproduk").removeClass("hide");
-        //         $("#datajasa").addClass("hide");
-        //     } else if ($(this).val() == "jasa") {
-        //         $("#datapart").addClass("hide");
-        //         $("#dataproduk").addClass("hide");
-        //         $("#datajasa").removeClass("hide");
-        //     }
-        // });
-
-
-
 
         $('input[type="radio"][name="do"]').on('change', function() {
             $('#btntambah').attr("disabled", true);
