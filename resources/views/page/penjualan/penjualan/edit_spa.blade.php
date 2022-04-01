@@ -895,6 +895,7 @@
                 }
 
                 }else{
+                $('#totalhargaprd').text("Rp. 0");
                 ($("#c_produk").val(0))
                 $('#produktable tbody').empty();
                 $("#dataproduk").addClass("hide");
@@ -911,6 +912,7 @@
 
                 if ($('#c_part').val() <= 0){
                 ($("#c_part").val(1))
+                $('#totalhargapart').text("Rp. 0");
                 $('#parttable tbody').append(trparttable());
                 numberRowsPart($("#parttable"));
                 }
