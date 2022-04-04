@@ -912,12 +912,12 @@
 
                 if ($('#c_part').val() <= 0){
                 ($("#c_part").val(1))
-                $('#totalhargapart').text("Rp. 0");
+
                 $('#parttable tbody').append(trparttable());
                 numberRowsPart($("#parttable"));
                 }
-
                 }else{
+                    $('#totalhargapart').text("Rp. 0");
                 ($("#c_part").val(0))
                 $('#parttable tbody').empty();
                 $("#datapart").addClass("hide");
@@ -1229,7 +1229,11 @@
             numberRowsProduk($("#produktable"));
             totalhargaprd();
             if ($('#produktable > tbody > tr').length <= 0) {
-                $("#totalhargaprd").text("0");
+                $('#totalhargaprd').text("Rp. 0");
+                ($("#c_produk").val(0))
+                $('#produktable tbody').empty();
+                $("#dataproduk").addClass("hide");
+                $("input[id=jenis_pen][value='produk']").prop("checked", false);
             }
         });
 
@@ -1543,7 +1547,11 @@
             numberRowsPart($("#parttable"));
             totalhargapart();
             if ($('#parttable > tbody > tr').length <= 0) {
-                $("#totalhargapart").text("0");
+                $('#totalhargapart').text("Rp. 0");
+                ($("#c_part").val(0))
+                $('#parttable tbody').empty();
+                $("#datapart").addClass("hide");
+                $("input[id=jenis_pen][value='sparepart']").prop("checked", false);
             }
         });
     });
