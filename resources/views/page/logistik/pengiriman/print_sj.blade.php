@@ -112,8 +112,8 @@
                             <td style="width:2% ;" class="vera">:</td>
                             <td class="wb" class="vera">
                                 <?php
-                                if (isset($data->DetailLogistik)) {
-                                    echo $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->no_po;
+                                if (isset($data->DetailLogistik[0])) {
+                                    echo $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po;
                                 } else {
                                     echo $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po;
                                 } ?>
@@ -124,14 +124,14 @@
                             <td class="vera">:</td>
                             <td class="vera">
                                 <?php
-                                if (isset($data->DetailLogistik)) {
-                                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                                if (isset($data->DetailLogistik[0])) {
+                                    $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                                     if ($name[1] == 'EKAT') {
-                                        echo    $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
+                                        echo    $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan;
                                     } else if ($name[1] == 'SPA') {
-                                        echo   $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
+                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama;
                                     } else if ($name[1] == 'SPB') {
-                                        echo   $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
+                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama;
                                     }
                                 } else {
 
@@ -151,14 +151,14 @@
                             <td class="vera">:</td>
                             <td class="vera">
                                 <?php
-                                if (isset($data->DetailLogistik)) {
-                                    $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
+                                if (isset($data->DetailLogistik[0])) {
+                                    $name = explode('/', $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so);
                                     if ($name[1] == 'EKAT') {
-                                        echo    $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat;
+                                        echo    $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat;
                                     } else if ($name[1] == 'SPA') {
-                                        echo   $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
+                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat;
                                     } else if ($name[1] == 'SPB') {
-                                        echo   $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
+                                        echo   $data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat;
                                     }
                                 } else {
                                     $name = explode('/', $data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so);

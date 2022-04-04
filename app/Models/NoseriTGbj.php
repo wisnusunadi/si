@@ -23,11 +23,13 @@ class NoseriTGbj extends Model
     }
     function seri()
     {
-        return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id');
+        return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id')
+            ->orderBy('noseri');
     }
     function NoseriBarangJadi()
     {
-        return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id');
+        return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id')
+            ->orderBy('noseri');
     }
     function NoseriDetailPesanan()
     {

@@ -25,8 +25,6 @@ class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
      * @return \Illuminate\Support\Collection
      */
 
-
-
     public function jenis_penjualan()
     {
         return $this->jenis_penjualan;

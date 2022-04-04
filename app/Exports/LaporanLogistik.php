@@ -4,11 +4,13 @@ namespace App\Exports;
 
 use App\Models\DetailLogistik;
 use App\Models\DetailLogistikPart;
+use App\Models\Pesanan;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananPart;
 use App\Models\Ekatalog;
 use App\Models\Spa;
 use App\Models\Spb;
+use App\Models\Logistik;
 use Illuminate\Contracts\View\View;
 use Maatwebsite\Excel\Concerns\Exportable;
 use Maatwebsite\Excel\Concerns\FromCollection;
@@ -71,15 +73,17 @@ class LaporanLogistik implements FromView, ShouldAutoSize, WithStyles, WithColum
     public function columnFormats(): array
     {
         return [
-            'M' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2
+            'M' => NumberFormat::FORMAT_NUMBER_COMMA_SEPARATED2,
+            'I' => NumberFormat::FORMAT_TEXT
         ];
     }
 
     public function styles(Worksheet $sheet)
     {
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
-        $sheet->getStyle('A2:T2')->getFont()->setBold(true);
-
+        $sheet->getStyle('A2:O2')->getFont()->setBold(true);
+        $sheet->getStyle('A:O')->getAlignment()
+        ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
         $sheet->getStyle('a2')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('00ff7f');
@@ -95,6 +99,26 @@ class LaporanLogistik implements FromView, ShouldAutoSize, WithStyles, WithColum
         $sheet->getStyle('k2:n2')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('00ff7f');
+        $sheet->getStyle('o2')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setRGB('89d0b4');
+        $sheet->getStyle('A:C')->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('G:I')->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('O')->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+
+        $sheet->getColumnDimension('D')->setAutoSize(false)->setWidth(35);
+        $sheet->getStyle('D')->getAlignment()->setWrapText(true);
+        $sheet->getColumnDimension('E')->setAutoSize(false)->setWidth(45);
+        $sheet->getStyle('E')->getAlignment()->setWrapText(true);
+        $sheet->getColumnDimension('K')->setAutoSize(false)->setWidth(38);
+        $sheet->getStyle('K')->getAlignment()->setWrapText(true);
+        $sheet->getColumnDimension('L')->setAutoSize(false)->setWidth(30);
+        $sheet->getStyle('L')->getAlignment()->setWrapText(true);
+        $sheet->getColumnDimension('N')->setAutoSize(false)->setWidth(45);
+        $sheet->getStyle('N')->getAlignment()->setWrapText(true);
     }
 
     public function view(): View
@@ -103,47 +127,85 @@ class LaporanLogistik implements FromView, ShouldAutoSize, WithStyles, WithColum
         $eks = $this->ekspedisi;
         $awal = $this->tgl_awal;
         $akhir = $this->tgl_akhir;
-
-
-
+        $prd = "";
+        $prt = "";
 
         if ($header == "ekspedisi") {
             if ($eks != '0') {
-                $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($eks, $awal, $akhir) {
-                    $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($eks, $awal, $akhir) {
+                //     $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                // })->get();
+                // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($eks, $awal, $akhir) {
+                //     $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                // })->get();
+
+                $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($eks, $awal, $akhir){
+                    $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir]);
                 })->get();
-                $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($eks, $awal, $akhir) {
-                    $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($eks, $awal, $akhir){
+                    $q->where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir]);
                 })->get();
             } else {
-                $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-                    $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+                //     $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                // })->get();
+                // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+                //     $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                // })->get();
+
+                $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($awal, $akhir){
+                    $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir]);
                 })->get();
-                $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-                    $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+                $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($awal, $akhir){
+                    $q->whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir]);
                 })->get();
             }
         } else if ($header == "nonekspedisi") {
-            $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-                $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+
+            // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+            //     $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+            // })->get();
+            // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+            //     $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+            // })->get();
+            $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($awal, $akhir){
+                $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir]);
             })->get();
-            $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-                $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+            $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($awal, $akhir){
+                $q->whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir]);
             })->get();
         } else {
-            $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-                $q->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+            // $prd = DetailLogistik::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+            //     $q->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+            // })->get();
+            // $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
+            //     $q->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+            // })->get();
+            $prd = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik', function($q) use($awal, $akhir){
+                $q->whereBetween('tgl_kirim', [$awal, $akhir]);
             })->get();
-            $prt = DetailLogistikPart::whereHas('Logistik', function ($q) use ($awal, $akhir) {
-                $q->whereBetween('tgl_kirim', [$awal, $akhir])->orderBy('nosurat', 'ASC');
+            $prt = Pesanan::whereHas('DetailPesananPart.DetailLogistikPart.Logistik', function($q) use($awal, $akhir){
+                $q->whereBetween('tgl_kirim', [$awal, $akhir]);
             })->get();
         }
 
         $data = $prd->merge($prt);
 
+        // if($header == "ekspedisi"){
+        //     if($eks != '0'){
+        //         $data = Logistik::where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$awal, $akhir])->get();
+        //     }
+        //     else{
+        //         $data = Logistik::whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$awal, $akhir])->get();
+        //     }
+        // }
+        // else if($header == "nonekspedisi"){
+        //     $data = Logistik::whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$awal, $akhir])->get();
+        // }
+        // else{
+        //     $data = Logistik::whereBetween('tgl_kirim', [$awal, $akhir])->orderByRaw('logistik.detail_logistik.detail_pesanan_produk.detail_pesanan.pesanan.id ASC')->orderByRaw('logistik.detail_logistik_part.detail_pesanan_part.pesanan.id ASC')->get();
+        // }
 
-
-
-        return view('page.logistik.laporan.LaporanLogistikEx', ['header' => $header, 'data' => $data]);
+        return view('page.logistik.laporan.LaporanLogistikEx', ['header' => $header, 'data' => $data, 'eks' => $eks, 'awal' => $awal, 'akhir' => $akhir]);
     }
 }
