@@ -3616,10 +3616,9 @@ class LogistikController extends Controller
             ->addColumn('no_paket', function ($data) {
                 if(isset($data->Ekatalog)){
                     return $data->Ekatalog->no_paket;
-                }else{
+                } else{
                     return '-';
                 }
-
             })
             ->addColumn('po', function ($data) {
                 return $data->no_po;

@@ -1347,7 +1347,6 @@ class QcController extends Controller
         }
         $hasil = Pesanan::whereIn('id', $arrayid)->get()->count();
 
-
         $lewat_batas_data = Pesanan::has('Ekatalog')->whereIN('id',  $this->check_input())->get();
         $tgl_sekarang = Carbon::now()->format('Y-m-d');
         $lewat_batas = 0;
