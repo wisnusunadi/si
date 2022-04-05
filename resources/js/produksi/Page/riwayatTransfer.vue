@@ -18,7 +18,7 @@
                                                     persistent-hint prepend-icon="mdi-calendar" :attrs="attrs" v-on="on"
                                                     @click:clear="date = null"></v-text-field>
                                             </template>
-                                            <v-date-picker @input="menu1 = false" range v-model="date"></v-date-picker>
+                                            <v-date-picker range v-model="date"></v-date-picker>
                                         </v-menu>
                                         </v-col>
                                     </v-row>
@@ -55,7 +55,6 @@
             return {
                 search: null,
                 dialog: false,
-                menu1: false,
                 dataRiwayat: [],
                 date: null,
                 nama_produk: null,
