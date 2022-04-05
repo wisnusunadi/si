@@ -586,7 +586,7 @@
             confirmButtonText: 'Yes, Transfer it'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $(this).attr('disabled', true);
+                    // $(this).attr('disabled', true);
                     $.ajax({
                         url: "/api/tfp/byso-final",
                         type: "post",
@@ -597,13 +597,14 @@
                             data: prd1,
                         },
                         success: function(res) {
-                            Swal.fire(
-                                'Success!',
-                                'Data Terkirim ke QC',
-                                'success'
-                            ).then(function() {
-                                location.reload();
-                            })
+                            console.log(res);
+                            // Swal.fire(
+                            //     'Success!',
+                            //     'Data Terkirim ke QC',
+                            //     'success'
+                            // ).then(function() {
+                            //     location.reload();
+                            // })
                         }
                     })
 
