@@ -192,6 +192,7 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
         });
         Route::group(['prefix' => '/laporan'], function () {
             Route::view('/show', 'page.qc.laporan.show')->name('qc.so.laporan.show');
+            Route::get('/export/{jenis}/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_cetak_laporan_qc']);
         });
     });
 });
@@ -203,6 +204,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::post('/data/{value}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
         Route::get('/create/{detail_pesanan_id}/{part}/{pesanan_id}/{jenis}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
+
         Route::view('/edit', 'page.logistik.so.edit')->name('logistik.so.edit');
         Route::group(['prefix' => '/riwayat'], function () {
             Route::view('/show', 'page.logistik.so.riwayat.show')->name('logistik.so.riwayat.show');
