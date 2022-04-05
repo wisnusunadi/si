@@ -59,13 +59,6 @@
                                     <input type="text" name="" id="" class="form-control daterange">
                                 </div>
                             </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="">Tanggal Pengiriman</label>
-                                    <input type="text" name="" id="" class="form-control daterange2">
-                                </div>
-                            </div>
-                            <div class="col-sm-3"></div>
                         </div>
                         <hr>
                         <div class="row text-center">
@@ -85,8 +78,6 @@
                                 <tr>
                                     <th>Tanggal Perakitan</th>
                                     <th>Waktu Perakitan</th>
-                                    <th>Tanggal Pengiriman</th>
-                                    <th>Waktu Pengiriman</th>
                                     <th>Nomor BPPB</th>
                                     <th>Produk</th>
                                     <th>Jumlah</th>
@@ -156,7 +147,6 @@
                             <th>Rakit</th>
                             <th>Sisa</th>
                             <th>filter_rakit</th>
-                            <th>filter_kirim</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -205,31 +195,21 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-sm">
-                                <label for="">Tanggal & Waktu Perakitan</label>
+                                <label for="">Tanggal Perakitan</label>
                                 <div class="card-group">
                                     <div class="card" style="background-color: #C8E1A7">
                                         <div class="card-body">
                                             <p class="card-text" id="d_rakit">Senin 10-04-2021</p>
                                         </div>
                                     </div>
-                                    <div class="card" style="background-color: #C8E1A7">
-                                        <div class="card-body">
-                                            <p class="card-text" id="t_rakit">08.00 WIB</p>
-                                        </div>
-                                    </div>
                                 </div>
                             </div>
                             <div class="col-sm">
-                                <label for="">Tanggal & Waktu Pengiriman</label>
+                                <label for="">Waktu Perakitan</label>
                                 <div class="card-group">
                                     <div class="card" style="background-color: #FFECB2">
                                         <div class="card-body">
-                                            <p class="card-text" id="d_kirim">Selasa 11-04-2021</p>
-                                        </div>
-                                    </div>
-                                    <div class="card" style="background-color: #FFECB2">
-                                        <div class="card-body">
-                                            <p class="card-text" id="t_kirim">09.00 WIB</p>
+                                            <p class="card-text" id="t_rakit">Selasa 11-04-2021</p>
                                         </div>
                                     </div>
                                 </div>
@@ -460,7 +440,7 @@
         var dateStart = parseDateValue(start_date);
         var dateEnd = parseDateValue(end_date);
 
-        var evalDate = parseDateValue(aData[8]);
+        var evalDate = parseDateValue(aData[6]);
         if ((isNaN(dateStart) && isNaN(dateEnd)) ||
             (isNaN(dateStart) && evalDate <= dateEnd) ||
             (dateStart <= evalDate && isNaN(dateEnd)) ||
@@ -471,30 +451,6 @@
     });
 
     function parseDateValue(rawDate) {
-        var dateArray = rawDate.split("-");
-        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
-        0]);
-        return parsedDate;
-    }
-
-    // Tanggal Pengiriman
-    var start_date2;
-    var end_date2;
-    var DateFilterFunction2 = (function (oSettings, aData, iDataIndex) {
-        var dateStart = parseDateValue2(start_date2);
-        var dateEnd = parseDateValue2(end_date2);
-
-        var evalDate = parseDateValue2(aData[9]);
-        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
-            (isNaN(dateStart) && evalDate <= dateEnd) ||
-            (dateStart <= evalDate && isNaN(dateEnd)) ||
-            (dateStart <= evalDate && evalDate <= dateEnd)) {
-            return true;
-        }
-        return false;
-    });
-
-    function parseDateValue2(rawDate) {
         var dateArray = rawDate.split("-");
         var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
         0]);
@@ -514,11 +470,9 @@
         var id = $(this).data('id');
         var time = $(this).data('tf');
         var rakit = $(this).data('rakit');
-        console.log($(this).parent());
-        $('p#d_rakit').text($(this).parent().prev().prev().prev().prev().prev().prev().prev().html());
-        $('p#d_kirim').text($(this).parent().prev().prev().prev().prev().prev().html());
-        $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().prev().html());
-        $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
+        console.log($(this).parent().prev().prev().prev().prev().prev().html());
+        $('p#d_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
+        $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().html());
         $('div#bppb').text($(this).parent().prev().prev().prev().html());
         $('div#produk').text($(this).parent().prev().prev().html());
         $('div#jml').text($(this).parent().prev().html());
@@ -555,10 +509,8 @@
     // var groupCol = [0,2];
     var table = $('.table-history').DataTable({
         "columnDefs": [
-            // { "visible": false, "targets": 0 },
-            // { "visible": false, "targets": 2 },
-            { "visible": false, "targets": 8 },
-            { "visible": false, "targets": 9 }
+            { "visible": false, "targets": 6 },
+            { "visible": false, "targets": 7 }
         ],
         destroy: true,
         "lengthChange": false,
@@ -578,8 +530,6 @@
         columns: [
             {data: 'day_rakit'},
             {data: 'time_rakit'},
-            {data: 'day_kirim'},
-            {data: 'time_kirim'},
             {data: 'bppb'},
             {data: 'produk'},
             {data: 'jml'},
@@ -621,7 +571,7 @@
             search.push(val);
         });
         search = search.join('|');
-        table.column(5).search(search, true, false).draw();
+        table.column(3).search(search, true, false).draw();
     });
 
     // Tanggal Perakitan
@@ -643,28 +593,6 @@
             start_date = '';
             end_date = '';
             $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
-            table.draw();
-        });
-
-    // Tanggal Pengiriman
-    $('.daterange2').daterangepicker({
-            autoUpdateInput: false
-        });
-
-        $('.daterange2').on('apply.daterangepicker', function (ev, picker) {
-            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
-                'DD-MM-YYYY'));
-            start_date2 = picker.startDate.format('DD-MM-YYYY');
-            end_date2 = picker.endDate.format('DD-MM-YYYY');
-            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction2);
-            table.draw();
-        });
-
-        $('.daterange2').on('cancel.daterangepicker', function (ev, picker) {
-            $(this).val('');
-            start_date2 = '';
-            end_date2 = '';
-            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
             table.draw();
         });
 
