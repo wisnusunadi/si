@@ -211,17 +211,17 @@ class ProduksiController extends Controller
                             // if (NoseriTGbj::where('noseri_id', $v)->get()->count() > 0) {
                             //     # code...
                             // } else {
-                            $nn = new NoseriTGbj();
-                            $nn->t_gbj_detail_id = $did;
-                            $nn->noseri_id = $v;
-                            $nn->status_id = 2;
-                            $nn->state_id = 8;
-                            $nn->jenis = 'keluar';
-                            $nn->created_at = Carbon::now();
-                            $nn->created_by = $request->userid;
-                            $nn->save();
+                                $nn = new NoseriTGbj();
+                                $nn->t_gbj_detail_id = $did;
+                                $nn->noseri_id = $v;
+                                $nn->status_id = 2;
+                                $nn->state_id = 8;
+                                $nn->jenis = 'keluar';
+                                $nn->created_at = Carbon::now();
+                                $nn->created_by = $request->userid;
+                                $nn->save();
 
-                            NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+                                NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
                             // }
                         }
 
@@ -259,17 +259,6 @@ class ProduksiController extends Controller
             $d->save();
 
             foreach ($request->data as $key1 => $value1) {
-                // $dd = TFProduksiDetail::create([
-                //     't_gbj_id' => $d->id,
-                //     'detail_pesanan_produk_id' => $key1,
-                //     'gdg_brg_jadi_id' => $value1['prd'],
-                //     'qty' => $value1['jumlah'],
-                //     'jenis' => 'keluar',
-                //     'status_id' => 2,
-                //     'state_id' => 8,
-                //     'created_at' => Carbon::now(),
-                //     'created_by' => $request->userid
-                // ]);
                 $dd = new TFProduksiDetail();
                 $dd->t_gbj_id = $d->id;
                 $dd->detail_pesanan_produk_id = $key1;
