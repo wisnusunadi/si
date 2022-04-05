@@ -2221,11 +2221,12 @@ class ProduksiController extends Controller
 
     function his_rakit()
     {
-        $rakit = JadwalPerakitan::where('status_tf', 14)->get()->count('produk_id');
-        $unit = JadwalPerakitan::where('status_tf', 14)->get()->sum('jumlah');
+        // $rakit = JadwalPerakitan::where('status_tf', 14)->get()->count('produk_id');
+        $rakit = JadwalRakitNoseri::distinct()->count('jadwal_id');
+        $unit = JadwalRakitNoseri::count('jadwal_id');
         $data = JadwalPerakitan::where('status_tf', 14)->get();
         $detail = JadwalPerakitan::with('noseri', 'produk.produk')->where('status_tf', 14)->get();
-
+        // dd($unit);
         return view('page.produksi.riwayat_perakitan', compact('rakit', 'unit', 'data', 'detail'));
     }
 
