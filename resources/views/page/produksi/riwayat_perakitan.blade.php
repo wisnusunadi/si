@@ -30,8 +30,8 @@
                             aria-controls="nav-home" aria-selected="true">Transfer Gudang Barang Jadi</a>
                         <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
                             aria-controls="nav-profile" aria-selected="false">Transfer Lain Lain</a>
-                        <a class="nav-link" id="nav-produk-tab" data-toggle="tab" href="#nav-produk" role="tab"
-                            aria-controls="nav-produk" aria-selected="false">Per Produk</a>
+                        {{-- <a class="nav-link" id="nav-produk-tab" data-toggle="tab" href="#nav-produk" role="tab"
+                            aria-controls="nav-produk" aria-selected="false">Per Produk</a> --}}
                     </div>
                 </nav>
             </div>
@@ -164,7 +164,7 @@
             </div>
         </div>
     </div>
-    <div class="tab-pane fade" id="nav-produk" role="tabpanel" aria-labelledby="nav-profile-tab">
+    {{-- <div class="tab-pane fade" id="nav-produk" role="tabpanel" aria-labelledby="nav-profile-tab">
         <div class="card">
             <div class="card-body">
                 <table class="table tableDetailProduk">
@@ -187,7 +187,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div> --}}
   </div>
 
 <!-- Modal -->
