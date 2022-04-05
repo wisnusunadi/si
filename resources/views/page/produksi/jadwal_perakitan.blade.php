@@ -598,7 +598,7 @@
                             let today = new Date();
                             let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
                             let datetime = tgl + ' ' + time;
-                            console.log('a');
+                            // console.log('a');
                             $.ajax({
                                 url: "/api/prd/rakit-seri",
                                 type: "post",

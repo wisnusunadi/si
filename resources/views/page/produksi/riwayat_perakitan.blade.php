@@ -539,7 +539,6 @@
             destroy: true,
             "ordering":false,
             "autoWidth": false,
-            "lengthChange": false,
             "pageLength": 10,
             processing: true,
             ajax: {

@@ -617,7 +617,7 @@
                                 tgl_transfer: datetime,
                             },
                             success: function (res) {
-                                console.log(res);
+                                // console.log(res);
                                 Swal.fire(
                                     'Berhasil!',
                                     'Data berhasil di transfer!',
