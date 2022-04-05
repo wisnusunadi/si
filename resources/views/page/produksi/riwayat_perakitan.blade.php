@@ -27,11 +27,11 @@
                 <nav>
                     <div class="nav nav-tabs topnav" id="nav-tab" role="tablist">
                         <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-                            aria-controls="nav-home" aria-selected="true">Transfer Gudang Barang Jadi</a>
+                            aria-controls="nav-home" aria-selected="true">Riwayat Perakitan</a>
                         <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
                             aria-controls="nav-profile" aria-selected="false">Transfer Lain Lain</a>
-                        <a class="nav-link" id="nav-produk-tab" data-toggle="tab" href="#nav-produk" role="tab"
-                            aria-controls="nav-produk" aria-selected="false">Per Produk</a>
+                        {{-- <a class="nav-link" id="nav-produk-tab" data-toggle="tab" href="#nav-produk" role="tab"
+                            aria-controls="nav-produk" aria-selected="false">Per Produk</a> --}}
                     </div>
                 </nav>
             </div>
@@ -85,14 +85,14 @@
                                 <tr>
                                     <th>Tanggal Perakitan</th>
                                     <th>Waktu Perakitan</th>
-                                    <th>Tanggal Pengiriman</th>
-                                    <th>Waktu Pengiriman</th>
+                                    {{-- <th>Tanggal Pengiriman</th>
+                                    <th>Waktu Pengiriman</th> --}}
                                     <th>Nomor BPPB</th>
                                     <th>Produk</th>
                                     <th>Jumlah</th>
                                     <th>Aksi</th>
                                     <th>filter_rakit</th>
-                                    <th>filter_kirim</th>
+                                    {{-- <th>filter_kirim</th> --}}
                                 </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -156,7 +156,6 @@
                             <th>Rakit</th>
                             <th>Sisa</th>
                             <th>filter_rakit</th>
-                            <th>filter_kirim</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -164,7 +163,7 @@
             </div>
         </div>
     </div>
-    <div class="tab-pane fade" id="nav-produk" role="tabpanel" aria-labelledby="nav-profile-tab">
+    {{-- <div class="tab-pane fade" id="nav-produk" role="tabpanel" aria-labelledby="nav-profile-tab">
         <div class="card">
             <div class="card-body">
                 <table class="table tableDetailProduk">
@@ -187,7 +186,7 @@
                 </table>
             </div>
         </div>
-    </div>
+    </div> --}}
   </div>
 
 <!-- Modal -->
@@ -209,17 +208,25 @@
                                 <div class="card-group">
                                     <div class="card" style="background-color: #C8E1A7">
                                         <div class="card-body">
-                                            <p class="card-text" id="d_rakit">Senin 10-04-2021</p>
+                                            <p class="card-text" id="d_rakit">-</p>
                                         </div>
                                     </div>
                                     <div class="card" style="background-color: #C8E1A7">
                                         <div class="card-body">
-                                            <p class="card-text" id="t_rakit">08.00 WIB</p>
+                                            <p class="card-text" id="t_rakit">-</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm">
+                                <label for="">Nama Produk</label>
+                                <div class="card" style="background-color: #FCF9C4">
+                                    <div class="card-body" id="produk">
+                                        -
+                                    </div>
+                                  </div>
+                            </div>
+                            {{-- <div class="col-sm">
                                 <label for="">Tanggal & Waktu Pengiriman</label>
                                 <div class="card-group">
                                     <div class="card" style="background-color: #FFECB2">
@@ -233,30 +240,23 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="row">
                             <div class="col-sm">
                                 <label for="">Nomor BPPB</label>
                                 <div class="card" style="background-color: #F89F81">
                                     <div class="card-body" id="bppb">
-                                        516546546546546
+                                        -
                                     </div>
                                   </div>
                             </div>
-                            <div class="col-sm">
-                                <label for="">Nama Produk</label>
-                                <div class="card" style="background-color: #FCF9C4">
-                                    <div class="card-body" id="produk">
-                                        Produk 1
-                                    </div>
-                                  </div>
-                            </div>
+
                             <div class="col-sm">
                                 <label for="">Jumlah</label>
                                 <div class="card" style="background-color: #FFCC83">
                                     <div class="card-body" id="jml">
-                                        100 Unit
+                                        -
                                     </div>
                                   </div>
                             </div>
@@ -514,26 +514,25 @@
         var id = $(this).data('id');
         var time = $(this).data('tf');
         var rakit = $(this).data('rakit');
-        console.log($(this).parent());
-        $('p#d_rakit').text($(this).parent().prev().prev().prev().prev().prev().prev().prev().html());
-        $('p#d_kirim').text($(this).parent().prev().prev().prev().prev().prev().html());
-        $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().prev().html());
-        $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
+        console.log(rakit);
+        console.log(id);
+        $('p#d_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
+        // $('p#d_kirim').text($(this).parent().prev().prev().prev().prev().prev().html());
+        $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().html());
+        // $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
         $('div#bppb').text($(this).parent().prev().prev().prev().html());
         $('div#produk').text($(this).parent().prev().prev().html());
         $('div#jml').text($(this).parent().prev().html());
-        $.ajax({
-            url: "/api/prd/history/header/" + id,
-            type: "get",
-            success: function(res) {
-                console.log(res);
+        // $.ajax({
+        //     url: "/api/prd/history/header/" + id,
+        //     type: "get",
+        //     success: function(res) {
+        //         console.log(res);
 
-                $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
-                $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
-            }
-        });
-
-        $('#modal_id').modal('show');
+        //         $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
+        //         $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
+        //     }
+        // });
 
         $('.scan-produk').DataTable({
             destroy: true,
@@ -541,8 +540,11 @@
             "autoWidth": false,
             "pageLength": 10,
             processing: true,
+            // ajax: {
+            //     url: "/api/prd/historySeri/" + id + "/" + time,
+            // },
             ajax: {
-                url: "/api/prd/historySeri/" + id + "/" + time,
+                url: "/api/prd/riwayat_seri_rakit/" + id + "/" + rakit,
             },
             columns: [
                 {data: 'no_seri'}
@@ -551,14 +553,16 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+
+        $('#modal_id').modal('show');
     });
     // var groupCol = [0,2];
     var table = $('.table-history').DataTable({
         "columnDefs": [
             // { "visible": false, "targets": 0 },
             // { "visible": false, "targets": 2 },
-            { "visible": false, "targets": 8 },
-            { "visible": false, "targets": 9 }
+            { "visible": false, "targets": 6 }
+            // { "visible": false, "targets": 7 }
         ],
         destroy: true,
         "lengthChange": false,
@@ -568,9 +572,16 @@
             "regex": true
         },
         "responsive": true,
-        "order": [[ 0, 'asc' ], [2, 'asc']],
+        "order": [[ 0, 'asc' ]],
+        // ajax: {
+        //     url: "/api/prd/ajax_his_rakit",
+        //     headers: {
+        //         'X-CSRF-TOKEN': '{{csrf_token()}}'
+        //     }
+        // },
         ajax: {
-            url: "/api/prd/ajax_his_rakit",
+            url: "/api/prd/riwayat_rakit",
+            type: "post",
             headers: {
                 'X-CSRF-TOKEN': '{{csrf_token()}}'
             }
@@ -578,14 +589,14 @@
         columns: [
             {data: 'day_rakit'},
             {data: 'time_rakit'},
-            {data: 'day_kirim'},
-            {data: 'time_kirim'},
+            // {data: 'day_kirim'},
+            // {data: 'time_kirim'},
             {data: 'bppb'},
             {data: 'produk'},
             {data: 'jml'},
             {data: 'action'},
             {data: 'day_rakit_filter'},
-            {data: 'day_kirim_filter'},
+            // {data: 'day_kirim_filter'},
         ],
         // "drawCallback": function ( settings ) {
         //     var api = this.api();

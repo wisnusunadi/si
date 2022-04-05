@@ -217,7 +217,14 @@
                             </div>
                         </div>
                     </div>
+<<<<<<< Updated upstream
 
+=======
+<<<<<<< HEAD
+=======
+
+>>>>>>> 7c04a0be99ca28c6fc057395d2419fc568383cff
+>>>>>>> Stashed changes
                     <div class="card-footer">
                         No Seri Yang Diisi : <span id="no_seri"></span>
                     </div>
