@@ -185,6 +185,26 @@ class PpicController extends Controller
             ->make(true);
     }
 
+    function get_keterangan_jadwal(Request $request)
+    {
+        $data = JadwalPerakitan::find($request->id);
+
+        return datatables()->of($data)
+            ->addColumn('keterangan', function($d) {
+                if (isset($d->keterangan)) {
+                    return $d->keterangan;
+                } else {
+                    return 'Selesai';
+                }
+            })
+            ->addColumn('aksi', function ($data)
+            {
+                return $data->id;
+            })
+            ->rawColumns(['nama', 'progres', 'tanggal_selesai', 'aksi'])
+            ->make(true);
+    }
+
     /**
      * Get data perakitan from previous planning from database
      *

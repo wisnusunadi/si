@@ -217,7 +217,6 @@
                             </div>
                         </div>
                     </div>
-
                     <div class="card-footer">
                         No Seri Yang Diisi : <span id="no_seri"></span>
                     </div>
@@ -508,7 +507,7 @@
             var $row = $table.find("tbody").append("<tr></tr>").children("tr:eq(" + i + ")");
             for (var k = 0; k < 1; k++) {
                 $row.append(
-                    '<td><input type="text" name="noseri[]" class="form-control noseri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td>'
+                    '<td><input type="text" name="noseri[]" class="form-control noseri" style="text-transform:uppercase" maxlength=""><div class="invalid-feedback">Nomor seri ada yang sama.</div></td>'
                 );
             }
         }
@@ -691,11 +690,17 @@
             if (e.keyCode == 8) {
                 // $(this).parent().parent().prev().find('input.noseri').focus();
             }else if (a.length == length) {
+                // document.getElementsByClassName("noseri").maxLength = length;
                 $(this).parent().parent().next().find('input.noseri').focus();
             }else if (a.length > length) {
                 $(this).val(a.substring(0, length));
                 $(this).parent().parent().next().find('input.noseri').focus();
             }
+        });
+
+        $("#lengthNoSeri").on("change paste keyup", function(e) {
+            let length = $(this).val()
+            $('.noseri').attr('maxlength', length)
         });
 
         // Sisa Transfer Produk
