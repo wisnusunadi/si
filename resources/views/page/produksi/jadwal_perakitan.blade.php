@@ -687,6 +687,7 @@
         $(document).on('keydown','input.noseri',function(e){
             const a = $(this).val();
             const length = $('#lengthNoSeri').val();
+            $(this).attr('maxlength', length);
             if (e.keyCode == 8) {
                 // $(this).parent().parent().prev().find('input.noseri').focus();
             }else if (a.length == length) {
