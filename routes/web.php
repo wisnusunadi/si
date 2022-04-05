@@ -84,6 +84,7 @@ Route::middleware('auth')->prefix('/produksi')->group(function () {
     Route::view('/perencanaan_perakitan', 'page.produksi.perencanaan_perakitan');
     Route::get('/riwayat_perakitan', [ProduksiController::class, 'his_rakit']);
     Route::view('/pengiriman', 'page.produksi.pengiriman');
+    Route::view('/riwayat_transfer', 'page.produksi.riwayat_transfer');
 });
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {
 //     Route::view('/produk/{any?}', 'page.penjualan.produk');

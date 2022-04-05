@@ -842,6 +842,12 @@ return [
             'auth' => [17],
         ],
         [
+            'text'    => 'Riwayat Transfer',
+            'icon'    => 'fas fa-history',
+            'url'  => '/produksi/riwayat_transfer',
+            'auth' => [17],
+        ],
+        [
             'text'    => 'Perakitan',
             'icon'    => 'fas fa-cogs',
             'url'  => '/perakitan/mtc',

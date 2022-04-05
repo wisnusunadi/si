@@ -9,9 +9,11 @@
 
 @section('adminlte_css')
 <style lang="scss">
-    .fc-event-time{
-    display : none;
+
+    .fc-event-time {
+        display: none;
     }
+
     body {
         font-size: 14px;
     }
@@ -148,9 +150,11 @@
     #tableKerusakan_filter {
         display: none;
     }
+
     .active {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
+
 </style>
 @stop
 
@@ -176,7 +180,8 @@
                                             <div class="col-12">
                                                 <h4><b>Grafik</b></h4>
                                                 <div class="chart h-100">
-                                                    <canvas id="myChart" style="position: relative; height:91vh; width:80vw;"></canvas>
+                                                    <canvas id="myChart"
+                                                        style="position: relative; height:91vh; width:80vw;"></canvas>
                                                 </div>
                                             </div>
                                         </div>
@@ -196,7 +201,9 @@
                                                                 <h3 id="so_gudang">{{$gudang}}</h3>
                                                                 <p class="so-title">SO Belum Diproses Gudang</p>
                                                             </div>
-                                                            <div class="card-footer align-center"><a href="#" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
+                                                            <div class="card-footer align-center"><a href="#"
+                                                                    id="belumdikirim" class="link">Lihat Laporan <i
+                                                                        class="fas fa-arrow-circle-right"></i></a></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6 col-12 py-2">
@@ -205,7 +212,9 @@
                                                                 <h3 id="so_qc">{{$qc}}</h3>
                                                                 <p class="so-title">SO Belum Diproses QC</p>
                                                             </div>
-                                                            <div class="card-footer align-center"><a href="/qc/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
+                                                            <div class="card-footer align-center"><a href="/qc/so/show"
+                                                                    id="belumdikirim" class="link">Lihat Laporan <i
+                                                                        class="fas fa-arrow-circle-right"></i></a></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -216,7 +225,10 @@
                                                                 <h3 id="so_logistik">{{$log}}</h3>
                                                                 <p class="so-title">SO Belum Diproses Logistik</p>
                                                             </div>
-                                                            <div class="card-footer align-center"><a href="/logistik/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
+                                                            <div class="card-footer align-center"><a
+                                                                    href="/logistik/so/show" id="belumdikirim"
+                                                                    class="link">Lihat Laporan <i
+                                                                        class="fas fa-arrow-circle-right"></i></a></div>
                                                         </div>
                                                     </div>
                                                     <div class="col-lg-6 col-12 py-2">
@@ -225,7 +237,9 @@
                                                                 <h3 id="so_dc">{{$dc}}</h3>
                                                                 <p class="so-title">SO Belum Diproses DC</p>
                                                             </div>
-                                                            <div class="card-footer align-center"><a href="/dc/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
+                                                            <div class="card-footer align-center"><a href="/dc/so/show"
+                                                                    id="belumdikirim" class="link">Lihat Laporan <i
+                                                                        class="fas fa-arrow-circle-right"></i></a></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -238,7 +252,10 @@
                                                                 <h3 id="so_dc">{{$penj}}</h3>
                                                                 <p class="so-title">AKN Belum Memiliki SO</p>
                                                             </div>
-                                                            <div class="card-footer align-center"><a href="/penjualan/penjualan/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
+                                                            <div class="card-footer align-center"><a
+                                                                    href="/penjualan/penjualan/show" id="belumdikirim"
+                                                                    class="link">Lihat Laporan <i
+                                                                        class="fas fa-arrow-circle-right"></i></a></div>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -320,26 +337,30 @@
                                         <div class="row produkgbj hidden">
                                             <div class="col-sm-4">
                                                 <div class="card">
-                                                    <div class="card-body text-center" style="background-color: #FEF7EA">
+                                                    <div class="card-body text-center"
+                                                        style="background-color: #FEF7EA">
                                                         <h4 id="prd1">10</h4>
                                                         <p class="card-text">Produk dengan jumlah stok 10 sampai 20</p>
                                                     </div>
                                                 </div>
                                                 <div class="card">
-                                                    <div class="card-body text-center" style="background-color: #FFBD67">
+                                                    <div class="card-body text-center"
+                                                        style="background-color: #FFBD67">
                                                         <h4 id="prd3">10</h4>
                                                         <p class="card-text">Produk dengan jumlah stok 1 sampai 4</p>
                                                     </div>
                                                 </div>
                                                 <div class="card">
-                                                    <div class="card-body text-center" style="background-color: #FA8282">
+                                                    <div class="card-body text-center"
+                                                        style="background-color: #FA8282">
                                                         <h4 id="prd4">10</h4>
                                                         <p class="card-text font-weight">Produk masuk 3 bulan sampai 6
                                                             bulan</p>
                                                     </div>
                                                 </div>
                                                 <div class="card">
-                                                    <div class="card-body text-center" style="background-color: #FF6464">
+                                                    <div class="card-body text-center"
+                                                        style="background-color: #FF6464">
                                                         <h4 id="prd7">10</h4>
                                                         <p class="card-text font-weight">Produk masuk lebih dari 3 tahun
                                                         </p>
@@ -357,7 +378,8 @@
                                                             </div>
                                                             <div class="col-sm text-right">Layout :</div>
                                                             <div class="col-sm">
-                                                                <select class="select2 form-control layout" multiple="multiple">
+                                                                <select class="select2 form-control layout"
+                                                                    multiple="multiple">
                                                                 </select>
                                                             </div>
                                                         </div>
@@ -402,23 +424,29 @@
                                                         <p class="card-text">Produk dengan jumlah lebih dari 10</p>
                                                     </div>
                                                 </div>
-                                                <div class="card" id="produk-masuk-3-bulan" style="background-color: #FFE1A1;">
+                                                <div class="card" id="produk-masuk-3-bulan"
+                                                    style="background-color: #FFE1A1;">
                                                     <div class="card-body text-center">
                                                         <h4 id="h4">10</h4>
-                                                        <p class="card-text font-weight">Produk masuk 3 bulan sampai 6 bulan</p>
+                                                        <p class="card-text font-weight">Produk masuk 3 bulan sampai 6
+                                                            bulan</p>
                                                     </div>
                                                 </div>
-                                                <div class="card" id="produk-masuk-3-tahun" style="background-color: #F95959;">
+                                                <div class="card" id="produk-masuk-3-tahun"
+                                                    style="background-color: #F95959;">
                                                     <div class="card-body text-center">
                                                         <h4 id="h7">10</h4>
-                                                        <p class="card-text font-weight">Produk masuk lebih dari 3 tahun</p>
+                                                        <p class="card-text font-weight">Produk masuk lebih dari 3 tahun
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-md-8">
                                                 <div class="col-xl-12 d-flex justify-content-end">
                                                     <span class="float-right filter">
-                                                        <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 12px">
+                                                        <button class="btn btn-outline-secondary" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false"
+                                                            style="font-size: 12px">
                                                             <i class="fas fa-filter"></i> Filter Kerusakan
                                                         </button>
                                                         <div class="dropdown-menu" style="font-size: 12px">
@@ -428,7 +456,8 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <div class="form-check">
-                                                                        <input class="form-check-input" type="checkbox" value="Level 1" id="level1" />
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value="Level 1" id="level1" />
                                                                         <label class="form-check-label" for="jenis1">
                                                                             Level 1
                                                                         </label>
@@ -436,7 +465,8 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <div class="form-check">
-                                                                        <input class="form-check-input" type="checkbox" value="Level 2" id="level2" />
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value="Level 2" id="level2" />
                                                                         <label class="form-check-label" for="jenis2">
                                                                             Level 2
                                                                         </label>
@@ -444,7 +474,8 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <div class="form-check">
-                                                                        <input class="form-check-input" type="checkbox" value="Level 3" id="level3" />
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value="Level 3" id="level3" />
                                                                         <label class="form-check-label" for="jenis2">
                                                                             Level 3
                                                                         </label>
@@ -454,7 +485,9 @@
                                                         </div>
                                                     </span>&nbsp;
                                                     <span class="float-right filter">
-                                                        <button class="btn btn-outline-primary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="font-size: 12px">
+                                                        <button class="btn btn-outline-primary" data-toggle="dropdown"
+                                                            aria-haspopup="true" aria-expanded="false"
+                                                            style="font-size: 12px">
                                                             <i class="fas fa-filter"></i> Filter Jenis
                                                         </button>
                                                         <div class="dropdown-menu" style="font-size: 12px">
@@ -464,7 +497,8 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <div class="form-check">
-                                                                        <input class="form-check-input" type="checkbox" value="Sparepart" id="sparepart" />
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value="Sparepart" id="sparepart" />
                                                                         <label class="form-check-label" for="jenis1">
                                                                             Sparepart
                                                                         </label>
@@ -472,7 +506,8 @@
                                                                 </div>
                                                                 <div class="form-group">
                                                                     <div class="form-check">
-                                                                        <input class="form-check-input" type="checkbox" value="Unit" id="unit" />
+                                                                        <input class="form-check-input" type="checkbox"
+                                                                            value="Unit" id="unit" />
                                                                         <label class="form-check-label" for="jenis2">
                                                                             Unit
                                                                         </label>
@@ -530,15 +565,18 @@
                                     <div class="card-body">
                                         <div class="row">
                                             <div class="col-6 col-md-4">
-                                                <div id="bataswaktupenyerahan" class="card active otg" style="background-color: #E6EFFA">
+                                                <div id="bataswaktupenyerahan" class="card active otg"
+                                                    style="background-color: #E6EFFA">
                                                     <div class="card-body text-center">
                                                         <h4 id="m4">10</h4>
-                                                        <p class="card-text">Produk Mendekati Batas Waktu Penyerahan ke GBJ</p>
+                                                        <p class="card-text">Produk Mendekati Batas Waktu Penyerahan ke
+                                                            GBJ</p>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-6 col-md-4">
-                                                <div id="bataswaktuperakitan" class="card otg" style="background-color: #FEF7EA">
+                                                <div id="bataswaktuperakitan" class="card otg"
+                                                    style="background-color: #FEF7EA">
                                                     <div class="card-body text-center">
                                                         <h4 id="m5">50</h4>
                                                         <p class="card-text">Produk Mendekati Batas Waktu Perakitan</p>
@@ -546,10 +584,12 @@
                                                 </div>
                                             </div>
                                             <div class="col-6 col-md-4">
-                                                <div id="perubahanperakitan" class="card otg" style="background-color: #FCEDE9">
+                                                <div id="perubahanperakitan" class="card otg"
+                                                    style="background-color: #FCEDE9">
                                                     <div class="card-body text-center">
                                                         <h4 id="m6">60</h4>
-                                                        <p class="card-text">Produk Mengalami Perubahan Jadwal Perakitan</p>
+                                                        <p class="card-text">Produk Mengalami Perubahan Jadwal Perakitan
+                                                        </p>
                                                     </div>
                                                 </div>
                                             </div>
@@ -613,7 +653,7 @@
 @stop
 @section('adminlte_js')
 <script>
-    $(function() {
+    $(function () {
         $('#divisitable').DataTable({});
         var pengirimantable = $('#pengirimantable').DataTable({
             processing: true,
@@ -665,19 +705,19 @@
             ]
         })
     });
-    $(function() {
-        $(document).on('click', '.detailmodal', function(event) {
+    $(function () {
+        $(document).on('click', '.detailmodal', function (event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data("id");
             var label = $(this).data("target");
             $.ajax({
                 url: href,
-                beforeSend: function() {
+                beforeSend: function () {
                     $('#loader').show();
                 },
                 // return the result
-                success: function(result) {
+                success: function (result) {
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
                     if (label == 'ekatalog') {
@@ -688,10 +728,10 @@
                         detailtabel_spb(id);
                     }
                 },
-                complete: function() {
+                complete: function () {
                     $('#loader').hide();
                 },
-                error: function(jqXHR, testStatus, error) {
+                error: function (jqXHR, testStatus, error) {
                     alert("Page " + href + " cannot open. Error:" + error);
                     $('#loader').hide();
                 },
@@ -743,11 +783,11 @@
                         searchable: false
                     },
                 ],
-                footerCallback: function(row, data, start, end, display) {
+                footerCallback: function (row, data, start, end, display) {
                     var api = this.api(),
                         data;
                     // converting to interger to find total
-                    var intVal = function(i) {
+                    var intVal = function (i) {
                         return typeof i === 'string' ?
                             i.replace(/[\$,]/g, '') * 1 :
                             typeof i === 'number' ?
@@ -757,14 +797,14 @@
                     var jumlah_pesanan = api
                         .column(3)
                         .data()
-                        .reduce(function(a, b) {
+                        .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
                     // computing column Total of the complete result
                     var total_pesanan = api
                         .column(4)
                         .data()
-                        .reduce(function(a, b) {
+                        .reduce(function (a, b) {
                             return intVal(a) + intVal(b);
                         }, 0);
                     var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
@@ -789,23 +829,23 @@
             },
             weekends: false,
             locale: 'id',
-            contentHeight: 'auto',
-            width: 500,
             // stickyFooterScrollbar: true,
             // dayMinWidth: 100,
-            events: function(fetchInfo, successCallback, failureCallback) {
+            events: function (fetchInfo, successCallback, failureCallback) {
                 $.ajax({
                     url: "/api/prd/ongoing-cal",
                     type: "post",
                     dataType: "json",
-                    success: function(res) {
+                    success: function (res) {
                         var events = [];
                         if (res != null) {
-                            $.each(res, function(i, item) {
+                            $.each(res, function (i, item) {
                                 events.push({
                                     start: item.tanggal_mulai,
-                                    end: item.tanggal_selesai + 'T23:59:59',
-                                    title: item.produk.produk.nama + '-' + item.produk.nama,
+                                    end: item.tanggal_selesai +
+                                        'T23:59:59',
+                                    title: item.produk.produk.nama +
+                                        '-' + item.produk.nama,
                                     backgroundColor: item.warna,
                                     borderColor: item.warna,
                                 })
@@ -817,13 +857,13 @@
                 })
             },
         });
-            calendar.render();
+        calendar.render();
     });
-    $(document).ready(function() {
+    $(document).ready(function () {
         $.ajax({
             url: "/api/penjualan/chart",
             method: "GET",
-            success: function(data) {
+            success: function (data) {
                 var ctx = document.getElementById("myChart");
                 var myChart = new Chart(ctx, {
                     type: 'line',
@@ -915,7 +955,7 @@
         $.ajax({
             url: "/api/dashboard-gbj/list1/h",
             type: "post",
-            success: function(res) {
+            success: function (res) {
                 $('h4#he1').text(res);
             }
         })
@@ -923,14 +963,14 @@
         $.ajax({
             url: "/api/dashboard-gbj/list2/h",
             type: "post",
-            success: function(res) {
+            success: function (res) {
                 $('h4#he2').text(res);
             }
         });
         $.ajax({
             url: "/api/dashboard-gbj/list/h",
             type: "post",
-            success: function(res) {
+            success: function (res) {
                 $('h4#he3').text(res);
             }
         });
@@ -998,12 +1038,12 @@
             url: '/api/gbj/sel-layout',
             type: 'GET',
             dataType: 'json',
-            success: function(res) {
+            success: function (res) {
                 if (res) {
                     $(".layout").empty();
                     $(".layout").append(
                         '<option value="" selected>All Layout</option>');
-                    $.each(res, function(key, value) {
+                    $.each(res, function (key, value) {
                         $(".layout").append('<option value="' + value
                             .ruang + '">' + value.ruang + '</option');
                     });
@@ -1014,14 +1054,14 @@
         });
         $.ajax({
             url: "/api/dashboard-gbj/stok/1020/h",
-            success: function(res) {
+            success: function (res) {
                 $('h4#prd1').text(res);
             }
         })
 
         $.ajax({
             url: "/api/dashboard-gbj/stok/14/h",
-            success: function(res) {
+            success: function (res) {
                 $('h4#prd3').text(res);
             }
         })
@@ -1029,7 +1069,7 @@
         $.ajax({
             url: "/api/dashboard-gbj/in/36/h",
             type: "post",
-            success: function(res) {
+            success: function (res) {
                 $('h4#prd4').text(res);
             }
         })
@@ -1037,11 +1077,11 @@
         $.ajax({
             url: "/api/dashboard-gbj/in/36plus/h",
             type: "post",
-            success: function(res) {
+            success: function (res) {
                 $('h4#prd7').text(res);
             }
         })
-        $('#gbj').change(function(e) {
+        $('#gbj').change(function (e) {
             if ($(this).val() == 'penjualan') {
                 $('.penjualangbj').removeClass('hidden');
                 $('.produkgbj').addClass('hidden');
@@ -1056,33 +1096,33 @@
         $.ajax({
             url: "/api/gk/dashboard/stok/34/h",
             type: "post",
-            success: function(res) {
+            success: function (res) {
                 $('h4#h1').text(res);
             }
         })
         $.ajax({
             url: "/api/gk/dashboard/stok/10/h",
             type: "post",
-            success: function(res) {
+            success: function (res) {
                 $('h4#h3').text(res);
             }
         })
         $.ajax({
             url: "/api/gk/dashboard/in/36/h",
             type: "post",
-            success: function(res) {
+            success: function (res) {
                 $('h4#h4').text(res);
             }
         })
         $.ajax({
             url: "/api/gk/dashboard/in/36plus/h",
             type: "post",
-            success: function(res) {
+            success: function (res) {
                 $('h4#h7').text(res);
             }
         })
 
-        $('#sparepart').click(function() {
+        $('#sparepart').click(function () {
             if ($(this).prop('checked') == true) {
                 table.column(3).search($(this).val()).draw();
             } else {
@@ -1090,7 +1130,7 @@
             }
         })
 
-        $('#unit').click(function() {
+        $('#unit').click(function () {
             if ($(this).prop('checked') == true) {
                 table.column(3).search($(this).val()).draw();
             } else {
@@ -1098,21 +1138,21 @@
             }
         })
 
-        $('#level1').click(function() {
+        $('#level1').click(function () {
             if ($(this).prop('checked') == true) {
                 table.column(2).search($(this).val()).draw();
             } else {
                 table.column(2).search('').draw();
             }
         })
-        $('#level2').click(function() {
+        $('#level2').click(function () {
             if ($(this).prop('checked') == true) {
                 table.column(2).search($(this).val()).draw();
             } else {
                 table.column(2).search('').draw();
             }
         })
-        $('#level3').click(function() {
+        $('#level3').click(function () {
             if ($(this).prop('checked') == true) {
                 table.column(2).search($(this).val()).draw();
             } else {
@@ -1152,7 +1192,7 @@
     $.ajax({
         url: "/api/prd/exp_rakit/h",
         type: "post",
-        success: function(res) {
+        success: function (res) {
             console.log(res);
             $('h4#m4').text(res);
         }
@@ -1204,7 +1244,7 @@
     $.ajax({
         url: "/api/prd/exp_rakit/h",
         type: "post",
-        success: function(res) {
+        success: function (res) {
             console.log(res);
             $('h4#m5').text(res);
         }
@@ -1256,7 +1296,7 @@
     $.ajax({
         url: "/api/prd/exp_jadwal/h",
         type: "post",
-        success: function(res) {
+        success: function (res) {
             console.log(res);
             $('h4#m6').text(res);
         }
@@ -1304,7 +1344,7 @@
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
     });
-    $(document).on('click', '#bataswaktupenyerahan', function() {
+    $(document).on('click', '#bataswaktupenyerahan', function () {
         $('#bataswaktupenyerahan').addClass('active');
         $('#bataswaktuperakitan').removeClass('active');
         $('#perubahanperakitan').removeClass('active');
@@ -1313,7 +1353,7 @@
         $('.perubahanPerakitan').addClass('hidden');
     });
 
-    $(document).on('click', '#bataswaktuperakitan', function() {
+    $(document).on('click', '#bataswaktuperakitan', function () {
         $('#bataswaktuperakitan').addClass('active');
         $('#bataswaktupenyerahan').removeClass('active');
         $('#perubahanperakitan').removeClass('active');
@@ -1322,7 +1362,7 @@
         $('.perubahanPerakitan').addClass('hidden');
     });
 
-    $(document).on('click', '#perubahanperakitan', function() {
+    $(document).on('click', '#perubahanperakitan', function () {
         $('#perubahanperakitan').addClass('active');
         $('#bataswaktupenyerahan').removeClass('active');
         $('#bataswaktuperakitan').removeClass('active');
@@ -1330,5 +1370,6 @@
         $('.produkGbj').addClass('hidden');
         $('.produkPerakitan').addClass('hidden');
     });
+
 </script>
 @stop

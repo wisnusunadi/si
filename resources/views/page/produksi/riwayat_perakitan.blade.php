@@ -27,9 +27,11 @@
                 <nav>
                     <div class="nav nav-tabs topnav" id="nav-tab" role="tablist">
                         <a class="nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab"
-                            aria-controls="nav-home" aria-selected="true">Transfer Gudang Barang Jadi</a>
+                            aria-controls="nav-home" aria-selected="true">Riwayat Perakitan</a>
                         <a class="nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab"
                             aria-controls="nav-profile" aria-selected="false">Transfer Lain Lain</a>
+                        {{-- <a class="nav-link" id="nav-produk-tab" data-toggle="tab" href="#nav-produk" role="tab"
+                            aria-controls="nav-produk" aria-selected="false">Per Produk</a> --}}
                     </div>
                 </nav>
             </div>
@@ -57,13 +59,6 @@
                                     <input type="text" name="" id="" class="form-control daterange">
                                 </div>
                             </div>
-                            <div class="col-sm-3">
-                                <div class="form-group">
-                                    <label for="">Tanggal Pengiriman</label>
-                                    <input type="text" name="" id="" class="form-control daterange2">
-                                </div>
-                            </div>
-                            <div class="col-sm-3"></div>
                         </div>
                         <hr>
                         <div class="row text-center">
@@ -83,14 +78,11 @@
                                 <tr>
                                     <th>Tanggal Perakitan</th>
                                     <th>Waktu Perakitan</th>
-                                    <th>Tanggal Pengiriman</th>
-                                    <th>Waktu Pengiriman</th>
                                     <th>Nomor BPPB</th>
                                     <th>Produk</th>
                                     <th>Jumlah</th>
                                     <th>Aksi</th>
                                     <th>filter_rakit</th>
-                                    <th>filter_kirim</th>
                                 </tr>
                                 </thead>
                                 <tbody></tbody>
@@ -116,13 +108,13 @@
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label for="">Tanggal Masuk</label>
-                            <input type="text" name="" id="" class="form-control daterange">
+                            <input type="text" name="" id="" class="form-control daterange3">
                         </div>
                     </div>
                     <div class="col-sm-3">
                         <div class="form-group">
                             <label for="">Tanggal Keluar</label>
-                            <input type="text" name="" id="" class="form-control daterange">
+                            <input type="text" name="" id="" class="form-control daterange4">
                         </div>
                     </div>
                 </div>
@@ -153,6 +145,7 @@
                             <th>Keluar</th>
                             <th>Rakit</th>
                             <th>Sisa</th>
+                            <th>filter_rakit</th>
                         </tr>
                     </thead>
                     <tbody></tbody>
@@ -160,6 +153,30 @@
             </div>
         </div>
     </div>
+    {{-- <div class="tab-pane fade" id="nav-produk" role="tabpanel" aria-labelledby="nav-profile-tab">
+        <div class="card">
+            <div class="card-body">
+                <table class="table tableDetailProduk">
+                    <thead class="thead-light">
+                        <tr>
+                            <th>Tanggal Perakitan</th>
+                            <th>No BPPB</th>
+                            <th>Nama Produk</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Jumat, 3 Des 2021</td>
+                            <td>BPPB/JKN01-00</td>
+                            <td>DIGIT ONE BACKLIGHT ABU</td>
+                            <td><button class="btn btn-outline-secondary btnClickDetailProduk"><i class="fas fa-eye"></i> Detail</button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div> --}}
   </div>
 
 <!-- Modal -->
@@ -177,31 +194,21 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-sm">
-                                <label for="">Tanggal & Waktu Perakitan</label>
+                                <label for="">Tanggal Perakitan</label>
                                 <div class="card-group">
                                     <div class="card" style="background-color: #C8E1A7">
                                         <div class="card-body">
-                                            <p class="card-text" id="d_rakit">Senin 10-04-2021</p>
-                                        </div>
-                                    </div>
-                                    <div class="card" style="background-color: #C8E1A7">
-                                        <div class="card-body">
-                                            <p class="card-text" id="t_rakit">08.00 WIB</p>
+                                            <p class="card-text" id="d_rakit">-</p>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="col-sm">
-                                <label for="">Tanggal & Waktu Pengiriman</label>
+                                <label for="">Waktu Perakitan</label>
                                 <div class="card-group">
                                     <div class="card" style="background-color: #FFECB2">
                                         <div class="card-body">
-                                            <p class="card-text" id="d_kirim">Selasa 11-04-2021</p>
-                                        </div>
-                                    </div>
-                                    <div class="card" style="background-color: #FFECB2">
-                                        <div class="card-body">
-                                            <p class="card-text" id="t_kirim">09.00 WIB</p>
+                                            <p class="card-text" id="t_rakit">Selasa 11-04-2021</p>
                                         </div>
                                     </div>
                                 </div>
@@ -212,7 +219,7 @@
                                 <label for="">Nomor BPPB</label>
                                 <div class="card" style="background-color: #F89F81">
                                     <div class="card-body" id="bppb">
-                                        516546546546546
+                                        -
                                     </div>
                                   </div>
                             </div>
@@ -220,7 +227,7 @@
                                 <label for="">Nama Produk</label>
                                 <div class="card" style="background-color: #FCF9C4">
                                     <div class="card-body" id="produk">
-                                        Produk 1
+                                        -
                                     </div>
                                   </div>
                             </div>
@@ -228,7 +235,7 @@
                                 <label for="">Jumlah</label>
                                 <div class="card" style="background-color: #FFCC83">
                                     <div class="card-body" id="jml">
-                                        100 Unit
+                                        -
                                     </div>
                                   </div>
                             </div>
@@ -306,7 +313,7 @@
     </div>
 </div>
 
-<!-- Modal -->
+<!-- Modal Transfer Lain-->
 <div class="modal fade modalTransferLain" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
@@ -364,6 +371,63 @@
         </div>
     </div>
 </div>
+
+{{-- Modal Per Produk --}}
+
+<div class="modal fade modalRakitProduk" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                            <div class="row">
+                                <div class="col-sm">
+                                    <label for="">Nomor BPPB</label>
+                                    <div class="card" style="background-color: #F89F81">
+                                        <div class="card-body" id="bppb1">
+                                            516546546546546
+                                        </div>
+                                      </div>
+                                </div>
+                                <div class="col-sm">
+                                    <label for="">Nama Produk</label>
+                                    <div class="card" style="background-color: #FCF9C4">
+                                        <div class="card-body" id="produk1">
+                                            Produk 1
+                                        </div>
+                                      </div>
+                                </div>
+                                <div class="col-sm">
+                                    <label for="">Jumlah</label>
+                                    <div class="card" style="background-color: #FFCC83">
+                                        <div class="card-body" id="jml1">
+                                            100 Unit
+                                        </div>
+                                      </div>
+                                </div>
+                            </div>
+                        </div>
+                    <div class="card-body">
+                        <table class="table tableNoseriProduk">
+                            <thead>
+                                <tr>
+                                    <th>Nomor Seri</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('adminlte_js')
@@ -375,7 +439,7 @@
         var dateStart = parseDateValue(start_date);
         var dateEnd = parseDateValue(end_date);
 
-        var evalDate = parseDateValue(aData[8]);
+        var evalDate = parseDateValue(aData[6]);
         if ((isNaN(dateStart) && isNaN(dateEnd)) ||
             (isNaN(dateStart) && evalDate <= dateEnd) ||
             (dateStart <= evalDate && isNaN(dateEnd)) ||
@@ -386,30 +450,6 @@
     });
 
     function parseDateValue(rawDate) {
-        var dateArray = rawDate.split("-");
-        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
-        0]);
-        return parsedDate;
-    }
-
-    // Tanggal Pengiriman
-    var start_date2;
-    var end_date2;
-    var DateFilterFunction2 = (function (oSettings, aData, iDataIndex) {
-        var dateStart = parseDateValue2(start_date2);
-        var dateEnd = parseDateValue2(end_date2);
-
-        var evalDate = parseDateValue2(aData[9]);
-        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
-            (isNaN(dateStart) && evalDate <= dateEnd) ||
-            (dateStart <= evalDate && isNaN(dateEnd)) ||
-            (dateStart <= evalDate && evalDate <= dateEnd)) {
-            return true;
-        }
-        return false;
-    });
-
-    function parseDateValue2(rawDate) {
         var dateArray = rawDate.split("-");
         var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
         0]);
@@ -429,36 +469,34 @@
         var id = $(this).data('id');
         var time = $(this).data('tf');
         var rakit = $(this).data('rakit');
-        console.log($(this).parent());
-        $('p#d_rakit').text($(this).parent().prev().prev().prev().prev().prev().prev().prev().html());
-        $('p#d_kirim').text($(this).parent().prev().prev().prev().prev().prev().html());
-        $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().prev().html());
-        $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
+        console.log($(this).parent().prev().prev().prev().prev().prev().html());
+        $('p#d_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
+        $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().html());
         $('div#bppb').text($(this).parent().prev().prev().prev().html());
         $('div#produk').text($(this).parent().prev().prev().html());
         $('div#jml').text($(this).parent().prev().html());
-        $.ajax({
-            url: "/api/prd/history/header/" + id,
-            type: "get",
-            success: function(res) {
-                console.log(res);
+        // $.ajax({
+        //     url: "/api/prd/history/header/" + id,
+        //     type: "get",
+        //     success: function(res) {
+        //         console.log(res);
 
-                $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
-                $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
-            }
-        });
-
-        $('#modal_id').modal('show');
+        //         $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
+        //         $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
+        //     }
+        // });
 
         $('.scan-produk').DataTable({
             destroy: true,
             "ordering":false,
             "autoWidth": false,
-            "lengthChange": false,
             "pageLength": 10,
             processing: true,
+            // ajax: {
+            //     url: "/api/prd/historySeri/" + id + "/" + time,
+            // },
             ajax: {
-                url: "/api/prd/historySeri/" + id + "/" + time,
+                url: "/api/prd/riwayat_seri_rakit/" + id + "/" + rakit,
             },
             columns: [
                 {data: 'no_seri'}
@@ -467,14 +505,13 @@
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
+
+        $('#modal_id').modal('show');
     });
     // var groupCol = [0,2];
     var table = $('.table-history').DataTable({
         "columnDefs": [
-            // { "visible": false, "targets": 0 },
-            // { "visible": false, "targets": 2 },
-            { "visible": false, "targets": 8 },
-            { "visible": false, "targets": 9 }
+            { "visible": false, "targets": 6 }
         ],
         destroy: true,
         "lengthChange": false,
@@ -484,9 +521,16 @@
             "regex": true
         },
         "responsive": true,
-        "order": [[ 0, 'asc' ], [2, 'asc']],
+        "order": [[ 0, 'asc' ]],
+        // ajax: {
+        //     url: "/api/prd/ajax_his_rakit",
+        //     headers: {
+        //         'X-CSRF-TOKEN': '{{csrf_token()}}'
+        //     }
+        // },
         ajax: {
-            url: "/api/prd/ajax_his_rakit",
+            url: "/api/prd/riwayat_rakit",
+            type: "post",
             headers: {
                 'X-CSRF-TOKEN': '{{csrf_token()}}'
             }
@@ -494,14 +538,11 @@
         columns: [
             {data: 'day_rakit'},
             {data: 'time_rakit'},
-            {data: 'day_kirim'},
-            {data: 'time_kirim'},
             {data: 'bppb'},
             {data: 'produk'},
             {data: 'jml'},
             {data: 'action'},
             {data: 'day_rakit_filter'},
-            {data: 'day_kirim_filter'},
         ],
         // "drawCallback": function ( settings ) {
         //     var api = this.api();
@@ -537,7 +578,7 @@
             search.push(val);
         });
         search = search.join('|');
-        table.column(5).search(search, true, false).draw();
+        table.column(3).search(search, true, false).draw();
     });
 
     // Tanggal Perakitan
@@ -559,28 +600,6 @@
             start_date = '';
             end_date = '';
             $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
-            table.draw();
-        });
-
-    // Tanggal Pengiriman
-    $('.daterange2').daterangepicker({
-            autoUpdateInput: false
-        });
-
-        $('.daterange2').on('apply.daterangepicker', function (ev, picker) {
-            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
-                'DD-MM-YYYY'));
-            start_date2 = picker.startDate.format('DD-MM-YYYY');
-            end_date2 = picker.endDate.format('DD-MM-YYYY');
-            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction2);
-            table.draw();
-        });
-
-        $('.daterange2').on('cancel.daterangepicker', function (ev, picker) {
-            $(this).val('');
-            start_date2 = '';
-            end_date2 = '';
-            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction2, 1));
             table.draw();
         });
 
@@ -730,5 +749,112 @@
         search2 = search2.join('|');
         table2.column(3).search(search2, true, false).draw();
     });
+
+    var start_date3;
+    var end_date3;
+    var DateFilterFunction3 = (function (oSettings, aData, iDataIndex) {
+        var dateStart3 = parseDateValue3(start_date3);
+        var dateEnd3 = parseDateValue3(end_date3);
+
+        var evalDate3 = parseDateValue3(aData[7]);
+        if ((isNaN(dateStart3) && isNaN(dateEnd3)) ||
+            (isNaN(dateStart3) && evalDate3 <= dateEnd3) ||
+            (dateStart3 <= evalDate3 && isNaN(dateEnd3)) ||
+            (dateStart3 <= evalDate3 && evalDate3 <= dateEnd3)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue3(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
+    $('.daterange3').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('.daterange3').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date3 = picker.startDate.format('DD-MM-YYYY');
+            end_date3 = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction3);
+            table2.draw();
+        });
+
+        $('.daterange3').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date3 = '';
+            end_date3 = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction3, 1));
+            table2.draw();
+        });
+
+        var start_date4;
+    var end_date4;
+    var DateFilterFunction4 = (function (oSettings, aData, iDataIndex) {
+        var dateStart4 = parseDateValue4(start_date4);
+        var dateEnd4 = parseDateValue4(end_date4);
+
+        var evalDate4 = parseDateValue4(aData[8]);
+        if ((isNaN(dateStart4) && isNaN(dateEnd4)) ||
+            (isNaN(dateStart4) && evalDate4 <= dateEnd4) ||
+            (dateStart4 <= evalDate4 && isNaN(dateEnd4)) ||
+            (dateStart4 <= evalDate4 && evalDate4 <= dateEnd4)) {
+            return true;
+        }
+        return false;
+    });
+
+    function parseDateValue4(rawDate) {
+        var dateArray = rawDate.split("-");
+        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
+        0]);
+        return parsedDate;
+    }
+
+    $('.daterange4').daterangepicker({
+            autoUpdateInput: false
+        });
+
+        $('.daterange4').on('apply.daterangepicker', function (ev, picker) {
+            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
+                'DD-MM-YYYY'));
+            start_date4 = picker.startDate.format('DD-MM-YYYY');
+            end_date4 = picker.endDate.format('DD-MM-YYYY');
+            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction4);
+            table2.draw();
+        });
+
+        $('.daterange4').on('cancel.daterangepicker', function (ev, picker) {
+            $(this).val('');
+            start_date4 = '';
+            end_date4 = '';
+            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction4, 1));
+            table2.draw();
+        });
+
+        // Per Produk
+        $('.tableDetailProduk').DataTable({});
+        $(document).on('click','.btnClickDetailProduk', function () {
+            $('.tableNoseriProduk').dataTable({
+                destroy: true,
+                "autoWidth": false,
+                processing: true,
+                lengthChange: false,
+                // ajax: {
+                //     url: "#",
+                //     type: "post",
+                // },
+                // columns: [
+                //     {data: 'noseri'}
+                // ],
+            })
+            $('.modalRakitProduk').modal('show');
+        });
 </script>
 @stop
