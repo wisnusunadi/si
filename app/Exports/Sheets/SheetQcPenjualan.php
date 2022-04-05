@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Exports;
+namespace App\Exports\Sheets;
 
 use App\Models\Pesanan;
 use Illuminate\Contracts\View\View;
@@ -23,30 +23,31 @@ class SheetQcPenjualan implements WithTitle, FromView, ShouldAutoSize, WithStyle
     /**
      * @return \Illuminate\Support\Collection
      */
-    // public function jenis()
-    // {
-    //     return $this->jenis;
-    // }
-    // public function produk()
-    // {
-    //     return $this->produk;
-    // }
-    // public function so()
-    // {
-    //     return $this->so;
-    // }
-    // public function hasil()
-    // {
-    //     return $this->hasil;
-    // }
-    // public function tgl_awal()
-    // {
-    //     return $this->tgl_awal;
-    // }
-    // public function tgl_akhir()
-    // {
-    //     return $this->tgl_akhir;
-    // }
+    public function jenis()
+    {
+        return $this->jenis;
+    }
+    public function produk()
+    {
+        return $this->produk;
+    }
+    public function so()
+    {
+        return $this->so;
+    }
+    public function hasil()
+    {
+        return $this->hasil;
+    }
+    public function tgl_awal()
+    {
+        return $this->tgl_awal;
+    }
+    public function tgl_akhir()
+    {
+        return $this->tgl_akhir;
+    }
+
     public function __construct(string $jenis, string $produk, string $so, string $hasil, string $tgl_awal, string $tgl_akhir)
     {
         $this->jenis = $jenis;
@@ -56,7 +57,6 @@ class SheetQcPenjualan implements WithTitle, FromView, ShouldAutoSize, WithStyle
         $this->tgl_awal = $tgl_awal;
         $this->tgl_akhir = $tgl_akhir;
     }
-
 
     // public function columnFormats(): array
     // {
@@ -195,7 +195,7 @@ class SheetQcPenjualan implements WithTitle, FromView, ShouldAutoSize, WithStyle
             }
         }
 
-        return view('page.qc.laporan.LaporanQc', ['jenis' => $jenis, 'produk' => $produk, 'so' => $so, 'hasil' => $hasil, 'tgl_awal' => $tgl_awal, 'akhir' => $tgl_akhir, 'data' => $res]);
+        return view('page.qc.laporan.LaporanQcPenjualan', ['jenis' => $jenis, 'produk' => $produk, 'so' => $so, 'hasil' => $hasil, 'tgl_awal' => $tgl_awal, 'tgl_akhir' => $tgl_akhir, 'data' => $res]);
     }
 
     public function title(): string

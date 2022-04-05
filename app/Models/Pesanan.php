@@ -360,6 +360,61 @@ class Pesanan extends Model
         return $prd + $part;
     }
 
+    public function LaporanQcProduk($produk, $hasil, $tgl_awal, $tgl_akhir){
+        $id = $this->id;
+        $res = "";
+        if($produk != "0"){
+            if($hasil != "semua"){
+                $res = DetailPesanan::where([['penjualan_produk_id', '=', $produk], ['pesanan_id', '=', $id]])->whereHas('DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
+                    $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil);
+                })->get();
+            } else {
+                $res = DetailPesanan::where([['penjualan_produk_id', '=', $produk], ['pesanan_id', '=', $id]])->whereHas('DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
+                    $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir]);
+                })->get();
+            }
+        }
+        else{
+            if($hasil != "semua"){
+                $res = DetailPesanan::where('pesanan_id', $id)->whereHas('DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
+                    $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil);
+                })->get();
+            } else {
+                $res = DetailPesanan::where('pesanan_id', $id)->whereHas('DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
+                    $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir]);
+                })->get();
+            }
+        }
+        return $res;
+    }
+
+    public function countLaporanQcProduk($produk, $hasil, $tgl_awal, $tgl_akhir){
+        $id = $this->id;
+        $res = "";
+        if($produk != "0"){
+            if($hasil != "semua"){
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil)->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($produk, $id){
+                    $q->where([['penjualan_produk_id', '=', $produk], ['pesanan_id', '=', $id]]);
+                })->count();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($produk, $id){
+                    $q->where([['penjualan_produk_id', '=', $produk], ['pesanan_id', '=', $id]]);
+                })->count();
+            }
+        }
+        else{
+            if($hasil != "semua"){
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil)->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($id){
+                    $q->where('pesanan_id', $id);
+                })->count();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($id){
+                    $q->where('pesanan_id', $id);
+                })->count();
+            }
+        }
+        return $res;
+    }
 
     function log()
     {

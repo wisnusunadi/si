@@ -51,7 +51,6 @@ class LaporanQc implements WithMultipleSheets
     {
         $sheets = [];
         $sheets[] = new SheetQcPenjualan($this->jenis, $this->produk, $this->so, $this->hasil, $this->tgl_awal, $this->tgl_akhir);
-
         return $sheets;
     }
 
