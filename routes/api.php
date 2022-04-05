@@ -35,9 +35,11 @@ Route::prefix('/ppic')->group(function () {
     Route::post('/master_pengiriman/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_pengiriman']);
     Route::get('/data/perakitan/{status?}', [App\Http\Controllers\PpicController::class, 'get_data_perakitan']);
     Route::get('/datatables/perakitan', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan']);
+    Route::get('/datatables/perakitandetail/{id}', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan_detail']);
     Route::get('/data/rencana_perakitan', [App\Http\Controllers\PpicController::class, 'get_data_perakitan_rencana']);
     Route::get('/data/gbj', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi']);
     Route::get('/data/so', [App\Http\Controllers\PpicController::class, 'get_data_so']);
+    Route::get('/data/so2', [PpicController::class,'get_data_so2']);
     Route::get('/data/so/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_data_so_detail']);
     Route::get('/data/master_pengiriman_for_ppic/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_pengiriman_for_ppic']);
     Route::get('/data/gk/sparepart', [App\Http\Controllers\PpicController::class, 'get_data_sparepart_gk']);
@@ -326,6 +328,7 @@ Route::prefix('/prd')->group(function () {
         Route::post('/rakit/h', [ProduksiController::class, 'h_rakit']);
         Route::post('/unit/h', [ProduksiController::class, 'h_unit']);
         Route::get('/header/{id}', [ProduksiController::class, 'header_his_rakit']);
+        Route::post('/pengiriman', [ProduksiController::class, 'h_pengiriman']);
     });
 });
 

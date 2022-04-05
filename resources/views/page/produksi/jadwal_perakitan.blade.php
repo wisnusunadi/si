@@ -691,6 +691,9 @@
                 // $(this).parent().parent().prev().find('input.noseri').focus();
             }else if (a.length == length) {
                 $(this).parent().parent().next().find('input.noseri').focus();
+            }else if (a.length > length) {
+                $(this).val(a.substring(0, length));
+                $(this).parent().parent().next().find('input.noseri').focus();
             }
         });
 
