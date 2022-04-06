@@ -580,7 +580,6 @@
             processing: true,
             serverSide: false,
             autowidth: true,
-            order: [[ 1, "asc" ]],
             ajax: {
                 'type': 'post',
                 'datatype': 'JSON',
