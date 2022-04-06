@@ -1898,109 +1898,89 @@ class GudangController extends Controller
         // dd($request->data);
         $a = TFProduksi::where('pesanan_id', $request->pesanan_id)->first();
         if ($a) {
-            // return 'a';
             foreach ($request->data as $key => $values) {
-                $b = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $values['prd'])->where('detail_pesanan_produk_id', $key)->get()->count();
                 $c = TFProduksiDetail::where('t_gbj_id', $a->id)->where('gdg_brg_jadi_id', $values['prd'])->where('detail_pesanan_produk_id', $key)->first();
                 if ($c) {
-                    return 'aa';
-                    // foreach ($values['noseri'] as $k => $v) {
-                    //     $nn = new NoseriTGbj();
-                    //     $nn->t_gbj_detail_id = $c->id;
-                    //     $nn->noseri_id = $v;
-                    //     $nn->status_id = 2;
-                    //     $nn->state_id = 8;
-                    //     $nn->jenis = 'keluar';
-                    //     $nn->created_at = Carbon::now();
-                    //     $nn->created_by = $request->userid;
-                    //     $nn->save();
+                    // return 'aa';
+                    foreach ($values['noseri'] as $k => $v) {
+                        NoseriTGbj::create([
+                            't_gbj_detail_id' => $c->id,
+                            'noseri_id' => $v,
+                            'status_id' => 2,
+                            'state_id' => 8,
+                            'jenis' => 'keluar',
+                            'created_at' => Carbon::now(),
+                            'created_by' => $request->userid
+                        ]);
 
-                    //     NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
-                    // }
+                        NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+                    }
 
-                    // $gdg = GudangBarangJadi::whereIn('id', [$values['prd']])->get()->toArray();
-                    // $i = 0;
-                    // foreach ($gdg as $vv) {
-                    //     $vv['stok'] = $vv['stok'] - $values['jumlah'];
-                    //     // print_r($vv['stok']);
-                    //     $i++;
-                    //     GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
-                    //     GudangBarangJadiHis::create([
-                    //         'gdg_brg_jadi_id' => $vv['id'],
-                    //         'stok' => $values['jumlah'],
-                    //         'tgl_masuk' => Carbon::now(),
-                    //         'jenis' => 'KELUAR',
-                    //         'created_by' => $request->userid,
-                    //         'created_at' => Carbon::now(),
-                    //         'ke' => 23,
-                    //         'tujuan' => $request->deskripsi,
-                    //     ]);
-                    // }
+                    $gdg = GudangBarangJadi::whereIn('id', [$values['prd']])->get()->toArray();
+                    $i = 0;
+                    foreach ($gdg as $vv) {
+                        $vv['stok'] = $vv['stok'] - $values['jumlah'];
+                        // print_r($vv['stok']);
+                        $i++;
+                        GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+                        GudangBarangJadiHis::create([
+                            'gdg_brg_jadi_id' => $vv['id'],
+                            'stok' => $values['jumlah'],
+                            'tgl_masuk' => Carbon::now(),
+                            'jenis' => 'KELUAR',
+                            'created_by' => $request->userid,
+                            'created_at' => Carbon::now(),
+                            'ke' => 23,
+                            'tujuan' => $request->deskripsi,
+                        ]);
+                    }
                 } else {
-                    return 'bb';
-                    // foreach ($request->data as $key => $valuess) {
-                    //     // $dd = TFProduksiDetail::create([
-                    //     //     't_gbj_id' => $a->id,
-                    //     //     'detail_pesanan_produk_id' => $key,
-                    //     //     'gdg_brg_jadi_id' => $valuess['prd'],
-                    //     //     'qty' => $valuess['jumlah'],
-                    //     //     'jenis' => 'keluar',
-                    //     //     'status_id' => 2,
-                    //     //     'state_id' => 8,
-                    //     //     'created_at' => Carbon::now(),
-                    //     //     'created_by' => $request->userid
-                    //     // ]);
-                    //     $dd = new TFProduksiDetail();
-                    //     $dd->t_gbj_id = $a->id;
-                    //     $dd->detail_pesanan_produk_id = $key;
-                    //     $dd->gdg_brg_jadi_id = $valuess['prd'];
-                    //     $dd->qty = $valuess['jumlah'];
-                    //     $dd->jenis = 'keluar';
-                    //     $dd->status_id = 2;
-                    //     $dd->state_id = 8;
-                    //     $dd->created_at = Carbon::now();
-                    //     $dd->created_by = $request->userid;
-                    //     $dd->save();
+                        $dd = TFProduksiDetail::create([
+                            't_gbj_id' => $a->id,
+                            'detail_pesanan_produk_id' => $key,
+                            'gdg_brg_jadi_id' => $values['prd'],
+                            'qty' => $values['jumlah'],
+                            'jenis' => 'keluar',
+                            'status_id' => 2,
+                            'state_id' => 8,
+                            'created_at' => Carbon::now(),
+                            'created_by' => $request->userid
+                        ]);
 
-                    //     $did = $dd->id;
-                    //     $checked = $request->noseri_id;
-                    //     foreach ($valuess['noseri'] as $k => $v) {
-                    //         // if (NoseriTGbj::where('noseri_id', $v)->get()->count() > 0) {
-                    //         //     # code...
-                    //         // } else {
-                    //             $nn = new NoseriTGbj();
-                    //             $nn->t_gbj_detail_id = $did;
-                    //             $nn->noseri_id = $v;
-                    //             $nn->status_id = 2;
-                    //             $nn->state_id = 8;
-                    //             $nn->jenis = 'keluar';
-                    //             $nn->created_at = Carbon::now();
-                    //             $nn->created_by = $request->userid;
-                    //             $nn->save();
+                        $did = $dd->id;
+                        $checked = $request->noseri_id;
+                        foreach ($values['noseri'] as $k => $v) {
+                                NoseriTGbj::create([
+                                    't_gbj_detail_id' => $did,
+                                    'noseri_id' => $v,
+                                    'status_id' => 2,
+                                    'state_id' => 8,
+                                    'jenis' => 'keluar',
+                                    'created_at' => Carbon::now(),
+                                    'created_by' => $request->userid
+                                ]);
 
-                    //             NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
-                    //         // }
-                    //     }
+                                NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
+                        }
 
-                    //     $gdg = GudangBarangJadi::whereIn('id', [$valuess['prd']])->get()->toArray();
-                    //     $i = 0;
-                    //     foreach ($gdg as $vv) {
-                    //         $vv['stok'] = $vv['stok'] - $valuess['jumlah'];
-                    //         // print_r($vv['stok']);
-                    //         $i++;
-                    //         GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
-                    //         GudangBarangJadiHis::create([
-                    //             'gdg_brg_jadi_id' => $vv['id'],
-                    //             'stok' => $valuess['jumlah'],
-                    //             'tgl_masuk' => Carbon::now(),
-                    //             'jenis' => 'KELUAR',
-                    //             'created_by' => $request->userid,
-                    //             'created_at' => Carbon::now(),
-                    //             'ke' => 23,
-                    //             'tujuan' => $request->deskripsi,
-                    //         ]);
-                    //     }
-                    // }
+                        $gdg = GudangBarangJadi::whereIn('id', [$values['prd']])->get()->toArray();
+                        $i = 0;
+                        foreach ($gdg as $vv) {
+                            $vv['stok'] = $vv['stok'] - $values['jumlah'];
+                            // print_r($vv['stok']);
+                            $i++;
+                            GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+                            GudangBarangJadiHis::create([
+                                'gdg_brg_jadi_id' => $vv['id'],
+                                'stok' => $values['jumlah'],
+                                'tgl_masuk' => Carbon::now(),
+                                'jenis' => 'KELUAR',
+                                'created_by' => $request->userid,
+                                'created_at' => Carbon::now(),
+                                'ke' => 23,
+                                'tujuan' => $request->deskripsi,
+                            ]);
+                        }
                 }
             }
         } else {
@@ -2018,30 +1998,30 @@ class GudangController extends Controller
 
             // $hid = $d->id;
             // foreach ($request->data as $key1 => $value1) {
-            //     $dd = TFProduksiDetail::create([
-            //         't_gbj_id' => $hid,
-            //         'detail_pesanan_produk_id' => $key1,
-            //         'gdg_brg_jadi_id' => $value1['prd'],
-            //         'qty' => $value1['jumlah'],
-            //         'jenis' => 'keluar',
-            //         'status_id' => 2,
-            //         'state_id' => 8,
-            //         'created_at' => Carbon::now(),
-            //         'created_by' => $request->userid
-            //     ]);
+                // $dd = TFProduksiDetail::create([
+                //     't_gbj_id' => $hid,
+                //     'detail_pesanan_produk_id' => $key1,
+                //     'gdg_brg_jadi_id' => $value1['prd'],
+                //     'qty' => $value1['jumlah'],
+                //     'jenis' => 'keluar',
+                //     'status_id' => 2,
+                //     'state_id' => 8,
+                //     'created_at' => Carbon::now(),
+                //     'created_by' => $request->userid
+                // ]);
 
             //     $did = $dd->id;
             //     $checked = $request->noseri_id;
             //     foreach ($value1['noseri'] as $k => $v) {
-            //         NoseriTGbj::create([
-            //             't_gbj_detail_id' => $did,
-            //             'noseri_id' => $v,
-            //             'status_id' => 2,
-            //             'state_id' => 8,
-            //             'jenis' => 'keluar',
-            //             'created_at' => Carbon::now(),
-            //             'created_by' => $request->userid
-            //         ]);
+                    // NoseriTGbj::create([
+                    //     't_gbj_detail_id' => $did,
+                    //     'noseri_id' => $v,
+                    //     'status_id' => 2,
+                    //     'state_id' => 8,
+                    //     'jenis' => 'keluar',
+                    //     'created_at' => Carbon::now(),
+                    //     'created_by' => $request->userid
+                    // ]);
 
             //         NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->pesanan_id]);
             //     }
