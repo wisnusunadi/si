@@ -131,7 +131,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-success" id="okk">Transfer</button>
-                <button type="button" class="btn btn-info" id="rancang">Rancang</button>
+                {{-- <button type="button" class="btn btn-info" id="rancang">Rancang</button> --}}
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
             </div>
         </div>
@@ -597,6 +597,7 @@
                             data: prd1,
                         },
                         success: function(res) {
+                            console.log(res);
                             Swal.fire(
                                 'Success!',
                                 'Data Terkirim ke QC',

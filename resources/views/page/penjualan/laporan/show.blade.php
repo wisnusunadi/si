@@ -189,9 +189,8 @@
                                                 </div>
                                             </div>
                                         </div>
-
                                         <div class="form-group row">
-                                            <label for="tanggal_mulai" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Awal</label>
+                                            <label for="tanggal_mulai" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Awal PO</label>
                                             <div class="col-lg-2 col-md-12">
                                                 <input type="date" class="form-control col-form-label @error('tanggal_mulai') is-invalid @enderror" id="tanggal_mulai" name="tanggal_mulai" readonly />
                                                 <div class="invalid-feedback" id="msgtanggal_mulai">
@@ -199,7 +198,7 @@
                                             </div>
                                         </div>
                                         <div class="form-group row">
-                                            <label for="tanggal_akhir" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Akhir</label>
+                                            <label for="tanggal_akhir" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Akhir PO</label>
                                             <div class="col-lg-2 col-md-12">
                                                 <input type="date" class="form-control col-form-label @error('tanggal_akhir') is-invalid @enderror" id="tanggal_akhir" name="tanggal_akhir" readonly />
                                                 <div class="invalid-feedback" id="msgtanggal_akhir">
@@ -772,7 +771,6 @@
             }
             else {
                 // Open this row
-
                 row.child( format(row.data().id) ).show();
                 tr.addClass('shown');
                 detailtable(row.data().id);
@@ -909,7 +907,14 @@
         //         $('#spbform').removeClass('hide');
         //     }
         // })
+        $('input[type="radio"][name="jenis_penjualan"]').on('change', function() {
+            if ($(this).val() == "ekatalog") {
+                $("#datajasa").addClass("hide");
+            }
+                else{
 
+                }
+        });
 
         $('#filter').submit(function() {
             var penjualan = [];

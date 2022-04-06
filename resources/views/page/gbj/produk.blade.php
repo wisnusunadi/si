@@ -71,7 +71,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table class="table table-bordered" id="gudang-barang">
+                        <table class="table table-bordered" id="gudang-barang" style="width: 100%">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -917,14 +917,14 @@ var authid = $('#authid').val();
         $('.tambah_noseri_tableee').DataTable().destroy();
         $('.tambah_noseri_table').empty();
         let jumlah = $('#jumlah_noseri').val();
-        let table = '<tr><td><input type="text" name="" id="" class="form-control no_seri" style="text-transform:uppercase"></td><td><select name="" id="" class="form-control layout_seri"></select></td></tr>';
+        let table = '<tr><td><input type="text" name="" id="" class="form-control no_seri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="" id="" class="form-control layout_seri"></select></td></tr>';
         for (let i = 0; i < jumlah; i++) {
             $('.tambah_noseri_table').append(table);
         }
         $.each(layout, function (index, value) {
              $('.layout_seri').append('<option value="'+value[0]+'">'+value[1]+'</option');
         });
-        $('.tambah_noseri_tableee').DataTable({
+         $('.tambah_noseri_tableee').DataTable({
             destroy: true,
             searching: false,
         });
@@ -932,6 +932,8 @@ var authid = $('#authid').val();
     });
 
     $(document).on('click', '#save_data', function () {
+    var dataNoSeri = $('.tambah_noseri_tableee').DataTable();
+    let datalength = $('#jumlah_noseri').val();
     let no_seri = $('.tambah_noseri_tableee').DataTable().column(0).nodes().to$().find('input[type=text]').map(function (index, elm) {
         return $(elm).val();
     }).get();
@@ -942,7 +944,55 @@ var authid = $('#authid').val();
     let dari = $('.dari').val();
     let created_by = $('.created_by').val();
 
-    $.ajax({
+    let arr = [];
+    const data = dataNoSeri.$('.no_seri').map(function () {
+        return $(this).val();
+    }).get();
+
+    data.forEach(function (item) {
+        if (item != '') {
+            arr.push(item);
+        }
+    });
+
+    const count = arr =>
+    arr.reduce((a, b) => ({
+        ...a,
+        [b]: (a[b] || 0) + 1
+    }), {})
+
+    const duplicates = dict =>
+    Object.keys(dict).filter((a) => dict[a] > 1)
+
+    if (arr.length != datalength || arr.length == 0) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Nomor seri tidak boleh kosong!',
+        })
+    }else if (duplicates(count(arr)).length > 0) {
+        $('.no_seri').removeClass('is-invalid');
+        $('.no_seri').filter(function () {
+            for (let index = 0; index < duplicates(count(arr))
+                .length; index++) {
+                if ($(this).val() == duplicates(count(arr))[index]) {
+                    return true;
+                }
+            }
+        }).addClass('is-invalid');
+
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Nomor seri ' + duplicates(count(arr)) +
+                ' ada yang sama.',
+        }).then((result) => {
+            if (result.value) {
+                $(this).prop('disabled', false);
+            }
+        });
+    }else{
+         $.ajax({
         url: '/api/gbj/ceknoseri',
         type: 'post',
         data: {noseri: no_seri},
@@ -982,7 +1032,8 @@ var authid = $('#authid').val();
             }
         }
     })
-
+    }
+    console.log("noseri", arr.length != datalength);
 
     })
 </script>

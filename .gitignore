@@ -15,3 +15,4 @@ yarn-error.log
 /.vscode
 /public/native
 mix-manifest.json
+package-lock.json
