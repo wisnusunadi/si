@@ -71,7 +71,7 @@
                     </div>
                     <!-- /.card-header -->
                     <div class="card-body">
-                        <table class="table table-bordered" id="gudang-barang">
+                        <table class="table table-bordered" id="gudang-barang" style="width: 100%">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -1034,7 +1034,7 @@ var authid = $('#authid').val();
     })
     }
     console.log("noseri", arr.length != datalength);
-   
+
     })
 </script>
 @stop
