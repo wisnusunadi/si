@@ -100,19 +100,19 @@ class QcController extends Controller
                 $q->where(['gdg_brg_jadi_id' => $id]);
             })->whereHas('detail.header', function ($q) use ($idpesanan) {
                 $q->where(['pesanan_id' => $idpesanan]);
-            });
+            })->orderBy('id');
         } elseif ($status == 'belum') {
             $data = NoseriTGbj::DoesntHave('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
                 $q->where(['gdg_brg_jadi_id' => $id]);
             })->whereHas('detail.header', function ($q) use ($idpesanan) {
                 $q->where(['pesanan_id' => $idpesanan]);
-            });
+            })->orderBy('id');
         } elseif ($status == 'sudah') {
             $data = NoseriTGbj::Has('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
                 $q->where(['gdg_brg_jadi_id' => $id]);
             })->whereHas('detail.header', function ($q) use ($idpesanan) {
                 $q->where(['pesanan_id' => $idpesanan]);
-            });
+            })->orderBy('id');
         }
 
         // $data = NoseriTGbj::whereHas('detail', function ($q) use ($id) {
@@ -197,7 +197,7 @@ class QcController extends Controller
         $dataprd = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($id) {
             $q->where('pesanan_id', $id);
         })->groupby('gudang_barang_jadi_id')->get();
-        $datapart = DetailPesananPart::where('pesanan_id', $id)->whereHas('Sparepart', function($q){
+        $datapart = DetailPesananPart::where('pesanan_id', $id)->whereHas('Sparepart', function ($q) {
             $q->where('kode', 'NOT LIKE', '%JASA%');
         })->get();
         $data = $dataprd->merge($datapart);
