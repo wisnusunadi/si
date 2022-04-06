@@ -416,6 +416,37 @@ class Pesanan extends Model
         return $res;
     }
 
+    public function LaporanQcPart($produk, $tgl_awal, $tgl_akhir){
+        $id = $this->id;
+        $res = "";
+        if($produk != "0"){
+            $res = DetailPesananPart::where([['m_sparepart_id', '=', $produk], ['pesanan_id', '=', $id]])->whereHas('OutgoingPesananPart', function($q) use($tgl_awal, $tgl_akhir){
+                $q->whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir]);
+            })->get();
+        } else {
+            $res = DetailPesananPart::where('pesanan_id', $id)->whereHas('OutgoingPesananPart', function($q) use($tgl_awal, $tgl_akhir){
+                $q->whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir]);
+            })->get();
+        }
+        return $res;
+    }
+
+    public function countLaporanQcPart($produk, $tgl_awal, $tgl_akhir){
+        $id = $this->id;
+        $res = "";
+        if($produk != "0"){
+            $res = OutgoingPesananPart::whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir])->whereHas('DetailPesananPart', function($q) use($produk, $id){
+                $q->where([['m_sparepart_id', '=', $produk], ['pesanan_id', '=', $id]]);
+            })->count();
+        } else {
+            $res = OutgoingPesananPart::whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir])->whereHas('DetailPesananPart', function($q) use($id){
+                $q->where('pesanan_id', $id);
+            })->count();
+        }
+        return $res;
+    }
+
+
     function log()
     {
         return $this->belongsTo(State::class, 'log_id');

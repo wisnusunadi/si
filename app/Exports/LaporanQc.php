@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Exports\Sheets\SheetQcPenjualan;
+use App\Exports\Sheets\SheetQcNoseri;
 use Dotenv\Util\Str;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
@@ -51,6 +52,7 @@ class LaporanQc implements WithMultipleSheets
     {
         $sheets = [];
         $sheets[] = new SheetQcPenjualan($this->jenis, $this->produk, $this->so, $this->hasil, $this->tgl_awal, $this->tgl_akhir);
+        $sheets[] = new SheetQcNoseri($this->jenis, $this->produk, $this->so, $this->hasil, $this->tgl_awal, $this->tgl_akhir);
         return $sheets;
     }
 

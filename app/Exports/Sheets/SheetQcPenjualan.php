@@ -69,9 +69,9 @@ class SheetQcPenjualan implements WithTitle, FromView, ShouldAutoSize, WithStyle
     public function styles(Worksheet $sheet)
     {
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
-        $sheet->getStyle('A2:O2')->getFont()->setBold(true);
-        // $sheet->getStyle('A:O')->getAlignment()
-        // ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
+        $sheet->getStyle('A2:N2')->getFont()->setBold(true);
+        $sheet->getStyle('A:N')->getAlignment()
+        ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
         // $sheet->getStyle('a2')->getFill()
         //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
         //     ->getStartColor()->setRGB('00ff7f');
@@ -90,23 +90,25 @@ class SheetQcPenjualan implements WithTitle, FromView, ShouldAutoSize, WithStyle
         // $sheet->getStyle('o2')->getFill()
         //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
         //     ->getStartColor()->setRGB('89d0b4');
-        // $sheet->getStyle('A:C')->getAlignment()
-        //     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        // $sheet->getStyle('G:I')->getAlignment()
-        //     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-        // $sheet->getStyle('O')->getAlignment()
-        //     ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A:E')->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('L:N')->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
 
-        // $sheet->getColumnDimension('D')->setAutoSize(false)->setWidth(35);
-        // $sheet->getStyle('D')->getAlignment()->setWrapText(true);
-        // $sheet->getColumnDimension('E')->setAutoSize(false)->setWidth(45);
-        // $sheet->getStyle('E')->getAlignment()->setWrapText(true);
-        // $sheet->getColumnDimension('K')->setAutoSize(false)->setWidth(38);
-        // $sheet->getStyle('K')->getAlignment()->setWrapText(true);
-        // $sheet->getColumnDimension('L')->setAutoSize(false)->setWidth(30);
-        // $sheet->getStyle('L')->getAlignment()->setWrapText(true);
-        // $sheet->getColumnDimension('N')->setAutoSize(false)->setWidth(45);
-        // $sheet->getStyle('N')->getAlignment()->setWrapText(true);
+        $sheet->getColumnDimension('F')->setAutoSize(false)->setWidth(35);
+        $sheet->getStyle('F')->getAlignment()->setWrapText(true);
+        $sheet->getColumnDimension('G')->setAutoSize(false)->setWidth(35);
+        $sheet->getStyle('G')->getAlignment()->setWrapText(true);
+        $sheet->getColumnDimension('H')->setAutoSize(false)->setWidth(35);
+        $sheet->getStyle('H')->getAlignment()->setWrapText(true);
+        $sheet->getColumnDimension('I')->setAutoSize(false)->setWidth(45);
+        $sheet->getStyle('I')->getAlignment()->setWrapText(true);
+        $sheet->getColumnDimension('J')->setAutoSize(false)->setWidth(35);
+        $sheet->getStyle('J')->getAlignment()->setWrapText(true);
+        if($this->jenis == "produk"){
+            $sheet->getColumnDimension('K')->setAutoSize(false)->setWidth(30);
+            $sheet->getStyle('K')->getAlignment()->setWrapText(true);
+        }
     }
 
     public function view(): View
@@ -123,37 +125,37 @@ class SheetQcPenjualan implements WithTitle, FromView, ShouldAutoSize, WithStyle
             if($produk != "0" && $so == "0"){
                 if ($hasil != "semua") {
                     $res = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
-                        $q->where('produk_penjualan_id', $produk);
+                        $q->where('penjualan_produk_id', $produk);
                     })->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil);
                     })->get();
                 } else {
                     $res = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
-                        $q->where('produk_penjualan_id', $produk);
+                        $q->where('penjualan_produk_id', $produk);
                     })->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir]);
                     })->get();
                 }
             } else if($produk == "0" && $so != "0"){
                 if ($hasil != "semua") {
-                    $res = Pesanan::where('so', $so)->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
+                    $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil);
                     })->get();
                 } else {
-                    $res = Pesanan::where('so', $so)->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
+                    $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir]);
                     })->get();
                 }
             } else if($produk != "0" && $so != "0"){
                 if ($hasil != "semua") {
-                    $res = Pesanan::where('so', $so)->whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
-                        $q->where('produk_penjualan_id', $produk);
+                    $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
+                        $q->where('penjualan_produk_id', $produk);
                     })->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil);
                     })->get();
                 } else {
-                    $res = Pesanan::where('so', $so)->whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
-                        $q->where('produk_penjualan_id', $produk);
+                    $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
+                        $q->where('penjualan_produk_id', $produk);
                     })->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir]);
                     })->get();
@@ -178,12 +180,12 @@ class SheetQcPenjualan implements WithTitle, FromView, ShouldAutoSize, WithStyle
                 })->get();
             }
             else if ($produk == "0" && $so != '0') {
-                $res = Pesanan::where('so', $so)->whereHas('DetailPesananPart.OutgoingPesananPart', function($q) use($tgl_awal, $tgl_akhir){
+                $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesananPart.OutgoingPesananPart', function($q) use($tgl_awal, $tgl_akhir){
                     $q->whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir]);
                 })->get();
             }
             else if ($produk != "0" && $so != '0') {
-                $res = Pesanan::where('so', $so)->whereHas('DetailPesananPart', function($q) use($produk){
+                $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesananPart', function($q) use($produk){
                     $q->where('m_sparepart_id', $produk);
                 })->whereHas('DetailPesananPart.OutgoingPesananPart', function($q) use($tgl_awal, $tgl_akhir){
                     $q->whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir]);

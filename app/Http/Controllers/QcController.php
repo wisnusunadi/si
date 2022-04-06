@@ -1750,37 +1750,37 @@ class QcController extends Controller
             if($produk != "0" && $so == "0"){
                 if ($hasil != "semua") {
                     $res = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
-                        $q->where('produk_penjualan_id', $produk);
+                        $q->where('penjualan_produk_id', $produk);
                     })->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil);
                     })->get();
                 } else {
                     $res = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
-                        $q->where('produk_penjualan_id', $produk);
+                        $q->where('penjualan_produk_id', $produk);
                     })->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir]);
                     })->get();
                 }
             } else if($produk == "0" && $so != "0"){
                 if ($hasil != "semua") {
-                    $res = Pesanan::where('so', $so)->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
+                    $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil);
                     })->get();
                 } else {
-                    $res = Pesanan::where('so', $so)->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
+                    $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir]);
                     })->get();
                 }
             } else if($produk != "0" && $so != "0"){
                 if ($hasil != "semua") {
-                    $res = Pesanan::where('so', $so)->whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
-                        $q->where('produk_penjualan_id', $produk);
+                    $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
+                        $q->where('penjualan_produk_id', $produk);
                     })->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil);
                     })->get();
                 } else {
-                    $res = Pesanan::where('so', $so)->whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
-                        $q->where('produk_penjualan_id', $produk);
+                    $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesanan.DetailPesananProduk', function($q) use($produk){
+                        $q->where('penjualan_produk_id', $produk);
                     })->whereHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
                         $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir]);
                     })->get();
@@ -1805,12 +1805,12 @@ class QcController extends Controller
                 })->get();
             }
             else if ($produk == "0" && $so != '0') {
-                $res = Pesanan::where('so', $so)->whereHas('DetailPesananPart.OutgoingPesananPart', function($q) use($tgl_awal, $tgl_akhir){
+                $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesananPart.OutgoingPesananPart', function($q) use($tgl_awal, $tgl_akhir){
                     $q->whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir]);
                 })->get();
             }
             else if ($produk != "0" && $so != '0') {
-                $res = Pesanan::where('so', $so)->whereHas('DetailPesananPart', function($q) use($produk){
+                $res = Pesanan::where('so', 'LIKE', '%'.$so.'%')->whereHas('DetailPesananPart', function($q) use($produk){
                     $q->where('m_sparepart_id', $produk);
                 })->whereHas('DetailPesananPart.OutgoingPesananPart', function($q) use($tgl_awal, $tgl_akhir){
                     $q->whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir]);
@@ -1926,7 +1926,7 @@ class QcController extends Controller
                 } else {
                     $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])
                         ->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($produk, $id) {
-                            $q->where('penjualan_produk_id', $produk)->where('pesanan_id', $id);
+                            $q->where('pesanan_id', $id)->where('penjualan_produk_id', $produk);
                         })->orderBy('detail_pesanan_produk_id', 'ASC')->get();
                 }
             } else if($produk == "0"){

@@ -422,18 +422,30 @@
             $('#lapform').removeClass('hide');
 
             var hasil = "";
-            var produk = "";
-            if ($(".produk_id").val() != "") {
-                produk = $(".produk_id").val();
-            } else if ($(".produk_id").val() == "") {
-                produk = "0";
+            var jenis = $('input[type="radio"][name="cari"]:checked').val();
+            if (jenis == "produk") {
+                hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
+            } else {
+                hasil = "0";
             }
 
-            if ($(".part_id").val() != "") {
-                produk = $(".part_id").val();
-            } else if ($(".part_id").val() == "") {
-                produk = "0";
+
+            var produk = "";
+            if(jenis == "produk"){
+                if ($(".produk_id").val() != "") {
+                    produk = $(".produk_id").val();
+                } else if ($(".produk_id").val() == "") {
+                    produk = "0";
+                }
             }
+            else {
+                if ($(".part_id").val() != "") {
+                    produk = $(".part_id").val();
+                } else {
+                    produk = "0";
+                }
+            }
+
             var so = "";
             if ($(".no_so").val() != "") {
                 var sos = $(".no_so").val();
@@ -441,12 +453,7 @@
             } else {
                 so = "0";
             }
-            var jenis = $('input[type="radio"][name="cari"]:checked').val();
-            if (jenis == "produk") {
-                hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
-            } else {
-                hasil = "0";
-            }
+
 
             var tgl_awal = $('#tanggal_mulai').val();
             var tgl_akhir = $('#tanggal_akhir').val();
@@ -701,17 +708,26 @@
                 var hasil = "";
                 var produk = "";
 
-                if ($(".produk_id").val() != "") {
-                    produk = $(".produk_id").val();
-                } else if ($(".produk_id").val() == "") {
-                    produk = "0";
-
+                var jenis = $('input[type="radio"][name="cari"]:checked').val();
+                if (jenis == "produk") {
+                    hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
+                } else {
+                    hasil = "0";
                 }
 
-                if ($(".part_id").val() != "") {
-                    produk = $(".part_id").val();
-                } else if ($(".part_id").val() == "") {
-                    produk = "0";
+                if(jenis == "produk"){
+                    if ($(".produk_id").val() != "") {
+                        produk = $(".produk_id").val();
+                    } else if ($(".produk_id").val() == "") {
+                        produk = "0";
+                    }
+                }
+                else if(jenis == "part"){
+                    if ($(".part_id").val() != "") {
+                        produk = $(".part_id").val();
+                    } else if ($(".part_id").val() == "") {
+                        produk = "0";
+                    }
                 }
 
                 var so = "";
@@ -722,12 +738,7 @@
                     so = "0";
                 }
 
-                var jenis = $('input[type="radio"][name="cari"]:checked').val();
-                if (jenis == "produk") {
-                    hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
-                } else {
-                    hasil = "0";
-                }
+
 
                 var tgl_awal = $('#tanggal_mulai').val();
                 var tgl_akhir = $('#tanggal_akhir').val();
