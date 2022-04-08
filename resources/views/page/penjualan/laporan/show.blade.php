@@ -833,6 +833,8 @@
         });
 
 
+
+
         $('.customer_id').select2({
             allowClear: false,
             placeholder: 'Pilih Data',
