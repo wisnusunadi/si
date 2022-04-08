@@ -12,7 +12,8 @@ class DetailPesanan extends Model
 
     public function Pesanan()
     {
-        return $this->belongsTo(Pesanan::class, 'pesanan_id');
+        return $this->belongsTo(Pesanan::class, 'pesanan_id')
+            ->orderBy('so', 'ASC');
     }
     public function PenjualanProduk()
     {
