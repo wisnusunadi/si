@@ -124,7 +124,7 @@
                 <td rowspan="{{$rowspan}}">
                     {{$d->State->nama}}
                 </td>
-                <td rowspan="{{$rowspan}}">
+                <td >
                     @if($d->Ekatalog)
                     {{$d->Ekatalog->status}}
                     @else
@@ -164,6 +164,13 @@
                     <td>{{$e->harga}}</td>
                     <td>{{$e->ongkir}}</td>
                     <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
+                    <td >
+                        @if($d->Ekatalog)
+                        {{$d->Ekatalog->status}}
+                        @else
+                        -
+                        @endif
+                    </td>
 
                 @endif
             </tr>
@@ -182,7 +189,7 @@
                 <td rowspan="{{$rowspan}}">
                     {{$d->State->nama}}
                 </td>
-                <td rowspan="{{$rowspan}}">
+                <td >
                     @if($d->Ekatalog)
                     {{$d->Ekatalog->status}}
                     @else
@@ -205,6 +212,7 @@
                     <td>{{$e->harga}}</td>
                     <td>{{$e->ongkir}}</td>
                     <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
+                    <td>{{$d->Ekatalog->status}}</td>
 
                 @endif
             </tr>
@@ -222,7 +230,7 @@
                 <td rowspan="{{$rowspan}}">
                     {{$d->State->nama}}
                 </td>
-                <td rowspan="{{$rowspan}}">
+                <td >
                     @if($d->Ekatalog)
                     {{$d->Ekatalog->status}}
                     @else
