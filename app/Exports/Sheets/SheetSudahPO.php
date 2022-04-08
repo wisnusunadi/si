@@ -241,68 +241,93 @@ class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
             }
         } else {
             if ($dsb == 'semua') {
-                $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-                })->orderBy('pesanan_id', 'ASC')->get();
-                $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-                })->orderBy('pesanan_id', 'ASC')->get();
-                $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-                })->orderBy('pesanan_id', 'ASC')->get();
-                $Part_Spa  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-                })->orderBy('pesanan_id', 'ASC')->get();
-                $Part_Spb  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($tanggal_awal, $tanggal_akhir) {
-                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir]);
-                })->orderBy('pesanan_id', 'ASC')->get();
+                $Ekatalog  = DetailPesanan::whereHas('Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('so', 'LIKE', '%EKAT%');
+                })->get();
+                $Spa  = collect(DetailPesanan::whereHas('Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('so', 'LIKE', '%SPA%');
+                })->get());
+
+                $Spb  = collect(DetailPesanan::whereHas('Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('so', 'LIKE', '%SPB%');
+                })->get());
+
+                $Ekatalog_Spa  = collect(DetailPesanan::whereHas('Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('so', 'LIKE', '%EKAT%')
+                        ->orwhere('so', 'LIKE', '%SPA%');
+                })->get());
+                $Ekatalog_Spb  = collect(DetailPesanan::whereHas('Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('so', 'LIKE', '%EKAT%')
+                        ->orwhere('so', 'LIKE', '%SPB%');
+                })->get());
+                $Spa_Spb  = collect(DetailPesanan::whereHas('Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('so', 'LIKE', '%SPA%')
+                        ->orwhere('so', 'LIKE', '%SPB%');
+                })->get());
+                $Ekatalog_Spa_Spb  = collect(DetailPesanan::whereHas('Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('so', 'LIKE', '%SPA%')
+                        ->orwhere('so', 'LIKE', '%SPB%')
+                        ->orwhere('so', 'LIKE', '%EKAT%');
+                })->get());
+
+
+                $Part_Spa  = collect(DetailPesananPart::whereHas('Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('so', 'LIKE', '%SPA%');
+                })->get());
+                $Part_Spb  = collect(DetailPesananPart::whereHas('Pesanan', function ($q) use ($tanggal_awal, $tanggal_akhir) {
+                    $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+                        ->where('so', 'LIKE', '%SPB%');
+                })->get());
             } else {
                 $Ekatalog  = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $dsb);
-                })->orderBy('pesanan_id', 'ASC')->get();
+                })->get();
                 $Spa  = DetailPesanan::whereHas('Pesanan.SPA', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $dsb);
-                })->orderBy('pesanan_id', 'ASC')->get();
+                })->get();
                 $Spb  = DetailPesanan::whereHas('Pesanan.SPB', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $dsb);
-                })->orderBy('pesanan_id', 'ASC')->get();
+                })->get();
                 $Part_Spa  = DetailPesananPart::whereHas('Pesanan.Spa', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $dsb);
-                })->orderBy('pesanan_id', 'ASC')->get();
+                })->get();
                 $Part_Spb  = DetailPesananPart::whereHas('Pesanan.Spb', function ($q) use ($dsb, $tanggal_awal, $tanggal_akhir) {
                     $q->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
                         ->where('customer_id', $dsb);
-                })->orderBy('pesanan_id', 'ASC')->get();
+                })->get();
             }
 
-
             if ($x == ['ekatalog', 'spa', 'spb']) {
-                $prd = $Ekatalog->merge($Spa)->merge($Spb);
                 $part = $Part_Spa->merge($Part_Spb);
-                $data = $prd->merge($part);
+                $data = $Ekatalog_Spa_Spb->merge($part);
                 $header = 'Laporan Penjualan Semua';
             } else if ($x == ['ekatalog', 'spa']) {
-                $prd = $Ekatalog->merge($Spa);
-                $data = $prd->merge($Part_Spa);
+                $data = $Ekatalog_Spa->merge($Part_Spa);
                 $header = 'Laporan Penjualan Ekatalog dan SPA';
             } else if ($x == ['ekatalog', 'spb']) {
-                $prd = $Ekatalog->merge($Spb);
-                $data = $prd->merge($Part_Spb);
+                $data = $Ekatalog_Spb->merge($Part_Spb);
                 $header = 'Laporan Penjualan Ekatalog dan SPB';
             } else if ($x == ['spa', 'spb']) {
-                $prd = $Spa->merge($Spb);
                 $part = $Part_Spa->merge($Part_Spb);
-                $data = $prd->merge($part);
+                $data = $Spa_Spb->merge($part);
                 $header = 'Laporan Penjualan SPA dan SPB';
             } else if ($this->jenis_penjualan == 'ekatalog') {
                 $data = $Ekatalog;
                 $header = 'Laporan Penjualan Ekatalog ';
             } else if ($this->jenis_penjualan == 'spa') {
-                $data = $Spa->merge($Part_Spa);
+                $data = $Part_Spa->merge($Spa);
                 $header = 'Laporan Penjualan SPA';
             } else if ($this->jenis_penjualan == 'spb') {
                 $data = $Spb->merge($Part_Spb);
