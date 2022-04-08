@@ -176,7 +176,7 @@
                                             <label for="penjualan" class="col-form-label col-lg-5 col-md-12 labelket">Penjualan</label>
                                             <div class="col-5 col-form-label">
                                                 <div class="form-check form-check-inline">
-                                                    <input class="form-check-input" type="checkbox" id="penjualan" value="ekatalog" name="penjualan">
+                                                    <input class="form-check-input" type="checkbox" id="penjualan" value="ekatalog" name="penjualan" >
                                                     <label class="form-check-label" for="inlineCheckbox1">E-katalog</label>
                                                 </div>
                                                 <div class="form-check form-check-inline">
@@ -781,8 +781,7 @@
 
         $('.customer_id').on('keyup change', function() {
             if ($(this).val() != "") {
-                $('input[type="checkbox"][name="penjualan"]').removeAttr('disabled');
-                if ($('input[type="checkbox"][name="penjualan"]').val() != undefined && $('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
+                if ($('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "" &&  $('input[name=penjualan]:checked').length > 0 ) {
                     $("#btncetak").removeAttr('disabled');
                 } else {
                     $("#btncetak").attr('disabled', true);
@@ -792,7 +791,11 @@
             }
         });
         $('input[type="checkbox"][name="penjualan"]').on('change', function() {
-            if ($(this).val() != "") {
+            var x = $(this).val();
+            if ($(":checkbox:checked").length == 0) {
+                $("input[id=penjualan][value="+x+"]").prop("checked", true);
+                }
+                if (x != "") {
                 $('#tanggal_mulai').removeAttr('readonly');
                 if ($('#tanggal_mulai').val() != "" && $('#tanggal_akhir').val() != "") {
                     $("#btncetak").removeAttr('disabled');
@@ -809,7 +812,7 @@
             if ($(this).val() != "") {
                 $('#tanggal_akhir').removeAttr('readonly');
                 $("#tanggal_akhir").attr("min", $(this).val())
-                if ($('input[type="checkbox"][name="penjualan"]').val() != undefined && $('#tanggal_akhir').val() != "") {
+                if ($('#tanggal_akhir').val() != "" &&  $('input[name=penjualan]:checked').length > 0 ) {
                     $("#btncetak").removeAttr('disabled');
                 } else {
                     $("#btncetak").attr('disabled', true);
@@ -822,7 +825,7 @@
 
         $('#tanggal_akhir').on('keyup change', function() {
             if ($(this).val() != "") {
-                if ($('#tanggal_mulai').val() != "" && $('input[type="checkbox"][name="penjualan"]').val() != undefined) {
+                if ($('#tanggal_mulai').val() != "" &&  $('input[name=penjualan]:checked').length > 0  ) {
                     $("#btncetak").removeAttr('disabled');
                 } else {
                     $("#btncetak").attr('disabled', true);
@@ -909,14 +912,7 @@
         //         $('#spbform').removeClass('hide');
         //     }
         // })
-        $('input[type="radio"][name="jenis_penjualan"]').on('change', function() {
-            if ($(this).val() == "ekatalog") {
-                $("#datajasa").addClass("hide");
-            }
-                else{
 
-                }
-        });
 
         $('#filter').submit(function() {
             var penjualan = [];
