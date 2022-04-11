@@ -45,7 +45,7 @@ function convertJadwal (jadwal) {
             end: item.tanggal_selesai,
             backgroundColor: item.warna,
             borderColor: item.warna,
-            no_bppb: item.no_bppb,
+            // no_bppb: item.no_bppb,
             produk_id: item.produk_id,
             jumlah: item.jumlah,
             progres: item.noseri_count
