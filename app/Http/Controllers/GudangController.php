@@ -36,7 +36,7 @@ class GudangController extends Controller
     // get
     public function get_data_barang_jadi()
     {
-        $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get();
+        $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get()->sortBy('produk.nama');
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
@@ -46,11 +46,13 @@ class GudangController extends Controller
                 return $data->produk->product->kode . '' . $data->produk->kode;
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->stok . ' ' . $data->satuan->nama;
+                $d = $data->get_sum_noseri();
+                return $d . ' ' . $data->satuan->nama;
             })
             ->addColumn('jumlah1', function ($data) {
+                $d = $data->get_sum_noseri();
                 $ss = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
-                    return $data->stok - $ss . ' ' . $data->satuan->nama;
+                    return $d - $ss . ' ' . $data->satuan->nama;
             })
             ->addColumn('kelompok', function ($data) {
                 return $data->produk->KelompokProduk->nama;
