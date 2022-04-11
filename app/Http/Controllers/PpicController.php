@@ -775,7 +775,7 @@ class PpicController extends Controller
 
         $object = new JadwalPerakitanLog();
         $object->jadwal_perakitan_id = $data->id;
-        $object->no_bppb = $data->no_bppb;
+        // $object->no_bppb = $data->no_bppb;
         $object->tanggal_mulai = $data->tanggal_mulai;
         $object->tanggal_selesai = $data->tanggal_selesai;
 
@@ -792,12 +792,12 @@ class PpicController extends Controller
             $object->tanggal_selesai_baru = $data->tanggal_selesai;
         }
 
-        if (isset($request->no_bppb)) {
-            $data->no_bppb = $request->no_bppb;
-            $object->no_bppb = $request->no_bppb;
-        } else {
-            $object->no_bppb = $data->no_bppb;
-        }
+        // if (isset($request->no_bppb)) {
+        //     $data->no_bppb = $request->no_bppb;
+        //     $object->no_bppb = $request->no_bppb;
+        // } else {
+        //     $object->no_bppb = $data->no_bppb;
+        // }
 
         if (isset($request->jumlah)) {
             $noseri_count = count($data->noseri);
