@@ -9,8 +9,8 @@
                             <template v-slot:top>
                                 <v-toolbar flat extended >
                                     <v-row>
-                                        <v-col cols="12" md="4">
-                                             <v-menu ref="menu1" v-model="menu1" :close-on-content-click="false"
+                                        <v-col md="4">
+                                             <v-menu :close-on-content-click="false"
                                             transition="scale-transition" offset-y max-width="290px" min-width="auto">
                                             <template v-slot:activator="{ on, attrs }">
                                                 <v-text-field v-model="dateRangeText" clearable
@@ -20,6 +20,25 @@
                                             </template>
                                             <v-date-picker range v-model="date"></v-date-picker>
                                         </v-menu>
+                                        </v-col>
+                                        <v-col md="4">
+                                             <v-select v-model="selectedProduct" :items="productUnique" label="Nama Produk" multiple>
+                                                    <template v-slot:prepend-item>
+                                                        <v-list-item ripple @mousedown.prevent @click="toggle">
+                                                            <v-list-item-action>
+                                                                <v-icon :color="selectedProduct.length > 0 ? 'indigo darken-4' : ''">
+                                                                    {{ icon }}
+                                                                </v-icon>
+                                                            </v-list-item-action>
+                                                            <v-list-item-content>
+                                                                <v-list-item-title>
+                                                                    Select All
+                                                                </v-list-item-title>
+                                                            </v-list-item-content>
+                                                        </v-list-item>
+                                                        <v-divider class="mt-2"></v-divider>
+                                                    </template>
+                                                </v-select>
                                         </v-col>
                                     </v-row>
                                     <v-dialog v-model="dialog" max-width="1000px">
@@ -59,6 +78,7 @@
                 date: null,
                 nama_produk: null,
                 data_detail: [],
+                selectedProduct: [],
                 headers: [{
                         text: 'Tanggal Pengiriman',
                         value: 'day_kirim'
@@ -117,7 +137,15 @@
                     console.log(error);
                 }
                 this.dialog = true;
-
+            },
+            toggle() {
+                this.$nextTick(() => {
+                    if (this.selectedProduct.length > 0) {
+                        this.selectedProduct = [];
+                    } else {
+                        this.selectedProduct = this.productUnique.slice();
+                    }
+                })
             }
         },
         mounted() {
@@ -130,6 +158,16 @@
                         return item.day_kirim_filter >= this.date[0] && item.day_kirim_filter <= this.date[1]
                     })
                     return dataFilter
+                } else if(this.selectedProduct.length > 0) {
+                    let dataFilter = this.dataRiwayat.filter(item => {
+                        return this.selectedProduct.includes(item.produk)
+                    })
+                    return dataFilter
+                } else if(this.date != null && this.selectedProduct.length > 0) {
+                    let dataFilter = this.dataRiwayat.filter(item => {
+                        return item.day_kirim_filter >= this.date[0] && item.day_kirim_filter <= this.date[1] && this.selectedProduct.includes(item.produk)
+                    })
+                    return dataFilter
                 } else {
                     return this.dataRiwayat
                 }
@@ -138,6 +176,26 @@
                 if (this.date) {
                     return this.date[0] + ' - ' + this.date[1];
                 }
+            },
+            productUnique(){
+                let unique = [];
+                this.dateFilter.forEach(function(item){
+                    if(unique.indexOf(item.produk) === -1){
+                        unique.push(item.produk);
+                    }
+                });
+                return unique;
+            },
+            likesAllProduct(){
+                return this.selectedProduct.length === this.productUnique.length
+            },
+            likesSomeProduct(){
+                return this.selectedProduct.length > 0 && !this.likesAllProduct
+            },
+            icon(){
+                if (this.likesAllProduct) return 'mdi-close-box'
+                if (this.likesSomeProduct) return 'mdi-minus-box'
+                return 'mdi-checkbox-blank-outline'
             }
         },
     }

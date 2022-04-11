@@ -167,7 +167,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="field is-horizontal">
+                    <!-- <div class="field is-horizontal">
                         <div class="field-label is-normal">
                             <label class="label">No BPPB</label>
                         </div>
@@ -178,7 +178,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                     <div class="field is-horizontal">
                         <div class="field-label is-normal">
                             <label class="label">Produk</label>
@@ -284,7 +284,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="column is-2">
+                        <!-- <div class="column is-2">
                             <div class="field">
                                 <label class="label">No BPPB</label>
                                 <div v-for="(item, index) in updated_events.events" :key="'nobppb'+index"
@@ -292,7 +292,7 @@
                                     <input class="input" type="text" v-model="item.no_bppb"/>
                                 </div>
                             </div>
-                        </div>
+                        </div> -->
                         <div class="column is-2">
                             <div class="field">
                                 <label class="label">Jumlah</label>
@@ -478,7 +478,7 @@
 
                 start_date: "",
                 end_date: "",
-                no_bppb: null,
+                // no_bppb: null,
                 produk: null,
                 jumlah: 1,
                 action: "add",
@@ -639,7 +639,7 @@
 
                     let data = {
                         produk_id: this.produk.value,
-                        no_bppb: this.no_bppb,
+                        // no_bppb: this.no_bppb,
                         jumlah: this.jumlah,
                         tanggal_mulai: this.start_date,
                         tanggal_selesai: this.end_date,
@@ -666,7 +666,7 @@
                     for (const index in this.updated_events.events) {
                         let start_date = new Date(this.updated_events.events[index].start);
                         let end_date = new Date(this.updated_events.events[index].end);
-                        let no_bppb = this.updated_events.events[index].no_bppb;
+                        // let no_bppb = this.updated_events.events[index].no_bppb;
 
                         if (
                             this.updated_events.events[index].jumlah < 1 ||
@@ -704,7 +704,7 @@
                                     tanggal_mulai: this.updated_events.events[index].start,
                                     tanggal_selesai: this.updated_events.events[index].end,
                                     jumlah: this.updated_events.events[index].jumlah,
-                                    no_bppb: this.updated_events.events[index].no_bppb,
+                                    // no_bppb: this.updated_events.events[index].no_bppb,
                                     status: this.status,
                                 }
                             )
@@ -1017,7 +1017,7 @@
                                 end: this.events[i].end,
                                 jumlah: this.events[i].jumlah,
                                 progres: this.events[i].progres,
-                                no_bppb: this.events[i].no_bppb
+                                // no_bppb: this.events[i].no_bppb
                             }, ],
                         });
                     } else {
@@ -1027,7 +1027,7 @@
                             end: this.events[i].end,
                             jumlah: this.events[i].jumlah,
                             progres: this.events[i].progres,
-                            no_bppb: this.events[i].no_bppb,
+                            // no_bppb: this.events[i].no_bppb,
                         });
                         exists.jumlah += this.events[i].jumlah;
                         exists.progres += this.events[i].progres;
