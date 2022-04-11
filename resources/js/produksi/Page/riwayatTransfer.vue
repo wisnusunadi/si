@@ -153,19 +153,23 @@
         },
         computed: {
             dateFilter() {
-                if (this.date != null) {
+                if(this.date != null && this.selectedProduct.length > 0) {
+                    dataFilter = '';
+                    let dataFilter = this.dataRiwayat.filter(item => {
+                        return item.day_kirim_filter >= this.date[0] && item.day_kirim_filter <= this.date[1] && this.selectedProduct.includes(item.produk)
+                    })
+                    return dataFilter
+                }
+                else if (this.date != null) {
+                    dataFilter = '';
                     let dataFilter = this.dataRiwayat.filter(item => {
                         return item.day_kirim_filter >= this.date[0] && item.day_kirim_filter <= this.date[1]
                     })
                     return dataFilter
                 } else if(this.selectedProduct.length > 0) {
+                    dataFilter = '';
                     let dataFilter = this.dataRiwayat.filter(item => {
                         return this.selectedProduct.includes(item.produk)
-                    })
-                    return dataFilter
-                } else if(this.date != null && this.selectedProduct.length > 0) {
-                    let dataFilter = this.dataRiwayat.filter(item => {
-                        return item.day_kirim_filter >= this.date[0] && item.day_kirim_filter <= this.date[1] && this.selectedProduct.includes(item.produk)
                     })
                     return dataFilter
                 } else {
