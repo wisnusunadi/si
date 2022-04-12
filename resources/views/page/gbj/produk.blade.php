@@ -261,7 +261,22 @@
                         <button class=" btn btn-primary tambah_noseri mt-2">Tambah</button>
                     </div>
                 </div>
-                <div class="card card-primary card-outline card-outline-tabs">
+                <form action="" id="noseriForm" name="noseriForm">
+                    <table class="table scan-produk">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" id="head-cb"></th>
+                                <th>No. Seri</th>
+                                <th>Layout</th>
+                                <th>Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+
+                    </table>
+                {{-- <div class="card card-primary card-outline card-outline-tabs">
                     <div class="card-header p-0 border-bottom-0">
                         <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                             <li class="nav-item">
@@ -301,11 +316,9 @@
                                 <table class="table scan-produk1">
                                     <thead>
                                         <tr>
-                                            {{-- <th><input type="checkbox" id="head-cb"></th> --}}
                                             <th>No</th>
                                             <th>No. Seri</th>
                                             <th>Layout</th>
-                                            {{-- <th>Aksi</th> --}}
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -317,7 +330,7 @@
                         </div>
                     </div>
 
-                </div>
+                </div> --}}
 
             </div>
             <div class="modal-footer">
