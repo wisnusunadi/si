@@ -49,7 +49,7 @@
                     <div class="card-body">
                         <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="pills-proses_kirim-tab" data-toggle="pill" href="#pills-proses_kirim" role="tab" aria-controls="pills-proses_kirim" aria-selected="true">Belum Dicek</a>
+                                <a class="nav-link active" id="pills-proses_kirim-tab" data-toggle="pill" href="#pills-proses_kirim" role="tab" aria-controls="pills-proses_kirim" aria-selected="true">Proses Dicek</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Dicek</a>

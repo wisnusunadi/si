@@ -615,15 +615,10 @@ class ProduksiController extends Controller
         foreach($data as $d) {
             $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml');
             $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml_prd');
-            if ($sumcek->sum() == 0) {
+            if ($sumcek->sum() == 0 || $sumcek->sum() != $sumprd->sum()) {
                 $a = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('pesananid');
                 $x[] = $a;
             }
-            // elseif ($sumcek->sum() != $sumprd->sum()) {
-            //     $a = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('pesananid');
-            //     $x[] = $a;
-            // }
-
         }
         $datax = Pesanan::whereIn('id', $x)->get();
         return datatables()->of($datax)
