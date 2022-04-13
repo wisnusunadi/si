@@ -49,10 +49,10 @@
                     <div class="card-body">
                         <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="pills-proses_kirim-tab" data-toggle="pill" href="#pills-proses_kirim" role="tab" aria-controls="pills-proses_kirim" aria-selected="true">Sudah Dicek</a>
+                                <a class="nav-link active" id="pills-proses_kirim-tab" data-toggle="pill" href="#pills-proses_kirim" role="tab" aria-controls="pills-proses_kirim" aria-selected="true">Belum Dicek</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Belum Dicek</a>
+                                <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Dicek</a>
                             </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
@@ -60,7 +60,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered" id="sudah-dicek">
+                                            <table class="table table-bordered" style="width: 100%" id="belum-dicek">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
@@ -80,7 +80,7 @@
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered" style="width: 100%" id="belum-dicek">
+                                            <table class="table table-bordered" style="width: 100%" id="sudah-dicek">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
@@ -92,6 +92,7 @@
                                                     </tr>
                                                 </thead>
                                             </table>
+
                                         </div>
                                     </div>
                                 </div>
@@ -284,7 +285,7 @@
         $('#sudah-dicek').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 url: '/api/tfp/sudah-dicek',
             },
@@ -311,7 +312,7 @@
         $('#belum-dicek').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
                 url: '/api/tfp/belum-dicek',
             },

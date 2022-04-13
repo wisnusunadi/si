@@ -458,8 +458,18 @@ class ProduksiController extends Controller
         $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10, 20])->Has('DetailPesanan')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $x = [];
+        foreach($data as $d) {
+            $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml');
+            $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml_prd');
+            if ($sumcek->sum() == $sumprd->sum()) {
+                $a = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('pesananid');
+                $x[] = $a;
+            }
 
-        return datatables()->of($data)
+        }
+        $datax = Pesanan::whereIn('id', $x)->get();
+        return datatables()->of($datax)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->so;
@@ -601,8 +611,22 @@ class ProduksiController extends Controller
         $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10, 20])->Has('DetailPesanan')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $x = [];
+        foreach($data as $d) {
+            $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml');
+            $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml_prd');
+            if ($sumcek->sum() == 0) {
+                $a = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('pesananid');
+                $x[] = $a;
+            }
+            // elseif ($sumcek->sum() != $sumprd->sum()) {
+            //     $a = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('pesananid');
+            //     $x[] = $a;
+            // }
 
-        return datatables()->of($data)
+        }
+        $datax = Pesanan::whereIn('id', $x)->get();
+        return datatables()->of($datax)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->so;
