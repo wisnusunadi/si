@@ -31,6 +31,11 @@
 
 @section('adminlte_css')
 <style>
+    .alert-danger{
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
     #showtable {
         text-align: center;
         white-space: nowrap;
@@ -551,6 +556,55 @@
                 </div>
             </div>
         </div>
+        @endif
+        @if($jenis == "EKAT")
+            @if(isset($l->DetailLogistik[0]))
+                @if($l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->ket != "")
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->ket}}
+                </div>
+                @endif
+            @endif
+        @elseif($jenis == "SPA")
+            @if(isset($l->DetailLogistikPart) && !isset($l->DetailLogistik[0]))
+                @if($l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->ket != "")
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->ket}}
+                </div>
+                @endif
+            @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                @if($l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->ket != "")
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->ket}}
+                </div>
+                @endif
+            @else
+                @if($l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->ket != "")
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->ket}}
+                </div>
+                @endif
+            @endif
+        @elseif($jenis == "SPB")
+            @if(isset($l->DetailLogistikPart) && !isset($l->DetailLogistik[0]))
+                @if($l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->ket != "")
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{$l->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->ket}}
+                </div>
+                @endif
+            @elseif(isset($l->DetailLogistikPart) && isset($l->DetailLogistik[0]))
+                @if($l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->ket != "")
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->ket}}
+                </div>
+                @endif
+            @else
+                @if($l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->ket != "")
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{$l->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->ket}}
+                </div>
+                @endif
+            @endif
         @endif
         <div class="row">
             <div class="col-12">

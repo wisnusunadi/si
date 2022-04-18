@@ -26,6 +26,12 @@
 
 @section('adminlte_css')
 <style>
+
+    .alert-danger{
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
     .ok {
         color: green;
         font-weight: 600;
@@ -250,6 +256,11 @@
                 </div>
             </div>
         </div>
+        @if($data->ket != "")
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{$data->ket}}
+                </div>
+        @endif
         <div class="row">
             <div class="col-12">
                 <div class="card">
