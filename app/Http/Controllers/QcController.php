@@ -506,6 +506,19 @@ class QcController extends Controller
                     }
                 }
             })
+            ->addColumn('keterangan', function ($data) {
+                if (!empty($data->so)) {
+                    $name = explode('/', $data->so);
+                    if ($name[1] == 'EKAT') {
+                        return $data->ekatalog->ket;
+                    }else if ($name[1] == 'SPA') {
+                        return $data->spa->ket;
+                    }
+                    else if ($name[1] == 'SPA') {
+                        return $data->spb->ket;
+                    }
+                }
+            })
             ->addColumn('status', function ($data) {
                 if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) <= 0) {
                     if ($data->getJumlahCek() == 0) {
@@ -654,6 +667,19 @@ class QcController extends Controller
                         }
                     } else {
                         return '-';
+                    }
+                }
+            })
+            ->addColumn('keterangan', function ($data) {
+                if (!empty($data->so)) {
+                    $name = explode('/', $data->so);
+                    if ($name[1] == 'EKAT') {
+                        return $data->ekatalog->ket;
+                    }else if ($name[1] == 'SPA') {
+                        return $data->spa->ket;
+                    }
+                    else if ($name[1] == 'SPA') {
+                        return $data->spb->ket;
                     }
                 }
             })
