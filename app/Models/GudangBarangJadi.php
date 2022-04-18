@@ -238,4 +238,13 @@ class GudangBarangJadi extends Model
         })->count();
         return $jumlah;
     }
+
+    function get_sum_noseri()
+    {
+        $id = $this->id;
+        $d = NoseriBarangJadi::whereHas('gudang', function($q) use($id) {
+            $q->where('gdg_barang_jadi_id', $id);
+        })->where('is_aktif', 1)->count();
+        return $d;
+    }
 }

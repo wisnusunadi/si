@@ -27,20 +27,25 @@
                                     <div class="col-lg-12">
                                         @if (Auth::user()->divisi->id != 2)
                                         <span class="float-right">
-                                            <button type="button" class="btn btn-info" data-toggle="modal" data-target="#modal-create" id="create">
+                                            <button type="button" class="btn btn-info" data-toggle="modal"
+                                                data-target="#modal-create" id="create">
                                                 <i class="fas fa-plus"></i>&nbsp;Tambah
                                             </button>
                                         </span>
                                         @endif
                                         <span class="float-right mr-1">
-                                            <button class="btn btn-outline-info dropdown-toggle" type="button" id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
+                                            <button class="btn btn-outline-info dropdown-toggle" type="button"
+                                                id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true"
+                                                aria-expanded="false"><i class="fas fa-filter"></i>&nbsp;
                                                 Filter
                                             </button>
-                                            <div class="dropdown-menu p-3 text-nowrap" aria-labelledby="semuaprodukfilter">
+                                            <div class="dropdown-menu p-3 text-nowrap"
+                                                aria-labelledby="semuaprodukfilter">
                                                 <div class="dropdown-header">Kelompok Produk</div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="alkes" value="Alat Kesehatan" />
+                                                        <input type="checkbox" class="form-check-input" id="alkes"
+                                                            value="Alat Kesehatan" />
                                                         <label class="form-check-label" for="sp_kelompok">
                                                             Alat Kesehatan
                                                         </label>
@@ -48,7 +53,8 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="sarkes" value="Sarana Kesehatan" />
+                                                        <input type="checkbox" class="form-check-input" id="sarkes"
+                                                            value="Sarana Kesehatan" />
                                                         <label class="form-check-label" for="sp_kelompok">
                                                             Sarana Kesehatan
                                                         </label>
@@ -56,7 +62,8 @@
                                                 </div>
                                                 <div class="form-group">
                                                     <div class="form-check">
-                                                        <input type="checkbox" class="form-check-input" id="water" value="Water Treatment" />
+                                                        <input type="checkbox" class="form-check-input" id="water"
+                                                            value="Water Treatment" />
                                                         <label class="form-check-label" for="sp_kelompok">
                                                             Water Treatment
                                                         </label>
@@ -123,7 +130,9 @@
                     <div class="row">
                         <div class="col">
                             <label for="">Nama Variasi</label>
-                            <input type="text" name="nama" id="nama" class="form-control @error('title') is-invalid @enderror" placeholder="Nama Variasi Produk">
+                            <input type="text" name="nama" id="nama"
+                                class="form-control @error('title') is-invalid @enderror"
+                                placeholder="Nama Variasi Produk">
                             @error('title')
                             <span class="invalid-feedback">Silahkan isi Nama Produk</span>
                             @enderror
@@ -179,88 +188,6 @@
     </div>
 </div>
 
-{{-- Modal Edit --}}
-<!-- Button trigger modal -->
-
-<!-- Modal -->
-<div class="modal fade modal-edit" id="" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Edit Produk Sterilisator</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group">
-                            <label for="">Produk</label>
-                            <select name="" class="form-control produk-add">
-                                <option value="">Buku</option>
-                                <option value="">Bolpoin</option>
-                            </select>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="">Nama Produk</label>
-                        <input type="text" class="form-control" placeholder="Nama Produk">
-                    </div>
-                    <div class="col">
-                        <label for="">Satuan</label>
-                        <select name="" id="" class="form-control satuan-edit">
-                            <option value="">mm</option>
-                            <option value="">unit</option>
-                        </select>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <label for="">Deskripsi</label>
-                    <textarea class="form-control" id="" cols="5" rows="5"></textarea>
-                </div>
-                <div class="form-group">
-                    <label for="">Dimensi</label>
-                    <div class="d-flex justify-content-between">
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" placeholder="Panjang">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
-                            </div>
-                        </div>&nbsp;
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" placeholder="Lebar">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
-                            </div>
-                        </div>&nbsp;
-                        <div class="input-group mb-2">
-                            <input type="text" class="form-control" placeholder="Tinggi">
-                            <div class="input-group-prepend">
-                                <div class="input-group-text">mm</div>
-                            </div>
-                        </div>&nbsp;
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="custom-file">
-                        <input type="file" class="custom-file-input" id="inputGroupFile02" />
-                        <label class="custom-file-label" for="inputGroupFile02">Pilih File</label>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary">Kirim</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-{{-- Modal View --}}
-
 <!-- Modal -->
 <div class="modal fade " id="modal-view" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -275,7 +202,9 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="card">
-                            <img class="card-img-top" id="img_prd" src="https://images.unsplash.com/photo-1636096111790-01540e4b36fd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80" alt="">
+                            <img class="card-img-top" id="img_prd"
+                                src="https://images.unsplash.com/photo-1636096111790-01540e4b36fd?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=687&q=80"
+                                alt="">
                         </div>
                     </div>
                     <div class="col-6">
@@ -318,21 +247,22 @@
                     <div class="card-body">
                         <input type="text" name="" class="seri_id" hidden>
                         <input type="text" class="created_by" name="" id="" value="{{ Auth::user()->id }}" hidden>
-                    <div class="row">
-                        <div class="col">
-                            <label for="">Tambah Data No Seri</label>
-                            <input type="text" class="form-control number" id="jumlah_noseri" placeholder="Jumlah No Seri">
+                        <div class="row">
+                            <div class="col">
+                                <label for="">Tambah Data No Seri</label>
+                                <input type="text" class="form-control number" id="jumlah_noseri"
+                                    placeholder="Jumlah No Seri">
+                            </div>
+                            <div class="col">
+                                <label for="">Dari</label>
+                                <select name="" id="" class="form-control dari"></select>
+                            </div>
                         </div>
-                        <div class="col">
-                            <label for="">Dari</label>
-                            <select name="" id="" class="form-control dari"></select>
-                        </div>
-                    </div>
-                    <button class=" btn btn-primary tambah_noseri mt-2">Tambah</button>
+                        <button class=" btn btn-primary tambah_noseri mt-2">Tambah</button>
                     </div>
                 </div>
                 <form action="" id="noseriForm" name="noseriForm">
-                    <table class="table scan-produk">
+                    {{-- <table class="table scan-produk">
                         <thead>
                             <tr>
                                 <th><input type="checkbox" id="head-cb"></th>
@@ -345,11 +275,68 @@
 
                         </tbody>
 
-                    </table>
+                    </table> --}}
+                <div class="card card-primary card-outline card-outline-tabs">
+                    <div class="card-header p-0 border-bottom-0">
+                        <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill"
+                                    href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
+                                    aria-selected="true">Belum Digunakan</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
+                                    href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile"
+                                    aria-selected="false">Sudah Digunakan</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <div class="tab-content" id="custom-tabs-four-tabContent">
+                            <div class="tab-pane fade active show" id="custom-tabs-four-home" role="tabpanel"
+                                aria-labelledby="custom-tabs-four-home-tab">
+                                <form action="" id="noseriForm" name="noseriForm">
+                                    <table class="table scan-produk">
+                                        <thead>
+                                            <tr>
+                                                <th><input type="checkbox" id="head-cb"></th>
+                                                <th>No. Seri</th>
+                                                <th>Layout</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        </tbody>
+
+                                    </table>
+                            </div>
+                            <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
+                                aria-labelledby="custom-tabs-four-profile-tab">
+                                <table class="table scan-produk1">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>No. Seri</th>
+                                            <th>Layout</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                    </tbody>
+
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="ubahSeri">Simpan</button>
-                <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah Layout</button>
+                <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah
+                    Layout</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
             </div>
             </form>
@@ -358,14 +345,16 @@
 </div>
 
 <!-- Modal Detail-->
-<div class="modal fade modalViewStock" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade modalViewStock" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
+    aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">
                     <div class="row">
                         <div class="col">
-                            <b>Produk</b><p id="namaa">Ambulatory</p>
+                            <b>Produk</b>
+                            <p id="namaa">Ambulatory</p>
                         </div>
                         {{-- <div class="col">
                             <b>Nomor SO</b><p>8457938475938475</p>
@@ -424,9 +413,9 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Tambah Data No Seri</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
             </div>
             <div class="modal-body">
                 <table class="table tambah_noseri_tableee">
@@ -451,6 +440,7 @@
     img {
         width: 100%;
     }
+
 </style>
 @stop
 
@@ -465,20 +455,20 @@
         //replace the "Choose a file" label
         $(this).next('.custom-file-label').html(fileName);
     });
-    $('.editProduk').click(function(e) {
+    $('.editProduk').click(function (e) {
         $('.modal-edit').modal('show');
         $('.produk-edit ').select2();
         $('.satuan-edit').select2();
         $('.layout-edit').select2();
     });
-    $('.viewProduk').click(function(e) {
+    $('.viewProduk').click(function (e) {
         $('.modal-view').modal('show');
     });
-    $(document).ready(function() {
+    $(document).ready(function () {
         $('.produk-add ').select2();
         $('.layout-add').select2();
 
-        $("#head-cb").on('click', function() {
+        $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
             // $('.cb-child').prop('checked', isChecked)
             $('.scan-produk').DataTable()
@@ -489,49 +479,50 @@
                 .prop('checked', isChecked);
         });
 
-         $.ajax({
-        url: '/api/gbj/sel-divisi',
-        type: 'GET',
-        dataType: 'json',
-        success: function (res) {
-            // ii++;
-            console.log(res);
-            $.each(res, function (key, value) {
-                $('.dari').append(
-                    '<option value="' + value.id + '">' + value.nama + '</option>'
-                );
-            });
-        }
-    });
+        $.ajax({
+            url: '/api/gbj/sel-divisi',
+            type: 'GET',
+            dataType: 'json',
+            success: function (res) {
+                // ii++;
+                console.log(res);
+                $.each(res, function (key, value) {
+                    $('.dari').append(
+                        '<option value="' + value.id + '">' + value.nama + '</option>'
+                    );
+                });
+            }
+        });
     });
 
     function ubahData() {
         let checkbox_terpilih = $('.scan-produk').DataTable().column(0).nodes()
-                .to$().find('input[type=checkbox]:checked');
+            .to$().find('input[type=checkbox]:checked');
         let layout = $('#change_layout').val();
-        $.each(checkbox_terpilih, function(index, elm) {
+        $.each(checkbox_terpilih, function (index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
         $('.edit-stok').modal('hide');
     }
 
-    $('.stokProduct').click(function(e) {
+    $('.stokProduct').click(function (e) {
         $('.daftar-stok').modal('show');
     });
 
-    $('.editStok').click(function(e) {
+    $('.editStok').click(function (e) {
         $('.edit-stok').modal('show');
     });
 
-    $('.viewStock').click(function(e) {
+    $('.viewStock').click(function (e) {
         $('.modalViewStock').modal('show');
     });
     $('#satuan_id').select2();
+
 </script>
 
 {{-- data --}}
 <script type="text/javascript">
-var authid = $('#authid').val();
+    var authid = $('#authid').val();
     // initial
     $.ajaxSetup({
         headers: {
@@ -539,7 +530,7 @@ var authid = $('#authid').val();
         }
     });
 
-    $('#alkes').click(function() {
+    $('#alkes').click(function () {
         if ($(this).prop('checked') == true) {
             datatable.column(5).search($(this).val()).draw();
         } else {
@@ -547,7 +538,7 @@ var authid = $('#authid').val();
         }
     })
 
-    $('#sarkes').click(function() {
+    $('#sarkes').click(function () {
         if ($(this).prop('checked') == true) {
             datatable.column(5).search($(this).val()).draw();
         } else {
@@ -555,7 +546,7 @@ var authid = $('#authid').val();
         }
     })
 
-    $('#water').click(function() {
+    $('#water').click(function () {
         if ($(this).prop('checked') == true) {
             datatable.column(5).search($(this).val()).draw();
         } else {
@@ -598,36 +589,42 @@ var authid = $('#authid').val();
             // {
             //     data: 'action'
             // }
-            {data: function(data) {
-                if (authid != 2) {
-                    // console.log(data)
-                    // return
-                    return `<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id=`+data.id+`>
+            {
+                data: function (data) {
+                    if (authid != 2) {
+                        // console.log(data)
+                        // return
+                        return `<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id=` +
+                            data.id + `>
                             <button class="btn btn-outline-success btn-sm" type="button" >
                             <i class="far fa-edit"></i>&nbsp;Edit
                             </button>
                         </a>
 
-                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id=`+data.id+`>
+                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id=` +
+                            data.id + `>
                             <button class="btn btn-outline-info btn-sm" type="button" >
                             <i class="far fa-eye"></i>&nbsp;Detail
                             </button>
                         </a>
 
-                        <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id=`+data.id+`>
+                        <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id=` +
+                            data.id + `>
                             <button class="btn btn-outline-warning btn-sm" type="button" >
                             <i class="far fa-eye"></i>&nbsp;Daftar Stok
                             </button>
                         </a>`
-                } else {
-                    return `<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id=`+data.id+`>
+                    } else {
+                        return `<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id=` +
+                            data.id + `>
                                 <button class="btn btn-outline-info btn-sm" type="button" >
                                 <i class="far fa-eye"></i>&nbsp;Detail
                                 </button>
                             </a>`;
-                }
+                    }
 
-            }}
+                }
+            }
         ],
         language: {
             search: "Cari:"
@@ -639,13 +636,14 @@ var authid = $('#authid').val();
         url: '/api/gbj/sel-product',
         type: 'GET',
         dataType: 'json',
-        success: function(res) {
+        success: function (res) {
             if (res) {
                 console.log(res);
                 $("#produk_id").empty();
                 $("#produk_id").append('<option value="">Pilih Item</option>');
-                $.each(res, function(key, value) {
-                    $("#produk_id").append('<option value="'+value.id+'">'+value.nama+'</option');
+                $.each(res, function (key, value) {
+                    $("#produk_id").append('<option value="' + value.id + '">' + value.nama +
+                        '</option');
                 });
             } else {
                 $("#produk_id").empty();
@@ -658,13 +656,14 @@ var authid = $('#authid').val();
         url: '/api/gbj/sel-satuan',
         type: 'GET',
         dataType: 'json',
-        success: function(res) {
+        success: function (res) {
             if (res) {
                 console.log(res);
                 $("#satuan_id").empty();
                 $("#satuan_id").append('<option value="">Pilih Item</option>');
-                $.each(res, function(key, value) {
-                    $("#satuan_id").append('<option value="' + value.id + '">' + value.nama + '</option');
+                $.each(res, function (key, value) {
+                    $("#satuan_id").append('<option value="' + value.id + '">' + value.nama +
+                        '</option');
                 });
             } else {
                 $("#satuan_id").empty();
@@ -673,7 +672,7 @@ var authid = $('#authid').val();
     });
 
     // load modal create edit
-    $('#create').click(function(e) {
+    $('#create').click(function (e) {
         $('#Submitmodalcreate').val('create-product');
         $('#produkForm').trigger("reset");
         $('#exampleModalLabel').html('Tambah Variasi Produk');
@@ -681,7 +680,7 @@ var authid = $('#authid').val();
     });
 
     // load modal edit
-    $(document).on('click', '.editmodal', function() {
+    $(document).on('click', '.editmodal', function () {
         var id = $(this).data('id');
         console.log(id);
         // ajax
@@ -692,9 +691,10 @@ var authid = $('#authid').val();
                 id: id
             },
             dataType: 'json',
-            success: function(res) {
+            success: function (res) {
                 console.log(res);
-                $('#exampleModalLabel').html('Edit Produk ' + '<b>' + res.nama_produk[0].nama + '</b>' + ' variasi ' + '<b>' + res.data[0].nama + '</b>');
+                $('#exampleModalLabel').html('Edit Produk ' + '<b>' + res.nama_produk[0].nama +
+                    '</b>' + ' variasi ' + '<b>' + res.data[0].nama + '</b>');
                 $('#Submitmodalcreate').val('edit-product');
                 $('#modal-create').modal('show');
                 $('#id').val(res.data[0].id);
@@ -718,7 +718,7 @@ var authid = $('#authid').val();
     });
 
     // detail
-    $(document).on('click', '.detailmodal', function() {
+    $(document).on('click', '.detailmodal', function () {
         var id = $(this).data('id');
         console.log(id);
         // ajax
@@ -729,24 +729,26 @@ var authid = $('#authid').val();
                 id: id
             },
             dataType: 'json',
-            success: function(res) {
+            success: function (res) {
                 console.log(res);
 
-                $('#header_data').html('Detail Produk ' + '<b>' + res.nama_produk[0].nama + '</b>' + ' variasi ' + '<b>' + res.data[0].nama + '</b>');
+                $('#header_data').html('Detail Produk ' + '<b>' + res.nama_produk[0].nama + '</b>' +
+                    ' variasi ' + '<b>' + res.data[0].nama + '</b>');
                 $('p#nama').text(res.data[0].nama);
                 $('p#deskripsi').text(res.data[0].deskripsi);
                 $('span#panjang').text(res.data[0].dim_p);
                 $('span#lebar').text(res.data[0].dim_l);
                 $('span#tinggi').text(res.data[0].dim_t);
                 $('p#produk').text(res.nama_produk[0].product.nama + ' ' + res.nama_produk[0].nama);
-                $('img#img_prd').attr("src", "http://localhost:8000/upload/gbj/" + res.data[0].gambar);
+                $('img#img_prd').attr("src", "http://localhost:8000/upload/gbj/" + res.data[0]
+                    .gambar);
                 $('#modal-view').modal('show');
             }
         });
     });
 
     // proses submit
-    $('body').on('submit', '#produkForm', function(e) {
+    $('body').on('submit', '#produkForm', function (e) {
         e.preventDefault();
         var actionType = $('#Submitmodalcreate').val();
         $('#Submitmodalcreate').html('Sending..');
@@ -775,52 +777,85 @@ var authid = $('#authid').val();
         });
     });
 
-   function select_layout() {
-    $.ajax({
-        url: '/api/gbj/sel-layout',
-        type: 'GET',
-        dataType: 'json',
-        success: function(res) {
-            $.each(res, function(key, value) {
-                $("#layout_id").append('<option value="'+value.id+'">'+value.ruang+'</option');
-            });
-        }
-    });
-   }
+    function select_layout() {
+        $.ajax({
+            url: '/api/gbj/sel-layout',
+            type: 'GET',
+            dataType: 'json',
+            success: function (res) {
+                $.each(res, function (key, value) {
+                    $("#layout_id").append('<option value="' + value.id + '">' + value.ruang +
+                        '</option');
+                });
+            }
+        });
+    }
     var title = $(this).parent().prev().prev().prev().prev().html();
     // modal noseri
-    $(document).on('click', '.stokmodal', function() {
+    $(document).on('click', '.stokmodal', function () {
         var id = $(this).data('id');
         $('.seri_id').val(id);
         console.log(id);
         $('span#nm_produk').text($(this).parent().prev().prev().prev().prev().html());
 
         $('.scan-produk').DataTable({
-                destroy: true,
-                "ordering":false,
-                "autoWidth": false,
-                "lengthChange": false,
-                processing: true,
-                serverSide: false,
-                ajax: {
-                    url: '/api/gbj/noseri/' + id,
+            destroy: true,
+            "ordering": false,
+            "autoWidth": false,
+            "lengthChange": false,
+            processing: true,
+            serverSide: false,
+            ajax: {
+                url: '/api/gbj/noseri/' + id,
+            },
+            columns: [{
+                    data: 'ids'
                 },
-                columns: [
-                    {data: 'ids'},
-                    {data: 'seri'},
-                    {data: 'Layout'},
-                    {data: 'aksi'}
-                ],
-                // "columnDefs": [
-                //     { "width": "5%", "targets": 0},
-                // ],
+                {
+                    data: 'seri'
+                },
+                {
+                    data: 'Layout'
+                },
+                {
+                    data: 'aksi'
+                }
+            ],
+            // "columnDefs": [
+            //     { "width": "5%", "targets": 0},
+            // ],
+        });
+
+        $('.scan-produk1').DataTable({
+            destroy: true,
+            "ordering": false,
+            "autoWidth": false,
+            "lengthChange": false,
+            processing: true,
+            serverSide: false,
+            ajax: {
+                url: '/api/gbj/noseri-done/' + id,
+            },
+            columns: [{
+                    data: 'DT_RowIndex'
+                },
+                {
+                    data: 'seri'
+                },
+                {
+                    data: 'Layout'
+                }
+            ],
+            // "columnDefs": [
+            //     { "width": "5%", "targets": 0},
+            // ],
         });
 
         $('.daftar-stok').modal('show');
     });
 
     // modal history
-    $(document).on('click', '.viewStock', function() {
+    $(document).on('click', '.viewStock', function () {
         var id = $(this).parent().prev().prev().text();
         let judul_detail = $('#nm_produk').text();
         $('p#namaa').text(judul_detail);
@@ -830,16 +865,19 @@ var authid = $('#authid').val();
         $('view_produk tbody').empty();
         $('.view_produk').DataTable({
             destroy: true,
-            "ordering":false,
+            "ordering": false,
             "autoWidth": false,
             "lengthChange": false,
             processing: true,
             ajax: {
                 url: '/api/gbj/history/' + id,
             },
-            columns: [
-                {data: 'tanggal'},
-                {data: 'dari'},
+            columns: [{
+                    data: 'tanggal'
+                },
+                {
+                    data: 'dari'
+                },
             ],
         });
 
@@ -851,23 +889,24 @@ var authid = $('#authid').val();
         url: '/api/gbj/sel-layout',
         type: 'GET',
         dataType: 'json',
-        success: function(res) {
+        success: function (res) {
             console.log(res);
             $("#change_layout").empty();
-            $.each(res, function(key, value) {
+            $.each(res, function (key, value) {
                 layout.push([value.id, value.ruang]);
-                $("#change_layout").append('<option value="' + value.id + '">' + value.ruang + '</option');
+                $("#change_layout").append('<option value="' + value.id + '">' + value.ruang +
+                    '</option');
             });
         }
     });
 
     // modal ubah layout
-    $(document).on('click', '.editStok', function() {
+    $(document).on('click', '.editStok', function () {
         $('.edit-stok').modal('show');
     });
 
-    $(document).ready(function() {
-        $('#ubahSeri').on('click', function() {
+    $(document).ready(function () {
+        $('#ubahSeri').on('click', function () {
             // console.log('test');
             const cekid = [];
             const layout = [];
@@ -880,51 +919,52 @@ var authid = $('#authid').val();
             // console.log(cekid);
 
             Swal.fire({
-            title: 'Apakah anda yakin?',
-            text: "Merubah Layout",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Terima!'
+                title: 'Apakah anda yakin?',
+                text: "Merubah Layout",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Terima!'
             }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Sukses!',
-                    'Layout berhasil dirubah',
-                    'success'
-                )
-                $.ajax({
-                    url: '/api/gbj/ubahseri',
-                    type: 'post',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        cekid : cekid,
-                        layout : layout,
-                    },
-                    success: function(res) {
-                        console.log(res);
-                    }
-                })
-                location.reload();
-            }
-        })
+                if (result.value) {
+                    Swal.fire(
+                        'Sukses!',
+                        'Layout berhasil dirubah',
+                        'success'
+                    )
+                    $.ajax({
+                        url: '/api/gbj/ubahseri',
+                        type: 'post',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            cekid: cekid,
+                            layout: layout,
+                        },
+                        success: function (res) {
+                            console.log(res);
+                        }
+                    })
+                    location.reload();
+                }
+            })
 
         })
     })
 
-    $(document).on('click','.tambah_noseri', function () {
+    $(document).on('click', '.tambah_noseri', function () {
         $('.tambah_noseri_tableee').DataTable().destroy();
         $('.tambah_noseri_table').empty();
         let jumlah = $('#jumlah_noseri').val();
-        let table = '<tr><td><input type="text" name="" id="" class="form-control no_seri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="" id="" class="form-control layout_seri"></select></td></tr>';
+        let table =
+            '<tr><td><input type="text" name="" id="" class="form-control no_seri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="" id="" class="form-control layout_seri"></select></td></tr>';
         for (let i = 0; i < jumlah; i++) {
             $('.tambah_noseri_table').append(table);
         }
         $.each(layout, function (index, value) {
-             $('.layout_seri').append('<option value="'+value[0]+'">'+value[1]+'</option');
+            $('.layout_seri').append('<option value="' + value[0] + '">' + value[1] + '</option');
         });
-         $('.tambah_noseri_tableee').DataTable({
+        $('.tambah_noseri_tableee').DataTable({
             destroy: true,
             searching: false,
         });
@@ -932,109 +972,114 @@ var authid = $('#authid').val();
     });
 
     $(document).on('click', '#save_data', function () {
-    var dataNoSeri = $('.tambah_noseri_tableee').DataTable();
-    let datalength = $('#jumlah_noseri').val();
-    let no_seri = $('.tambah_noseri_tableee').DataTable().column(0).nodes().to$().find('input[type=text]').map(function (index, elm) {
-        return $(elm).val();
-    }).get();
-    let layout = $('.tambah_noseri_tableee').DataTable().column(1).nodes().to$().find('select').map(function (index, elm) {
-        return $(elm).val();
-    }).get();
-    let id = $('.seri_id').val();
-    let dari = $('.dari').val();
-    let created_by = $('.created_by').val();
+        var dataNoSeri = $('.tambah_noseri_tableee').DataTable();
+        let datalength = $('#jumlah_noseri').val();
+        let no_seri = $('.tambah_noseri_tableee').DataTable().column(0).nodes().to$().find('input[type=text]')
+            .map(function (index, elm) {
+                return $(elm).val();
+            }).get();
+        let layout = $('.tambah_noseri_tableee').DataTable().column(1).nodes().to$().find('select').map(
+            function (index, elm) {
+                return $(elm).val();
+            }).get();
+        let id = $('.seri_id').val();
+        let dari = $('.dari').val();
+        let created_by = $('.created_by').val();
 
-    let arr = [];
-    const data = dataNoSeri.$('.no_seri').map(function () {
-        return $(this).val();
-    }).get();
+        let arr = [];
+        const data = dataNoSeri.$('.no_seri').map(function () {
+            return $(this).val();
+        }).get();
 
-    data.forEach(function (item) {
-        if (item != '') {
-            arr.push(item);
-        }
-    });
-
-    const count = arr =>
-    arr.reduce((a, b) => ({
-        ...a,
-        [b]: (a[b] || 0) + 1
-    }), {})
-
-    const duplicates = dict =>
-    Object.keys(dict).filter((a) => dict[a] > 1)
-
-    if (arr.length != datalength || arr.length == 0) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Nomor seri tidak boleh kosong!',
-        })
-    }else if (duplicates(count(arr)).length > 0) {
-        $('.no_seri').removeClass('is-invalid');
-        $('.no_seri').filter(function () {
-            for (let index = 0; index < duplicates(count(arr))
-                .length; index++) {
-                if ($(this).val() == duplicates(count(arr))[index]) {
-                    return true;
-                }
-            }
-        }).addClass('is-invalid');
-
-        Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Nomor seri ' + duplicates(count(arr)) +
-                ' ada yang sama.',
-        }).then((result) => {
-            if (result.value) {
-                $(this).prop('disabled', false);
+        data.forEach(function (item) {
+            if (item != '') {
+                arr.push(item);
             }
         });
-    }else{
-         $.ajax({
-        url: '/api/gbj/ceknoseri',
-        type: 'post',
-        data: {noseri: no_seri},
-        success: function(res) {
-            if(res.msg) {
-                $.ajax({
-                    type: 'post',
-                    url: '/api/gbj/addSeri',
-                    data: {
-                        "_token": "{{ csrf_token() }}",
-                        no_seri : no_seri,
-                        layout: layout,
-                        id: id,
-                        dari: dari,
-                        created_by: created_by,
-                    },
-                    success: function(res) {
-                        console.log(res);
-                        if (res.success) {
-                            Swal.fire(
-                                'Sukses!',
-                                'Data berhasil ditambahkan',
-                                'success'
-                            )
-                            setTimeout(() => {
-                                location.reload();
-                            }, 1000);
-                        }
+
+        const count = arr =>
+            arr.reduce((a, b) => ({
+                ...a,
+                [b]: (a[b] || 0) + 1
+            }), {})
+
+        const duplicates = dict =>
+            Object.keys(dict).filter((a) => dict[a] > 1)
+
+        if (arr.length != datalength || arr.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Nomor seri tidak boleh kosong!',
+            })
+        } else if (duplicates(count(arr)).length > 0) {
+            $('.no_seri').removeClass('is-invalid');
+            $('.no_seri').filter(function () {
+                for (let index = 0; index < duplicates(count(arr))
+                    .length; index++) {
+                    if ($(this).val() == duplicates(count(arr))[index]) {
+                        return true;
                     }
-                });
-            } else {
-                Swal.fire(
-                    'Oops',
-                    res.error,
-                    'error'
-                )
-            }
+                }
+            }).addClass('is-invalid');
+
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Nomor seri ' + duplicates(count(arr)) +
+                    ' ada yang sama.',
+            }).then((result) => {
+                if (result.value) {
+                    $(this).prop('disabled', false);
+                }
+            });
+        } else {
+            $.ajax({
+                url: '/api/gbj/ceknoseri',
+                type: 'post',
+                data: {
+                    noseri: no_seri
+                },
+                success: function (res) {
+                    if (res.msg) {
+                        $.ajax({
+                            type: 'post',
+                            url: '/api/gbj/addSeri',
+                            data: {
+                                "_token": "{{ csrf_token() }}",
+                                no_seri: no_seri,
+                                layout: layout,
+                                id: id,
+                                dari: dari,
+                                created_by: created_by,
+                            },
+                            success: function (res) {
+                                console.log(res);
+                                if (res.success) {
+                                    Swal.fire(
+                                        'Sukses!',
+                                        'Data berhasil ditambahkan',
+                                        'success'
+                                    )
+                                    setTimeout(() => {
+                                        location.reload();
+                                    }, 1000);
+                                }
+                            }
+                        });
+                    } else {
+                        Swal.fire(
+                            'Oops',
+                            res.error,
+                            'error'
+                        )
+                    }
+                }
+            })
         }
-    })
-    }
-    console.log("noseri", arr.length != datalength);
+        console.log("noseri", arr.length != datalength);
 
     })
+
 </script>
 @stop

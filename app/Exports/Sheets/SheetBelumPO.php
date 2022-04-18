@@ -81,13 +81,13 @@ class SheetBelumPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
 
 
         $sheet->getStyle('A:R')->getAlignment()
-        ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
+            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
         $sheet->getStyle('A:C')->getAlignment()
-        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('G:H')->getAlignment()
-        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('O:P')->getAlignment()
-        ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
     }
 
 
@@ -103,7 +103,7 @@ class SheetBelumPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
 
         if ($dsb == 'semua') {
             $ekatalog = Pesanan::whereHas('Ekatalog', function ($q) {
-                $q->wherenotIN('status', ['batal']);
+                $q->wherenotIN('status', ['batal', 'draft']);
             })->wherenull('no_po')
                 ->orderby('so', 'ASC')
                 ->limit(41)
@@ -123,23 +123,23 @@ class SheetBelumPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
             // })->get();
         } else {
             $ekatalog = Pesanan::whereHas('Ekatalog', function ($q) use ($dsb) {
-                $q->wherenotIN('status', ['batal'])
+                $q->wherenotIN('status', ['batal', 'draft'])
                     ->where('customer_id', $dsb);
-                })->wherenull('no_po')
-                    ->orderby('so', 'ASC')
-                    ->get();
+            })->wherenull('no_po')
+                ->orderby('so', 'ASC')
+                ->get();
 
             $spa = Pesanan::whereHas('Spa', function ($q) use ($dsb) {
-                    $q->where('customer_id', $dsb);
-                })->wherenull('no_po')
-                    ->orderby('so', 'ASC')
-                    ->get();
+                $q->where('customer_id', $dsb);
+            })->wherenull('no_po')
+                ->orderby('so', 'ASC')
+                ->get();
 
             $spb = Pesanan::whereHas('Spb', function ($q) use ($dsb) {
-                        $q->where('customer_id', $dsb);
-                    })->wherenull('no_po')
-                        ->orderby('so', 'ASC')
-                        ->get();
+                $q->where('customer_id', $dsb);
+            })->wherenull('no_po')
+                ->orderby('so', 'ASC')
+                ->get();
             // $ekatalog = DetailPesanan::whereHas('Pesanan.Ekatalog', function ($q) use ($dsb) {
             //     $q->whereNUll('no_po')
             //         ->where('customer_id', $dsb)
@@ -169,8 +169,7 @@ class SheetBelumPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
         } else if ($this->jenis_penjualan == 'spb') {
             $data = $spb;
             $header = 'Laporan Penjualan SPB ';
-        }
-        else {
+        } else {
             $data = $ekatalog->merge($spa)->merge($spb)->sortBy('created_at');
             $header = 'Laporan Penjualan Semua';
         }

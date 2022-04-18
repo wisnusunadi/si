@@ -36,7 +36,7 @@ class GudangController extends Controller
     // get
     public function get_data_barang_jadi()
     {
-        $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get();
+        $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get()->sortBy('produk.nama');
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
@@ -46,11 +46,13 @@ class GudangController extends Controller
                 return $data->produk->product->kode . '' . $data->produk->kode;
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->stok . ' ' . $data->satuan->nama;
+                $d = $data->get_sum_noseri();
+                return $d . ' ' . $data->satuan->nama;
             })
             ->addColumn('jumlah1', function ($data) {
+                $d = $data->get_sum_noseri();
                 $ss = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
-                    return $data->stok - $ss . ' ' . $data->satuan->nama;
+                    return $d - $ss . ' ' . $data->satuan->nama;
             })
             ->addColumn('kelompok', function ($data) {
                 return $data->produk->KelompokProduk->nama;
@@ -100,7 +102,45 @@ class GudangController extends Controller
     {
         $data = NoseriBarangJadi::whereHas('gudang', function ($d) use ($id) {
             $d->where('id', $id);
-        })->where('is_aktif', 1)->get();
+        })->where('is_aktif', 1)->where('is_ready', 0)->get();
+        $layout = Layout::where('jenis_id', 1)->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('ids', function ($d) {
+                return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
+            })
+            ->addColumn('seri', function ($d) {
+                return $d->noseri;
+            })
+            ->addColumn('Layout', function ($d) use ($layout) {
+                $opt = '';
+                foreach ($layout as $l) {
+                    if ($d->layout_id == $l->id) {
+                        $opt .= '<option value="' . $l->id . '" selected>' . $l->ruang . '</option>';
+                    } else {
+                        $opt .= '<option value="' . $l->id . '">' . $l->ruang . '</option>';
+                    }
+                }
+                return '<select name="layout_id[]" id="layout_id[]" class="form-control">
+                        ' . $opt . '
+                        </select>';
+            })
+            ->addColumn('aksi', function ($d) {
+                return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
+                        <button class="btn btn-outline-info btn-sm" type="button" >
+                        <i class="far fa-eye"></i>&nbsp;Detail
+                        </button>
+                    </a>';
+            })
+            ->rawColumns(['ids', 'Layout', 'aksi'])
+            ->make(true);
+    }
+
+    function getNoseriDone(Request $request, $id)
+    {
+        $data = NoseriBarangJadi::whereHas('gudang', function ($d) use ($id) {
+            $d->where('id', $id);
+        })->where('is_aktif', 1)->where('is_ready', 1)->get();
         $layout = Layout::where('jenis_id', 1)->get();
         return datatables()->of($data)
             ->addIndexColumn()
