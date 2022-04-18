@@ -102,7 +102,45 @@ class GudangController extends Controller
     {
         $data = NoseriBarangJadi::whereHas('gudang', function ($d) use ($id) {
             $d->where('id', $id);
-        })->where('is_aktif', 1)->get();
+        })->where('is_aktif', 1)->where('is_ready', 0)->get();
+        $layout = Layout::where('jenis_id', 1)->get();
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('ids', function ($d) {
+                return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
+            })
+            ->addColumn('seri', function ($d) {
+                return $d->noseri;
+            })
+            ->addColumn('Layout', function ($d) use ($layout) {
+                $opt = '';
+                foreach ($layout as $l) {
+                    if ($d->layout_id == $l->id) {
+                        $opt .= '<option value="' . $l->id . '" selected>' . $l->ruang . '</option>';
+                    } else {
+                        $opt .= '<option value="' . $l->id . '">' . $l->ruang . '</option>';
+                    }
+                }
+                return '<select name="layout_id[]" id="layout_id[]" class="form-control">
+                        ' . $opt . '
+                        </select>';
+            })
+            ->addColumn('aksi', function ($d) {
+                return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
+                        <button class="btn btn-outline-info btn-sm" type="button" >
+                        <i class="far fa-eye"></i>&nbsp;Detail
+                        </button>
+                    </a>';
+            })
+            ->rawColumns(['ids', 'Layout', 'aksi'])
+            ->make(true);
+    }
+
+    function getNoseriDone(Request $request, $id)
+    {
+        $data = NoseriBarangJadi::whereHas('gudang', function ($d) use ($id) {
+            $d->where('id', $id);
+        })->where('is_aktif', 1)->where('is_ready', 1)->get();
         $layout = Layout::where('jenis_id', 1)->get();
         return datatables()->of($data)
             ->addIndexColumn()
