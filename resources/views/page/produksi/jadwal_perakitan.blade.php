@@ -685,12 +685,23 @@
         })
         $(document).on('keydown','input.noseri',function(e){
             const a = $(this).val();
+            const b = a.charAt(0);
+            const regex=/^[a-zA-Z\s]*$/;
             const length = $('#lengthNoSeri').val();
             $(this).attr('maxlength', length);
             if (e.keyCode == 8) {
-                // $(this).parent().parent().prev().find('input.noseri').focus();
+            }else if(!regex.test(b)){
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Nomor seri harus berupa huruf.',
+                }).then((result) => {
+                    if (result.value) {
+                        $(this).val('');
+                        $(this).focus();
+                    }
+                });
             }else if (a.length == length) {
-                // document.getElementsByClassName("noseri").maxLength = length;
                 $(this).parent().parent().next().find('input.noseri').focus();
             }else if (a.length > length) {
                 $(this).val(a.substring(0, length));
