@@ -77,6 +77,11 @@
                 </div>
             </div>
             <div class="col-lg-8 col-md-12">
+                @if($data->ket != "")
+                <div class="alert alert-danger" role="alert">
+                    <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{$data->ket}}
+                </div>
+                @endif
                 <h5>Detail Pemesanan</h5>
                 <div class="card overflowy" id="detailspb">
                     <div class="card-body">

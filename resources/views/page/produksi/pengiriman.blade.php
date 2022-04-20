@@ -244,7 +244,7 @@
                 <div class="form-group">
                   <label for="">No Seri</label>
                   <input type="hidden" name="" id="idNoseri">
-                  <input type="text" name="" id="noseriselect" class="form-control" placeholder="" aria-describedby="helpId">
+                  <input type="text" name="" id="noseriselect" class="form-control" placeholder="" aria-describedby="helpId" style="text-transform: uppercase;">
                 </div>
             </div>
             <div class="modal-footer">

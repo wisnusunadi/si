@@ -144,6 +144,9 @@ Route::prefix('/so')->group(function () {
 Route::prefix('/laporan')->group(function () {
     Route::post('/create', [App\Http\Controllers\PenjualanController::class, 'laporan']);
     Route::post('/penjualan/{penjualan}/{distributor}/{tanggal_awal}/{tanggal_akhir}', [App\Http\Controllers\PenjualanController::class, 'get_data_laporan_penjualan']);
+    Route::post('/qc_2/{jenis}/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_data_laporan_qc_2']);
+    Route::post('/qc/detail/{id}', [App\Http\Controllers\QcController::class, 'get_data_detail_laporan_qc']);
+    
     Route::post('/qc/{jenis}/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_data_laporan_qc']);
     Route::post('/logistik/{pengiriman}/{ekspedisi}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\LogistikController::class, 'get_data_laporan_logistik']);
 });

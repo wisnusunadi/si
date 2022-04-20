@@ -78,4 +78,10 @@ class DetailPesananPart extends Model
         }
         return $jumlah;
     }
+
+    public function LaporanQcPart($tgl_awal, $tgl_akhir){
+        $id = $this->id;
+        $res = OutgoingPesananPart::whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir])->where('detail_pesanan_part_id', $id)->get();
+        return $res;
+    }
 }

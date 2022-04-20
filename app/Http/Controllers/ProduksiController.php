@@ -1173,10 +1173,16 @@ class ProduksiController extends Controller
                     } else {
                         $jml_now = $x - $datacek;
                         // return $datacek;
-                        return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $jml_now . '" data-id="' . $data->gudang_barang_jadi_id . '" data-dpp="' . $data->id . '">
+
+                        if ($data->status_cek == null) {
+                            return 'Siapkan Produk Dulu';
+                        } else {
+                            return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $jml_now . '" data-id="' . $data->gudang_barang_jadi_id . '" data-dpp="' . $data->id . '">
                                 <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
                                 class="fas fa-qrcode"></i> Scan Produk</button>
                                 </a>';
+                        }
+
                     }
                 } else {
                     $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($data) {
@@ -1190,10 +1196,16 @@ class ProduksiController extends Controller
                             }
                         }
                     }
-                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $x . '" data-id="' . $data->gudang_barang_jadi_id . '" data-dpp="' . $data->id . '">
+
+                    if ($data->status_cek == null) {
+                        return 'Siapkan Produk Dulu';
+                    } else {
+                        return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr="" data-jml="' . $x . '" data-id="' . $data->gudang_barang_jadi_id . '" data-dpp="' . $data->id . '">
                                 <button class="btn btn-primary" data-toggle="modal" data-target=".modal-scan"><i
                                 class="fas fa-qrcode"></i> Scan Produk</button>
                                 </a>';
+                    }
+
                 }
             })
             ->addColumn('status', function ($data) {

@@ -76,4 +76,34 @@ class DetailPesanan extends Model
 
         return $s;
     }
+
+    public function LaporanQcProduk($hasil, $tgl_awal, $tgl_akhir){
+        $id = $this->id;
+        $res = "";
+        if($hasil != "semua"){
+            $res = DetailPesananProduk::where('detail_pesanan_id', $id)->whereHas('NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
+                $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil);
+            })->get();
+        } else {
+            $res = DetailPesananProduk::where('detail_pesanan_id', $id)->whereHas('NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
+                $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir]);
+            })->get();
+        }
+        return $res;
+    }
+
+    public function countLaporanQcProduk($hasil, $tgl_awal, $tgl_akhir){
+        $id = $this->id;
+        $res = "";
+        if($hasil != "semua"){
+            $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil)->whereHas('DetailPesananProduk', function($q) use($id){
+                $q->where('detail_pesanan_id', $id);
+            })->count();
+        } else {
+            $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->whereHas('DetailPesananProduk', function($q) use($id){
+                $q->where('detail_pesanan_id', $id);
+            })->count();
+        }
+        return $res;
+    }
 }

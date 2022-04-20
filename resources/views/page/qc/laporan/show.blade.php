@@ -8,6 +8,16 @@
 
 @section('adminlte_css')
 <style>
+     td.dt-control {
+        background: url("/assets/image/logo/plus.png") no-repeat center center;
+        cursor: pointer;
+        background-size: 15px 15px;
+    }
+    tr.shown td.dt-control {
+        background: url("/assets/image/logo/minus.png") no-repeat center center;
+        background-size: 15px 15px;
+    }
+
     .filter {
         margin: 5px;
     }
@@ -22,6 +32,10 @@
 
     .nowrap-text {
         white-space: nowrap;
+    }
+
+    .childrowbg{
+        background-color: #E8E8E8;
     }
 
     @media screen and (min-width: 1440px) {
@@ -173,9 +187,10 @@
                     <div class="card-body">
                         <h5>Laporan Pengujian</h5>
                         <div class="table-responsive">
+                            <a id="exportbutton" href=""><button class="btn btn-info" id="btnexport"><i class="far fa-file-excel fa-fw"></i> Export</button></a>
                             <table class="table table-hover" id="qctable" style="width:100%">
                                 <thead style="text-align: center;">
-                                    <tr>
+                                    {{-- <tr>
                                         <th rowspan="2">No</th>
                                         <th rowspan="2">No SO</th>
                                         <th rowspan="2">Nama Produk</th>
@@ -187,6 +202,17 @@
                                     <tr>
                                         <th>OK</th>
                                         <th>NOK</th>
+                                    </tr> --}}
+                                    <tr>
+                                        <th></th>
+                                        <th>No SO</th>
+                                        <th>No AKN</th>
+                                        <th>No PO</th>
+                                        <th>Tanggal PO</th>
+                                        <th>Customer</th>
+                                        <th>Instansi</th>
+                                        <th>Alamat</th>
+                                        <th>Status</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -302,7 +328,6 @@
                 if ($('input[type="radio"][name="cari"]').val() != "" && $('input[type="radio"][name="hasil_uji"]').val() != '' && $('#tanggal_akhir').val() != "") {
                     $("#btncetak").removeAttr('disabled');
                 } else {
-
                     $("#btncetak").attr('disabled', true);
                 }
             } else {
@@ -397,26 +422,6 @@
             $('#lapform').removeClass('hide');
 
             var hasil = "";
-            var produk = "";
-            if ($(".produk_id").val() != "") {
-                produk = $(".produk_id").val();
-            } else if ($(".produk_id").val() == "") {
-                produk = "0";
-
-            }
-
-            if ($(".part_id").val() != "") {
-                produk = $(".part_id").val();
-            } else if ($(".part_id").val() == "") {
-                produk = "0";
-            }
-            var so = "";
-            if ($(".no_so").val() != "") {
-                var sos = $(".no_so").val();
-                so = sos.replaceAll("/", "_")
-            } else {
-                so = "0";
-            }
             var jenis = $('input[type="radio"][name="cari"]:checked').val();
             if (jenis == "produk") {
                 hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
@@ -424,17 +429,106 @@
                 hasil = "0";
             }
 
+
+            var produk = "";
+            if(jenis == "produk"){
+                if ($(".produk_id").val() != "") {
+                    produk = $(".produk_id").val();
+                } else if ($(".produk_id").val() == "") {
+                    produk = "0";
+                }
+            }
+            else {
+                if ($(".part_id").val() != "") {
+                    produk = $(".part_id").val();
+                } else {
+                    produk = "0";
+                }
+            }
+
+            var so = "";
+            if ($(".no_so").val() != "") {
+                var sos = $(".no_so").val();
+                so = sos.replaceAll("/", "_")
+            } else {
+                so = "0";
+            }
+
+
             var tgl_awal = $('#tanggal_mulai').val();
             var tgl_akhir = $('#tanggal_akhir').val();
+            $('#exportbutton').attr('href', '/qc/so/laporan/export/'+jenis+'/'+produk+'/'+so+'/'+hasil+'/'+tgl_awal+'/'+tgl_akhir);
             table(jenis, produk, so, hasil, tgl_awal, tgl_akhir);
         });
 
 
+        // function table(jenis, produk, so, hasil, tgl_awal, tgl_akhir) {
+        //     $('#qctable').DataTable({
+        //         destroy: true,
+        //         processing: true,
+        //         dom: 'Bfrtip',
+        //         serverSide: false,
+        //         language: {
+        //             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+        //         },
+        //         ajax: {
+        //             'type': 'POST',
+        //             'datatype': 'JSON',
+        //             'url': '/api/laporan/qc/' + jenis + '/' + produk + '/' + so + '/' + hasil + '/' + tgl_awal + '/' + tgl_akhir,
+        //             'headers': {
+        //                 'X-CSRF-TOKEN': '{{csrf_token()}}'
+        //             }
+        //         },
+        //         buttons: [{
+        //             extend: 'excel',
+        //             title: 'Laporan QC Outgoing',
+        //             text: '<i class="far fa-file-excel"></i> Export',
+        //             className: "btn btn-info"
+        //         }, ],
+        //         columns: [{
+        //                 data: 'DT_RowIndex',
+        //                 className: 'nowrap-text align-center'
+        //             },
+        //             {
+        //                 data: 'so',
+        //                 className: 'nowrap-text align-center'
+        //             },
+        //             {
+        //                 data: 'produk'
+        //             },
+        //             {
+        //                 data: 'noseri',
+        //                 className: 'nowrap-text align-center',
+        //                 visible: jenis == "produk" ? true : false
+        //             },
+        //             {
+        //                 data: 'tgl_uji',
+        //                 className: 'nowrap-text align-center'
+        //             },
+        //             {
+        //                 data: 'status',
+        //                 className: 'nowrap-text align-center',
+        //                 visible: jenis == "produk" ? true : false
+        //             },
+        //             {
+        //                 data: 'jumlah_ok',
+        //                 className: 'nowrap-text align-center',
+        //                 visible: jenis == "part" ? true : false
+        //             },
+        //             {
+        //                 data: 'jumlah_nok',
+        //                 className: 'nowrap-text align-center',
+        //                 visible: jenis == "part" ? true : false
+        //             },
+        //         ],
+        //     });
+        // }
+        var showtable = "";
+
         function table(jenis, produk, so, hasil, tgl_awal, tgl_akhir) {
-            $('#qctable').DataTable({
+            showtable = $('#qctable').DataTable({
                 destroy: true,
                 processing: true,
-                dom: 'Bfrtip',
                 serverSide: false,
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -442,25 +536,72 @@
                 ajax: {
                     'type': 'POST',
                     'datatype': 'JSON',
-                    'url': '/api/laporan/qc/' + jenis + '/' + produk + '/' + so + '/' + hasil + '/' + tgl_awal + '/' + tgl_akhir,
+                    'url': '/api/laporan/qc_2/' + jenis + '/' + produk + '/' + so + '/' + hasil + '/' + tgl_awal + '/' + tgl_akhir,
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
                 },
-                buttons: [{
-                    extend: 'excel',
-                    title: 'Laporan QC Outgoing',
-                    text: '<i class="far fa-file-excel"></i> Export',
-                    className: "btn btn-info"
-                }, ],
                 columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center'
+                        "className": 'dt-control',
+                        "orderable": false,
+                        "data": null,
+                        "defaultContent": ''
                     },
                     {
                         data: 'so',
                         className: 'nowrap-text align-center'
                     },
+                    {
+                        data: 'no_paket',
+                        className: 'nowrap-text align-center',
+                    },
+                    {
+                        data: 'no_po',
+                        className: 'nowrap-text align-center',
+                    },
+                    {
+                        data: 'tgl_po',
+                        className: 'nowrap-text align-center'
+                    },
+                    {
+                        data: 'customer',
+                        className: 'align-center',
+                    },
+                    {
+                        data: 'instansi',
+                        className: 'align-center',
+                    },
+                    {
+                        data: 'alamat',
+                        className: 'align-center',
+                    },
+                    {
+                        data: 'status',
+                        className: 'nowrap-text align-center',
+                    },
+                ],
+            });
+        }
+
+        function dettable(id, jenis, produk, hasil, tgl_awal, tgl_akhir) {
+            var groupColumn = 0;
+            $('#dettable'+id).DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: false,
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
+                    'url': '/api/laporan/qc/detail/' + id,
+                    'data': {'jenis': jenis, 'produk': produk, 'hasil': hasil, 'tgl_awal': tgl_awal, 'tgl_akhir': tgl_akhir},
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                columns: [
                     {
                         data: 'produk'
                     },
@@ -489,8 +630,122 @@
                         visible: jenis == "part" ? true : false
                     },
                 ],
+                "fixedColumns": {
+                    left: 0
+                },
+                "columnDefs": [{
+                    "visible": false,
+                    "targets": groupColumn
+                }],
+                "order": [
+                    [groupColumn, 'asc']
+                ],
+                "drawCallback": function(settings) {
+                    var api = this.api();
+                    var rows = api.rows({
+                        page: 'current'
+                    }).nodes();
+                    var last = null;
+
+                    api.column(groupColumn, {
+                        page: 'current'
+                    }).data().each(function(group, i) {
+                        if (last !== group) {
+                            $(rows).eq(i).before(
+                                '<tr class="group" style="background-color:steelblue; color:white;"><td colspan="6"><b>' + group + '</b></td></tr>'
+                            );
+                            last = group;
+                        }
+                    });
+                }
             });
         }
+
+        function format ( data ) {
+            return `
+            <div class="row childrowbg">
+                <div class="col-12">
+                    <div class="card shadow-none">
+                        <div class="card-body">
+                            <h5>Daftar Produk / Part</h5>
+                            <div class="table-responsive">
+                            <table class="table table-hover dettable" id="dettable`+data+`" width="100%">
+                                <thead>
+                                    <tr>
+                                        <th rowspan="2">Produk</th>
+                                        <th rowspan="2">No Seri</th>
+                                        <th rowspan="2">Tanggal Uji</th>
+                                        <th rowspan="2">Hasil</th>
+                                        <th colspan="2">Jumlah</th>
+                                    </tr>
+                                    <tr>
+                                        <th>OK</th>
+                                        <th>NOK</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>`;
+        }
+
+        $('#qctable tbody').on('click', 'td.dt-control', function () {
+            var tr = $(this).closest('tr');
+            var row = showtable.row( tr );
+
+            if ( row.child.isShown() ) {
+                // This row is already open - close it
+                row.child.hide();
+                tr.removeClass('shown');
+            }
+            else {
+                // Open this row
+                row.child( format(row.data().id), ['childrowbg', "childrow"+row.data().id]).show();
+                tr.addClass('shown');
+                var hasil = "";
+                var produk = "";
+
+                var jenis = $('input[type="radio"][name="cari"]:checked').val();
+                if (jenis == "produk") {
+                    hasil = $('input[type="radio"][name="hasil_uji"]:checked').val();
+                } else {
+                    hasil = "0";
+                }
+
+                if(jenis == "produk"){
+                    if ($(".produk_id").val() != "") {
+                        produk = $(".produk_id").val();
+                    } else if ($(".produk_id").val() == "") {
+                        produk = "0";
+                    }
+                }
+                else if(jenis == "part"){
+                    if ($(".part_id").val() != "") {
+                        produk = $(".part_id").val();
+                    } else if ($(".part_id").val() == "") {
+                        produk = "0";
+                    }
+                }
+
+                var so = "";
+                if ($(".no_so").val() != "") {
+                    var sos = $(".no_so").val();
+                    so = sos.replaceAll("/", "_")
+                } else {
+                    so = "0";
+                }
+
+
+
+                var tgl_awal = $('#tanggal_mulai').val();
+                var tgl_akhir = $('#tanggal_akhir').val();
+                // sjtabledata(row.data().id, pengiriman, ekspedisi, tgl_awal, tgl_akhir);
+                dettable(row.data().id, jenis, produk, hasil, tgl_awal, tgl_akhir);
+            }
+        });
     });
 </script>
 @endsection

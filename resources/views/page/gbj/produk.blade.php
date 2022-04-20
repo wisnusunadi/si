@@ -262,7 +262,7 @@
                     </div>
                 </div>
                 <form action="" id="noseriForm" name="noseriForm">
-                    <table class="table scan-produk">
+                    {{-- <table class="table scan-produk">
                         <thead>
                             <tr>
                                 <th><input type="checkbox" id="head-cb"></th>
@@ -275,8 +275,8 @@
 
                         </tbody>
 
-                    </table>
-                {{-- <div class="card card-primary card-outline card-outline-tabs">
+                    </table> --}}
+                <div class="card card-primary card-outline card-outline-tabs">
                     <div class="card-header p-0 border-bottom-0">
                         <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                             <li class="nav-item">
@@ -330,7 +330,7 @@
                         </div>
                     </div>
 
-                </div> --}}
+                </div>
 
             </div>
             <div class="modal-footer">

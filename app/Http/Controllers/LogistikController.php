@@ -1127,27 +1127,27 @@ class LogistikController extends Controller
         $tgl_akhir = $r->tgl_akhir;
         if($pengiriman == "ekspedisi"){
             if($eks != '0'){
-                $data = Logistik::where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                $prd = Logistik::where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
                     $q->where('pesanan_id', $id);
                 })->get();
-                $data = Logistik::where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
+                $part = Logistik::where('ekspedisi_id', $eks)->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->whereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
                     $q->where('pesanan_id', $id);
                 })->get();
             }
             else{
-                $data = Logistik::whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                $prd = Logistik::whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
                     $q->where('pesanan_id', $id);
                 })->get();
-                $data = Logistik::whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
+                $part = Logistik::whereNotNull('ekspedisi_id')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->whereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
                     $q->where('pesanan_id', $id);
                 })->get();
             }
         }
         else if($pengiriman == "nonekspedisi"){
-            $data = Logistik::whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+            $prd = Logistik::whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
             })->get();
-            $data = Logistik::whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->orWhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
+            $part = Logistik::whereNotNull('nama_pengirim')->whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->whereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
             })->get();
         }
@@ -1158,8 +1158,9 @@ class LogistikController extends Controller
             $part = Logistik::whereBetween('tgl_kirim', [$tgl_awal, $tgl_akhir])->whereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
             })->get();
-            $data = $prd->merge($part);
+
         }
+        $data = $prd->merge($part);
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -3616,10 +3617,9 @@ class LogistikController extends Controller
             ->addColumn('no_paket', function ($data) {
                 if(isset($data->Ekatalog)){
                     return $data->Ekatalog->no_paket;
-                }else{
+                } else{
                     return '-';
                 }
-
             })
             ->addColumn('po', function ($data) {
                 return $data->no_po;
