@@ -1,9 +1,9 @@
 <form data-attr="{{ route('penjualan.customer.update', $customer->id) }}" data-id="{{$customer->id}}" method="POST" id="form-customer-update">
     @method('PUT')
     <div class="row d-flex justify-content-center">
-        <div class="col-11">
-            <div class="card">
-                <div class="card-body">
+        <div class="col-12 justify-content-center">
+            <div class="card removeboxshadow">
+                <div class="card-body bg-color">
                     @if(session()->has('error'))
                     <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
                         <strong>Gagal menambahkan!</strong> Periksa
@@ -22,8 +22,6 @@
                     </div>
                     @endif
                     <div class="row d-flex justify-content-center">
-                        <div class="col-11">
-                            <div class="row">
                                 <div class="col-12">
                                     <div class="card removeboxshadow">
                                         <div class="card-body">
@@ -54,13 +52,18 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="row">
                                 <div class="col-12">
                                     <div class="card removeboxshadow">
-                                        <div class="card-header"></div>
                                         <div class="card-body">
+                                            <div class="form-group row">
+                                                <label for="pemilik" class="col-lg-4 col-md-12 col-form-label labelket">Nama Pemilik</label>
+                                                <div class="col-lg-5 col-md-12">
+                                                    <input type="text" class="form-control" placeholder="Nama Pemilik" id="pemilik" name="pemilik" />
+                                                    <div class="invalid-feedback" id="msgpemilik">
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="form-group row">
                                                 <label for="alamat" class="col-lg-4 col-md-12 col-form-label labelket">Alamat</label>
                                                 <div class="col-lg-8 col-md-12">
@@ -79,21 +82,11 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-12">
-                                    <div class="card removeboxshadow">
-                                        <div class="card-header"></div>
-                                        <div class="card-body">
                                             <div class="form-group row">
                                                 <label for="telepon" class="col-lg-4 col-md-12 col-form-label labelket">PIC</label>
                                                 <div class="col-lg-5 col-md-12">
                                                     <input type="text" class="form-control" placeholder="Masukkan Nama PIC" id="pic" name="pic" value="{{old('pic', $customer->pic)}}" />
-                                                    <div class="invalid-feedback" id="msgbatas">
+                                                    <div class="invalid-feedback" id="msgpic">
                                                     </div>
                                                 </div>
                                             </div>
@@ -110,6 +103,70 @@
                                                 <div class="col-lg-5 col-md-12">
                                                     <input type="text" class="form-control" placeholder="Masukkan NPWP" id="npwp" name="npwp" value="{{old('npwp', $customer->npwp)}}" />
                                                     <div class="invalid-feedback" id="msg_npwp">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="izin_usaha" class="col-lg-4 col-md-12 col-form-label labelket">Izin Usaha</label>
+                                                <div class="col-lg-8 col-md-12 col-form-label">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha1" value="iumk" />
+                                                        <label class="form-check-label" for="izin_usaha1">IUMK</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha2" value="iutm" />
+                                                        <label class="form-check-label" for="izin_usaha2">IUTM</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha3" value="siup" />
+                                                        <label class="form-check-label" for="izin_usaha3">SIUP</label>
+                                                    </div>
+                                                    <div class="invalid-feedback" id="msgizin_usaha">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <div class="card removeboxshadow">
+                                        <div class="card-body">
+                                            <div class="form-group row">
+                                                <label for="modal_usaha" class="col-lg-4 col-md-12 col-form-label labelket">Modal Usaha</label>
+                                                <div class="col-lg-8 col-md-11 col-form-label">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha1" value="<1M" />
+                                                        <label class="form-check-label" for="modal_usaha1"> < 1 Miliar </label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha2" value=">1M & <5M" />
+                                                        <label class="form-check-label" for="modal_usaha2"> > 1 Miliar & < 5 Miliar </label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha3" value=">5M & <10M" />
+                                                        <label class="form-check-label" for="modal_usaha3"> > 5 Miliar & < 10 Miliar </label>
+                                                    </div>
+                                                    <div class="invalid-feedback" id="msgmodal_usaha">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group row">
+                                                <label for="hasil_penjualan" class="col-lg-4 col-md-12 col-form-label labelket">Hasil Penjualan</label>
+                                                <div class="col-lg-8 col-md-11 col-form-label">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan1" value="<2M" />
+                                                        <label class="form-check-label" for="hasil_penjualan1"> < 2 Miliar </label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan2" value=">2M & <15M" />
+                                                        <label class="form-check-label" for="hasil_penjualan2"> > 2 Miliar & < 15 Miliar </label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan3" value=">15M & <50M" />
+                                                        <label class="form-check-label" for="hasil_penjualan3"> > 15 Miliar & < 50 Miliar </label>
+                                                    </div>
+                                                    <div class="invalid-feedback" id="msghasil_penjualan">
                                                     </div>
                                                 </div>
                                             </div>
@@ -133,18 +190,19 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                    </div>
+                    <div class="col-12">
+                        <span class="float-right filter">
+                            <button type="submit" class="btn btn-warning" id="btnsimpan">Simpan</button>
+                        </span>
+                        <span class="float-left filter">
+                            <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                        </span>
                     </div>
                 </div>
-                <div class="card-footer"><span class="float-right filter"><button type="submit" class="btn btn-warning" id="btnsimpan">
-                            Simpan
-                        </button></span>
-                    <span class="float-left filter"><button type="button" class="btn btn-danger" data-dismiss="modal">
-                            Batal
-                        </button></span>
-                </div>
+
             </div>
+
         </div>
     </div>
 </form>

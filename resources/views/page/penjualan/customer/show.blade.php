@@ -25,7 +25,7 @@
 
 @section('adminlte_css')
 <style>
-    
+
     .align-center {
         text-align: center;
     }
@@ -53,9 +53,8 @@
         color: #C0C0C0;
     }
 
-    .yellow-bg {
-        background-color: #ffe680;
-        color: #997a00;
+    .bg-color {
+        background-color: #fff2cc;
     }
 
     .removeboxshadow {
@@ -217,10 +216,10 @@
                     <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content" style="margin: 10px">
-                                <div class="modal-header yellow-bg">
+                                <div class="modal-header bg-warning">
                                     <h4 class="modal-title"><b>Ubah</b></h4>
                                 </div>
-                                <div class="modal-body" id="edit">
+                                <div class="modal-body bg-color" id="edit">
 
                                 </div>
                             </div>
@@ -229,7 +228,7 @@
                     <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content" style="margin: 10px">
-                                <div class="modal-header yellow-bg">
+                                <div class="modal-header bg-danger">
                                     <h4 class="modal-title"><b>Hapus</b></h4>
                                 </div>
                                 <div class="modal-body" id="hapus">

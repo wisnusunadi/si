@@ -28,6 +28,10 @@
         border: 1px;
     }
 
+    .bg-color{
+        background-color: #d2f4f9;
+    }
+
     @media screen and (min-width: 993px) {
         .labelket {
             text-align: right;
@@ -70,7 +74,7 @@
                         <div class="card-header bg-info">
                             <h5 class="card-title">Tambah Customer</h5>
                         </div>
-                        <div class="card-body">
+                        <div class="card-body bg-color">
                             <div class="row">
                                 <div class="col-lg-12 col-md-12">
                                     <div class="form-group row">
@@ -93,7 +97,7 @@
                                         @endif
                                     </div>
                                     <div class="row">
-                                        <div class="col-lg-12 col-md-12">
+                                        <div class="col-lg-12 col-md-12" >
                                             <div class="card removeboxshadow">
                                                 <div class="card-body">
                                                     <div class="form-group row">
@@ -135,8 +139,19 @@
 
                                         <div class="col-lg-12 col-md-12">
                                             <div class="card removeboxshadow">
-                                                <div class="card-header"></div>
                                                 <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label for="pemilik" class="col-lg-4 col-md-12 col-form-label labelket">Nama Pemilik</label>
+                                                        <div class="col-lg-5 col-md-12">
+                                                            <input type="text" class="form-control @error('pemilik') is-invalid @enderror" placeholder="Nama Pemilik" id="pemilik" name="pemilik" />
+                                                            <div class="invalid-feedback" id="msgpemilik">
+                                                                @if($errors->has('pemilik'))
+                                                                {{ $errors->first('pemilik')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
                                                     <div class="form-group row">
                                                         <label for="alamat" class="col-lg-4 col-md-12 col-form-label labelket">Alamat</label>
                                                         <div class="col-lg-6 col-md-12">
@@ -161,14 +176,6 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <div class="col-lg-12 col-md-12">
-                                            <div class="card removeboxshadow">
-                                                <div class="card-header"></div>
-                                                <div class="card-body">
                                                     <div class="form-group row">
                                                         <label for="pic" class="col-lg-4 col-md-12 col-form-label labelket">PIC</label>
                                                         <div class="col-lg-5 col-md-12">
@@ -203,6 +210,79 @@
                                                         </div>
                                                     </div>
                                                     <div class="form-group row">
+                                                        <label for="izin_usaha" class="col-lg-4 col-md-12 col-form-label labelket">Izin Usaha</label>
+                                                        <div class="col-lg-8 col-md-11 col-form-label">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha1" value="iumk" />
+                                                                <label class="form-check-label" for="izin_usaha1">IUMK</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha2" value="iutm" />
+                                                                <label class="form-check-label" for="izin_usaha2">IUTM</label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha3" value="siup" />
+                                                                <label class="form-check-label" for="izin_usaha3">SIUP</label>
+                                                            </div>
+                                                            <div class="invalid-feedback" id="msgizin_usaha">
+                                                                @if($errors->has('izin_usaha'))
+                                                                {{ $errors->first('izin_usaha')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-lg-12 col-md-12">
+                                            <div class="card removeboxshadow">
+                                                <div class="card-body">
+                                                    <div class="form-group row">
+                                                        <label for="modal_usaha" class="col-lg-4 col-md-12 col-form-label labelket">Modal Usaha</label>
+                                                        <div class="col-lg-8 col-md-11 col-form-label">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha1" value="<1M" />
+                                                                <label class="form-check-label" for="modal_usaha1"> < 1 Miliar </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha2" value=">1M & <5M" />
+                                                                <label class="form-check-label" for="modal_usaha2"> > 1 Miliar & < 5 Miliar </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha3" value=">5M & <10M" />
+                                                                <label class="form-check-label" for="modal_usaha3"> > 5 Miliar & < 10 Miliar </label>
+                                                            </div>
+                                                            <div class="invalid-feedback" id="msgmodal_usaha">
+                                                                @if($errors->has('modal_usaha'))
+                                                                {{ $errors->first('modal_usaha')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="hasil_penjualan" class="col-lg-4 col-md-12 col-form-label labelket">Hasil Penjualan</label>
+                                                        <div class="col-lg-8 col-md-11 col-form-label">
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan1" value="<2M" />
+                                                                <label class="form-check-label" for="hasil_penjualan1"> < 2 Miliar </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan2" value=">2M & <15M" />
+                                                                <label class="form-check-label" for="hasil_penjualan2"> > 2 Miliar & < 15 Miliar </label>
+                                                            </div>
+                                                            <div class="form-check form-check-inline">
+                                                                <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan3" value=">15M & <50M" />
+                                                                <label class="form-check-label" for="hasil_penjualan3"> > 15 Miliar & < 50 Miliar </label>
+                                                            </div>
+                                                            <div class="invalid-feedback" id="msghasil_penjualan">
+                                                                @if($errors->has('hasil_penjualan'))
+                                                                {{ $errors->first('hasil_penjualan')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
                                                         <label for="batas" class="col-form-label col-lg-4 col-md-12 labelket">Batas Pembayaran</label>
                                                         <div class="col-lg-2 col-md-6 input-group">
                                                             <input type="text" class="form-control col-form-label @error('batas') is-invalid @enderror" name="batas" id="batas" aria-label="batas" placeholder="Batas hari pembayaran" />
@@ -225,6 +305,7 @@
                                                 </div>
                                             </div>
                                         </div>
+
                                     </div>
                                 </div>
                             </div>
