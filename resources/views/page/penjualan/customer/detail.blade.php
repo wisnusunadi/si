@@ -185,8 +185,8 @@
                                 </div>
                                 <div class="margin-all"><a class="text-muted margin-side">NPWP :</a><b>{{$customer->npwp}}</b></div>
                                 <div class="margin-all">
-                                    <span><a class="text-muted margin-side">IZIN USAHA :</a><b>SIUP</b></span> | <span><a class="text-muted margin-side">MODAL USAHA :</a><b>> 10 M & < 50M</b></span>
-                                    | <span><a class="text-muted margin-side">HASIL PENJUALAN :</a><b>> 10 M & < 50M</b></span>
+                                    <span><a class="text-muted margin-side">IZIN USAHA :</a><b>SIUP</b></span> |<span><a class="text-muted margin-side">MODAL USAHA :</a><b>> 10 M & < 50M</b></span>
+                                    |<span><a class="text-muted margin-side">HASIL PENJUALAN :</a><b>> 10 M & < 50M</b></span>
                                 </div>
                                 <div class="margin-all"><a class="text-muted">{{$customer->ket}}</a></div>
                             </div>
