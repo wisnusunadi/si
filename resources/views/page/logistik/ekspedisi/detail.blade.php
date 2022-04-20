@@ -2,7 +2,6 @@
 
 @section('title', 'ERP')
 
-
 @section('adminlte_css')
 <style>
     li.list-group-item {

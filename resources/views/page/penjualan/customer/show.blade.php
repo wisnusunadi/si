@@ -25,6 +25,7 @@
 
 @section('adminlte_css')
 <style>
+    
     .align-center {
         text-align: center;
     }

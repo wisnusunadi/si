@@ -43,6 +43,13 @@
         color: #4682B4
     }
 
+    .minimizechar {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 25ch;
+    }
+
     @media screen and (min-width: 1440px) {
 
         body {
@@ -155,6 +162,7 @@
                                                     <th>No PO</th>
                                                     <th>Batas Pengujian</th>
                                                     <th>Customer</th>
+                                                    <th>Keterangan</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </thead>
@@ -225,6 +233,7 @@
                                                     <th>No PO</th>
                                                     <th>Batas Pengujian</th>
                                                     <th>Customer</th>
+                                                    <th>Keterangan</th>
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </thead>
@@ -280,6 +289,9 @@
             }, {
                 data: 'nama_customer',
 
+            }, {
+                data: 'keterangan',
+                className: 'minimizechar',
             }, {
                 data: 'status',
                 className: 'nowrap-text align-center',
@@ -341,6 +353,9 @@
             }, {
                 data: 'nama_customer',
 
+            }, {
+                data: 'keterangan',
+                className: 'minimizechar',
             }, {
                 data: 'status',
                 className: 'nowrap-text align-center',

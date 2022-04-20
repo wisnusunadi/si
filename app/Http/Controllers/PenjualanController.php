@@ -1397,8 +1397,7 @@ class PenjualanController extends Controller
                     if (!empty($data->Pesanan->log_id)) {
                         if ($data->Pesanan->State->nama == "Penjualan") {
                             $datas .= '<span class="red-text badge">';
-                        } else if ($data->Pesanan->State->nama == "PO") {
-                            $datas .= '<span class="purple-text badge">';
+                           $datas .= '<span class="purple-text badge">';
                         } else if ($data->Pesanan->State->nama == "Gudang") {
                             $datas .= '<span class="orange-text badge">';
                         } else if ($data->Pesanan->State->nama == "QC") {
@@ -1414,6 +1413,8 @@ class PenjualanController extends Controller
                     } else {
                         $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                     }
+                } else if ($data->Pesanan->State->nama == "PO") {
+
                 } else {
                     $datas .= '<span class="red-text badge">Batal</span>';
                 }

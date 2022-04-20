@@ -360,6 +360,92 @@ class Pesanan extends Model
         return $prd + $part;
     }
 
+    public function LaporanQcProduk($produk, $hasil, $tgl_awal, $tgl_akhir){
+        $id = $this->id;
+        $res = "";
+        if($produk != "0"){
+            if($hasil != "semua"){
+                $res = DetailPesanan::where([['penjualan_produk_id', '=', $produk], ['pesanan_id', '=', $id]])->whereHas('DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
+                    $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil);
+                })->get();
+            } else {
+                $res = DetailPesanan::where([['penjualan_produk_id', '=', $produk], ['pesanan_id', '=', $id]])->whereHas('DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
+                    $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir]);
+                })->get();
+            }
+        }
+        else{
+            if($hasil != "semua"){
+                $res = DetailPesanan::where('pesanan_id', $id)->whereHas('DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir, $hasil){
+                    $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil);
+                })->get();
+            } else {
+                $res = DetailPesanan::where('pesanan_id', $id)->whereHas('DetailPesananProduk.NoseriDetailPesanan', function($q) use($tgl_awal, $tgl_akhir){
+                    $q->whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir]);
+                })->get();
+            }
+        }
+        return $res;
+    }
+
+    public function countLaporanQcProduk($produk, $hasil, $tgl_awal, $tgl_akhir){
+        $id = $this->id;
+        $res = "";
+        if($produk != "0"){
+            if($hasil != "semua"){
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil)->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($produk, $id){
+                    $q->where([['penjualan_produk_id', '=', $produk], ['pesanan_id', '=', $id]]);
+                })->count();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($produk, $id){
+                    $q->where([['penjualan_produk_id', '=', $produk], ['pesanan_id', '=', $id]]);
+                })->count();
+            }
+        }
+        else{
+            if($hasil != "semua"){
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('status', $hasil)->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($id){
+                    $q->where('pesanan_id', $id);
+                })->count();
+            } else {
+                $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->whereHas('DetailPesananProduk.DetailPesanan', function($q) use($id){
+                    $q->where('pesanan_id', $id);
+                })->count();
+            }
+        }
+        return $res;
+    }
+
+    public function LaporanQcPart($produk, $tgl_awal, $tgl_akhir){
+        $id = $this->id;
+        $res = "";
+        if($produk != "0"){
+            $res = DetailPesananPart::where([['m_sparepart_id', '=', $produk], ['pesanan_id', '=', $id]])->whereHas('OutgoingPesananPart', function($q) use($tgl_awal, $tgl_akhir){
+                $q->whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir]);
+            })->get();
+        } else {
+            $res = DetailPesananPart::where('pesanan_id', $id)->whereHas('OutgoingPesananPart', function($q) use($tgl_awal, $tgl_akhir){
+                $q->whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir]);
+            })->get();
+        }
+        return $res;
+    }
+
+    public function countLaporanQcPart($produk, $tgl_awal, $tgl_akhir){
+        $id = $this->id;
+        $res = "";
+        if($produk != "0"){
+            $res = OutgoingPesananPart::whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir])->whereHas('DetailPesananPart', function($q) use($produk, $id){
+                $q->where([['m_sparepart_id', '=', $produk], ['pesanan_id', '=', $id]]);
+            })->count();
+        } else {
+            $res = OutgoingPesananPart::whereBetween('tanggal_uji', [$tgl_awal, $tgl_akhir])->whereHas('DetailPesananPart', function($q) use($id){
+                $q->where('pesanan_id', $id);
+            })->count();
+        }
+        return $res;
+    }
+
 
     function log()
     {
