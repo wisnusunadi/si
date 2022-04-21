@@ -29,7 +29,7 @@
     }
 
     .bg-color{
-        background-color: #d2f4f9;
+        background-color: #e8fafc;
     }
 
     @media screen and (min-width: 993px) {
@@ -103,7 +103,7 @@
                                                     <div class="form-group row">
                                                         <label for="nama_produk" class="col-lg-4 col-md-12 col-form-label labelket">Nama Customer</label>
                                                         <div class="col-lg-6 col-md-12">
-                                                            <input type="text" class="form-control @error('nama_customer') is-invalid @enderror" placeholder="Masukkan Nama Customer" id="nama_customer" name="nama_customer" />
+                                                            <input type="text" class="form-control col-form-label @error('nama_customer') is-invalid @enderror" placeholder="Masukkan Nama Customer" id="nama_customer" name="nama_customer" />
                                                             <div class="invalid-feedback" id="msgnama_customer">
                                                                 @if($errors->has('nama_customer'))
                                                                 {{ $errors->first('nama_customer')}}
@@ -114,7 +114,7 @@
                                                     <div class="form-group row">
                                                         <label for="telepon" class="col-lg-4 col-md-12 col-form-label labelket">No Telp</label>
                                                         <div class="col-lg-5 col-md-12">
-                                                            <input type="text" class="form-control @error('telepon') is-invalid @enderror" value="" placeholder="Masukkan Telepon" id="telepon" name="telepon" />
+                                                            <input type="text" class="form-control col-form-label @error('telepon') is-invalid @enderror" value="" placeholder="Masukkan Telepon" id="telepon" name="telepon" />
                                                             <div class="invalid-feedback" id="msgtelepon">
                                                                 @if($errors->has('telepon'))
                                                                 {{ $errors->first('telepon')}}
@@ -125,7 +125,7 @@
                                                     <div class="form-group row">
                                                         <label for="email" class="col-lg-4 col-md-12 col-form-label labelket">Email</label>
                                                         <div class="col-lg-6 col-md-12">
-                                                            <input type="text" class="form-control @error('email') is-invalid @enderror" placeholder="Masukkan Email" id="email" name="email" />
+                                                            <input type="text" class="form-control col-form-label @error('email') is-invalid @enderror" placeholder="Masukkan Email" id="email" name="email" />
                                                             <div class="invalid-feedback" id="msgemail">
                                                                 @if($errors->has('email'))
                                                                 {{ $errors->first('email')}}
@@ -143,7 +143,7 @@
                                                     <div class="form-group row">
                                                         <label for="pemilik" class="col-lg-4 col-md-12 col-form-label labelket">Nama Pemilik</label>
                                                         <div class="col-lg-5 col-md-12">
-                                                            <input type="text" class="form-control @error('pemilik') is-invalid @enderror" placeholder="Nama Pemilik" id="pemilik" name="pemilik" />
+                                                            <input type="text" class="form-control col-form-label @error('pemilik') is-invalid @enderror" placeholder="Nama Pemilik" id="pemilik" name="pemilik" />
                                                             <div class="invalid-feedback" id="msgpemilik">
                                                                 @if($errors->has('pemilik'))
                                                                 {{ $errors->first('pemilik')}}
@@ -155,7 +155,7 @@
                                                     <div class="form-group row">
                                                         <label for="alamat" class="col-lg-4 col-md-12 col-form-label labelket">Alamat</label>
                                                         <div class="col-lg-6 col-md-12">
-                                                            <textarea class="form-control @error('alamat') is-invalid @enderror" name="alamat" id="alamat" placeholder="Masukkan Alamat"></textarea>
+                                                            <textarea class="form-control col-form-label @error('alamat') is-invalid @enderror" name="alamat" id="alamat" placeholder="Masukkan Alamat"></textarea>
                                                             {{-- <input type="text" class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan Alamat" id="alamat" name="alamat" /> --}}
                                                             <div class="invalid-feedback" id="msgalamat">
                                                                 @if($errors->has('alamat'))
@@ -167,7 +167,7 @@
                                                     <div class="form-group row">
                                                         <label for="provinsi" class="col-lg-4 col-md-12 col-form-label labelket">Provinsi</label>
                                                         <div class="col-lg-5 col-md-12">
-                                                            <select class="select-info form-control custom-select provinsi @error('alamat') is-invalid @enderror" name="provinsi" id="provinsi" width="100%">
+                                                            <select class="select-info form-control col-form-label custom-select provinsi @error('alamat') is-invalid @enderror" name="provinsi" id="provinsi" width="100%">
                                                             </select>
                                                             <div class="invalid-feedback" id="msgprovinsi">
                                                                 @if($errors->has('provinsi'))
@@ -179,7 +179,7 @@
                                                     <div class="form-group row">
                                                         <label for="pic" class="col-lg-4 col-md-12 col-form-label labelket">PIC</label>
                                                         <div class="col-lg-5 col-md-12">
-                                                            <input type="text" class="form-control @error('pic') is-invalid @enderror" placeholder="Nama PIC" id="pic" name="pic" />
+                                                            <input type="text" class="form-control col-form-label @error('pic') is-invalid @enderror" placeholder="Nama PIC" id="pic" name="pic" />
                                                             <div class="invalid-feedback" id="msgpic">
                                                                 @if($errors->has('pic'))
                                                                 {{ $errors->first('pic')}}
@@ -190,7 +190,7 @@
                                                     <div class="form-group row">
                                                         <label for="ktp" class="col-lg-4 col-md-12 col-form-label labelket">No KTP</label>
                                                         <div class="col-lg-5 col-md-12">
-                                                            <input type="text" class="form-control @error('ktp') is-invalid @enderror" value="" placeholder="Masukkan KTP" id="ktp" name="ktp" />
+                                                            <input type="text" class="form-control col-form-label @error('ktp') is-invalid @enderror" value="" placeholder="Masukkan KTP" id="ktp" name="ktp" />
                                                             <div class="invalid-feedback" id="msgktp">
                                                                 @if($errors->has('ktp'))
                                                                 {{ $errors->first('ktp')}}
@@ -201,7 +201,7 @@
                                                     <div class="form-group row">
                                                         <label for="npwp" class="col-lg-4 col-md-12 col-form-label labelket">NPWP</label>
                                                         <div class="col-lg-5 col-md-12">
-                                                            <input type="text" class="form-control @error('npwp') is-invalid @enderror" value="" placeholder="Masukkan NPWP" id="npwp" name="npwp" />
+                                                            <input type="text" class="form-control col-form-label @error('npwp') is-invalid @enderror" value="" placeholder="Masukkan NPWP" id="npwp" name="npwp" />
                                                             <div class="invalid-feedback" id="msgnpwp">
                                                                 @if($errors->has('npwp'))
                                                                 {{ $errors->first('npwp')}}
@@ -284,7 +284,7 @@
                                                     </div>
                                                     <div class="form-group row">
                                                         <label for="batas" class="col-form-label col-lg-4 col-md-12 labelket">Batas Pembayaran</label>
-                                                        <div class="col-lg-2 col-md-6 input-group">
+                                                        <div class="col-lg-4 col-md-6 input-group">
                                                             <input type="text" class="form-control col-form-label @error('batas') is-invalid @enderror" name="batas" id="batas" aria-label="batas" placeholder="Batas hari pembayaran" />
                                                             <div class="input-group-prepend">
                                                                 <span class="input-group-text" id="ket_no_paket">Hari</span>
@@ -335,6 +335,14 @@
 <script type="text/javascript" src="{{ asset('vendor/masking/masking.js') }}"></script>
 <script>
     $(function() {
+        function validasi(){
+            if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#alamat").val() != "" && $('.provinsi').val() != "" && ($("#telepon").val() != "" && !$("#telepon").hasClass('is-invalid')) && !$("#email").hasClass('is-invalid')) {
+                $("#btntambah").removeAttr('disabled');
+            } else {
+                $("#btntambah").attr('disabled', true);
+            }
+        }
+
         $('#npwp').mask('00.000.000.0-000.000');
         $('#ktp').mask('0000000000000000');
 
@@ -352,32 +360,34 @@
                         if (data >= 1) {
                             $("#msgnama_customer").text("Nama sudah terpakai");
                             $('#nama_customer').addClass('is-invalid');
-                            $("#btnsimpan").attr("disabled", true);
+                            // $("#btnsimpan").attr("disabled", true);
                         } else {
                             $("#msgnama_customer").text("");
                             $('#nama_customer').removeClass('is-invalid');
-                            if ($('#telepon').val() != "" && $('#npwp').val() != "" && $('#alamat').val() != "" && $('.provinsi').val() != "") {
-                                $("#btnsimpan").removeAttr("disabled");
-                            } else {
-                                $("#btnsimpan").attr("disabled", true);
-                            }
+                            // if ($('#telepon').val() != "" && $('#npwp').val() != "" && $('#alamat').val() != "" && $('.provinsi').val() != "") {
+                            //     $("#btnsimpan").removeAttr("disabled");
+                            // } else {
+                            //     $("#btnsimpan").attr("disabled", true);
+                            // }
                         }
                     }
                 });
 
             }
+
+            validasi();
         });
 
         $('input[name="telepon"]').on('keyup change', function() {
             if ($(this).val() == "") {
                 $("#msgtelepon").text("Telepon tidak boleh kosong");
                 $("#telepon").addClass('is-invalid');
-                $("#btntambah").attr('disabled', true);
+                // $("#btntambah").attr('disabled', true);
             } else if ($(this).val() != "") {
                 if (!/^[0-9]+$/.test($(this).val())) {
                     $("#msgtelepon").text("Isi nomor telepon dengan angka");
                     $("#telepon").addClass('is-invalid');
-                    $("#btntambah").attr('disabled', true);
+                    // $("#btntambah").attr('disabled', true);
                 } else {
                     // if (checkTelepon(this.teleponer).value >= 1) {
                     //     this.msg["telepon"] = "Nomor Telepon sudah terpakai";
@@ -390,30 +400,33 @@
                     // }
                     $("#msgtelepon").text("");
                     $("#telepon").removeClass('is-invalid');
-                    $("#btntambah").removeAttr('disabled');
-                    if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#alamat").val() != "" && $('.provinsi').val() != "") {
-                        $("#btntambah").removeAttr('disabled');
-                    } else {
-                        $("#btntambah").attr('disabled', true);
-                    }
+                    // $("#btntambah").removeAttr('disabled');
+                    // if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#alamat").val() != "" && $('.provinsi').val() != "") {
+                    //     $("#btntambah").removeAttr('disabled');
+                    // } else {
+                    //     $("#btntambah").attr('disabled', true);
+                    // }
                 }
             }
+
+            validasi();
         })
 
         $("#alamat").on('keyup change', function() {
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");
-                if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $('.provinsi').val() != "") {
-                    $("#btntambah").removeAttr('disabled');
-                } else {
-                    $("#btntambah").attr('disabled', true);
-                }
+                // if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $('.provinsi').val() != "") {
+                //     $("#btntambah").removeAttr('disabled');
+                // } else {
+                //     $("#btntambah").attr('disabled', true);
+                // }
             } else {
                 $('#msgalamat').text("Alamat tidak boleh kosong");
                 $('#alamat').addClass("is-invalid");
-                $("#btntambah").attr('disabled', true);
+                // $("#btntambah").attr('disabled', true);
             }
+            validasi();
         });
 
         $('input[name="npwp"]').on('keyup change', function() {
@@ -433,16 +446,18 @@
                 if (!/^[0-9.-]+$/.test($(this).val())) {
                     $('#msgnpwp').text("Masukkan npwp dengan benar");
                     $('#npwp').addClass("is-invalid");
-                    $("#btntambah").attr('disabled', true);
+                    // $("#btntambah").attr('disabled', true);
                 } else {
                     $("#msgnpwp").text("");
                     $('#npwp').removeClass('is-invalid');
-                    if ($('#telepon').val() != "" && ($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && $('#alamat').val() != "" && $('.provinsi').val() != "") {
-                        $("#btntambah").removeAttr("disabled");
-                    } else {
-                        $("#btntambah").attr("disabled", true);
-                    }
+                //     if ($('#telepon').val() != "" && ($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && $('#alamat').val() != "" && $('.provinsi').val() != "") {
+                //         $("#btntambah").removeAttr("disabled");
+                //     } else {
+                //         $("#btntambah").attr("disabled", true);
+                //     }
                 }
+
+                validasi();
             }
         });
 
@@ -452,21 +467,23 @@
                 if (!errorhandling.test($(this).val())) {
                     $('#msgemail').text("Masukkan email dengan benar");
                     $('#email').addClass("is-invalid");
-                    $("#btntambah").attr('disabled', true);
+                    // $("#btntambah").attr('disabled', true);
                 } else {
                     $('#msgemail').text("");
                     $('#email').removeClass("is-invalid");
-                    if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
-                        $("#btntambah").removeAttr('disabled');
-                    }
+                    // if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
+                    //     $("#btntambah").removeAttr('disabled');
+                    // }
                 }
             } else {
                 $('#msgemail').text("");
                 $('#email').removeClass("is-invalid");
-                if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
-                    $("#btntambah").removeAttr('disabled');
-                }
+                // if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "" && $('.provinsi').val() != "") {
+                //     $("#btntambah").removeAttr('disabled');
+                // }
             }
+
+            validasi();
         })
 
         $('.provinsi').select2({
@@ -494,9 +511,9 @@
                     };
                 },
             }
-        }).change(
-
-        )
+        }).on('change', function(){
+            validasi();
+        });
 
     })
 </script>
