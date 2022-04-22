@@ -34,4 +34,6 @@ class NoseriBarangJadi extends Model
     {
         return $this->belongsTo(Layout::class, 'layout_id');
     }
+
+    
 }

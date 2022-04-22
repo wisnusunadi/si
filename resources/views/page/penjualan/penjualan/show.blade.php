@@ -25,6 +25,12 @@
 
 @section('adminlte_css')
 <style>
+    .alert-danger{
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
     .separator {
         border-top: 1px solid #bbb;
         width: 90%;

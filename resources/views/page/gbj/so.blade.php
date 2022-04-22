@@ -47,19 +47,57 @@
                 <!-- Card -->
                 <div class="card">
                     <div class="card-body">
-                        <table class="table table-bordered" id="gudang-barang">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nomor SO</th>
-                                    <th>Nomor PO</th>
-                                    <th>Customer</th>
-                                    <th>Batas Transfer</th>
-                                    <th>Status</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                        </table>
+                        <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-proses_kirim-tab" data-toggle="pill" href="#pills-proses_kirim" role="tab" aria-controls="pills-proses_kirim" aria-selected="true">Proses Dicek</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Dicek</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-proses_kirim" role="tabpanel" aria-labelledby="pills-proses_kirim-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" style="width: 100%" id="belum-dicek">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nomor SO</th>
+                                                        <th>Nomor PO</th>
+                                                        <th>Customer</th>
+                                                        <th>Batas Transfer</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="pills-selesai_kirim" role="tabpanel" aria-labelledby="pills-selesai_kirim-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" style="width: 100%" id="sudah-dicek">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nomor SO</th>
+                                                        <th>Nomor PO</th>
+                                                        <th>Customer</th>
+                                                        <th>Batas Transfer</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -244,12 +282,12 @@
             $('.cb-child-so').prop('checked', isChecked)
         });
 
-        $('#gudang-barang').DataTable({
+        $('#sudah-dicek').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
+            serverSide: false,
             ajax: {
-                url: '/api/tfp/cek-so',
+                url: '/api/tfp/sudah-dicek',
             },
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},
@@ -257,7 +295,33 @@
                 {data: 'po'},
                 { data: 'nama_customer', name: 'nama_customer'},
                 { data: 'batas_out', name: 'batas_out'},
-                { data: 'status1', name: 'status1'},
+                { data: 'action', name: 'action'},
+            ],
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        },
+            "columnDefs": [
+                {
+                    "targets": [5],
+                    "visible": document.getElementById('auth').value == '2' ? false : true,
+                    "width": "20%",
+                }
+            ]
+        });
+
+        $('#belum-dicek').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: false,
+            ajax: {
+                url: '/api/tfp/belum-dicek',
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'so', name: 'so'},
+                {data: 'po'},
+                { data: 'nama_customer', name: 'nama_customer'},
+                { data: 'batas_out', name: 'batas_out'},
                 { data: 'action', name: 'action'},
             ],
             "language": {

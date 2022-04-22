@@ -144,6 +144,9 @@ Route::prefix('/so')->group(function () {
 Route::prefix('/laporan')->group(function () {
     Route::post('/create', [App\Http\Controllers\PenjualanController::class, 'laporan']);
     Route::post('/penjualan/{penjualan}/{distributor}/{tanggal_awal}/{tanggal_akhir}', [App\Http\Controllers\PenjualanController::class, 'get_data_laporan_penjualan']);
+    Route::post('/qc_2/{jenis}/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_data_laporan_qc_2']);
+    Route::post('/qc/detail/{id}', [App\Http\Controllers\QcController::class, 'get_data_detail_laporan_qc']);
+    
     Route::post('/qc/{jenis}/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_data_laporan_qc']);
     Route::post('/logistik/{pengiriman}/{ekspedisi}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\LogistikController::class, 'get_data_laporan_logistik']);
 });
@@ -171,6 +174,7 @@ Route::prefix('/gbj')->group(function () {
 
     // noseri
     Route::get('noseri/{id}', [GudangController::class, 'getNoseri']);
+    Route::get('noseri-done/{id}', [GudangController::class, 'getNoseriDone']);
     Route::get('history/{id}', [GudangController::class, 'getHistory']);
     Route::post('noseri/{id}', [GudangController::class, 'storeNoseri']);
     Route::post('ceknoseri', [GudangController::class, 'ceknoseri']);
@@ -251,7 +255,8 @@ Route::prefix('/tfp')->group(function () {
     Route::get('data', [ProduksiController::class, 'getTFnon']);
     Route::get('noseri/{id}', [ProduksiController::class, 'getNoseri']);
     Route::get('data-so', [ProduksiController::class, 'getOutSO']);
-    Route::get('cek-so', [ProduksiController::class, 'getSOCek']);
+    Route::get('sudah-dicek', [ProduksiController::class, 'getSOCek']);
+    Route::get('belum-dicek', [ProduksiController::class, 'getSOCekBelum']);
     Route::get('detail-so/{id}/{value}', [ProduksiController::class, 'getDetailSO']);
     Route::get('edit-so/{id}/{value}', [ProduksiController::class, 'getEditSO']);
     Route::get('header-so/{id}/{value}', [ProduksiController::class, 'headerSo']);
