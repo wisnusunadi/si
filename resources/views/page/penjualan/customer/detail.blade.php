@@ -176,6 +176,7 @@
                                 <div class="margin-all">
                                     <h5><b>{{$customer->nama}}</b></h5>
                                 </div>
+                                <div class="margin-all"><a class="text-muted margin-side">Pemilik :</a><b>{{$customer->npwp}}</b></div>
                                 <div class="margin-all"><b>{{$customer->alamat}}</b></div>
                                 <div class="margin-all"><b>{{$customer->Provinsi->nama}}</b></div>
                                 <div class="margin-all">
@@ -183,6 +184,10 @@
                                     <span class="margin-side"><i class="fas fa-envelope text-muted margin-side"></i><b>@if(!empty($customer->email)) {{$customer->email}} @else - @endif</b></span>
                                 </div>
                                 <div class="margin-all"><a class="text-muted margin-side">NPWP :</a><b>{{$customer->npwp}}</b></div>
+                                <div class="margin-all">
+                                    <span><a class="text-muted margin-side">IZIN USAHA :</a><b class="badge blue-text">SIUP</b></span> |<span><a class="text-muted margin-side">MODAL USAHA :</a><b class="badge blue-text">> 10 M & < 50M</b></span>
+                                    |<span><a class="text-muted margin-side">HASIL PENJUALAN :</a><b class="badge blue-text">> 10 M & < 50M</b></span>
+                                </div>
                                 <div class="margin-all"><a class="text-muted">{{$customer->ket}}</a></div>
                             </div>
                         </div>
