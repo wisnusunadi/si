@@ -391,6 +391,19 @@
                 }
             ]
         });
+
+        function reset_izin_usaha(){
+           var get= $('input[type="radio"][name="izin_usaha"]:checked').val();
+
+            $('input[type="radio"][name="izin_usaha"]').on('click', function() {
+                $("input[type='radio'][name='izin_usaha'][value='SIUP']").prop("checked",false);
+            });
+        }
+        function tooltips(){
+            $('[data-toggle="iumk_info"]').tooltip({ content: '<p><b>Izin usaha mikro dan kecil (IUMK)</b> adalah tanda legalitas kepada seseorang atau pelaku usaha/kegiatan tertentu dalam bentuk izin usaha mikro dan kecil dalam bentuk satu lembar</p>' });
+            $('[data-toggle="iutm_info"]').tooltip({ content: '<p><b>Izin Usaha Toko Modern selanjutnya (IUTM)</b> adalah izin untuk dapat melaksanakan usaha pengelolaan Toko Modern yang diterbitkan oleh Pemerintah Daerah setempat</p>' });
+            $('[data-toggle="siup_info"]').tooltip({ content: '<p><b>Surat Izin Usaha Perdagangan (SIUP)</b> adalah surat ijin yang diberikan kepada suatu badan usaha untuk dapat melakukan kegiatan usaha perdagangan</p>' });
+        }
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
@@ -402,11 +415,12 @@
                 },
                 // return the result
                 success: function(result) {
-
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
                     $('#npwp').mask('00.000.000.0-000.000');
                     $('#ktp').mask('0000000000000000');
+                    tooltips();
+                    reset_izin_usaha();
                     console.log(id);
                     // $("#editform").attr("action", href);
                     select_data();

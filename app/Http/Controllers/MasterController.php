@@ -718,6 +718,10 @@ class MasterController extends Controller
             'npwp' => $request->npwp,
             'batas' => $request->batas,
             'pic' => $request->pic,
+            'izin_usaha' => $request->izin_usaha,
+            'modal_usaha' => $request->modal_usaha,
+            'hasil_penjualan' => $request->hasil_penjualan,
+            'nama_pemilik' => $request->pemilik,
             'ket' => $request->keterangan,
         ]);
 
@@ -808,6 +812,10 @@ class MasterController extends Controller
         $customer->email = $request->email;
         $customer->telp = $request->telepon;
         $customer->alamat = $request->alamat;
+        $customer->izin_usaha = $request->keterangan;
+        $customer->modal_usaha = $request->modal_usaha;
+        $customer->hasil_penjualan = $request->hasil_penjualan;
+        $customer->nama_pemilik = $request->pemilik;
         $customer->ket = $request->keterangan;
         $c = $customer->save();
         if ($c) {
