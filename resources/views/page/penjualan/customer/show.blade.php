@@ -393,11 +393,14 @@
         });
 
         function reset_izin_usaha(){
-           var get= $('input[type="radio"][name="izin_usaha"]:checked').val();
-
-            $('input[type="radio"][name="izin_usaha"]').on('click', function() {
-                $("input[type='radio'][name='izin_usaha'][value='SIUP']").prop("checked",false);
-            });
+        //    var get= $('input[type="radio"][name="izin_usaha"]:checked').val();
+        //    var count= $('input[type="radio"][name="izin_usaha"]:checked').length;
+        //     $('input[type="radio"][name="izin_usaha"]').on('click', function() {
+        //         $("input[type='radio'][name='izin_usaha']").removeAttr('checked');
+        //         var current =  $(this).val();
+        //         if (get == current){
+        //         $("input[type='radio'][name='izin_usaha'][value='"+current+"']").prop("checked",false);
+        //     }});
         }
         function tooltips(){
             $('[data-toggle="iumk_info"]').tooltip({ content: '<p><b>Izin usaha mikro dan kecil (IUMK)</b> adalah tanda legalitas kepada seseorang atau pelaku usaha/kegiatan tertentu dalam bentuk izin usaha mikro dan kecil dalam bentuk satu lembar</p>' });
@@ -554,7 +557,6 @@
                     // }
                 }
             }
-
             validasi();
         })
 

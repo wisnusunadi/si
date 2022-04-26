@@ -110,15 +110,15 @@
                                                 <label for="izin_usaha" class="col-lg-4 col-md-12 col-form-label labelket">Izin Usaha</label>
                                                 <div class="col-lg-8 col-md-12 col-form-label">
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha1" value="iumk" data-toggle="iumk_info" title="merge" {{ ($customer->izin_usaha=="IUMK")? "checked" : "" }}/>
+                                                        <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha1" value="IUMK" data-toggle="iumk_info" title="merge" {{ ($customer->izin_usaha=="IUMK")? "checked" : "" }}/>
                                                         <label class="form-check-label" for="izin_usaha1">IUMK</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha2" value="iutm"  data-toggle="iutm_info" title="merge"  {{ ($customer->izin_usaha=="IUTM")? "checked" : "" }}/>
+                                                        <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha2" value="IUTM"  data-toggle="iutm_info" title="merge"  {{ ($customer->izin_usaha=="IUTM")? "checked" : "" }}/>
                                                         <label class="form-check-label" for="izin_usaha2">IUTM</label>
                                                     </div>
                                                     <div class="form-check form-check-inline">
-                                                        <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha3" value="siup"  data-toggle="siup_info" title="merge"  {{ ($customer->izin_usaha=="SIUP")? "checked" : "" }}/>
+                                                        <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha3" value="SIUP"  data-toggle="siup_info" title="merge"  {{ ($customer->izin_usaha=="SIUP")? "checked" : "" }}/>
                                                         <label class="form-check-label" for="izin_usaha3">SIUP</label>
                                                     </div>
                                                     <div class="invalid-feedback" id="msgizin_usaha">

@@ -812,7 +812,7 @@ class MasterController extends Controller
         $customer->email = $request->email;
         $customer->telp = $request->telepon;
         $customer->alamat = $request->alamat;
-        $customer->izin_usaha = $request->keterangan;
+        $customer->izin_usaha = $request->izin_usaha;
         $customer->modal_usaha = $request->modal_usaha;
         $customer->hasil_penjualan = $request->hasil_penjualan;
         $customer->nama_pemilik = $request->pemilik;
@@ -824,6 +824,7 @@ class MasterController extends Controller
             return response()->json(['data' => 'error']);
         }
     }
+
     public function update_produk(Request $request)
     {
         $id = $request->id;
