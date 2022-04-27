@@ -86,6 +86,7 @@ Route::middleware('auth')->prefix('/produksi')->group(function () {
     Route::view('/pengiriman', 'page.produksi.pengiriman');
     Route::view('/riwayat_transfer', 'page.produksi.riwayat_transfer');
 });
+
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {
 //     Route::view('/produk/{any?}', 'page.penjualan.produk');
 //     Route::view('/customer/{any?}', 'page.penjualan.customer');
@@ -133,6 +134,9 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_customer'])->name('penjualan.customer.store');
         Route::put('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_customer'])->name('penjualan.customer.update');
         Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_customer'])->name('penjualan.customer.detail');
+
+        //Export
+        Route::get('/export', [App\Http\Controllers\MasterController::class, 'export_customer'])->name('penjualan.customer.export');
     });
 
     Route::group(['prefix' => '/penjualan'], function () {

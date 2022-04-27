@@ -23,6 +23,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Alert;
+use App\Exports\CustomerData;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
@@ -36,6 +37,7 @@ use App\Models\Sparepart;
 use App\Models\SparepartGudang;
 use App\Models\UserLog;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 use function PHPUnit\Framework\returnValueMap;
 
@@ -1180,5 +1182,11 @@ class MasterController extends Controller
         $row->aksi = $request->aksi;
         $row->created_at = Carbon::now();
         $row->save();
+    }
+
+    public function export_customer()
+    {
+        $waktu = Carbon::now();
+        return Excel::download(new CustomerData(), 'Daftar Customer Data ' . $waktu->toDateTimeString() . '.xlsx');
     }
 }
