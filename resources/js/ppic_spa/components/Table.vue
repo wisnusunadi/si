@@ -188,7 +188,7 @@
                                 <div class="control">
                                     <v-select :options="options" v-model="produk" @input="changeProduk">
                                         <template v-slot:option="option">
-                                            <b>{{option.merk}}</b> - {{ option.label }}
+                                            <b>{{option.merk}}</b> - {{ option.produk }}
                                         </template>
                                     </v-select>
                                 </div>
@@ -996,7 +996,8 @@
             options: function () {
                 let data = this.data_produk.map((data) => ({
                     merk: `${data.produk.merk}`,
-                    label: `${data.produk.nama} ${data.nama}`,
+                    produk: `${data.produk.nama}`,
+                    label: `${data.produk.merk} - ${data.produk.nama} ${data.nama}`,
                     value: data.id,
                 }));
                 return data;
