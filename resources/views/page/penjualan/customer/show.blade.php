@@ -134,13 +134,14 @@
                             <div class="card-body">
                                 <div class="row" style="margin-bottom:10px;">
                                     <div class="col-12">
-                                        @if(Auth::user()->divisi->id == "26")
                                         <span class="float-left filter">
                                             <a id="exportbutton" href="{{route('penjualan.customer.export')}}"><button class="btn btn-success">
                                                 <i class="far fa-file-excel" id="load"></i> Export
                                             </button>
                                         </a>
                                         </span>
+                                        @if(Auth::user()->divisi->id == "26")
+
                                         <span class="float-right filter">
                                             <a href="{{route('penjualan.customer.create')}}"><button class="btn btn-outline-info">
                                                     <i class="fas fa-plus"></i> Tambah
