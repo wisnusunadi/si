@@ -25,6 +25,7 @@ use Illuminate\Support\Carbon;
 use Alert;
 use App\Exports\CustomerData;
 use App\Exports\EkspedisiData;
+use App\Exports\ProdukData;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
@@ -1188,11 +1189,16 @@ class MasterController extends Controller
     public function export_customer()
     {
         $waktu = Carbon::now();
-        return Excel::download(new CustomerData(), 'Daftar Customer Data ' . $waktu->toDateTimeString() . '.xlsx');
+        return Excel::download(new CustomerData(), 'Daftar Customer  ' . $waktu->toDateTimeString() . '.xlsx');
     }
     public function export_ekspedisi()
     {
         $waktu = Carbon::now();
-        return Excel::download(new EkspedisiData(), 'Daftar Ekspedisi Data ' . $waktu->toDateTimeString() . '.xlsx');
+        return Excel::download(new EkspedisiData(), 'Daftar Ekspedisi  ' . $waktu->toDateTimeString() . '.xlsx');
+    }
+    public function export_produk()
+    {
+        $waktu = Carbon::now();
+        return Excel::download(new ProdukData(), 'Daftar Produk ' . $waktu->toDateTimeString() . '.xlsx');
     }
 }

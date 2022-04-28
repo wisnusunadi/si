@@ -98,6 +98,8 @@ Route::group(['prefix' => 'master', 'middleware' => 'auth'], function () {
         Route::view('/show', 'page.master.produk.show')->name('master.produk.show');
         Route::post('/data', [App\Http\Controllers\MasterController::class, 'get_data_master_produk']);
         Route::get('/edit_coo/{id}', [App\Http\Controllers\MasterController::class, 'edit_coo_data_produk'])->name('master.produk.edit_coo');
+
+        Route::get('/export', [App\Http\Controllers\MasterController::class, 'export_produk'])->name('master.produk.export');
     });
 });
 
