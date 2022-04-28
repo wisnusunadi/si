@@ -491,13 +491,18 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
-                    if ($d->Ekatalog->Provinsi->status == 1) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                    if (isset($d->Ekatalog->provinsi_id)) {
+                        if ($d->Ekatalog->Provinsi->status == 1) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                        }
+
+                        if ($d->Ekatalog->Provinsi->status == 2) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
+                        }
+                    } else {
+                        return '-';
                     }
 
-                    if ($d->Ekatalog->Provinsi->status == 2) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
-                    }
                 } else {
                     return '-';
                 }
@@ -643,13 +648,18 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
-                    if ($d->Ekatalog->Provinsi->status == 1) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                    if (isset($d->Ekatalog->provinsi_id)) {
+                        if ($d->Ekatalog->Provinsi->status == 1) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                        }
+
+                        if ($d->Ekatalog->Provinsi->status == 2) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
+                        }
+                    } else {
+                        return '-';
                     }
 
-                    if ($d->Ekatalog->Provinsi->status == 2) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
-                    }
                 } else {
                     return '-';
                 }
@@ -794,13 +804,18 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
-                    if ($d->Ekatalog->Provinsi->status == 1) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                    if (isset($d->Ekatalog->provinsi_id)) {
+                        if ($d->Ekatalog->Provinsi->status == 1) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                        }
+
+                        if ($d->Ekatalog->Provinsi->status == 2) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
+                        }
+                    } else {
+                        return '-';
                     }
 
-                    if ($d->Ekatalog->Provinsi->status == 2) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
-                    }
                 } else {
                     return '-';
                 }
