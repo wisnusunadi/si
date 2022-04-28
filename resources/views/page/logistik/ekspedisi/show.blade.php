@@ -128,6 +128,12 @@
                     <div class="card-body">
                         <div class="row" style="margin-bottom:10px;">
                             <div class="col-12">
+                                <span class="float-left filter">
+                                    <a id="exportbutton" href="{{route('logistik.ekspedisi.export')}}"><button class="btn btn-success">
+                                        <i class="far fa-file-excel" id="load"></i> Export
+                                    </button>
+                                </a>
+                                </span>
                                 @if(Auth::user()->divisi_id == "15")
                                 <span class="float-right filter">
                                     <a href="{{route('logistik.ekspedisi.create')}}"><button class="btn btn-outline-info">
