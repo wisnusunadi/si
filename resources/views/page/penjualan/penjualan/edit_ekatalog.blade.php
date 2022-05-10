@@ -408,6 +408,28 @@
                                                         <div class="tab-pane fade show active" id="pills-penjualan" role="tabpanel" aria-labelledby="pills-penjualan-tab">
                                                             <div class="card removeshadow">
                                                                 <div class="card-body">
+                                                                    <div class="form-group row @if($e->status != "draft") hide @endif"  id="checkbox_nopaket">
+                                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Paket</label>
+                                                                        <div class="col-lg-5 col-md-12 input-group">
+                                                                            <div class="input-group-prepend">
+                                                                                <span class="input-group-text" id="ket_no_paket">AK1-</span>
+                                                                            </div>
+                                                                            <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" @if($e->status == "draft") readonly="true" @endif/>
+                                                                            <div class="input-group-append">
+                                                                                <span class="input-group-text">
+                                                                                    <div class="form-check form-check-inline">
+                                                                                        <input class="form-check-input" type="checkbox" name="isi_nopaket" id="isi_nopaket" value="true" />
+                                                                                        <label class="form-check-label" for="isi_nopaket">Isi</label>
+                                                                                    </div>
+                                                                                </span>
+                                                                            </div>
+                                                                            <div class="invalid-feedback" id="msgno_paket">
+                                                                                @if($errors->has('no_paket'))
+                                                                                {{ $errors->first('no_paket')}}
+                                                                                @endif
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
                                                                     <div class="form-group row">
                                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Urut</label>
                                                                         <div class="col-lg-2 col-md-4">
@@ -1059,6 +1081,9 @@
         $('input[type="radio"][name="status_akn"]').on('change', function() {
             if ($(this).val() != "") {
                 if ($(this).val() == "sepakat") {
+                    $('#checkbox_nopaket').addClass('hide');
+                    $('#isi_nopaket').prop("checked", false);
+                    $('#no_paket').attr('readonly', false);
                     $("#dataproduk").removeClass("hide");
                     $("#batas_kontrak").attr('disabled', false);
                     $("#provinsi").attr('disabled', false);
@@ -1066,6 +1091,9 @@
                     // $('#produktable tbody').append(trproduktable());
                     numberRowsProduk($("#produktable"));
                 } else if ($(this).val() == "draft") {
+                    $('#checkbox_nopaket').removeClass('hide');
+                    $('#isi_nopaket').prop("checked", false);
+                    $('#no_paket').attr('readonly', true);
                     $("#produktable tbody").empty();
                     $("#totalhargaprd").text("Rp. 0");
                     $("#dataproduk").addClass("hide");
@@ -1075,6 +1103,9 @@
                 } else {
                     //$("#produktable tbody").empty();
                     //$('#produktable tbody').append(trproduktable());
+                    $('#checkbox_nopaket').addClass('hide');
+                    $('#isi_nopaket').prop("checked", false);
+                    $('#no_paket').attr('readonly', false);
                     numberRowsProduk($("#produktable"));
                     $("#batas_kontrak").val("");
                     $("#batas_kontrak").attr('disabled', true);
@@ -1083,10 +1114,22 @@
                     $("#provinsi").empty().trigger('change')
                 }
             } else {
+                $('#checkbox_nopaket').addClass('hide');
+                    $('#isi_nopaket').prop("checked", false);
+                    $('#no_paket').attr('readonly', false);
                 $("#msgstatus").text("Status Harus dipilih");
                 $("#status").addClass('is-invalid');
             }
         });
+
+        $(document).on('change', '#isi_nopaket', function(){
+            if($('#isi_nopaket:checked').length > 0){
+                $('#no_paket').attr('readonly', false);
+            }else{
+                $('#no_paket').attr('readonly', true);
+            }
+        })
+
 
         $('#tanggal_pemesanan').on('keyup change', function() {
             if ($(this).val() != "") {

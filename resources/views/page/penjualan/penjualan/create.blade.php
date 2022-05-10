@@ -1284,14 +1284,14 @@
                 if ($(this).val() == "sepakat") {
                     $('#checkbox_nopaket').addClass('hide');
                     $('#isi_nopaket').prop("checked", false);
-                    $('#no_paket').attr('disabled', false);
+                    $('#no_paket').attr('readonly', false);
                     $("#dataproduk").removeClass("hide");
                     $("#batas_kontrak").attr('disabled', false);
                     $("#provinsi").attr('disabled', false);
                 } else if ($(this).val() == "draft") {
                     $('#checkbox_nopaket').removeClass('hide');
                     $('#isi_nopaket').prop("checked", false);
-                    $('#no_paket').attr('disabled', true);
+                    $('#no_paket').attr('readonly', true);
                     $("#produktable tbody").empty();
                     $('#produktable tbody').append(trproduktable());
                     numberRowsProduk($("#produktable"));
@@ -1303,7 +1303,7 @@
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
                     $('#isi_nopaket').prop("checked", false);
-                    $('#no_paket').attr('disabled', false);
+                    $('#no_paket').attr('readonly', false);
                     $("#batas_kontrak").val("");
                     $("#batas_kontrak").attr('disabled', true);
                     $("#dataproduk").removeClass("hide");
@@ -1314,7 +1314,7 @@
             } else {
                 $('#checkbox_nopaket').addClass('hide');
                 $('#isi_nopaket').prop("checked", false);
-                $('#no_paket').attr('disabled', false);
+                $('#no_paket').attr('readonly', false);
                 $("#msgstatus").text("Status Harus dipilih");
                 $("#status").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
@@ -1323,9 +1323,9 @@
 
         $(document).on('change', '#isi_nopaket', function(){
             if($('#isi_nopaket:checked').length > 0){
-                $('#no_paket').attr('disabled', false);
+                $('#no_paket').attr('readonly', false);
             }else{
-                $('#no_paket').attr('disabled', true);
+                $('#no_paket').attr('readonly', true);
             }
         })
 
