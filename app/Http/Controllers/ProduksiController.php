@@ -1428,7 +1428,7 @@ class ProduksiController extends Controller
 
     function getNoseriSO(Request $request)
     {
-        $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->orderBy('noseri')->get();
+        $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->get();
         $i = 0;
         return datatables()->of($data)
             ->addColumn('ids', function ($d) {
