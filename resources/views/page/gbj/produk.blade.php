@@ -83,6 +83,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Kode Produk</th>
+                                    <th>Merk</th>
                                     <th>Nama Produk</th>
                                     <th>Stok Gudang</th>
                                     <th>Stok Penjualan</th>
@@ -572,6 +573,9 @@
             {
                 data: 'kode_produk',
                 name: 'kode_produk'
+            },
+            {
+                data: "merk"
             },
             {
                 data: 'nama_produk',

@@ -254,7 +254,7 @@
                     <div class="card-body">
                         <h5>Laporan Penjualan</h5>
                         <div class="table-responsive">
-                            <a id="exportbutton" href="{{route('penjualan.penjualan.export',['jenis'=> 'semua','customer_id'=> 'semua','tgl_awal'=> '0','tgl_akhir'=>'0','seri' => 'kosong','tampilan' => 'unmerge'])}}"><button class="btn btn-success">
+                            <a id="exportbutton" href="{{route('')}}"><button class="btn btn-success">
                                     <i class="far fa-file-excel" id="load"></i> Export
                                 </button>
                             </a>

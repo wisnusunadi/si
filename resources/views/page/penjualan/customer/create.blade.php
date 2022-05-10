@@ -59,6 +59,9 @@
             font-size: 12px;
         }
     }
+    div.ui-tooltip {
+    max-width: 400px;
+}
 </style>
 @stop
 
@@ -218,15 +221,15 @@
                                                         <label for="izin_usaha" class="col-lg-4 col-md-12 col-form-label labelket">Izin Usaha</label>
                                                         <div class="col-lg-8 col-md-11 col-form-label">
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha1" value="iumk" />
+                                                                <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha1" value="IUMK" data-toggle="iumk_info" title="merge"/>
                                                                 <label class="form-check-label" for="izin_usaha1">IUMK</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha2" value="iutm" />
+                                                                <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha2" value="IUTM" data-toggle="iutm_info" title="merge" />
                                                                 <label class="form-check-label" for="izin_usaha2">IUTM</label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha3" value="siup" />
+                                                                <input class="form-check-input" type="radio" name="izin_usaha" id="izin_usaha3" value="SIUP"  data-toggle="siup_info" title="merge" />
                                                                 <label class="form-check-label" for="izin_usaha3">SIUP</label>
                                                             </div>
                                                             <div class="invalid-feedback" id="msgizin_usaha">
@@ -247,16 +250,16 @@
                                                         <label for="modal_usaha" class="col-lg-4 col-md-12 col-form-label labelket">Modal Usaha</label>
                                                         <div class="col-lg-8 col-md-11 col-form-label">
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha1" value="<1M" />
-                                                                <label class="form-check-label" for="modal_usaha1"> < 1 Miliar </label>
+                                                                <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha1" value="1" />
+                                                                <label class="form-check-label" for="modal_usaha1"> < 1 M </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha2" value=">1M & <5M" />
-                                                                <label class="form-check-label" for="modal_usaha2"> > 1 Miliar & < 5 Miliar </label>
+                                                                <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha2" value="2" />
+                                                                <label class="form-check-label" for="modal_usaha2"> > 1 M & < 5 M </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha3" value=">5M & <10M" />
-                                                                <label class="form-check-label" for="modal_usaha3"> > 5 Miliar & < 10 Miliar </label>
+                                                                <input class="form-check-input" type="radio" name="modal_usaha" id="modal_usaha3" value="3" />
+                                                                <label class="form-check-label" for="modal_usaha3"> > 5 M & < 10 M </label>
                                                             </div>
                                                             <div class="invalid-feedback" id="msgmodal_usaha">
                                                                 @if($errors->has('modal_usaha'))
@@ -269,16 +272,16 @@
                                                         <label for="hasil_penjualan" class="col-lg-4 col-md-12 col-form-label labelket">Hasil Penjualan</label>
                                                         <div class="col-lg-8 col-md-11 col-form-label">
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan1" value="<2M" />
-                                                                <label class="form-check-label" for="hasil_penjualan1"> < 2 Miliar </label>
+                                                                <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan1" value="1" />
+                                                                <label class="form-check-label" for="hasil_penjualan1"> < 2 M </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan2" value=">2M & <15M" />
-                                                                <label class="form-check-label" for="hasil_penjualan2"> > 2 Miliar & < 15 Miliar </label>
+                                                                <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan2" value="2" />
+                                                                <label class="form-check-label" for="hasil_penjualan2"> > 2 M & < 15 M </label>
                                                             </div>
                                                             <div class="form-check form-check-inline">
-                                                                <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan3" value=">15M & <50M" />
-                                                                <label class="form-check-label" for="hasil_penjualan3"> > 15 Miliar & < 50 Miliar </label>
+                                                                <input class="form-check-input" type="radio" name="hasil_penjualan" id="hasil_penjualan3" value="3" />
+                                                                <label class="form-check-label" for="hasil_penjualan3"> > 15 M & < 50 M </label>
                                                             </div>
                                                             <div class="invalid-feedback" id="msghasil_penjualan">
                                                                 @if($errors->has('hasil_penjualan'))
@@ -522,4 +525,11 @@
 
     })
 </script>
+<script>
+    $(document).ready(function(){
+      $('[data-toggle="iumk_info"]').tooltip({ content: '<p><b>Izin usaha mikro dan kecil (IUMK)</b> adalah tanda legalitas kepada seseorang atau pelaku usaha/kegiatan tertentu dalam bentuk izin usaha mikro dan kecil dalam bentuk satu lembar</p>' });
+      $('[data-toggle="iutm_info"]').tooltip({ content: '<p><b>Izin Usaha Toko Modern selanjutnya (IUTM)</b> adalah izin untuk dapat melaksanakan usaha pengelolaan Toko Modern yang diterbitkan oleh Pemerintah Daerah setempat</p>' });
+      $('[data-toggle="siup_info"]').tooltip({ content: '<p><b>Surat Izin Usaha Perdagangan (SIUP)</b> adalah surat ijin yang diberikan kepada suatu badan usaha untuk dapat melakukan kegiatan usaha perdagangan</p>' });
+    });
+    </script>
 @stop
