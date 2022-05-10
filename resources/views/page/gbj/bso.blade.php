@@ -215,7 +215,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Scan Produk</h5>
+                <h5 class="modal-title">Scan Produk <span id="namaproduk"></span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -443,6 +443,11 @@
     var jml = '';
     var dpp = '';
     $(document).on('click', '.detailmodal', function(e) {
+
+        let gh = $(this).parent().prev().prev().prev()[0].textContent
+        let ghh = gh.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        $('#namaproduk').html('<b>'+ghh+'</b>')
+        // console.log(ghh);
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
         // console.log(prd);

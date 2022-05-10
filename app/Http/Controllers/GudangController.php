@@ -57,6 +57,9 @@ class GudangController extends Controller
             ->addColumn('kelompok', function ($data) {
                 return $data->produk->KelompokProduk->nama;
             })
+            ->addColumn('merk', function($data){
+                return $data->produk->merk;
+            })
             ->addColumn('action', function ($data) {
                 return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
                             <button class="btn btn-outline-success btn-sm" type="button" >
