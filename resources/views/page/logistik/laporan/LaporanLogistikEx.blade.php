@@ -4,8 +4,6 @@
             <th colspan="17" style="text-align:center">
                 @if($header == 'ekspedisi')
                 Laporan Pengiriman Ekspedisi
-                @foreach ($data as $d)
-                @endforeach
                 @elseif ($header == 'nonekspedisi')
                 Laporan Pengiriman Non Ekspedisi
                 @else
@@ -80,7 +78,9 @@
                     }
                     $rowspan = $prd + $part;
                     ?>
-                    @if($clog <= 0)
+                    @if($clog > 0)
+                    <tr>
+                    @endif
                         <td rowspan="{{$rowspan}}">{{$j->nosurat}}</td>
                         <td rowspan="{{$rowspan}}">{{date('d-m-Y', strtotime($j->tgl_kirim))}}</td>
                         <td rowspan="{{$rowspan}}">{{$j->noresi}}</td>
@@ -93,21 +93,16 @@
                         </td>
                         @if($j->DetailLogistikPart)
                             @foreach ($j->DetailLogistikPart as $k)
-                                @if($cdlog <= 0)
+                                @if($cdlog > 0)
+                                <tr>
+                                @endif
                                     <td>{{$k->DetailPesananPart->Sparepart->nama}}</td>
                                     <td>-</td>
                                     <td>{{$k->DetailPesananPart->jumlah}}</td>
                                     <td>-</td>
-                                    @if($clog <= 0)
+                                    @if($cdlog <= 0)
                                     <td rowspan="{{$rowspan}}">{{$i->State->nama}}</td>
                                     @endif
-                                @else
-                                <tr>
-                                    <td>{{$k->DetailPesananPart->Sparepart->nama}}</td>
-                                    <td>-</td>
-                                    <td>{{$k->DetailPesananPart->jumlah}}</td>
-                                    <td>-</td>
-                                @endif
                                 </tr>
                                 <?php
                                 $cdlog++;
@@ -116,33 +111,9 @@
                         @endif
                         @if($j->DetailLogistik)
                             @foreach ($j->DetailLogistik as $k)
-                                @if($cdlog <= 0)
-                                    <td>
-                                        @if($k->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias != '')
-                                        {{$k->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias}}
-                                        @else
-                                        {{$k->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama}}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{$k->DetailPesananProduk->GudangBarangJadi->Produk->nama}} {{$k->DetailPesananProduk->GudangBarangJadi->nama}}
-                                    </td>
-                                    <td>
-                                        {{$k->NoseriDetailLogistik->count()}}
-                                    </td>
-                                    <td>
-                                        @if($k->NoseriDetailLogistik)
-                                            @foreach ($k->NoseriDetailLogistik as $k)
-                                                {{ $loop->first ? '' : ', ' }}
-                                                {{ $k->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri }}
-                                            @endforeach
-                                        @endif
-                                    </td>
-                                    @if($clog <= 0)
-                                    <td rowspan="{{$rowspan}}">{{$i->State->nama}}</td>
-                                    @endif
-                                @else
+                                @if($cdlog > 0)
                                 <tr>
+                                @endif
                                     <td>
                                         @if($k->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias != '')
                                         {{$k->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias}}
@@ -164,115 +135,25 @@
                                             @endforeach
                                         @endif
                                     </td>
-                                @endif
+                                    @if($cdlog <= 0)
+                                    <td rowspan="{{$rowspan}}">{{$i->State->nama}} </td>
+                                    @endif
                                 </tr>
                             <?php
                             $cdlog++;
                             ?>
                             @endforeach
                         @endif
-                    @else
-                    <tr>
-                        <td rowspan="{{$rowspan}}">{{$j->nosurat}}</td>
-                        <td rowspan="{{$rowspan}}">{{date('d-m-Y', strtotime($j->tgl_kirim))}}</td>
-                        <td rowspan="{{$rowspan}}">{{$j->noresi}}</td>
-                        <td rowspan="{{$rowspan}}">
-                            @if($j->ekspedisi_id)
-                            {{$j->Ekspedisi->nama}}
-                            @else
-                            {{$j->nama_pengirim}}
-                            @endif
-                        </td>
-                        @if($j->DetailLogistikPart)
-                            @foreach ($j->DetailLogistikPart as $k)
-                                @if($cdlog <= 0)
-                                    <td>{{$k->DetailPesananPart->Sparepart->nama}}</td>
-                                    <td>-</td>
-                                    <td>{{$k->DetailPesananPart->jumlah}}</td>
-                                    <td>-</td>
-                                    @if($clog <= 0)
-                                    <td rowspan="{{$rowspan}}">{{$i->State->nama}}</td>
-                                    @endif
-                                @else
-                                <tr>
-                                    <td>{{$k->DetailPesananPart->Sparepart->nama}}</td>
-                                    <td>-</td>
-                                    <td>{{$k->DetailPesananPart->jumlah}}</td>
-                                    <td>-</td>
-                                @endif
-                                </tr>
-                                <?php
-                                $cdlog++;
-                                ?>
-                            @endforeach
-                        @endif
-                        @if($j->DetailLogistik)
-                            @foreach ($j->DetailLogistik as $k)
-                                @if($cdlog <= 0)
-                                    <td>
-                                        @if($k->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias != '')
-                                        {{$k->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias}}
-                                        @else
-                                        {{$k->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama}}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{$k->DetailPesananProduk->GudangBarangJadi->Produk->nama}} {{$k->DetailPesananProduk->GudangBarangJadi->nama}}
-                                    </td>
-                                    <td>
-                                        {{$k->NoseriDetailLogistik->count()}}
-                                    </td>
-                                    <td>
-                                        @if($k->NoseriDetailLogistik)
-                                            @foreach ($k->NoseriDetailLogistik as $k)
-                                                {{ $loop->first ? '' : ', ' }}
-                                                {{ $k->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri }}
-                                            @endforeach
-                                        @endif
-                                    </td>
-                                    @if($clog <= 0)
-                                    <td rowspan="{{$rowspan}}">{{$i->State->nama}}</td>
-                                    @endif
-                                @else
-                                <tr>
-                                    <td>
-                                        @if($k->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias != '')
-                                        {{$k->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama_alias}}
-                                        @else
-                                        {{$k->DetailPesananProduk->DetailPesanan->PenjualanProduk->nama}}
-                                        @endif
-                                    </td>
-                                    <td>
-                                        {{$k->DetailPesananProduk->GudangBarangJadi->Produk->nama}} {{$k->DetailPesananProduk->GudangBarangJadi->nama}}
-                                    </td>
-                                    <td>
-                                        {{$k->NoseriDetailLogistik->count()}}
-                                    </td>
-                                    <td>
-                                        @if($k->NoseriDetailLogistik)
-                                            @foreach ($k->NoseriDetailLogistik as $k)
-                                                {{ $loop->first ? '' : ', ' }}
-                                                {{ $k->NoseriDetailPesanan->NoseriTGbj->NoseriBarangJadi->noseri }}
-                                            @endforeach
-                                        @endif
-                                    </td>
-                                @endif
-                                </tr>
-                                <?php
-                                $cdlog++;
-                                ?>
-                            @endforeach
-                        @endif
-                    @endif
                     <?php
                     $clog++;
                     ?>
                 @endforeach
+
         @endforeach
     </tbody>
 
     {{-- <tbody>
-        <?php
+        <php
             // $so = ""; $po = ""; $cust = ""; $add = ""; $prov = ""; $cso = 0; $csolog = 0; $index = 0;
         ?>
         {{-- @foreach ($data as $i) --}}
