@@ -95,11 +95,11 @@
                     @endif
                 </td>
                 <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
-                @if($d->Ekatalog)
-                {{$d->Ekatalog->no_paket}}
-                @else
-                -
-                @endif
+                    @if($d->Ekatalog)
+                    {{$d->Ekatalog->no_paket}}
+                    @else
+                    -
+                    @endif
                 </td>
                 <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
                     @if($d->Ekatalog)
@@ -142,82 +142,68 @@
                 @if($d->DetailPesanan)
                     @foreach ($d->DetailPesanan as $e)
                     <?php $countdet = 0; ?>
-                    @if($countprd <= 0)
-                    <td rowspan="{{$e->DetailPesananProduk->count()}}">
-                        @if($e->PenjualanProduk->nama_alias != '')
-                        {{$e->PenjualanProduk->nama_alias}}
-                        @else
-                        {{$e->PenjualanProduk->nama}}
-                        @endif
-                    </td>
-                        @foreach ($e->DetailPesananProduk as $f)
-                            @if($countdet <= 0)
-                                <td>{{$f->GudangBarangJadi->Produk->nama}} {{$f->GudangBarangJadi->nama}}</td>
-                                @if($countprd <= 0)
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->jumlah}}</td>
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->harga}}</td>
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->ongkir}}</td>
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
-                                <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
-                                    {{$d->State->nama}}
-                                </td>
-                                <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
-                                    @if($d->Ekatalog)
-                                    {{$d->Ekatalog->status}}
-                                    @else
-                                    -
-                                    @endif
-                                </td>
-                                <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">@if($d->Ekatalog)
-                                    {{$d->Ekatalog->ket}}
-                                    @elseif($d->Spa)
-                                    {{$d->Spa->ket}}
-                                    @elseif($d->Spb)
-                                    {{$d->Spb->ket}}
-                                    @endif</td>
-                                @else
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->jumlah}}</td>
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->harga}}</td>
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->ongkir}}</td>
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
-                                @endif
-                            @else
-                                <tr>
-                                    <td>{{$f->GudangBarangJadi->Produk->nama}} {{$f->GudangBarangJadi->nama}}</td>
-                            @endif
-                            </tr>
-                            <?php $countdet++; ?>
-                        @endforeach
-                    @else
-                    <tr><td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->PenjualanProduk->nama}}</td>
-                        @foreach ($e->DetailPesananProduk as $f)
-                            @if($countdet <= 0)
-                                <td>{{$f->GudangBarangJadi->Produk->nama}} {{$f->GudangBarangJadi->nama}}</td>
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->jumlah}}</td>
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->harga}}</td>
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->ongkir}}</td>
-                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
-                            @else
-                                <tr>
-                                    <td>{{$f->GudangBarangJadi->Produk->nama}} {{$f->GudangBarangJadi->nama}}</td>
-                            @endif
-                            </tr>
-                            <?php $countdet++; ?>
-                        @endforeach
+                    @if($countprd > 0)
+                    <tr>
                     @endif
+                        <td rowspan="{{$e->DetailPesananProduk->count()}}">
+                            @if($e->PenjualanProduk->nama_alias != '')
+                            {{$e->PenjualanProduk->nama_alias}}
+                            @else
+                            {{$e->PenjualanProduk->nama}}
+                            @endif
+                        </td>
+                        @foreach ($e->DetailPesananProduk as $f)
+                            @if($countdet > 0)
+                            <tr>
+                            @endif
+                                <td>{{$f->GudangBarangJadi->Produk->nama}} {{$f->GudangBarangJadi->nama}}</td>
+
+                                @if($countdet <= 0)
+                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->jumlah}}</td>
+                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->harga}}</td>
+                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->ongkir}}</td>
+                                <td rowspan="{{$e->DetailPesananProduk->count()}}">{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
+                                    @if($countprd <= 0)
+                                    <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
+                                        {{$d->State->nama}}
+                                    </td>
+                                    <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
+                                        @if($d->Ekatalog)
+                                        {{$d->Ekatalog->status}}
+                                        @else
+                                        -
+                                        @endif
+                                    </td>
+                                    <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
+                                        @if($d->Ekatalog)
+                                        {{$d->Ekatalog->ket}}
+                                        @elseif($d->Spa)
+                                        {{$d->Spa->ket}}
+                                        @elseif($d->Spb)
+                                        {{$d->Spb->ket}}
+                                        @endif
+                                    </td>
+                                    @endif
+                                @endif
+                            </tr>
+                            <?php $countdet++; ?>
+                        @endforeach
                     <?php $countprd++ ?>
                     @endforeach
                 @endif
 
                 @if($d->DetailPesananPart)
                     @foreach ($d->DetailPesananPart as $e)
-                    @if($countprd <= 0)
+                    @if($countprd > 0)
+                    <tr>
+                    @endif
                         <td>{{$e->Sparepart->nama}}</td>
                         <td>-</td>
                         <td>{{$e->jumlah}}</td>
                         <td>{{$e->harga}}</td>
                         <td>{{$e->ongkir}}</td>
                         <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
+                        @if($countprd <= 0)
                         <td rowspan="{{$d->getJumlahPaket() + $d->DetailPesananPart->count()}}">
                             {{$d->State->nama}}
                         </td>
@@ -235,15 +221,7 @@
                             @elseif($d->Spb)
                             {{$d->Spb->ket}}
                             @endif</td>
-                    @else
-                        <tr>
-                            <td>{{$e->Sparepart->nama}}</td>
-                            <td>-</td>
-                            <td>{{$e->jumlah}}</td>
-                            <td>{{$e->harga}}</td>
-                            <td>{{$e->ongkir}}</td>
-                            <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
-                    @endif
+                        @endif
                     </tr>
                     <?php $countprd++ ?>
                     @endforeach

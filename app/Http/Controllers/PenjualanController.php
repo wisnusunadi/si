@@ -32,6 +32,7 @@ use League\Fractal\Resource\Item;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Excel as ExcelExcel;
+use Symfony\Component\Console\Input\Input;
 
 use function PHPUnit\Framework\assertIsNotArray;
 
@@ -1397,7 +1398,7 @@ class PenjualanController extends Controller
                     if (!empty($data->Pesanan->log_id)) {
                         if ($data->Pesanan->State->nama == "Penjualan") {
                             $datas .= '<span class="red-text badge">';
-                           $datas .= '<span class="purple-text badge">';
+                            $datas .= '<span class="purple-text badge">';
                         } else if ($data->Pesanan->State->nama == "Gudang") {
                             $datas .= '<span class="orange-text badge">';
                         } else if ($data->Pesanan->State->nama == "QC") {
@@ -1414,7 +1415,6 @@ class PenjualanController extends Controller
                         $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                     }
                 } else if ($data->Pesanan->State->nama == "PO") {
-
                 } else {
                     $datas .= '<span class="red-text badge">Batal</span>';
                 }
@@ -1730,12 +1730,19 @@ class PenjualanController extends Controller
                 $c_id = $request->customer_id;
             }
 
+            if ($request->status != 'draft') {
+                $akn = 'AK1-' . $request->no_paket;
+            } else {
+                $c_akn = $request->has('isi_nopaket') ? 'AK1-' . $request->no_paket : NULL;
+                $akn = $c_akn;
+            }
+
 
             $Ekatalog = Ekatalog::create([
                 'customer_id' => $c_id,
                 'provinsi_id' => $request->provinsi,
                 'pesanan_id' => $x,
-                'no_paket' => 'AK1-' . $request->no_paket,
+                'no_paket' => $akn,
                 'no_urut' => $request->no_urut,
                 'deskripsi' => $request->deskripsi,
                 'instansi' => $request->instansi,
@@ -2022,7 +2029,24 @@ class PenjualanController extends Controller
         } else {
             $c_id = $request->customer_id;
         }
+
+
+
         $ekatalog = Ekatalog::find($id);
+
+        if ($request->status_akn == 'draft') {
+
+            if ($request->no_paket == '') {
+                $c_akn = NULL;
+            } else {
+                $c_akn = $request->has('isi_nopaket') ? 'AK1-' . $request->no_paket : NULL;
+            }
+
+            $akn = $c_akn;
+        } else {
+            $akn = $ekatalog->no_paket;
+        }
+
         $poid = $ekatalog->pesanan_id;
         $ekatalog->customer_id = $c_id;
         $ekatalog->provinsi_id = $request->provinsi;
@@ -2036,6 +2060,7 @@ class PenjualanController extends Controller
         $ekatalog->satuan = $request->satuan_kerja;
         $ekatalog->status = $request->status_akn;
         $ekatalog->ket = $request->keterangan;
+        $ekatalog->no_paket = $akn;
         $ekat = $ekatalog->save();
         $bool = true;
         if ($ekat) {
