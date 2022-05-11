@@ -2022,6 +2022,13 @@ class PenjualanController extends Controller
         } else {
             $c_id = $request->customer_id;
         }
+
+        if($request->no_paket != ""){
+            $nopaket = "AK1-".$request->no_paket;
+        }
+        else{
+            $nopaket = "";
+        }
         $ekatalog = Ekatalog::find($id);
         $poid = $ekatalog->pesanan_id;
         $ekatalog->customer_id = $c_id;
@@ -2034,6 +2041,7 @@ class PenjualanController extends Controller
         $ekatalog->tgl_edit = $request->tgl_edit;
         $ekatalog->no_urut = $request->no_urut;
         $ekatalog->satuan = $request->satuan_kerja;
+        $ekatalog->no_paket = $nopaket;
         $ekatalog->status = $request->status_akn;
         $ekatalog->ket = $request->keterangan;
         $ekat = $ekatalog->save();

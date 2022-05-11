@@ -414,7 +414,7 @@
                                                                             <div class="input-group-prepend">
                                                                                 <span class="input-group-text" id="ket_no_paket">AK1-</span>
                                                                             </div>
-                                                                            <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" @if($e->status == "draft") readonly="true" @endif/>
+                                                                            <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" @if($e->status == "draft") readonly="true" @endif value="{{substr($e->no_paket, 4)}}"/>
                                                                             <div class="input-group-append  @if($e->status != "draft") hide @endif" id="checkbox_nopaket">
                                                                                 <span class="input-group-text" >
                                                                                     <div class="form-check form-check-inline">
@@ -856,6 +856,8 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var nopaketdb = "{{substr($e->no_paket, 4)}}";
+        var nopaketubah = false;
         $(".os-content-arrange").remove();
         var today = new Date();
         var dd = String(today.getDate()).padStart(2, '0');
@@ -1087,12 +1089,16 @@
                     $("#dataproduk").removeClass("hide");
                     $("#batas_kontrak").attr('disabled', false);
                     $("#provinsi").attr('disabled', false);
+                    if(nopaketubah == false){
+                        $('#no_paket').val(nopaketdb);
+                    }
                     // $("#produktable tbody").empty();
                     // $('#produktable tbody').append(trproduktable());
                     numberRowsProduk($("#produktable"));
                 } else if ($(this).val() == "draft") {
                     $('#checkbox_nopaket').removeClass('hide');
                     $('#isi_nopaket').prop("checked", false);
+                    $('#no_paket').val("");
                     $('#no_paket').attr('readonly', true);
                     $("#produktable tbody").empty();
                     $("#totalhargaprd").text("Rp. 0");
@@ -1112,6 +1118,9 @@
                     $("#dataproduk").removeClass("hide");
                     $("#provinsi").attr('disabled', true);
                     $("#provinsi").empty().trigger('change')
+                    if(nopaketubah == false){
+                        $('#no_paket').val(nopaketdb);
+                    }
                 }
             } else {
                 $('#checkbox_nopaket').addClass('hide');
@@ -1119,15 +1128,26 @@
                     $('#no_paket').attr('readonly', false);
                 $("#msgstatus").text("Status Harus dipilih");
                 $("#status").addClass('is-invalid');
+                if(nopaketubah == false){
+                    $('#no_paket').val(nopaketdb);
+                }
             }
         });
 
         $(document).on('change', '#isi_nopaket', function(){
             if($('#isi_nopaket:checked').length > 0){
                 $('#no_paket').attr('readonly', false);
+                if(nopaketubah == false){
+                        $('#no_paket').val(nopaketdb);
+                    }
             }else{
                 $('#no_paket').attr('readonly', true);
+                $('#no_paket').val("");
             }
+        })
+
+        $(document).on('keyup', '#no_paket', function(){
+            nopaketubah = true;
         })
 
 
