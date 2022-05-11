@@ -996,7 +996,7 @@
             options: function () {
                 let data = this.data_produk.map((data) => ({
                     merk: `${data.produk.merk}`,
-                    produk: `${data.produk.nama}`,
+                    produk: `${data.produk.nama} ${data.nama}`,
                     label: `${data.produk.merk} - ${data.produk.nama} ${data.nama}`,
                     value: data.id,
                 }));
