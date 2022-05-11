@@ -186,7 +186,11 @@
                         <div class="field-body">
                             <div class="field">
                                 <div class="control">
-                                    <vSelect :options="options" v-model="produk" @input="changeProduk" />
+                                    <v-select :options="options" v-model="produk" @input="changeProduk">
+                                        <template v-slot:option="option">
+                                            <b>{{option.merk}}</b> - {{ option.produk }}
+                                        </template>
+                                    </v-select>
                                 </div>
                             </div>
                         </div>
@@ -991,10 +995,11 @@
         computed: {
             options: function () {
                 let data = this.data_produk.map((data) => ({
-                    label: `${data.produk.nama} ${data.nama}`,
+                    merk: `${data.produk.merk}`,
+                    produk: `${data.produk.nama} ${data.nama}`,
+                    label: `${data.produk.merk} - ${data.produk.nama} ${data.nama}`,
                     value: data.id,
                 }));
-
                 return data;
             },
 
