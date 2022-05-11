@@ -1730,12 +1730,18 @@ class PenjualanController extends Controller
                 $c_id = $request->customer_id;
             }
 
+            if($request->no_paket != ""){
+                $nopaket = 'AK1-' . $request->no_paket;
+            }else{
+                $nopaket = "";
+            }
+
 
             $Ekatalog = Ekatalog::create([
                 'customer_id' => $c_id,
                 'provinsi_id' => $request->provinsi,
                 'pesanan_id' => $x,
-                'no_paket' => 'AK1-' . $request->no_paket,
+                'no_paket' => $nopaket,
                 'no_urut' => $request->no_urut,
                 'deskripsi' => $request->deskripsi,
                 'instansi' => $request->instansi,

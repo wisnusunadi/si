@@ -1030,8 +1030,24 @@
                     $('#btntambah').attr("disabled", true);
                 }
             } else {
-                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "" && $('#no_urut').val() != "") {
-                    $('#btntambah').removeAttr("disabled");
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && !$("#no_paket").hasClass('is-invalid') && $("#status").val() != "" && $("#deskripsi").val() != "" && $('#no_urut').val() != "") {
+                    if($('input[type="radio"][name="status"]:checked').val() == "draft") {
+                        if($('#isi_nopaket:checked').length > 0){
+                            if($("#no_paket").val() != ""){
+                                $('#btntambah').removeAttr("disabled");
+                            }else{
+                                $('#btntambah').attr("disabled", true);
+                            }
+                        }else if($('#isi_nopaket:checked').length <= 0){
+                            $('#btntambah').removeAttr("disabled");
+                        }
+                    } else {
+                        if($("#no_paket").val() != ""){
+                            $('#btntambah').removeAttr("disabled");
+                        }else{
+                            $('#btntambah').attr("disabled", true);
+                        }
+                    }
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
@@ -1291,7 +1307,10 @@
                 } else if ($(this).val() == "draft") {
                     $('#checkbox_nopaket').removeClass('hide');
                     $('#isi_nopaket').prop("checked", false);
+                    $("#no_paket").val("");
                     $('#no_paket').attr('readonly', true);
+                    $("#msgno_paket").text("");
+                    $("#no_paket").removeClass('is-invalid');
                     $("#produktable tbody").empty();
                     $('#produktable tbody').append(trproduktable());
                     numberRowsProduk($("#produktable"));
@@ -1326,7 +1345,11 @@
                 $('#no_paket').attr('readonly', false);
             }else{
                 $('#no_paket').attr('readonly', true);
+                $("#no_paket").val("");
+                $("#msgno_paket").text("");
+                $("#no_paket").removeClass('is-invalid');
             }
+            checkvalidasi();
         })
 
         $('#satuan_kerja').on('keyup', function() {
