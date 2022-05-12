@@ -2240,7 +2240,6 @@ class PenjualanController extends Controller
             $bool = false;
         }
 
-
         if ($bool == true) {
             return redirect()->back()->with('success', 'Berhasil mengubah SPA');
         } else if ($bool == false) {
