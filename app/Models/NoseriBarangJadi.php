@@ -35,5 +35,10 @@ class NoseriBarangJadi extends Model
         return $this->belongsTo(Layout::class, 'layout_id');
     }
 
-    
+    function pesanan()
+    {
+        return $this->belongsTo(Pesanan::class, 'used_by');
+    }
+
+
 }
