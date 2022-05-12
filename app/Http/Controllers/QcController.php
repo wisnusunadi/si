@@ -328,16 +328,16 @@ class QcController extends Controller
                     $bool = "0";
                     if ($jumlahditrf > 0) {
                         if ($jumlahditrf == $countok) {
-                            return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><i class="fas fa-search"></i></a>';
+                            return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><i class="fas fa-eye"></i></a>';
                         } else {
-                            return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><i class="fas fa-search"></i></a>';
+                            return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><i class="fas fa-eye"></i></a>';
                         }
                     }
                 } else {
                     if ($data->jumlah == $data->getJumlahCekPart('ok')) {
-                        return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-search"></i></a>';
+                        return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-eye"></i></a>';
                     } else {
-                        return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-search"></i></a>';
+                        return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-eye"></i></a>';
                     }
                 }
 
@@ -366,9 +366,9 @@ class QcController extends Controller
                 // $bool = "0";
                 // if ($jumlahditrf > 0) {
                 //     if ($jumlahditrf == $ok) {
-                //         return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
+                //         return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-eye"></i></a>';
                 //     } else {
-                //         return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-search"></i></a>';
+                //         return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '"><i class="fas fa-eye"></i></a>';
                 //     }
                 // }
             })
@@ -563,7 +563,7 @@ class QcController extends Controller
                         $x =  'spb';
                     }
                     return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '">
-                                <i class="fas fa-search"></i>
+                                <i class="fas fa-eye"></i>
                         </a>';
                 }
             })
@@ -727,7 +727,7 @@ class QcController extends Controller
                         $x =  'spb';
                     }
                     return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '">
-                                <i class="fas fa-search"></i>
+                                <i class="fas fa-eye"></i>
                         </a>';
                 }
             })
@@ -802,7 +802,7 @@ class QcController extends Controller
         //                 $produk_id = $data['produk_id'];
         //             }
         //             return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data['penjualan_produk_id'] . '" data-id="' . $data['id'] . '" data-count="' . $data['produk_count'] . '" data-produk="' . $produk_id . '" id="detmodal">
-        //             <div><i class="fas fa-search"></i></div>
+        //             <div><i class="fas fa-eye"></i></div>
         //         </a>';
         //         }
         //     })
@@ -855,11 +855,11 @@ class QcController extends Controller
                         $produkid = $data->DetailPesananProduk->first()->id;
                     }
                     return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data->penjualan_produk_id . '" data-id="' . $data->id . '" data-count="' . $produkcount . '" data-produk="' . $produkid . '" data-jenis="produk" id="detmodal">
-                        <div><i class="fas fa-search"></i></div>
+                        <div><i class="fas fa-eye"></i></div>
                     </a>';
                 } else {
                     return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data->part_id . '" data-id="' . $data->id . '" data-count="1" data-produk="0" data-jenis="part" id="detmodal">
-                        <div><i class="fas fa-search"></i></div>
+                        <div><i class="fas fa-eye"></i></div>
                     </a>';
                 }
                 // if ($data['jenis'] == "produk") {
@@ -868,7 +868,7 @@ class QcController extends Controller
                 //         $produk_id = $data['produk_id'];
                 //     }
                 //     return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data['penjualan_produk_id'] . '" data-id="' . $data['id'] . '" data-count="' . $data['produk_count'] . '" data-produk="' . $produk_id . '" id="detmodal">
-                //     <div><i class="fas fa-search"></i></div>
+                //     <div><i class="fas fa-eye"></i></div>
                 // </a>';
                 // }
             })
@@ -1525,7 +1525,7 @@ class QcController extends Controller
                     } else {
                         $x =  'spb';
                     }
-                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"><i class="fas fa-search"></i></a>
+                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"><i class="fas fa-eye"></i></a>
                 ';
                 })
                 ->rawColumns(['button', 'batas', 'status'])
@@ -1618,7 +1618,7 @@ class QcController extends Controller
                     } else {
                         $x =  'spb';
                     }
-                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"><i class="fas fa-search"></i></a>';
+                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"><i class="fas fa-eye"></i></a>';
                 })
                 ->rawColumns(['button', 'batas'])
                 ->make(true);
@@ -1715,7 +1715,7 @@ class QcController extends Controller
                     } else {
                         $x =  'spb';
                     }
-                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"><i class="fas fa-search"></i></a>';
+                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"><i class="fas fa-eye"></i></a>';
                 })
                 ->rawColumns(['button', 'batas', 'status'])
                 ->make(true);

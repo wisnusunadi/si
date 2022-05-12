@@ -169,7 +169,7 @@
                                             <div class="icon">
                                                 <i class="fas fa-tasks"></i>
                                             </div>
-                                            <a class="small-box-footer active" id="pengujianterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer active align-items-end" id="pengujianterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
@@ -181,7 +181,7 @@
                                             <div class="icon">
                                                 <i class="fas fa-boxes"></i>
                                             </div>
-                                            <a class="small-box-footer" id="belumdiuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer align-items-end" id="belumdiuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
@@ -193,7 +193,7 @@
                                             <div class="icon">
                                                 <i class="fas fa-exclamation-circle"></i>
                                             </div>
-                                            <a class="small-box-footer" id="lewatbatasuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer align-items-end" id="lewatbatasuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </div>

@@ -186,7 +186,7 @@ class MasterController extends Controller
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a href="' . route('logistik.ekspedisi.detail', ['id' => $data->id]) . '">
                     <button class="dropdown-item" type="button">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-eye"></i>
                         Detail
                     </button>
                 </a>';
@@ -279,7 +279,7 @@ class MasterController extends Controller
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a href="' . route('penjualan.customer.detail', $data->id) . '">
                     <button class="dropdown-item" type="button">
-                      <i class="fas fa-search"></i>
+                      <i class="fas fa-eye"></i>
                       Detail
                     </button>
                 </a>';
@@ -359,7 +359,7 @@ class MasterController extends Controller
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <button class="dropdown-item" type="button" id="showmodal">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-eye"></i>
                         Detail
                     </button>
                     <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
@@ -560,16 +560,16 @@ class MasterController extends Controller
 
                     if ($name == 'ekatalog') {
                         return  '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                                  <i class="fas fa-search"></i>
+                                  <i class="fas fa-eye"></i>
                             </a>';
                     } else if ($name == 'spa') {
                         return  '<a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
-                                  <i class="fas fa-search"></i>
+                                  <i class="fas fa-eye"></i>
                             </a>';
                     } else {
                         return  '
                             <a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
-                                  <i class="fas fa-search"></i>
+                                  <i class="fas fa-eye"></i>
                             </a>';
                     }
                 })

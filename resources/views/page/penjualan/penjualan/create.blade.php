@@ -385,7 +385,7 @@
                                                                             <span class="input-group-text">
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input" type="checkbox" name="isi_nopaket" id="isi_nopaket" value="true" />
-                                                                                    <label class="form-check-label" for="isi_nopaket">Isi</label>
+                                                                                    <label class="form-check-label" for="isi_nopaket"></label>
                                                                                 </div>
                                                                             </span>
                                                                         </div>
@@ -1005,7 +1005,22 @@
                     $('#pills-instansi-tab').addClass('disabled');
                     $('#pills-produk-tab').addClass('disabled');
                 }
-            } else {
+            }
+
+          else if ($('input[type="radio"][name="status"]:checked').val() == "draft") {
+            if ($('#no_urut').val() != "" && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "") {
+
+                if (($('#no_paket').val() != "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length > 0 ) || ($('#no_paket').val() == "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length <= 0) &&  !$("#no_paket").hasClass('is-invalid') ) {
+                    $('#pills-instansi-tab').removeClass('disabled');
+                }else{
+                    $('#pills-instansi-tab').addClass('disabled');
+                }
+            }else{
+                $('#pills-instansi-tab').addClass('disabled');
+            }
+            }
+
+            else {
                 if ($('#no_urut').val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "") {
                     $('#pills-instansi-tab').removeClass('disabled');
                     if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
@@ -1029,25 +1044,23 @@
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
-            } else {
-                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && !$("#no_paket").hasClass('is-invalid') && $("#status").val() != "" && $("#deskripsi").val() != "" && $('#no_urut').val() != "") {
-                    if($('input[type="radio"][name="status"]:checked').val() == "draft") {
-                        if($('#isi_nopaket:checked').length > 0){
-                            if($("#no_paket").val() != ""){
-                                $('#btntambah').removeAttr("disabled");
-                            }else{
-                                $('#btntambah').attr("disabled", true);
-                            }
-                        }else if($('#isi_nopaket:checked').length <= 0){
-                            $('#btntambah').removeAttr("disabled");
-                        }
-                    } else {
-                        if($("#no_paket").val() != ""){
-                            $('#btntambah').removeAttr("disabled");
+            } else if ($('input[type="radio"][name="status"]:checked').val() == "draft") {
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#status").val() != "" && $("#deskripsi").val() != "" && $('#no_urut').val() != "") {
+
+                    if (($('#no_paket').val() != "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length > 0 ) || ($('#no_paket').val() == "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length <= 0) &&  !$("#no_paket").hasClass('is-invalid') ) {
+                        $('#btntambah').removeAttr("disabled");
                         }else{
-                            $('#btntambah').attr("disabled", true);
-                        }
-                    }
+                    $('#btntambah').attr("disabled", true);
+                         }
+
+                } else {
+                    $('#btntambah').attr("disabled", true);
+                }
+            }
+            else {
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "" && $('#no_urut').val() != "") {
+
+                    $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
@@ -1300,6 +1313,7 @@
                 if ($(this).val() == "sepakat") {
                     $('#checkbox_nopaket').addClass('hide');
                     $('#isi_nopaket').prop("checked", false);
+                    $('#isi_nopaket').val("true");
                     $('#no_paket').attr('readonly', false);
                     $("#dataproduk").removeClass("hide");
                     $("#batas_kontrak").attr('disabled', false);
@@ -1307,7 +1321,8 @@
                 } else if ($(this).val() == "draft") {
                     $('#checkbox_nopaket').removeClass('hide');
                     $('#isi_nopaket').prop("checked", false);
-                    $("#no_paket").val("");
+                    $('#isi_nopaket').val("");
+                    $("#no_paket").removeClass('is-invalid');
                     $('#no_paket').attr('readonly', true);
                     $("#msgno_paket").text("");
                     $("#no_paket").removeClass('is-invalid');
@@ -1322,6 +1337,7 @@
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
                     $('#isi_nopaket').prop("checked", false);
+                      $('#isi_nopaket').val("true");
                     $('#no_paket').attr('readonly', false);
                     $("#batas_kontrak").val("");
                     $("#batas_kontrak").attr('disabled', true);
@@ -1340,17 +1356,18 @@
             }
         });
 
-        $(document).on('change', '#isi_nopaket', function(){
-            if($('#isi_nopaket:checked').length > 0){
+        $(document).ready(function() {
+        $('input[type="checkbox"][name="isi_nopaket"]').change(function() {
+            if ($('input[type="checkbox"][name="isi_nopaket"]:checked').length > 0) {
                 $('#no_paket').attr('readonly', false);
-            }else{
-                $('#no_paket').attr('readonly', true);
-                $("#no_paket").val("");
-                $("#msgno_paket").text("");
-                $("#no_paket").removeClass('is-invalid');
-            }
-            checkvalidasi();
-        })
+
+                } else {
+                    $('#no_paket').attr('readonly', true);
+                    $("#no_paket").removeClass('is-invalid');
+                }
+                checkvalidasi();
+            });
+        });
 
         $('#satuan_kerja').on('keyup', function() {
             if ($(this).val() != "") {

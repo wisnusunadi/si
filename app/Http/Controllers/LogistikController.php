@@ -230,7 +230,7 @@ class LogistikController extends Controller
                 return $data->jumlah;
             })
             ->addColumn('button', function () {
-                return '<a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a>';
+                return '<a type="button" class="noserishow" data-id="3"><i class="fas fa-eye"></i></a>';
             })
             ->rawColumns(['checkbox', 'button', 'status'])
             ->make(true);
@@ -318,7 +318,7 @@ class LogistikController extends Controller
                     return $s;
                 })
                 ->addColumn('button', function ($data) {
-                    return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-search"></i></a>';
+                    return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-eye"></i></a>';
                 })
                 ->rawColumns(['checkbox', 'button', 'status'])
                 ->make(true);
@@ -415,7 +415,7 @@ class LogistikController extends Controller
                 })
                 ->addColumn('button', function ($data) {
                     if (isset($data->gudangbarangjadi)) {
-                        return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-search"></i></a>';
+                        return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-eye"></i></a>';
                     } else {
                         return '';
                     }
@@ -444,7 +444,7 @@ class LogistikController extends Controller
             //         return $data->jumlah;
             //     })
             //     ->addColumn('button', function ($data) {
-            //         return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-search"></i></a>';
+            //         return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-eye"></i></a>';
             //     })
             //     ->rawColumns(['checkbox', 'button', 'status'])
             //     ->make(true);
@@ -511,7 +511,7 @@ class LogistikController extends Controller
                 })
                 ->addColumn('button', function ($data) {
                     return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
-                <div><i class="fas fa-search"></i></div>
+                <div><i class="fas fa-eye"></i></div>
             </a>';
                 })
                 ->rawColumns(['checkbox', 'button', 'status'])
@@ -590,7 +590,7 @@ class LogistikController extends Controller
                 ->addColumn('button', function ($data) {
                     if (isset($data->DetailPesananProduk)) {
                         return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
-            <div><i class="fas fa-search"></i></div>
+            <div><i class="fas fa-eye"></i></div>
         </a>';
                     }
                 })
@@ -637,7 +637,7 @@ class LogistikController extends Controller
         //         return $data->jumlah;
         //     })
         //     ->addColumn('button', function ($data) {
-        //         return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-search"></i></a>';
+        //         return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-eye"></i></a>';
         //     })
         //     ->rawColumns(['checkbox', 'button', 'status'])
         //     ->make(true);
@@ -912,7 +912,7 @@ class LogistikController extends Controller
                 }
                 $z = 'proses';
                 return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-eye"></i>
                     </a>';
             })
             ->rawColumns(['status', 'button', 'batas'])
@@ -1062,7 +1062,7 @@ class LogistikController extends Controller
                 }
                 $z = 'selesai';
                 return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                            <i class="fas fa-search"></i>
+                            <i class="fas fa-eye"></i>
                     </a>';
             })
             ->rawColumns(['status', 'button', 'batas'])
@@ -1709,7 +1709,7 @@ class LogistikController extends Controller
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a href="' . route('logistik.pengiriman.detail', ['id' => $data->id, 'jenis' => $name[1]]) . '">
                         <button class="dropdown-item" type="button">
-                            <i class="fas fa-search"></i>
+                            <i class="fas fa-eye"></i>
                             Detail
                         </button>
                     </a>';
@@ -2222,7 +2222,7 @@ class LogistikController extends Controller
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a href="' . route('logistik.pengiriman.detail', ['id' => $data->id, 'jenis' => $name]) . '">
                         <button class="dropdown-item" type="button">
-                            <i class="fas fa-search"></i>
+                            <i class="fas fa-eye"></i>
                             Detail
                         </button>
                     </a>
@@ -3107,7 +3107,7 @@ class LogistikController extends Controller
                     }
                     return '
                         <a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                                <i class="fas fa-search"></i>
+                                <i class="fas fa-eye"></i>
                         </a>';
                 })
                 ->rawColumns(['batas', 'status', 'button'])
@@ -3165,7 +3165,7 @@ class LogistikController extends Controller
                     }
                     $z = "proses";
                     return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                                    <i class="fas fa-search"></i>
+                                    <i class="fas fa-eye"></i>
                             </a>';
                 })
                 ->rawColumns(['batas', 'button'])
@@ -3255,7 +3255,7 @@ class LogistikController extends Controller
                     $z = "proses";
                     return '
                         <a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                                <i class="fas fa-search"></i>
+                                <i class="fas fa-eye"></i>
                         </a>';
                 })
                 ->rawColumns(['batas', 'status', 'button'])

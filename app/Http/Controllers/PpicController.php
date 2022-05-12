@@ -1021,7 +1021,7 @@ class PpicController extends Controller
             })
             ->addColumn('aksi', function ($data) {
                 return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '" id="detmodal">
-                <div><i class="fas fa-search"></i></div>
+                <div><i class="fas fa-eye"></i></div>
             </a>';
             })
             ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
@@ -1176,7 +1176,7 @@ class PpicController extends Controller
             })
             ->addColumn('aksi', function ($data) {
                 return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '" id="detmodal">
-                <div><i class="fas fa-search"></i></div>
+                <div><i class="fas fa-eye"></i></div>
             </a>';
             })
             ->rawColumns(['nama_produk', 'aksi'])
