@@ -319,6 +319,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>No. Seri</th>
+                                            <th>Digunakan</th>
                                             <th>Layout</th>
                                         </tr>
                                     </thead>
@@ -846,6 +847,7 @@
                 {
                     data: 'seri'
                 },
+                {data: 'used'},
                 {
                     data: 'Layout'
                 }

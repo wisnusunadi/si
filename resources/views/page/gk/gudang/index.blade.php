@@ -113,6 +113,7 @@
                                 <thead class="thead-dark">
                                     <tr>
                                         <th>Kode Unit</th>
+                                        <th>Merk</th>
                                         <th>Nama</th>
                                         <th>Jumlah</th>
                                         <th>Aksi</th>
@@ -175,6 +176,7 @@
         },
         columns: [
             {data: 'kode_produk'},
+            {data: 'merk'},
             {data: 'nama_produk'},
             {data: 'jumlah'},
             {data: 'button'},
