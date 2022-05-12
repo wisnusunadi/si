@@ -167,6 +167,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div class="form-group row">
                                                         <label for="provinsi" class="col-lg-4 col-md-12 col-form-label labelket">Provinsi</label>
                                                         <div class="col-lg-5 col-md-12">
@@ -179,6 +180,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div class="form-group row">
                                                         <label for="pic" class="col-lg-4 col-md-12 col-form-label labelket">PIC</label>
                                                         <div class="col-lg-5 col-md-12">
@@ -190,6 +192,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div class="form-group row">
                                                         <label for="ktp" class="col-lg-4 col-md-12 col-form-label labelket">No KTP</label>
                                                         <div class="col-lg-5 col-md-12">
@@ -201,6 +204,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div class="form-group row">
                                                         <label for="npwp" class="col-lg-4 col-md-12 col-form-label labelket">NPWP</label>
                                                         <div class="col-lg-5 col-md-12">
@@ -212,6 +216,7 @@
                                                             </div>
                                                         </div>
                                                     </div>
+
                                                     <div class="form-group row">
                                                         <label for="izin_usaha" class="col-lg-4 col-md-12 col-form-label labelket">Izin Usaha</label>
                                                         <div class="col-lg-8 col-md-11 col-form-label">
