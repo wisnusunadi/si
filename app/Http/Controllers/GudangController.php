@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\GBJExportSPB;
+use App\Exports\ImportNoseri;
 use App\Models\DetailEkatalog;
 use App\Models\DetailEkatalogProduk;
 use App\Models\DetailPesanan;
@@ -30,6 +31,9 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class GudangController extends Controller
 {
@@ -749,6 +753,43 @@ class GudangController extends Controller
         return $pdf->stream();
         // return response()->json(['data' => $data]);
         return view('page.gbj.reports.spb', ['data' => $data, 'tfby' => $tfby, 'header' => $header]);
+    }
+
+    function download_template_noseri(Request $request)
+    {
+        // return Excel::download(new ImportNoseri(), 'template_noseri.xls');
+        // data
+        $no = 1;
+        $noo = 2;
+        $produk = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get()->sortBy('produk.nama');
+
+        // spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->createSheet();
+
+        $spreadsheet->setActiveSheetIndex(0);
+        $spreadsheet->getActiveSheet()->setTitle('Noseri');
+        $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
+        $spreadsheet->getActiveSheet()->setCellValue('B1', 'Nama Produk');
+        $spreadsheet->getActiveSheet()->setCellValue('C1', 'Noseri');
+
+        $spreadsheet->setActiveSheetIndex(1);
+        $spreadsheet->getActiveSheet()->setTitle('Produk');
+        $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
+        $spreadsheet->getActiveSheet()->setCellValue('B1', 'Merk');
+        $spreadsheet->getActiveSheet()->setCellValue('C1', 'Nama Produk');
+
+        foreach($produk as $p) {
+            // $spreadsheet->getActiveSheet()->setCellValue('A'.$noo++, $no++);
+            $spreadsheet->getActiveSheet()->setCellValue('B'. $noo++, $p->produk->merk);
+        }
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Template Noseri.xlsx"'); // Set nama file excel nya
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
     }
 
     function getListSODone()

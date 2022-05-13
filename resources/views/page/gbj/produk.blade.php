@@ -21,6 +21,19 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-8">
+                                <div class="row">
+                                    <span class="float-left mr-1">
+                                        <button type="button" class="btn btn-success" id="downloadTemplate">
+                                            <i class="fas fa-download"></i>&nbsp;Template
+                                        </button>
+                                    </span>
+
+                                    <span class="float-left mr-1">
+                                        <button type="button" class="btn btn-outline-success" id="importTemplate">
+                                            <i class="fas fa-file-import"></i>&nbsp;Import
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
                             <div class="col-4">
                                 <div class="row">
@@ -33,6 +46,7 @@
                                             </button>
                                         </span>
                                         @endif
+
                                         <span class="float-right mr-1">
                                             <button class="btn btn-outline-info dropdown-toggle" type="button"
                                                 id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true"
@@ -531,6 +545,15 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    $('#downloadTemplate').click(function() {
+        // console.log('download');
+        window.location = window.location.origin+'/api/v2/gbj/template_noseri'
+    })
+
+    $('#importTemplate').click(function() {
+        console.log('import');
+    })
 
     $('#alkes').click(function () {
         if ($(this).prop('checked') == true) {
