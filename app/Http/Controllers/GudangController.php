@@ -760,7 +760,7 @@ class GudangController extends Controller
         // return Excel::download(new ImportNoseri(), 'template_noseri.xls');
         // data
         $no = 1;
-        $noo = 2;
+
         $produk = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get()->sortBy('produk.nama');
 
         // spreadsheet
@@ -779,9 +779,13 @@ class GudangController extends Controller
         $spreadsheet->getActiveSheet()->setCellValue('B1', 'Merk');
         $spreadsheet->getActiveSheet()->setCellValue('C1', 'Nama Produk');
 
+        $noo = 2;
         foreach($produk as $p) {
-            // $spreadsheet->getActiveSheet()->setCellValue('A'.$noo++, $no++);
-            $spreadsheet->getActiveSheet()->setCellValue('B'. $noo++, $p->produk->merk);
+            $spreadsheet->getActiveSheet()->setCellValue('A'. $noo, $no);
+            $spreadsheet->getActiveSheet()->setCellValue('B'. $noo, $p->produk->merk);
+            $spreadsheet->getActiveSheet()->setCellValue('C'. $noo, $p->produk->nama.' '.$p->nama);
+            $noo++;
+            $no++;
         }
 
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
