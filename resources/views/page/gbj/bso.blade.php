@@ -228,6 +228,7 @@
                         <tr>
                             <th>Nomor Seri</th>
                             <th><input type="checkbox" id="head-cb"></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -291,7 +292,6 @@
                 .to$()
                 .find('input[type=checkbox]')
                 .prop('checked', isChecked);
-
         });
 
         $("#head-cb-edit").on('click', function () {
@@ -315,6 +315,10 @@
                 $('.cb-child-prd').parent().next().next().next().next().children().find('button').removeClass('disabled').attr('disabled', true);
            }
         });
+
+
+
+    });
 
         let a = $('#gudang-barang').DataTable({
             processing: true,
@@ -349,8 +353,6 @@
             cell.innerHTML = i + 1;
         });
     }).draw();
-
-    });
 
     // add
     var id = '';
@@ -468,7 +470,6 @@
             columns: [
                 { data: 'seri', name: 'seri'},
                 { data(data) {
-                    console.log("colm", data.ids, temp_array[data.ids])
                     if (temp_array[data.ids] !== undefined){
                         if (temp_array[data.ids] == dpp)
                             return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}" checked>`
@@ -478,6 +479,9 @@
                     else
                        return  `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}">`
                 }},
+                { data(data) {
+                    return `<input type="text" name="" value="">`
+                }}
             ],
             'select': {
                 'style': 'multi'
@@ -496,7 +500,21 @@
         $('.modal-scan').modal('show');
     });
 
+    let idCheck = 1;
+
+    $('.scan-produk').on('click', '.cb-child', function(e) {
+        if ($(this).is(':checked')) {
+            $(this).parent().next().children().val(idCheck);
+            idCheck++;
+        } else {
+            $(this).parent().next().children().val('');
+            idCheck--;
+        }
+    });
+
+
     var t = 0;
+    
     $(document).on('click', '#simpan', function(e) {
         console.log(jml);
         console.log(dpp);
@@ -520,11 +538,13 @@
                 timer: 1500
             })
 
-            prd1[dpp] = {"jumlah": jml, "prd": prd, "noseri": a};
-            $('.modal-scan').modal('hide');
-            if(prd1[dpp].noseri.length == 0) {
-                delete prd1[dpp]
-            }
+            console.log("noseri", a);
+
+            // prd1[dpp] = {"jumlah": jml, "prd": prd, "noseri": a};
+            // $('.modal-scan').modal('hide');
+            // if(prd1[dpp].noseri.length == 0) {
+            //     delete prd1[dpp]
+            // }
 
         }
         console.log(prd1);
