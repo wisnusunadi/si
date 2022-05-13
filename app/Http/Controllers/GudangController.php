@@ -166,6 +166,9 @@ class GudangController extends Controller
                         ' . $opt . '
                         </select>';
             })
+            ->addColumn('used', function($d) {
+                return $d->pesanan->so;
+            })
             ->addColumn('aksi', function ($d) {
                 return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
                         <button class="btn btn-outline-info btn-sm" type="button" >

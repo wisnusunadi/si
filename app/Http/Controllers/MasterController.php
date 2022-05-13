@@ -1158,7 +1158,7 @@ class MasterController extends Controller
 
     function select_gk_unit()
     {
-        $data = GudangKarantinaDetail::select('t_gk_detail.gbj_id', DB::raw('CONCAT(produk.nama," ",gdg_barang_jadi.nama) as name'))
+        $data = GudangKarantinaDetail::select('t_gk_detail.gbj_id', DB::raw('CONCAT("(",produk.merk,") ",produk.nama," ",gdg_barang_jadi.nama) as name'))
             ->whereNotNull('t_gk_detail.gbj_id')
             ->where('is_draft', 0)
             ->where('is_keluar', 0)
