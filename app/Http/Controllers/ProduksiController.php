@@ -2896,7 +2896,7 @@ class ProduksiController extends Controller
         // ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
         ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
         ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
-        ->get()->sortByDesc('date_in');
+        ->get()->sortByDesc('waktu_tf');
 
         return datatables()->of($d)
             ->addColumn('day_kirim', function ($d) {
