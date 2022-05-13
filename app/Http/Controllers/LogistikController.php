@@ -590,8 +590,8 @@ class LogistikController extends Controller
                 ->addColumn('button', function ($data) {
                     if (isset($data->DetailPesananProduk)) {
                         return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
-            <div><i class="fas fa-eye"></i></div>
-        </a>';
+                            <button class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                        </a>';
                     }
                 })
                 ->rawColumns(['checkbox', 'button', 'status'])
@@ -3106,8 +3106,8 @@ class LogistikController extends Controller
                         $z = "proses";
                     }
                     return '
-                        <a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                                <i class="fas fa-eye"></i>
+                        <a href="' . route('logistik.so.detail', [$z, $y, $x]) . '" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye"></i> Detail
                         </a>';
                 })
                 ->rawColumns(['batas', 'status', 'button'])
@@ -3164,8 +3164,8 @@ class LogistikController extends Controller
                         $y = $data->spb->id;
                     }
                     $z = "proses";
-                    return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                                    <i class="fas fa-eye"></i>
+                    return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '" class="btn btn-outline-primary btn-sm">
+                                    <i class="fas fa-eye"></i> Detail
                             </a>';
                 })
                 ->rawColumns(['batas', 'button'])
@@ -3254,8 +3254,8 @@ class LogistikController extends Controller
                     }
                     $z = "proses";
                     return '
-                        <a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                                <i class="fas fa-eye"></i>
+                        <a href="' . route('logistik.so.detail', [$z, $y, $x]) . '" class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye"></i> Detail
                         </a>';
                 })
                 ->rawColumns(['batas', 'status', 'button'])

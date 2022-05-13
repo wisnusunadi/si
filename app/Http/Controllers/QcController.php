@@ -1525,7 +1525,7 @@ class QcController extends Controller
                     } else {
                         $x =  'spb';
                     }
-                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"><i class="fas fa-eye"></i></a>
+                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</a>
                 ';
                 })
                 ->rawColumns(['button', 'batas', 'status'])
@@ -1618,7 +1618,7 @@ class QcController extends Controller
                     } else {
                         $x =  'spb';
                     }
-                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"><i class="fas fa-eye"></i></a>';
+                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</a>';
                 })
                 ->rawColumns(['button', 'batas'])
                 ->make(true);
@@ -1715,7 +1715,7 @@ class QcController extends Controller
                     } else {
                         $x =  'spb';
                     }
-                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"><i class="fas fa-eye"></i></a>';
+                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</a>';
                 })
                 ->rawColumns(['button', 'batas', 'status'])
                 ->make(true);

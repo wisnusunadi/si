@@ -155,13 +155,13 @@
         <div class="row">
             <div class="col-12">
                 <div class="row">
-                    <div class="col-lg-6 col-12">
+                    <div class="col-xl-6 col-12">
                         <div class="card">
                             <div class="card-body">
                                 <h4>Outgoing 2021</h4>
                                 <div class="row">
                                     <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
-                                        <div class="small-box bg-success flex-fill">
+                                        <div class="small-box bg-success flex-fill d-flex flex-column">
                                             <div class="inner">
                                                 <h3>{{$terbaru}}</h3>
                                                 <p>Pengujian Terbaru</p>
@@ -169,11 +169,11 @@
                                             <div class="icon">
                                                 <i class="fas fa-tasks"></i>
                                             </div>
-                                            <a class="small-box-footer active align-items-end" id="pengujianterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer active mt-auto" id="pengujianterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
-                                        <div class="small-box warning-bg flex-fill">
+                                        <div class="small-box warning-bg flex-fill d-flex flex-column">
                                             <div class="inner">
                                                 <h3>{{$hasil}}</h3>
                                                 <p>Belum diuji</p>
@@ -181,11 +181,11 @@
                                             <div class="icon">
                                                 <i class="fas fa-boxes"></i>
                                             </div>
-                                            <a class="small-box-footer align-items-end" id="belumdiuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer mt-auto" id="belumdiuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
-                                        <div class="small-box bg-danger flex-fill">
+                                        <div class="small-box bg-danger flex-fill d-flex flex-column">
                                             <div class="inner">
                                                 <h3>{{$lewat_batas}}</h3>
                                                 <p>Lewat Batas Uji</p>
@@ -193,7 +193,7 @@
                                             <div class="icon">
                                                 <i class="fas fa-exclamation-circle"></i>
                                             </div>
-                                            <a class="small-box-footer align-items-end" id="lewatbatasuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer mt-auto" id="lewatbatasuji">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </div>
@@ -269,14 +269,14 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-12">
+                    <div class="col-xl-6 col-12">
                         <div class="card">
                             <div class="card-body">
                                 <h4>Sales Order</h4>
                                 <div class="row">
                                     <div class="col-lg-4 col-md-4 col-sm-12 align-center d-flex">
                                         <div class="small-box purple-text flex-fill">
-                                            <div class="inner">
+                                            <div class="inner align-middle">
                                                 <h3>{{$po}}</h3>
                                                 <p>Dalam Proses PO</p>
                                             </div>
@@ -287,7 +287,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12 align-center d-flex">
                                         <div class="small-box orange-text flex-fill">
-                                            <div class="inner">
+                                            <div class="inner align-middle">
                                                 <h3>{{$gudang}}</h3>
                                                 <p>Dalam Proses Gudang</p>
                                             </div>
@@ -298,7 +298,7 @@
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12 align-center d-flex">
                                         <div class="small-box green-text flex-fill">
-                                            <div class="inner">
+                                            <div class="inner align-middle">
                                                 <h3>{{$logistik}}</h3>
                                                 <p>Dalam Proses Logistik</p>
                                             </div>

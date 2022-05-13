@@ -75,12 +75,18 @@ class MasterController extends Controller
                 if (isset($data->detaillogistik[0])) {
                     $name = explode('/', $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->so);
                     if ($name[1] == 'EKAT') {
-                        return   $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->nama;
-                    } elseif ($name[1] == 'SPA') {
-                        return  $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spa->customer->nama;
+                        return $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->nama;
+                    } else if ($name[1] == 'SPA') {
+                        return $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spa->customer->nama;
+                    } else if ($name[1] == 'SPB') {
+                        return $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spb->customer->nama;
                     }
                 } else {
-                    return  $data->detaillogistikpart->first()->detailpesananpart->pesanan->spb->customer->nama;
+                    if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spa)) {
+                        return $data->detaillogistikpart->first()->detailpesananpart->pesanan->spa->customer->nama;
+                    } else if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spb)) {
+                        return $data->detaillogistikpart->first()->detailpesananpart->pesanan->spb->customer->nama;
+                    }
                 }
                 return;
             })
@@ -89,11 +95,18 @@ class MasterController extends Controller
                     $name = explode('/', $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->so);
                     if ($name[1] == 'EKAT') {
                         return   $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->alamat;
-                    } elseif ($name[1] == 'SPA') {
+                    } else if ($name[1] == 'SPA') {
                         return  $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spa->customer->alamat;
+                    } else if ($name[1] == 'SPB') {
+                        return  $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spb->customer->alamat;
                     }
                 } else {
-                    return  $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->alamat;
+                    if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spa)) {
+                        return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spa->customer->alamat;
+                    }
+                    else if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spb)) {
+                        return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->alamat;
+                    }
                 }
                 return;
             })
@@ -106,7 +119,12 @@ class MasterController extends Controller
                         return  $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spa->customer->telp;
                     }
                 } else {
-                    return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->telp;
+                    if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spa)) {
+                        return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spa->customer->telp;
+                    }
+                    else if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spb)) {
+                        return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->telp;
+                    }
                 }
                 return;
             })
