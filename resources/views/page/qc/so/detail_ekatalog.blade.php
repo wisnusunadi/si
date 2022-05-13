@@ -243,7 +243,16 @@
             <div class="col-7">
                 <div class="card">
                     <div class="card-body">
-
+                        <div class="row" style="margin-bottom: 5px">
+                            <div class="col-12">
+                                <span class="float-left filter">
+                                    <a id="exportbutton" href="{{route('qc.so.export',['id' => $d->pesanan->id])}}"><button class="btn btn-success">
+                                        <i class="far fa-file-excel" id="load"></i> Export
+                                    </button>
+                                </a>
+                                </span>
+                            </div>
+                        </div>
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">

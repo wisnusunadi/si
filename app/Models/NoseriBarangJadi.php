@@ -39,6 +39,4 @@ class NoseriBarangJadi extends Model
     {
         return $this->belongsTo(Pesanan::class, 'used_by');
     }
-
-
 }
