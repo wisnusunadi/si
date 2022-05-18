@@ -146,7 +146,7 @@ Route::prefix('/laporan')->group(function () {
     Route::post('/penjualan/{penjualan}/{distributor}/{tanggal_awal}/{tanggal_akhir}', [App\Http\Controllers\PenjualanController::class, 'get_data_laporan_penjualan']);
     Route::post('/qc_2/{jenis}/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_data_laporan_qc_2']);
     Route::post('/qc/detail/{id}', [App\Http\Controllers\QcController::class, 'get_data_detail_laporan_qc']);
-    
+
     Route::post('/qc/{jenis}/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_data_laporan_qc']);
     Route::post('/logistik/{pengiriman}/{ekspedisi}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\LogistikController::class, 'get_data_laporan_logistik']);
 });
@@ -160,7 +160,6 @@ Route::prefix('/gbj')->group(function () {
     Route::post('data-so', [GudangController::class, 'getSODone']);
 
     Route::get('/test', [App\Http\Controllers\GudangController::class, 'test']);
-
     // select
     Route::get('sel-product', [GudangController::class, 'select_product']);
     Route::get('sel-product/{id}', [GudangController::class, 'select_product_by_id']);

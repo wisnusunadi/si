@@ -28,10 +28,16 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx as ReaderXlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Conditional;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
@@ -767,21 +773,54 @@ class GudangController extends Controller
         $spreadsheet = new Spreadsheet();
         $spreadsheet->createSheet();
 
+        // workshet noseri
         $spreadsheet->setActiveSheetIndex(0);
         $spreadsheet->getActiveSheet()->setTitle('Noseri');
         $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
         $spreadsheet->getActiveSheet()->setCellValue('B1', 'Nama Produk');
         $spreadsheet->getActiveSheet()->setCellValue('C1', 'Noseri');
 
+        $validation = $spreadsheet->getActiveSheet()->getCell('B2')
+            ->getDataValidation();
+        $validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST );
+        $validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_INFORMATION );
+        $validation->setAllowBlank(false);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setShowDropDown(true);
+        $validation->setErrorTitle('Input error');
+        $validation->setError('Value is not in list.');
+        $validation->setPromptTitle('Pick from list');
+        $validation->setPrompt('Please pick a value from the drop-down list.');
+
+        $validation->setFormula1('\'Produk\'!$C$2:$C$288');
+        // $validation->setFormula1('"Item A,Item B,Item C"');
+        $validation->setSqref('B2:B10000');
+
+        // check duplicate input noseri
+        $duplicate = new Conditional();
+        $duplicate->setConditionType(Conditional::CONDITION_DUPLICATES);
+        $duplicate->getStyle()->getFont()->getColor()->setARGB(Color::COLOR_BLACK);
+        $duplicate->getStyle()->getFill()->setFillType(Fill::FILL_SOLID);
+        $duplicate->getStyle()->getFill()->getEndColor()->setARGB(Color::COLOR_YELLOW);
+
+        $conditionalStyles = $spreadsheet->getActiveSheet()->getStyle('C2:C10000')->getConditionalStyles();
+        $conditionalStyles[] = $duplicate;
+
+        $spreadsheet->getActiveSheet()->getStyle('C2:C10000')->setConditionalStyles($conditionalStyles);
+
+
+        // workshet master
         $spreadsheet->setActiveSheetIndex(1);
         $spreadsheet->getActiveSheet()->setTitle('Produk');
         $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
         $spreadsheet->getActiveSheet()->setCellValue('B1', 'Merk');
         $spreadsheet->getActiveSheet()->setCellValue('C1', 'Nama Produk');
+        $spreadsheet->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
 
         $noo = 2;
         foreach($produk as $p) {
-            $spreadsheet->getActiveSheet()->setCellValue('A'. $noo, $no);
+            $spreadsheet->getActiveSheet()->setCellValue('A'. $noo, $p->id);
             $spreadsheet->getActiveSheet()->setCellValue('B'. $noo, $p->produk->merk);
             $spreadsheet->getActiveSheet()->setCellValue('C'. $noo, $p->produk->nama.' '.$p->nama);
             $noo++;
@@ -794,6 +833,45 @@ class GudangController extends Controller
 
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
+    }
+
+    function import_noseri(Request $request)
+    {
+        $file = $request->file('file_csv');
+        $filename = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension(); //Get extension of uploaded file
+        $tempPath = $file->getRealPath();
+        $fileSize = $file->getSize();
+
+        $reader = new ReaderXlsx();
+        $spreadsheet = $reader->load(public_path('upload/noseri/'. $filename));
+        $spreadsheet->setActiveSheetIndex(1);
+        $sheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
+
+        $html = "<table border='1'>
+        <tr>
+        <th>No</th>
+        <th>Nama</th>
+        <th>Noseri</th>
+        </tr>";
+        $a =[];
+        $numrow = 1;
+        foreach($sheet as $row) {
+            $a = $row['A'];
+            $b = $row['B'];
+            $c = $row['C'];
+            if($numrow > 1) {
+                $nis_td = (!empty($a)) ? "" : " style='background: #E07171;'";
+                $html .= "<tr>";
+                $html .= "<td" . $nis_td . ">" . $a . "</td>";
+                $html .= "<td" . $nis_td . ">" . $b . "</td>";
+                $html .= "<td" . $nis_td . ">" . $c . "</td>";
+                $html .= "</tr>";
+            }
+            $numrow++;
+        }
+        $html .= "</table>";
+        return json_encode($html);
     }
 
     function getListSODone()

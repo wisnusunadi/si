@@ -13,5 +13,6 @@ Route::prefix('/v2')->group(function() {
 
     Route::prefix('/gbj')->group(function() {
         Route::get('template_noseri', [GudangController::class, 'download_template_noseri']);
+        Route::post('import-noseri', [GudangController::class, 'import_noseri']);
     });
 });

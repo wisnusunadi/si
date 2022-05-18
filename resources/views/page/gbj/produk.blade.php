@@ -423,6 +423,34 @@
     </div>
 </div>
 
+<div class="modal fade import-seri" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Unggah File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form name="formImport" id="formImport" method="post" enctype="multipart/form-data">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">Noseri</label>
+                    <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".csv">
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary">Import</button>
+                </div>
+            </form>
+            </div>
+            <div class="modal-footer" id="csv_data_file" style="overflow-y: scroll; height:600px;">
+                {{-- <button type="button" class="btn btn-primary">Simpan</button> --}}
+            </div>
+        </div>
+    </div>
+</div>
+
 <!-- Modal -->
 <div class="modal fade tambah_seri" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
@@ -552,7 +580,7 @@
     })
 
     $('#importTemplate').click(function() {
-        console.log('import');
+        $('.import-seri').modal('show')
     })
 
     $('#alkes').click(function () {
@@ -804,6 +832,23 @@
             }
         });
     });
+
+    $('#formImport').on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: "/api/v2/gbj/import-noseri",
+            method: "post",
+            data: new FormData(this),
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data) {
+                // console.log(data);
+                $('#csv_data_file').html(data);
+            }
+        })
+    })
 
     function select_layout() {
         $.ajax({
