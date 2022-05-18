@@ -228,7 +228,6 @@
                         <tr>
                             <th>Nomor Seri</th>
                             <th><input type="checkbox" id="head-cb"></th>
-                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -479,9 +478,6 @@
                     else
                        return  `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}">`
                 }},
-                { data(data) {
-                    return `<input type="text" name="" value="">`
-                }}
             ],
             'select': {
                 'style': 'multi'
@@ -501,13 +497,16 @@
     });
 
     let idCheck = 1;
+    let dataTampungSeri = [];
 
     $('.scan-produk').on('click', '.cb-child', function(e) {
         if ($(this).is(':checked')) {
-            $(this).parent().next().children().val(idCheck);
+            dataTampungSeri.push({
+                noseri: $(this).val(),
+            });
             idCheck++;
         } else {
-            $(this).parent().next().children().val('');
+            let index = dataTampungSeri.findIndex(x => x.noseri == $(this).val());
             idCheck--;
         }
     });
@@ -519,9 +518,6 @@
         console.log(jml);
         console.log(dpp);
         console.log(prd);
-        let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(function() {
-            return $(this).val();
-        }).get();
 
         if (a.length > jml) {
             Swal.fire({
@@ -538,7 +534,7 @@
                 timer: 1500
             })
 
-            console.log("noseri", a);
+            console.log("noseri", dataTampungSeri);
 
             // prd1[dpp] = {"jumlah": jml, "prd": prd, "noseri": a};
             // $('.modal-scan').modal('hide');
