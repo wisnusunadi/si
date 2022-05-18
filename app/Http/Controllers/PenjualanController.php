@@ -1732,7 +1732,7 @@ class PenjualanController extends Controller
             }
 
             if($request->no_paket != ""){
-                $nopaket = 'AK1-' . $request->no_paket;
+                $nopaket = $request->jenis_paket. $request->no_paket;
             }else{
                 $nopaket = "";
             }
@@ -2039,7 +2039,7 @@ class PenjualanController extends Controller
             if ($request->no_paket == '') {
                 $c_akn = NULL;
             } else {
-                $c_akn = $request->has('isi_nopaket') ? 'AK1-' . $request->no_paket : NULL;
+                $c_akn = $request->has('isi_nopaket') ? $request->jenis_paket . $request->no_paket : NULL;
             }
 
             $akn = $c_akn;
@@ -2058,7 +2058,6 @@ class PenjualanController extends Controller
         $ekatalog->tgl_edit = $request->tgl_edit;
         $ekatalog->no_urut = $request->no_urut;
         $ekatalog->satuan = $request->satuan_kerja;
-        $ekatalog->no_paket = $nopaket;
         $ekatalog->status = $request->status_akn;
         $ekatalog->ket = $request->keterangan;
         $ekatalog->no_paket = $akn;

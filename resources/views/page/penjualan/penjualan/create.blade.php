@@ -378,7 +378,11 @@
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Paket</label>
                                                                     <div class="col-lg-5 col-md-12 input-group">
                                                                         <div class="input-group-prepend">
-                                                                            <span class="input-group-text" id="ket_no_paket">AK1-</span>
+                                                                            <select class="form-control jenis_paket" name="jenis_paket" id="jenis_paket">
+                                                                                <option value="AK1-" selected>AK1-</option>
+                                                                                <option value="FKS">FKS</option>
+                                                                            </select>
+                                                                            {{-- <span class="input-group-text" id="ket_no_paket">AK1-</span> --}}
                                                                         </div>
                                                                         <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" />
                                                                         <div class="input-group-append hide" id="checkbox_nopaket">
@@ -894,6 +898,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        $('#jenis_paket').select2();
         function perencanaan(customer_id, instansi) {
             $('#perencanaantable').DataTable({
                 searching: false,
