@@ -2272,7 +2272,6 @@ class ProduksiController extends Controller
 
     function kirimseri(Request $request)
     {
-        // dd($request->all());
         $header = new TFProduksi();
         $header->tgl_masuk = $request->tgl_transfer;
         $header->dari = 17;
@@ -2294,20 +2293,33 @@ class ProduksiController extends Controller
         $check_array = $request->noseri;
         foreach ($request->noseri as $key => $value) {
             if (in_array($request->noseri[$key], $check_array)) {
-                $seri = new NoseriBarangJadi();
-                $seri->dari = 17;
-                $seri->ke = $request->tujuan;
-                $seri->gdg_barang_jadi_id = $request->gbj_id;
-                $seri->noseri = $request->noseri[$key];
-                $seri->jenis = 'MASUK';
-                $seri->is_aktif = 0;
-                $seri->created_at = Carbon::now();
-                $seri->created_by = $request->userid;
-                $seri->save();
+                // $seri = new NoseriBarangJadi();
+                // $seri->dari = 17;
+                // $seri->ke = $request->tujuan;
+                // $seri->gdg_barang_jadi_id = $request->gbj_id;
+                // $seri->noseri = $request->noseri[$key];
+                // $seri->jenis = 'MASUK';
+                // $seri->is_aktif = 0;
+                // $seri->created_at = Carbon::now();
+                // $seri->created_by = $request->userid;
+                // $seri->save();
+                $seri = NoseriBarangJadi::updateOrCreate(
+                    ['noseri' => $request->noseri[$key]],
+                    [
+                    'dari' => 17,
+                    'ke' => $request->tujuan,
+                    'gdg_barang_jadi_id' => $request->gbj_id,
+                    'noseri' => $request->noseri[$key],
+                    'jenis' => 'MASUK',
+                    'is_aktif' => 0,
+                    'created_at' => Carbon::now(),
+                    'created_by' => $request->userid,
+                ]);
+                $seriid = $seri->id;
 
                 $serit = new NoseriTGbj();
                 $serit->t_gbj_detail_id = $detail->id;
-                $serit->noseri_id = $seri->id;
+                $serit->noseri_id = $seriid;
                 $serit->layout_id = 1;
                 $serit->jenis = 'MASUK';
                 $serit->created_at = Carbon::now();
