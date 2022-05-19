@@ -215,7 +215,7 @@
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">Scan Produk</h5>
+                <h5 class="modal-title">Scan Produk <span id="namaproduk"></span></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -291,6 +291,7 @@
                 .to$()
                 .find('input[type=checkbox]')
                 .prop('checked', isChecked);
+
         });
 
         $("#head-cb-edit").on('click', function () {
@@ -314,10 +315,6 @@
                 $('.cb-child-prd').parent().next().next().next().next().children().find('button').removeClass('disabled').attr('disabled', true);
            }
         });
-
-
-
-    });
 
         let a = $('#gudang-barang').DataTable({
             processing: true,
@@ -352,6 +349,8 @@
             cell.innerHTML = i + 1;
         });
     }).draw();
+
+    });
 
     // add
     var id = '';
@@ -444,6 +443,11 @@
     var jml = '';
     var dpp = '';
     $(document).on('click', '.detailmodal', function(e) {
+
+        let gh = $(this).parent().prev().prev().prev()[0].textContent
+        let ghh = gh.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
+        $('#namaproduk').html('<b>'+ghh+'</b>')
+        // console.log(ghh);
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
         // console.log(prd);
@@ -469,6 +473,7 @@
             columns: [
                 { data: 'seri', name: 'seri'},
                 { data(data) {
+                    console.log("colm", data.ids, temp_array[data.ids])
                     if (temp_array[data.ids] !== undefined){
                         if (temp_array[data.ids] == dpp)
                             return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}" checked>`
@@ -496,28 +501,23 @@
         $('.modal-scan').modal('show');
     });
 
-    let idCheck = 1;
-    let dataTampungSeri = [];
+    var t = 0;
 
+    let dataTampungSeri = [];
     $('.scan-produk').on('click', '.cb-child', function(e) {
         if ($(this).is(':checked')) {
-            dataTampungSeri.push({
-                noseri: $(this).val(),
-            });
-            idCheck++;
+            dataTampungSeri.push($(this).val());
         } else {
             let index = dataTampungSeri.findIndex(x => x.noseri == $(this).val());
-            idCheck--;
         }
     });
-
-
-    var t = 0;
-    
     $(document).on('click', '#simpan', function(e) {
         console.log(jml);
         console.log(dpp);
         console.log(prd);
+        let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(function() {
+            return $(this).val();
+        }).get();
 
         if (a.length > jml) {
             Swal.fire({
@@ -534,16 +534,16 @@
                 timer: 1500
             })
 
-            console.log("noseri", dataTampungSeri);
-
-            // prd1[dpp] = {"jumlah": jml, "prd": prd, "noseri": a};
-            // $('.modal-scan').modal('hide');
-            // if(prd1[dpp].noseri.length == 0) {
-            //     delete prd1[dpp]
-            // }
+            prd1[dpp] = {"jumlah": jml, "prd": prd, "noseri": dataTampungSeri};
+            $('.modal-scan').modal('hide');
+            if(prd1[dpp].noseri.length == 0) {
+                delete prd1[dpp]
+            }
 
         }
         console.log(prd1);
+        console.log("a", a);
+        console.log("dataTampungSeri", dataTampungSeri);
     })
 
     $(document).on('click', '#rancang', function(e) {
