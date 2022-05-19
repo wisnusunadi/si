@@ -982,7 +982,11 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('gbj', function ($data) {
-                return $data->stok;
+                if ($data->stok >= 0) {
+                    return "<div>" . $data->stok . "</div>";
+                } else {
+                    return '<div style="color:red;">' . $data->stok . '</div>';
+                }
             })
             ->addColumn('penjualan', function ($data) {
                 $jumlah_gbj = $data->stok;
@@ -1021,7 +1025,7 @@ class PpicController extends Controller
             })
             ->addColumn('aksi', function ($data) {
                 return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '" id="detmodal">
-                <div><i class="fas fa-eye"></i></div>
+                <button type="button" class=" btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
             </a>';
             })
             ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
@@ -1031,9 +1035,9 @@ class PpicController extends Controller
     public function master_stok_detail_show($id)
     {
         $data = GudangBarangJadi::find($id);
-        $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi")  + $data->getJumlahPermintaanPesanan("ekatalog", "batal") + $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+        $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi")  +  $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
         $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa")  + $data->getJumlahTransferPesanan("spb");
-        $jumlah = $jumlahdiminta - $jumlahtf;
+        $jumlah = ($jumlahdiminta - $jumlahtf);
         return view('spa.ppic.master_stok.detail', ['id' => $id, 'data' => $data, 'jumlah' => $jumlah]);
     }
 
@@ -1063,6 +1067,21 @@ class PpicController extends Controller
                     return $data->so;
                 } else {
                     return '-';
+                }
+            })
+            ->addColumn('customer', function($data){
+                if(isset($data->Ekatalog)){
+                    if(isset($data->Ekatalog->Customer)){
+                        return $data->Ekatalog->Customer->nama;
+                    }
+                }else if(isset($data->Spa)){
+                    if(isset($data->Spa->Customer)){
+                        return $data->Spa->Customer->nama;
+                    }
+                }else{
+                    if(isset($data->Spb->Customer)){
+                        return $data->Spb->Customer->nama;
+                    }
                 }
             })
             ->addColumn('tgl_order', function ($data) {
@@ -1125,7 +1144,24 @@ class PpicController extends Controller
                 // }
                 return $jumlah;
             })
-            ->rawColumns(['tgl_delivery'])
+            ->addColumn('status', function($data){
+                if(isset($data->Ekatalog)){
+                        if($data->Ekatalog->status == "sepakat"){
+                            if($data->State->nama == "Penjualan"){
+                                return '<span class="badge green-text">Sepakat</span>';
+                            }else{
+                                return '<span class="badge purple-text">PO</span>';
+                            }
+                        }else if($data->Ekatalog->status == "negosiasi"){
+                            return '<span class="badge yellow-text">Negosiasi</span>';
+                        }else if($data->Ekatalog->status == "batal"){
+                            return '<span class="badge red-text">Batal</span>';
+                        }
+                }else{
+                    return '<span class="badge purple-text">PO</span>';
+                }
+            })
+            ->rawColumns(['tgl_delivery', 'status'])
             ->make(true);
     }
 
@@ -1157,6 +1193,12 @@ class PpicController extends Controller
             })
             ->addColumn('jumlah', function ($data) {
                 $jumlah = $data->getJumlahCekPesanan();
+                // $id = $data->id;
+                // $j = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+                //     $q->where('gudang_barang_jadi_id', $id);
+                // })->doesntHave('NoseriDetailLogistik')->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+                //     $q->whereNotIn('log_id', ['10']);
+                // })->get();
                 return $jumlah;
             })
             ->addColumn('jumlah_pengiriman', function ($data) {
@@ -1165,6 +1207,13 @@ class PpicController extends Controller
                 //     $jumlah = $jumlah + $o->DetailPesanan->Pesanan->getJumlahCek();
                 // }
                 // return $jumlah;
+                // $id = $data->id;
+                // $j = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
+                //     $q->where('gudang_barang_jadi_id', $id);
+                // })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+                //     $q->whereNotIn('log_id', ['10']);
+                // })->get();
+                // return $j;
                 return $data->getJumlahKirimPesanan();
             })
 
@@ -1176,7 +1225,7 @@ class PpicController extends Controller
             })
             ->addColumn('aksi', function ($data) {
                 return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '" id="detmodal">
-                <div><i class="fas fa-eye"></i></div>
+                <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
             </a>';
             })
             ->rawColumns(['nama_produk', 'aksi'])
@@ -1215,6 +1264,15 @@ class PpicController extends Controller
             ->addColumn('so', function ($data) {
                 return $data->so;
             })
+            ->addColumn('customer', function ($data) {
+                if(isset($data->Ekatalog)){
+                    return $data->Ekatalog->Customer->nama;
+                }else if(isset($data->Spa)){
+                    return $data->Spa->Customer->nama;
+                }else{
+                    return $data->Spb->Customer->nama;
+                }
+            })
             ->addColumn('jumlah_pesanan', function ($data) use ($id) {
                 $jumlah = $this->getJumlahCekPesanan($id, $data->id);
                 // $res = DetailPesanan::where('pesanan_id', $ids)->get();
@@ -1235,6 +1293,8 @@ class PpicController extends Controller
                 // })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($ids) {
                 //     $q->where('pesanan_id', $ids);
                 // })->count();
+
+
                 $jumlah = $this->getJumlahKirimPesanan($id, $data->id);
                 return $jumlah;
             })

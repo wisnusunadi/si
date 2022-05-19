@@ -172,7 +172,6 @@
                                         </div>
                                         <div class="margin">
                                             <div><b id="no_akn">{{$data->satuan}}</b></div>
-                                            <!-- <small>({{$data->instansi}})</small> -->
                                         </div>
                                         <div class="margin">
                                             <b id="distributor">{{$data->alamat}}</b>

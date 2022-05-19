@@ -231,9 +231,9 @@ class GudangBarangJadi extends Model
     public function getJumlahKirimPesanan()
     {
         $id = $this->id;
-        $jumlah = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
+        $jumlah = NoseriDetailLogistik::whereHas('NoseriDetailPesanan.DetailPesananProduk', function ($q) use ($id) {
             $q->where('gudang_barang_jadi_id', $id);
-        })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+        })->whereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
             $q->whereNotIn('log_id', ['10']);
         })->count();
         return $jumlah;

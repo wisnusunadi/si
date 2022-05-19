@@ -64,14 +64,16 @@
                                             <span class="yellow-text badge">
                                                 @elseif ($data->Pesanan->State->nama == "Terkirim Sebagian")
                                                 <span class="blue-text badge">
-                                                    @elseif ($data->Pesanan->State->nama == "Kirim")
-                                                    <span class="green-text badge">
+                                                    @elseif ($data->Pesanan->State->nama == "Belum Terkirim")
+                                                    <span class="red-text badge">
+                                                        @elseif ($data->Pesanan->State->nama == "Kirim")
+                                                        <span class="green-text badge">
+                                                            @endif
+                                                            {{ucfirst($data->Pesanan->State->nama)}}</span>
+                                                        @else
+                                                        -
                                                         @endif
-                                                        {{ucfirst($data->Pesanan->State->nama)}}</span>
-                                                    @else
-                                                    -
-                                                    @endif
-                            </b>
+                                </b>
                         </div>
                     </div>
                 </div>

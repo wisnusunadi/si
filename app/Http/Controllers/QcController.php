@@ -463,7 +463,7 @@ class QcController extends Controller
                 if (!empty($data->so)) {
                     $name = explode('/', $data->so);
                     if ($name[1] == 'EKAT') {
-                        return $data->Ekatalog->satuan_kerja;
+                        return $data->Ekatalog->satuan;
                     } elseif ($name[1] == 'SPA') {
                         return $data->Spa->Customer->nama;
                     } else {
@@ -562,8 +562,8 @@ class QcController extends Controller
                     } else {
                         $x =  'spb';
                     }
-                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '">
-                                <i class="fas fa-eye"></i>
+                    return '<a class="btn btn-outline-primary btn-sm" href="' . route('qc.so.detail', [$data->id, $x]) . '">
+                                <i class="fas fa-eye"></i> Detail
                         </a>';
                 }
             })
@@ -626,7 +626,7 @@ class QcController extends Controller
                 if (!empty($data->so)) {
                     $name = explode('/', $data->so);
                     if ($name[1] == 'EKAT') {
-                        return $data->Ekatalog->satuan_kerja;
+                        return $data->Ekatalog->satuan;
                     } elseif ($name[1] == 'SPA') {
                         return $data->Spa->Customer->nama;
                     } else {
@@ -725,8 +725,8 @@ class QcController extends Controller
                     } else {
                         $x =  'spb';
                     }
-                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '">
-                                <i class="fas fa-eye"></i>
+                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"  class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye"></i> Detail
                         </a>';
                 }
             })
@@ -854,11 +854,11 @@ class QcController extends Controller
                         $produkid = $data->DetailPesananProduk->first()->id;
                     }
                     return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data->penjualan_produk_id . '" data-id="' . $data->id . '" data-count="' . $produkcount . '" data-produk="' . $produkid . '" data-jenis="produk" id="detmodal">
-                        <div><i class="fas fa-eye"></i></div>
+                        <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
                     </a>';
                 } else {
                     return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data->part_id . '" data-id="' . $data->id . '" data-count="1" data-produk="0" data-jenis="part" id="detmodal">
-                        <div><i class="fas fa-eye"></i></div>
+                        <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
                     </a>';
                 }
                 // if ($data['jenis'] == "produk") {

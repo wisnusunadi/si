@@ -226,6 +226,9 @@
                         data: 'so',
                     },
                     {
+                        data: 'customer',
+                    },
+                    {
                         data: 'tgl_delivery',
                     },
                     {
