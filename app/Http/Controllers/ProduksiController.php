@@ -2127,14 +2127,29 @@ class ProduksiController extends Controller
 
     function cekDuplicateNoseri(Request $request)
     {
-        $noseri = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get();
-        $data = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get()->count();
+        // $noseri = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get();
+        $data = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get()->pluck('noseri');
+        $data1 = NoseriBarangJadi::whereIn('noseri', $request->noseri)->get()->pluck('noseri');
+        $datam = $data->merge($data1);
         $seri = [];
-        if ($data > 0) {
-            foreach ($noseri as $item) {
-                array_push($seri, $item->noseri);
+        $seri1 = [];
+        if (count($data) > 0 || count($data1) > 0) {
+            foreach ($data as $item) {
+                array_push($seri, $item);
             }
-            return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true]);
+
+            foreach ($data1 as $item1) {
+                array_push($seri1, $item1);
+            }
+
+            if(count($data) > 0) {
+                return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar di perakitan', 'error' => true]);
+            }
+
+            if(count($data1) > 0) {
+                return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri1) . ' sudah terdaftar di gudang barang jadi', 'error' => true]);
+            }
+            // return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true]);
         } else {
             return response()->json(['msg' => 'Success', 'error' => false]);
         }

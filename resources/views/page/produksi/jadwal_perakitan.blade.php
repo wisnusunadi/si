@@ -575,6 +575,7 @@
                     }
                 });
             } else {
+                $('.noseri').removeClass('is-invalid');
                 $.ajax({
                     url: "/api/prd/cek-noseri",
                     type: "post",
@@ -582,6 +583,7 @@
                         noseri: arr,
                     },
                     success: function(res) {
+                        // console.log(res);
                         if(res.error == true) {
                             Swal.fire({
                                 icon: 'error',

@@ -32,6 +32,7 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
 use PhpOffice\PhpSpreadsheet\Reader\Xlsx as ReaderXlsx;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
@@ -843,39 +844,90 @@ class GudangController extends Controller
         $tempPath = $file->getRealPath();
         $fileSize = $file->getSize();
 
+        $file->move(public_path('upload/noseri/'), $filename);
+
         $reader = new ReaderXlsx();
         $spreadsheet = $reader->load(public_path('upload/noseri/'. $filename));
-        $spreadsheet->setActiveSheetIndex(1);
-        $sheet = $spreadsheet->getActiveSheet()->toArray(null, true, true, true);
-
-        $html = "<table border='1'>
-        <tr>
-        <th>No</th>
-        <th>Nama</th>
-        <th>Noseri</th>
-        </tr>";
-        $a =[];
-        $numrow = 1;
-        foreach($sheet as $row) {
-            $a = $row['A'];
-            $b = $row['B'];
-            $c = $row['C'];
-            if($numrow > 1) {
-                $nis_td = (!empty($a)) ? "" : " style='background: #E07171;'";
-                $html .= "<tr>";
-                $html .= "<td" . $nis_td . ">" . $a . "</td>";
-                $html .= "<td" . $nis_td . ">" . $b . "</td>";
-                $html .= "<td" . $nis_td . ">" . $c . "</td>";
-                $html .= "</tr>";
+        $spreadsheet->setActiveSheetIndex(0);
+        // $sheet = $spreadsheet->getActiveSheet()->toArray();
+        // $html = "<table class='table table-bordered table-striped table-hover'>
+        //     <tr>
+        //     <th>No</th>
+        //     <th>Nama</th>
+        //     <th>Noseri</th>
+        //     <th>Keterangan</th>
+        //     </tr>";
+        //     $c =[];
+        //     $numrow = 1;
+            // unset($sheet[0]);
+            // foreach($sheet as $key => $row) {
+                // $a = $row['A'];
+                // $b = $row['B'];
+                // $c = $row['C'];
+                // if($numrow > 1) {
+                //     $nis_td = (!empty($a)) ? "" : " style='background: #E07171;'";
+                //     $cekok = (!$a) ? "" : "style='background: #E07171;'";
+                //     $html .= "<tr>";
+                //     $html .= "<td" . $nis_td . ">" . $a . "</td>";
+                //     $html .= "<td" . $nis_td . ">" . $b . "</td>";
+                //     $html .= "<td" . $nis_td . ">" . $c . "</td>";
+                //     $html .= "<td" . $nis_td . ">OK</td>";
+                //     $html .= "</tr>";
+                // }
+                // // $noseri = NoseriBarangJadi::where('noseri', $c)->get();
+                // $numrow++;
+                // $arr_insert = [
+                //     'noser' => $c,
+                // ];
+                // return $row[0];
+            // }
+            // $html .= "</table>";
+            // return $arr_insert;
+            // $html .= '<hr>';
+            // $html .= '<button type="button" class="btn btn-primary">Simpan</button>';
+            // return json_encode($html);
+            // dd($sheet);
+            // array_shift($data);
+            $sheet        = $spreadsheet->getActiveSheet();
+            $row_limit    = $sheet->getHighestDataRow();
+            $column_limit = $sheet->getHighestDataColumn();
+            $row_range    = range( 2, $row_limit );
+            $column_range = range( 'C', $column_limit );
+            $startcount = 2;
+            $data = array();
+            foreach ( $row_range as $row ) {
+                $data[] = [
+                    'no' =>$sheet->getCell( 'A' . $row )->getValue(),
+                    'produk' => $sheet->getCell( 'B' . $row )->getValue(),
+                    'noseri' => $sheet->getCell( 'C' . $row )->getValue()
+                ];
+                $startcount++;
             }
-            $numrow++;
-        }
-        $html .= "</table>";
-        return json_encode($html);
-    }
 
-    function getListSODone()
-    {
+            foreach($data as $d) {
+                $aa[] = $d['noseri'];
+                // echo NoseriBarangJadi::where('noseri', $aa)->get();
+            }
+            return $aa;
+
+
+            // foreach($data as $kk => $dd) {
+            //     // echo json_encode($dd['noseri']);
+            //     echo NoseriBarangJadi::where('noseri', json_encode($dd['noseri']))->get();
+            // }
+
+            // for ($i=0; $i < count($data); $i++) {
+            //     // echo NoseriBarangJadi::whereIn('noseri', $data[$i]['noseri'])->get();
+            //     echo $data[$i]['noseri'];
+            // }
+            // return $noseri;
+            // return gettype($data);
+            // return $data[]['noseri'];
+            // var_dump($data);
+        }
+
+        function getListSODone()
+        {
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })->get());

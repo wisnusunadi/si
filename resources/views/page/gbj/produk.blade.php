@@ -436,20 +436,35 @@
             <div class="modal-body">
                 <div class="form-group">
                     <label for="">Noseri</label>
-                    <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".csv">
+                    <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".xlsx">
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Import</button>
+                    <button type="submit" class="btn btn-primary">Preview</button>
                 </div>
             </form>
             </div>
-            <div class="modal-footer" id="csv_data_file" style="overflow-y: scroll; height:600px;">
+            <div class="modal-footer" id="csv_data_file" style="overflow-y: scroll; height:400px;">
                 {{-- <button type="button" class="btn btn-primary">Simpan</button> --}}
+            </div>
+            <div class="modal-footer" id="footer-btn">
+                <button type="button" class="btn btn-primary">Simpan</button>
             </div>
         </div>
     </div>
 </div>
+
+<div class="modal fade notice" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <div class="modal-content">
+        <h5>
+            <center>Sebelum Mengunggah Noseri</center>
+        </h5>
+        <p align="center">Pastikan Noseri Sudah Unik atau Tidak Ada Warna Dalam Template</p>
+        <button type="button" class="btn btn-success btnNext"><i class="fas fa-check"> OK</i></button>
+      </div>
+    </div>
+  </div>
 
 <!-- Modal -->
 <div class="modal fade tambah_seri" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
@@ -566,6 +581,7 @@
 
 {{-- data --}}
 <script type="text/javascript">
+    $('#footer-btn').hide()
     var authid = $('#authid').val();
     // initial
     $.ajaxSetup({
@@ -580,6 +596,11 @@
     })
 
     $('#importTemplate').click(function() {
+        $('.notice').modal('show')
+    })
+
+    $('.btnNext').click(function() {
+        $('.notice').modal('hide')
         $('.import-seri').modal('show')
     })
 
@@ -846,6 +867,7 @@
             success: function(data) {
                 // console.log(data);
                 $('#csv_data_file').html(data);
+                $('#footer-btn').show()
             }
         })
     })
