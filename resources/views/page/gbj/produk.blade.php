@@ -444,6 +444,7 @@
                 </div>
             </form>
             </div>
+            <form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">
             <div class="modal-footer" id="csv_data_file" style="overflow-y: scroll; height:400px;">
 
             </div>
@@ -452,8 +453,9 @@
                     <br>
                     <span id="existNoseri"></span>
                 </p>
-                <button type="button" class="btn btn-default float-right btnImport"><i class="fas fa-upload"> Unggah</i></button>
+                <button type="submit" class="btn btn-default float-right btnImport"><i class="fas fa-upload"> Unggah</i></button>
             </div>
+        </form>
         </div>
     </div>
 </div>
@@ -913,6 +915,21 @@
                     });
                 }
                 $('#footer-btn').show()
+            }
+        })
+    })
+
+    $('#formStoreImport').on('submit', function(e){
+        $.ajax({
+            url: "/api/v2/gbj/import-noseri",
+            method: "post",
+            data: new FormData(this),
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data) {
+                console.log(res);
             }
         })
     })

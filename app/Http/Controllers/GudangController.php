@@ -849,105 +849,103 @@ class GudangController extends Controller
         $reader = new ReaderXlsx();
         $spreadsheet = $reader->load(public_path('upload/noseri/'. $filename));
         $spreadsheet->setActiveSheetIndex(0);
-        // $sheet = $spreadsheet->getActiveSheet()->toArray();
-        // $html = "<table class='table table-bordered table-striped table-hover'>
-        //     <tr>
-        //     <th>No</th>
-        //     <th>Nama</th>
-        //     <th>Noseri</th>
-        //     <th>Keterangan</th>
-        //     </tr>";
-        //     $c =[];
-        //     $numrow = 1;
-            // unset($sheet[0]);
-            // foreach($sheet as $key => $row) {
-                // $a = $row['A'];
-                // $b = $row['B'];
-                // $c = $row['C'];
-                // if($numrow > 1) {
-                //     $nis_td = (!empty($a)) ? "" : " style='background: #E07171;'";
-                //     $cekok = (!$a) ? "" : "style='background: #E07171;'";
-                //     $html .= "<tr>";
-                //     $html .= "<td" . $nis_td . ">" . $a . "</td>";
-                //     $html .= "<td" . $nis_td . ">" . $b . "</td>";
-                //     $html .= "<td" . $nis_td . ">" . $c . "</td>";
-                //     $html .= "<td" . $nis_td . ">OK</td>";
-                //     $html .= "</tr>";
-                // }
-                // // $noseri = NoseriBarangJadi::where('noseri', $c)->get();
-                // $numrow++;
-                // $arr_insert = [
-                //     'noser' => $c,
-                // ];
-                // return $row[0];
-            // }
-            // $html .= "</table>";
-            // return $arr_insert;
-            // $html .= '<hr>';
-            // $html .= '<button type="button" class="btn btn-primary">Simpan</button>';
-            // return json_encode($html);
-            // dd($sheet);
-            // array_shift($data);
-            $sheet        = $spreadsheet->getActiveSheet();
-            $row_limit    = $sheet->getHighestDataRow();
-            $column_limit = $sheet->getHighestDataColumn();
-            $row_range    = range( 2, $row_limit );
-            $column_range = range( 'C', $column_limit );
-            $startcount = 2;
-            $data = array();
-            foreach ( $row_range as $row ) {
-                $data[] = [
-                    'no' =>$sheet->getCell( 'A' . $row )->getValue(),
-                    'produk' => $sheet->getCell( 'B' . $row )->getValue(),
-                    'noseri' => $sheet->getCell( 'C' . $row )->getValue()
-                ];
-                $startcount++;
-            }
-            // return json_encode($data);
 
-            foreach($data as $d) {
-                $aa[] = $d['noseri'];
-                $bb[] = $d['produk'];
-            }
-            // return $aa;
-
-            $check = NoseriBarangJadi::whereIn('noseri', $aa)->get()->pluck('noseri');
-            $seri = [];
-            $sheet1 = $sheet->toArray(null, true, true, true);
-            $numrow = 1;
-            $html = "<table class='table table-bordered table-striped table-hover'>
-                    <tr>
-                    <th>No</th>
-                    <th>Nama</th>
-                    <th>Noseri</th>
-                    </tr>";
-            foreach($sheet1 as $key => $row) {
-                $a = $row['A'];
-                $b = $row['B'];
-                $c = $row['C'];
-                if($numrow > 1) {
-                    $nis_td = (!empty($c)) ? "" : " style='background: #E07171;'";
-                    $html .= "<tr>";
-                    $html .= "<td" . $nis_td . ">" . $a . "</td>";
-                    $html .= "<td" . $nis_td . ">" . $b . "</td>";
-                    $html .= "<td" . $nis_td . ">" . $c . "</td>";
-                    $html .= "</tr>";
-                }
-                $numrow++;
-            }
-            $html .= "</table>";
-
-            if(count($check) > 0) {
-                foreach ($check as $item) {
-                    array_push($seri, $item);
-                }
-                return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true, 'data' => $html, 'noseri' => implode(', ', $seri)]);
-            } else {
-                return response()->json(['msg' => 'Noseri Sudah Bisa Diunggah', 'error' => false, 'data' => $html]);
-            }
+        $sheet        = $spreadsheet->getActiveSheet();
+        $row_limit    = $sheet->getHighestDataRow();
+        $column_limit = $sheet->getHighestDataColumn();
+        $row_range    = range( 2, $row_limit );
+        $column_range = range( 'C', $column_limit );
+        $startcount = 2;
+        $data = array();
+        foreach ( $row_range as $row ) {
+            $data[] = [
+                'no' =>$sheet->getCell( 'A' . $row )->getValue(),
+                'produk' => $sheet->getCell( 'B' . $row )->getValue(),
+                'noseri' => $sheet->getCell( 'C' . $row )->getValue()
+            ];
+            $startcount++;
         }
 
-        function getListSODone()
+        foreach($data as $d) {
+            $aa[] = $d['noseri'];
+            $bb[] = $d['produk'];
+        }
+
+        $check = NoseriBarangJadi::whereIn('noseri', $aa)->get()->pluck('noseri');
+        $seri = [];
+        $sheet1 = $sheet->toArray(null, true, true, true);
+        $numrow = 1;
+        // $html = '<form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">';
+        $html = "<input type='hidden' name='namafile' value='" . $filename . "'>";
+        $html .= "<table class='table table-bordered table-striped table-hover'>
+                <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Noseri</th>
+                </tr>";
+        foreach($sheet1 as $key => $row) {
+            $a = $row['A'];
+            $b = $row['B'];
+            $c = $row['C'];
+            if($numrow > 1) {
+                $nis_td = (!empty($c)) ? "" : " style='background: #E07171;'";
+                $html .= "<tr>";
+                $html .= "<td" . $nis_td . ">" . $a . "</td>";
+                $html .= "<td" . $nis_td . ">" . $b . "</td>";
+                $html .= "<td" . $nis_td . ">" . $c . "</td>";
+                $html .= "</tr>";
+            }
+            $numrow++;
+        }
+        $html .= "</table>";
+
+        if(count($check) > 0) {
+            foreach ($check as $item) {
+                array_push($seri, $item);
+            }
+            return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true, 'data' => $html, 'noseri' => implode(', ', $seri)]);
+        } else {
+            return response()->json(['msg' => 'Noseri Sudah Bisa Diunggah', 'error' => false, 'data' => $html]);
+        }
+    }
+
+    function import_noseri_to_db(Request $request)
+    {
+        $file = $request->file('namafile');
+        $filename = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension(); //Get extension of uploaded file
+        $tempPath = $file->getRealPath();
+        $fileSize = $file->getSize();
+
+        $reader = new ReaderXlsx();
+        $spreadsheet = $reader->load(public_path('upload/noseri/'. $filename));
+        $spreadsheet->setActiveSheetIndex(0);
+
+        $sheet        = $spreadsheet->getActiveSheet();
+        $row_limit    = $sheet->getHighestDataRow();
+        $column_limit = $sheet->getHighestDataColumn();
+        $row_range    = range( 2, $row_limit );
+        $column_range = range( 'C', $column_limit );
+        $startcount = 2;
+        $data = array();
+        foreach ( $row_range as $row ) {
+            $data[] = [
+                'no' =>$sheet->getCell( 'A' . $row )->getValue(),
+                'produk' => $sheet->getCell( 'B' . $row )->getValue(),
+                'noseri' => $sheet->getCell( 'C' . $row )->getValue()
+            ];
+            $startcount++;
+        }
+
+        foreach($data as $d) {
+            $aa[] = $d['noseri'];
+            $bb[] = $d['produk'];
+        }
+
+        return $aa;
+    }
+
+    function getListSODone()
         {
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
