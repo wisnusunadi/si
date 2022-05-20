@@ -73,7 +73,7 @@
                                                         @else
                                                         -
                                                         @endif
-                                </b>
+                            </b>
                         </div>
                     </div>
                 </div>
