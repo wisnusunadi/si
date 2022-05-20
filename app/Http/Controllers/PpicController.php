@@ -106,12 +106,10 @@ class PpicController extends Controller
         $data = JadwalPerakitan::where('status', '!=', $this->change_status('penyusunan'))->orderBy('tanggal_mulai', 'desc')->get();
         return datatables($data)
             ->addIndexColumn()
-            ->addColumn('periode', function ($d)
-            {
+            ->addColumn('periode', function ($d) {
                 return $d->tanggal_mulai == true ? Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM') : '-';
             })
-            ->addColumn('no_bppb', function ($d)
-            {
+            ->addColumn('no_bppb', function ($d) {
                 return $d->no_bppb == null ? '-' : $d->no_bppb;
             })
             ->addColumn('nama', function ($data) {
@@ -135,17 +133,17 @@ class PpicController extends Controller
 
                 if (isset($d->tanggal_selesai)) {
                     if ($x >= -10 && $x < -5) {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
                     } elseif ($x >= -5 && $x <= -2) {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
                     } elseif ($x > -2 && $x <= 0) {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Kurang ' . $x . ' Hari</span>';
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Kurang ' . $x . ' Hari</span>';
                     } elseif ($x > 0) {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Lebih ' . $x . ' Hari</span>';
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-danger">Lebih ' . $x . ' Hari</span>';
                     } elseif ($x < -10) {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="tag is-warning">Kurang ' . abs($x) . ' Hari</span>';
                     } else {
-                        return '<span class="tanggal">'.Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
+                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
                     }
                     // return date('d-m-Y', strtotime($d->tanggal_selesai)).' '.$x;
                 } else {
@@ -177,8 +175,7 @@ class PpicController extends Controller
                     return 'Selesai';
                 }
             })
-            ->addColumn('aksi', function ($data)
-            {
+            ->addColumn('aksi', function ($data) {
                 return $data->id;
             })
             ->rawColumns(['nama', 'progres', 'tanggal_selesai', 'aksi'])
@@ -190,15 +187,14 @@ class PpicController extends Controller
         $data = JadwalPerakitan::find($request->id);
 
         return datatables()->of($data)
-            ->addColumn('keterangan', function($d) {
+            ->addColumn('keterangan', function ($d) {
                 if (isset($d->keterangan)) {
                     return $d->keterangan;
                 } else {
                     return 'Selesai';
                 }
             })
-            ->addColumn('aksi', function ($data)
-            {
+            ->addColumn('aksi', function ($data) {
                 return $data->id;
             })
             ->rawColumns(['nama', 'progres', 'tanggal_selesai', 'aksi'])
@@ -269,7 +265,6 @@ class PpicController extends Controller
             foreach ($data as $d) {
                 $detail_id[] = $d->id;
                 $did[] = $d->pesanan_id;
-
             }
 
 
@@ -291,7 +286,6 @@ class PpicController extends Controller
             foreach ($data as $d) {
                 $detail_id[] = $d->id;
                 $did[] = $d->pesanan_id;
-
             }
 
             $g = collect(DetailPesananProduk::whereIn('detail_pesanan_id', $detail_id)->get());
@@ -301,15 +295,15 @@ class PpicController extends Controller
 
         return datatables()->of($g_data)
             ->addIndexColumn()
-            ->addColumn('paket', function($d) {
-                if(empty($d->GudangBarangJadi)) {
-                   return '-';
+            ->addColumn('paket', function ($d) {
+                if (empty($d->GudangBarangJadi)) {
+                    return '-';
                 } else {
                     return $d->detailpesanan->penjualanproduk->nama;
                 }
             })
             ->addColumn('produk', function ($data) {
-                if(empty($data->GudangBarangJadi)) {
+                if (empty($data->GudangBarangJadi)) {
                     return $data->Sparepart->nama;
                 } else {
                     if (empty($data->gudangbarangjadi->nama)) {
@@ -318,13 +312,12 @@ class PpicController extends Controller
                         return $data->gudangbarangjadi->produk->nama . '-' . $data->gudangbarangjadi->nama;
                     }
                 }
-
             })
             ->addColumn('jumlah', function ($data) {
-                if(empty($data->GudangBarangJadi)) {
+                if (empty($data->GudangBarangJadi)) {
                     return $data->jumlah;
                 } else {
-                    $s = DetailPesanan::whereHas('DetailPesananProduk', function($q) use($data) {
+                    $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($data) {
                         $q->where('id', $data->id);
                     })->get();
                     $x = 0;
@@ -337,11 +330,10 @@ class PpicController extends Controller
                     }
                     return $x . ' ' .   $data->gudangbarangjadi->satuan->nama;
                 }
-
             })
-            ->addColumn('jumlah_kirim', function($d) {
+            ->addColumn('jumlah_kirim', function ($d) {
 
-                if(empty($d->GudangBarangJadi)) {
+                if (empty($d->GudangBarangJadi)) {
                     // return 'a';
                     $s = DetailLogistikPart::whereHas('DetailPesananPart', function ($q) use ($d) {
                         $q->where('pesanan_id', $d->pesanan->id);
@@ -358,7 +350,6 @@ class PpicController extends Controller
                     })->count();
                     return $jumlah;
                 }
-
             })
             ->make(true);
     }
@@ -387,54 +378,54 @@ class PpicController extends Controller
         $data = GudangBarangJadi::whereIn('id', $arrayid)->get();
 
         return datatables()->of($data)
-        ->addIndexColumn()
-        ->addColumn('nama_produk', function ($data) {
-            if (!empty($data->nama)) {
-                return $data->Produk->nama . " - <b>" . $data->nama . "</b>";
-            } else {
-                return $data->Produk->nama;
-            }
-        })
-        ->addColumn('gbj', function ($data) {
-            return $data->stok;
-        })
-        ->addColumn('penjualan', function ($data) {
-            $jumlah_gbj = $data->stok;
-            $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
-            $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
-            $jumlah_stok_permintaan = $jumlahdiminta - $jumlahtf;
-            $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
-            if ($jumlah >= 0) {
-                return "<div>" . $jumlah . "</div>";
-            } else {
-                return '<div class="has-text-danger">' . $jumlah . "</div>";
-            }
-        })
-        ->addColumn('total', function ($data) {
-            $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
-            $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
-            $jumlah = $jumlahdiminta - $jumlahtf;
-            return $jumlah;
-        })
-        ->addColumn('sepakat', function ($data) {
-            // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") - $data->getJumlahTransferPesanan("ekatalog");
-            $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat");
-            return $jumlah;
-        })
-        ->addColumn('nego', function ($data) {
-            // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") - $data->getJumlahTransferPesanan("ekatalog", "negosiasi");
-            $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi");
-            return $jumlah;
-        })
-        ->addColumn('batal', function ($data) {
-            return $data->getJumlahPermintaanPesanan("ekatalog", "batal");
-        })
-        ->addColumn('po', function ($data) {
-            $jumlah = ($data->getJumlahPermintaanPesanan("ekatalog_po", "") - $data->getJumlahTransferPesanan("ekatalog")) + ($data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa")) + ($data->getJumlahPermintaanPesanan("spb", "") - $data->getJumlahTransferPesanan("spb"));
-            return $jumlah;
-        })
-        ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
-        ->make(true);
+            ->addIndexColumn()
+            ->addColumn('nama_produk', function ($data) {
+                if (!empty($data->nama)) {
+                    return $data->Produk->nama . " - <b>" . $data->nama . "</b>";
+                } else {
+                    return $data->Produk->nama;
+                }
+            })
+            ->addColumn('gbj', function ($data) {
+                return $data->stok;
+            })
+            ->addColumn('penjualan', function ($data) {
+                $jumlah_gbj = $data->stok;
+                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
+                $jumlah_stok_permintaan = $jumlahdiminta - $jumlahtf;
+                $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
+                if ($jumlah >= 0) {
+                    return "<div>" . $jumlah . "</div>";
+                } else {
+                    return '<div class="has-text-danger">' . $jumlah . "</div>";
+                }
+            })
+            ->addColumn('total', function ($data) {
+                $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+                $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
+                $jumlah = $jumlahdiminta - $jumlahtf;
+                return $jumlah;
+            })
+            ->addColumn('sepakat', function ($data) {
+                // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") - $data->getJumlahTransferPesanan("ekatalog");
+                $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat");
+                return $jumlah;
+            })
+            ->addColumn('nego', function ($data) {
+                // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") - $data->getJumlahTransferPesanan("ekatalog", "negosiasi");
+                $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi");
+                return $jumlah;
+            })
+            ->addColumn('batal', function ($data) {
+                return $data->getJumlahPermintaanPesanan("ekatalog", "batal");
+            })
+            ->addColumn('po', function ($data) {
+                $jumlah = ($data->getJumlahPermintaanPesanan("ekatalog_po", "") - $data->getJumlahTransferPesanan("ekatalog")) + ($data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa")) + ($data->getJumlahPermintaanPesanan("spb", "") - $data->getJumlahTransferPesanan("spb"));
+                return $jumlah;
+            })
+            ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
+            ->make(true);
     }
 
     public function get_data_so2()
@@ -492,7 +483,7 @@ class PpicController extends Controller
             ->addColumn('po', function ($data) {
                 return $data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa");
             })
-            ->addColumn('jumlah_kirim', function($data) {
+            ->addColumn('jumlah_kirim', function ($data) {
                 return $data->getJumlahKirimPesanan();
             })
             ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
@@ -632,13 +623,13 @@ class PpicController extends Controller
     public function get_data_unit_gk(Request $request)
     {
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
-        ->whereNotNull('t_gk_detail.gbj_id')
-        ->where('is_draft', 0)
-        ->where('is_keluar', 0)
-        ->groupBy('t_gk_detail.gbj_id')
-        ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
-        ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
-        ->get();
+            ->whereNotNull('t_gk_detail.gbj_id')
+            ->where('is_draft', 0)
+            ->where('is_keluar', 0)
+            ->groupBy('t_gk_detail.gbj_id')
+            ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', 't_gk_detail.gbj_id')
+            ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+            ->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_produk', function ($data) {
@@ -1609,10 +1600,10 @@ class PpicController extends Controller
     }
     public function get_datatables_data_perakitan_detail($id)
     {
-        $data = JadwalPerakitan::select('keterangan','keterangan_transfer')->where('id', $id)->first();
+        $data = JadwalPerakitan::select('keterangan', 'keterangan_transfer')->where('id', $id)->first();
         if ($data->keterangan != null) {
             return $data->keterangan;
-        }else{
+        } else {
             return $data->keterangan_transfer;
         }
     }

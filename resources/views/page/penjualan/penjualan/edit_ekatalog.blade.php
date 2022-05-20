@@ -409,17 +409,17 @@
                                                         <div class="tab-pane fade show active" id="pills-penjualan" role="tabpanel" aria-labelledby="pills-penjualan-tab">
                                                             <div class="card removeshadow">
                                                                 <div class="card-body">
-                                                                    @if($e->status != "sepakat")
+                                                                    @if($e->status == "draft")
                                                                     <div class="form-group row">
                                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">No Paket</label>
                                                                         <div class="col-lg-5 col-md-12 input-group">
                                                                             <div class="input-group-prepend">
                                                                                 <select class="form-control jenis_paket" name="jenis_paket" id="jenis_paket">
                                                                                     <option value="AK1-" @if(strpos($e->no_paket, 'AK1-') !== false) selected @endif>AK1-</option>
-                                                                                    <option value="FKS" @if(strpos($e->no_paket, 'FKS') !== false) selected @endif>FKS</option>
+                                                                                    <option value="FKS-" @if(strpos($e->no_paket, 'FKS-') !== false) selected @endif>FKS-</option>
                                                                                 </select>
                                                                             </div>
-                                                                            <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" @if($e->status == "draft" && $e->no_paket == "" ) readonly="true" @endif @if($e->no_paket != '' ) value="{{ str_replace( array('AK1', 'FKS'), '', $e->no_paket) }}" @endif/>
+                                                                            <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" @if($e->status == "draft" && $e->no_paket == "" ) readonly="true" @endif @if($e->no_paket != '' ) value="{{ str_replace( array('AK1-', 'FKS-'), '', $e->no_paket) }}" @endif/>
                                                                             <div class="input-group-append  @if($e->status != "draft") hide @endif" id="checkbox_nopaket">
                                                                                 <span class="input-group-text" >
                                                                                     <div class="form-check form-check-inline">
