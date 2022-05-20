@@ -65,7 +65,7 @@ class SparepartController extends Controller
             ->make(true);
     }
 
-    function get_unit() 
+    function get_unit()
     {
         $data = GudangKarantinaDetail::select('*', DB::raw('sum(qty_unit) as jml'))
             ->whereNotNull('t_gk_detail.gbj_id')
@@ -91,6 +91,9 @@ class SparepartController extends Controller
             })
             ->addColumn('kelompok', function ($data) {
                 return $data->units->produk->KelompokProduk->nama;
+            })
+            ->addColumn('merk', function ($data) {
+                return $data->units->produk->merk;
             })
             ->addColumn('button', function ($d) {
                 return '<a class="btn btn-outline-info" href="' . url('gk/gudang/unit/' . $d->gbj_id . '') . '"><i

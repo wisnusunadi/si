@@ -21,6 +21,19 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-8">
+                                <div class="row">
+                                    <span class="float-left mr-1">
+                                        <button type="button" class="btn btn-success" id="downloadTemplate">
+                                            <i class="fas fa-download"></i>&nbsp;Template
+                                        </button>
+                                    </span>
+
+                                    <span class="float-left mr-1">
+                                        <button type="button" class="btn btn-outline-success" id="importTemplate">
+                                            <i class="fas fa-file-import"></i>&nbsp;Import
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
                             <div class="col-4">
                                 <div class="row">
@@ -33,6 +46,7 @@
                                             </button>
                                         </span>
                                         @endif
+
                                         <span class="float-right mr-1">
                                             <button class="btn btn-outline-info dropdown-toggle" type="button"
                                                 id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true"
@@ -83,6 +97,7 @@
                                 <tr>
                                     <th>No</th>
                                     <th>Kode Produk</th>
+                                    <th>Merk</th>
                                     <th>Nama Produk</th>
                                     <th>Stok Gudang</th>
                                     <th>Stok Penjualan</th>
@@ -318,6 +333,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>No. Seri</th>
+                                            <th>Digunakan</th>
                                             <th>Layout</th>
                                         </tr>
                                     </thead>
@@ -406,6 +422,53 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade import-seri" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Unggah File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form name="formImport" id="formImport" method="post" enctype="multipart/form-data">
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="">Noseri</label>
+                    <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".xlsx">
+                </div>
+
+                <div class="form-group">
+                    <button type="submit" class="btn btn-outline-info"><i class="fas fa-eye"> Preview</i></button>
+                </div>
+            </form>
+            </div>
+            <div class="modal-footer" id="csv_data_file" style="overflow-y: scroll; height:400px;">
+
+            </div>
+            <div class="modal-footer justify-content-between" id="footer-btn">
+                <p id="bodyNoseri">Noseri Yang Terdaftar:
+                    <br>
+                    <span id="existNoseri"></span>
+                </p>
+                <button type="button" class="btn btn-default float-right btnImport"><i class="fas fa-upload"> Unggah</i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade notice" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+      <div class="modal-content">
+        <h5>
+            <center>Sebelum Mengunggah Noseri</center>
+        </h5>
+        <p align="center">Pastikan Noseri Sudah Unik atau Tidak Ada Warna Dalam Template</p>
+        <button type="button" class="btn btn-success btnNext"><i class="fas fa-check"> OK</i></button>
+      </div>
+    </div>
+  </div>
 
 <!-- Modal -->
 <div class="modal fade tambah_seri" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
@@ -522,6 +585,8 @@
 
 {{-- data --}}
 <script type="text/javascript">
+    $('#footer-btn').hide()
+    $('#bodyNoseri').hide()
     var authid = $('#authid').val();
     // initial
     $.ajaxSetup({
@@ -529,6 +594,28 @@
             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
         }
     });
+
+    $('#downloadTemplate').click(function() {
+        // console.log('download');
+        window.location = window.location.origin+'/api/v2/gbj/template_noseri'
+    })
+
+    $('#importTemplate').click(function() {
+        $('.notice').modal('show')
+    })
+
+    $('.btnNext').click(function() {
+        $('.notice').modal('hide')
+        $('#template_noseri').val('');
+        $('.import-seri').modal('show')
+    })
+
+    $('.import-seri').on('hidden.bs.modal', function() {
+        $('#template_noseri').val('');
+        $('#footer-btn').hide()
+        $('#csv_data_file').empty()
+
+    })
 
     $('#alkes').click(function () {
         if ($(this).prop('checked') == true) {
@@ -572,6 +659,9 @@
             {
                 data: 'kode_produk',
                 name: 'kode_produk'
+            },
+            {
+                data: "merk"
             },
             {
                 data: 'nama_produk',
@@ -777,6 +867,56 @@
         });
     });
 
+    // $('body').on('submit', '#formImport', function (e) {
+    $('#formImport').on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: "/api/v2/gbj/import-noseri",
+            method: "post",
+            data: new FormData(this),
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data) {
+                $('#csv_data_file').html(data.data);
+                if (data.error == true) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.msg,
+                    }).then((result) => {
+                        if (result.value) {
+                            $('#bodyNoseri').show()
+                            $('#existNoseri').html(data.noseri)
+                            $('.btnImport').removeClass('btn-default')
+                            $('.btnImport').addClass('btn-danger')
+                            $('.btnImport').prop('disabled', true);
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: data.msg,
+                    }).then((result) => {
+                        if (result.value) {
+                            $('#bodyNoseri').hide()
+                            if ($('.btnImport').hasClass('btn-default')) {
+                                $('.btnImport').removeClass('btn-default')
+                            } else {
+                                $('.btnImport').removeClass('btn-danger')
+                            }
+                            $('.btnImport').addClass('btn-success')
+                            $('.btnImport').prop('disabled', false);
+                        }
+                    });
+                }
+                $('#footer-btn').show()
+            }
+        })
+    })
+
     function select_layout() {
         $.ajax({
             url: '/api/gbj/sel-layout',
@@ -842,6 +982,7 @@
                 {
                     data: 'seri'
                 },
+                {data: 'used'},
                 {
                     data: 'Layout'
                 }

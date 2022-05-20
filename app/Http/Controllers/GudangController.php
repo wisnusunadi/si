@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Exports\GBJExportSPB;
+use App\Exports\ImportNoseri;
 use App\Models\DetailEkatalog;
 use App\Models\DetailEkatalogProduk;
 use App\Models\DetailPesanan;
@@ -27,9 +28,19 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx as ReaderXlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Conditional;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class GudangController extends Controller
 {
@@ -56,6 +67,9 @@ class GudangController extends Controller
             })
             ->addColumn('kelompok', function ($data) {
                 return $data->produk->KelompokProduk->nama;
+            })
+            ->addColumn('merk', function($data){
+                return $data->produk->merk;
             })
             ->addColumn('action', function ($data) {
                 return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
@@ -162,6 +176,9 @@ class GudangController extends Controller
                 return '<select name="layout_id[]" id="layout_id[]" class="form-control">
                         ' . $opt . '
                         </select>';
+            })
+            ->addColumn('used', function($d) {
+                return $d->pesanan->so;
             })
             ->addColumn('aksi', function ($d) {
                 return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
@@ -745,8 +762,193 @@ class GudangController extends Controller
         return view('page.gbj.reports.spb', ['data' => $data, 'tfby' => $tfby, 'header' => $header]);
     }
 
-    function getListSODone()
+    function download_template_noseri(Request $request)
     {
+        // return Excel::download(new ImportNoseri(), 'template_noseri.xls');
+        // data
+        $no = 1;
+
+        $produk = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get()->sortBy('produk.nama');
+
+        // spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->createSheet();
+
+        // workshet noseri
+        $spreadsheet->setActiveSheetIndex(0);
+        $spreadsheet->getActiveSheet()->setTitle('Noseri');
+        $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
+        $spreadsheet->getActiveSheet()->setCellValue('B1', 'Nama Produk');
+        $spreadsheet->getActiveSheet()->setCellValue('C1', 'Noseri');
+
+        $validation = $spreadsheet->getActiveSheet()->getCell('B2')
+            ->getDataValidation();
+        $validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST );
+        $validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_INFORMATION );
+        $validation->setAllowBlank(false);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setShowDropDown(true);
+        $validation->setErrorTitle('Input error');
+        $validation->setError('Value is not in list.');
+        $validation->setPromptTitle('Pick from list');
+        $validation->setPrompt('Please pick a value from the drop-down list.');
+
+        $validation->setFormula1('\'Produk\'!$C$2:$C$288');
+        // $validation->setFormula1('"Item A,Item B,Item C"');
+        $validation->setSqref('B2:B10000');
+
+        // check duplicate input noseri
+        $duplicate = new Conditional();
+        $duplicate->setConditionType(Conditional::CONDITION_DUPLICATES);
+        $duplicate->getStyle()->getFont()->getColor()->setARGB(Color::COLOR_BLACK);
+        $duplicate->getStyle()->getFill()->setFillType(Fill::FILL_SOLID);
+        $duplicate->getStyle()->getFill()->getEndColor()->setARGB(Color::COLOR_YELLOW);
+
+        $conditionalStyles = $spreadsheet->getActiveSheet()->getStyle('C2:C10000')->getConditionalStyles();
+        $conditionalStyles[] = $duplicate;
+
+        $spreadsheet->getActiveSheet()->getStyle('C2:C10000')->setConditionalStyles($conditionalStyles);
+
+
+        // workshet master
+        $spreadsheet->setActiveSheetIndex(1);
+        $spreadsheet->getActiveSheet()->setTitle('Produk');
+        $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
+        $spreadsheet->getActiveSheet()->setCellValue('B1', 'Merk');
+        $spreadsheet->getActiveSheet()->setCellValue('C1', 'Nama Produk');
+        $spreadsheet->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+
+        $noo = 2;
+        foreach($produk as $p) {
+            $spreadsheet->getActiveSheet()->setCellValue('A'. $noo, $p->id);
+            $spreadsheet->getActiveSheet()->setCellValue('B'. $noo, $p->produk->merk);
+            $spreadsheet->getActiveSheet()->setCellValue('C'. $noo, $p->produk->nama.' '.$p->nama);
+            $noo++;
+            $no++;
+        }
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Template Noseri.xlsx"'); // Set nama file excel nya
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+    }
+
+    function import_noseri(Request $request)
+    {
+        $file = $request->file('file_csv');
+        $filename = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension(); //Get extension of uploaded file
+        $tempPath = $file->getRealPath();
+        $fileSize = $file->getSize();
+
+        $file->move(public_path('upload/noseri/'), $filename);
+
+        $reader = new ReaderXlsx();
+        $spreadsheet = $reader->load(public_path('upload/noseri/'. $filename));
+        $spreadsheet->setActiveSheetIndex(0);
+        // $sheet = $spreadsheet->getActiveSheet()->toArray();
+        // $html = "<table class='table table-bordered table-striped table-hover'>
+        //     <tr>
+        //     <th>No</th>
+        //     <th>Nama</th>
+        //     <th>Noseri</th>
+        //     <th>Keterangan</th>
+        //     </tr>";
+        //     $c =[];
+        //     $numrow = 1;
+            // unset($sheet[0]);
+            // foreach($sheet as $key => $row) {
+                // $a = $row['A'];
+                // $b = $row['B'];
+                // $c = $row['C'];
+                // if($numrow > 1) {
+                //     $nis_td = (!empty($a)) ? "" : " style='background: #E07171;'";
+                //     $cekok = (!$a) ? "" : "style='background: #E07171;'";
+                //     $html .= "<tr>";
+                //     $html .= "<td" . $nis_td . ">" . $a . "</td>";
+                //     $html .= "<td" . $nis_td . ">" . $b . "</td>";
+                //     $html .= "<td" . $nis_td . ">" . $c . "</td>";
+                //     $html .= "<td" . $nis_td . ">OK</td>";
+                //     $html .= "</tr>";
+                // }
+                // // $noseri = NoseriBarangJadi::where('noseri', $c)->get();
+                // $numrow++;
+                // $arr_insert = [
+                //     'noser' => $c,
+                // ];
+                // return $row[0];
+            // }
+            // $html .= "</table>";
+            // return $arr_insert;
+            // $html .= '<hr>';
+            // $html .= '<button type="button" class="btn btn-primary">Simpan</button>';
+            // return json_encode($html);
+            // dd($sheet);
+            // array_shift($data);
+            $sheet        = $spreadsheet->getActiveSheet();
+            $row_limit    = $sheet->getHighestDataRow();
+            $column_limit = $sheet->getHighestDataColumn();
+            $row_range    = range( 2, $row_limit );
+            $column_range = range( 'C', $column_limit );
+            $startcount = 2;
+            $data = array();
+            foreach ( $row_range as $row ) {
+                $data[] = [
+                    'no' =>$sheet->getCell( 'A' . $row )->getValue(),
+                    'produk' => $sheet->getCell( 'B' . $row )->getValue(),
+                    'noseri' => $sheet->getCell( 'C' . $row )->getValue()
+                ];
+                $startcount++;
+            }
+            // return json_encode($data);
+
+            foreach($data as $d) {
+                $aa[] = $d['noseri'];
+                $bb[] = $d['produk'];
+            }
+            // return $aa;
+
+            $check = NoseriBarangJadi::whereIn('noseri', $aa)->get()->pluck('noseri');
+            $seri = [];
+            $sheet1 = $sheet->toArray(null, true, true, true);
+            $numrow = 1;
+            $html = "<table class='table table-bordered table-striped table-hover'>
+                    <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Noseri</th>
+                    </tr>";
+            foreach($sheet1 as $key => $row) {
+                $a = $row['A'];
+                $b = $row['B'];
+                $c = $row['C'];
+                if($numrow > 1) {
+                    $nis_td = (!empty($c)) ? "" : " style='background: #E07171;'";
+                    $html .= "<tr>";
+                    $html .= "<td" . $nis_td . ">" . $a . "</td>";
+                    $html .= "<td" . $nis_td . ">" . $b . "</td>";
+                    $html .= "<td" . $nis_td . ">" . $c . "</td>";
+                    $html .= "</tr>";
+                }
+                $numrow++;
+            }
+            $html .= "</table>";
+
+            if(count($check) > 0) {
+                foreach ($check as $item) {
+                    array_push($seri, $item);
+                }
+                return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true, 'data' => $html, 'noseri' => implode(', ', $seri)]);
+            } else {
+                return response()->json(['msg' => 'Noseri Sudah Bisa Diunggah', 'error' => false, 'data' => $html]);
+            }
+        }
+
+        function getListSODone()
+        {
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })->get());
@@ -2087,20 +2289,9 @@ class GudangController extends Controller
             }
         }
 
-        $s = DetailPesanan::where('pesanan_id', $request->pesanan_id)->get();
-        $jumlah = 0;
-        $x = 0;
-        foreach ($s as $i) {
-            foreach ($i->PenjualanProduk->Produk as $j) {
-                $x = $jumlah + ($i->jumlah * $j->pivot->jumlah);
-            }
-        }
+        $po = Pesanan::find($request->pesanan_id);
 
-        $jumlah_kirim = NoseriTGbj::whereHas('detail.header', function ($q) use ($request) {
-            $q->where('pesanan_id', $request->pesanan_id);
-        })->where('status_id', 2)->get()->count();
-
-        if ($x == $jumlah_kirim) {
+        if ($po->getJumlahPesanan() == $po->cekJumlahkirim()) {
             Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
         } else {
             Pesanan::find($request->pesanan_id)->update(['log_id' => 6]);

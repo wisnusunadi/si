@@ -95,7 +95,9 @@
 
             @if(isset($d->DetailPesanan))
                 @foreach ($d->DetailPesanan as $e)
-                @if($countprd <= 0)
+                @if($countprd > 0)
+                <tr>
+                @endif
                 <td>
                     @if($e->PenjualanProduk->nama_alias != '')
                     {{$e->PenjualanProduk->nama_alias}}
@@ -121,10 +123,11 @@
                 <td>{{$e->harga}}</td>
                 <td>{{$e->ongkir}}</td>
                 <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
+                @if($countprd <= 0)
                 <td rowspan="{{$rowspan}}">
                     {{$d->State->nama}}
                 </td>
-                <td >
+                <td rowspan="{{$rowspan}}">
                     @if($d->Ekatalog)
                     {{$d->Ekatalog->status}}
                     @else
@@ -139,39 +142,6 @@
                     @elseif($d->Spb)
                     {{$d->Spb->ket}}
                     @endif</td>
-                @else
-                <tr>
-                    <td> @if($e->PenjualanProduk->nama_alias != '')
-                        {{$e->PenjualanProduk->nama_alias}}
-                        @else
-                        {{$e->PenjualanProduk->nama}}
-                        @endif</td>
-                    <td>
-                        @foreach($e->DetailPesananProduk as $p)
-                        {{ $p->gudangbarangjadi->produk->nama}}
-
-                        @if ($p->gudangbarangjadi->nama != '')
-                        {{ $p->gudangbarangjadi->nama}}
-                        @endif
-
-                        @if( !$loop->last)
-                        ,
-                        @endif
-
-                        @endforeach
-                    </td>
-                    <td>{{$e->jumlah}}</td>
-                    <td>{{$e->harga}}</td>
-                    <td>{{$e->ongkir}}</td>
-                    <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
-                    <td >
-                        @if($d->Ekatalog)
-                        {{$d->Ekatalog->status}}
-                        @else
-                        -
-                        @endif
-                    </td>
-
                 @endif
             </tr>
                 <?php $countprd++ ?>
@@ -179,17 +149,20 @@
             @endif
             @if(isset($d->DetailPesananPart))
                 @foreach ($d->DetailPesananPart as $e)
-                @if($countprd <= 0)
+                @if($countprd > 0)
+                <tr>
+                @endif
                 <td>-</td>
                 <td>{{$e->Sparepart->nama}}</td>
                 <td>{{$e->jumlah}}</td>
                 <td>{{$e->harga}}</td>
                 <td>{{$e->ongkir}}</td>
                 <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
+                @if($countprd <= 0)
                 <td rowspan="{{$rowspan}}">
                     {{$d->State->nama}}
                 </td>
-                <td >
+                <td rowspan="{{$rowspan}}">
                     @if($d->Ekatalog)
                     {{$d->Ekatalog->status}}
                     @else
@@ -204,16 +177,6 @@
                     @elseif($d->Spb)
                     {{$d->Spb->ket}}
                     @endif</td>
-                @else
-                <tr>
-                    <td>-</td>
-                    <td>{{$e->Sparepart->nama}}</td>
-                    <td>{{$e->jumlah}}</td>
-                    <td>{{$e->harga}}</td>
-                    <td>{{$e->ongkir}}</td>
-                    <td>{{($e->jumlah * $e->harga) + $e->ongkir}}</td>
-                    <td>{{$d->Ekatalog->status}}</td>
-
                 @endif
             </tr>
                 <?php $countprd++ ?>
@@ -230,7 +193,7 @@
                 <td rowspan="{{$rowspan}}">
                     {{$d->State->nama}}
                 </td>
-                <td >
+                <td rowspan="{{$rowspan}}">
                     @if($d->Ekatalog)
                     {{$d->Ekatalog->status}}
                     @else
@@ -246,12 +209,6 @@
                     {{$d->Spb->ket}}
                     @endif</td>
             @endif
-            {{-- <td rowspan="{{$rowspan}}"></td>
-            <td rowspan="{{$rowspan}}"></td>
-            <td rowspan="{{$rowspan}}"></td>
-            <td rowspan="{{$rowspan}}"></td>
-            <td rowspan="{{$rowspan}}"></td>
-            <td rowspan="{{$rowspan}}"></td> --}}
 
 
         @endforeach

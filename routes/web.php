@@ -86,6 +86,7 @@ Route::middleware('auth')->prefix('/produksi')->group(function () {
     Route::view('/pengiriman', 'page.produksi.pengiriman');
     Route::view('/riwayat_transfer', 'page.produksi.riwayat_transfer');
 });
+
 // Route::middleware('auth')->prefix('/penjualan')->group(function () {
 //     Route::view('/produk/{any?}', 'page.penjualan.produk');
 //     Route::view('/customer/{any?}', 'page.penjualan.customer');
@@ -97,6 +98,8 @@ Route::group(['prefix' => 'master', 'middleware' => 'auth'], function () {
         Route::view('/show', 'page.master.produk.show')->name('master.produk.show');
         Route::post('/data', [App\Http\Controllers\MasterController::class, 'get_data_master_produk']);
         Route::get('/edit_coo/{id}', [App\Http\Controllers\MasterController::class, 'edit_coo_data_produk'])->name('master.produk.edit_coo');
+
+        Route::get('/export', [App\Http\Controllers\MasterController::class, 'export_produk'])->name('master.produk.export');
     });
 });
 
@@ -133,6 +136,9 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_customer'])->name('penjualan.customer.store');
         Route::put('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_customer'])->name('penjualan.customer.update');
         Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_customer'])->name('penjualan.customer.detail');
+
+        //Export
+        Route::get('/export', [App\Http\Controllers\MasterController::class, 'export_customer'])->name('penjualan.customer.export');
     });
 
     Route::group(['prefix' => '/penjualan'], function () {
@@ -224,6 +230,10 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_ekspedisi'])->name('logistik.ekspedisi.store');
         Route::get('/edit/{id}', [App\Http\Controllers\MasterController::class, 'update_ekspedisi_modal'])->name('logistik.ekspedisi.edit');
         Route::put('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_ekspedisi'])->name('logistik.ekspedisi.update');
+
+
+        //Export
+        Route::get('/export', [App\Http\Controllers\MasterController::class, 'export_ekspedisi'])->name('logistik.ekspedisi.export');
     });
 
     Route::group(['prefix' => '/pengiriman'], function () {

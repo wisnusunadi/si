@@ -878,7 +878,7 @@
             success: function (res) {
                 // ii++;
                 $.each(res, function (key, value) {
-                    unit.push([value.id, value.produk.nama + ' ' + value.nama]);
+                    unit.push([value.id, '('+value.produk.merk +') '+value.produk.nama + ' ' + value.nama]);
                 });
             }
         });

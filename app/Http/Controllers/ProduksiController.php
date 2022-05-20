@@ -491,13 +491,18 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
-                    if ($d->Ekatalog->Provinsi->status == 1) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                    if (isset($d->Ekatalog->provinsi_id)) {
+                        if ($d->Ekatalog->Provinsi->status == 1) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                        }
+
+                        if ($d->Ekatalog->Provinsi->status == 2) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
+                        }
+                    } else {
+                        return '-';
                     }
 
-                    if ($d->Ekatalog->Provinsi->status == 2) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
-                    }
                 } else {
                     return '-';
                 }
@@ -643,13 +648,18 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
-                    if ($d->Ekatalog->Provinsi->status == 1) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                    if (isset($d->Ekatalog->provinsi_id)) {
+                        if ($d->Ekatalog->Provinsi->status == 1) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                        }
+
+                        if ($d->Ekatalog->Provinsi->status == 2) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
+                        }
+                    } else {
+                        return '-';
                     }
 
-                    if ($d->Ekatalog->Provinsi->status == 2) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
-                    }
                 } else {
                     return '-';
                 }
@@ -794,13 +804,18 @@ class ProduksiController extends Controller
             })
             ->addColumn('batas_out', function ($d) {
                 if (isset($d->Ekatalog->tgl_kontrak)) {
-                    if ($d->Ekatalog->Provinsi->status == 1) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                    if (isset($d->Ekatalog->provinsi_id)) {
+                        if ($d->Ekatalog->Provinsi->status == 1) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
+                        }
+
+                        if ($d->Ekatalog->Provinsi->status == 2) {
+                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
+                        }
+                    } else {
+                        return '-';
                     }
 
-                    if ($d->Ekatalog->Provinsi->status == 2) {
-                        return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
-                    }
                 } else {
                     return '-';
                 }
@@ -1413,7 +1428,7 @@ class ProduksiController extends Controller
 
     function getNoseriSO(Request $request)
     {
-        $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->orderBy('noseri')->get();
+        $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->get();
         $i = 0;
         return datatables()->of($data)
             ->addColumn('ids', function ($d) {
@@ -2112,14 +2127,29 @@ class ProduksiController extends Controller
 
     function cekDuplicateNoseri(Request $request)
     {
-        $noseri = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get();
-        $data = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get()->count();
+        // $noseri = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get();
+        $data = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get()->pluck('noseri');
+        $data1 = NoseriBarangJadi::whereIn('noseri', $request->noseri)->get()->pluck('noseri');
+        $datam = $data->merge($data1);
         $seri = [];
-        if ($data > 0) {
-            foreach ($noseri as $item) {
-                array_push($seri, $item->noseri);
+        $seri1 = [];
+        if (count($data) > 0 || count($data1) > 0) {
+            foreach ($data as $item) {
+                array_push($seri, $item);
             }
-            return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true]);
+
+            foreach ($data1 as $item1) {
+                array_push($seri1, $item1);
+            }
+
+            if(count($data) > 0) {
+                return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar di perakitan', 'error' => true]);
+            }
+
+            if(count($data1) > 0) {
+                return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri1) . ' sudah terdaftar di gudang barang jadi', 'error' => true]);
+            }
+            // return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true]);
         } else {
             return response()->json(['msg' => 'Success', 'error' => false]);
         }
@@ -2257,7 +2287,6 @@ class ProduksiController extends Controller
 
     function kirimseri(Request $request)
     {
-        // dd($request->all());
         $header = new TFProduksi();
         $header->tgl_masuk = $request->tgl_transfer;
         $header->dari = 17;
@@ -2279,20 +2308,33 @@ class ProduksiController extends Controller
         $check_array = $request->noseri;
         foreach ($request->noseri as $key => $value) {
             if (in_array($request->noseri[$key], $check_array)) {
-                $seri = new NoseriBarangJadi();
-                $seri->dari = 17;
-                $seri->ke = $request->tujuan;
-                $seri->gdg_barang_jadi_id = $request->gbj_id;
-                $seri->noseri = $request->noseri[$key];
-                $seri->jenis = 'MASUK';
-                $seri->is_aktif = 0;
-                $seri->created_at = Carbon::now();
-                $seri->created_by = $request->userid;
-                $seri->save();
+                // $seri = new NoseriBarangJadi();
+                // $seri->dari = 17;
+                // $seri->ke = $request->tujuan;
+                // $seri->gdg_barang_jadi_id = $request->gbj_id;
+                // $seri->noseri = $request->noseri[$key];
+                // $seri->jenis = 'MASUK';
+                // $seri->is_aktif = 0;
+                // $seri->created_at = Carbon::now();
+                // $seri->created_by = $request->userid;
+                // $seri->save();
+                $seri = NoseriBarangJadi::updateOrCreate(
+                    ['noseri' => $request->noseri[$key]],
+                    [
+                    'dari' => 17,
+                    'ke' => $request->tujuan,
+                    'gdg_barang_jadi_id' => $request->gbj_id,
+                    'noseri' => $request->noseri[$key],
+                    'jenis' => 'MASUK',
+                    'is_aktif' => 0,
+                    'created_at' => Carbon::now(),
+                    'created_by' => $request->userid,
+                ]);
+                $seriid = $seri->id;
 
                 $serit = new NoseriTGbj();
                 $serit->t_gbj_detail_id = $detail->id;
-                $serit->noseri_id = $seri->id;
+                $serit->noseri_id = $seriid;
                 $serit->layout_id = 1;
                 $serit->jenis = 'MASUK';
                 $serit->created_at = Carbon::now();
@@ -2881,7 +2923,7 @@ class ProduksiController extends Controller
         // ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
         ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
         ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
-        ->get()->sortByDesc('date_in');
+        ->get()->sortByDesc('waktu_tf');
 
         return datatables()->of($d)
             ->addColumn('day_kirim', function ($d) {

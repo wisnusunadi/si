@@ -132,13 +132,6 @@
                     @endif
                 </td>
                 <td>
-                    @if($i->DetailPesananPart->PenjualanProduk->nama_alias != '')
-                    {{$i->DetailPesananPart->PenjualanProduk->nama_alias}}
-                    @else
-                    {{$i->DetailPesananPart->PenjualanProduk->nama}}
-                    @endif
-                </td>
-                <td>
                     {{$i->DetailPesananPart->Sparepart->nama}}
                 </td>
                 <td>{{$i->tanggal_uji}}</td>

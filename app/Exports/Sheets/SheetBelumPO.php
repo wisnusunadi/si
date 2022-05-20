@@ -106,7 +106,6 @@ class SheetBelumPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
                 $q->wherenotIN('status', ['batal', 'draft']);
             })->wherenull('no_po')
                 ->orderby('so', 'ASC')
-                ->limit(41)
                 ->get();
 
             $spa = Pesanan::Has('Spa')->wherenull('no_po')
@@ -149,6 +148,7 @@ class SheetBelumPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
 
 
         if ($x == ['ekatalog', 'spa', 'spb']) {
+            $header = 'Laporan Penjualan Semua';
             $data = $ekatalog->merge($spa)->merge($spb)->sortBy('created_at');
             $header = 'Laporan Penjualan Semua';
         } else if ($x == ['ekatalog', 'spa']) {

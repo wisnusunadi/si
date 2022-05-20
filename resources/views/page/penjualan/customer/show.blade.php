@@ -25,7 +25,7 @@
 
 @section('adminlte_css')
 <style>
-    
+
     .align-center {
         text-align: center;
     }
@@ -53,9 +53,8 @@
         color: #C0C0C0;
     }
 
-    .yellow-bg {
-        background-color: #ffe680;
-        color: #997a00;
+    .bg-color {
+        background-color: #fff2cc;
     }
 
     .removeboxshadow {
@@ -135,7 +134,14 @@
                             <div class="card-body">
                                 <div class="row" style="margin-bottom:10px;">
                                     <div class="col-12">
+                                        <span class="float-left filter">
+                                            <a id="exportbutton" href="{{route('penjualan.customer.export')}}"><button class="btn btn-success">
+                                                <i class="far fa-file-excel" id="load"></i> Export
+                                            </button>
+                                        </a>
+                                        </span>
                                         @if(Auth::user()->divisi->id == "26")
+
                                         <span class="float-right filter">
                                             <a href="{{route('penjualan.customer.create')}}"><button class="btn btn-outline-info">
                                                     <i class="fas fa-plus"></i> Tambah
@@ -217,10 +223,10 @@
                     <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content" style="margin: 10px">
-                                <div class="modal-header yellow-bg">
+                                <div class="modal-header bg-warning">
                                     <h4 class="modal-title"><b>Ubah</b></h4>
                                 </div>
-                                <div class="modal-body" id="edit">
+                                <div class="modal-body bg-color" id="edit">
 
                                 </div>
                             </div>
@@ -229,7 +235,7 @@
                     <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content" style="margin: 10px">
-                                <div class="modal-header yellow-bg">
+                                <div class="modal-header bg-danger">
                                     <h4 class="modal-title"><b>Hapus</b></h4>
                                 </div>
                                 <div class="modal-body" id="hapus">
@@ -267,7 +273,13 @@
 <script type="text/javascript" src="{{ asset('vendor/masking/masking.js') }}"></script>
 <script>
     $(function() {
-
+        function validasi(){
+            if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#alamat").val() != "" && $('.provinsi').val() != "" && ($("#telepon").val() != "" && !$("#telepon").hasClass('is-invalid')) && !$("#email").hasClass('is-invalid')) {
+                $("#btnsimpan").removeAttr('disabled');
+            } else {
+                $("#btnsimpan").attr('disabled', true);
+            }
+        }
         var divisi_id = "{{Auth::user()->divisi_id}}";
         $(document).on('submit', '#form-customer-update', function(e) {
             e.preventDefault();
@@ -386,6 +398,22 @@
                 }
             ]
         });
+
+        function reset_izin_usaha(){
+        //    var get= $('input[type="radio"][name="izin_usaha"]:checked').val();
+        //    var count= $('input[type="radio"][name="izin_usaha"]:checked').length;
+        //     $('input[type="radio"][name="izin_usaha"]').on('click', function() {
+        //         $("input[type='radio'][name='izin_usaha']").removeAttr('checked');
+        //         var current =  $(this).val();
+        //         if (get == current){
+        //         $("input[type='radio'][name='izin_usaha'][value='"+current+"']").prop("checked",false);
+        //     }});
+        }
+        function tooltips(){
+            $('[data-toggle="iumk_info"]').tooltip({ content: '<p><b>Izin usaha mikro dan kecil (IUMK)</b> adalah tanda legalitas kepada seseorang atau pelaku usaha/kegiatan tertentu dalam bentuk izin usaha mikro dan kecil dalam bentuk satu lembar</p>' });
+            $('[data-toggle="iutm_info"]').tooltip({ content: '<p><b>Izin Usaha Toko Modern selanjutnya (IUTM)</b> adalah izin untuk dapat melaksanakan usaha pengelolaan Toko Modern yang diterbitkan oleh Pemerintah Daerah setempat</p>' });
+            $('[data-toggle="siup_info"]').tooltip({ content: '<p><b>Surat Izin Usaha Perdagangan (SIUP)</b> adalah surat ijin yang diberikan kepada suatu badan usaha untuk dapat melakukan kegiatan usaha perdagangan</p>' });
+        }
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
@@ -397,11 +425,12 @@
                 },
                 // return the result
                 success: function(result) {
-
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
                     $('#npwp').mask('00.000.000.0-000.000');
                     $('#ktp').mask('0000000000000000');
+                    tooltips();
+                    reset_izin_usaha();
                     console.log(id);
                     // $("#editform").attr("action", href);
                     select_data();
@@ -489,31 +518,32 @@
                         if (data >= 1) {
                             $("#msgnama_customer").text("Nama sudah terpakai");
                             $('#nama_customer').addClass('is-invalid');
-                            $("#btnsimpan").attr("disabled", true);
+                            // $("#btnsimpan").attr("disabled", true);
                         } else {
                             $("#msgnama_customer").text("");
                             $('#nama_customer').removeClass('is-invalid');
-                            if ($('#telepon').val() != "" && $('#npwp').val() != "" && $('#alamat').val() != "" && $('.provinsi').val() != "") {
-                                $("#btnsimpan").removeAttr("disabled");
-                            } else {
-                                $("#btnsimpan").attr("disabled", true);
-                            }
+                            // if ($('#telepon').val() != "" && $('#npwp').val() != "" && $('#alamat').val() != "" && $('.provinsi').val() != "") {
+                            //     $("#btnsimpan").removeAttr("disabled");
+                            // } else {
+                            //     $("#btnsimpan").attr("disabled", true);
+                            // }
                         }
                     }
                 });
             }
+            validasi();
         })
         $(document).on('keyup change', 'input[name="telepon"]', function() {
             var id = $('#form-customer-update').attr('data-id');
             if ($(this).val() == "") {
                 $("#msgtelepon").text("Telepon tidak boleh kosong");
                 $("#telepon").addClass('is-invalid');
-                $("#btnsimpan").attr('disabled', true);
+                // $("#btnsimpan").attr('disabled', true);
             } else if ($(this).val() != "") {
                 if (!/^[0-9]+$/.test($(this).val())) {
                     $("#msgtelepon").text("Isi nomor telepon dengan angka");
                     $("#telepon").addClass('is-invalid');
-                    $("#btnsimpan").attr('disabled', true);
+                    // $("#btnsimpan").attr('disabled', true);
                 } else {
                     // if (checkTelepon(this.teleponer).value >= 1) {
                     //     this.msg["telepon"] = "Nomor Telepon sudah terpakai";
@@ -526,30 +556,33 @@
                     // }
                     $("#msgtelepon").text("");
                     $("#telepon").removeClass('is-invalid');
-                    $("#btnsimpan").removeAttr('disabled');
-                    if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#alamat").val() != "") {
-                        $("#btnsimpan").removeAttr('disabled');
-                    } else {
-                        $("#btnsimpan").attr('disabled', true);
-                    }
+                    // $("#btnsimpan").removeAttr('disabled');
+                    // if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#alamat").val() != "") {
+                    //     $("#btnsimpan").removeAttr('disabled');
+                    // } else {
+                    //     $("#btnsimpan").attr('disabled', true);
+                    // }
                 }
             }
+            validasi();
         })
 
         $(document).on('keyup change', '#alamat', function() {
             if ($(this).val() != "") {
                 $('#msgalamat').text("");
                 $('#alamat').removeClass("is-invalid");
-                if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "") {
-                    $("#btnsimpan").removeAttr('disabled');
-                } else {
-                    $("#btnsimpan").attr('disabled', true);
-                }
+                // if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "") {
+                //     $("#btnsimpan").removeAttr('disabled');
+                // } else {
+                //     $("#btnsimpan").attr('disabled', true);
+                // }
             } else {
                 $('#msgalamat').text("Alamat tidak boleh kosong");
                 $('#alamat').addClass("is-invalid");
-                $("#btnsimpan").attr('disabled', true);
+                // $("#btnsimpan").attr('disabled', true);
             }
+
+            validasi();
         });
 
         $(document).on('keyup change', 'input[name="npwp"]', function() {
@@ -569,17 +602,18 @@
                 if (!/^[0-9.-]+$/.test($(this).val())) {
                     $('#msgnpwp').text("Masukkan NPWP dengan benar");
                     $('#npwp').addClass("is-invalid");
-                    $("#btnsimpan").attr('disabled', true);
+                    // $("#btnsimpan").attr('disabled', true);
                 } else {
                     $("#msgnpwp").text("");
                     $('#npwp').removeClass('is-invalid');
-                    if ($('#telepon').val() != "" && ($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && $('#alamat').val() != "") {
-                        $("#btnsimpan").removeAttr("disabled");
-                    } else {
-                        $("#btnsimpan").attr("disabled", true);
-                    }
+                    // if ($('#telepon').val() != "" && ($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && $('#alamat').val() != "") {
+                    //     $("#btnsimpan").removeAttr("disabled");
+                    // } else {
+                    //     $("#btnsimpan").attr("disabled", true);
+                    // }
                 }
             }
+            validasi();
         });
         $(document).on('keyup change', 'input[name="email"]', function() {
             var errorhandling = /^([\w-\.]+@([\w-]+\.)+[\w-]{2,4})?$/;
@@ -587,21 +621,23 @@
                 if (!errorhandling.test($(this).val())) {
                     $('#msgemail').text("Masukkan email dengan benar");
                     $('#email').addClass("is-invalid");
-                    $("#btnsimpan").attr('disabled', true);
+                    // $("#btnsimpan").attr('disabled', true);
                 } else {
                     $('#msgemail').text("");
                     $('#email').removeClass("is-invalid");
-                    if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "") {
-                        $("#btnsimpan").removeAttr('disabled');
-                    }
+                    // if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "") {
+                    //     $("#btnsimpan").removeAttr('disabled');
+                    // }
                 }
             } else {
                 $('#msgemail').text("");
                 $('#email').removeClass("is-invalid");
-                if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "") {
-                    $("#btnsimpan").removeAttr('disabled');
-                }
+                // if (($("#nama_customer").val() != "" && !$("#nama_customer").hasClass('is-invalid')) && ($("#npwp").val() != "" && !$("#npwp").hasClass('is-invalid')) && $("#telepon").val() != "" && $("#alamat").val() != "") {
+                //     $("#btnsimpan").removeAttr('disabled');
+                // }
             }
+
+            validasi();
         })
 
         function select_data() {

@@ -85,37 +85,43 @@
                 <?php $cdp = 0; ?>
                 @foreach ($i->LaporanQcProduk($produk, $hasil, $tgl_awal, $tgl_akhir) as $j)
                     <?php $rowdp = $j->countLaporanQcProduk($hasil, $tgl_awal, $tgl_akhir);?>
-                    @if($cdp <= 0)
+                    @if($cdp > 0)
+                    <tr>
+                    @endif
                         <td rowspan="{{$rowdp}}"> @if($j->PenjualanProduk->nama_alias != '') {{$j->PenjualanProduk->nama_alias}} @else {{$j->PenjualanProduk->nama}} @endif</td>
                         <?php $cdpp = 0; ?>
                         @foreach ($j->LaporanQcProduk($hasil, $tgl_awal, $tgl_akhir) as $k)
                             <?php $rowddp = $k->LaporanQcProduk($hasil, $tgl_awal, $tgl_akhir)->count(); ?>
-                            @if($cdpp <= 0)
+                            @if($cdpp > 0)
+                            <tr>
+                            @endif
                             <td rowspan="{{$rowddp}}">{{$k->GudangBarangJadi->Produk->nama}} {{$k->GudangBarangJadi->nama}}</td>
                             <?php $cndp = 0; ?>
                                 @foreach($k->LaporanQcProduk($hasil, $tgl_awal, $tgl_akhir) as $l)
 
-                                    @if($cndp <= 0)
+                                    @if($cndp > 0)
+                                    <tr>
+                                    @endif
                                     <td>
                                         {{$l->NoseriTGbj->NoseriBarangJadi->noseri}}
                                     </td>
                                     <td>{{$l->tgl_uji}}</td>
                                     <td>{{$l->status}}</td>
-                                    @else
+                                    {{-- @else
                                     <tr>
                                     <td>
                                         {{$l->NoseriTGbj->NoseriBarangJadi->noseri}}
                                     </td>
                                     <td>{{$l->tgl_uji}}</td>
                                     <td>{{$l->status}}</td>
-                                    @endif
+                                    @endif --}}
                                     <?php $cndp++; ?>
                                 </tr>
                                 @endforeach
-                            @else
+                            {{-- @else
                             <tr>
                             <td rowspan="{{$rowddp}}">{{$k->GudangBarangJadi->Produk->nama}} {{$k->GudangBarangJadi->nama}}</td>
-                            <?php $cndp = 0; ?>
+                            <php $cndp = 0; ?>
                                 @foreach($k->LaporanQcProduk($hasil, $tgl_awal, $tgl_akhir) as $l)
                                     @if($cndp <= 0)
                                     <td>
@@ -131,13 +137,13 @@
                                     <td>{{$l->tgl_uji}}</td>
                                     <td>{{$l->status}}</td>
                                     @endif
-                                    <?php $cndp++; ?>
+                                    <php $cndp++; ?>
                                 </tr>
                                 @endforeach
-                            @endif
+                            @endif --}}
                             <?php $cdpp++; ?>
                         @endforeach
-                    @else
+                    {{-- @else
                         <tr>
                         <td rowspan="{{$rowdp}}"> @if($j->PenjualanProduk->nama_alias != '') {{$j->PenjualanProduk->nama_alias}} @else {{$j->PenjualanProduk->nama}} @endif </td>
                         <?php $cdpp = 0; ?>
@@ -191,33 +197,37 @@
                             @endif
                             <?php $cdpp++; ?>
                         @endforeach
-                    @endif
+                    @endif --}}
                 <?php $cdp++; ?>
                 @endforeach
                 @elseif($jenis == "part")
                     <?php $cdp = 0; ?>
                     @foreach ($i->LaporanQcPart($produk, $tgl_awal, $tgl_akhir) as $j)
-                        @if($cdp <= 0)
+                        @if($cdp > 0)
+                        <tr>
+                        @endif
                         <td rowspan="{{$j->LaporanQcPart($tgl_awal, $tgl_akhir)->count()}}">{{$j->Sparepart->nama}}</td>
                             <?php $odp = 0; ?>
                             @foreach ($j->LaporanQcPart($tgl_awal, $tgl_akhir) as $k)
-                                @if($odp <= 0)
+                                @if($odp > 0)
+                                <tr>
+                                @endif
                                 <td>{{$k->tanggal_uji}}</td>
                                 <td>{{$k->jumlah_ok}}</td>
                                 <td>{{$k->jumlah_nok}}</td>
-                                @else
+                                {{-- @else
                                 <tr>
                                 <td>{{$k->tanggal_uji}}</td>
                                 <td>{{$k->jumlah_ok}}</td>
                                 <td>{{$k->jumlah_nok}}</td>
-                                @endif
+                                @endif --}}
                             </tr>
                             <?php $odp++; ?>
                             @endforeach
-                        @else
+                        {{-- @else
                         <tr>
                         <td rowspan="{{$j->LaporanQcPart($tgl_awal, $tgl_akhir)->count()}}">{{$j->Sparepart->nama}}</td>
-                            <?php $odp = 0; ?>
+                            <php $odp = 0; ?>
                             @foreach ($j->LaporanQcPart($tgl_awal, $tgl_akhir) as $k)
                                 @if($odp <= 0)
                                 <td>{{$k->tanggal_uji}}</td>
@@ -230,9 +240,9 @@
                                 <td>{{$k->jumlah_nok}}</td>
                                 @endif
                             </tr>
-                            <?php $odp++; ?>
+                            <php $odp++; ?>
                             @endforeach
-                        @endif
+                        @endif --}}
                     <?php $cdp++; ?>
                     @endforeach
                 @endif

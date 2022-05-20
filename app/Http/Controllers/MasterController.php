@@ -23,6 +23,9 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Carbon;
 use Alert;
+use App\Exports\CustomerData;
+use App\Exports\EkspedisiData;
+use App\Exports\ProdukData;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
@@ -36,6 +39,7 @@ use App\Models\Sparepart;
 use App\Models\SparepartGudang;
 use App\Models\UserLog;
 use Illuminate\Support\Facades\DB;
+use Maatwebsite\Excel\Facades\Excel;
 
 use function PHPUnit\Framework\returnValueMap;
 
@@ -718,6 +722,10 @@ class MasterController extends Controller
             'npwp' => $request->npwp,
             'batas' => $request->batas,
             'pic' => $request->pic,
+            'izin_usaha' => $request->izin_usaha,
+            'modal_usaha' => $request->modal_usaha,
+            'hasil_penjualan' => $request->hasil_penjualan,
+            'nama_pemilik' => $request->pemilik,
             'ket' => $request->keterangan,
         ]);
 
@@ -808,6 +816,10 @@ class MasterController extends Controller
         $customer->email = $request->email;
         $customer->telp = $request->telepon;
         $customer->alamat = $request->alamat;
+        $customer->izin_usaha = $request->izin_usaha;
+        $customer->modal_usaha = $request->modal_usaha;
+        $customer->hasil_penjualan = $request->hasil_penjualan;
+        $customer->nama_pemilik = $request->pemilik;
         $customer->ket = $request->keterangan;
         $c = $customer->save();
         if ($c) {
@@ -816,6 +828,7 @@ class MasterController extends Controller
             return response()->json(['data' => 'error']);
         }
     }
+
     public function update_produk(Request $request)
     {
         $id = $request->id;
@@ -1127,7 +1140,7 @@ class MasterController extends Controller
 
     function select_gk_unit()
     {
-        $data = GudangKarantinaDetail::select('t_gk_detail.gbj_id', DB::raw('CONCAT(produk.nama," ",gdg_barang_jadi.nama) as name'))
+        $data = GudangKarantinaDetail::select('t_gk_detail.gbj_id', DB::raw('CONCAT("(",produk.merk,") ",produk.nama," ",gdg_barang_jadi.nama) as name'))
             ->whereNotNull('t_gk_detail.gbj_id')
             ->where('is_draft', 0)
             ->where('is_keluar', 0)
@@ -1171,5 +1184,21 @@ class MasterController extends Controller
         $row->aksi = $request->aksi;
         $row->created_at = Carbon::now();
         $row->save();
+    }
+
+    public function export_customer()
+    {
+        $waktu = Carbon::now();
+        return Excel::download(new CustomerData(), 'Daftar Customer  ' . $waktu->toDateTimeString() . '.xlsx');
+    }
+    public function export_ekspedisi()
+    {
+        $waktu = Carbon::now();
+        return Excel::download(new EkspedisiData(), 'Daftar Ekspedisi  ' . $waktu->toDateTimeString() . '.xlsx');
+    }
+    public function export_produk()
+    {
+        $waktu = Carbon::now();
+        return Excel::download(new ProdukData(), 'Daftar Produk ' . $waktu->toDateTimeString() . '.xlsx');
     }
 }
