@@ -903,27 +903,48 @@ class GudangController extends Controller
                 ];
                 $startcount++;
             }
+            // return json_encode($data);
 
             foreach($data as $d) {
                 $aa[] = $d['noseri'];
-                // echo NoseriBarangJadi::where('noseri', $aa)->get();
+                $bb[] = $d['produk'];
             }
-            return $aa;
+            // return $aa;
 
+            $check = NoseriBarangJadi::whereIn('noseri', $aa)->get()->pluck('noseri');
+            $seri = [];
+            $sheet1 = $sheet->toArray(null, true, true, true);
+            $numrow = 1;
+            $html = "<table class='table table-bordered table-striped table-hover'>
+                    <tr>
+                    <th>No</th>
+                    <th>Nama</th>
+                    <th>Noseri</th>
+                    </tr>";
+            foreach($sheet1 as $key => $row) {
+                $a = $row['A'];
+                $b = $row['B'];
+                $c = $row['C'];
+                if($numrow > 1) {
+                    $nis_td = (!empty($c)) ? "" : " style='background: #E07171;'";
+                    $html .= "<tr>";
+                    $html .= "<td" . $nis_td . ">" . $a . "</td>";
+                    $html .= "<td" . $nis_td . ">" . $b . "</td>";
+                    $html .= "<td" . $nis_td . ">" . $c . "</td>";
+                    $html .= "</tr>";
+                }
+                $numrow++;
+            }
+            $html .= "</table>";
 
-            // foreach($data as $kk => $dd) {
-            //     // echo json_encode($dd['noseri']);
-            //     echo NoseriBarangJadi::where('noseri', json_encode($dd['noseri']))->get();
-            // }
-
-            // for ($i=0; $i < count($data); $i++) {
-            //     // echo NoseriBarangJadi::whereIn('noseri', $data[$i]['noseri'])->get();
-            //     echo $data[$i]['noseri'];
-            // }
-            // return $noseri;
-            // return gettype($data);
-            // return $data[]['noseri'];
-            // var_dump($data);
+            if(count($check) > 0) {
+                foreach ($check as $item) {
+                    array_push($seri, $item);
+                }
+                return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true, 'data' => $html, 'noseri' => implode(', ', $seri)]);
+            } else {
+                return response()->json(['msg' => 'Noseri Sudah Bisa Diunggah', 'error' => false, 'data' => $html]);
+            }
         }
 
         function getListSODone()
@@ -2268,20 +2289,9 @@ class GudangController extends Controller
             }
         }
 
-        $s = DetailPesanan::where('pesanan_id', $request->pesanan_id)->get();
-        $jumlah = 0;
-        $x = 0;
-        foreach ($s as $i) {
-            foreach ($i->PenjualanProduk->Produk as $j) {
-                $x = $jumlah + ($i->jumlah * $j->pivot->jumlah);
-            }
-        }
+        $po = Pesanan::find($request->pesanan_id);
 
-        $jumlah_kirim = NoseriTGbj::whereHas('detail.header', function ($q) use ($request) {
-            $q->where('pesanan_id', $request->pesanan_id);
-        })->where('status_id', 2)->get()->count();
-
-        if ($x == $jumlah_kirim) {
+        if ($po->getJumlahPesanan() == $po->cekJumlahkirim()) {
             Pesanan::find($request->pesanan_id)->update(['log_id' => 8]);
         } else {
             Pesanan::find($request->pesanan_id)->update(['log_id' => 6]);

@@ -440,15 +440,19 @@
                 </div>
 
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary">Preview</button>
+                    <button type="submit" class="btn btn-outline-info"><i class="fas fa-eye"> Preview</i></button>
                 </div>
             </form>
             </div>
             <div class="modal-footer" id="csv_data_file" style="overflow-y: scroll; height:400px;">
-                {{-- <button type="button" class="btn btn-primary">Simpan</button> --}}
+
             </div>
-            <div class="modal-footer" id="footer-btn">
-                <button type="button" class="btn btn-primary">Simpan</button>
+            <div class="modal-footer justify-content-between" id="footer-btn">
+                <p id="bodyNoseri">Noseri Yang Terdaftar:
+                    <br>
+                    <span id="existNoseri"></span>
+                </p>
+                <button type="button" class="btn btn-default float-right btnImport"><i class="fas fa-upload"> Unggah</i></button>
             </div>
         </div>
     </div>
@@ -582,6 +586,7 @@
 {{-- data --}}
 <script type="text/javascript">
     $('#footer-btn').hide()
+    $('#bodyNoseri').hide()
     var authid = $('#authid').val();
     // initial
     $.ajaxSetup({
@@ -601,7 +606,15 @@
 
     $('.btnNext').click(function() {
         $('.notice').modal('hide')
+        $('#template_noseri').val('');
         $('.import-seri').modal('show')
+    })
+
+    $('.import-seri').on('hidden.bs.modal', function() {
+        $('#template_noseri').val('');
+        $('#footer-btn').hide()
+        $('#csv_data_file').empty()
+
     })
 
     $('#alkes').click(function () {
@@ -854,6 +867,7 @@
         });
     });
 
+    // $('body').on('submit', '#formImport', function (e) {
     $('#formImport').on('submit', function(e){
         e.preventDefault();
         $.ajax({
@@ -865,8 +879,39 @@
             cache: false,
             processData: false,
             success: function(data) {
-                // console.log(data);
-                $('#csv_data_file').html(data);
+                $('#csv_data_file').html(data.data);
+                if (data.error == true) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.msg,
+                    }).then((result) => {
+                        if (result.value) {
+                            $('#bodyNoseri').show()
+                            $('#existNoseri').html(data.noseri)
+                            $('.btnImport').removeClass('btn-default')
+                            $('.btnImport').addClass('btn-danger')
+                            $('.btnImport').prop('disabled', true);
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: data.msg,
+                    }).then((result) => {
+                        if (result.value) {
+                            $('#bodyNoseri').hide()
+                            if ($('.btnImport').hasClass('btn-default')) {
+                                $('.btnImport').removeClass('btn-default')
+                            } else {
+                                $('.btnImport').removeClass('btn-danger')
+                            }
+                            $('.btnImport').addClass('btn-success')
+                            $('.btnImport').prop('disabled', false);
+                        }
+                    });
+                }
                 $('#footer-btn').show()
             }
         })
