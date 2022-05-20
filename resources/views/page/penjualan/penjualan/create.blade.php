@@ -380,7 +380,7 @@
                                                                         <div class="input-group-prepend">
                                                                             <select class="form-control jenis_paket" name="jenis_paket" id="jenis_paket">
                                                                                 <option value="AK1-" selected>AK1-</option>
-                                                                                <option value="FKS">FKS</option>
+                                                                                <option value="FKS-">FKS-</option>
                                                                             </select>
                                                                             {{-- <span class="input-group-text" id="ket_no_paket">AK1-</span> --}}
                                                                         </div>

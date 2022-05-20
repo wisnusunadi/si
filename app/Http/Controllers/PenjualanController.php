@@ -1398,8 +1398,7 @@ class PenjualanController extends Controller
                     if (!empty($data->Pesanan->log_id)) {
                         if ($data->Pesanan->State->nama == "PO") {
                             $datas .= '<span class="purple-text badge">';
-                        }
-                        else if ($data->Pesanan->State->nama == "Penjualan") {
+                        } else if ($data->Pesanan->State->nama == "Penjualan") {
                             $datas .= '<span class="red-text badge">';
                         } else if ($data->Pesanan->State->nama == "Gudang") {
                             $datas .= '<span class="orange-text badge">';
@@ -1731,9 +1730,9 @@ class PenjualanController extends Controller
                 $c_id = $request->customer_id;
             }
 
-            if($request->no_paket != ""){
-                $nopaket = $request->jenis_paket. $request->no_paket;
-            }else{
+            if ($request->no_paket != "") {
+                $nopaket = $request->jenis_paket . $request->no_paket;
+            } else {
                 $nopaket = "";
             }
 
