@@ -163,7 +163,7 @@
                                 <h4>Outgoing 2021</h4>
                                 <div class="row">
                                     <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
-                                        <div class="small-box bg-success flex-fill">
+                                        <div class="small-box bg-success flex-fill d-flex flex-column">
                                             <div class="inner">
                                                 <h3>{{$terbaru}}</h3>
                                                 <p>Pengiriman Terbaru</p>
@@ -171,11 +171,11 @@
                                             <div class="icon">
                                                 <i class="fas fa-dolly-flatbed"></i>
                                             </div>
-                                            <a class="small-box-footer" id="pengirimanterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer mt-auto" id="pengirimanterbaru">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
-                                        <div class="small-box warning-bg flex-fill">
+                                        <div class="small-box warning-bg flex-fill d-flex flex-column">
                                             <div class="inner">
                                                 <h3>{{$belum_dikirim}}</h3>
                                                 <p>Belum dikirim</p>
@@ -183,11 +183,11 @@
                                             <div class="icon">
                                                 <i class="fas fa-boxes"></i>
                                             </div>
-                                            <a class="small-box-footer" id="belumdikirim">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer mt-auto" id="belumdikirim">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                     <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
-                                        <div class="small-box bg-danger flex-fill">
+                                        <div class="small-box bg-danger flex-fill d-flex flex-column">
                                             <div class="inner">
                                                 <h3>{{$lewat_batas}}</h3>
                                                 <p>Lewat Batas Kirim</p>
@@ -195,7 +195,7 @@
                                             <div class="icon">
                                                 <i class="fas fa-exclamation-circle"></i>
                                             </div>
-                                            <a class="small-box-footer" id="lewatbataskirim">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer mt-auto" id="lewatbataskirim">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
                                 </div>

@@ -348,13 +348,13 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
-                                                    <th>No SO</th>
+                                                    <th>Nomor SO</th>
                                                     <th>Nomor AKN</th>
                                                     <th>Nomor PO</th>
                                                     <th>Tanggal PO</th>
                                                     <th>Tanggal Delivery</th>
                                                     <th>Customer</th>
-                                                    <th>Jenis</th>
+                                                    {{-- <th>Jenis</th> --}}
                                                     <th>Status</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -541,7 +541,6 @@
                                                     <th>Tanggal Delivery</th>
                                                     <th>Customer</th>
                                                     <th>Status</th>
-                                                    <th>Aksi</th>
                                                     <th>Aksi</th>
                                                 </tr>
                                             </thead>
@@ -992,9 +991,11 @@
                 data: 'tgl_kontrak',
             }, {
                 data: 'nama_customer',
-            }, {
-                data: 'jenis',
-            }, {
+            },
+            // {
+            //     data: 'jenis',
+            // },
+            {
                 data: 'status',
             }, {
                 data: 'button',

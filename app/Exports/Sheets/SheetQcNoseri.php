@@ -69,8 +69,10 @@ class SheetQcNoseri implements WithTitle, FromView, ShouldAutoSize, WithStyles
     {
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(16);
         $sheet->getStyle('A2:N2')->getFont()->setBold(true);
+
+
         $sheet->getStyle('A:N')->getAlignment()
-        ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
+            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_TOP);
         // $sheet->getStyle('a2')->getFill()
         //     ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
         //     ->getStartColor()->setRGB('00ff7f');

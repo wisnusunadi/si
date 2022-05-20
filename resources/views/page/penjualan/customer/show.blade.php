@@ -25,7 +25,9 @@
 
 @section('adminlte_css')
 <style>
-
+    .hide{
+        display: none !important
+    }
     .align-center {
         text-align: center;
     }
@@ -199,7 +201,7 @@
                                                     <tr>
                                                         <th>No</th>
                                                         <th>Nama</th>
-                                                        <th>Alamat</th>
+                                                        {{-- <th>Alamat</th> --}}
                                                         <th>Provinsi</th>
                                                         <th>Email</th>
                                                         <th>Telp</th>
@@ -349,11 +351,11 @@
                     data: 'nama',
                     className: 'nowrap-text',
                 },
-                {
-                    data: 'alamat',
-                    className: 'minimizechar',
-                    orderable: false,
-                },
+                // {
+                //     data: 'alamat',
+                //     className: 'minimizechar',
+                //     orderable: false,
+                // },
                 {
                     data: "prov",
                     className: 'align-center nowrap-text',

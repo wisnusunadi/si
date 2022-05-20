@@ -290,16 +290,16 @@ class PenjualanController extends Controller
                 if ($name == 'ekatalog') {
                     if ($data->status != 'draft') {
                         return  '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                          <i class="fas fa-search"></i>
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
                     </a>';
                     }
                 } else if ($name == 'spa') {
                     return  '<a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
-                          <i class="fas fa-search"></i>
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
                     </a>';
                 } else {
                     return  '<a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
-                          <i class="fas fa-search"></i>
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
                     </a>';
                 }
             })
@@ -905,7 +905,7 @@ class PenjualanController extends Controller
                 return $data->harga * $data->jumlah;
             })
             ->addColumn('button', function ($data) {
-                return '<i class="fas fa-search"></i>';
+                return '<i class="fas fa-eye"></i>';
             })
             ->rawColumns(['button'])
             ->make(true);
@@ -923,7 +923,7 @@ class PenjualanController extends Controller
                 return $data->harga * $data->jumlah;
             })
             ->addColumn('button', function ($data) {
-                return '<i class="fas fa-search"></i>';
+                return '<i class="fas fa-eye"></i>';
             })
             ->rawColumns(['button',])
             ->make(true);
@@ -946,7 +946,7 @@ class PenjualanController extends Controller
                 return $data->harga * $data->jumlah;
             })
             ->addColumn('button', function ($data) {
-                return '<i class="fas fa-search"></i>';
+                return '<i class="fas fa-eye"></i>';
             })
             ->rawColumns(['button', 'variasi'])
             ->make(true);
@@ -1127,8 +1127,8 @@ class PenjualanController extends Controller
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
                 <button class="dropdown-item" type="button">
-                      <i class="fas fa-search"></i>
-                      Details
+                      <i class="fas fa-eye"></i>
+                      Detail
                     </button>
                 </a>
                 </div>';
@@ -1279,8 +1279,8 @@ class PenjualanController extends Controller
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
                 <button class="dropdown-item" type="button">
-                      <i class="fas fa-search"></i>
-                      Details
+                      <i class="fas fa-eye"></i>
+                      Detail
                     </button>
                 </a>';
                 } else {
@@ -1396,9 +1396,10 @@ class PenjualanController extends Controller
                 $datas = "";
                 if ($data->log != "batal") {
                     if (!empty($data->Pesanan->log_id)) {
-                        if ($data->Pesanan->State->nama == "Penjualan") {
-                            $datas .= '<span class="red-text badge">';
+                        if ($data->Pesanan->State->nama == "PO") {
                             $datas .= '<span class="purple-text badge">';
+                        } else if ($data->Pesanan->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
                         } else if ($data->Pesanan->State->nama == "Gudang") {
                             $datas .= '<span class="orange-text badge">';
                         } else if ($data->Pesanan->State->nama == "QC") {
@@ -1414,7 +1415,6 @@ class PenjualanController extends Controller
                     } else {
                         $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                     }
-                } else if ($data->Pesanan->State->nama == "PO") {
                 } else {
                     $datas .= '<span class="red-text badge">Batal</span>';
                 }
@@ -1441,8 +1441,8 @@ class PenjualanController extends Controller
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '" >
                 <button class="dropdown-item" type="button">
-                      <i class="fas fa-search"></i>
-                      Details
+                      <i class="fas fa-eye"></i>
+                      Detail
                     </button>
                 </a>';
                 if ($divisi_id == "26") {
@@ -1585,8 +1585,8 @@ class PenjualanController extends Controller
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '" >
                 <button class="dropdown-item" type="button">
-                      <i class="fas fa-search"></i>
-                      Details
+                      <i class="fas fa-eye"></i>
+                      Detail
                     </button>
                 </a>';
                 if ($divisi_id == "26" || $divisi_id == "8") {
@@ -1730,11 +1730,10 @@ class PenjualanController extends Controller
                 $c_id = $request->customer_id;
             }
 
-            if ($request->status != 'draft') {
-                $akn = 'AK1-' . $request->no_paket;
+            if ($request->no_paket != "") {
+                $nopaket = $request->jenis_paket . $request->no_paket;
             } else {
-                $c_akn = $request->has('isi_nopaket') ? 'AK1-' . $request->no_paket : NULL;
-                $akn = $c_akn;
+                $nopaket = "";
             }
 
 
@@ -1742,7 +1741,7 @@ class PenjualanController extends Controller
                 'customer_id' => $c_id,
                 'provinsi_id' => $request->provinsi,
                 'pesanan_id' => $x,
-                'no_paket' => $akn,
+                'no_paket' => $nopaket,
                 'no_urut' => $request->no_urut,
                 'deskripsi' => $request->deskripsi,
                 'instansi' => $request->instansi,
@@ -2039,7 +2038,7 @@ class PenjualanController extends Controller
             if ($request->no_paket == '') {
                 $c_akn = NULL;
             } else {
-                $c_akn = $request->has('isi_nopaket') ? 'AK1-' . $request->no_paket : NULL;
+                $c_akn = $request->has('isi_nopaket') ? $request->jenis_paket . $request->no_paket : NULL;
             }
 
             $akn = $c_akn;
@@ -2250,7 +2249,6 @@ class PenjualanController extends Controller
         } else {
             $bool = false;
         }
-
 
         if ($bool == true) {
             return redirect()->back()->with('success', 'Berhasil mengubah SPA');
