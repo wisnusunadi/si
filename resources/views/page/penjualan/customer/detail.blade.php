@@ -23,6 +23,9 @@
 
 @section('adminlte_css')
 <style>
+    .hide{
+        display: none !important
+    }
     .alert-danger{
         color: #a94442;
         background-color: #f2dede;

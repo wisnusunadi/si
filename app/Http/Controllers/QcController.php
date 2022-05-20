@@ -329,16 +329,16 @@ class QcController extends Controller
                     $bool = "0";
                     if ($jumlahditrf > 0) {
                         if ($jumlahditrf == $countok) {
-                            return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><i class="fas fa-eye"></i></a>';
+                            return '<a class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                         } else {
-                            return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><i class="fas fa-eye"></i></a>';
+                            return '<a class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                         }
                     }
                 } else {
                     if ($data->jumlah == $data->getJumlahCekPart('ok')) {
-                        return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-eye"></i></a>';
+                        return '<a class="noserishow" data-count="0" data-id="' . $data->id . '" data-jenis="part"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                     } else {
-                        return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-eye"></i></a>';
+                        return '<a class="noserishow" data-count="1" data-id="' . $data->id . '" data-jenis="part"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                     }
                 }
 

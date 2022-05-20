@@ -230,7 +230,7 @@ class LogistikController extends Controller
                 return $data->jumlah;
             })
             ->addColumn('button', function () {
-                return '<a type="button" class="noserishow" data-id="3"><i class="fas fa-eye"></i></a>';
+                return '<a type="button" class="noserishow btn btn-outline-primary btn-sm" data-id="3" ><i class="fas fa-eye"></i> Detail</a>';
             })
             ->rawColumns(['checkbox', 'button', 'status'])
             ->make(true);
@@ -318,7 +318,7 @@ class LogistikController extends Controller
                     return $s;
                 })
                 ->addColumn('button', function ($data) {
-                    return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-eye"></i></a>';
+                    return '<a class="noserishow" data-id="' . $data->id . '"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                 })
                 ->rawColumns(['checkbox', 'button', 'status'])
                 ->make(true);
@@ -415,7 +415,7 @@ class LogistikController extends Controller
                 })
                 ->addColumn('button', function ($data) {
                     if (isset($data->gudangbarangjadi)) {
-                        return '<a type="button" class="noserishow" data-id="' . $data->id . '"><i class="fas fa-eye"></i></a>';
+                        return '<a class="noserishow" data-id="' . $data->id . '"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                     } else {
                         return '';
                     }
@@ -511,7 +511,7 @@ class LogistikController extends Controller
                 })
                 ->addColumn('button', function ($data) {
                     return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
-                <div><i class="fas fa-eye"></i></div>
+                <div><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></div>
             </a>';
                 })
                 ->rawColumns(['checkbox', 'button', 'status'])
@@ -911,8 +911,8 @@ class LogistikController extends Controller
                     $y = $data->spb->id;
                 }
                 $z = 'proses';
-                return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                        <i class="fas fa-eye"></i>
+                return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '" type="button" class="btn btn-outline-primary btn-sm">
+                        <i class="fas fa-eye"></i> Detail
                     </a>';
             })
             ->rawColumns(['status', 'button', 'batas'])
@@ -1061,8 +1061,8 @@ class LogistikController extends Controller
                     $y = $data->spb->id;
                 }
                 $z = 'selesai';
-                return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '">
-                            <i class="fas fa-eye"></i>
+                return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '" type="button" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye"></i> Detail
                     </a>';
             })
             ->rawColumns(['status', 'button', 'batas'])
@@ -2282,7 +2282,7 @@ class LogistikController extends Controller
             ->addColumn('aksi', function ($data) {
                 if (isset($data->DetailPesananProduk)) {
                     return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
-                <div><i class="fas fa-eye"></i></div>
+                <div><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></div>
             </a>';
                 } else {
                     return '-';
