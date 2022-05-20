@@ -445,6 +445,7 @@
             </form>
             </div>
             <form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="userid" id="userid1" value="{{ Auth::user()->id }}">
                 <div class="modal-footer" id="csv_data_file" style="overflow-y: scroll; height:400px;">
 
                 </div>
@@ -930,7 +931,13 @@
             cache: false,
             processData: false,
             success: function(data) {
-                console.log(data);
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: data.msg,
+                }).then((res) => {
+                    location.reload()
+                })
             }
         })
     })

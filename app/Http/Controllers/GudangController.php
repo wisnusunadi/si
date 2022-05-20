@@ -942,7 +942,30 @@ class GudangController extends Controller
             $bb[] = $d['produk'];
         }
 
-        return $bb;
+        // array_unique($bb);
+        $check = GudangBarangJadi::select('gdg_barang_jadi.id', DB::raw("concat(produk.nama, ' ', gdg_barang_jadi.nama) as produk"))
+            ->whereIn(DB::raw("concat(produk.nama, ' ', gdg_barang_jadi.nama)"), $bb)
+            ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+            ->get()->pluck('id');
+        // return ;
+        foreach($aa as $key => $nn) {
+            $dat_arr[] = [
+                'gdg_barang_jadi_id' => GudangBarangJadi::select('gdg_barang_jadi.id')
+                ->where(DB::raw("concat(produk.nama, ' ', gdg_barang_jadi.nama)"), $bb[$key])
+                ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+                ->first()->id,
+                'dari' => 13,
+                'noseri' => $nn,
+                'jenis' => 'MASUK',
+                'is_ready' => 0,
+                'is_aktif' => 1,
+                'created_by' => $request->userid,
+                'created_at' => Carbon::now(),
+            ];
+        }
+        NoseriBarangJadi::insert($dat_arr);
+        return response()->json(['msg' => 'Data Berhasil Diunggah', 'error' => false]);
+
     }
 
     function getListSODone()
