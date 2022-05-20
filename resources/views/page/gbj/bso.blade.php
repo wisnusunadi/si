@@ -443,7 +443,6 @@
     var jml = '';
     var dpp = '';
     $(document).on('click', '.detailmodal', function(e) {
-
         let gh = $(this).parent().prev().prev().prev()[0].textContent
         let ghh = gh.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
         $('#namaproduk').html('<b>'+ghh+'</b>')
@@ -497,7 +496,6 @@
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
         });
-
         $('.modal-scan').modal('show');
     });
 
