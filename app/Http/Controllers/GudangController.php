@@ -911,14 +911,14 @@ class GudangController extends Controller
 
     function import_noseri_to_db(Request $request)
     {
-        $file = $request->file('namafile');
-        $filename = $file->getClientOriginalName();
-        $extension = $file->getClientOriginalExtension(); //Get extension of uploaded file
-        $tempPath = $file->getRealPath();
-        $fileSize = $file->getSize();
+        // $file = $request->file('namafile');
+        // $filename = $file->getClientOriginalName();
+        // $extension = $file->getClientOriginalExtension(); //Get extension of uploaded file
+        // $tempPath = $file->getRealPath();
+        // $fileSize = $file->getSize();
 
         $reader = new ReaderXlsx();
-        $spreadsheet = $reader->load(public_path('upload/noseri/'. $filename));
+        $spreadsheet = $reader->load(public_path('upload/noseri/'. $request->namafile));
         $spreadsheet->setActiveSheetIndex(0);
 
         $sheet        = $spreadsheet->getActiveSheet();
@@ -942,7 +942,7 @@ class GudangController extends Controller
             $bb[] = $d['produk'];
         }
 
-        return $aa;
+        return $bb;
     }
 
     function getListSODone()

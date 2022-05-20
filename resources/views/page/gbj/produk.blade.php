@@ -445,17 +445,17 @@
             </form>
             </div>
             <form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">
-            <div class="modal-footer" id="csv_data_file" style="overflow-y: scroll; height:400px;">
+                <div class="modal-footer" id="csv_data_file" style="overflow-y: scroll; height:400px;">
 
-            </div>
-            <div class="modal-footer justify-content-between" id="footer-btn">
-                <p id="bodyNoseri">Noseri Yang Terdaftar:
-                    <br>
-                    <span id="existNoseri"></span>
-                </p>
-                <button type="submit" class="btn btn-default float-right btnImport"><i class="fas fa-upload"> Unggah</i></button>
-            </div>
-        </form>
+                </div>
+                <div class="modal-footer justify-content-between" id="footer-btn">
+                    <p id="bodyNoseri">Noseri Yang Terdaftar:
+                        <br>
+                        <span id="existNoseri"></span>
+                    </p>
+                    <button type="submit" class="btn btn-default float-right btnImport"><i class="fas fa-upload"> Unggah</i></button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -920,8 +920,9 @@
     })
 
     $('#formStoreImport').on('submit', function(e){
+        e.preventDefault();
         $.ajax({
-            url: "/api/v2/gbj/import-noseri",
+            url: "/api/v2/gbj/store-importseri",
             method: "post",
             data: new FormData(this),
             dataType: "json",
@@ -929,7 +930,7 @@
             cache: false,
             processData: false,
             success: function(data) {
-                console.log(res);
+                console.log(data);
             }
         })
     })
