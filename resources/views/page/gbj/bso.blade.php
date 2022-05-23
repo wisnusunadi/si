@@ -544,7 +544,7 @@
         console.log(prd1);
         // console.log("a", a);
         // console.log("dataTampungSeri", dataTampungSeri);
-        console.log(textDataSeri);
+        // console.log(textDataSeri);
     })
 
     $(document).on('click', '#rancang', function(e) {
