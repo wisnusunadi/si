@@ -472,7 +472,7 @@
             columns: [
                 { data: 'seri', name: 'seri'},
                 { data(data) {
-                    console.log("colm", data.ids, temp_array[data.ids])
+                    // console.log("colm", data.ids, temp_array[data.ids])
                     if (temp_array[data.ids] !== undefined){
                         if (temp_array[data.ids] == dpp)
                             return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}" checked>`
@@ -503,10 +503,11 @@
 
     let dataTampungSeri = [];
     $('.scan-produk').on('click', '.cb-child', function(e) {
+        dataTampungSeri = [];
         if ($(this).is(':checked')) {
             dataTampungSeri.push($(this).val());
         } else {
-            let index = dataTampungSeri.findIndex(x => x.noseri == $(this).val());
+            dataTampungSeri.splice(dataTampungSeri.indexOf($(this).val()), 1);
         }
     });
     $(document).on('click', '#simpan', function(e) {
@@ -532,7 +533,7 @@
                 timer: 1500
             })
 
-            prd1[dpp] = {"jumlah": jml, "prd": prd, "noseri": dataTampungSeri};
+            prd1[dpp] = {"jumlah": jml, "prd": prd, "noseri": a};
             $('.modal-scan').modal('hide');
             if(prd1[dpp].noseri.length == 0) {
                 delete prd1[dpp]
