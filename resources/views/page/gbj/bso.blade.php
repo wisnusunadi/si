@@ -503,8 +503,10 @@
 
     let dataTampungSeri = [];
     $('.scan-produk').on('click', '.cb-child', function(e) {
-        dataTampungSeri = [];
         if ($(this).is(':checked')) {
+            if(dataTampungSeri.length == 0){
+                dataTampungSeri = []
+            }
             dataTampungSeri.push($(this).val());
         } else {
             dataTampungSeri.splice(dataTampungSeri.indexOf($(this).val()), 1);
