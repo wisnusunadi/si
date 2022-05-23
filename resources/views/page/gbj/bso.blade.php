@@ -443,7 +443,6 @@
     var jml = '';
     var dpp = '';
     $(document).on('click', '.detailmodal', function(e) {
-
         let gh = $(this).parent().prev().prev().prev()[0].textContent
         let ghh = gh.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
         $('#namaproduk').html('<b>'+ghh+'</b>')
@@ -473,7 +472,7 @@
             columns: [
                 { data: 'seri', name: 'seri'},
                 { data(data) {
-                    console.log("colm", data.ids, temp_array[data.ids])
+                    // console.log("colm", data.ids, temp_array[data.ids])
                     if (temp_array[data.ids] !== undefined){
                         if (temp_array[data.ids] == dpp)
                             return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}" checked>`
@@ -497,11 +496,21 @@
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         }
         });
-
         $('.modal-scan').modal('show');
     });
 
     var t = 0;
+
+    let dataTampungSeri = [];
+    let textDataSeri = [];
+    $('.scan-produk').on('click', '.cb-child', function(e) {
+        if ($(this).is(':checked')) {
+            dataTampungSeri.push($(this).val());
+            textDataSeri.push($(this).parent().prev().text())
+        } else {
+            let index = dataTampungSeri.findIndex(x => x.noseri == $(this).val());
+        }
+    });
     $(document).on('click', '#simpan', function(e) {
         console.log(jml);
         console.log(dpp);
@@ -525,7 +534,7 @@
                 timer: 1500
             })
 
-            prd1[dpp] = {"jumlah": jml, "prd": prd, "noseri": a};
+            prd1[dpp] = {"jumlah": jml, "prd": prd, "noseri": dataTampungSeri};
             $('.modal-scan').modal('hide');
             if(prd1[dpp].noseri.length == 0) {
                 delete prd1[dpp]
@@ -533,6 +542,9 @@
 
         }
         console.log(prd1);
+        // console.log("a", a);
+        // console.log("dataTampungSeri", dataTampungSeri);
+        console.log(textDataSeri);
     })
 
     $(document).on('click', '#rancang', function(e) {
@@ -591,7 +603,7 @@
             confirmButtonText: 'Yes, Transfer it'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $(this).attr('disabled', true);
+                    // $(this).attr('disabled', true);
                     $.ajax({
                         url: "/api/tfp/byso-final",
                         type: "post",
@@ -603,13 +615,13 @@
                         },
                         success: function(res) {
                             console.log(res);
-                            Swal.fire(
-                                'Success!',
-                                'Data Terkirim ke QC',
-                                'success'
-                            ).then(function() {
-                                location.reload();
-                            })
+                            // Swal.fire(
+                            //     'Success!',
+                            //     'Data Terkirim ke QC',
+                            //     'success'
+                            // ).then(function() {
+                            //     location.reload();
+                            // })
                         }
                     })
 
