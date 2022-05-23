@@ -146,6 +146,17 @@
         margin-top: 15px;
         margin-bottom: 15px;
     }
+    .card-detail {
+        align-items: center;
+        flex-direction: row;
+        shadow: none;
+        border: none;
+    }
+    .card-detail img {
+        width: 25%;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: calc(0.25rem - 1px);
+    }
 
     @media screen and (min-width: 1440px) {
 
@@ -905,7 +916,7 @@
         </div>
 
         <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
-            <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header">
                         <h4 id="modal-title">Detail</h4>
@@ -1167,11 +1178,9 @@
                     searchable: false
                 }
             ],
-
         });
     })
 </script>
-
 <script>
     $(function() {
         $(document).on('click', '.detailmodal', function(event) {
@@ -1190,22 +1199,25 @@
                     $('#detail').html(result).show();
 
                     if (label == 'ekatalog') {
-                        $('#detailmodal').find(".modal-header").attr('id', '');
-                        $('#detailmodal').find(".modal-header").attr('id', 'detailekat');
+                        $('#detailmodal').find(".modal-header").removeClass('bg-orange bg-lightblue');
+                        $('#detailmodal').find(".modal-header").addClass('bg-purple');
                         $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
                         detailtabel_ekatalog(id);
                     } else if (label == 'spa') {
-                        $('#detailmodal').find(".modal-header").attr('id', '');
-                        $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
+                        // $('#detailmodal').find(".modal-header").attr('id', '');
+                        // $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
+                        $('#detailmodal').find(".modal-header").removeClass('bg-purple bg-lightblue');
+                        $('#detailmodal').find(".modal-header").addClass('bg-orange');
                         $('#detailmodal').find(".modal-header > h4").text('SPA');
                         detailtabel_spa(id);
                     } else {
-                        $('#detailmodal').find(".modal-header").attr('id', '');
-                        $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
+                        // $('#detailmodal').find(".modal-header").attr('id', '');
+                        // $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
+                        $('#detailmodal').find(".modal-header").removeClass('bg-orange bg-purple');
+                        $('#detailmodal').find(".modal-header").addClass('bg-lightblue');
                         $('#detailmodal').find(".modal-header > h4").text('SPB');
                         detailtabel_spb(id);
                     }
-
                 },
                 complete: function() {
                     $('#loader').hide();
