@@ -502,13 +502,14 @@
     var t = 0;
 
     let dataTampungSeri = [];
-    let textDataSeri = [];
     $('.scan-produk').on('click', '.cb-child', function(e) {
         if ($(this).is(':checked')) {
+            if(dataTampungSeri.length == 0){
+                dataTampungSeri = []
+            }
             dataTampungSeri.push($(this).val());
-            textDataSeri.push($(this).parent().prev().text())
         } else {
-            let index = dataTampungSeri.findIndex(x => x.noseri == $(this).val());
+            dataTampungSeri.splice(dataTampungSeri.indexOf($(this).val()), 1);
         }
     });
     $(document).on('click', '#simpan', function(e) {
@@ -542,9 +543,8 @@
 
         }
         console.log(prd1);
-        // console.log("a", a);
-        // console.log("dataTampungSeri", dataTampungSeri);
-        // console.log(textDataSeri);
+        console.log("a", a);
+        console.log("dataTampungSeri", dataTampungSeri);
     })
 
     $(document).on('click', '#rancang', function(e) {

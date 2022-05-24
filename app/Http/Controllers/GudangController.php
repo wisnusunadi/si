@@ -877,12 +877,15 @@ class GudangController extends Controller
         $numrow = 1;
         // $html = '<form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">';
         $html = "<input type='hidden' name='namafile' value='" . $filename . "'>";
-        $html .= "<table class='table table-bordered table-striped table-hover'>
+        $html .= "<table class='table table-bordered table-striped table-hover tableImport'>
+                <thead>
                 <tr>
                 <th>No</th>
                 <th>Nama</th>
                 <th>Noseri</th>
-                </tr>";
+                </tr>
+                </thead>
+                <tbody>";
         foreach($sheet1 as $key => $row) {
             $a = $row['A'];
             $b = $row['B'];
@@ -897,7 +900,7 @@ class GudangController extends Controller
             }
             $numrow++;
         }
-        $html .= "</table>";
+        $html .= "</tbody></table>";
 
         if(count($check) > 0) {
             foreach ($check as $item) {

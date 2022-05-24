@@ -291,33 +291,51 @@
                         </tbody>
 
                     </table> --}}
-                <div class="card card-primary card-outline card-outline-tabs">
-                    <div class="card-header p-0 border-bottom-0">
-                        <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill"
-                                    href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
-                                    aria-selected="true">Belum Digunakan</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
-                                    href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile"
-                                    aria-selected="false">Sudah Digunakan</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content" id="custom-tabs-four-tabContent">
-                            <div class="tab-pane fade active show" id="custom-tabs-four-home" role="tabpanel"
-                                aria-labelledby="custom-tabs-four-home-tab">
-                                <form action="" id="noseriForm" name="noseriForm">
-                                    <table class="table scan-produk">
+                    <div class="card card-primary card-outline card-outline-tabs">
+                        <div class="card-header p-0 border-bottom-0">
+                            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
+                                        aria-selected="true">Belum Digunakan</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-profile" role="tab"
+                                        aria-controls="custom-tabs-four-profile" aria-selected="false">Sudah
+                                        Digunakan</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-four-tabContent">
+                                <div class="tab-pane fade active show" id="custom-tabs-four-home" role="tabpanel"
+                                    aria-labelledby="custom-tabs-four-home-tab">
+                                    <form action="" id="noseriForm" name="noseriForm">
+                                        <table class="table scan-produk">
+                                            <thead>
+                                                <tr>
+                                                    <th><input type="checkbox" id="head-cb"></th>
+                                                    <th>No. Seri</th>
+                                                    <th>Layout</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            </tbody>
+
+                                        </table>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
+                                    aria-labelledby="custom-tabs-four-profile-tab">
+                                    <table class="table scan-produk1">
                                         <thead>
                                             <tr>
-                                                <th><input type="checkbox" id="head-cb"></th>
+                                                <th>No</th>
                                                 <th>No. Seri</th>
+                                                <th>Digunakan</th>
                                                 <th>Layout</th>
-                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -325,28 +343,11 @@
                                         </tbody>
 
                                     </table>
-                            </div>
-                            <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
-                                aria-labelledby="custom-tabs-four-profile-tab">
-                                <table class="table scan-produk1">
-                                    <thead>
-                                        <tr>
-                                            <th>No</th>
-                                            <th>No. Seri</th>
-                                            <th>Digunakan</th>
-                                            <th>Layout</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-
-                                    </tbody>
-
-                                </table>
+                                </div>
                             </div>
                         </div>
-                    </div>
 
-                </div>
+                    </div>
 
             </div>
             <div class="modal-footer">
@@ -423,8 +424,8 @@
     </div>
 </div>
 
-<div class="modal fade import-seri" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade import-seri" id="" role="dialog" aria-labelledby="modelTitleId">
+    <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Unggah File</h5>
@@ -433,45 +434,45 @@
                 </button>
             </div>
             <form name="formImport" id="formImport" method="post" enctype="multipart/form-data">
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="">Noseri</label>
-                    <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".xlsx">
-                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Noseri</label>
+                        <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".xlsx">
+                    </div>
 
-                <div class="form-group">
-                    <button type="submit" class="btn btn-outline-info"><i class="fas fa-eye"> Preview</i></button>
-                </div>
-            </form>
-            </div>
-            <form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="userid" id="userid1" value="{{ Auth::user()->id }}">
-                <div class="modal-footer" id="csv_data_file" style="overflow-y: scroll; height:400px;">
-
-                </div>
-                <div class="modal-footer justify-content-between" id="footer-btn">
-                    <p id="bodyNoseri">Noseri Yang Terdaftar:
-                        <br>
-                        <span id="existNoseri"></span>
-                    </p>
-                    <button type="submit" class="btn btn-default float-right btnImport"><i class="fas fa-upload"> Unggah</i></button>
-                </div>
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-outline-info"><i class="fas fa-eye"> Preview</i></button>
+                    </div>
             </form>
         </div>
+        <form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">
+            <div class="modal-footer" id="csv_data_file">
+
+            </div>
+            <div class="modal-footer justify-content-between" id="footer-btn">
+                <p id="bodyNoseri">Noseri Yang Terdaftar:
+                    <br>
+                    <span id="existNoseri"></span>
+                </p>
+                <button type="submit" class="btn btn-default float-right btnImport"><i class="fas fa-upload">
+                        Unggah</i></button>
+            </div>
+        </form>
     </div>
+</div>
 </div>
 
 <div class="modal fade notice" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-centered">
-      <div class="modal-content">
-        <h5>
-            <center>Sebelum Mengunggah Noseri</center>
-        </h5>
-        <p align="center">Pastikan Noseri Sudah Unik atau Tidak Ada Warna Dalam Template</p>
-        <button type="button" class="btn btn-success btnNext"><i class="fas fa-check"> OK</i></button>
-      </div>
+        <div class="modal-content">
+            <h5>
+                <center>Sebelum Mengunggah Noseri</center>
+            </h5>
+            <p align="center">Pastikan Noseri Sudah Unik atau Tidak Ada Warna Dalam Template</p>
+            <button type="button" class="btn btn-success btnNext"><i class="fas fa-check"> OK</i></button>
+        </div>
     </div>
-  </div>
+</div>
 
 <!-- Modal -->
 <div class="modal fade tambah_seri" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
@@ -533,7 +534,6 @@
     $(document).ready(function () {
         $('.produk-add ').select2();
         $('.layout-add').select2();
-
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
             // $('.cb-child').prop('checked', isChecked)
@@ -598,22 +598,22 @@
         }
     });
 
-    $('#downloadTemplate').click(function() {
+    $('#downloadTemplate').click(function () {
         // console.log('download');
-        window.location = window.location.origin+'/api/v2/gbj/template_noseri'
+        window.location = window.location.origin + '/api/v2/gbj/template_noseri'
     })
 
-    $('#importTemplate').click(function() {
+    $('#importTemplate').click(function () {
         $('.notice').modal('show')
     })
 
-    $('.btnNext').click(function() {
+    $('.btnNext').click(function () {
         $('.notice').modal('hide')
         $('#template_noseri').val('');
-        $('.import-seri').modal('show')
+        $('.import-seri').modal('show');
     })
 
-    $('.import-seri').on('hidden.bs.modal', function() {
+    $('.import-seri').on('hidden.bs.modal', function () {
         $('#template_noseri').val('');
         $('#footer-btn').hide()
         $('#csv_data_file').empty()
@@ -871,7 +871,7 @@
     });
 
     // $('body').on('submit', '#formImport', function (e) {
-    $('#formImport').on('submit', function(e){
+    $('#formImport').on('submit', function (e) {
         e.preventDefault();
         $.ajax({
             url: "/api/v2/gbj/import-noseri",
@@ -881,7 +881,7 @@
             contentType: false,
             cache: false,
             processData: false,
-            success: function(data) {
+            success: function (data) {
                 $('#csv_data_file').html(data.data);
                 if (data.error == true) {
                     Swal.fire({
@@ -1007,7 +1007,9 @@
                 {
                     data: 'seri'
                 },
-                {data: 'used'},
+                {
+                    data: 'used'
+                },
                 {
                     data: 'Layout'
                 }
