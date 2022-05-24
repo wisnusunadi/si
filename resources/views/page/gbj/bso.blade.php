@@ -571,43 +571,12 @@
         // scan produk
         $('.barcode').on('keyup', function (e) {
             let barcode = $(this).val();
-            if (barcode.length >= 10) {
+            mytable.search(barcode).draw();
+            if(barcode.length >= 10){
                 let data = mytable.row('tr:contains("' + barcode + '")').data();
-                console.log("data", data);
-                if (data !== undefined) {
-                    if (data.seri !== undefined) {
-                        if (dataTampungSeri.indexOf(data.seri) == -1) {
-                            if(data.id != undefined){
-                                dataTampungSeri.push(data.ids);
-                            }
-                            mytable.row('tr:contains("' + barcode + '")').remove().draw(false);
-                            mytable.row.add({
-                                seri: data.seri,
-                                ids: data.ids
-                            }).draw(false);
-                        } else {
-                            mytable.row('tr:contains("' + barcode + '")').remove().draw(false);
-                            mytable.row.add({
-                                seri: data.seri,
-                                ids: data.ids
-                            }).draw(false);
-                        }
-                    } else {
-                        mytable.row('tr:contains("' + barcode + '")').remove().draw(false);
-                        mytable.row.add({
-                            seri: data.seri,
-                            ids: data.ids
-                        }).draw(false);
-                    }
-                } else {
-                    mytable.row('tr:contains("' + barcode + '")').remove().draw(false);
-                    mytable.row.add({
-                        seri: barcode,
-                        ids: barcode
-                    }).draw(false);
-                }
-                $(this).val('');
+                $('.cb-child').prop('checked', true);
             }
+            $(this).val('');
         });
     });
 
@@ -647,7 +616,7 @@
             prd1[dpp] = {
                 "jumlah": jml,
                 "prd": prd,
-                "noseri": dataTampungSeri
+                "noseri": a
             };
             $('.modal-scan').modal('hide');
             if (prd1[dpp].noseri.length == 0) {
