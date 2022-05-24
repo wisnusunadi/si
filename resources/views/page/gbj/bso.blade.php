@@ -577,7 +577,9 @@
                 if (data !== undefined) {
                     if (data.seri !== undefined) {
                         if (dataTampungSeri.indexOf(data.seri) == -1) {
-                            dataTampungSeri.push(data.ids)
+                            if(data.id != undefined){
+                                dataTampungSeri.push(data.ids);
+                            }
                             mytable.row('tr:contains("' + barcode + '")').remove().draw(false);
                             mytable.row.add({
                                 seri: data.seri,
