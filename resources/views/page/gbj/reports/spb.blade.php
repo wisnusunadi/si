@@ -38,7 +38,7 @@
             <tr></tr>
             <tr align="center">
                 <td colspan="9" align="center">{{ $d->produk->produk->nama.' '.$d->produk->nama }}</td>
-                <td rowspan="2" style="vertical-align:middle; text-align:center">{{ count($d->seri) }}</td>
+                <td rowspan="2" style="vertical-align:middle; text-align:center;">{{ count($d->seri) }}</td>
             </tr>
             <tr align="center">
                 <th colspan="9" align="center"><b>({{ $d->paket->detailpesanan->penjualanproduk->nama }})</b></th>
