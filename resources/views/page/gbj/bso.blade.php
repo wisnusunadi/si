@@ -562,7 +562,7 @@
             },
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
+            },
         });
         let s = $('.modal-scan').modal('show');
         $('.modal-scan').on('shown.bs.modal', function () {
@@ -571,24 +571,28 @@
         // scan produk
         $('.barcode').on('keyup', function (e) {
             let barcode = $(this).val();
-            mytable.search(barcode).draw();
+            let search = mytable.search(barcode).draw();
+            let data = mytable.row('tr:contains("' + barcode + '")').data();
             if(barcode.length >= 10){
-                let data = mytable.row('tr:contains("' + barcode + '")').data();
-                $('.cb-child').prop('checked', true);
+                if (data !== undefined) {
+                    $('.cb-child').prop('checked', true);
+                    $(this).val('');
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Nomor Seri Tidak Ditemukan!',
+                        timer: 2000,
+                        showConfirmButton: false,
+                    })
+                    $(this).val('');
+                    mytable.search('').draw();
+                }
             }
-            $(this).val('');
         });
     });
 
     var t = 0;
-
-    $('.scan-produk').on('click', '.cb-child', function (e) {
-        if ($(this).is(':checked')) {
-            dataTampungSeri.push($(this).val());
-        } else {
-            dataTampungSeri.splice(dataTampungSeri.indexOf($(this).val()), 1);
-        }
-    });
     $(document).on('click', '#simpan', function (e) {
         console.log(jml);
         console.log(dpp);
@@ -622,11 +626,8 @@
             if (prd1[dpp].noseri.length == 0) {
                 delete prd1[dpp]
             }
-            console.log("dataTampungSeri", dataTampungSeri);
-            dataTampungSeri = [];
         }
         console.log("prd1", prd1);
-        console.log("a", a);
     })
 
     $(document).on('click', '#rancang', function (e) {
