@@ -66,7 +66,7 @@
         </tr>
         <tr>
             {{-- <td colspan="3" align="center"><img src="{{ asset('assets/image/accepted.png') }}" alt=""></td> --}}
-            <td colspan="3" rowspan="4" align="center" style="vertical-align:middle; text-align:center;"></td>
+            <td colspan="3" rowspan="4" align="center">&#10004;erified</td>
             <td colspan="3" rowspan="4" align="center"></td>
             <td colspan="3" rowspan="4" align="center"></td>
         </tr>
@@ -98,3 +98,8 @@
         @endforeach
     </table>
 
+<style>
+.rotate {
+    text-align: center;
+}
+</style>
