@@ -744,57 +744,8 @@ class GudangController extends Controller
     // Export Excell
     function exportSpb($id)
     {
-        // $tfbyid = LogSurat::where('pesanan_id', $id)->get();
-        // if (count($tfbyid) > 0) {
-        //     LogSurat::where('pesanan_id', $id)->update(['transfer_by' => Auth::user()->id]);
-        // } else {
-        //     LogSurat::create([
-        //         'pesanan_id' => $id,
-        //         'transfer_by' => Auth::user()->id,
-        //     ]);
-        // }
-        // $tfby = LogSurat::where('pesanan_id', $id)->get();
-        $data = TFProduksiDetail::whereHas('header', function ($q) use ($id) {
-            $q->where('pesanan_id', $id);
-        })->with('seri.seri', 'produk.produk', 'paket.detailpesanan.penjualanproduk')->groupBy('detail_pesanan_produk_id')->groupBy('gdg_brg_jadi_id')->get();
-
-        $header = TFProduksi::where('pesanan_id', $id)->with('pesanan')->get();
-        // $html = "<table border=1>";
-        // $html .= "<tr align=center>";
-        // $html .= "<td colspan=8><b>SURAT PENGANTAR BARANG</b></td>";
-        // $html .= "</tr>";
-        // foreach($header as $h) {
-        //     $html .= "<tr align=center>";
-        //     $html .= "<td colspan=2>No So</td>";
-        //     $html .= "<td colspan=2>".$h->pesanan->so."</td>";
-        //     $html .= "<td colspan=2>No PO</td>";
-        //     $html .= "<td colspan=2>".$h->pesanan->no_po."</td>";
-        //     $html .= "</tr>";
-        // }
-        // $html .= "<tr align=center>";
-        // $html .= "<td colspan=3>Dikirim Ke</td>";
-        // $html .= "<td colspan=5>Quality Control</td>";
-        // $html .= "</tr>";
-        // foreach($data as $d) {
-        //     $i = 0;
-        //     $html .= "<tr align=center>";
-        //     $html .= "<td colspan=7>".$d->produk->produk->nama.' '.$d->produk->nama."</td>";
-        //     $html .= "<td rowspan=2>".count($d->seri)."</td>";
-        //     $html .= "</tr>";
-        //     $html .= "<tr align=center>";
-        //     $html .= "<td colspan=7><b>(".$d->paket->detailpesanan->penjualanproduk->nama.")</b></td>";
-        //     $html .= "</tr>";
-        //     foreach($d->seri as $r) {
-        //         $i++;
-        //         $html .= "<td>(".$i.") ".$r->seri->noseri."</td>";
-        //         if ($i % 8 == 0) {
-        //             $html .= '</tr><tr>';
-        //         }
-        //     }
-        // }
-        // $html .= "</table>";
-
-        return Excel::download(new SpbExport($id), 'x.xlsx');
+        return Excel::download(new SpbExport($id), 'SPB.xlsx');
+        
     }
 
     function download_template_noseri(Request $request)
