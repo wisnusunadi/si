@@ -744,8 +744,9 @@ class GudangController extends Controller
     // Export Excell
     function exportSpb($id)
     {
-        return Excel::download(new SpbExport($id), 'SPB.xlsx');
-        
+        $header = TFProduksi::where('pesanan_id', $id)->with('pesanan')->get()->pluck('pesanan.so');
+        return $header[0];
+        // return Excel::download(new SpbExport($id), 'SPB-'.json_decode(json_encode($header[0]), true).'.xlsx');
     }
 
     function download_template_noseri(Request $request)
