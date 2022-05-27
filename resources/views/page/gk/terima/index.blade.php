@@ -682,16 +682,16 @@
             $('.seri').removeClass('is-invalid');
             $('.kerusakan').removeClass('is-invalid');
             $('.tingkat').removeClass('is-invalid');
-            $.ajax({
-                url: "/api/gk/cekseri",
-                type: "post",
-                data: {noseri: dataUnit},
-                success: function(res) {
-                    if(res.msg) {
+            // $.ajax({
+            //     url: "/api/gk/cekseri",
+            //     type: "post",
+            //     data: {noseri: dataUnit},
+            //     success: function(res) {
+            //         if(res.msg) {
                         Swal.fire({
                             position: 'center',
                             icon: 'success',
-                            title: res.msg,
+                            title: 'Data Berhasil Disimpan',
                             showConfirmButton: false,
                             timer: 1500
                         }).then(function () {
@@ -722,15 +722,15 @@
                             console.log("unit"+ unit_arr);
                             $('.modalAddUnit').modal('hide');
                         })
-                    } else {
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: res.error,
-                        })
-                    }
-                }
-            })
+                //     } else {
+                //         Swal.fire({
+                //             icon: 'error',
+                //             title: 'Oops...',
+                //             text: res.error,
+                //         })
+                //     }
+                // }
+            // })
 
         }
     }
