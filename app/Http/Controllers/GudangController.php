@@ -13,6 +13,7 @@ use App\Models\Divisi;
 use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
+use App\Models\JadwalRakitNoseri;
 use App\Models\Layout;
 use App\Models\LogSurat;
 use App\Models\NoseriBarangJadi;
@@ -449,6 +450,18 @@ class GudangController extends Controller
 
         return datatables()->of($datax)
             ->addIndexColumn()
+            ->addColumn('bppb', function($d) {
+                $seri_done = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
+                    $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
+                    $q->whereHas('header', function ($a) use ($d) {
+                        $a->where('tgl_masuk', $d->header->tgl_masuk)->where('ke', 13)->where('dari', 17);
+                        // $a->where('dari', 17);
+                    });
+                })->where('jenis', 'masuk')->first();
+
+                $nobppb = JadwalRakitNoseri::with('header')->where('noseri', $seri_done->seri->noseri)->first();
+                return $nobppb->header->no_bppb == '-' ? '-' : $nobppb->header->no_bppb;
+            })
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
                     return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMMM Y');
@@ -1004,11 +1017,11 @@ class GudangController extends Controller
             if ($id) {
                 $brg_jadi = GudangBarangJadi::find($id);
                 $brg_his = new GudangBarangJadiHis();
-    
+
                 if (empty($brg_jadi->id)) {
                     return response()->json(['msg' => 'Data not found']);
                 }
-    
+
                 $brg_jadi->produk_id = $request->produk_id;
                 $brg_jadi->satuan_id = $request->satuan_id;
                 $brg_jadi->nama = $request->nama;
@@ -1027,7 +1040,7 @@ class GudangController extends Controller
                 $brg_jadi->updated_at = Carbon::now();
                 $brg_jadi->updated_by = $request->userid;
                 $brg_jadi->save();
-    
+
                 $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
                 $brg_his->produk_id = $request->produk_id;
                 $brg_his->satuan_id = $request->satuan_id;
@@ -1058,7 +1071,7 @@ class GudangController extends Controller
                 $brg_jadi->created_at = Carbon::now();
                 $brg_jadi->created_by = $request->userid;
                 $brg_jadi->save();
-    
+
                 $brg_his = new GudangBarangJadiHis();
                 $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
                 $brg_his->satuan_id = $request->satuan_id;
