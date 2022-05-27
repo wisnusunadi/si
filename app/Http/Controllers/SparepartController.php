@@ -978,8 +978,8 @@ class SparepartController extends Controller
     // cek
     function cekNoseriTerima(Request $request)
     {
-        $noseri = GudangKarantinaNoseri::whereIn('noseri', $request->noseri)->get();
-        $data = GudangKarantinaNoseri::whereIn('noseri', $request->noseri)->get()->count();
+        $noseri = GudangKarantinaNoseri::whereIn('noseri', $request->noseri)->where('is_ready',1)->get();
+        $data = GudangKarantinaNoseri::whereIn('noseri', $request->noseri)->where('is_ready',1)->get()->count();
         $dataseri = [];
         if ($data > 0) {
             foreach ($noseri as $item) {
@@ -1252,18 +1252,24 @@ class SparepartController extends Controller
             $id = $sprr->id;
 
             foreach($request->noseri[$v] as $kk => $vv) {
-                foreach($vv['noseri'] as $kkk => $vvv) {
-                    $noseri = new GudangKarantinaNoseri();
-                    $noseri->gk_detail_id = $id;
-                    $noseri->noseri = strtoupper($vvv);
-                    $noseri->remark = $vv['kerusakan'][$kkk];
-                    $noseri->tk_kerusakan =  $vv['tingkat'][$kkk];
-                    $noseri->is_draft = 0;
-                    $noseri->is_keluar = 0;
-                    $noseri->created_at = Carbon::now();
-                    $noseri->created_by = $request->userid;
-                    $noseri->save();
+                $check = GudangKarantinaNoseri::find($vv['noseri'])->where('is_ready', 1);
+                if ($check) {
+                    return 'Noseri Sudah Keluar';
+                } else {
+                    return 'Noseri Belum Keluar';
                 }
+                // foreach($vv['noseri'] as $kkk => $vvv) {
+                //     $noseri = new GudangKarantinaNoseri();
+                //     $noseri->gk_detail_id = $id;
+                //     $noseri->noseri = strtoupper($vvv);
+                //     $noseri->remark = $vv['kerusakan'][$kkk];
+                //     $noseri->tk_kerusakan =  $vv['tingkat'][$kkk];
+                //     $noseri->is_draft = 0;
+                //     $noseri->is_keluar = 0;
+                //     $noseri->created_at = Carbon::now();
+                //     $noseri->created_by = $request->userid;
+                //     $noseri->save();
+                // }
             }
         }
        }
