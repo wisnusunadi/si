@@ -846,6 +846,7 @@
         var actionType = $('#Submitmodalcreate').val();
         $('#Submitmodalcreate').html('Sending..');
         var formData = new FormData(this);
+        console.log(formData.get('produk_id'));
         $.ajax({
             type: 'POST',
             url: "/api/gbj/create",
@@ -854,18 +855,34 @@
             contentType: false,
             processData: false,
             success: (data) => {
-                $('#produkForm').trigger('reset');
-                $('#modal-create').modal('hide');
-                $('#Submitmodalcreate').html('Kirim');
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Data Berhasil Disimpan',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                $('.datatable').DataTable().ajax.reload();
-                location.reload();
+                if (data.error == true) {
+                    $('#produkForm').trigger('reset');
+                    $('#modal-create').modal('hide');
+                    $('#Submitmodalcreate').html('Kirim');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.msg,
+                    }).then((result) => {
+                        if (result.value) {
+                            $('.datatable').DataTable().ajax.reload();
+                            location.reload();
+                        }
+                    });
+                } else {
+                    $('#produkForm').trigger('reset');
+                    $('#modal-create').modal('hide');
+                    $('#Submitmodalcreate').html('Kirim');
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Data Berhasil Disimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    $('.datatable').DataTable().ajax.reload();
+                    location.reload();
+                }
             }
         });
     });

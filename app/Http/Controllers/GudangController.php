@@ -998,77 +998,81 @@ class GudangController extends Controller
     function StoreBarangJadi(Request $request)
     {
         $id = $request->id;
-        if ($id) {
-            $brg_jadi = GudangBarangJadi::find($id);
-            $brg_his = new GudangBarangJadiHis();
-
-            if (empty($brg_jadi->id)) {
-                return response()->json(['msg' => 'Data not found']);
+        if(($request->produk_id && $request->nama && $request->satuan_id) == null) {
+            return response()->json(['msg' => 'Produk, Nama, dan Satuan Harus Diisi', 'error' => true]);
+        }else{
+            if ($id) {
+                $brg_jadi = GudangBarangJadi::find($id);
+                $brg_his = new GudangBarangJadiHis();
+    
+                if (empty($brg_jadi->id)) {
+                    return response()->json(['msg' => 'Data not found']);
+                }
+    
+                $brg_jadi->produk_id = $request->produk_id;
+                $brg_jadi->satuan_id = $request->satuan_id;
+                $brg_jadi->nama = $request->nama;
+                $brg_jadi->deskripsi = $request->deskripsi;
+                $image = $request->file('gambar');
+                if ($image) {
+                    $path = 'upload/gbj/';
+                    $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                    $image->move($path, $nameImage);
+                    $brg_jadi->gambar = $nameImage;
+                }
+                $brg_jadi->dim_p = $request->dim_p;
+                $brg_jadi->dim_l = $request->dim_l;
+                $brg_jadi->dim_t = $request->dim_t;
+                $brg_jadi->status = $request->status;
+                $brg_jadi->updated_at = Carbon::now();
+                $brg_jadi->updated_by = $request->userid;
+                $brg_jadi->save();
+    
+                $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
+                $brg_his->produk_id = $request->produk_id;
+                $brg_his->satuan_id = $request->satuan_id;
+                $brg_his->nama = $request->nama;
+                $brg_his->deskripsi = $request->deskripsi;
+                $brg_his->status = $request->status;
+                $brg_his->created_at = Carbon::now();
+                $brg_his->created_by = $request->userid;
+                $brg_his->save();
+            } else {
+                $brg_jadi = new GudangBarangJadi();
+                $brg_jadi->produk_id = $request->produk_id;
+                $brg_jadi->satuan_id = $request->satuan_id;
+                $brg_jadi->nama = $request->nama;
+                $brg_jadi->stok = 0;
+                $brg_jadi->deskripsi = $request->deskripsi;
+                $image = $request->file('gambar');
+                if ($image) {
+                    $path = 'upload/gbj/';
+                    $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                    $image->move($path, $nameImage);
+                    $brg_jadi->gambar = $nameImage;
+                }
+                $brg_jadi->dim_p = $request->dim_p;
+                $brg_jadi->dim_l = $request->dim_l;
+                $brg_jadi->dim_t = $request->dim_t;
+                $brg_jadi->status = $request->status;
+                $brg_jadi->created_at = Carbon::now();
+                $brg_jadi->created_by = $request->userid;
+                $brg_jadi->save();
+    
+                $brg_his = new GudangBarangJadiHis();
+                $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
+                $brg_his->satuan_id = $request->satuan_id;
+                $brg_his->produk_id = $request->produk_id;
+                $brg_his->nama = $request->nama;
+                $brg_his->stok = 0;
+                $brg_his->deskripsi = $request->deskripsi;
+                $brg_his->status = $request->status;
+                $brg_his->created_at = Carbon::now();
+                $brg_his->created_by = $request->userid;
+                $brg_his->save();
             }
-
-            $brg_jadi->produk_id = $request->produk_id;
-            $brg_jadi->satuan_id = $request->satuan_id;
-            $brg_jadi->nama = $request->nama;
-            $brg_jadi->deskripsi = $request->deskripsi;
-            $image = $request->file('gambar');
-            if ($image) {
-                $path = 'upload/gbj/';
-                $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-                $image->move($path, $nameImage);
-                $brg_jadi->gambar = $nameImage;
-            }
-            $brg_jadi->dim_p = $request->dim_p;
-            $brg_jadi->dim_l = $request->dim_l;
-            $brg_jadi->dim_t = $request->dim_t;
-            $brg_jadi->status = $request->status;
-            $brg_jadi->updated_at = Carbon::now();
-            $brg_jadi->updated_by = $request->userid;
-            $brg_jadi->save();
-
-            $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
-            $brg_his->produk_id = $request->produk_id;
-            $brg_his->satuan_id = $request->satuan_id;
-            $brg_his->nama = $request->nama;
-            $brg_his->deskripsi = $request->deskripsi;
-            $brg_his->status = $request->status;
-            $brg_his->created_at = Carbon::now();
-            $brg_his->created_by = $request->userid;
-            $brg_his->save();
-        } else {
-            $brg_jadi = new GudangBarangJadi();
-            $brg_jadi->produk_id = $request->produk_id;
-            $brg_jadi->satuan_id = $request->satuan_id;
-            $brg_jadi->nama = $request->nama;
-            $brg_jadi->stok = 0;
-            $brg_jadi->deskripsi = $request->deskripsi;
-            $image = $request->file('gambar');
-            if ($image) {
-                $path = 'upload/gbj/';
-                $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-                $image->move($path, $nameImage);
-                $brg_jadi->gambar = $nameImage;
-            }
-            $brg_jadi->dim_p = $request->dim_p;
-            $brg_jadi->dim_l = $request->dim_l;
-            $brg_jadi->dim_t = $request->dim_t;
-            $brg_jadi->status = $request->status;
-            $brg_jadi->created_at = Carbon::now();
-            $brg_jadi->created_by = $request->userid;
-            $brg_jadi->save();
-
-            $brg_his = new GudangBarangJadiHis();
-            $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
-            $brg_his->satuan_id = $request->satuan_id;
-            $brg_his->produk_id = $request->produk_id;
-            $brg_his->nama = $request->nama;
-            $brg_his->stok = 0;
-            $brg_his->deskripsi = $request->deskripsi;
-            $brg_his->status = $request->status;
-            $brg_his->created_at = Carbon::now();
-            $brg_his->created_by = $request->userid;
-            $brg_his->save();
-        }
         return response()->json(['msg' => 'Successfully']);
+        }
     }
 
     function storeDraftRancang(Request $request)

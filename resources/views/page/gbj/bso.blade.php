@@ -4,36 +4,41 @@
 
 @section('content')
 <style>
-    .nomor-so{
+    .nomor-so {
         background-color: #717FE1;
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
-    .nomor-akn{
+
+    .nomor-akn {
         background-color: #DF7458;
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
-    .nomor-po{
+
+    .nomor-po {
         background-color: #85D296;
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
+    }
+    .hidden {
+        display: none;
     }
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
 <div class="content-header">
     <div class="container-fluid">
-      <div class="row mb-2">
-        <div class="col-sm-6">
-          <h1 class="m-0">Transfer Produk Berdasarkan SO</h1>
-        </div><!-- /.col -->
-      </div><!-- /.row -->
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0">Transfer Produk Berdasarkan SO</h1>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
     </div><!-- /.container-fluid -->
-  </div>
+</div>
 <div class="row">
     <div class="col-12">
         <div class="row">
@@ -84,11 +89,11 @@
                                 <div class="row">
                                     <div class="col-sm">
                                         <label for="">Nomor SO</label>
-                                            <div class="card nomor-so">
-                                                <div class="card-body">
-                                                    <span id="so"></span>
-                                                </div>
-                                              </div>
+                                        <div class="card nomor-so">
+                                            <div class="card-body">
+                                                <span id="so"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-sm">
                                         <label for="">Nomor AKN</label>
@@ -96,7 +101,7 @@
                                             <div class="card-body">
                                                 <span id="akn"></span>
                                             </div>
-                                          </div>
+                                        </div>
                                     </div>
                                     <div class="col-sm">
                                         <label for="">Nomor PO</label>
@@ -104,7 +109,7 @@
                                             <div class="card-body">
                                                 <span id="po"></span>
                                             </div>
-                                          </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -157,11 +162,11 @@
                                 <div class="row">
                                     <div class="col-sm">
                                         <label for="">Nomor SO</label>
-                                            <div class="card nomor-so">
-                                                <div class="card-body">
-                                                    <span id="so-edit"></span>
-                                                </div>
-                                              </div>
+                                        <div class="card nomor-so">
+                                            <div class="card-body">
+                                                <span id="so-edit"></span>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-sm">
                                         <label for="">Nomor AKN</label>
@@ -169,7 +174,7 @@
                                             <div class="card-body">
                                                 <span id="akn-edit"></span>
                                             </div>
-                                          </div>
+                                        </div>
                                     </div>
                                     <div class="col-sm">
                                         <label for="">Nomor PO</label>
@@ -177,7 +182,7 @@
                                             <div class="card-body">
                                                 <span id="po-edit"></span>
                                             </div>
-                                          </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -221,8 +226,14 @@
                 </button>
             </div>
             <div class="modal-body">
-                 <input type="text" name="" id="dpp" class="dpp" hidden>
-                 <input type="text" name="" id="jml" class="jml" hidden>
+                <input type="text" name="" id="dpp" class="dpp" hidden>
+                <input type="text" name="" id="jml" class="jml" hidden>
+                <div class="d-flex justify-content-end">
+                    <div class="form-group">
+                        <label for="">Scan Nomor Seri</label>
+                        <input type="text" name="" class="form-control barcode">
+                    </div>
+                </div>
                 <table class="table table-striped scan-produk" id="scan">
                     <thead>
                         <tr>
@@ -242,7 +253,8 @@
     </div>
 </div>
 
-<div class="modal fade modal-scan-edit" id="modal-scan-edit" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+<div class="modal fade modal-scan-edit" id="modal-scan-edit" role="dialog" aria-labelledby="modelTitleId"
+    aria-hidden="true">
     <div class="modal-dialog modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -306,14 +318,16 @@
         });
 
         $("#head-cb-produk").on('click', function () {
-           if ($(this).is(':checked')) {
+            if ($(this).is(':checked')) {
                 var isChecked = $("#head-cb-produk").prop('checked')
                 $('.cb-child-prd').prop('checked', isChecked)
-                $('.cb-child-prd').parent().next().next().next().next().children().find('button').removeClass('disabled').attr('disabled', false);
-           } else {
+                $('.cb-child-prd').parent().next().next().next().next().children().find('button')
+                    .removeClass('disabled').attr('disabled', false);
+            } else {
                 $('.cb-child-prd').prop('checked', false)
-                $('.cb-child-prd').parent().next().next().next().next().children().find('button').removeClass('disabled').attr('disabled', true);
-           }
+                $('.cb-child-prd').parent().next().next().next().next().children().find('button')
+                    .removeClass('disabled').attr('disabled', true);
+            }
         });
 
         let a = $('#gudang-barang').DataTable({
@@ -322,14 +336,33 @@
             ajax: {
                 url: '/api/tfp/data-so',
             },
-            columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                { data: 'so', name: 'so'},
-                {data: 'no_po'},
-                { data: 'nama_customer', name: 'nama_customer'},
-                { data: 'batas_out', name: 'batas_out'},
-                { data: 'status', name: 'status'},
-                { data: 'button', name: 'button'},
+            columns: [{
+                    data: 'DT_RowIndex',
+                    name: 'DT_RowIndex'
+                },
+                {
+                    data: 'so',
+                    name: 'so'
+                },
+                {
+                    data: 'no_po'
+                },
+                {
+                    data: 'nama_customer',
+                    name: 'nama_customer'
+                },
+                {
+                    data: 'batas_out',
+                    name: 'batas_out'
+                },
+                {
+                    data: 'status',
+                    name: 'status'
+                },
+                {
+                    data: 'button',
+                    name: 'button'
+                },
             ],
             "columnDefs": [{
                 "searchable": false,
@@ -337,32 +370,32 @@
                 "targets": 0
             }],
             "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
-    });
-
-    a.on('order.dt search.dt', function () {
-        a.column(0, {
-            search: 'applied',
-            order: 'applied'
-        }).nodes().each(function (cell, i) {
-            cell.innerHTML = i + 1;
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
         });
-    }).draw();
+
+        a.on('order.dt search.dt', function () {
+            a.column(0, {
+                search: 'applied',
+                order: 'applied'
+            }).nodes().each(function (cell, i) {
+                cell.innerHTML = i + 1;
+            });
+        }).draw();
 
     });
 
     // add
     var id = '';
-    $(document).on('click', '.editmodal', function(e) {
+    $(document).on('click', '.editmodal', function (e) {
         var x = $(this).data('value');
         console.log(x);
 
         id = $(this).data('id');
         console.log(id);
         $.ajax({
-            url: "/api/tfp/header-so/" +id+"/"+x,
-            success: function(res) {
+            url: "/api/tfp/header-so/" + id + "/" + x,
+            success: function (res) {
                 console.log(res);
                 $('span#so').text(res.so);
                 $('span#po').text(res.po);
@@ -378,48 +411,74 @@
             "ordering": false,
             bPaginate: false,
             ajax: {
-                url: "/api/tfp/detail-so/" +id+"/"+x,
+                url: "/api/tfp/detail-so/" + id + "/" + x,
             },
-            columns: [
-                {data: 'detail_pesanan_id'},
-                {data: 'paket'},
+            columns: [{
+                    data: 'detail_pesanan_id'
+                },
+                {
+                    data: 'paket'
+                },
                 // {data: 'checkbox'},
-                { data: 'produk', name: 'produk'},
-                { data: 'qty', name: 'qty'},
-                { data: 'merk', name: 'merk'},
-                { data: 'action', name: 'action'},
+                {
+                    data: 'produk',
+                    name: 'produk'
+                },
+                {
+                    data: 'qty',
+                    name: 'qty'
+                },
+                {
+                    data: 'merk',
+                    name: 'merk'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
+                },
             ],
             "order": [
                 [1, 'asc']
             ],
-            "drawCallback": function ( settings ) {
-            var api = this.api();
-            var rows = api.rows( {page:'current'} ).nodes();
-            var last=null;
+            "drawCallback": function (settings) {
+                var api = this.api();
+                var rows = api.rows({
+                    page: 'current'
+                }).nodes();
+                var last = null;
 
-            api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+                api.column(0, {
+                    page: 'current'
+                }).data().each(function (group, i) {
 
-                if (last !== group) {
-                    var rowData = api.row(i).data();
-                    $(rows).eq(i).before(
-                    '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="5">' + rowData.paket + '</td></tr>'
-                );
-                    last = group;
-                }
-            });
+                    if (last !== group) {
+                        var rowData = api.row(i).data();
+                        $(rows).eq(i).before(
+                            '<tr class="table-dark text-bold"><td style="display:none;">' +
+                            group + '</td><td colspan="5">' + rowData.paket +
+                            '</td></tr>'
+                        );
+                        last = group;
+                    }
+                });
             },
-            columnDefs: [
-                {"targets": [0], "visible": false},
-                {"targets": [1], "visible": false},
+            columnDefs: [{
+                    "targets": [0],
+                    "visible": false
+                },
+                {
+                    "targets": [1],
+                    "visible": false
+                },
             ],
             "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
         })
         // testing
         $.ajax({
             type: "get",
-            url: "/api/tfp/detail-so/" +id+"/"+x,
+            url: "/api/tfp/detail-so/" + id + "/" + x,
             success: function (response) {
                 console.log(response);
             }
@@ -427,11 +486,11 @@
         $('#addProdukModal').modal('show');
     });
 
-    function make_temp_array(prd1){
+    function make_temp_array(prd1) {
         let result = {};
-        console.log("func",prd1)
-        for (const dpp in prd1){
-            for (let i = 0; i < prd1[dpp].noseri.length; i++){
+        console.log("func", prd1)
+        for (const dpp in prd1) {
+            for (let i = 0; i < prd1[dpp].noseri.length; i++) {
                 result[prd1[dpp].noseri[i]] = dpp
             }
         }
@@ -442,10 +501,13 @@
     var prd = '';
     var jml = '';
     var dpp = '';
-    $(document).on('click', '.detailmodal', function(e) {
+    let dataTampungSeri = [];
+    $(document).on('click', '.detailmodal', function (e) {
         let gh = $(this).parent().prev().prev().prev()[0].textContent
-        let ghh = gh.replace(/\w\S*/g, function(txt){return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();});
-        $('#namaproduk').html('<b>'+ghh+'</b>')
+        let ghh = gh.replace(/\w\S*/g, function (txt) {
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+        });
+        $('#namaproduk').html('<b>' + ghh + '</b>')
         // console.log(ghh);
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
@@ -463,25 +525,31 @@
             autoWidth: false,
             destroy: true,
             stateSave: true,
+            lengthChange: false,
             "ordering": false,
             ajax: {
                 url: "/api/tfp/seri-so",
-                data: {gdg_barang_jadi_id: prd},
+                data: {
+                    gdg_barang_jadi_id: prd
+                },
                 type: "post",
             },
-            columns: [
-                { data: 'seri', name: 'seri'},
-                { data(data) {
-                    // console.log("colm", data.ids, temp_array[data.ids])
-                    if (temp_array[data.ids] !== undefined){
-                        if (temp_array[data.ids] == dpp)
-                            return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}" checked>`
-                        else
-                        return '<span class="badge badge-info">Sudah Digunakan</span>'
+            columns: [{
+                    data: 'seri',
+                    name: 'seri'
+                },
+                {
+                    data(data) {
+                        // console.log("colm", data.ids, temp_array[data.ids])
+                        if (temp_array[data.ids] !== undefined) {
+                            if (temp_array[data.ids] == dpp)
+                                return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}" checked>`
+                            else
+                                return '<span class="badge badge-info">Sudah Digunakan</span>'
+                        } else
+                            return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}">`
                     }
-                    else
-                       return  `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}">`
-                }},
+                },
             ],
             'select': {
                 'style': 'multi'
@@ -490,41 +558,56 @@
                 [0, 'asc']
             ],
             "oLanguage": {
-            "sSearch": "Masukkan Nomor Seri:"
+                "sSearch": "Masukkan Nomor Seri:"
             },
             "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
         });
-        $('.modal-scan').modal('show');
+        let s = $('.modal-scan').modal('show');
+        $('.modal-scan').on('shown.bs.modal', function () {
+            $('#scan_filter').addClass('hidden');
+        });
+        // scan produk
+        $('.barcode').on('keyup', function (e) {
+            let barcode = $(this).val();
+            let search = mytable.search(barcode).draw();
+            let data = mytable.row('tr:contains("' + barcode + '")').data();
+            if(barcode.length >= 10){
+                if (data !== undefined) {
+                    $('.cb-child').prop('checked', true);
+                    $(this).val('');
+                }else{
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: 'Nomor Seri Tidak Ditemukan!',
+                        timer: 2000,
+                        showConfirmButton: false,
+                    })
+                    $(this).val('');
+                    mytable.search('').draw();
+                }
+            }
+        });
     });
 
     var t = 0;
-
-    let dataTampungSeri = [];
-    $('.scan-produk').on('click', '.cb-child', function(e) {
-        if ($(this).is(':checked')) {
-            if(dataTampungSeri.length == 0){
-                dataTampungSeri = []
-            }
-            dataTampungSeri.push($(this).val());
-        } else {
-            dataTampungSeri.splice(dataTampungSeri.indexOf($(this).val()), 1);
-        }
-    });
-    $(document).on('click', '#simpan', function(e) {
+    var dataTemp = [];
+    $(document).on('click', '#simpan', function (e) {
         console.log(jml);
         console.log(dpp);
         console.log(prd);
-        let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(function() {
-            return $(this).val();
-        }).get();
+        let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(
+            function () {
+                return $(this).val();
+            }).get();
 
         if (a.length > jml) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Batas Maksimal '+jml+' Barang!',
+                text: 'Batas Maksimal ' + jml + ' Barang!',
             })
         } else {
             Swal.fire({
@@ -535,24 +618,24 @@
                 timer: 1500
             })
 
-            prd1[dpp] = {"jumlah": jml, "prd": prd, "noseri": dataTampungSeri};
+            prd1[dpp] = {
+                "jumlah": jml,
+                "prd": prd,
+                "noseri": a
+            };
             $('.modal-scan').modal('hide');
-            if(prd1[dpp].noseri.length == 0) {
+            if (prd1[dpp].noseri.length == 0) {
                 delete prd1[dpp]
             }
-
         }
-        console.log(prd1);
-        console.log("a", a);
-        console.log("dataTampungSeri", dataTampungSeri);
+        console.log("prd1", prd1);
     })
 
-    $(document).on('click', '#rancang', function(e) {
+    $(document).on('click', '#rancang', function (e) {
         e.preventDefault();
 
-        $('.cb-child-prd').each(function() {
-            if($(this).is(":checked")) {
-            } else {
+        $('.cb-child-prd').each(function () {
+            if ($(this).is(":checked")) {} else {
                 delete prd1[$(this).val()]
             }
         })
@@ -565,32 +648,32 @@
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Ya Masukkan Draft'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire(
-                        'Success!',
-                        'Data Tersimpan ke Rancangan',
-                        'success'
-                    )
-                    $.ajax({
-                        url: "/api/tfp/byso",
-                        type: "post",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            pesanan_id: id,
-                            userid: $('#userid').val(),
-                            data: prd1,
-                        },
-                        success: function(res) {
-                           console.log(res);
-                           location.reload();
-                        }
-                    })
-                }
-            })
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    'Success!',
+                    'Data Tersimpan ke Rancangan',
+                    'success'
+                )
+                $.ajax({
+                    url: "/api/tfp/byso",
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        pesanan_id: id,
+                        userid: $('#userid').val(),
+                        data: prd1,
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        location.reload();
+                    }
+                })
+            }
+        })
     })
 
-    $(document).on('click', '#okk', function(e) {
+    $(document).on('click', '#okk', function (e) {
         e.preventDefault();
 
         Swal.fire({
@@ -601,52 +684,54 @@
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, Transfer it'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    // $(this).attr('disabled', true);
-                    $.ajax({
-                        url: "/api/tfp/byso-final",
-                        type: "post",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            pesanan_id: id,
-                            userid: $('#userid').val(),
-                            data: prd1,
-                        },
-                        success: function(res) {
-                            console.log(res);
-                            // Swal.fire(
-                            //     'Success!',
-                            //     'Data Terkirim ke QC',
-                            //     'success'
-                            // ).then(function() {
-                            //     location.reload();
-                            // })
-                        }
-                    })
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(this).attr('disabled', true);
+                $.ajax({
+                    url: "/api/tfp/byso-final",
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        pesanan_id: id,
+                        userid: $('#userid').val(),
+                        data: prd1,
+                    },
+                    success: function (res) {
+                        console.log(res);
+                        Swal.fire(
+                            'Success!',
+                            'Data Terkirim ke QC',
+                            'success'
+                        ).then(function () {
+                            location.reload();
+                        })
+                    }
+                })
 
-                }
-            });
+            }
+        });
     });
 
     $(document).on('click', '.cb-child-prd', function () {
         if ($(this).is(":checked")) {
-            $(this).parent().next().next().next().next().children().find('button').removeClass('disabled').attr('disabled', false);
+            $(this).parent().next().next().next().next().children().find('button').removeClass('disabled').attr(
+                'disabled', false);
         } else {
-            $(this).parent().next().next().next().next().children().find('button').addClass('disabled').attr('disabled', true);
+            $(this).parent().next().next().next().next().children().find('button').addClass('disabled').attr(
+                'disabled', true);
         }
     })
 
     // edit
-    $(document).on('click', '.ubahmodal', function(e) {
+    $(document).on('click', '.ubahmodal', function (e) {
         var x = $(this).data('value');
         console.log(x);
 
         id = $(this).data('id');
         console.log(id);
         $.ajax({
-            url: "/api/tfp/header-so/" +id+"/"+x,
-            success: function(res) {
+            url: "/api/tfp/header-so/" + id + "/" + x,
+            success: function (res) {
                 console.log(res);
                 $('span#so-edit').text(res.so);
                 $('span#po-edit').text(res.po);
@@ -661,26 +746,39 @@
             serverSide: true,
             "ordering": false,
             ajax: {
-                url: "/api/tfp/edit-so/" +id+"/"+x,
+                url: "/api/tfp/edit-so/" + id + "/" + x,
             },
-            columns: [
-                {data: 'checkbox'},
-                { data: 'produk', name: 'produk'},
-                { data: 'qty', name: 'qty'},
-                { data: 'merk', name: 'merk'},
-                { data: 'action', name: 'action'},
+            columns: [{
+                    data: 'checkbox'
+                },
+                {
+                    data: 'produk',
+                    name: 'produk'
+                },
+                {
+                    data: 'qty',
+                    name: 'qty'
+                },
+                {
+                    data: 'merk',
+                    name: 'merk'
+                },
+                {
+                    data: 'action',
+                    name: 'action'
+                },
             ],
             "order": [
                 [1, 'asc']
             ],
             "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
         })
         $('#editProdukModal').modal('show');
     })
 
-    $(document).on('click', '.serimodal', function(e) {
+    $(document).on('click', '.serimodal', function (e) {
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
         so = $(this).data('so');
@@ -695,12 +793,19 @@
             "ordering": false,
             ajax: {
                 url: "/api/tfp/seri-edit-so",
-                data: {gdg_barang_jadi_id: prd},
+                data: {
+                    gdg_barang_jadi_id: prd
+                },
                 type: "post",
             },
-            columns: [
-                { data: 'seri', name: 'seri'},
-                { data: 'checkbox', name: 'checkbox'},
+            columns: [{
+                    data: 'seri',
+                    name: 'seri'
+                },
+                {
+                    data: 'checkbox',
+                    name: 'checkbox'
+                },
             ],
             'select': {
                 'style': 'multi'
@@ -708,24 +813,26 @@
             'order': [
                 [0, 'asc']
             ],
-                "oLanguage": {
+            "oLanguage": {
                 "sSearch": "Masukkan Nomor Seri:"
             },
-                "language": {
+            "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
         });
         $('#modal-scan-edit').modal('show');
     })
 
-    $(document).on('click', '.cb-child-edit', function() {
+    $(document).on('click', '.cb-child-edit', function () {
         if ($(this).is(':checked')) {
             console.log($(this).val());
             $.ajax({
                 url: "/api/tfp/updateChecked",
                 type: "post",
-                data: {id: $(this).val()},
-                success: function(res) {
+                data: {
+                    id: $(this).val()
+                },
+                success: function (res) {
                     console.log('Checked');
                 }
             })
@@ -734,32 +841,37 @@
             $.ajax({
                 url: "/api/tfp/updateCheck",
                 type: "post",
-                data: {id: $(this).val()},
-                success: function(res) {
+                data: {
+                    id: $(this).val()
+                },
+                success: function (res) {
                     console.log('Unchecked');
                 }
             })
         }
     })
     var editPrd = {};
-    $(document).on('click', '#simpan-edit', function() {
-        $('.cb-prd-edit').each(function() {
-            if($(this).is(":checked")) {
+    $(document).on('click', '#simpan-edit', function () {
+        $('.cb-prd-edit').each(function () {
+            if ($(this).is(":checked")) {
                 if (!editPrd[$(this).val()])
-                editPrd[$(this).val()] = {"jumlah": $(this).parent().next().next().children().val(), "noseri": []};
+                    editPrd[$(this).val()] = {
+                        "jumlah": $(this).parent().next().next().children().val(),
+                        "noseri": []
+                    };
             } else {
                 delete editPrd[$(this).val()]
             }
         })
 
         const ids = [];
-        $('.cb-child-edit').each(function() {
-            if($(this).is(":checked")) {
+        $('.cb-child-edit').each(function () {
+            if ($(this).is(":checked")) {
                 if ($('.cb-child-edit').filter(':checked').length > jml) {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
-                        text: 'Batas Maksimal '+jml+' Barang!',
+                        text: 'Batas Maksimal ' + jml + ' Barang!',
                     })
                 } else {
                     ids.push($(this).val());
@@ -779,11 +891,10 @@
         console.log(editPrd);
     })
 
-    $(document).on('click', '#rancang-edit', function(e) {
+    $(document).on('click', '#rancang-edit', function (e) {
         e.preventDefault();
-        $('.cb-prd-edit').each(function() {
-            if($(this).is(":checked")) {
-            } else {
+        $('.cb-prd-edit').each(function () {
+            if ($(this).is(":checked")) {} else {
                 delete editPrd[$(this).val()]
             }
         })
@@ -797,7 +908,7 @@
                 userid: $('#userid').val(),
                 data: editPrd,
             },
-            success: function(res) {
+            success: function (res) {
                 console.log(res);
                 Swal.fire({
                     position: 'center',
@@ -811,11 +922,10 @@
         })
     })
 
-    $(document).on('click', '#okk-edit', function(e) {
+    $(document).on('click', '#okk-edit', function (e) {
         e.preventDefault();
-        $('.cb-prd-edit').each(function() {
-            if($(this).is(":checked")) {
-            } else {
+        $('.cb-prd-edit').each(function () {
+            if ($(this).is(":checked")) {} else {
                 delete editPrd[$(this).val()]
             }
         })
@@ -828,26 +938,26 @@
             confirmButtonColor: '#3085d6',
             cancelButtonColor: '#d33',
             confirmButtonText: 'Yes, Draft it'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $(this).prop('disabled', true);
-                    Swal.fire({
-                        title: 'Please wait',
-                        text: 'Data is transferring...',
-                        allowOutsideClick: false,
-                        showConfirmButton: false
-                    });
-                    $.ajax({
-                        url: "/api/tfp/updateFinalSO",
-                        type: "post",
-                        data: {
-                            "_token": "{{ csrf_token() }}",
-                            pesanan_id: id,
-                            userid: $('#userid').val(),
-                            data: editPrd,
-                        },
-                        success: function(res) {
-                            Swal.fire(
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(this).prop('disabled', true);
+                Swal.fire({
+                    title: 'Please wait',
+                    text: 'Data is transferring...',
+                    allowOutsideClick: false,
+                    showConfirmButton: false
+                });
+                $.ajax({
+                    url: "/api/tfp/updateFinalSO",
+                    type: "post",
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        pesanan_id: id,
+                        userid: $('#userid').val(),
+                        data: editPrd,
+                    },
+                    success: function (res) {
+                        Swal.fire(
                             'Success!',
                             'Data Rancangan Terkirim ke QC',
                             'success'
@@ -855,11 +965,11 @@
                             if (result.isConfirmed) {
                                 location.reload();
                             }
-                            })
-                        }
-                    })
-                }
-            })
+                        })
+                    }
+                })
+            }
+        })
     })
     $(document).on('click', '.detailmodal', function () {
         let jml = $(this).data('jml');
