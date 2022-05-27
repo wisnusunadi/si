@@ -463,12 +463,15 @@ class ProduksiController extends Controller
             $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml');
             $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml_prd');
             if ($sumcek->sum() == $sumprd->sum()) {
-                $a = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('pesananid');
-                $x[] = $a;
+                $a = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get();
+                foreach ($a as $aa) {
+                    $x[] = $aa->pesananid;
+                }
             }
 
         }
         $datax = Pesanan::whereIn('id', $x)->get();
+        // return $data;
         return datatables()->of($datax)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -621,8 +624,10 @@ class ProduksiController extends Controller
             $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml');
             $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml_prd');
             if ($sumcek->sum() == 0 || $sumcek->sum() != $sumprd->sum()) {
-                $a = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('pesananid');
-                $x[] = $a;
+                $a = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get();
+                foreach ($a as $aa) {
+                    $x[] = $aa->pesananid;
+                }
             }
         }
         $datax = Pesanan::whereIn('id', $x)->get();
