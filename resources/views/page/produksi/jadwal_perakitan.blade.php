@@ -526,9 +526,29 @@
 
         $(document).on('click', '#btnSave', function (e) {
             e.preventDefault();
+            let arr = [];
+            const data = scanProduk.$('.noseri').map(function () {
+                return $(this).val();
+            }).get();
+
+            data.forEach(function (item) {
+                if (item != '') {
+                    arr.push(item);
+                }
+            })
+
+            const count = arr =>
+                arr.reduce((a, b) => ({
+                    ...a,
+                    [b]: (a[b] || 0) + 1
+                }), {})
+
+            const duplicates = dict =>
+                Object.keys(dict).filter((a) => dict[a] > 1)
+
             Swal.fire({
                 title: 'Apakah Kamu Yakin?',
-                text: "Melakukan Perakitan di Tanggal "+ $('#tgl_perakitan').val()+ " Sejumlah ",
+                text: "Melakukan Perakitan di Tanggal "+ dateFormat($('#tgl_perakitan').val(), 'dd MM yyyy')+ " Sejumlah "+arr.length+ " Nomor seri",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -536,116 +556,122 @@
                 confirmButtonText: 'Yes, delete it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // Swal.fire({
-                    //     title: 'Please wait',
-                    //     text: 'Data is transferring...',
-                    //     allowOutsideClick: false,
-                    //     showConfirmButton: false
-                    // });
-                    // $(this).prop('disabled', true);
-                    // let arr = [];
-                    // const data = scanProduk.$('.noseri').map(function () {
-                    //     return $(this).val();
-                    // }).get();
+                    Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
+                    $(this).prop('disabled', true);
 
-                    // data.forEach(function (item) {
-                    //     if (item != '') {
-                    //         arr.push(item);
-                    //     }
-                    // })
+                    if (duplicates(count(arr)).length > 0) {
+                        $('.noseri').removeClass('is-invalid');
+                        $('.noseri').filter(function () {
+                            for (let index = 0; index < duplicates(count(arr))
+                                .length; index++) {
+                                if ($(this).val() == duplicates(count(arr))[index]) {
+                                    return true;
+                                }
+                            }
+                        }).addClass('is-invalid');
 
-                    // const count = arr =>
-                    //     arr.reduce((a, b) => ({
-                    //         ...a,
-                    //         [b]: (a[b] || 0) + 1
-                    //     }), {})
-
-                    // const duplicates = dict =>
-                    //     Object.keys(dict).filter((a) => dict[a] > 1)
-
-                    // if (duplicates(count(arr)).length > 0) {
-                    //     $('.noseri').removeClass('is-invalid');
-                    //     $('.noseri').filter(function () {
-                    //         for (let index = 0; index < duplicates(count(arr))
-                    //             .length; index++) {
-                    //             if ($(this).val() == duplicates(count(arr))[index]) {
-                    //                 return true;
-                    //             }
-                    //         }
-                    //     }).addClass('is-invalid');
-
-                    //     Swal.fire({
-                    //         icon: 'error',
-                    //         title: 'Oops...',
-                    //         text: 'Nomor seri ' + duplicates(count(arr)) +
-                    //             ' ada yang sama.',
-                    //     }).then((result) => {
-                    //         if (result.value) {
-                    //             $(this).prop('disabled', false);
-                    //         }
-                    //     });
-                    // } else {
-                    //     $('.noseri').removeClass('is-invalid');
-                    //     $.ajax({
-                    //         url: "/api/prd/cek-noseri",
-                    //         type: "post",
-                    //         data: {
-                    //             noseri: arr,
-                    //         },
-                    //         success: function(res) {
-                    //             // console.log(res);
-                    //             if(res.error == true) {
-                    //                 Swal.fire({
-                    //                     icon: 'error',
-                    //                     title: 'Oops...',
-                    //                     text: res.msg,
-                    //                 }).then((result) => {
-                    //                     if (result.value) {
-                    //                         $('#btnSave').prop('disabled', false);
-                    //                     }
-                    //                 });
-                    //             } else {
-                    //                 let tgl = $('#tgl_perakitan').val();
-                    //                 let today = new Date();
-                    //                 let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                    //                 let datetime = tgl + ' ' + time;
-                    //                 // console.log('a');
-                    //                 $.ajax({
-                    //                     url: "/api/prd/rakit-seri",
-                    //                     type: "post",
-                    //                     data: {
-                    //                         "_token": "{{ csrf_token() }}",
-                    //                         no_bppb: $('#no_bppb').val(),
-                    //                         noseri: arr,
-                    //                         userid: $('#userid').val(),
-                    //                         jadwal_id: id,
-                    //                         tgl_perakitan: datetime,
-                    //                     },
-                    //                     success: function (res) {
-                    //                         console.log(res);
-                    //                         Swal.fire({
-                    //                             icon: 'success',
-                    //                             title: 'Berhasil',
-                    //                             text: 'Data berhasil disimpan.',
-                    //                         })
-                    //                         $('.modalRakit').modal('hide');
-                    //                         $('.scan-produk').DataTable().destroy();
-                    //                         $('.scan-produk tbody').empty();
-                    //                         $('#table_produk_perakitan').DataTable().ajax
-                    //                             .reload();
-                    //                         location.reload();
-                    //                     }
-                    //                 })
-                    //             }
-                    //         }
-                    //     })
-                    // }
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Nomor seri ' + duplicates(count(arr)) +
+                                ' ada yang sama.',
+                        }).then((result) => {
+                            if (result.value) {
+                                $(this).prop('disabled', false);
+                            }
+                        });
+                    } else {
+                        $('.noseri').removeClass('is-invalid');
+                        $.ajax({
+                            url: "/api/prd/cek-noseri",
+                            type: "post",
+                            data: {
+                                noseri: arr,
+                            },
+                            success: function(res) {
+                                // console.log(res);
+                                if(res.error == true) {
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Oops...',
+                                        text: res.msg,
+                                    }).then((result) => {
+                                        if (result.value) {
+                                            $('#btnSave').prop('disabled', false);
+                                        }
+                                    });
+                                } else {
+                                    let tgl = $('#tgl_perakitan').val();
+                                    let today = new Date();
+                                    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                                    let datetime = tgl + ' ' + time;
+                                    // console.log('a');
+                                    $.ajax({
+                                        url: "/api/prd/rakit-seri",
+                                        type: "post",
+                                        data: {
+                                            "_token": "{{ csrf_token() }}",
+                                            no_bppb: $('#no_bppb').val(),
+                                            noseri: arr,
+                                            userid: $('#userid').val(),
+                                            jadwal_id: id,
+                                            tgl_perakitan: datetime,
+                                        },
+                                        success: function (res) {
+                                            console.log(res);
+                                            Swal.fire({
+                                                icon: 'success',
+                                                title: 'Berhasil',
+                                                text: 'Data berhasil disimpan.',
+                                            })
+                                            $('.modalRakit').modal('hide');
+                                            $('.scan-produk').DataTable().destroy();
+                                            $('.scan-produk tbody').empty();
+                                            $('#table_produk_perakitan').DataTable().ajax
+                                                .reload();
+                                            location.reload();
+                                        }
+                                    })
+                                }
+                            }
+                        })
+                    }
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     Swal.fire('Changes are not saved', '', 'info')
                 }
             })
 
         })
+
+        function dateFormat(inputDate, format) {
+            //parse the input date
+            const date = new Date(inputDate);
+
+            //extract the parts of the date
+            const day = date.getDate();
+            const month = date.getMonth() + 1;
+            const year = date.getFullYear();
+
+            //replace the month
+            format = format.replace("MM", month.toString().padStart(2,"0"));
+
+            //replace the year
+            if (format.indexOf("yyyy") > -1) {
+                format = format.replace("yyyy", year.toString());
+            } else if (format.indexOf("yy") > -1) {
+                format = format.replace("yy", year.toString().substr(2,2));
+            }
+
+            //replace the day
+            format = format.replace("dd", day.toString().padStart(2,"0"));
+
+            return format;
+        }
 
         $('#btnCheck').click(function(){
             let arr = [];

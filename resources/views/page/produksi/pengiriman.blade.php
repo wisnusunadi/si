@@ -573,14 +573,21 @@
         });
         $('#form-scan').on('submit', function (e) {
             e.preventDefault();
+            var table = $('.scan-produk').DataTable();
+            var rows_select = table.column(0).checkboxes.selected();
+            const check_seri_length = [];
+
+            $.each(rows_select, function (index, rowId) {
+                check_seri_length.push(rowId);
+            });
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: 'Apakah Kamu Yakin?',
+                text: "Melakukan Perakitan di Tanggal "+ dateFormat($('#tgl_perakitan').val(), 'dd MM yyyy')+ " Sejumlah "+check_seri_length.length+ " Nomor seri",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, Transfer it'
+                confirmButtonText: 'Yes, transfer it!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     var form = $(this);
@@ -635,12 +642,40 @@
                             'error'
                         )
                     }
-
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire('Changes are not saved', '', 'info')
                 }
             })
 
+
         });
     }
+
+    function dateFormat(inputDate, format) {
+        //parse the input date
+        const date = new Date(inputDate);
+
+        //extract the parts of the date
+        const day = date.getDate();
+        const month = date.getMonth() + 1;
+        const year = date.getFullYear();
+
+        //replace the month
+        format = format.replace("MM", month.toString().padStart(2,"0"));
+
+        //replace the year
+        if (format.indexOf("yyyy") > -1) {
+            format = format.replace("yyyy", year.toString());
+        } else if (format.indexOf("yy") > -1) {
+            format = format.replace("yy", year.toString().substr(2,2));
+        }
+
+        //replace the day
+        format = format.replace("dd", day.toString().padStart(2,"0"));
+
+        return format;
+    }
+
     // Produksi Checkbox
     $(document).on('click','#checked', function () {
         var table = $('.scan-produk').DataTable();
