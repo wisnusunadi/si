@@ -1183,7 +1183,7 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('jumlah', function ($data) {
-                $jumlah = $data->getJumlahCekPesanan();
+                $jumlah = $data->getJumlahCekPesanan() + $data->getJumlahKirimPesanan();
                 // $id = $data->id;
                 // $j = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
                 //     $q->where('gudang_barang_jadi_id', $id);
@@ -1205,14 +1205,20 @@ class PpicController extends Controller
                 //     $q->whereNotIn('log_id', ['10']);
                 // })->get();
                 // return $j;
+                // $id = $data->id;
+                // $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function($q) use ($id){
+                //     $q->where('gudang_barang_jadi_id', $id);
+                // })->whereNotIn('log_id', ['10'])->has('DetailPesanan.DetailPesananProduk.DetailLogistik')->first();
                 return $data->getJumlahKirimPesanan();
+                // return $data;
             })
 
             ->addColumn('belum_pengiriman', function ($data) {
-                $jumlah = $data->getJumlahCekPesanan();
-                $jumlahselesai = $data->getJumlahKirimPesanan();
-                $jumlahproses = $jumlah - $jumlahselesai;
-                return $jumlahproses;
+                // $jumlah = $data->getJumlahCekPesanan();
+                // $jumlahselesai = $data->getJumlahKirimPesanan();
+                // $jumlahproses = $jumlah - $jumlahselesai;
+                // return $jumlahproses;
+                return $data->getJumlahCekPesanan();
             })
             ->addColumn('aksi', function ($data) {
                 return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '" id="detmodal">
@@ -1226,9 +1232,9 @@ class PpicController extends Controller
     public function master_pengiriman_detail_show($id)
     {
         $data = GudangBarangJadi::find($id);
-        $jumlah = $data->getJumlahCekPesanan();
+        $jumlah = $data->getJumlahCekPesanan() + $data->getJumlahKirimPesanan();
         $jumlahselesai = $data->getJumlahKirimPesanan();
-        $jumlahproses = $jumlah - $jumlahselesai;
+        $jumlahproses = $data->getJumlahCekPesanan();
         return view('spa.ppic.master_pengiriman.detail', ['id' => $id, 'data' => $data, 'jumlah' => $jumlah, 'jumlahselesai' => $jumlahselesai, 'jumlahproses' => $jumlahproses]);
     }
 

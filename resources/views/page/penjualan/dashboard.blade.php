@@ -394,8 +394,11 @@
     <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="margin: 10px">
-                <div class="modal-header bg-warning">
-                    <h4>Detail</h4>
+                <div class="modal-header bg-purple">
+                    <h4 class="modal-title">E-Catalogue</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="modal-body" id="detail">
 

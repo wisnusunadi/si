@@ -515,7 +515,7 @@ Route::prefix('/logistik')->group(function () {
         Route::put('create/{detail_pesanan_id}/{part_array}/{jenis}', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
         // Route::get('data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::post('noseri/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so']);
-        Route::post('noseri/detail/belum_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_belum_kirim']);
+        Route::post('noseri/detail/belum_kirim/{id}/{array}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_belum_kirim']);
         Route::get('noseri/detail/selesai_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_selesai_kirim']);
         Route::post('noseri/detail/selesai_kirim/data/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_selesai_kirim_data']);
         // Route::get('data/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_so']);
@@ -552,6 +552,8 @@ Route::prefix('/logistik')->group(function () {
     Route::group(['prefix' => '/cek'], function () {
         Route::post('/no_sj/{id}/{val}/{jenis}', [App\Http\Controllers\LogistikController::class, 'check_no_sj']);
         Route::post('/no_resi/{val}', [App\Http\Controllers\LogistikController::class, 'check_no_resi']);
+        Route::get('/no_sj_detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_surat_jalan_detail']);
+        Route::get('/no_sj_belum_kirim/{customer}', [App\Http\Controllers\LogistikController::class, 'get_surat_jalan_belum_kirim']);
     });
 });
 

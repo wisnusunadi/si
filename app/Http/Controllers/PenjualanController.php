@@ -877,9 +877,9 @@ class PenjualanController extends Controller
             $param = 'semua';
         }
 
-
         return view('page.penjualan.penjualan.detail_spa', ['data' => $data, 'param' => $param]);
     }
+
     public function get_data_detail_ekatalog($value)
     {
         $data  = Ekatalog::find($value);
@@ -959,7 +959,7 @@ class PenjualanController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('paket_produk', function ($data) {
-                return $data->DetailPesanan->PenjualanProduk->nama . ' (' . $data->DetailPesanan->jumlah . ' unit)';
+                return $data->DetailPesanan->PenjualanProduk->nama_alias . ' (' . $data->DetailPesanan->jumlah . ' unit)';
             })
             ->addColumn('nama_produk', function ($data) {
                 return $data->GudangBarangJadi->Produk->nama . ' ' . $data->GudangBarangJadi->nama;
@@ -1065,7 +1065,7 @@ class PenjualanController extends Controller
 
                     if (isset($data->Pesanan->so)) {
                         if ($data->Pesanan->getJumlahPesanan() == $data->Pesanan->getJumlahKirim()) {
-                            return $tgl_parameter;
+                            return Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
                         } else {
                             if ($tgl_sekarang < $tgl_parameter) {
                                 $to = Carbon::now();
@@ -1613,7 +1613,7 @@ class PenjualanController extends Controller
                 $divisi_id = Auth::user()->divisi->id;
                 $return = "";
 
-                if ($divisi_id == "26" || $divisi_id == "8") {
+                if ($divisi_id == "26") {
                     $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '" >

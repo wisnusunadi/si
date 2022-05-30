@@ -774,7 +774,7 @@
                 row.child( format(row.data().id) ).show();
                 tr.addClass('shown');
                 detailtable(row.data().id);
-
+                
             }
         });
 

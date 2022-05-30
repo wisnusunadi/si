@@ -123,7 +123,7 @@
                                     <?php $totalharga = 0; ?>
                                     <?php $no = 0; ?>
                                     @if(isset($data->Pesanan))
-                                    <div class="card removeshadow">
+                                    <div class="card removeshadow overflowy">
                                         <div class="card-body">
                                             <table class="table" style="max-width:100%; overflow-x: hidden; background-color:white;" id="tabledetailpesan">
                                                 <thead>
@@ -133,6 +133,9 @@
                                                         <th colspan="2">Qty</th>
                                                         <th rowspan="2">Harga</th>
                                                         <th rowspan="2">Subtotal</th>
+                                                        @if(Auth::user()->divisi_id == "8")
+                                                        <th rowspan="2">Aksi</th>
+                                                        @endif
                                                     </tr>
                                                     <tr>
                                                         <th><i class="fas fa-shopping-cart"></i></th>
@@ -149,6 +152,9 @@
                                                         <td colspan="2" class="nowraptxt tabnum">{{$e->jumlah}}</td>
                                                         <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->harga)</td>
                                                         <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
+                                                        @if(Auth::user()->divisi_id == "8")
+                                                        <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">-</td>
+                                                        @endif
                                                         <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
                                                     </tr>
                                                     @if(isset($e->DetailPesananProduk))
@@ -175,11 +181,19 @@
                                                     <?php $no = $no + 1; ?>
                                                     <tr>
                                                         <td class="nowraptxt">{{$no}}</td>
-                                                        <td class="wb"><b>{{$e->Sparepart->nama}}</b></td>
+                                                        <td class="wb"><b>{{$e->Sparepart->nama}} <i class="fas fa-info-circle text-danger" data-toggle="tooltip" data-html="true" data-placement="bottom" role="button" title='Ini Adalah Tooltipnya'</b></td>
                                                         <td class="nowraptxt tabnum"><span class="text-muted">{{$e->jumlah}}</span></td>
                                                         <td class="nowraptxt tabnum">@if(isset($e->detaillogistikpart)) {{$e->jumlah}} @else 0 @endif</td>
                                                         <td class="nowraptxt tabnum">@currency($e->harga)</td>
                                                         <td class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
+                                                        @if(Auth::user()->divisi_id == "8")
+                                                            <td><a data-toggle="komentar" class="komentarmodal" data-id="{{$e->id}}">
+                                                                <button type="button" class="btn btn-outline-warning btn-sm">
+                                                                    <i class="fas fa-pencil-alt"></i>
+                                                                        Komentar
+                                                                </button></a>
+                                                            </td>
+                                                            @endif
                                                         <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
                                                     </tr>
                                                     @endforeach

@@ -283,7 +283,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/coo'], function () {
         Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');
         Route::view('/detail/{id}', 'page.dc.coo.detail')->name('dc.coo.detail');
-        Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
+        // Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
         Route::get('/create/{id}/{Value}', [App\Http\Controllers\DcController::class, 'create_coo'])->name('dc.coo.create');
         Route::get('/edit/{id}/{Value}', [App\Http\Controllers\DcController::class, 'edit_coo'])->name('dc.coo.edit');
         Route::get('/edit_tglkirim/{Value}', [App\Http\Controllers\DcController::class, 'edit_tglkirim_coo'])->name('dc.coo.tglkirim_edit');
@@ -304,10 +304,11 @@ Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/so'], function () {
-        Route::get('/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so'])->name('as.so.show');
+        Route::get('/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so']);
         Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_so'])->name('as.so.detail');
         Route::view('/show', 'page.as.so.show')->name('as.so.show');
         Route::view('/list/{id}', 'page.as.so.list')->name('as.so.list');
+        Route::get('/edit/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_data_detail_part']);
     });
 
     Route::group(['prefix' => '/coo'], function () {
