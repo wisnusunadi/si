@@ -123,6 +123,7 @@
                                             <th>Produk</th>
                                             <th>Jumlah</th>
                                             <th>Merk</th>
+                                            <th>Progress</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -431,6 +432,10 @@
                 {
                     data: 'merk',
                     name: 'merk'
+                },
+                {
+                    data: 'progress',
+                    name: 'progress'
                 },
                 {
                     data: 'action',
