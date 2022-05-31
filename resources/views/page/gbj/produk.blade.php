@@ -644,15 +644,22 @@
 
     // hidden hapus
     $('#custom-tabs-four-profile-tab').click(function () {
+        $('.simpanSeri').prop('disabled', false);
         $('.hapusSeri').prop('disabled', true);
         $('.simpanSeri').removeAttr('id');
         $('.simpanSeri').attr('id', 'simpanSeriSudahDigunakan');
     });
 
     $('#custom-tabs-four-home-tab').click(function () {
+        $('.simpanSeri').prop('disabled', false);
         $('.hapusSeri').prop('disabled', false);
         $('.simpanSeri').removeAttr('id');
         $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
+    });
+
+    $('#custom-tabs-four-wait-approved-tab').click(function () {
+        $('.hapusSeri').prop('disabled', true);
+        $('.simpanSeri').prop('disabled', true);
     });
 
 </script>
