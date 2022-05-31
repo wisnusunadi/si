@@ -17,6 +17,7 @@ Route::prefix('/v2')->group(function() {
         Route::post('store-importseri', [GudangController::class, 'import_noseri_to_db']);
         Route::post('delete-noseri', [GudangController::class, 'delete_noseri']);
         Route::post('edit-noseri', [GudangController::class, 'edit_noseri']);
+        Route::post('list-waiting-noseri', [GudangController::class, 'get_data_waiting_approve']);
         Route::post('list-approve-noseri', [GudangController::class, 'list_approve_noseri']);
         Route::post('list-update-noseri', [GudangController::class, 'list_update_noseri']);
         Route::post('proses-delete-noseri', [GudangController::class, 'proses_delete_noseri']);

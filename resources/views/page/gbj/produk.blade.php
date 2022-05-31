@@ -304,6 +304,11 @@
                                         aria-controls="custom-tabs-four-profile" aria-selected="false">Sudah
                                         Digunakan</a>
                                 </li>
+                                                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-wait-approved-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-wait-approved" role="tab"
+                                        aria-controls="custom-tabs-four-wait-approved" aria-selected="false">Menunggu Persetujuan</a>
+                                </li>
                             </ul>
                         </div>
                         <div class="card-body">
@@ -340,21 +345,29 @@
                                         </tbody>
                                     </table>
                                 </div>
+                                <div class="tab-pane fade" id="custom-tabs-four-wait-approved" role="tabpanel"
+                                aria-labelledby="custom-tabs-four-wait-approved-tab">
+                                <table class="table scan-produk2">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>No. Seri</th>
+                                            <th>Permintaan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card">
-                      <div class="card-body">
-                        <p><strong> No Seri Yang Sudah Digunakan </strong></p>
-                        <p class="noSeriIsUsed"></p>
-                      </div>
-                    </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="ubahSeri">Simpan</button>
+                <button type="button" class="btn btn-primary simpanSeri" id="simpanSeriBelumDigunakan">Simpan</button>
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah
                     Layout</button>
-                <button type="button" class="btn btn-danger" id="hapus">Hapus</button>
+                <button type="button" class="btn btn-danger hapusSeri">Hapus</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
             </div>
             </form>
@@ -637,13 +650,27 @@
 
     // hidden hapus
     $('#custom-tabs-four-profile-tab').click(function () {
-        $('#hapus').prop('disabled', true);
+        $('.simpanSeri').prop('disabled', false);
+        $('.hapusSeri').prop('disabled', true);
+        $('.simpanSeri').removeAttr('id');
+        $('.simpanSeri').attr('id', 'simpanSeriSudahDigunakan');
     });
 
-    $('#custom-tabs-four-tab').click(function () {
-        $('#hapus').prop('disabled', false);
+    $('#custom-tabs-four-home-tab').click(function () {
+        $('.simpanSeri').prop('disabled', false);
+        $('.hapusSeri').prop('disabled', false);
+        $('.simpanSeri').removeAttr('id');
+        $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
     });
 
+<<<<<<< HEAD
+=======
+    $('#custom-tabs-four-wait-approved-tab').click(function () {
+        $('.hapusSeri').prop('disabled', true);
+        $('.simpanSeri').prop('disabled', true);
+    });
+
+>>>>>>> fe255b15dd9fa16814545ba0d54d10416ea5f188
 </script>
 
 {{-- data --}}
@@ -1110,9 +1137,6 @@
                     data: 'aksi'
                 }
             ],
-            // "columnDefs": [
-            //     { "width": "5%", "targets": 0},
-            // ],
         });
 
         $('.scan-produk1').DataTable({
@@ -1138,9 +1162,33 @@
                     data: 'Layout'
                 }
             ],
-            // "columnDefs": [
-            //     { "width": "5%", "targets": 0},
-            // ],
+        });
+
+        $('.scan-produk2').DataTable({
+            destroy: true,
+            "ordering": false,
+            "autoWidth": false,
+            "lengthChange": false,
+            processing: true,
+            serverSide: false,
+            pageLength: 5 ,
+            ajax: {
+                url: '/api/v2/gbj/list-waiting-noseri',
+                type: 'post',
+                data: {
+                    gbjid: id
+                },
+            },
+            columns: [{
+                    data: 'DT_RowIndex'
+                },
+                {
+                    data: 'noseri'
+                },
+                {
+                    data: 'action'
+                },
+            ],
         });
 
         $('.daftar-stok').modal('show');
@@ -1388,6 +1436,14 @@
         console.log("noseri", arr.length != datalength);
 
     })
+
+    $(document).on('click', '#simpanSeriSudahDigunakan', function () {
+        alert('simpanSeriSudahDigunakan');
+    });
+
+    $(document).on('click', '#simpanSeriBelumDigunakan', function () {
+        alert('simpanSeriBelumDigunakan');
+    });
 
 </script>
 @stop

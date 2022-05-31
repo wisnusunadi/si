@@ -628,6 +628,7 @@
         console.log(jml);
         console.log(dpp);
         console.log(prd);
+        $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
         let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(
             function () {
                 return $(this).val();

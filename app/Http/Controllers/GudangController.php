@@ -408,6 +408,38 @@ class GudangController extends Controller
         return view('page.gbj.tp.show', compact('data', 'data1', 'header'));
     }
 
+    function get_data_waiting_approve(Request $request) {
+        try {
+            $data = NoseriBrgJadiLog::where([
+                'status' => 'waiting'
+            ])->whereHas('noseri', function($d) use($request){
+                $d->where('gdg_barang_jadi_id', $request->gbjid);
+            })->get();
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('checkbox', function($d) {
+                    return '<input type="checkbox" id="noseriid" name="id" value="'.$d->noseri_id.'">';
+                })
+                ->addColumn('noseri', function($d) {
+                    return $d->noseri->noseri;
+                })
+                ->editColumn('action',function($d){
+                    return $d->action == 'delete' ? '<span class="badge badge-danger">Hapus</span>': '<span class="badge badge-info">Ubah</span>';
+                })
+                ->addColumn('requested', function($d) {
+                    return $d->actionn->nama;
+                })
+                ->rawColumns(['checkbox', 'action'])
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
     function delete_noseri(Request $request) {
         try {
             // dd($request->all());
@@ -513,28 +545,29 @@ class GudangController extends Controller
 
     function edit_noseri(Request $request) {
         try {
-            $dataseri = [];
-            $data = NoseriBarangJadi::whereIn('id',$request->noseriid);
-            $check = NoseriBarangJadi::whereIn('noseri', $request->new)->get();
-            if (count($check) > 0) {
-                foreach($check as $d) {
-                    array_push($dataseri, $d->noseri);
-                }
-                return response()->json(['error' => false, 'msg' => 'Noseri '.implode(', ', $dataseri).' Sudah Terdaftar']);
-            } else {
-                foreach($data->get() as $k => $c) {
-                    NoseriBrgJadiLog::create([
-                        'noseri_id' => $c->id,
-                        'data_lama' => $c->noseri,
-                        'data_baru' => $request->new[$k],
-                        'action' => 'update',
-                        'action_by' => $request->actionby,
-                        'status' => 'waiting'
-                    ]);
-                    NoseriBarangJadi::find($c->id)->update(['noseri' => $request->new[$k], 'is_change' => 0]);
-                }
-                return response()->json(['error' => false, 'msg' => 'Mohon Tunggu Persetujuan dari Manager']);
-            }
+            dd($request->all());
+            // $dataseri = [];
+            // $data = NoseriBarangJadi::whereIn('id',$request->noseriid);
+            // $check = NoseriBarangJadi::whereIn('noseri', $request->new)->get();
+            // if (count($check) > 0) {
+            //     foreach($check as $d) {
+            //         array_push($dataseri, $d->noseri);
+            //     }
+            //     return response()->json(['error' => false, 'msg' => 'Noseri '.implode(', ', $dataseri).' Sudah Terdaftar']);
+            // } else {
+            //     foreach($data->get() as $k => $c) {
+            //         NoseriBrgJadiLog::create([
+            //             'noseri_id' => $c->id,
+            //             'data_lama' => $c->noseri,
+            //             'data_baru' => $request->new[$k],
+            //             'action' => 'update',
+            //             'action_by' => $request->actionby,
+            //             'status' => 'waiting'
+            //         ]);
+            //         NoseriBarangJadi::find($c->id)->update(['noseri' => $request->new[$k], 'is_change' => 0]);
+            //     }
+            //     return response()->json(['error' => false, 'msg' => 'Mohon Tunggu Persetujuan dari Manager']);
+            // }
 
         } catch (\Exception $e) {
             return response()->json([
