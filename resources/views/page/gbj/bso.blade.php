@@ -123,6 +123,7 @@
                                             <th>Produk</th>
                                             <th>Jumlah</th>
                                             <th>Merk</th>
+                                            <th>Progress</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -447,6 +448,10 @@
                     name: 'merk'
                 },
                 {
+                    data: 'progress',
+                    name: 'progress'
+                },
+                {
                     data: 'action',
                     name: 'action'
                 },
@@ -618,6 +623,7 @@
     });
 
     var t = 0;
+    var dataTemp = [];
     $(document).on('click', '#simpan', function (e) {
         console.log(jml);
         console.log(dpp);

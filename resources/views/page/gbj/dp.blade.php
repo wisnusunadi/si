@@ -19,6 +19,7 @@
             <thead>
                 <tr>
                     <th>No</th>
+                    <th>Nomor BPPB</th>
                     <th>Tanggal Masuk</th>
                     <th>Produk</th>
                     <th>Jumlah</th>
@@ -140,6 +141,7 @@
                 data: 'DT_RowIndex',
                 name: 'DT_RowIndex'
             },
+            {data: 'bppb'},
             {
                 data: 'tgl_masuk'
             },

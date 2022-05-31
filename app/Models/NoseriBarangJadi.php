@@ -11,7 +11,7 @@ class NoseriBarangJadi extends Model
 
     protected $table = "noseri_barang_jadi";
 
-    protected $fillable = ['is_aktif', 'is_ready', 'used_by', 'layout_id', 'gdg_barang_jadi_id', 'dari', 'noseri', 'jenis', 'created_by'];
+    protected $fillable = ['is_aktif', 'is_ready', 'is_delete' ,'used_by', 'layout_id', 'gdg_barang_jadi_id', 'dari', 'noseri', 'jenis', 'created_by', 'is_change'];
 
     function from()
     {
@@ -38,6 +38,11 @@ class NoseriBarangJadi extends Model
     function pesanan()
     {
         return $this->belongsTo(Pesanan::class, 'used_by');
+    }
+
+    function noseri_log()
+    {
+        return $this->hasOne(NoseriBrgJadiLog::class, 'noseri_id');
     }
 
 

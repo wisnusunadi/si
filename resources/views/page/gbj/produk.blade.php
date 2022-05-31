@@ -5,6 +5,7 @@
 @section('content')
 <div class="content-header">
     <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
+
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
@@ -136,8 +137,7 @@
                                 <label for="">Produk</label>
                                 <input type="hidden" name="produk_id" id="produk_idd">
                                 <select name="produk_id" id="produk_id" class="form-control produk-add">
-                                    <option value="">Buku</option>
-                                    <option value="">Bolpoin</option>
+
                                 </select>
                             </div>
                         </div>
@@ -154,9 +154,8 @@
                         </div>
                         <div class="col">
                             <label for="">Satuan</label>
-                            <select name="satuan_id" id="satuan_id" class="form-control">
-                                <option value="">mm</option>
-                                <option value="">unit</option>
+                            <select name="satuan_id" id="satuan_id" class="form-control satuan_id">
+                                <option selected></option>
                             </select>
                         </div>
                     </div>
@@ -317,6 +316,7 @@
                                 <div class="tab-pane fade active show" id="custom-tabs-four-home" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-home-tab">
                                     <form action="" id="noseriForm" name="noseriForm">
+                                        <input type="hidden" name="action_by" id="actionby" value="{{ Auth::user()->id }}">
                                         <table class="table scan-produk">
                                             <thead>
                                                 <tr>
@@ -546,7 +546,10 @@
         $('.modal-view').modal('show');
     });
     $(document).ready(function () {
-        $('.produk-add ').select2();
+        $('.produk-add').select2({
+            placeholder: "Choose ...",
+            allowClear: true
+        });
         $('.layout-add').select2();
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
@@ -573,7 +576,7 @@
                 .find('input[type=text]')
                 .prop('disabled', true);
             }
-                
+
         });
 
         $("#head-cb1").on('click', function () {
@@ -640,7 +643,10 @@
     $('.viewStock').click(function (e) {
         $('.modalViewStock').modal('show');
     });
-    $('#satuan_id').select2();
+    $('.satuan_id').select2({
+        placeholder: "Choose...",
+        allowClear: true
+    });
 
     // hidden hapus
     $('#custom-tabs-four-profile-tab').click(function () {
@@ -811,7 +817,7 @@
             if (res) {
                 console.log(res);
                 $("#produk_id").empty();
-                $("#produk_id").append('<option value="">Pilih Item</option>');
+                $("#produk_id").append('<option selected></option>');
                 $.each(res, function (key, value) {
                     $("#produk_id").append('<option value="' + value.id + '">' + value.nama +
                         '</option');
@@ -830,14 +836,14 @@
         success: function (res) {
             if (res) {
                 console.log(res);
-                $("#satuan_id").empty();
-                $("#satuan_id").append('<option value="">Pilih Item</option>');
+                $(".satuan_id").empty();
+                $(".satuan_id").append('<option selected></option>');
                 $.each(res, function (key, value) {
-                    $("#satuan_id").append('<option value="' + value.id + '">' + value.nama +
+                    $(".satuan_id").append('<option value="' + value.id + '">' + value.nama +
                         '</option');
                 });
             } else {
-                $("#satuan_id").empty();
+                $(".satuan_id").empty();
             }
         }
     });
@@ -935,18 +941,13 @@
             success: (data) => {
                 if (data.error == true) {
                     $('#produkForm').trigger('reset');
-                    $('#modal-create').modal('hide');
+                    // $('#modal-create').modal('hide');
                     $('#Submitmodalcreate').html('Kirim');
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
                         text: data.msg,
-                    }).then((result) => {
-                        if (result.value) {
-                            $('.datatable').DataTable().ajax.reload();
-                            location.reload();
-                        }
-                    });
+                    })
                 } else {
                     $('#produkForm').trigger('reset');
                     $('#modal-create').modal('hide');
@@ -1015,17 +1016,24 @@
         })
     })
 
-    $('#formStoreImport').on('submit', function (e) {
+    $('#formStoreImport').on('submit', function(e){
+        e.preventDefault();
         $.ajax({
-            url: "/api/v2/gbj/import-noseri",
+            url: "/api/v2/gbj/store-importseri",
             method: "post",
             data: new FormData(this),
             dataType: "json",
             contentType: false,
             cache: false,
             processData: false,
-            success: function (data) {
-                console.log(res);
+            success: function(data) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: data.msg,
+                }).then((res) => {
+                    location.reload()
+                })
             }
         })
     })
@@ -1043,6 +1051,58 @@
             }
         });
     }
+
+    $('#hapus').click(function(e){
+        const cekid = [];
+        const layout = [];
+        let a = $('.scan-produk').DataTable().column(0).nodes()
+            .to$().find('input[type=checkbox]:checked');
+        $(a).each(function (index, elm) {
+            cekid.push($(elm).val());
+            layout.push($(elm).parent().next().children().val());
+        });
+        // console.log(layout);
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/v2/gbj/delete-noseri',
+                    type: 'post',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        noseriid: cekid,
+                        actionby: $('#actionby').val()
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.error == true) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: res.msg,
+                            })
+                        } else {
+                            Swal.fire(
+                                'Deleted!',
+                                res.msg,
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            })
+                        }
+                    }
+                });
+                }
+            })
+    })
     var title = $(this).parent().prev().prev().prev().prev().html();
     // modal noseri
     $(document).on('click', '.stokmodal', function () {
@@ -1118,7 +1178,7 @@
         }
     })
 
-    $('.scan-produk1').on('click', '.cb-child', function () {
+    $('.scan-produk1').on('click', '.cb-child1', function () {
         if($(this).is(':checked')){
             $(this).parent().next().children().attr('disabled', false);
         }else{

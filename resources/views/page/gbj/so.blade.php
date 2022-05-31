@@ -54,6 +54,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Dicek</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-batal-tab" data-toggle="pill" href="#pills-batal" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Batal</a>
+                            </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-proses_kirim" role="tabpanel" aria-labelledby="pills-proses_kirim-tab">
@@ -89,6 +92,27 @@
                                                         <th>Customer</th>
                                                         <th>Batas Transfer</th>
                                                         <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="pills-batal" role="tabpanel" aria-labelledby="pills-batal-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" style="width: 100%" id="batal-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nomor SO</th>
+                                                        <th>Nomor PO</th>
+                                                        <th>Customer</th>
+                                                        <th>Batas Transfer</th>
+                                                        <th>Status</th>
                                                     </tr>
                                                 </thead>
                                             </table>
@@ -282,6 +306,33 @@
             $('.cb-child-so').prop('checked', isChecked)
         });
 
+        $('#belum-dicek').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: false,
+            ajax: {
+                url: '/api/tfp/belum-dicek',
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'so', name: 'so'},
+                {data: 'po'},
+                { data: 'nama_customer', name: 'nama_customer'},
+                { data: 'batas_out', name: 'batas_out'},
+                { data: 'action', name: 'action'},
+            ],
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        },
+            "columnDefs": [
+                {
+                    "targets": [5],
+                    "visible": document.getElementById('auth').value == '2' ? false : true,
+                    "width": "20%",
+                }
+            ]
+        });
+
         $('#sudah-dicek').DataTable({
             destroy: true,
             processing: true,
@@ -309,32 +360,14 @@
             ]
         });
 
-        $('#belum-dicek').DataTable({
+        $('#batal-table').DataTable({
             destroy: true,
             processing: true,
             serverSide: false,
-            ajax: {
-                url: '/api/tfp/belum-dicek',
-            },
-            columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                { data: 'so', name: 'so'},
-                {data: 'po'},
-                { data: 'nama_customer', name: 'nama_customer'},
-                { data: 'batas_out', name: 'batas_out'},
-                { data: 'action', name: 'action'},
-            ],
             "language": {
             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        },
-            "columnDefs": [
-                {
-                    "targets": [5],
-                    "visible": document.getElementById('auth').value == '2' ? false : true,
-                    "width": "20%",
-                }
-            ]
-        });
+            },
+        })
     });
 
     var id = '';
