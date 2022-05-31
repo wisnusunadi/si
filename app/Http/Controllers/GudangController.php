@@ -880,15 +880,28 @@ class GudangController extends Controller
     function ceknoseri(Request $request)
     {
         $data = NoseriBarangJadi::whereIn('noseri', $request->noseri)->get();
+        $datarakit = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get();
         $arr_seri = [];
+        $arr_rakit = [];
 
-        if (count($data) == 0) {
+        if (count($data) == 0 && count($datarakit) == 0) {
             return response()->json(['msg' => 'Noseri tersimpan']);
         } else {
             foreach ($data as $d) {
                 array_push($arr_seri, $d->noseri);
             }
-            return response()->json(['error' => 'Nomor seri ' . implode(', ', $arr_seri) . ' sudah terdaftar']);
+
+            foreach($datarakit as $c) {
+                array_push($arr_rakit, $c->noseri);
+            }
+
+            if (count($data) > 0) {
+                return response()->json(['error' => 'Nomor seri ' . implode(', ', $arr_seri) . ' sudah terdaftar di gudang']);
+            }
+
+            if (count($datarakit) > 0) {
+                return response()->json(['error' => 'Nomor seri ' . implode(', ', $arr_rakit) . ' sudah terdaftar di perakitan']);
+            }
         }
     }
 
@@ -1206,8 +1219,8 @@ class GudangController extends Controller
     function StoreBarangJadi(Request $request)
     {
         $id = $request->id;
-        if(($request->produk_id && $request->nama && $request->satuan_id) == null) {
-            return response()->json(['msg' => 'Produk, Nama, dan Satuan Harus Diisi', 'error' => true]);
+        if(($request->produk_id && $request->satuan_id) == null) {
+            return response()->json(['msg' => 'Produk dan Satuan Harus Diisi', 'error' => true]);
         }else{
             if ($id) {
                 $brg_jadi = GudangBarangJadi::find($id);
@@ -1647,6 +1660,7 @@ class GudangController extends Controller
             ->addColumn('jumlah', function ($d) {
                 return $d->qty . ' ' . $d->produk->satuan->nama;
             })
+            ->rawColumns(['tgl_masuk'])
             ->make(true);
     }
 

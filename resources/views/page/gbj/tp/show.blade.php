@@ -74,6 +74,11 @@
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
+        <div class="col-sm-1">
+            {{-- <a href="javascript:;" onclick = "history.back()">Redirect back to Page 1</a> --}}
+            {{-- <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i></a> --}}
+            <button class="btn btn-secondary btnBack" type="button"><i class="fas fa-arrow-left"></i></button>
+        </div>
         <div class="col-sm-6">
           <h4 class="m-0">Detail Riwayat Transaksi {{ $header->produk->nama }} {{ $header->nama }}</h1>
         </div><!-- /.col -->
@@ -315,6 +320,15 @@
     })
 
     $(document).ready(function () {
+        // disable button back browser
+        window.history.pushState(null, "", window.location.href);
+        window.onpopstate = function() {
+            window.history.pushState(null, "", window.location.href);
+        };
+
+        $('.btnBack').click(function() {
+            window.location.href = '{{ url('gbj/tp')}}'
+        })
         var id = $('#ids').val();
         console.log(id);
         var table = $('.tableProdukView').dataTable({

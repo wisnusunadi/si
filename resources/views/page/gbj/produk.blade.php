@@ -136,8 +136,7 @@
                                 <label for="">Produk</label>
                                 <input type="hidden" name="produk_id" id="produk_idd">
                                 <select name="produk_id" id="produk_id" class="form-control produk-add">
-                                    <option value="">Buku</option>
-                                    <option value="">Bolpoin</option>
+
                                 </select>
                             </div>
                         </div>
@@ -154,9 +153,8 @@
                         </div>
                         <div class="col">
                             <label for="">Satuan</label>
-                            <select name="satuan_id" id="satuan_id" class="form-control">
-                                <option value="">mm</option>
-                                <option value="">unit</option>
+                            <select name="satuan_id" id="satuan_id" class="form-control satuan_id">
+                                <option selected></option>
                             </select>
                         </div>
                     </div>
@@ -532,7 +530,10 @@
         $('.modal-view').modal('show');
     });
     $(document).ready(function () {
-        $('.produk-add ').select2();
+        $('.produk-add').select2({
+            placeholder: "Choose ...",
+            allowClear: true
+        });
         $('.layout-add').select2();
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
@@ -582,7 +583,10 @@
     $('.viewStock').click(function (e) {
         $('.modalViewStock').modal('show');
     });
-    $('#satuan_id').select2();
+    $('.satuan_id').select2({
+        placeholder: "Choose...",
+        allowClear: true
+    });
 
 </script>
 
@@ -733,7 +737,7 @@
             if (res) {
                 console.log(res);
                 $("#produk_id").empty();
-                $("#produk_id").append('<option value="">Pilih Item</option>');
+                $("#produk_id").append('<option selected></option>');
                 $.each(res, function (key, value) {
                     $("#produk_id").append('<option value="' + value.id + '">' + value.nama +
                         '</option');
@@ -752,14 +756,14 @@
         success: function (res) {
             if (res) {
                 console.log(res);
-                $("#satuan_id").empty();
-                $("#satuan_id").append('<option value="">Pilih Item</option>');
+                $(".satuan_id").empty();
+                $(".satuan_id").append('<option selected></option>');
                 $.each(res, function (key, value) {
-                    $("#satuan_id").append('<option value="' + value.id + '">' + value.nama +
+                    $(".satuan_id").append('<option value="' + value.id + '">' + value.nama +
                         '</option');
                 });
             } else {
-                $("#satuan_id").empty();
+                $(".satuan_id").empty();
             }
         }
     });
@@ -857,18 +861,13 @@
             success: (data) => {
                 if (data.error == true) {
                     $('#produkForm').trigger('reset');
-                    $('#modal-create').modal('hide');
+                    // $('#modal-create').modal('hide');
                     $('#Submitmodalcreate').html('Kirim');
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
                         text: data.msg,
-                    }).then((result) => {
-                        if (result.value) {
-                            $('.datatable').DataTable().ajax.reload();
-                            location.reload();
-                        }
-                    });
+                    })
                 } else {
                     $('#produkForm').trigger('reset');
                     $('#modal-create').modal('hide');
