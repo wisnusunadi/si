@@ -174,7 +174,7 @@ class GudangController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('ids', function ($d) {
-                return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
+                return '<input type="checkbox" class="cb-child1" value="' . $d->id . '">';
             })
             ->addColumn('seri', function ($d) {
                 return '<input type="text" class="form-control" id="noseri[]" value="' . $d->noseri . '" disabled>';
@@ -410,6 +410,7 @@ class GudangController extends Controller
 
     function delete_noseri(Request $request) {
         try {
+            // dd($request->all());
             $check = NoseriTGbj::whereIn('noseri_id', $request->noseriid);
             $dataseri = [];
 
@@ -435,7 +436,7 @@ class GudangController extends Controller
                 }
                 return response()->json(['error'=>false, 'msg'=> 'Mohon Tunggu Persetujuan dari Manajer']);
             } else {
-                return response()->json(['error' => false, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
+                return response()->json(['error' => true, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
             }
         } catch (\Exception $e) {
             return response()->json([

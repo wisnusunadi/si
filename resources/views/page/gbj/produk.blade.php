@@ -5,6 +5,7 @@
 @section('content')
 <div class="content-header">
     <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
+
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
@@ -310,6 +311,7 @@
                                 <div class="tab-pane fade active show" id="custom-tabs-four-home" role="tabpanel"
                                     aria-labelledby="custom-tabs-four-home-tab">
                                     <form action="" id="noseriForm" name="noseriForm">
+                                        <input type="hidden" name="action_by" id="actionby" value="{{ Auth::user()->id }}">
                                         <table class="table scan-produk">
                                             <thead>
                                                 <tr>
@@ -561,7 +563,7 @@
                 .find('input[type=text]')
                 .prop('disabled', true);
             }
-                
+
         });
 
         $("#head-cb1").on('click', function () {
@@ -641,8 +643,6 @@
     $('#custom-tabs-four-tab').click(function () {
         $('#hapus').prop('disabled', false);
     });
-
-
 
 </script>
 
@@ -1027,6 +1027,58 @@
             }
         });
     }
+
+    $('#hapus').click(function(e){
+        const cekid = [];
+        const layout = [];
+        let a = $('.scan-produk').DataTable().column(0).nodes()
+            .to$().find('input[type=checkbox]:checked');
+        $(a).each(function (index, elm) {
+            cekid.push($(elm).val());
+            layout.push($(elm).parent().next().children().val());
+        });
+        // console.log(layout);
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/v2/gbj/delete-noseri',
+                    type: 'post',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        noseriid: cekid,
+                        actionby: $('#actionby').val()
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.error == true) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: res.msg,
+                            })
+                        } else {
+                            Swal.fire(
+                                'Deleted!',
+                                res.msg,
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            })
+                        }
+                    }
+                });
+                }
+            })
+    })
     var title = $(this).parent().prev().prev().prev().prev().html();
     // modal noseri
     $(document).on('click', '.stokmodal', function () {
