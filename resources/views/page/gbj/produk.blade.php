@@ -320,9 +320,7 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-
                                             </tbody>
-
                                         </table>
                                 </div>
                                 <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
@@ -330,28 +328,31 @@
                                     <table class="table scan-produk1">
                                         <thead>
                                             <tr>
-                                                <th>No</th>
+                                                <th><input type="checkbox" id="head-cb1"></th>
                                                 <th>No. Seri</th>
                                                 <th>Digunakan</th>
                                                 <th>Layout</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-
                                         </tbody>
-
                                     </table>
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
+                    <div class="card">
+                      <div class="card-body">
+                        <p><strong> No Seri Yang Sudah Digunakan </strong></p>
+                        <p class="noSeriIsUsed"></p>
+                      </div>
+                    </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-primary" id="ubahSeri">Simpan</button>
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah
                     Layout</button>
+                <button type="button" class="btn btn-danger" id="hapus">Hapus</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
             </div>
             </form>
@@ -544,6 +545,50 @@
                 .to$()
                 .find('input[type=checkbox]')
                 .prop('checked', isChecked);
+
+            if (isChecked) {
+                $('.scan-produk').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=text]')
+                .prop('disabled', false);
+            } else {
+                $('.scan-produk').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=text]')
+                .prop('disabled', true);
+            }
+                
+        });
+
+        $("#head-cb1").on('click', function () {
+            var isChecked = $("#head-cb1").prop('checked')
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk1').DataTable()
+                .column(0)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
+
+            if (isChecked) {
+                $('.scan-produk1').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=text]')
+                .prop('disabled', false);
+            } else {
+                $('.scan-produk1').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=text]')
+                .prop('disabled', true);
+            }
         });
 
         $.ajax({
@@ -587,6 +632,17 @@
         placeholder: "Choose...",
         allowClear: true
     });
+
+    // hidden hapus
+    $('#custom-tabs-four-profile-tab').click(function () {
+        $('#hapus').prop('disabled', true);
+    });
+
+    $('#custom-tabs-four-tab').click(function () {
+        $('#hapus').prop('disabled', false);
+    });
+
+
 
 </script>
 
@@ -1018,7 +1074,7 @@
                 url: '/api/gbj/noseri-done/' + id,
             },
             columns: [{
-                    data: 'DT_RowIndex'
+                    data: 'ids'
                 },
                 {
                     data: 'seri'
@@ -1037,6 +1093,22 @@
 
         $('.daftar-stok').modal('show');
     });
+
+    $('.scan-produk').on('click', '.cb-child', function () {
+        if($(this).is(':checked')){
+            $(this).parent().next().children().attr('disabled', false);
+        }else{
+            $(this).parent().next().children().attr('disabled', true);
+        }
+    })
+
+    $('.scan-produk1').on('click', '.cb-child', function () {
+        if($(this).is(':checked')){
+            $(this).parent().next().children().attr('disabled', false);
+        }else{
+            $(this).parent().next().children().attr('disabled', true);
+        }
+    })
 
     // modal history
     $(document).on('click', '.viewStock', function () {

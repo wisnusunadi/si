@@ -134,7 +134,7 @@ class GudangController extends Controller
                 return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
             })
             ->addColumn('seri', function ($d) {
-                return $d->noseri;
+                return '<input type="text" class="form-control" id="noseri[]" value="' . $d->noseri . '" disabled>';
             })
             ->addColumn('Layout', function ($d) use ($layout) {
                 $opt = '';
@@ -156,7 +156,7 @@ class GudangController extends Controller
                         </button>
                     </a>';
             })
-            ->rawColumns(['ids', 'Layout', 'aksi'])
+            ->rawColumns(['ids', 'Layout', 'aksi', 'seri'])
             ->make(true);
     }
 
@@ -177,7 +177,7 @@ class GudangController extends Controller
                 return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
             })
             ->addColumn('seri', function ($d) {
-                return $d->noseri;
+                return '<input type="text" class="form-control" id="noseri[]" value="' . $d->noseri . '" disabled>';
             })
             ->addColumn('Layout', function ($d) use ($layout) {
                 $opt = '';
@@ -202,7 +202,7 @@ class GudangController extends Controller
                         </button>
                     </a>';
             })
-            ->rawColumns(['ids', 'Layout', 'aksi'])
+            ->rawColumns(['ids', 'Layout', 'aksi', 'seri'])
             ->make(true);
     }
 

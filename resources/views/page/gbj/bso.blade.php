@@ -235,16 +235,30 @@
                         <input type="text" name="" class="form-control barcode">
                     </div>
                 </div>
-                <table class="table table-striped scan-produk" id="scan">
-                    <thead>
-                        <tr>
-                            <th>Nomor Seri</th>
-                            <th><input type="checkbox" id="head-cb"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                    </tbody>
-                </table>
+                <div class="row">
+                    <div class="col-8">
+                        <table class="table table-striped scan-produk" id="scan">
+                            <thead>
+                                <tr>
+                                    <th>Nomor Seri</th>
+                                    <th><input type="checkbox" id="head-cb"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-4">
+                        <div class="card">
+                        <div class="card-header">
+                            <h5 class="card-title">Preview No Seri Setelah Scan</h5>
+                        </div>
+                          <div class="card-body">
+                            <span class="card-text preview-scan">Some quick example text to build on the card title and make up the bulk of the card's content.</span>
+                          </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-info" id="simpan">Simpan</button>
@@ -521,9 +535,18 @@
         dpp = $(this).data('dpp');
         // dpp = $(this).parent().prev()
         // console.log(jml);
-
-        let temp_array = make_temp_array(prd1)
-
+        let temp_array = make_temp_array(prd1);
+        // if(prd1[dpp].noseri.length > 0){
+        //     console.log("noseri", prd1[dpp].noseri);
+        // }
+        for (const dataseri in prd1[dpp]) {
+            if (dataseri == "noseri") {
+                for (let i = 0; i < prd1[dpp][dataseri].length; i++) {
+                    dataTampungSeri.push(prd1[dpp][dataseri][i])
+                }
+            }
+        }
+        
         mytable = $('.scan-produk').DataTable({
             processing: false,
             serverSide: false,
@@ -570,6 +593,7 @@
             },
         });
         let s = $('.modal-scan').modal('show');
+        console.log("dataTampungSeri", dataTampungSeri);
         $('.modal-scan').on('shown.bs.modal', function () {
             $('#scan_filter').addClass('hidden');
         });
@@ -581,6 +605,7 @@
             if(barcode.length >= 10){
                 if (data !== undefined) {
                     $('.cb-child').prop('checked', true);
+                    dataTampungSeri.push(data.noseri);
                     $(this).val('');
                 }else{
                     Swal.fire({
