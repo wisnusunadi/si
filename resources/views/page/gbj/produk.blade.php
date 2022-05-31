@@ -663,14 +663,11 @@
         $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
     });
 
-<<<<<<< HEAD
-=======
     $('#custom-tabs-four-wait-approved-tab').click(function () {
         $('.hapusSeri').prop('disabled', true);
         $('.simpanSeri').prop('disabled', true);
     });
 
->>>>>>> fe255b15dd9fa16814545ba0d54d10416ea5f188
 </script>
 
 {{-- data --}}
@@ -1055,7 +1052,7 @@
         });
     }
 
-    $('#hapus').click(function(e){
+    $('.hapusSeri').click(function(e){
         const cekid = [];
         const layout = [];
         let a = $('.scan-produk').DataTable().column(0).nodes()
@@ -1105,6 +1102,48 @@
                 });
                 }
             })
+    })
+
+    $('#simpanSeriBelumDigunakan').click(function(e){
+        let seri = {};
+        const cekid = [];
+        const serii = [];
+        const ori = [];
+        let a = $('.scan-produk').DataTable().column(0).nodes()
+            .to$().find('input[type=checkbox]:checked');
+        $(a).each(function (index, elm) {
+            cekid.push($(elm).val());
+            serii.push($(elm).parent().next().children()[1].value)
+        });
+
+        $.ajax({
+            url: '/api/v2/gbj/edit-noseri',
+            type: 'post',
+            data: {
+                "_token": "{{ csrf_token() }}",
+                data: cekid,
+                new: serii,
+                actionby: $('#actionby').val()
+            },
+            dataType: 'json',
+            success: function(res) {
+                if (res.error == true) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: res.msg,
+                    })
+                } else {
+                    Swal.fire(
+                        'Updated!',
+                        res.msg,
+                        'success'
+                    ).then(function () {
+                        location.reload();
+                    })
+                }
+            }
+        })
     })
     var title = $(this).parent().prev().prev().prev().prev().html();
     // modal noseri
@@ -1437,13 +1476,13 @@
 
     })
 
-    $(document).on('click', '#simpanSeriSudahDigunakan', function () {
-        alert('simpanSeriSudahDigunakan');
-    });
+    // $(document).on('click', '#simpanSeriSudahDigunakan', function () {
+    //     alert('simpanSeriSudahDigunakan');
+    // });
 
-    $(document).on('click', '#simpanSeriBelumDigunakan', function () {
-        alert('simpanSeriBelumDigunakan');
-    });
+    // $(document).on('click', '#simpanSeriBelumDigunakan', function () {
+    //     alert('simpanSeriBelumDigunakan');
+    // });
 
 </script>
 @stop

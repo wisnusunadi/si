@@ -134,7 +134,7 @@ class GudangController extends Controller
                 return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
             })
             ->addColumn('seri', function ($d) {
-                return '<input type="text" class="form-control" id="noseri[]" value="' . $d->noseri . '" disabled>';
+                return '<input type="hidden" class="form-control" id="noseriOri[]" value="' . $d->noseri . '"><input type="text" class="form-control" id="noseri[]" value="' . $d->noseri . '" disabled>';
             })
             ->addColumn('Layout', function ($d) use ($layout) {
                 $opt = '';
@@ -177,7 +177,7 @@ class GudangController extends Controller
                 return '<input type="checkbox" class="cb-child1" value="' . $d->id . '">';
             })
             ->addColumn('seri', function ($d) {
-                return '<input type="text" class="form-control" id="noseri[]" value="' . $d->noseri . '" disabled>';
+                return '<input type="hidden" class="form-control" id="noseriOri[]" value="' . $d->noseri . '"><input type="text" class="form-control" id="noseri[]" value="' . $d->noseri . '" disabled>';
             })
             ->addColumn('Layout', function ($d) use ($layout) {
                 $opt = '';
@@ -545,29 +545,30 @@ class GudangController extends Controller
 
     function edit_noseri(Request $request) {
         try {
-            dd($request->all());
-            // $dataseri = [];
-            // $data = NoseriBarangJadi::whereIn('id',$request->noseriid);
-            // $check = NoseriBarangJadi::whereIn('noseri', $request->new)->get();
-            // if (count($check) > 0) {
-            //     foreach($check as $d) {
-            //         array_push($dataseri, $d->noseri);
-            //     }
-            //     return response()->json(['error' => false, 'msg' => 'Noseri '.implode(', ', $dataseri).' Sudah Terdaftar']);
-            // } else {
-            //     foreach($data->get() as $k => $c) {
-            //         NoseriBrgJadiLog::create([
-            //             'noseri_id' => $c->id,
-            //             'data_lama' => $c->noseri,
-            //             'data_baru' => $request->new[$k],
-            //             'action' => 'update',
-            //             'action_by' => $request->actionby,
-            //             'status' => 'waiting'
-            //         ]);
-            //         NoseriBarangJadi::find($c->id)->update(['noseri' => $request->new[$k], 'is_change' => 0]);
-            //     }
-            //     return response()->json(['error' => false, 'msg' => 'Mohon Tunggu Persetujuan dari Manager']);
-            // }
+            // dd($request->all());
+            $dataseri = [];
+            $data = NoseriBarangJadi::whereIn('id',$request->data);
+            $check = NoseriBarangJadi::whereIn('noseri', $request->new)->get();
+            if (count($check) > 0) {
+                foreach($check as $d) {
+                    array_push($dataseri, $d->noseri);
+                }
+                return response()->json(['error' => true, 'msg' => 'Noseri '.implode(', ', $dataseri).' Sudah Terdaftar']);
+            } else {
+                foreach($data->get() as $k => $c) {
+                    NoseriBrgJadiLog::create([
+                        'noseri_id' => $c->id,
+                        'data_lama' => $c->noseri,
+                        'data_baru' => $request->new[$k],
+                        'action' => 'update',
+                        'action_by' => $request->actionby,
+                        'status' => 'waiting'
+                    ]);
+                    NoseriBarangJadi::find($c->id)->update(['noseri' => $request->new[$k], 'is_change' => 0]);
+                }
+
+                return response()->json(['error' => false, 'msg' => 'Mohon Tunggu Persetujuan dari Manager']);
+            }
 
         } catch (\Exception $e) {
             return response()->json([
