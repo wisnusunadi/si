@@ -1104,47 +1104,7 @@
             })
     })
 
-    $('#simpanSeriBelumDigunakan').click(function(e){
-        let seri = {};
-        const cekid = [];
-        const serii = [];
-        const ori = [];
-        let a = $('.scan-produk').DataTable().column(0).nodes()
-            .to$().find('input[type=checkbox]:checked');
-        $(a).each(function (index, elm) {
-            cekid.push($(elm).val());
-            serii.push($(elm).parent().next().children()[1].value)
-        });
 
-        $.ajax({
-            url: '/api/v2/gbj/edit-noseri',
-            type: 'post',
-            data: {
-                "_token": "{{ csrf_token() }}",
-                data: cekid,
-                new: serii,
-                actionby: $('#actionby').val()
-            },
-            dataType: 'json',
-            success: function(res) {
-                if (res.error == true) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: res.msg,
-                    })
-                } else {
-                    Swal.fire(
-                        'Updated!',
-                        res.msg,
-                        'success'
-                    ).then(function () {
-                        location.reload();
-                    })
-                }
-            }
-        })
-    })
     var title = $(this).parent().prev().prev().prev().prev().html();
     // modal noseri
     $(document).on('click', '.stokmodal', function () {
@@ -1476,13 +1436,114 @@
 
     })
 
-    // $(document).on('click', '#simpanSeriSudahDigunakan', function () {
-    //     alert('simpanSeriSudahDigunakan');
-    // });
+    $(document).on('click', '#simpanSeriSudahDigunakan', function () {
+        let seri = {};
+        const cekid = [];
+        const serii = [];
+        const ori = [];
+        let a = $('.scan-produk1').DataTable().column(0).nodes()
+            .to$().find('input[type=checkbox]:checked');
+        $(a).each(function (index, elm) {
+            cekid.push($(elm).val());
+            serii.push($(elm).parent().next().children()[1].value)
+        });
 
-    // $(document).on('click', '#simpanSeriBelumDigunakan', function () {
-    //     alert('simpanSeriBelumDigunakan');
-    // });
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, change it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/v2/gbj/edit-noseri',
+                        type: 'post',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            data: cekid,
+                            new: serii,
+                            actionby: $('#actionby').val()
+                        },
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res.error == true) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: res.msg,
+                                })
+                            } else {
+                                Swal.fire(
+                                    'Updated!',
+                                    res.msg,
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                })
+                            }
+                        }
+                    })
+                }
+            })
+    });
+
+    $(document).on('click', '#simpanSeriBelumDigunakan', function () {
+        let seri = {};
+        const cekid = [];
+        const serii = [];
+        const ori = [];
+        let a = $('.scan-produk').DataTable().column(0).nodes()
+            .to$().find('input[type=checkbox]:checked');
+        $(a).each(function (index, elm) {
+            cekid.push($(elm).val());
+            serii.push($(elm).parent().next().children()[1].value)
+        });
+
+        Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, change it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/v2/gbj/edit-noseri',
+                    type: 'post',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        data: cekid,
+                        new: serii,
+                        actionby: $('#actionby').val()
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.error == true) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: res.msg,
+                            })
+                        } else {
+                            Swal.fire(
+                                'Updated!',
+                                res.msg,
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+    });
 
 </script>
 @stop
