@@ -1241,7 +1241,7 @@
         }
     })
 
-    $('.scan-produk1').on('click', '.cb-child', function () {
+    $('.scan-produk1').on('click', '.cb-child1', function () {
         if($(this).is(':checked')){
             $(this).parent().next().children().attr('disabled', false);
         }else{
