@@ -148,8 +148,14 @@
         };
     }(jQuery));
     $(document).ready(function () {
-        $('.ke').select2();
-        $('.product').select2();
+        $('.ke').select2({
+            placeholder: "Pilih Tujuan",
+            allowClear: true
+        });
+        $('.product').select2({
+            placeholder: "Pilih Produk",
+            allowClear: true
+        });
 
         $(".number-input").inputFilter(function (value) {
             return /^\d*$/.test(value);
@@ -176,7 +182,7 @@
                 if(res) {
                     console.log(res);
                     $("#gdg_brg_jadi_id").empty();
-                    $("#gdg_brg_jadi_id").append('<option value="">Pilih Item</option>');
+                    $("#gdg_brg_jadi_id").append('<option selected></option>');
                     $.each(res, function(key, value) {
                         $("#gdg_brg_jadi_id").append('<option value="'+value.id+'">'+value.produk.nama+' '+value.nama+'</option');
                     });
@@ -207,7 +213,7 @@
                 if(res) {
                     console.log(res);
                     $("#ke").empty();
-                    $("#ke").append('<option value="">Pilih Item</option>');
+                    $("#ke").append('<option selected></option>');
                     $.each(res, function(key, value) {
                         $("#ke").append('<option value="'+value.id+'">'+value.nama+'</option');
                     });

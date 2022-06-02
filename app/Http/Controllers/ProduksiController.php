@@ -1133,7 +1133,7 @@ class ProduksiController extends Controller
                 $vall = 0;
                 $val = $datacek/$x * 100;
                 $vall += $val/2;
-                return $data->detailpesanan->penjualanproduk->nama.' '.$vall.'%';
+                return $data->detailpesanan->penjualanproduk->nama;
             })
             ->addColumn('produk', function ($data) {
                 if (empty($data->gudangbarangjadi->nama)) {

@@ -304,7 +304,7 @@
                                         aria-controls="custom-tabs-four-profile" aria-selected="false">Sudah
                                         Digunakan</a>
                                 </li>
-                                                                <li class="nav-item">
+                                <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-four-wait-approved-tab" data-toggle="pill"
                                         href="#custom-tabs-four-wait-approved" role="tab"
                                         aria-controls="custom-tabs-four-wait-approved" aria-selected="false">Menunggu Persetujuan</a>
@@ -387,9 +387,7 @@
                             <b>Produk</b>
                             <p id="namaa">Ambulatory</p>
                         </div>
-                        {{-- <div class="col">
-                            <b>Nomor SO</b><p>8457938475938475</p>
-                        </div> --}}
+
                     </div>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
