@@ -268,6 +268,10 @@
                                                         <div><small class="text-muted">Harga Produk</small></div>
                                                         <div><b id="harga_produk"></b></div>
                                                     </div>
+                                                    <div class="filter">
+                                                        <div><small class="text-muted">Jenis Produk</small></div>
+                                                        <div><b id="jenis_produk"><span class="badge red-text">Non Ekatalog</span><span class="badge purple-text">Ekatalog</span></b></div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

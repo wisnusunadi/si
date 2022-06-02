@@ -28,6 +28,7 @@
 
 @section('adminlte_css')
 <link rel="stylesheet" href="{{asset('vendor/icheck/icheck.min.css')}}">
+<link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}">
 <style>
      td.dt-control {
         background: url("/assets/image/logo/plus.png") no-repeat center center;
@@ -81,6 +82,10 @@
         font-variant-numeric: tabular-nums;
     }
 
+    .card > .media > .radio > input[type="radio"][name="jenis_laporan"]:checked{
+        background-color: black;
+    }
+
     @media screen and (min-width: 992px) {
         .labelket{
             text-align: right;
@@ -108,6 +113,8 @@
         .dropdown-item {
             font-size: 14px;
         }
+
+
     }
 
     @media screen and (max-width: 991px) {
@@ -401,7 +408,7 @@
 
         <div class="modal fade" id="laporanmodal" tabindex="-1" role="dialog" aria-labelledby="laporanmodal"
             aria-hidden="true">
-            <div class="modal-dialog modal-md" role="document">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content" style="margin: 10px">
                     <div class="modal-header bg-navy">
                         <h4 id="modal-title">Export Laporan</h4>
@@ -409,52 +416,62 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body" id="laporan">
-                        <div class="card border-primary">
-                            <div class="media mx-2 my-3">
-                                <div class="radio icheck-primary mx-3">
-                                    <input id="no_so" type="radio" name="jenis_laporan" value="no_so" />
-                                    <label for="no_so"></label>
-                                </div>
-                                <div class="media-body align-middle">
-                                    <h5><b>Sales Order</b></h5>
-                                    <p>Laporan akan ditampilkan berdasarkan Sales Order</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card border-primary">
-                            <div class="media mx-2 my-3">
-                                <div class="radio icheck-primary mx-3">
-                                    <input id="no_po" type="radio" name="jenis_laporan" value="no_po" />
-                                    <label for="no_po"></label>
-                                </div>
-                                <div class="media-body align-middle">
-                                    <h5><b>Purchase Order</b></h5>
-                                    <p>Laporan akan ditampilkan berdasarkan Purchase Order</p>
+                    <div class="modal-body px-4" id="laporan">
+                        <div class="row row-cols-1 row-cols-md-2 g-4">
+                            <div class="col my-2">
+                                <div class="card h-100">
+                                    <div class="media mx-2 my-auto">
+                                        <div class="radio icheck-primary mx-3">
+                                            <input id="no_so" type="radio" name="jenis_laporan" value="no_so" class="pilih_laporan" />
+                                            <label for="no_so"></label>
+                                        </div>
+                                        <div class="media-body align-middle mr-2">
+                                            <h5><b>Sales Order</b></h5>
+                                            <p>Laporan akan ditampilkan berdasarkan Sales Order</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card border-primary">
-                            <div class="media mx-2 my-3">
-                                <div class="radio icheck-primary mx-3">
-                                    <input id="no_sj" type="radio" name="jenis_laporan" value="no_sj" />
-                                    <label for="no_sj"></label>
-                                </div>
-                                <div class="media-body align-middle">
-                                    <h5><b>Surat Jalan</b></h5>
-                                    <p>Laporan akan ditampilkan berdasarkan Surat Jalan</p>
+                            <div class="col my-2">
+                                <div class="card h-100">
+                                    <div class="media mx-2 my-auto">
+                                        <div class="radio icheck-primary mx-3">
+                                            <input id="no_po" type="radio" name="jenis_laporan" value="no_po" class="pilih_laporan" />
+                                            <label for="no_po"></label>
+                                        </div>
+                                        <div class="media-body align-middle mr-2">
+                                            <h5><b>Purchase Order</b></h5>
+                                            <p>Laporan akan ditampilkan berdasarkan Purchase Order</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="card border-primary">
-                            <div class="media mx-2 my-3">
-                                <div class="radio icheck-primary mx-3">
-                                    <input id="paket_produk" type="radio" name="jenis_laporan" value="paket_produk" />
-                                    <label for="paket_produk"></label>
+                            <div class="col my-2">
+                                <div class="card h-100">
+                                    <div class="media mx-2 my-auto">
+                                        <div class="radio icheck-primary mx-3">
+                                            <input id="no_sj" type="radio" name="jenis_laporan" value="no_sj" class="pilih_laporan" />
+                                            <label for="no_sj"></label>
+                                        </div>
+                                        <div class="media-body align-middle mr-2">
+                                            <h5><b>Surat Jalan</b></h5>
+                                            <p>Laporan akan ditampilkan berdasarkan Surat Jalan</p>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="media-body align-middle">
-                                    <h5 class="align-items-center"><b>Paket Produk</b></h5>
-                                    <p>Laporan akan ditampilkan berdasarkan Paket Produk</p>
+                            </div>
+                            <div class="col my-2">
+                                <div class="card h-100">
+                                    <div class="media mx-2 my-auto">
+                                        <div class="radio icheck-primary mx-3">
+                                            <input id="paket_produk" type="radio" name="jenis_laporan" value="paket_produk" class="pilih_laporan" />
+                                            <label for="paket_produk"></label>
+                                        </div>
+                                        <div class="media-body align-middle mr-2">
+                                            <h5><b>Paket Produk</b></h5>
+                                            <p>Laporan akan ditampilkan berdasarkan Paket Produk</p>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -472,7 +489,7 @@
 
 @section('adminlte_js')
 <script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
-<link rel="stylesheet" href="{{ asset('assets/rowgroup/rowGroup.bootstrap4.min.css') }}"> --}}
+
 
 {{-- {{-- <!-- <script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
 <script src="{{ asset('assets/button/jszip.min.js') }}"></script>
@@ -657,8 +674,9 @@
 
             window.location.href = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y + '/' + tampilan_export;
             setTimeout(function() {
+                $("#laporanmodal").modal('hide');
                 $('#loader').fadeOut();
-            }, 300);
+            }, 2000);
             // $.ajax({
             //     url:
             //     beforeSend: function() {
@@ -924,7 +942,6 @@
 
             }
         });
-
 
         $('.customer_id').on('keyup change', function() {
             if ($(this).val() != "") {

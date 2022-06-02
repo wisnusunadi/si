@@ -802,7 +802,7 @@
 
                                 @endif
                             </td>
-
+                            @if($countdet <= 0)
                             <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->jumlah}}</td>
                             <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->harga}}</td>
                             <td rowspan="{{$e->DetailPesananProduk->count()}}">{{$e->ongkir}}</td>
@@ -825,7 +825,9 @@
                                 {{$d->Spa->ket}}
                                 @elseif($d->Spb)
                                 {{$d->Spb->ket}}
-                                @endif</td>
+                                @endif
+                            </td>
+                            @endif
                             @endif
                         </tr>
                         <?php $countdet++; ?>
