@@ -48,9 +48,21 @@ use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class GudangController extends Controller
 {
-    // get
-    public function get_data_barang_jadi()
+    function updateStokGudang($id)
     {
+        // $id = $this->id;
+        $d = NoseriBarangJadi::whereHas('gudang', function($q) use($id) {
+            $q->where('gdg_barang_jadi_id', $id);
+        })->where('is_aktif', 1)->count();
+        $a = NoseriBarangJadi::whereHas('gudang', function($q) use($id) {
+            $q->where('gdg_barang_jadi_id', $id);
+        })->where('is_aktif', 1)->where('is_ready', 0)->count();
+        GudangBarangJadi::find($id)->update(['stok' => $d, 'stok_siap' => $a]);
+    }
+    // get
+    public function get_data_barang_jadi(Request $request)
+    {
+
         $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get()->sortBy('produk.nama');
         return datatables()->of($data)
             ->addIndexColumn()
@@ -62,7 +74,9 @@ class GudangController extends Controller
             })
             ->addColumn('jumlah', function ($data) {
                 $d = $data->get_sum_noseri();
-                return $d . ' ' . $data->satuan->nama;
+                $a = $data->get_sum_seri_siap();
+                $this->updateStokGudang($data->id);
+                return $d . ' ' . $data->satuan->nama.'<br><span class="badge badge-dark">Stok Siap: '.$a.' '.$data->satuan->nama.'</span>';
             })
             ->addColumn('jumlah1', function ($data) {
                 $d = $data->get_sum_noseri();
@@ -101,7 +115,7 @@ class GudangController extends Controller
                             </button>
                         </a>';
             })
-            ->rawColumns(['action', 'action_direksi'])
+            ->rawColumns(['action', 'action_direksi', 'jumlah'])
             ->make(true);
     }
 
@@ -477,8 +491,11 @@ class GudangController extends Controller
                 ->addColumn('checkbox', function($d) {
                     return '<input type="checkbox" id="noseriid" name="id" value="'.$d->noseri_id.'">';
                 })
+                ->addColumn('noseri_lama', function($d) {
+                    return $d->data_lama;
+                })
                 ->addColumn('noseri', function($d) {
-                    return $d->noseri->noseri;
+                    return $d->data_baru == null ? '-' : $d->data_baru;
                 })
                 ->editColumn('action',function($d){
                     return $d->action == 'delete' ? '<span class="badge badge-danger">Hapus</span>': '<span class="badge badge-info">Ubah</span>';
@@ -674,15 +691,31 @@ class GudangController extends Controller
     function proses_update_noseri(Request $request)
     {
         try {
-            $data = NoseriBarangJadi::whereIn('id',$request->noseriid);
-            foreach($data->get() as $k => $c) {
-                NoseriBrgJadiLog::where('noseri_id', $c->id)->where([
+            if ($request->is_acc == 'rejected') {
+                $a = NoseriBrgJadiLog::whereIn('noseri_id', $request->noseriid)->where([
                     'action' => 'update',
                     'status' => 'waiting'
-                ])->update(['status' => 'approved', 'acc_by' => $request->accby]);
-                NoseriBarangJadi::find($c->id)->update(['is_change' => 1]);
+                    ])->get()->pluck('data_lama');
+                for ($i=0; $i < count($a); $i++) {
+                    NoseriBrgJadiLog::where('noseri_id', $request->noseriid[$i])->where([
+                        'action' => 'update',
+                        'status' => 'waiting'
+                    ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                    NoseriBarangJadi::where('id', $request->noseriid[$i])->update(['is_change' => 1, 'noseri'=> $a[$i]]);
+                }
+                return response()->json(['error' => false, 'msg' => 'Noseri Batal Diubah']);
+            } else {
+                // return 'acc';
+                $data = NoseriBarangJadi::whereIn('id',$request->noseriid);
+                foreach($data->get() as $k => $c) {
+                    NoseriBrgJadiLog::where('noseri_id', $c->id)->where([
+                        'action' => 'update',
+                        'status' => 'waiting'
+                    ])->update(['status' => 'approved', 'acc_by' => $request->accby]);
+                    NoseriBarangJadi::find($c->id)->update(['is_change' => 1]);
+                }
+                return response()->json(['error' => false, 'msg' => 'Noseri Berhasil Diubah']);
             }
-            return response()->json(['error' => false, 'msg' => 'Noseri Berhasil Diubah']);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,

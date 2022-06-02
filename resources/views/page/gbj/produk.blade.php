@@ -351,7 +351,8 @@
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>No. Seri</th>
+                                            <th>No. Seri Lama</th>
+                                            <th>No. Seri Baru</th>
                                             <th>Permintaan</th>
                                         </tr>
                                     </thead>
@@ -1179,6 +1180,7 @@
             columns: [{
                     data: 'DT_RowIndex'
                 },
+                {data: 'noseri_lama'},
                 {
                     data: 'noseri'
                 },

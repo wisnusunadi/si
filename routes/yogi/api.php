@@ -22,6 +22,7 @@ Route::prefix('/v2')->group(function() {
         Route::post('list-update-noseri', [GudangController::class, 'list_update_noseri']);
         Route::post('proses-delete-noseri', [GudangController::class, 'proses_delete_noseri']);
         Route::post('proses-update-noseri', [GudangController::class, 'proses_update_noseri']);
+        Route::post('tets',[GudangController::class, 'updateStokGudang']);
     });
 
 });

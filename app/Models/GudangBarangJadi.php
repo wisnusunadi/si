@@ -13,7 +13,7 @@ class GudangBarangJadi extends Model
     use HasFactory;
 
     protected $table = "gdg_barang_jadi";
-    protected $fillable = ['produk_id', 'variasi', 'stok', 'ruang', 'updated_by', 'created_by'];
+    protected $fillable = ['produk_id', 'variasi', 'stok', 'ruang', 'updated_by', 'created_by', 'stok_siap'];
 
     public function noseri()
     {
@@ -245,6 +245,15 @@ class GudangBarangJadi extends Model
         $d = NoseriBarangJadi::whereHas('gudang', function($q) use($id) {
             $q->where('gdg_barang_jadi_id', $id);
         })->where('is_aktif', 1)->count();
+        return $d;
+    }
+
+    function get_sum_seri_siap()
+    {
+        $id = $this->id;
+        $d = NoseriBarangJadi::whereHas('gudang', function($q) use($id) {
+            $q->where('gdg_barang_jadi_id', $id);
+        })->where('is_aktif', 1)->where('is_ready', 0)->count();
         return $d;
     }
 }
