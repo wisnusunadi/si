@@ -27,6 +27,7 @@
 @stop
 
 @section('adminlte_css')
+<link rel="stylesheet" href="{{asset('vendor/icheck/icheck.min.css')}}">
 <style>
      td.dt-control {
         background: url("/assets/image/logo/plus.png") no-repeat center center;
@@ -254,10 +255,15 @@
                     <div class="card-body">
                         <h5>Laporan Penjualan</h5>
                         <div class="table-responsive">
-                            <a id="exportbutton" href="{{route('penjualan.penjualan.export',['jenis'=> 'semua','customer_id'=> 'semua','tgl_awal'=> '0','tgl_akhir'=>'0','seri' => 'kosong','tampilan' => 'unmerge'])}}"><button class="btn btn-success">
+                            <a id="exportbutton" data-toggle="modal" data-target="#laporanmodal" class="laporanmodal">
+                                <button class="btn btn-success">
                                     <i class="far fa-file-excel" id="load"></i> Export
                                 </button>
                             </a>
+                            {{-- <a id="exportbutton" href="{{route('penjualan.penjualan.export',['jenis'=> 'semua', 'customer_id' => 'semua','tgl_awal'=> '0','tgl_akhir'=>'0','seri' => 'kosong','tampilan' => 'unmerge'])}}"><button class="btn btn-success">
+                                    <i class="far fa-file-excel" id="load"></i> Export
+                                </button>
+                            </a> --}}
                             <span class="float-right filter">
                             </span>
                             <table class="table table-hover" id="semuatable" style="width:100%">
@@ -279,18 +285,6 @@
                                         <th>Status</th>
                                         <th>Keterangan</th>
                                     </tr>
-
-                                    {{-- <tr>
-                                        <th></th>
-                                        <th>No SO</th>
-                                        <th>No PO</th>
-                                        <th>No AKN</th>
-                                        <th>Customer / Distributor</th>
-                                        <th>Batas Kontrak</th>
-                                        <th>Instansi</th>
-                                        <th>Status</th>
-                                        <th>Keterangan</th>
-                                    </tr> --}}
                                 </thead>
                                 <tbody>
 
@@ -400,6 +394,74 @@
                                 </tbody>
                             </table>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade" id="laporanmodal" tabindex="-1" role="dialog" aria-labelledby="laporanmodal"
+            aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-navy">
+                        <h4 id="modal-title">Export Laporan</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="laporan">
+                        <div class="card border-primary">
+                            <div class="media mx-2 my-3">
+                                <div class="radio icheck-primary mx-3">
+                                    <input id="no_so" type="radio" name="jenis_laporan" value="no_so" />
+                                    <label for="no_so"></label>
+                                </div>
+                                <div class="media-body align-middle">
+                                    <h5><b>Sales Order</b></h5>
+                                    <p>Laporan akan ditampilkan berdasarkan Sales Order</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card border-primary">
+                            <div class="media mx-2 my-3">
+                                <div class="radio icheck-primary mx-3">
+                                    <input id="no_po" type="radio" name="jenis_laporan" value="no_po" />
+                                    <label for="no_po"></label>
+                                </div>
+                                <div class="media-body align-middle">
+                                    <h5><b>Purchase Order</b></h5>
+                                    <p>Laporan akan ditampilkan berdasarkan Purchase Order</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card border-primary">
+                            <div class="media mx-2 my-3">
+                                <div class="radio icheck-primary mx-3">
+                                    <input id="no_sj" type="radio" name="jenis_laporan" value="no_sj" />
+                                    <label for="no_sj"></label>
+                                </div>
+                                <div class="media-body align-middle">
+                                    <h5><b>Surat Jalan</b></h5>
+                                    <p>Laporan akan ditampilkan berdasarkan Surat Jalan</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card border-primary">
+                            <div class="media mx-2 my-3">
+                                <div class="radio icheck-primary mx-3">
+                                    <input id="paket_produk" type="radio" name="jenis_laporan" value="paket_produk" />
+                                    <label for="paket_produk"></label>
+                                </div>
+                                <div class="media-body align-middle">
+                                    <h5 class="align-items-center"><b>Paket Produk</b></h5>
+                                    <p>Laporan akan ditampilkan berdasarkan Paket Produk</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger pull-left" data-dismiss="modal">Cancel</button>
+                        <button type="button" class="btn btn-info pull-right" id="btn-export">Export</button>
                     </div>
                 </div>
             </div>
@@ -535,6 +597,91 @@
             }
 
         });
+
+        $(document).on('click', '.laporanmodal', function(event) {
+            event.preventDefault();
+            $('#laporanmodal').modal("show");
+            // $.ajax({
+            //     url: '/penjualan/pesanan/edit/' + id + '/' + jenis,
+            //     beforeSend: function() {
+            //         $('#loader').show();
+            //     },
+            //     // return the result
+            //     success: function(result) {
+            //         $('#editmodal').modal("show");
+            //         $('#edit').html(result).show();
+            //     },
+            //     complete: function() {
+            //         $('#loader').hide();
+            //     },
+            //     error: function(jqXHR, testStatus, error) {
+            //         console.log(error);
+            //         alert("Page " + '/penjualan/pesanan/edit/' + id + '/' + jenis +
+            //             " cannot open. Error:" + error);
+            //         $('#loader').hide();
+            //     },
+            //     timeout: 8000
+            // })
+        });
+
+        $(document).on('click', '#laporanmodal #btn-export', function(event) {
+            $('#loader').show();
+
+            var penjualan = [];
+            var tambahan = [];
+            var exportbutton = $('#exportbutton').val();
+            var tanggal_mulai = $('#tanggal_mulai').val();
+            var tanggal_akhir = $('#tanggal_akhir').val();
+            var customer_id = $('#customer_id').val();
+            var tampilan_export = $('input[type="radio"][name="tampilan_export"]:checked').val();
+
+            $("input[name=penjualan]:checked").each(function() {
+                penjualan.push($(this).val());
+            });
+
+            $("input[name=tambahan]:checked").each(function() {
+                tambahan.push($(this).val());
+            });
+
+            if (penjualan != 0) {
+                var x = penjualan;
+            } else {
+                var x = ['kosong']
+            }
+
+            if (tambahan != 0) {
+                var y = tambahan;
+            } else {
+                var y = ['kosong']
+            }
+
+            window.location.href = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y + '/' + tampilan_export;
+            setTimeout(function() {
+                $('#loader').fadeOut();
+            }, 300);
+            // $.ajax({
+            //     url:
+            //     beforeSend: function() {
+            //         $('#loader').show();
+            //     },
+            //     // return the result
+            //     success: function(result) {
+            //         // $('#editmodal').modal("show");
+            //         // $('#edit').html(result).show();
+            //     },
+            //     complete: f+unction() {
+            //         $('#loader').hide();
+            //     },
+            //     error: function(jqXHR, testStatus, error) {
+            //         // console.log(error);
+            //         // alert("Page " + '/penjualan/pesanan/edit/' + id + '/' + jenis +
+            //         //     " cannot open. Error:" + error);
+            //         // $('#loader').hide();
+            //     },
+            //     timeout: 8000
+            // })
+        });
+
 
         // var semuatable = $('#semuatable').DataTable({
         //     destroy: true,
@@ -774,7 +921,7 @@
                 row.child( format(row.data().id) ).show();
                 tr.addClass('shown');
                 detailtable(row.data().id);
-                
+
             }
         });
 

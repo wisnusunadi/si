@@ -329,49 +329,6 @@
                                                                                     </span>
                                                                                 </a>
                                                                             @endif
-                                                                            <!-- <span class="float-right filter">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <i class="fas fa-filter"></i> Filter
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <div class="dropdown-menu">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                <div class="px-3 py-3">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="form-group">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <label for="jenis_penjualan">Status</label>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="form-group">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="form-check">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <input class="form-check-input" type="checkbox" value="selesai" id="status1" name="status" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <label class="form-check-label" for="status1">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Sudah Dikirim
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </label>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="form-group">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="form-check">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <input class="form-check-input" type="checkbox" value="sebagian" id="status2" name="status" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <label class="form-check-label" for="status2">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Sebagian Dikirim
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </label>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="form-group">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <div class="form-check">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <input class="form-check-input" type="checkbox" value="belum" id="status3" name="status" />
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <label class="form-check-label" for="status3">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Belum Dikirim
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </label>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <div class="form-group">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <span class="float-right">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            <button class="btn btn-primary">
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                Cari
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </button>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </span>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            </div>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        </span> -->
                                                                         </div>
                                                                     </div>
                                                                     <div class="row">
@@ -484,38 +441,6 @@
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
-                                                                        <!-- <tr>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id" disabled></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>26-10-2021</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>ELITECH MINI/MEDICAL COMPRESSOR NEBULIZER PROMIST 2</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>2</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><span class="badge green-text">Sudah Dikirim</span></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><a type="button" class="noserishow" data-id="1"><i class="fas fa-search"></i></a></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </tr>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <tr>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id" disabled></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>26-10-2021</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>ELITECH ULTRASONIC POCKET DOPPLER</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>5</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><span class="badge green-text">Sudah Dikirim</span></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><a type="button" class="noserishow" data-id="2"><i class="fas fa-search"></i></a></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </tr>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <tr>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id available"></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>-</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>MTB 2 MTR</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>10</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><span class="badge red-text">Belum Dikirim</span></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </tr>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <tr>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><input type="checkbox" name="detail_produk_id" id="detail_produk_id" class="detail_produk_id available"></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>-</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>CENTRAL MONITOR PM-9000+ + PC + INSTALASI</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td>1</td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><span class="badge red-text">Belum Dikirim</span></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        <td><a type="button" class="noserishow" data-id="3"><i class="fas fa-search"></i></a></td>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    </tr> -->
                                                                     </tbody>
                                                                 </table>
                                                             </div>
@@ -651,6 +576,7 @@
                     searchable: false
                 }]
             });
+
             var belumkirimtable = $('#belumkirimtable').DataTable({
                 destroy: true,
                 processing: true,
@@ -756,8 +682,21 @@
                 }]
             });
 
-            $('#belumkirimtable').on('click', '.noserishow', function() {
+            function validasi(){
+                if(($('input[type="radio"][name="no_sj_exist"]:checked').val() == "baru" && ($('#no_invoice').val() != "" && !$('#no_invoice').hasClass('is-invalid')) && $('#tgl_kirim').val() != "" && ((($('input[type="radio"][name="pengiriman"]:checked').val() == "nonekspedisi" && $('#nama_pengirim').val() != "") ||
+                ($('input[type="radio"][name="pengiriman"]:checked').val() == "ekspedisi" && $('#ekspedisi_id').val() != "")))) || ($('input[type="radio"][name="no_sj_exist"]:checked').val() == "lama" && $("#sj_lama").val() != "")){
+                    $('#btnsimpan').attr('disabled', false);
+                }else{
+                    $('#btnsimpan').attr('disabled', true);
+                }
+            }
+
+            $(document).on('click', '#belumkirimtable .noserishow', function() {
                 var array = $(this).closest('tr').find('div[name="array_check[]"]').text();
+                if(array == "")
+                {
+                    array = "0";
+                }
                 var data = $(this).attr('data-id');
                 idtrf = <?php
                 if (!isset($data->pesanan->TFProduksi->id)) {
@@ -773,7 +712,7 @@
                 var jumlahkirim = $(this).closest('tr').find('.jumlah_kirim').val();
                 if(jumlahtransfer == jumlahkirim){
                     $('input[name="check_all_noseri"]').prop('checked', true);
-                }else{
+                } else {
                     $('input[name="check_all_noseri"]').prop('checked', false);
                 }
                 noseritable(data, array);
@@ -862,8 +801,10 @@
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        'url': '/api/logistik/so/detail/select/' + produk_id + '/' + part_id + '/' +
-                            pesanan_id + '/' + jenis_penjualan,
+                        // 'url': '/api/logistik/so/detail/select/' + produk_id + '/' + part_id + '/' +
+                        //     pesanan_id + '/' + jenis_penjualan,
+                        'url': '/api/logistik/so/detail/select/' + pesanan_id + '/' + jenis_penjualan,
+                        'data': {'produk_id': produk_id, 'part_id': part_id},
                         'dataType': 'json',
                         'type': 'GET',
                         'headers': {
@@ -955,18 +896,38 @@
             part_id = [];
 
             $('#belumkirimtable').on('click', 'input[name="check_all"]', function() {
-                if ($('input[name="check_all"]:checked').length > 0) {
-                    $('.check_detail').prop('checked', true);
-                    produk_id = [];
-                    part_id = [];
-                    produk_id.push('0');
-                    part_id.push('0');
+                var rows = $('#belumkirimtable').DataTable().rows({
+                    'search': 'applied'
+                }).nodes();
 
+                produk_id = [];
+                part_id = [];
+
+
+                if ($('input[name="check_all"]:checked').length > 0) {
+                    $('.check_detail:not(:disabled)', rows).prop('checked', true);
                     $('#kirim_produk').removeAttr('disabled');
                 } else if ($('input[name="check_all"]:checked').length <= 0) {
                     $('.check_detail').prop('checked', false);
                     $('#kirim_produk').prop('disabled', true);
                 }
+
+                produk_id = [];
+                $.each($(".detail_produk_id:checked", rows), function() {
+                    produk_id_arr = {};
+                    produk_id_arr.id = $(this).closest('tr').find('.detail_produk_id').attr('data-id');
+                    produk_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                    produk_id_arr.array_no_seri = $(this).closest('tr').find('div[name="array_check[]"]').text();
+                    produk_id.push(produk_id_arr);
+                });
+                part_id = [];
+                $.each($(".detail_part_id:checked", rows), function() {
+                    part_id_arr = {};
+                    part_id_arr.id = $(this).closest('tr').find('.detail_part_id').attr('data-id');
+                    part_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                    part_id.push(part_id_arr);
+                });
+                console.log(produk_id);
             });
 
             $(document).on('click change', '#noseritable input[name="check_all_noseri"]', function() {
@@ -975,18 +936,23 @@
                 }).nodes();
 
                 if ($('input[name="check_all_noseri"]:checked').length > 0) {
-                    // $('.check_noseri').prop('checked', true);
                     $('.check_noseri', rows).prop('checked', true);
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').removeClass(
                         'is-invalid');
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr(
+                        'disabled', false);
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('#btnnoseri').attr(
+                        'disabled', false);
 
                 } else if ($('input[name="check_all_noseri"]:checked').length <= 0) {
-                    // $('.check_noseri').prop('checked', false);
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').removeClass(
                         'is-invalid');
                     $('.check_noseri', rows).prop('checked', false);
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').addClass('is-invalid');
-
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr(
+                        'disabled', true);
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('#btnnoseri').attr(
+                        'disabled', true);
                 }
                 checkedAry = [];
                 $.each($(".check_noseri:checked", rows), function() {
@@ -1004,20 +970,34 @@
                 if ($('.detail_produk_id:checked').length > 0) {
                     produk_id = [];
                     $.each($(".detail_produk_id:checked"), function() {
-                        produk_id.push($(this).closest('tr').find('.detail_produk_id').attr(
-                            'data-id'));
+                        var produk_id_arr = {};
+                        produk_id_arr.id = $(this).closest('tr').find('.detail_produk_id').attr('data-id');
+                        produk_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                        produk_id_arr.array_no_seri = $(this).closest('tr').find('div[name="array_check[]"]').text();
+                        produk_id.push(produk_id_arr);
                     });
 
                 } else if ($('.detail_produk_id:checked').length <= 0) {
-                    produk_id = ['0'];
+                    var produk_id_arr = {};
+                    produk_id_arr.id = '0';
+                    produk_id_arr.jumlah_kirim = '0';
+                    produk_id_arr.array_no_seri = '0';
+                    produk_id.push(produk_id_arr);
                 }
+
                 if ($('.detail_part_id:checked').length > 0) {
                     part_id = [];
                     $.each($(".detail_part_id:checked"), function() {
-                        part_id.push($(this).closest('tr').find('.detail_part_id').attr('data-id'));
+                        var part_id_arr = {};
+                        part_id_arr.id = $(this).closest('tr').find('.detail_part_id').attr('data-id');
+                        part_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                        part_id.push(part_id_arr);
                     });
                 } else if ($('.detail_part_id:checked').length <= 0) {
-                    part_id = ['0'];
+                    var part_id_arr = {};
+                    part_id_arr.id = '0';
+                    part_id_arr.jumlah_kirim = '0';
+                    part_id.push(part_id_arr);
                 }
 
                 if ($('.check_detail').is(':checked')) {
@@ -1057,6 +1037,7 @@
                     }
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').removeClass(
                         'is-invalid');
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr('disabled', false);
                 } else {
                     const index = array_noseri_produk.indexOf($(this).closest('tr').find('.check_noseri')
                         .attr('data-id'));
@@ -1066,6 +1047,7 @@
                     $('#belumkirimtable > tbody > tr.bgcolor').find('div[name="array_check[]"]').text(
                         array_noseri_produk);
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').addClass('is-invalid');
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr('disabled', true);
                 }
                 $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').val($(
                     '.check_noseri:checked', rows).length);
@@ -1074,45 +1056,44 @@
                 // }
             });
 
-            $('#belumkirimtable').on('change keyup', '.jumlah_kirim', function() {
+            $(document).on('change keyup', '#belumkirimtable .jumlah_kirim', function() {
                 var jumlah_dikirim = parseInt($(this).closest('tr').find('input[name="jumlah_dikirim[]"]')
                     .val());
                 var jumlah_transfer = parseInt($(this).closest('tr').find('#jumlah_transfer').text());
-                if (jumlah_dikirim > jumlah_transfer) {
-                    $(this).closest('tr').find('input[name="jumlah_dikirim[]"]').addClass('is-invalid');
-                } else if (jumlah_dikirim == 0 || jumlah_dikirim == "") {
-                    $(this).closest('tr').find('input[name="jumlah_dikirim[]"]').addClass('is-invalid');
-                } else {
+                var produk_ids = $(this).closest('tr').find('.detail_produk_id').attr('data-id');
+                if (jumlah_dikirim <= jumlah_transfer && jumlah_dikirim != 0){
                     $(this).closest('tr').find('input[name="jumlah_dikirim[]"]').removeClass('is-invalid');
+                    $(this).closest('tr').find('.check_detail').attr('disabled', false);
+
+                    var this_table = $(this).closest('tr');
+                    $.ajax({
+                        url: "/api/logistik/so/noseri_array/" + produk_ids + '/' + jumlah_dikirim,
+                        type: 'GET',
+                        dataType: 'json',
+                        success: function(result) {
+                            this_table.find('div[name="array_check[]"]').text(result);
+                            if(this_table.hasClass('bgcolor')){
+                                $('#noseritable').DataTable().ajax.url('/api/logistik/so/noseri/detail/belum_kirim/' + produk_ids+ '/'+ result).load();
+                            }
+                        },
+                        error: function(jqXHR, testStatus, error) {
+                            console.log(error);
+                            alert("Page " + href + " cannot open. Error:" + error);
+                            $('#loader').hide();
+                        },
+                        timeout: 8000
+                    });
+                } else {
+                    $(this).closest('tr').find('input[name="jumlah_dikirim[]"]').addClass('is-invalid');
+                    $('#check_all').prop('checked', false);
+                    $(this).closest('tr').find('.check_detail').prop('checked', false);
+                    $(this).closest('tr').find('.check_detail').attr('disabled', true);
+                    $(this).closest('tr').find('div[name="array_check[]"]').text("");
+                    if($(this).closest('tr').hasClass('bgcolor')){
+                        $('#noseritable').DataTable().ajax.url('/api/logistik/so/noseri/detail/belum_kirim/' + produk_ids+ '/0').load();
+                    }
                 }
             });
-            // $('#belumkirimtable').on('click', '.detail_produk_id', function() {
-            //     $('#check_all').prop('checked', false);
-            //     if ($('.detail_produk_id:checked').length > 0) {
-            //         $('#kirim_produk').removeAttr('disabled');
-            //         checkedAry = [];
-            //         $.each($(".detail_produk_id:checked"), function() {
-            //             checkedAry.push($(this).closest('tr').find('.detail_produk_id').attr('data-id'));
-            //         });
-
-            //     } else if ($('.detail_produk_id:checked').length <= 0) {
-            //         $('#kirim_produk').removeAttr('disabled');
-            //     }
-            // })
-
-            // $('#belumkirimtable').on('click', '.detail_part_id', function() {
-            //     $('#check_all').prop('checked', false);
-            //     if ($('.detail_part_id:checked').length > 0) {
-            //         $('#kirim_produk').removeAttr('disabled');
-            //         partAry = [];
-            //         $.each($(".detail_part_id:checked"), function() {
-            //             partAry.push($(this).closest('tr').find('.detail_part_id').attr('data-id'));
-            //         });
-
-            //     } else if ($('.detail_part_id:checked').length <= 0) {
-            //         $('#kirim_produk').removeAttr('disabled');
-            //     }
-            // })
 
             function ekspedisi_select(id) {
                 $('.ekspedisi_id').select2({
@@ -1144,26 +1125,19 @@
                     if ($(this).val() != "") {
                         $('#ekspedisi_id').removeClass('is-invalid');
                         $('#msgekspedisi_id').text("");
-                        if (($('#no_invoice').val() != "" && !$('#no_invoice').hasClass('is-invalid')) && $(
-                                '#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $(
-                                '#ekspedisi_id').val() != "")) {
-                            $('#btnsimpan').removeAttr('disabled');
-                        } else {
-                            $('#btnsimpan').attr('disabled', true);
-                        }
                     } else if ($(this).val() == "") {
                         $('#ekspedisi_id').addClass('is-invalid');
                         $('#msgekspedisi_id').text("No Kendaraan harus diisi");
-                        $('#btnsimpan').attr('disabled', true);
                     }
                     var value = $(this).val();
+                    validasi();
                 });
             }
 
             function max_date() {
                 var today = new Date();
                 var dd = String(today.getDate()).padStart(2, '0');
-                var mm = String(today.getMonth() + 1).padStart(2, '0'); //January is 0!
+                var mm = String(today.getMonth() + 1).padStart(2, '0');
                 var yyyy = today.getFullYear();
                 today = yyyy + '-' + mm + '-' + dd;
                 $("#tgl_kirim").attr("max", today);
@@ -1174,10 +1148,22 @@
                 var href = $(this).attr('data-attr');
                 var id = $(this).data('id');
                 var pesanan_id = '{{ $data->pesanan_id }}';
-
+                if(produk_id.length <= 0){
+                    var produk_id_arr = {}
+                    produk_id_arr.id = "0";
+                    produk_id_arr.jumlah_kirim = "0";
+                    produk_id_arr.array_no_seri = "0";
+                    produk_id.push(produk_id_arr);
+                }
+                if(part_id.length <= 0){
+                    var part_id_arr = {}
+                    part_id_arr.id = "0";
+                    part_id_arr.jumlah_kirim = "0";
+                    part_id.push(part_id_arr);
+                }
                 $.ajax({
-                    url: "/logistik/so/create/" + produk_id + '/' + part_id + '/' + pesanan_id +
-                        '/' + jenis_penjualan,
+                    url: "/logistik/so/create/" + pesanan_id + '/' + jenis_penjualan,
+                    data: {'produk_id':produk_id, 'part_id':part_id},
                     beforeSend: function() {
                         $('#loader').show();
                     },
@@ -1191,8 +1177,6 @@
                         });
                         ekspedisi_select(provinsi);
                         $('#tgl_kirim').attr('max', today);
-
-                        // $("#editform").attr("action", href);
                     },
                     complete: function() {
                         $('#loader').hide();
@@ -1216,26 +1200,12 @@
                     $('#ekspedisi').removeClass('hide');
                     $('#nonekspedisi').addClass('hide');
                     $('#nama_pengirim').val("");
-                    if (($('#no_invoice').val() != "" && !$('#no_invoice').hasClass('is-invalid')) && $(
-                            '#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $(
-                            '#ekspedisi_id').val() != "")) {
-                        $('#btnsimpan').removeAttr('disabled');
-                    } else {
-                        $('#btnsimpan').attr('disabled', true);
-                    }
-
                 } else if ($(this).val() == "nonekspedisi") {
                     $('#ekspedisi').addClass('hide');
                     $('#nonekspedisi').removeClass('hide');
                     $('.ekspedisi_id').val(null).trigger("change");
-                    if (($('#no_invoice').val() != "" && !$('#no_invoice').hasClass('is-invalid')) && $(
-                            '#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $(
-                            '#ekspedisi_id').val() != "")) {
-                        $('#btnsimpan').removeAttr('disabled');
-                    } else {
-                        $('#btnsimpan').attr('disabled', true);
-                    }
                 }
+                validasi();
             });
 
             function check_no_sj(val) {
@@ -1268,19 +1238,11 @@
                                 if (data > 0) {
                                     $('#no_invoice').addClass('is-invalid');
                                     $('#msgnoinvoice').text("No Surat Jalan sudah terpakai");
-                                    $('#btnsimpan').attr('disabled', true);
                                 } else {
                                     $('#no_invoice').removeClass('is-invalid');
                                     $('#msgnoinvoice').text("");
-                                    if (($('#no_invoice').val() != "" && !$('#no_invoice')
-                                            .hasClass('is-invalid')) && $('#tgl_kirim').val() !=
-                                        "" && ($('#nama_pengirim').val() != "" || $(
-                                            '#ekspedisi_id').val() != "")) {
-                                        $('#btnsimpan').removeAttr('disabled');
-                                    } else {
-                                        $('#btnsimpan').attr('disabled', true);
-                                    }
                                 }
+                                validasi();
                             },
                             error: function() {
                                 alert('Error occured');
@@ -1303,18 +1265,9 @@
                             if (data > 0) {
                                 $('#no_invoice').addClass('is-invalid');
                                 $('#msgnoinvoice').text("No Surat Jalan sudah terpakai");
-                                $('#btnsimpan').attr('disabled', true);
                             } else {
                                 $('#no_invoice').removeClass('is-invalid');
                                 $('#msgnoinvoice').text("");
-                                if (($('#no_invoice').val() != "" && !$('#no_invoice').hasClass(
-                                        'is-invalid')) && $('#tgl_kirim').val() != "" && ($(
-                                            '#nama_pengirim').val() != "" || $('#ekspedisi_id')
-                                        .val() != "")) {
-                                    $('#btnsimpan').removeAttr('disabled');
-                                } else {
-                                    $('#btnsimpan').attr('disabled', true);
-                                }
                             }
                         },
                         error: function() {
@@ -1324,55 +1277,57 @@
                 } else if ($(this).val() == "") {
                     $('#no_invoice').addClass('is-invalid');
                     $('#msgnoinvoice').text("No Surat Jalan tidak boleh kosong");
-                    $('#btnsimpan').attr('disabled', true);
                 }
+                validasi();
             });
 
             $(document).on('change keyup', '#tgl_kirim', function(event) {
                 if ($(this).val() != "") {
                     $('#tgl_kirim').removeClass('is-invalid');
                     $('#msgtgl_kirim').text("");
-                    if (($('#no_invoice').val() != "" && !$('#no_invoice').hasClass('is-invalid')) && $(
-                            '#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $(
-                            '#ekspedisi_id').val() != "")) {
-                        $('#btnsimpan').removeAttr('disabled');
-                    } else {
-                        $('#btnsimpan').attr('disabled', true);
-                    }
                 } else if ($(this).val() == "") {
                     $('#tgl_kirim').addClass('is-invalid');
                     $('#msgtgl_kirim').text("Tanggal Kirim harus diisi");
-                    $('#btnsimpan').attr('disabled', true);
                 }
+                validasi();
             });
 
             $(document).on('change keyup', '#nama_pengirim', function(event) {
                 if ($(this).val() != "") {
                     $('#nama_pengirim').removeClass('is-invalid');
                     $('#msgnama_pengirim').text("");
-                    if (($('#no_invoice').val() != "" && !$('#no_invoice').hasClass('is-invalid')) && $(
-                            '#tgl_kirim').val() != "" && ($('#nama_pengirim').val() != "" || $(
-                            '#ekspedisi_id').val() != "")) {
-                        $('#btnsimpan').removeAttr('disabled');
-                    } else {
-                        $('#btnsimpan').attr('disabled', true);
-                    }
                 } else if ($(this).val() == "") {
                     $('#nama_pengirim').addClass('is-invalid');
                     $('#msgnama_pengirim').text("Nama Pengirim harus diisi");
-                    $('#btnsimpan').attr('disabled', true);
                 }
+                validasi();
             });
 
             $(document).on('change', 'input[type="radio"][name="no_sj_exist"]', function() {
+                $("#sj_lama").val(null).trigger("change");
+                $(".ekspedisi_id").val(null).trigger("change");
+                $('#tgl_kirim').val('');
+                $('#nama_pengirim').val('');
+                $('#no_invoice').val('');
+                $('input[name="pengiriman"]').removeAttr('checked');
                 if ($(this).val() == "baru") {
                     $('#sj_baru').removeClass('hide');
                     $('.sj_lamas').addClass('hide');
 
+                    $('#tgl_kirim').attr('disabled', false);
+                    $('#nama_pengirim').attr('disabled', false);
+                    $('.ekspedisi_id').removeAttr('disabled');
+                    $('input[name="pengiriman"]').removeAttr('disabled');
                 } else if ($(this).val() == "lama") {
                     $('#sj_baru').addClass('hide');
                     $('.sj_lamas').removeClass('hide');
+
+                    $('#tgl_kirim').attr('disabled', true);
+                    $('#nama_pengirim').attr('disabled', true);
+                    $('.ekspedisi_id').attr('disabled', 'disabled');
+                    $('input[name="pengiriman"]').attr('disabled', true);
                 }
+                validasi();
             });
 
             function select_sj_lama() {
@@ -1403,34 +1358,31 @@
                     }
                 }).change(function() {
                     if ($(this).val() != "") {
+                        $('#ekspedisi').addClass('hide');
+                        $('#nonekspedisi').addClass('hide');
+                        $('input[name="pengiriman"]').removeAttr('checked');
                         $.ajax({
-                            type: "POST",
-                            url: '/api/logistik/cek/no_sj/0/' + value + '/' + jenis_penjualan,
+                            type: "GET",
+                            url: '/api/logistik/cek/no_sj_detail/' + $(this).val(),
                             dataType: 'json',
                             success: function(data) {
-                                if (data > 0) {
-                                    $('#no_invoice').addClass('is-invalid');
-                                    $('#msgnoinvoice').text("No Surat Jalan sudah terpakai");
-                                    $('#btnsimpan').attr('disabled', true);
-                                } else {
-                                    $('#no_invoice').removeClass('is-invalid');
-                                    $('#msgnoinvoice').text("");
-                                    if (($('#no_invoice').val() != "" && !$('#no_invoice')
-                                            .hasClass('is-invalid')) && $('#tgl_kirim').val() !=
-                                        "" &&
-                                        ($('#nama_pengirim').val() != "" || $('#ekspedisi_id')
-                                            .val() != "")) {
-                                        $('#btnsimpan').removeAttr('disabled');
-                                    } else {
-                                        $('#btnsimpan').attr('disabled', true);
-                                    }
+                                $('#tgl_kirim').val(data[0]['tgl_kirim']);
+                                if(data[0]['ekspedisi_id'] !== ""){
+                                    $('input[name="pengiriman"][value="ekspedisi"]').prop("checked", "checked");
+                                    $('#ekspedisi').removeClass('hide');
+                                    $(".ekspedisi_id").val(data[0]['ekspedisi_id']);
+                                }else{
+                                    $('input[name="pengiriman"][value="nonekspedisi"]').prop("checked", "checked");
+                                    $('#nonekspedisi').removeClass('hide');
+                                    $('#nama_pengirim').val(data[0]['nama_pengirim']);
                                 }
                             },
-                            error: function() {
+                            error: function(data) {
                                 alert('Error occured');
                             }
                         });
                     }
+                    validasi();
                 });
             }
         })
