@@ -527,24 +527,24 @@
     var jml = '';
     var dpp = '';
     let dataTampungSeri = [];
+    const list  = document.getElementById('listseri');
     $(document).on('click', '.detailmodal', function (e) {
         let gh = $(this).parent().prev().prev().prev().prev()[0].textContent
         let ghh = gh.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
         $('#namaproduk').html('<b>' + ghh + '</b>')
-        // console.log(ghh);
+
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
-        // console.log(prd);
-        jml = $(this).parent().prev().prev().text();
+
+        jml = $(this).parent().prev().prev().prev().text();
+        max = $(this).data('jml');
         dpp = $(this).data('dpp');
-        // dpp = $(this).parent().prev()
-        // console.log(jml);
+
         let temp_array = make_temp_array(prd1);
-        // if(prd1[dpp].noseri.length > 0){
-        //     console.log("noseri", prd1[dpp].noseri);
-        // }
+
+        $(list).html("")
         for (const dataseri in prd1[dpp]) {
             if (dataseri == "noseri") {
                 for (let i = 0; i < prd1[dpp][dataseri].length; i++) {
@@ -637,7 +637,6 @@
         }
     })
 
-    const list  = document.getElementById('listseri');
     $('.scan-produk').on('change', 'input[type=checkbox]',function (){
         var idd = $(this).val();
         var title = $(this).parent().prev()[0].textContent;
@@ -652,14 +651,15 @@
 
     var t = 0;
     var dataTemp = [];
+
     $(document).on('click', '#simpan', function (e) {
         $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
 
-        if (tmp.length > jml) {
+        if (tmp.length > max) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Batas Maksimal ' + jml + ' Barang!',
+                text: 'Batas Maksimal ' + max + ' Barang!',
             })
         } else {
             Swal.fire({
