@@ -182,11 +182,13 @@
                                 <thead>
                                     <tr>
                                         <th>Nomor SO</th>
+                                        <th>Nomor PO</th>
                                         <th>Tanggal Masuk</th>
                                         <th>Tanggal Keluar</th>
                                         <th>Dari/Ke</th>
                                         <th>Tujuan</th>
                                         <th>Jumlah</th>
+                                        <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -342,11 +344,13 @@
             },
             columns: [
                 { data: 'so', name: 'so'},
+                {data: 'po'},
                 { data: 'date_in', name: 'date_in'},
                 { data: 'date_out', name: 'date_out'},
                 { data: 'divisi', name: 'divisi'},
                 { data: 'tujuan', name: 'tujuan'},
                 { data: 'jumlah', name: 'jumlah'},
+                {data: 'logs'},
                 { data: 'action', name: 'action'},
             ],
             "language": {

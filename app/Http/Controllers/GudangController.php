@@ -258,12 +258,40 @@ class GudangController extends Controller
 
     function getAllTransaksi()
     {
-        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->get()->sortByDesc('header.tgl_keluar');
+        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri', 'header.pesanan.log')->get()->sortByDesc('header.tgl_keluar');
         $g = datatables()->of($data1)
             ->addIndexColumn()
             ->addColumn('so', function ($d) {
                 if (isset($d->header->pesanan_id)) {
                     return $d->header->pesanan->so;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('po', function ($d) {
+                if (isset($d->header->pesanan_id)) {
+                    return $d->header->pesanan->no_po;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('logs', function($d) {
+                if (isset($d->header->pesanan_id)) {
+                    if ($d->header->pesanan->log_id == 9) {
+                        $ax = "<span class='badge badge-pill badge-secondary'>".$d->header->pesanan->log->nama."</span>";
+                    } else if ($d->header->pesanan->log_id == 6) {
+                        $ax = "<span class='badge badge-pill badge-warning'>".$d->header->pesanan->log->nama."</span>";
+                    } elseif ($d->header->pesanan->log_id == 8) {
+                        $ax = "<span class='badge badge-pill badge-info'>".$d->header->pesanan->log->nama."</span>";
+                    } elseif ($d->header->pesanan->log_id == 11) {
+                        $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
+                    } elseif ($d->header->pesanan->log_id == 10) {
+                        $ax = "<span class='badge badge-pill badge-success'>".$d->header->pesanan->log->nama."</span>";
+                    } else {
+                        $ax = "<span class='badge badge-pill badge-danger'>".$d->header->pesanan->log->nama."</span>";
+                    }
+
+                    return $ax;
                 } else {
                     return '-';
                 }
@@ -304,7 +332,7 @@ class GudangController extends Controller
                 class="far fa-eye"></i> Detail</button>
                         </a>';
             })
-            ->rawColumns(['divisi', 'action'])
+            ->rawColumns(['divisi', 'action', 'logs'])
             ->make(true);
 
         return $g;
@@ -349,6 +377,34 @@ class GudangController extends Controller
                     return '-';
                 }
             })
+            ->addColumn('po', function ($d) {
+                if (isset($d->header->pesanan_id)) {
+                    return $d->header->pesanan->no_po;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('logs', function($d) {
+                if (isset($d->header->pesanan_id)) {
+                    if ($d->header->pesanan->log_id == 9) {
+                        $ax = "<span class='badge badge-pill badge-secondary'>".$d->header->pesanan->log->nama."</span>";
+                    } else if ($d->header->pesanan->log_id == 6) {
+                        $ax = "<span class='badge badge-pill badge-warning'>".$d->header->pesanan->log->nama."</span>";
+                    } elseif ($d->header->pesanan->log_id == 8) {
+                        $ax = "<span class='badge badge-pill badge-info'>".$d->header->pesanan->log->nama."</span>";
+                    } elseif ($d->header->pesanan->log_id == 11) {
+                        $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
+                    } elseif ($d->header->pesanan->log_id == 10) {
+                        $ax = "<span class='badge badge-pill badge-success'>".$d->header->pesanan->log->nama."</span>";
+                    } else {
+                        $ax = "<span class='badge badge-pill badge-danger'>".$d->header->pesanan->log->nama."</span>";
+                    }
+
+                    return $ax;
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('date_in', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
                     return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMM YYYY');
@@ -382,7 +438,7 @@ class GudangController extends Controller
                             class="far fa-eye"> Detail</i></button>
                         </a>';
             })
-            ->rawColumns(['divisi', 'action'])
+            ->rawColumns(['divisi', 'action', 'logs'])
             ->make(true);
     }
 
@@ -963,6 +1019,27 @@ class GudangController extends Controller
             ->addColumn('nopo', function ($d) {
                 return $d->pesanan->no_po;
             })
+            ->addColumn('logs', function($d) {
+                if (isset($d->pesanan_id)) {
+                    if ($d->pesanan->log_id == 9) {
+                        $ax = "<span class='badge badge-pill badge-secondary'>".$d->pesanan->log->nama."</span>";
+                    } else if ($d->pesanan->log_id == 6) {
+                        $ax = "<span class='badge badge-pill badge-warning'>".$d->pesanan->log->nama."</span>";
+                    } elseif ($d->pesanan->log_id == 8) {
+                        $ax = "<span class='badge badge-pill badge-info'>".$d->pesanan->log->nama."</span>";
+                    } elseif ($d->pesanan->log_id == 11) {
+                        $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
+                    } elseif ($d->pesanan->log_id == 10) {
+                        $ax = "<span class='badge badge-pill badge-success'>".$d->pesanan->log->nama."</span>";
+                    } else {
+                        $ax = "<span class='badge badge-pill badge-danger'>".$d->pesanan->log->nama."</span>";
+                    }
+
+                    return $ax;
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('customer', function ($data) {
                 $name = explode('/', $data->pesanan->so);
                 for ($i = 1; $i < count($name); $i++) {
@@ -995,7 +1072,7 @@ class GudangController extends Controller
                         <button class="btn btn-outline-primary"><i class="fas fa-print"></i> Cetak</button>
                         </a></td>';
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'logs'])
             ->make(true);
     }
     // Export Excell

@@ -151,8 +151,10 @@
                                                 <th>Dari/Ke</th>
                                                 <th>Tujuan</th>
                                                 <th>Nomor SO</th>
+                                                <th>Nomor PO</th>
                                                 <th>Produk</th>
                                                 <th>Jumlah</th>
+                                                <th>Status</th>
                                                 <td>Aksi</td>
                                             </tr>
                                         </thead>
@@ -219,6 +221,7 @@
                                                 <th>Nomor PO</th>
                                                 <th>Customer</th>
                                                 <th>Batas Transfer</th>
+                                                <th>Status</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -375,8 +378,10 @@
                 { data: 'divisi', name: 'divisi'},
                 { data: 'tujuan', name: 'tujuan'},
                 { data: 'so', name: 'so'},
+                { data: 'po', name: 'po'},
                 { data: 'product', name: 'product'},
                 { data: 'jumlah', name: 'jumlah'},
+                {data: 'logs'},
                 { data: 'action', name: 'action'},
             ],
             dom: 'Bfrtip',
@@ -525,6 +530,7 @@
             {data: 'nopo'},
             {data: 'customer'},
             {data: 'tgl_kontrak'},
+            {data: 'logs'},
             {data: function(data) {
                 if (userid != 2) {
                     // console.log(data)

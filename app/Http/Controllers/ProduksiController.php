@@ -453,9 +453,9 @@ class ProduksiController extends Controller
 
     function getSOCek()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10, 20])->get());
-        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10, 20])->Has('DetailPesanan')->get());
-        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10, 20])->Has('DetailPesanan')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
+        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
@@ -480,6 +480,21 @@ class ProduksiController extends Controller
             ->addColumn('po', function ($data) {
                 return $data->no_po;
             })
+            ->addColumn('logs', function($d) {
+                if ($d->log_id == 9) {
+                    $ax = "<span class='badge badge-pill badge-secondary'>".$d->log->nama."</span>";
+                } else if ($d->log_id == 6) {
+                    $ax = "<span class='badge badge-pill badge-warning'>".$d->log->nama."</span>";
+                } elseif ($d->log_id == 8) {
+                    $ax = "<span class='badge badge-pill badge-info'>".$d->log->nama."</span>";
+                } elseif ($d->log_id == 11) {
+                    $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
+                } else {
+                    $ax = "<span class='badge badge-pill badge-danger'>".$d->log->nama."</span>";
+                }
+
+                return $ax;
+            })
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->so);
                 for ($i = 1; $i < count($name); $i++) {
@@ -608,15 +623,15 @@ class ProduksiController extends Controller
                     }
                 }
             })
-            ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
+            ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd', 'logs'])
             ->make(true);
     }
 
     function getSOCekBelum()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10, 20])->get());
-        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10, 20])->Has('DetailPesanan')->get());
-        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10, 20])->Has('DetailPesanan')->get());
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
+        $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
@@ -639,6 +654,21 @@ class ProduksiController extends Controller
             ->addColumn('po', function ($data) {
                 return $data->no_po;
             })
+            ->addColumn('logs', function($d) {
+                if ($d->log_id == 9) {
+                    $ax = "<span class='badge badge-pill badge-secondary'>".$d->log->nama."</span>";
+                } else if ($d->log_id == 6) {
+                    $ax = "<span class='badge badge-pill badge-warning'>".$d->log->nama."</span>";
+                } elseif ($d->log_id == 8) {
+                    $ax = "<span class='badge badge-pill badge-info'>".$d->log->nama."</span>";
+                } elseif ($d->log_id == 11) {
+                    $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
+                } else {
+                    $ax = "<span class='badge badge-pill badge-danger'>".$d->log->nama."</span>";
+                }
+
+                return $ax;
+            })
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->so);
                 for ($i = 1; $i < count($name); $i++) {
@@ -767,7 +797,7 @@ class ProduksiController extends Controller
                     }
                 }
             })
-            ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
+            ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd', 'logs'])
             ->make(true);
     }
 

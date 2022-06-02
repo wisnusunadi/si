@@ -71,6 +71,7 @@
                                                         <th>Nomor PO</th>
                                                         <th>Customer</th>
                                                         <th>Batas Transfer</th>
+                                                        <th>Status</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -91,6 +92,7 @@
                                                         <th>Nomor PO</th>
                                                         <th>Customer</th>
                                                         <th>Batas Transfer</th>
+                                                        <th>Status</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -319,6 +321,7 @@
                 {data: 'po'},
                 { data: 'nama_customer', name: 'nama_customer'},
                 { data: 'batas_out', name: 'batas_out'},
+                {data: 'logs'},
                 { data: 'action', name: 'action'},
             ],
             "language": {
@@ -346,6 +349,7 @@
                 {data: 'po'},
                 { data: 'nama_customer', name: 'nama_customer'},
                 { data: 'batas_out', name: 'batas_out'},
+                {data: 'logs'},
                 { data: 'action', name: 'action'},
             ],
             "language": {
