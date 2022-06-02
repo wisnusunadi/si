@@ -254,7 +254,11 @@
                             <h5 class="card-title">Preview No Seri Setelah Scan</h5>
                         </div>
                           <div class="card-body">
-                            <span class="card-text preview-scan">Some quick example text to build on the card title and make up the bulk of the card's content.</span>
+                            <span class="card-text preview-scan">
+                                <ul id="listseri">
+
+                                </ul>
+                            </span>
                           </div>
                         </div>
                     </div>
@@ -303,6 +307,7 @@
 <script>
     var mytable = '';
     let prd1 = {};
+    let tmp = []
 
     $(document).ready(function () {
         $('#head-cb').prop('checked', false);
@@ -397,6 +402,7 @@
                 cell.innerHTML = i + 1;
             });
         }).draw();
+
 
     });
 
@@ -546,7 +552,7 @@
                 }
             }
         }
-        
+
         mytable = $('.scan-produk').DataTable({
             processing: false,
             serverSide: false,
@@ -622,19 +628,34 @@
         });
     });
 
+    $('.scan-produk').on('click', 'input[type=checkbox]',function (){
+        if ($(this).is(':checked')) {
+            var checked = ($(this).val());
+            tmp.push(checked);
+        } else {
+            tmp.splice($.inArray(checked, tmp),1);
+        }
+    })
+
+    const list  = document.getElementById('listseri');
+    $('.scan-produk').on('change', 'input[type=checkbox]',function (){
+        var idd = $(this).val();
+        var title = $(this).parent().prev()[0].textContent;
+        var textid = 'text' + $(this).attr('id');
+
+        if ($(this).is(':checked')) {
+            $(list).append('<li id='+ textid +'>'+title+'</li>')
+        } else {
+            $('#'+textid).remove()
+        }
+    })
+
     var t = 0;
     var dataTemp = [];
     $(document).on('click', '#simpan', function (e) {
-        console.log(jml);
-        console.log(dpp);
-        console.log(prd);
         $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
-        let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(
-            function () {
-                return $(this).val();
-            }).get();
 
-        if (a.length > jml) {
+        if (tmp.length > jml) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -652,7 +673,7 @@
             prd1[dpp] = {
                 "jumlah": jml,
                 "prd": prd,
-                "noseri": a
+                "noseri": tmp
             };
             $('.modal-scan').modal('hide');
             if (prd1[dpp].noseri.length == 0) {

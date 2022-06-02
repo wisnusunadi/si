@@ -54,9 +54,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Dicek</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" id="pills-batal-tab" data-toggle="pill" href="#pills-batal" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Batal</a>
-                            </li>
+                            </li> --}}
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-proses_kirim" role="tabpanel" aria-labelledby="pills-proses_kirim-tab">
@@ -100,7 +100,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="tab-pane fade show" id="pills-batal" role="tabpanel" aria-labelledby="pills-batal-tab">
+                            {{-- <div class="tab-pane fade show" id="pills-batal" role="tabpanel" aria-labelledby="pills-batal-tab">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="table-responsive">
@@ -120,7 +120,7 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
                 </div>
