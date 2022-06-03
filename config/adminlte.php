@@ -1020,7 +1020,7 @@ return [
             'icon' => 'fas fa-history',
             'auth' => [13],
         ],
-        
+
         [
             'header' => 'Penerimaan',
             'auth' => [13]
@@ -1437,13 +1437,13 @@ return [
 
         [
             'header' => 'Persetujuan',
-            'auth' => [13]
+            'auth' => [31]
         ],
         [
             'text' => 'Produk',
             'url' => 'gbjmanager/produksi',
             'icon' => 'fas fa-cubes',
-            'auth' => [13],
+            'auth' => [31],
         ]
     ],
 

@@ -322,6 +322,7 @@
                                                 <tr>
                                                     <th><input type="checkbox" id="head-cb"></th>
                                                     <th>No. Seri</th>
+                                                    <th>Nomor</th>
                                                     <th>Layout</th>
                                                     <th>Aksi</th>
                                                 </tr>
@@ -337,6 +338,7 @@
                                             <tr>
                                                 <th><input type="checkbox" id="head-cb1"></th>
                                                 <th>No. Seri</th>
+                                                <th>Nomor</th>
                                                 <th>Digunakan</th>
                                                 <th>Layout</th>
                                             </tr>
@@ -703,30 +705,6 @@
 
     })
 
-    $('#alkes').click(function () {
-        if ($(this).prop('checked') == true) {
-            datatable.column(5).search($(this).val()).draw();
-        } else {
-            datatable.column(5).search('').draw();
-        }
-    })
-
-    $('#sarkes').click(function () {
-        if ($(this).prop('checked') == true) {
-            datatable.column(5).search($(this).val()).draw();
-        } else {
-            datatable.column(5).search('').draw();
-        }
-    })
-
-    $('#water').click(function () {
-        if ($(this).prop('checked') == true) {
-            datatable.column(5).search($(this).val()).draw();
-        } else {
-            datatable.column(5).search('').draw();
-        }
-    })
-
     // load data
     var datatable = $('#gudang-barang').DataTable({
         processing: true,
@@ -806,6 +784,31 @@
             search: "Cari:"
         }
     });
+
+    $('#alkes').click(function () {
+        if ($(this).prop('checked') == true) {
+            datatable.column(6).search($(this).val()).draw();
+        } else {
+            datatable.column(6).search('').draw();
+        }
+    })
+
+    $('#sarkes').click(function () {
+        if ($(this).prop('checked') == true) {
+            datatable.column(6).search($(this).val()).draw();
+        } else {
+            datatable.column(6).search('').draw();
+        }
+    })
+
+    $('#water').click(function () {
+        if ($(this).prop('checked') == true) {
+            datatable.column(6).search($(this).val()).draw();
+        } else {
+            datatable.column(6).search('').draw();
+        }
+    })
+
 
     // load produk
     $.ajax({
@@ -1128,6 +1131,7 @@
                 {
                     data: 'seri'
                 },
+                {data: 'nomor'},
                 {
                     data: 'Layout'
                 },
@@ -1135,6 +1139,10 @@
                     data: 'aksi'
                 }
             ],
+            "aoColumnDefs": [
+                { "bSearchable": true, "bVisible": false, "aTargets": [ 2 ] },
+                // { "bVisible": false, "aTargets": [ 3 ] }
+            ]
         });
 
         $('.scan-produk1').DataTable({
@@ -1153,6 +1161,7 @@
                 {
                     data: 'seri'
                 },
+                {data: 'nomor'},
                 {
                     data: 'used'
                 },
@@ -1160,6 +1169,10 @@
                     data: 'Layout'
                 }
             ],
+            "aoColumnDefs": [
+                { "bSearchable": true, "bVisible": false, "aTargets": [ 2 ] },
+                // { "bVisible": false, "aTargets": [ 3 ] }
+            ]
         });
 
         $('.scan-produk2').DataTable({
@@ -1181,6 +1194,7 @@
                     data: 'DT_RowIndex'
                 },
                 {data: 'noseri_lama'},
+
                 {
                     data: 'noseri'
                 },

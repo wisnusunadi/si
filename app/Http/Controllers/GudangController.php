@@ -150,6 +150,9 @@ class GudangController extends Controller
             ->addColumn('seri', function ($d) {
                 return '<input type="hidden" class="form-control" id="noseriOri[]" value="' . $d->noseri . '"><input type="text" class="form-control" id="noseri[]" value="' . $d->noseri . '" disabled>';
             })
+            ->addColumn('nomor', function($d){
+                return $d->noseri;
+            })
             ->addColumn('Layout', function ($d) use ($layout) {
                 $opt = '';
                 foreach ($layout as $l) {
@@ -192,6 +195,9 @@ class GudangController extends Controller
             })
             ->addColumn('seri', function ($d) {
                 return '<input type="hidden" class="form-control" id="noseriOri[]" value="' . $d->noseri . '"><input type="text" class="form-control" id="noseri[]" value="' . $d->noseri . '" disabled>';
+            })
+            ->addColumn('nomor', function($d){
+                return $d->noseri;
             })
             ->addColumn('Layout', function ($d) use ($layout) {
                 $opt = '';
