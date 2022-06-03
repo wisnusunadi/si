@@ -148,6 +148,8 @@
         };
     }(jQuery));
     $(document).ready(function () {
+        $('.deskripsi').val('')
+        $('.qtyy').val('')
         $('.ke').select2({
             placeholder: "Pilih Tujuan",
             allowClear: true
@@ -199,7 +201,7 @@
                 type: "post",
                 data: {gdg_brg_jadi_id: $(this).val()},
                 success: function(res) {
-                    $('span#stock').text(res.stok);
+                    $('span#stock').text(res.stok_siap);
                 }
             })
         })
@@ -252,7 +254,7 @@
                         position: 'center',
                         icon: 'error',
                         title: 'Stok Tidak Mencukupi',
-                        text: 'Stok gudang produk saat ini '+res.stok,
+                        text: 'Stok gudang produk saat ini '+res.stok_siap,
                         confirmButtonText: 'Oke',
                     })
                 } else {

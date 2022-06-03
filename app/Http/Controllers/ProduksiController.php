@@ -440,9 +440,16 @@ class ProduksiController extends Controller
         $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $id)->where('is_ready', 0)->get();
         $i = 0;
         return datatables()->of($data)
-            ->addColumn('checkbox', function ($data) use ($i) {
+            ->addColumn('checkbox', function ($d) use ($i) {
                 $i++;
-                return '<input type="checkbox" class="cb-child" name="noseri_id[][' . $i . ']" id="" value="' . $data->id . '">';
+                if ($d->is_change == 0) {
+                    # code...
+                    return '<input type="checkbox" class="cb-child" name="noseri_id[][' . $i . ']"  value="' . $d->id . '" disabled title="Noseri Tidak Bisa Digunakan">';
+                } else {
+                    # code...
+                    return '<input type="checkbox" class="cb-child" name="noseri_id[][' . $i . ']"  value="' . $d->id . '">';
+                }
+                // return '<input type="checkbox" class="cb-child" name="noseri_id[][' . $i . ']" id="" value="' . $data->id . '">';
             })
             ->addColumn('noseri', function ($data) {
                 return $data->noseri;
@@ -1523,6 +1530,9 @@ class ProduksiController extends Controller
         return datatables()->of($data)
             ->addColumn('ids', function ($d) {
                 return $d->id;
+            })
+            ->addColumn('ischange', function ($d) {
+                return $d->is_change;
             })
             ->addColumn('seri', function ($d) {
                 return $d->noseri . '';

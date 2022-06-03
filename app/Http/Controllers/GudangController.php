@@ -243,12 +243,14 @@ class GudangController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('stock', function ($d) {
-                return $d->stok . ' ' . $d->satuan->nama;
+                $dd = $d->get_sum_noseri();
+                return $dd . ' ' . $d->satuan->nama;
             })
             ->addColumn('stok_jual', function ($data) {
                 if ($data->id) {
-                    $ss = DetailPesananProduk::with('detailpesanan')->where('gudang_barang_jadi_id', $data->id)->get();
-                    return $data->stok - $ss->sum('detailpesanan.jumlah') . ' ' . $data->satuan->nama;
+                    $d = $data->get_sum_noseri();
+                    $ss = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+                    return $d - $ss . ' ' . $data->satuan->nama;
                 } else {
                     return '-';
                 }
@@ -465,7 +467,8 @@ class GudangController extends Controller
                 return $d->seri->noseri;
             })
             ->addColumn('posisi', function ($d) {
-                return $d->layout->ruang;
+                return $d->layout_id == null ? '-' : $d->layout->ruang;
+                // return $d
             })
             ->make(true);
     }

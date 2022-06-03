@@ -2365,7 +2365,7 @@ class SparepartController extends Controller
             })
             ->addColumn('layout', function ($d) {
                 if (empty($d->layout_id)) {
-                    return $d->Layout->ruang;
+                    return '-';
                 } else {
                     return $d->layout->ruang;
                 }

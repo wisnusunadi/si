@@ -580,8 +580,14 @@
                                 return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}" checked>`
                             else
                                 return '<span class="badge badge-info">Sudah Digunakan</span>'
-                        } else
-                            return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}">`
+                        } else {
+                            if (data.ischange == 0) {
+                                return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}" disabled title="Noseri Tidak Bisa Digunakan">`
+                            } else {
+                                return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}">`
+                            }
+                        }
+
                     }
                 },
             ],

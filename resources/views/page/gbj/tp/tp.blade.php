@@ -155,7 +155,7 @@
                                                 <th>Produk</th>
                                                 <th>Jumlah</th>
                                                 <th>Status</th>
-                                                <td>Aksi</td>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>

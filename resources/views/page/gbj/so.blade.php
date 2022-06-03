@@ -329,10 +329,11 @@
         },
             "columnDefs": [
                 {
-                    "targets": [5],
+                    "targets": [6],
                     "visible": document.getElementById('auth').value == '2' ? false : true,
                     "width": "20%",
-                }
+                },
+                { "width": "10%", "targets": 5 }
             ]
         });
 
@@ -357,10 +358,11 @@
         },
             "columnDefs": [
                 {
-                    "targets": [5],
+                    "targets": [6],
                     "visible": document.getElementById('auth').value == '2' ? false : true,
                     "width": "20%",
-                }
+                },
+                { "width": "10%", "targets": 5 }
             ]
         });
 
