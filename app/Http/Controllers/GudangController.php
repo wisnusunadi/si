@@ -559,21 +559,25 @@ class GudangController extends Controller
                 'action' => 'delete'
             ])->get();
 
-            if (count($data) > 0) {
-                return datatables()->of($data)
-                    ->addIndexColumn()
-                    ->addColumn('checkbox', function($d) {
-                        return '<input type="checkbox" id="noseriid" name="id" value="'.$d->noseri_id.'">';
-                    })
-                    ->addColumn('noseri', function($d) {
-                        return $d->noseri->noseri;
-                    })
-                    ->addColumn('requested', function($d) {
-                        return $d->actionn->nama;
-                    })
-                    ->rawColumns(['checkbox'])
-                    ->make(true);
-            }
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('checkbox', function($d) {
+                    return '<input type="checkbox" class="cb-child1" id="noseriid" name="id" value="'.$d->noseri_id.'">';
+                })
+                ->addColumn('produk', function($d){
+                    return $d->noseri->gudang->nama == null ? $d->noseri->gudang->produk->nama : $d->noseri->gudang->produk->nama.' <b>'.$d->noseri->gudang->nama.'</b>';
+                })
+                ->addColumn('merk', function($d){
+                    return $d->noseri->gudang->produk->merk;
+                })
+                ->addColumn('noseri', function($d) {
+                    return $d->noseri->noseri;
+                })
+                ->addColumn('requested', function($d) {
+                    return $d->actionn->nama;
+                })
+                ->rawColumns(['checkbox', 'produk'])
+                ->make(true);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -590,24 +594,28 @@ class GudangController extends Controller
                 'action' => 'update'
             ])->get();
 
-            if (count($data) > 0) {
-                return datatables()->of($data)
-                    ->addIndexColumn()
-                    ->addColumn('checkbox', function($d) {
-                        return '<input type="checkbox" id="noseriid" name="id" value="'.$d->noseri_id.'">';
-                    })
-                    ->addColumn('lama', function($d) {
-                        return $d->data_lama;
-                    })
-                    ->addColumn('baru', function($d) {
-                        return $d->data_baru;
-                    })
-                    ->addColumn('requested', function($d) {
-                        return $d->actionn->nama;
-                    })
-                    ->rawColumns(['checkbox'])
-                    ->make(true);
-            }
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('checkbox', function($d) {
+                    return '<input type="checkbox" class="cb-child" id="noseriid" name="id" value="'.$d->noseri_id.'">';
+                })
+                ->addColumn('produk', function($d){
+                    return $d->noseri->gudang->nama == null ? $d->noseri->gudang->produk->nama : $d->noseri->gudang->produk->nama.' <b>'.$d->noseri->gudang->nama.'</b>';
+                })
+                ->addColumn('merk', function($d){
+                    return $d->noseri->gudang->produk->merk;
+                })
+                ->addColumn('lama', function($d) {
+                    return $d->data_lama;
+                })
+                ->addColumn('baru', function($d) {
+                    return $d->data_baru;
+                })
+                ->addColumn('requested', function($d) {
+                    return $d->actionn->nama;
+                })
+                ->rawColumns(['checkbox', 'produk'])
+                ->make(true);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -678,7 +686,7 @@ class GudangController extends Controller
                     ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
                     NoseriBarangJadi::find($dd->noseri_id)->update(['is_change' => 1]);
                 }
-                return response()->json(['error' => false, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
+                return response()->json(['error' => true, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
             }
         } catch (\Exception $e) {
             return response()->json([

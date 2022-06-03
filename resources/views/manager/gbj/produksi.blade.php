@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="content-header">
-    <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
+    <input type="hidden" name="" id="authid" value="{{ Auth::user()->id }}">
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
@@ -25,7 +25,7 @@
         <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
             <li class="nav-item">
                 <a class="nav-link active" id="pills-edit-tab" data-toggle="pill" href="#pills-edit" role="tab"
-                    aria-controls="pills-edit" aria-selected="true">Edit Nomor Seri</a>
+                    aria-controls="pills-edit" aria-selected="true">Ubah Nomor Seri</a>
             </li>
             <li class="nav-item">
                 <a class="nav-link" id="pills-hapus-tab" data-toggle="pill" href="#pills-hapus" role="tab"
@@ -46,14 +46,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child"></td>
-                            <td>Elitech</td>
-                            <td>ABPM</td>
-                            <td>ABP5465465464</td>
-                            <td>APB6546565566</td>
-                            <td>Nur Kholidah</td>
-                        </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -64,20 +57,12 @@
                             <th><input type="checkbox" id="head-cb1"></th>
                             <th>Merk</th>
                             <th>Nama Produk</th>
-                            <th>No Seri Lama</th>
-                            <th>No Seri Baru</th>
+                            <th>No Seri</th>
                             <th>Diajukan Oleh</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" class="cb-child1"></td>
-                            <td>Elitech</td>
-                            <td>ABPM</td>
-                            <td>ABP5465465464</td>
-                            <td>APB6546565566</td>
-                            <td>Nur Kholidah</td>
-                        </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -86,7 +71,7 @@
     <div class="card-footer">
         <div class="d-flex justify-content-end">
             <button class="btn btn-primary buttonSubmit" id="btnApproveEdit">Setujui</button>
-            {{-- <button class="btn btn-danger" id="btn-reject">Reject</button> --}}
+            <button class="btn btn-danger buttonReject" id="btn-reject">Reject</button>
         </div>
     </div>
 </div>
@@ -95,16 +80,53 @@
 
 @section('adminlte_js')
 <script>
+    $("#head-cb").prop('checked', false);
+    $("#head-cb1").prop('checked', false);
+    $('.buttonSubmit').attr('id', 'btnApproveEdit');
+    $('.buttonReject').attr('id', 'btnRejectEdit');
     var authid = $('#authid').val();
     // Datatable
     $('#editTable').DataTable({
         processing: true,
+        ordering: false,
+        ajax: {
+            'type': 'POST',
+            'datatype': 'JSON',
+            'url': '/api/v2/gbj/list-update-noseri',
+            'headers': {
+                'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+        },
+        columns: [
+            {data: 'checkbox'},
+            {data: 'merk'},
+            {data: 'produk'},
+            {data: 'lama'},
+            {data: 'baru'},
+            {data: 'requested'},
+        ],
         language: {
             search: "Cari:"
         }
     });
     $('#hapusTable').DataTable({
         processing: true,
+        ordering: false,
+        ajax: {
+            'type': 'POST',
+            'datatype': 'JSON',
+            'url': '/api/v2/gbj/list-approve-noseri',
+            'headers': {
+                'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+        },
+        columns: [
+            {data: 'checkbox'},
+            {data: 'merk'},
+            {data: 'produk'},
+            {data: 'noseri'},
+            {data: 'requested'},
+        ],
         language: {
             search: "Cari:"
         }
@@ -149,19 +171,115 @@
     $('#pills-edit-tab').on('click', function () {
         $('.buttonSubmit').removeAttr('id');
         $('.buttonSubmit').attr('id', 'btnApproveEdit');
+        $('.buttonReject').attr('id', 'btnRejectEdit');
     });
 
     $('#pills-hapus-tab').on('click', function () {
         $('.buttonSubmit').removeAttr('id');
         $('.buttonSubmit').attr('id', 'btnApproveHapus');
+        $('.buttonReject').attr('id', 'btnRejectHapus');
     });
 
     $(document).on('click', '#btnApproveEdit', function () {
-        alert('Edit Nomor Seri Berhasil');
+        let a = $('#editTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+            function () {
+                return $(this).val();
+            }).get();
+
+        if (a.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Minimal 1 Data Dipilih!',
+            })
+        } else {
+            Swal.fire({
+                title: 'Kamu Yakin?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, approve it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/v2/gbj/proses-update-noseri',
+                        type: 'post',
+                        data: {
+                            is_acc: 'approved',
+                            noseriid: a,
+                            accby: authid,
+                        },
+                        success: function(res) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Approved',
+                                text: res.msg,
+                            }).then(() => {
+                                location.reload()
+                            });
+                        }
+                    })
+                }
+            })
+        }
+
     })
 
     $(document).on('click', '#btnApproveHapus', function () {
-        alert('Data Hapus Produk Berhasil Disetujui');
+        let a = $('#hapusTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+            function () {
+                return $(this).val();
+            }).get();
+        console.log(a);
+    });
+
+    $(document).on('click', '#btnRejectEdit', function () {
+        let a = $('#editTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+            function () {
+                return $(this).val();
+            }).get();
+        console.log(a.length);
+
+        if (a.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Minimal 1 Data Dipilih!',
+            })
+        } else {
+            Swal.fire({
+                title: 'Kamu Yakin?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, reject it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/v2/gbj/proses-update-noseri',
+                        type: 'post',
+                        data: {
+                            is_acc: 'rejected',
+                            noseriid: a,
+                            accby: authid,
+                        },
+                        success: function(res) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Rejected',
+                                text: res.msg,
+                            }).then(() => {
+                                location.reload()
+                            });
+                        }
+                    })
+                }
+            })
+        }
     });
 
 </script>
