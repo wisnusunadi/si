@@ -4,6 +4,7 @@ namespace App\Exports;
 
 use App\Exports\Sheets\SheetBelumPO;
 use App\Exports\Sheets\SheetSudahPO;
+use App\Exports\Sheets\SheetSudahPOPaket;
 use Dotenv\Util\Str;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithMultipleSheets;
@@ -53,18 +54,18 @@ class LaporanPenjualan implements WithMultipleSheets
     {
         $sheets = [];
         $x = explode(',', $this->jenis_penjualan);
-        $sheets[] = new SheetSudahPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->tampilan);
+        $sheets[] = new SheetSudahPOPaket($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->tampilan);
+        // $sheets[] = new SheetSudahPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->tampilan);
 
-        if ($x == ['ekatalog', 'spa', 'spb']) {
-            $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
-        } else if ($x == ['ekatalog', 'spa']) {
-            $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
-        } else if ($x == ['ekatalog', 'spb']) {
-            $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
-        } else if ($this->jenis_penjualan == 'ekatalog') {
-            $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
-        }
-
+        // if ($x == ['ekatalog', 'spa', 'spb']) {
+        //     $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
+        // } else if ($x == ['ekatalog', 'spa']) {
+        //     $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
+        // } else if ($x == ['ekatalog', 'spb']) {
+        //     $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
+        // } else if ($this->jenis_penjualan == 'ekatalog') {
+        //     $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
+        // }
 
         return $sheets;
     }

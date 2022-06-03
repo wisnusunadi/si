@@ -322,7 +322,7 @@
                                                     </div>
                                                     <div class="form-group">
                                                         <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="11" name="status_penjualan[]" id="status8" />
+                                                            <input class="form-check-input" type="checkbox" value="10" name="status_penjualan[]" id="status8" />
                                                             <label class="form-check-label" for="status8">
                                                                 Kirim
                                                             </label>

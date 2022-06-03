@@ -338,6 +338,6 @@ class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
     }
     public function title(): string
     {
-        return 'Sudah PO';
+        return 'Sudah PO (Variasi)';
     }
 }

@@ -1143,9 +1143,9 @@ class PenjualanController extends Controller
         $data = "";
 
         if ($value == 'semua') {
-            $data  = Ekatalog::with('pesanan', 'customer')->orderBy('id', 'DESC')->get();
+            $data  = Ekatalog::with('pesanan', 'customer')->orderBy('no_urut', 'DESC')->get();
         } else {
-            $data  = Ekatalog::orderBy('id', 'DESC')->whereIN('status', $x)->get();
+            $data  = Ekatalog::orderBy('no_urut', 'DESC')->whereIN('status', $x)->get();
         }
 
         return datatables()->of($data)
