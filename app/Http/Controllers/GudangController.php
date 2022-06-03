@@ -45,6 +45,7 @@ use PhpOffice\PhpSpreadsheet\Style\Conditional;
 use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Support\Str;
 
 class GudangController extends Controller
 {
@@ -1144,7 +1145,7 @@ class GudangController extends Controller
     function exportSpb($id)
     {
         $header = TFProduksi::where('pesanan_id', $id)->with('pesanan')->get()->pluck('pesanan.so');
-        return $header[0];
+        return Excel::download(new SpbExport($id), 'SPB.xlsx');
     }
 
     function download_template_noseri(Request $request)
