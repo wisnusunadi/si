@@ -261,13 +261,13 @@
                         },
                         success: function(res) {
                             console.log(res);
-                            // Swal.fire({
-                            //     icon: 'success',
-                            //     title: 'Approved',
-                            //     text: 'a',
-                            // }).then(() => {
-                            //     location.reload()
-                            // });
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Approved',
+                                text: res.msg,
+                            }).then(() => {
+                                location.reload()
+                            });
                         }
                     })
                 }
@@ -308,13 +308,13 @@
                         },
                         success: function(res) {
                             console.log(res);
-                            // Swal.fire({
-                            //     icon: 'success',
-                            //     title: 'Rejected',
-                            //     text: 'a',
-                            // }).then(() => {
-                            //     location.reload()
-                            // });
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Rejected',
+                                text: res.msg,
+                            }).then(() => {
+                                location.reload()
+                            });
                         }
                     })
                 }
