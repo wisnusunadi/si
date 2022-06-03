@@ -323,7 +323,7 @@
                                                                                     <span class="float-right filter">
                                                                                         <button class="btn btn-primary"
                                                                                             type="button" id="kirim_produk"
-                                                                                            disabled><i
+                                                                                            disabled="true"><i
                                                                                                 class="fas fa-plus"></i>
                                                                                             Pengiriman</button>
                                                                                     </span>

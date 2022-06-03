@@ -489,16 +489,6 @@
 
 @section('adminlte_js')
 <script src="{{ asset('assets/rowgroup/dataTables.rowGroup.min.js') }}"></script>
-
-
-{{-- {{-- <!-- <script src="{{ asset('assets/button/dataTables.buttons.min.js') }}"></script>
-<script src="{{ asset('assets/button/jszip.min.js') }}"></script>
-<script src="{{ asset('assets/button/pdfmake.min.js') }}"></script>
-<script src="{{ asset('assets/button/vfs_fonts.js') }}"></script>
-<script src="{{ asset('assets/button/buttons.html5.min.js') }}"></script>
-<script src="{{ asset('assets/button/buttons.print.min.js') }} "></script>
-<link rel="stylesheet" href="{{ asset('assets/button/buttons.bootstrap4.min.css') }}"> --> --}}
-
 <script>
     $(function() {
         $('#customer_id').append('<option value=""></option>');
@@ -528,12 +518,6 @@
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
             },
-            // buttons: [{
-            //     extend: 'excel',
-            //     title: 'Laporan Penjualan',
-            //     text: '<i class="far fa-file-excel"></i> Export',
-            //     className: "btn btn-info"
-            // }, ],
             columns: [{
                     data: 'kosong'
                 },
@@ -642,7 +626,7 @@
         });
 
         $(document).on('click', '#laporanmodal #btn-export', function(event) {
-            $('#loader').show();
+            // $('#loader').show();
 
             var penjualan = [];
             var tambahan = [];
@@ -663,20 +647,51 @@
             if (penjualan != 0) {
                 var x = penjualan;
             } else {
-                var x = ['kosong']
+                var x = ['kosong'];
             }
 
             if (tambahan != 0) {
                 var y = tambahan;
             } else {
-                var y = ['kosong']
+                var y = ['kosong'];
             }
 
-            window.location.href = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y + '/' + tampilan_export;
-            setTimeout(function() {
-                $("#laporanmodal").modal('hide');
-                $('#loader').fadeOut();
-            }, 2000);
+            $.ajax({
+                url: '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y + '/' + tampilan_export,
+                type: 'GET',
+                responseType: 'blob',
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // success: function(result) {
+                //     $('#laporanmodal').modal("hide");
+                //     // $('#edit').html(result).show();
+                // },
+                complete: function() {
+                    $('#laporanmodal').modal("hide");
+                    $('#loader').fadeOut();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y + '/' + tampilan_export +
+                        " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+            .then((response) => {
+                const url = window.URL.createObjectURL(new Blob([response.data]));
+                const link = document.createElement('a');
+                link.setAttribute('download', 'file.pdf');
+                document.body.appendChild(link);
+                link.click();
+            });
+
+            // window.location.href = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y + '/' + tampilan_export;
+            // setTimeout(function() {
+            //     $("#laporanmodal").modal('hide');
+            //     $('#loader').fadeOut();
+            // }, 2000);
             // $.ajax({
             //     url:
             //     beforeSend: function() {
