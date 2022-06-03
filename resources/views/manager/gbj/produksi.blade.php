@@ -70,8 +70,8 @@
     </div>
     <div class="card-footer">
         <div class="d-flex justify-content-end">
-            <button class="btn btn-primary buttonSubmit" id="btnApproveEdit">Setujui</button>
-            <button class="btn btn-danger buttonReject" id="btn-reject">Reject</button>
+            <button class="btn btn-primary buttonSubmit" id="btnApproveEdit"><i class="fas fa-check"></i> Setujui</button>
+            <button class="btn btn-danger buttonReject" id="btn-reject"><i class="fas fa-ban"></i> Reject</button>
         </div>
     </div>
 </div>
@@ -233,6 +233,91 @@
                 return $(this).val();
             }).get();
         console.log(a);
+
+        if (a.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Minimal 1 Data Dipilih untuk Dihapus!',
+            })
+        } else {
+            Swal.fire({
+                title: 'Kamu Yakin?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, Approved it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // $.ajax({
+                    //     url: '/api/v2/gbj/proses-update-noseri',
+                    //     type: 'post',
+                    //     data: {
+                    //         is_acc: 'rejected',
+                    //         noseriid: a,
+                    //         accby: authid,
+                    //     },
+                        // success: function(res) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Approved',
+                                text: 'a',
+                            }).then(() => {
+                                location.reload()
+                            });
+                    //     }
+                    // })
+                }
+            })
+        }
+    });
+
+    $(document).on('click', '#btnRejectHapus', function () {
+        let a = $('#hapusTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+            function () {
+                return $(this).val();
+            }).get();
+        // console.log(a);
+        if (a.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Minimal 1 Data Dipilih untuk Dihapus!',
+            })
+        } else {
+            Swal.fire({
+                title: 'Kamu Yakin?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, reject it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    // $.ajax({
+                    //     url: '/api/v2/gbj/proses-update-noseri',
+                    //     type: 'post',
+                    //     data: {
+                    //         is_acc: 'rejected',
+                    //         noseriid: a,
+                    //         accby: authid,
+                    //     },
+                        // success: function(res) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Rejected',
+                                text: 'a',
+                            }).then(() => {
+                                location.reload()
+                            });
+                    //     }
+                    // })
+                }
+            })
+        }
     });
 
     $(document).on('click', '#btnRejectEdit', function () {
