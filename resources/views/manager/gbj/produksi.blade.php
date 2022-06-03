@@ -251,24 +251,25 @@
                 confirmButtonText: 'Yes, Approved it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // $.ajax({
-                    //     url: '/api/v2/gbj/proses-update-noseri',
-                    //     type: 'post',
-                    //     data: {
-                    //         is_acc: 'rejected',
-                    //         noseriid: a,
-                    //         accby: authid,
-                    //     },
-                        // success: function(res) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Approved',
-                                text: 'a',
-                            }).then(() => {
-                                location.reload()
-                            });
-                    //     }
-                    // })
+                    $.ajax({
+                        url: '/api/v2/gbj/proses-delete-noseri',
+                        type: 'post',
+                        data: {
+                            is_acc: 'approved',
+                            noseriid: a,
+                            accby: authid,
+                        },
+                        success: function(res) {
+                            console.log(res);
+                            // Swal.fire({
+                            //     icon: 'success',
+                            //     title: 'Approved',
+                            //     text: 'a',
+                            // }).then(() => {
+                            //     location.reload()
+                            // });
+                        }
+                    })
                 }
             })
         }
@@ -297,24 +298,25 @@
                 confirmButtonText: 'Yes, reject it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // $.ajax({
-                    //     url: '/api/v2/gbj/proses-update-noseri',
-                    //     type: 'post',
-                    //     data: {
-                    //         is_acc: 'rejected',
-                    //         noseriid: a,
-                    //         accby: authid,
-                    //     },
-                        // success: function(res) {
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Rejected',
-                                text: 'a',
-                            }).then(() => {
-                                location.reload()
-                            });
-                    //     }
-                    // })
+                    $.ajax({
+                        url: '/api/v2/gbj/proses-delete-noseri',
+                        type: 'post',
+                        data: {
+                            is_acc: 'rejected',
+                            noseriid: a,
+                            accby: authid,
+                        },
+                        success: function(res) {
+                            console.log(res);
+                            // Swal.fire({
+                            //     icon: 'success',
+                            //     title: 'Rejected',
+                            //     text: 'a',
+                            // }).then(() => {
+                            //     location.reload()
+                            // });
+                        }
+                    })
                 }
             })
         }
