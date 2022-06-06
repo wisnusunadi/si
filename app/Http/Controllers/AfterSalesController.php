@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Logistik;
+use App\Models\Pesanan;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
@@ -357,6 +358,188 @@ class AfterSalesController extends Controller
             </a>';
             })
             ->rawColumns(['checkbox', 'button', 'status'])
+            ->make(true);
+    }
+
+    public function get_data_so_belum_kirim()
+    {
+        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['8', '9', '11', '12'])->orderBy('tgl_po', 'desc')->get();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jenis', function ($data) {
+                if (isset($data->Spa)) {
+                    return '<span class="orange-text badge">SPA</span>';
+                }
+                else if (isset($data->Spb)) {
+                    return '<span class="blue-text badge">SPB</span>';
+                }
+            })
+            ->addColumn('so', function ($data) {
+                if (!empty($data->so)) {
+                        return $data->so;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('nopo', function ($data) {
+                    if (!empty($data->no_po)) {
+                        return $data->no_po;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('status', function ($data) {
+                $datas = "";
+                if ($data->log != "batal") {
+                    if (!empty($data->log_id)) {
+                        if ($data->State->nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->State->nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->State->nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        }
+                        $datas .= ucfirst($data->State->nama) . '</span>';
+                    } else {
+                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                    }
+                } else {
+                    $datas .= '<span class="red-text badge">Batal</span>';
+                }
+                return $datas;
+            })
+            ->addColumn('tglpo', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+            })
+            ->addColumn('nama_customer', function ($data) {
+                if (isset($data->Spa)) {
+                    return $data->Spa->Customer->nama;
+                }
+                else if (isset($data->Spb)) {
+                    return $data->Spb->Customer->nama;
+                }
+            })
+            ->addColumn('button', function ($data) {
+                $return = "";
+                if (isset($data->Spa)) {
+                    $return .= '<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->Spa->id) . '"  data-id="' . $data->Spa->id . '" >
+                        <button class="btn btn-outline-primary" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                else if (isset($data->Spb)) {
+                    $return .= '<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '" >
+                    <button class="btn btn-outline-primary" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                return $return;
+            })
+            ->rawColumns(['button', 'status', 'jenis'])
+            ->make(true);
+    }
+
+    public function get_data_so_selesai_kirim()
+    {
+        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['10'])->orderBy('tgl_po', 'desc')->get();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jenis', function ($data) {
+                if (isset($data->Spa)) {
+                    return '<span class="orange-text badge">SPA</span>';
+                }
+                else if (isset($data->Spb)) {
+                    return '<span class="blue-text badge">SPB</span>';
+                }
+            })
+            ->addColumn('so', function ($data) {
+                if (!empty($data->so)) {
+                        return $data->so;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('nopo', function ($data) {
+                    if (!empty($data->no_po)) {
+                        return $data->no_po;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('status', function ($data) {
+                $datas = "";
+                if ($data->log != "batal") {
+                    if (!empty($data->log_id)) {
+                        if ($data->State->nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->State->nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->State->nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        }
+                        $datas .= ucfirst($data->State->nama) . '</span>';
+                    } else {
+                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                    }
+                } else {
+                    $datas .= '<span class="red-text badge">Batal</span>';
+                }
+                return $datas;
+            })
+            ->addColumn('tglpo', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+            })
+            ->addColumn('nama_customer', function ($data) {
+                if (isset($data->Spa)) {
+                    return $data->Spa->Customer->nama;
+                }
+                else if (isset($data->Spb)) {
+                    return $data->Spb->Customer->nama;
+                }
+            })
+            ->addColumn('button', function ($data) {
+                $return = "";
+                if (isset($data->Spa)) {
+                    $return .= '<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->Spa->id) . '"  data-id="' . $data->Spa->id . '" >
+                    <button class="btn btn-outline-primary" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                else if (isset($data->Spb)) {
+                    $return .= '<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '" >
+                    <button class="btn btn-outline-primary" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                return $return;
+            })
+            ->rawColumns(['button', 'status', 'jenis'])
             ->make(true);
     }
 }

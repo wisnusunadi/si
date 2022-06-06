@@ -321,9 +321,9 @@
                                                         <h6 class="card-title">Info Produk</h6>
                                                     </div>
                                                     <div class="card-body overflowy">
-                                                        @if ($ekatalog->Pesanan->ket != null)
+                                                        @if ($ekatalog->ket != null)
                                                             <div class="alert alert-danger" role="alert">
-                                                                Catatan : {{ $ekatalog->Pesanan->ket }}
+                                                                <strong><i class="fas fa-exclamation-triangle"></i> Catatan : </strong>{{ $ekatalog->ket }}
                                                             </div>
                                                         @endif
                                                         <div class="card">
@@ -347,8 +347,10 @@
                                                                     <div class="p-2">
                                                                         <div class="text-muted">Total Harga</div>
                                                                         <div>
-                                                                            <h6><b>
-                                                                                    @currency($totalharga)</b>
+                                                                            <h6>
+                                                                                <b>
+                                                                                    @currency($totalharga)
+                                                                                </b>
                                                                             </h6>
                                                                         </div>
                                                                     </div>

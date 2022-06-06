@@ -910,6 +910,7 @@ class PenjualanController extends Controller
             ->rawColumns(['button'])
             ->make(true);
     }
+
     public function get_data_detail_paket_spb($id)
     {
         $data  = DetailSpb::where('spb_id', $id)
@@ -928,6 +929,7 @@ class PenjualanController extends Controller
             ->rawColumns(['button',])
             ->make(true);
     }
+
     public function get_data_detail_paket_ekatalog($id)
     {
         $data  = DetailEkatalog::with('gudangbarangjadi')->where('ekatalog_id', $id)
@@ -951,6 +953,7 @@ class PenjualanController extends Controller
             ->rawColumns(['button', 'variasi'])
             ->make(true);
     }
+    
     public function get_data_paket_pesanan_ekat($id)
     {
         $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($id) {

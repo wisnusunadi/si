@@ -186,13 +186,17 @@
                                                         <td class="nowraptxt tabnum">@if(isset($e->detaillogistikpart)) {{$e->jumlah}} @else 0 @endif</td>
                                                         <td class="nowraptxt tabnum">@currency($e->harga)</td>
                                                         <td class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
-                                                        @if(Auth::user()->divisi_id == "8")
+                                                            @if(Auth::user()->divisi_id == "8")
+                                                            @if($data->Pesanan->log_id == "8" || $data->Pesanan->log_id == "9")
                                                             <td><a data-toggle="komentar" class="komentarmodal" data-id="{{$e->id}}">
                                                                 <button type="button" class="btn btn-outline-warning btn-sm">
                                                                     <i class="fas fa-pencil-alt"></i>
                                                                         Komentar
                                                                 </button></a>
                                                             </td>
+                                                            @else
+                                                            <td>-</td>
+                                                            @endif
                                                             @endif
                                                         <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
                                                     </tr>

@@ -27,7 +27,7 @@
                                                 <input class="form-check-input" type="radio" name="no_sj_exist"
                                                     id="no_sj_exist2" value="lama" />
                                                 <label class="form-check-label" for="no_sj_exist2">Surat Jalan
-                                                    Lama</label>
+                                                    Tersedia</label>
                                             </div>
                                         </div>
                                     </div>
@@ -105,6 +105,7 @@
 
                                             </select>
                                             <div class="invalid-feedback" id="msgekspedisi_id"></div>
+                                            <label for="" id="ekspedisi_nama" class="col-form-label hide"></label>
                                         </div>
                                         {{-- </div> --}}
                                         {{-- </div> --}}

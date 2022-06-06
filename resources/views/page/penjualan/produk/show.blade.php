@@ -270,7 +270,7 @@
                                                     </div>
                                                     <div class="filter">
                                                         <div><small class="text-muted">Jenis Produk</small></div>
-                                                        <div><b id="jenis_produk"><span class="badge red-text">Non Ekatalog</span><span class="badge purple-text">Ekatalog</span></b></div>
+                                                        <div><b id="jenis_produk"><span class="badge blue-text">Non Ekatalog</span><span class="badge purple-text">Ekatalog</span></b></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -425,8 +425,7 @@
                     {
                         data: 'jenis_paket',
                         className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
+                        orderable: true
                     },
                     {
                         data: 'nama_alias',
@@ -515,7 +514,6 @@
                     success: function(result) {
                         $('#editmodal').modal("show");
                         $('#edit').html(result).show();
-                        console.log(result);
                         $("#editform").attr("action", href);
                         var x = 3;
                         for (i = 0; i < 10; i++) {

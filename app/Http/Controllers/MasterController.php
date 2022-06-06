@@ -357,7 +357,7 @@ class MasterController extends Controller
             })
             ->addColumn('jenis_paket', function ($data) {
                 $array = [
-                    '<span class="badge purple-text">Ekatalog</span>','<span class="badge red-text">Non Ekatalog</span>'
+                    '<span class="badge purple-text">Ekatalog</span>','<span class="badge blue-text">Non Ekatalog</span>'
                 ];
                 shuffle($array);
                 return $array[0];
