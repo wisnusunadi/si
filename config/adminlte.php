@@ -984,7 +984,7 @@ return [
             'text' => 'Dashboard',
             'url' => '/gbj/dashboard',
             'icon' => 'fas fa-layer-group',
-            'auth' => [13],
+            'auth' => [13, 31],
         ],
         // [
         //     'header' => 'Produksi',
@@ -1437,13 +1437,13 @@ return [
 
         [
             'header' => 'Persetujuan',
-            'auth' => [13]
+            'auth' => [31]
         ],
         [
             'text' => 'Produk',
             'url' => 'gbjmanager/produksi',
             'icon' => 'fas fa-cubes',
-            'auth' => [13],
+            'auth' => [31],
         ]
     ],
 

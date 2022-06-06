@@ -34,19 +34,28 @@
         </ul>
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-edit" role="tabpanel" aria-labelledby="pills-edit-tab">
-                <table class="table table-bordered" id="editTable" style="width: 100%">
+                <table class="table table-bordered" id="editTable" style                                                                                   ="width: 100%">
                     <thead>
                         <tr>
                             <th><input type="checkbox" id="head-cb"></th>
                             <th>Merk</th>
                             <th>Nama Produk</th>
+                            <th>Tanggal Pengajuan</th>
                             <th>No Seri Lama</th>
                             <th>No Seri Baru</th>
                             <th>Diajukan Oleh</th>
                         </tr>
                     </thead>
                     <tbody>
-
+                        <tr>
+                            <td><input type="checkbox" name="cb-child" id=""></td>
+                            <td>Elitech</td>
+                            <td>Produk 1</td>
+                            <td>12 Desember 2020</td>
+                            <td>123456789</td>
+                            <td>123456789</td>
+                            <td>Admin</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -56,21 +65,30 @@
                         <tr>
                             <th><input type="checkbox" id="head-cb1"></th>
                             <th>Merk</th>
+                            <th>Tanggal Pengajuan</th>
                             <th>Nama Produk</th>
                             <th>No Seri</th>
                             <th>Diajukan Oleh</th>
                         </tr>
                     </thead>
                     <tbody>
-
+                        <tr>
+                            <td><input type="checkbox" name="cb-child1" id=""></td>
+                            <td>Elitech</td>
+                            <td>Produk 1</td>
+                            <td>12 Desember 2020</td>
+                            <td>123456789</td>
+                            <td>123456789</td>
+                            <td>Admin</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
         </div>
     </div>
     <div class="card-footer">
-        <div class="d-flex justify-content-end">
-            <button class="btn btn-primary buttonSubmit" id="btnApproveEdit"><i class="fas fa-check"></i> Setujui</button>
+        <div class="d-flex justify-content-end bd-example">
+            <button class="btn btn-primary buttonSubmit" id="btnApproveEdit"><i class="fas fa-check"></i> Setujui</button>&nbsp;
             <button class="btn btn-danger buttonReject" id="btn-reject"><i class="fas fa-ban"></i> Reject</button>
         </div>
     </div>
@@ -79,7 +97,7 @@
 @stop
 
 @section('adminlte_js')
-<script>
+{{-- <script>
     $("#head-cb").prop('checked', false);
     $("#head-cb1").prop('checked', false);
     $('.buttonSubmit').attr('id', 'btnApproveEdit');
@@ -369,5 +387,5 @@
         }
     });
 
-</script>
+</script> --}}
 @stop

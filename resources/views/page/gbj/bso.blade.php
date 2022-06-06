@@ -27,6 +27,13 @@
     .hidden {
         display: none;
     }
+
+    #listseri{
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
@@ -236,7 +243,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-6">
                         <table class="table table-striped scan-produk" id="scan">
                             <thead>
                                 <tr>
@@ -248,16 +255,21 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-4">
+                    <div class="col-6">
                         <div class="card">
                         <div class="card-header">
                             <h5 class="card-title">Preview No Seri Setelah Scan</h5>
                         </div>
                           <div class="card-body">
-                            <span class="card-text preview-scan">
-                                <ul id="listseri">
-
-                                </ul>
+                            <span class="card-text ">
+                                <table class="table table-striped preview-scan">
+                                    <thead>
+                                        <tr>
+                                            <th>Nomor Seri</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="listseri"></tbody>
+                                </table>
                             </span>
                           </div>
                         </div>
@@ -528,8 +540,9 @@
     var dpp = '';
     let dataTampungSeri = [];
     const list  = document.getElementById('listseri');
+
     $(document).on('click', '.detailmodal', function (e) {
-        let gh = $(this).parent().prev().prev().prev().prev()[0].textContent
+        let gh = $(this).parent().prev().prev().prev().prev()[0].textContent;
         let ghh = gh.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
         });
@@ -552,7 +565,6 @@
                 }
             }
         }
-
         mytable = $('.scan-produk').DataTable({
             processing: false,
             serverSide: false,
@@ -616,9 +628,17 @@
             let data = mytable.row('tr:contains("' + barcode + '")').data();
             if(barcode.length >= 10){
                 if (data !== undefined) {
-                    $('.cb-child').prop('checked', true);
+                    let checked = $('.cb-child').prop('checked', true);
                     dataTampungSeri.push(data.noseri);
                     $(this).val('');
+                    if(checked){
+                        var idd = $(checked).val();
+                        var title = $(checked).parent().prev()[0].textContent;
+                        var textid = 'text' + $(checked).attr('id');
+
+                        $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
+                    }
+
                 }else{
                     Swal.fire({
                         icon: 'error',
@@ -643,15 +663,35 @@
         }
     })
 
-    $('.scan-produk').on('change', 'input[type=checkbox]',function (){
+    $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();
         var title = $(this).parent().prev()[0].textContent;
         var textid = 'text' + $(this).attr('id');
 
         if ($(this).is(':checked')) {
-            $(list).append('<li id='+ textid +'>'+title+'</li>')
+            $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
         } else {
             $('#'+textid).remove()
+        }
+
+        console.log("idd", idd);
+                        console.log("title", title);
+                        console.log("noseri", textid);
+
+    });
+
+    $('.scan-produk').on('change', '#head-cb', function () {
+        if ($(this).is(':checked')) {
+            $('.cb-child').prop('checked', true);
+            $('.cb-child').each(function () {
+                var idd = $(this).val();
+                var title = $(this).parent().prev()[0].textContent;
+                var textid = 'text' + $(this).attr('id');
+                $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
+            })
+        } else {
+            $('.cb-child').prop('checked', false);
+            $(list).html("")
         }
     })
 
@@ -987,7 +1027,6 @@
                 delete editPrd[$(this).val()]
             }
         })
-        console.log(editPrd);
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
