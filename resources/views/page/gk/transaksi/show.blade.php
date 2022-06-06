@@ -64,6 +64,11 @@
     }
 </style>
 <section class="content">
+    <div class="col-sm-1">
+        {{-- <a href="javascript:;" onclick = "history.back()">Redirect back to Page 1</a> --}}
+        {{-- <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i></a> --}}
+        <button class="btn btn-secondary btnBack" type="button"><i class="fas fa-arrow-left"></i></button>
+    </div>
     <div class="container-fluid">
         <div class="row">
             <div class="col-xl-5">
@@ -216,6 +221,15 @@
 @stop
 @section('adminlte_js')
 <script>
+    window.history.pushState(null, "", window.location.href);
+    window.onpopstate = function() {
+        window.history.pushState(null, "", window.location.href);
+    };
+
+    $('.btnBack').click(function() {
+        window.location.href = '{{ url('/gk/transaksi')}}'
+    })
+
      var id = $('#id').val();
      var getUrlParameter = function getUrlParameter(sParam) {
         var sPageURL = window.location.search.substring(1),

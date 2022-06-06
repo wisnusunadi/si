@@ -386,7 +386,10 @@
             ],
             dom: 'Bfrtip',
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                // "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
             },
         });
      // Tanggal Masuk
@@ -461,7 +464,10 @@
                 { data: 'action', name: 'action'},
             ],
             "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                    // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                    processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
             },
         });
         $(document).on("click", "#semua-produk-tab", function () {
@@ -544,6 +550,11 @@
 
             }}
         ],
+        language: {
+            processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
+        }
     });
     // Sales Order Cetak
     $('#gudang-salesorder-search').on('keyup', function() {

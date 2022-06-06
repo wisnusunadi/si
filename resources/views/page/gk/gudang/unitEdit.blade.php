@@ -71,6 +71,11 @@
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 
 <div class="row">
+    <div class="col-sm-1">
+        {{-- <a href="javascript:;" onclick = "history.back()">Redirect back to Page 1</a> --}}
+        {{-- <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i></a> --}}
+        <button class="btn btn-secondary btnBack" type="button"><i class="fas fa-arrow-left"></i></button>
+    </div>
     <div class="col-xl-12">
         <div class="card">
             <div class="card-header">
@@ -221,6 +226,12 @@
 @stop
 @section('adminlte_js')
 <script>
+    // disable button back browser
+    window.history.pushState(null, "", window.location.href);
+    window.onpopstate = function() {
+        window.history.pushState(null, "", window.location.href);
+    };
+
     function changeStatus() {
         $('.changeStatus').modal('show');
     }
@@ -230,6 +241,10 @@
     $('.kerusakan_edit').select2({
         dropdownParent: $('.changeStatus')
     });
+
+    $('.btnBack').click(function() {
+        window.location.href = '{{ url('/gk/gudang')}}'
+    })
     var id = $('#id').val();
     console.log(id);
     $('.table_edit_sparepart').dataTable({

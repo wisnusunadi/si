@@ -390,7 +390,10 @@
                 "targets": 0
             }],
             "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
             }
         });
 
@@ -497,7 +500,10 @@
                 },
             ],
             "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
             }
         })
         // testing
@@ -531,7 +537,7 @@
     $(document).on('click', '.detailmodal', function (e) {
         let gh = $(this).parent().prev().prev().prev().prev()[0].textContent
         let ghh = gh.replace(/\w\S*/g, function (txt) {
-            return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            return txt.charAt(0).toUpperCase() + txt.substr(1).toUpperCase();
         });
         $('#namaproduk').html('<b>' + ghh + '</b>')
 

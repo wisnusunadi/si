@@ -325,8 +325,11 @@
                 { data: 'action', name: 'action'},
             ],
             "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        },
+                // url: "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json",
+                processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
+            },
             "columnDefs": [
                 {
                     "targets": [6],
@@ -354,8 +357,11 @@
                 { data: 'action', name: 'action'},
             ],
             "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        },
+                // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
+            },
             "columnDefs": [
                 {
                     "targets": [6],
