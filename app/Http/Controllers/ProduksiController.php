@@ -570,6 +570,18 @@ class ProduksiController extends Controller
                                     ';
                         }
                     }
+
+                    if($data->log_id == 20) {
+                        for ($i = 1; $i < count($x); $i++) {
+                            if ($x[1] == 'EKAT') {
+                                return '';
+                            } elseif ($x[1] == 'SPA') {
+                                return '';
+                            } elseif ($x[1] == 'SPB') {
+                                return '';
+                            }
+                        }
+                    }
                 } elseif ($sumcek->sum() != $sumprd->sum()) {
                     for ($i = 1; $i < count($x); $i++) {
                         if ($x[1] == 'EKAT') {
@@ -587,6 +599,18 @@ class ProduksiController extends Controller
                                     <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
                                     <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
                                     ';
+                        }
+                    }
+
+                    if($data->log_id == 20) {
+                        for ($i = 1; $i < count($x); $i++) {
+                            if ($x[1] == 'EKAT') {
+                                return '';
+                            } elseif ($x[1] == 'SPA') {
+                                return '';
+                            } elseif ($x[1] == 'SPB') {
+                                return '';
+                            }
                         }
                     }
                 } else {
@@ -744,7 +768,31 @@ class ProduksiController extends Controller
                                     ';
                         }
                     }
+
+                    if($data->log_id == 20) {
+                        for ($i = 1; $i < count($x); $i++) {
+                            if ($x[1] == 'EKAT') {
+                                return '';
+                            } elseif ($x[1] == 'SPA') {
+                                return '';
+                            } elseif ($x[1] == 'SPB') {
+                                return '';
+                            }
+                        }
+                    }
                 } elseif ($sumcek->sum() != $sumprd->sum()) {
+                    if($data->log_id == 20) {
+                        for ($i = 1; $i < count($x); $i++) {
+                            if ($x[1] == 'EKAT') {
+                                return '';
+                            } elseif ($x[1] == 'SPA') {
+                                return '';
+                            } elseif ($x[1] == 'SPB') {
+                                return '';
+                            }
+                        }
+                    }
+
                     for ($i = 1; $i < count($x); $i++) {
                         if ($x[1] == 'EKAT') {
                             return '
