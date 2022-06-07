@@ -721,6 +721,8 @@
                 </div>
             </div>
 
+
+
             <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal"
                 aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
@@ -826,7 +828,6 @@
                     },
                 ]
             });
-
 
             var ekatalogtable = $('#ekatalogtable').DataTable({
                 destroy: true,
@@ -1006,7 +1007,6 @@
                     beforeSend: function() {
                         $('#loader').show();
                     },
-                    // return the result
                     success: function(result) {
                         $('#detailmodal').modal("show");
                         $('#detail').html(result).show();
@@ -1018,16 +1018,12 @@
                             $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
                             detailtabel_ekatalog(id);
                         } else if (label == 'spa') {
-                            // $('#detailmodal').find(".modal-header").attr('id', '');
-                            // $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-purple bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-orange');
                             $('#detailmodal').find(".modal-header > h4").text('SPA');
                             detailtabel_spa(id);
                         } else {
-                            // $('#detailmodal').find(".modal-header").attr('id', '');
-                            // $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-orange bg-purple');
                             $('#detailmodal').find(".modal-header").addClass('bg-lightblue');
@@ -1058,7 +1054,6 @@
                     beforeSend: function() {
                         $('#loader').show();
                     },
-                    // return the result
                     success: function(result) {
                         $('#editmodal').modal("show");
                         $('#edit').html(result).show();
@@ -1090,62 +1085,90 @@
                 var jenis = $(this).attr('data-jenis');
                 var id = $(this).attr("data-id");
 
-                swalWithBootstrapButtons.fire({
-                    title: 'Batalkan Pesanan',
-                    text: "Ingin membatalkan Pesanan ini?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Batalkan',
-                    cancelButtonText: 'Tutup',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                $.ajax({
+                    url: '/penjualan/penjualan/cancel/'+id+'/'+jenis,
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    success: function(result) {
+                        $('#detailmodal').modal("show");
+                        $('#detail').html(result).show();
+                        $('#detailmodal').find(".modal-header").removeClass('bg-purple bg-orange bg-lightblue');
+                        $('#detailmodal').find(".modal-header").addClass('bg-dark');
+                        $('#detailmodal').find(".modal-header > h4").text('Pesanan Batal');
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+            });
 
+            $(document).on('submit', '#btnkirimbatal', function(event) {
+                event.preventDefault();
+                var alasan = $(this).find('#alasan').val();
+                var jenis = $(this).find('#jenis').val();
+                var id = $(this).find('#id').val();
+
+                swal({
+                    title: "Batalkan Pesanan",
+                    text: "Apakah anda yakin ingin membatalkan pesanan?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Batalkan",
+                    cancelButtonText: "Kembali",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
                         $.ajax({
-                            url: '/api/penjualan/penjualan/cancel/' + id + '/' + jenis,
-                            type: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
-                            success: function(response) {
+                            url: '/api/penjualan/penjualan/cancel',
+                            type: 'POST',
+                            data: {'id': id, 'jenis': jenis, 'alasan': alasan},
+                            beforeSend: function() {
+                                $('#loader').show();
+                            },
+                            success: function(result) {
                                 if (response['data'] == "success") {
                                     swal.fire(
-                                        'Batal',
-                                        'Sukses Batalkan Pesanan',
+                                        'Berhasil',
+                                        'Berhasil melakukan Perubahan Pesanan',
                                         'success'
                                     );
-                                    $('#penjualantable').DataTable().ajax.reload();
-                                    if (jenis == 'spa') {
-                                        $('#spatable').DataTable().ajax.reload();
-                                    } else if (jenis == 'spb') {
-                                        $('#spbtable').DataTable().ajax.reload();
-                                    }
-                                    $("#deletemodal").modal('hide');
+                                    $("#editmodal").modal('hide');
+                                    location.reload();
                                 } else if (response['data'] == "error") {
                                     swal.fire(
                                         'Gagal',
-                                        'Gagal melakukan Hapus Data',
+                                        'Gagal melakukan Perubahan Pesanan',
                                         'error'
                                     );
                                 }
                             },
-                            error: function(xhr, status, error) {
-                                swal.fire(
-                                    'Error',
-                                    'Data telah digunakan dalam Transaksi Lain',
-                                    'warning'
-                                );
-                                // console.log(action);
-                            }
-                        });
-                        return false;
-                        swalWithBootstrapButtons.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
+                            complete: function() {
+                                $('#loader').hide();
+                            },
+                            error: function(jqXHR, testStatus, error) {
+                                console.log(error);
+                                alert("Page " + href + " cannot open. Error:" + error);
+                                $('#loader').hide();
+                            },
+                            timeout: 8000
+                        })
+                    } else {
+                        swal("Cancelled", "Your imaginary file is safe :)", "error");
                     }
-                })
+                });
             });
 
             $(document).on('submit', '#form-pesanan-update', function(e) {
@@ -1209,27 +1232,7 @@
                     $('#deletemodal').find('form').attr('action', '/api/spb/delete/' + id);
                     $('#deletemodal').find('form').attr('data-target', 'spb');
                 }
-                // $.ajax({
-                //     url: href,
-                //     beforeSend: function() {
-                //         $('#loader').show();
-                //     },
-                //     // return the result
-                //     success: function(result) {
                 $('#deletemodal').modal("show");
-                // $('#detail').html(result).show();
-
-                //     },
-                //     complete: function() {
-                //         $('#loader').hide();
-                //     },
-                //     error: function(jqXHR, testStatus, error) {
-                //         console.log(error);
-                //         alert("Page " + href + " cannot open. Error:" + error);
-                //         $('#loader').hide();
-                //     },
-                //     timeout: 8000
-                // })
             });
 
 

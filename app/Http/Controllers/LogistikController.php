@@ -352,7 +352,6 @@ class LogistikController extends Controller
 
                 foreach ($detail_pesanan as $j) {
                     foreach ($j->PenjualanProduk->Produk as $k) {
-                        // echo $k->id . " dengan " . $i->GudangBarangJadi->produk_id . ". ";
                         if ($k->id == $i->GudangBarangJadi->produk_id) {
                             $jumlahpesanan = $jumlahpesanan + ($j->jumlah * $k->pivot->jumlah);
                         }

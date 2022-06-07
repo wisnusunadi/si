@@ -953,7 +953,7 @@ class PenjualanController extends Controller
             ->rawColumns(['button', 'variasi'])
             ->make(true);
     }
-    
+
     public function get_data_paket_pesanan_ekat($id)
     {
         $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($id) {
@@ -2666,10 +2666,23 @@ class PenjualanController extends Controller
         $detail_spb = DetailSpb::findOrFail($id);
         $detail_spb->delete();
     }
-    public function cancel_spa_spb($id, $jenis)
+
+    public function cancel_penjualan($id, $jenis)
     {
+        $data = NULL;
         if ($jenis == "spa") {
-            $spa = Spa::find($id);
+            $data = Spa::find($id);
+        } else if ($jenis == "spb") {
+            $data = Spb::find($id);
+        }
+
+        return view('page.penjualan.penjualan.cancel', ['id' => $id, 'data' => $data]);
+    }
+
+    public function cancel_spa_spb(Request $r)
+    {
+        if ($r->jenis == "spa") {
+            $spa = Spa::find($r->id);
             $spa->log = "batal";
             $u = $spa->save();
             if ($u) {
@@ -2677,8 +2690,8 @@ class PenjualanController extends Controller
             } else if (!$u) {
                 return response()->json(['data' => 'error']);
             }
-        } else if ($jenis == "spb") {
-            $spb = Spb::find($id);
+        } else if ($r->jenis == "spb") {
+            $spb = Spb::find($r->id);
             $spb->log = "batal";
             $u = $spb->save();
             if ($u) {

@@ -432,7 +432,7 @@ class AfterSalesController extends Controller
                 $return = "";
                 if (isset($data->Spa)) {
                     $return .= '<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->Spa->id) . '"  data-id="' . $data->Spa->id . '" >
-                        <button class="btn btn-outline-primary" type="button">
+                        <button class="btn btn-outline-primary btn-sm" type="button">
                         <i class="fas fa-eye"></i>
                         Detail
                         </button>
@@ -440,7 +440,7 @@ class AfterSalesController extends Controller
                 }
                 else if (isset($data->Spb)) {
                     $return .= '<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '" >
-                    <button class="btn btn-outline-primary" type="button">
+                    <button class="btn btn-outline-primary btn-sm" type="button">
                         <i class="fas fa-eye"></i>
                         Detail
                         </button>
@@ -523,7 +523,7 @@ class AfterSalesController extends Controller
                 $return = "";
                 if (isset($data->Spa)) {
                     $return .= '<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->Spa->id) . '"  data-id="' . $data->Spa->id . '" >
-                    <button class="btn btn-outline-primary" type="button">
+                    <button class="btn btn-outline-primary btn-sm" type="button">
                         <i class="fas fa-eye"></i>
                         Detail
                         </button>
@@ -531,7 +531,7 @@ class AfterSalesController extends Controller
                 }
                 else if (isset($data->Spb)) {
                     $return .= '<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '" >
-                    <button class="btn btn-outline-primary" type="button">
+                    <button class="btn btn-outline-primary btn-sm" type="button">
                         <i class="fas fa-eye"></i>
                         Detail
                         </button>

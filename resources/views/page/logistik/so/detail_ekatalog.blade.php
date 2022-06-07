@@ -691,6 +691,18 @@
                 }
             }
 
+            function validasi_checked_produk(){
+                var rows = $('#belumkirimtable').DataTable().rows({
+                    'search': 'applied'
+                }).nodes();
+                if($('.check_detail:checked', rows).length <= 0){
+                    $('#kirim_produk').attr('disabled', true);
+                }
+                else{
+                    $('#kirim_produk').attr('disabled', false);
+                }
+            }
+
             $(document).on('click', '#belumkirimtable .noserishow', function() {
                 var array = $(this).closest('tr').find('div[name="array_check[]"]').text();
                 if(array == "")
@@ -707,7 +719,6 @@
                 $('#belumkirimtable').find('tr').removeClass('bgcolor');
                 $(this).closest('tr').addClass('bgcolor');
                 $('#noseridetail').removeClass('hide');
-                $('input[name="check_all"]').prop('checked', false);
                 var jumlahtransfer = $(this).closest('tr').find('#jumlah_transfer').text();
                 var jumlahkirim = $(this).closest('tr').find('.jumlah_kirim').val();
                 if(jumlahtransfer == jumlahkirim){
@@ -928,6 +939,7 @@
                     part_id.push(part_id_arr);
                 });
                 console.log(produk_id);
+                validasi_checked_produk();
             });
 
             $(document).on('click change', '#noseritable input[name="check_all_noseri"]', function() {
@@ -941,8 +953,6 @@
                         'is-invalid');
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr(
                         'disabled', false);
-                    $('#belumkirimtable > tbody > tr.bgcolor').find('#btnnoseri').attr(
-                        'disabled', false);
 
                 } else if ($('input[name="check_all_noseri"]:checked').length <= 0) {
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').removeClass(
@@ -951,8 +961,8 @@
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').addClass('is-invalid');
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr(
                         'disabled', true);
-                    $('#belumkirimtable > tbody > tr.bgcolor').find('#btnnoseri').attr(
-                        'disabled', true);
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').prop(
+                        'checked', false);
                 }
                 checkedAry = [];
                 $.each($(".check_noseri:checked", rows), function() {
@@ -962,6 +972,8 @@
                 $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').val($(
                         '.check_noseri:checked', rows)
                     .length);
+
+                validasi_checked_produk();
             });
 
 
@@ -1005,6 +1017,7 @@
                 } else {
                     $('#kirim_produk').prop('disabled', true);
                 }
+                validasi_checked_produk();
             })
 
             $('#noseritable').on('change', '.check_noseri', function() {
@@ -1048,12 +1061,11 @@
                         array_noseri_produk);
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').addClass('is-invalid');
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr('disabled', true);
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').prop('checked', false);
                 }
                 $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').val($(
                     '.check_noseri:checked', rows).length);
-                // } else if ($('input[name="check_all_noseri"]:checked').length <= 0) {
-                //     $('.check_noseri').prop('checked', false);
-                // }
+                validasi_checked_produk();
             });
 
             $(document).on('change keyup', '#belumkirimtable .jumlah_kirim', function() {
@@ -1093,6 +1105,7 @@
                         $('#noseritable').DataTable().ajax.url('/api/logistik/so/noseri/detail/belum_kirim/' + produk_ids+ '/0').load();
                     }
                 }
+                validasi_checked_produk();
             });
 
             function ekspedisi_select(id) {
