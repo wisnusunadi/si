@@ -236,14 +236,26 @@
             <div class="modal-body">
                 <input type="text" name="" id="dpp" class="dpp" hidden>
                 <input type="text" name="" id="jml" class="jml" hidden>
-                <div class="d-flex justify-content-end">
-                    <div class="form-group">
-                        <label for="">Scan Nomor Seri</label>
-                        <input type="text" name="" class="form-control barcode">
+                <div class="d-flex bd-highlight">
+                    <div class="p-2 flex-grow-1 bd-highlight">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="switchScan">
+                            <label class="custom-control-label" id="switchScanLabel" for="switchScan">Scan Nomor Seri Untuk Alat (Aktif)</label>
+                          </div>
                     </div>
+                    <div class="p-2 bd-highlight">
+                        <div class="form-group">
+                            <label for="">Scan Nomor Seri</label>
+                            <input type="text" name="" class="form-control barcodeScanAlat" id="" >
+                            <input type="text" name="" class="form-control barcodeScanNonAlat" id="" hidden>
+                        </div>
+                    </div>
+                  </div>
+                <div class="d-flex justify-content-end">
+                    
                 </div>
                 <div class="row">
-                    <div class="col-6">
+                    <div class="col-12">
                         <table class="table table-striped scan-produk" id="scan">
                             <thead>
                                 <tr>
@@ -255,7 +267,7 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-6">
+                    {{-- <div class="col-6">
                         <div class="card">
                         <div class="card-header">
                             <h5 class="card-title">Preview No Seri Setelah Scan</h5>
@@ -273,7 +285,7 @@
                             </span>
                           </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="modal-footer">
@@ -621,8 +633,35 @@
         $('.modal-scan').on('shown.bs.modal', function () {
             $('#scan_filter').addClass('hidden');
         });
-        // scan produk
-        $('.barcode').on('keyup', function (e) {
+        // Switch Scan
+        $('#switchScan').on('click', function () {
+            if ($(this).is(':checked')) {
+                $('#switchScanLabel').html('Scan Nomor Seri Untuk Alat (Aktif)');
+                $('.barcodeScanAlat').attr('hidden', false);
+                $('.barcodeScanNonAlat').attr('hidden', true);
+            } else {
+                $('#switchScanLabel').html('Scan Nomor Seri Untuk Alat (Non Aktif)');
+                $('.barcodeScanNonAlat').attr('hidden', false);
+                $('.barcodeScanAlat').attr('hidden', true);
+            }
+        });
+
+        // scan produk non alat
+        $('.barcodeScanNonAlat').on('keyup', function (e) {
+            let barcodes = $(this).val();
+            let search = mytable.search(barcodes).draw();
+            let datas = mytable.row('tr:contains("' + barcodes + '")').data();
+            if (e.keyCode == 13) {
+                if (datas !== undefined) {
+                    let checkeds = $('.cb-child').prop('checked', true);
+                    $(this).val('');
+                    mytable.search('').draw();
+                }
+            }
+        });
+
+        // scan produk dengan alat
+        $('.barcodeScanAlat').on('keyup', function (e) {
             let barcode = $(this).val();
             let search = mytable.search(barcode).draw();
             let data = mytable.row('tr:contains("' + barcode + '")').data();
