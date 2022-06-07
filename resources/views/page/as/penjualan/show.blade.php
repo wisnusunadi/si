@@ -395,52 +395,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- <tr>
-                                                                                                                                                                    <td>1</td>
-                                                                                                                                                                    <td>SOSPB0902012910</td>
-                                                                                                                                                                    <td>PO/ON/51/10/21</td>
-                                                                                                                                                                    <td>05-10-2021</td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <span class="urgent">19-10-2021</span>
-                                                                                                                                                                    </td>
-                                                                                                                                                                    <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <span class="yellow-text badge">Gudang</span>
-                                                                                                                                                                    </td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <i class="fas fa-ellipsis-v"></i>
-                                                                                                                                                                    </td>
-                                                                                                                                                                </tr>
-                                                                                                                                                                <tr>
-                                                                                                                                                                    <td>2</td>
-                                                                                                                                                                    <td>SOSPB0902012910</td>
-                                                                                                                                                                    <td>PO/ON/51/10/21</td>
-                                                                                                                                                                    <td>14-10-2021</td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <span class="warning">28-10-2021</span>
-                                                                                                                                                                    </td>
-                                                                                                                                                                    <td><span class="minimizechar">PT Cipta Medika Pasuruan</span></td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <span class="yellow-text badge">Gudang</span>
-                                                                                                                                                                    </td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <i class="fas fa-ellipsis-v"></i>
-                                                                                                                                                                    </td>
-                                                                                                                                                                </tr>
-                                                                                                                                                                <tr>
-                                                                                                                                                                    <td>3</td>
-                                                                                                                                                                    <td>SOSPB0902012910</td>
-                                                                                                                                                                    <td>PO/ON/51/10/21</td>
-                                                                                                                                                                    <td>15-10-2021</td>
-                                                                                                                                                                    <td>29-10-2021</td>
-                                                                                                                                                                    <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <span class="green-text badge">Pengiriman</span>
-                                                                                                                                                                    </td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <i class="fas fa-ellipsis-v"></i>
-                                                                                                                                                                    </td>
-                                                                                                                                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
