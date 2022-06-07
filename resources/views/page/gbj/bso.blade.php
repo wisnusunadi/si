@@ -239,7 +239,7 @@
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="switchScan">
+                            <input type="checkbox" class="custom-control-input" id="switchScan" checked>
                             <label class="custom-control-label" id="switchScanLabel" for="switchScan">Scan Nomor Seri Untuk Alat (Aktif)</label>
                           </div>
                     </div>
@@ -661,7 +661,9 @@
                 if (datas !== undefined) {
                     let checkeds = $('.cb-child').prop('checked', true);
                     $(this).val('');
-                    mytable.search('').draw();
+                    setTimeout(() => {
+                        mytable.search('').draw();
+                    }, 100);
                 }
             }
         });
