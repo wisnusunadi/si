@@ -27,6 +27,13 @@
     .hidden {
         display: none;
     }
+
+    #listseri{
+        width: 100%;
+        height: 100%;
+        overflow-y: scroll;
+        overflow-x: hidden;
+    }
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
@@ -229,14 +236,26 @@
             <div class="modal-body">
                 <input type="text" name="" id="dpp" class="dpp" hidden>
                 <input type="text" name="" id="jml" class="jml" hidden>
-                <div class="d-flex justify-content-end">
-                    <div class="form-group">
-                        <label for="">Scan Nomor Seri</label>
-                        <input type="text" name="" class="form-control barcode">
+                <div class="d-flex bd-highlight">
+                    <div class="p-2 flex-grow-1 bd-highlight">
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="switchScan">
+                            <label class="custom-control-label" id="switchScanLabel" for="switchScan">Scan Nomor Seri Untuk Alat (Aktif)</label>
+                          </div>
                     </div>
+                    <div class="p-2 bd-highlight">
+                        <div class="form-group">
+                            <label for="">Scan Nomor Seri</label>
+                            <input type="text" name="" class="form-control barcodeScanAlat" id="" >
+                            <input type="text" name="" class="form-control barcodeScanNonAlat" id="" hidden>
+                        </div>
+                    </div>
+                  </div>
+                <div class="d-flex justify-content-end">
+                    
                 </div>
                 <div class="row">
-                    <div class="col-8">
+                    <div class="col-12">
                         <table class="table table-striped scan-produk" id="scan">
                             <thead>
                                 <tr>
@@ -248,20 +267,25 @@
                             </tbody>
                         </table>
                     </div>
-                    <div class="col-4">
+                    {{-- <div class="col-6">
                         <div class="card">
                         <div class="card-header">
                             <h5 class="card-title">Preview No Seri Setelah Scan</h5>
                         </div>
                           <div class="card-body">
-                            <span class="card-text preview-scan">
-                                <ul id="listseri">
-
-                                </ul>
+                            <span class="card-text ">
+                                <table class="table table-striped preview-scan">
+                                    <thead>
+                                        <tr>
+                                            <th>Nomor Seri</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="listseri"></tbody>
+                                </table>
                             </span>
                           </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
             </div>
             <div class="modal-footer">
@@ -534,8 +558,9 @@
     var dpp = '';
     let dataTampungSeri = [];
     const list  = document.getElementById('listseri');
+
     $(document).on('click', '.detailmodal', function (e) {
-        let gh = $(this).parent().prev().prev().prev().prev()[0].textContent
+        let gh = $(this).parent().prev().prev().prev().prev()[0].textContent;
         let ghh = gh.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toUpperCase();
         });
@@ -558,7 +583,6 @@
                 }
             }
         }
-
         mytable = $('.scan-produk').DataTable({
             processing: false,
             serverSide: false,
@@ -615,16 +639,51 @@
         $('.modal-scan').on('shown.bs.modal', function () {
             $('#scan_filter').addClass('hidden');
         });
-        // scan produk
-        $('.barcode').on('keyup', function (e) {
+        // Switch Scan
+        $('#switchScan').on('click', function () {
+            if ($(this).is(':checked')) {
+                $('#switchScanLabel').html('Scan Nomor Seri Untuk Alat (Aktif)');
+                $('.barcodeScanAlat').attr('hidden', false);
+                $('.barcodeScanNonAlat').attr('hidden', true);
+            } else {
+                $('#switchScanLabel').html('Scan Nomor Seri Untuk Alat (Non Aktif)');
+                $('.barcodeScanNonAlat').attr('hidden', false);
+                $('.barcodeScanAlat').attr('hidden', true);
+            }
+        });
+
+        // scan produk non alat
+        $('.barcodeScanNonAlat').on('keyup', function (e) {
+            let barcodes = $(this).val();
+            let search = mytable.search(barcodes).draw();
+            let datas = mytable.row('tr:contains("' + barcodes + '")').data();
+            if (e.keyCode == 13) {
+                if (datas !== undefined) {
+                    let checkeds = $('.cb-child').prop('checked', true);
+                    $(this).val('');
+                    mytable.search('').draw();
+                }
+            }
+        });
+
+        // scan produk dengan alat
+        $('.barcodeScanAlat').on('keyup', function (e) {
             let barcode = $(this).val();
             let search = mytable.search(barcode).draw();
             let data = mytable.row('tr:contains("' + barcode + '")').data();
             if(barcode.length >= 10){
                 if (data !== undefined) {
-                    $('.cb-child').prop('checked', true);
+                    let checked = $('.cb-child').prop('checked', true);
                     dataTampungSeri.push(data.noseri);
                     $(this).val('');
+                    if(checked){
+                        var idd = $(checked).val();
+                        var title = $(checked).parent().prev()[0].textContent;
+                        var textid = 'text' + $(checked).attr('id');
+
+                        $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
+                    }
+
                 }else{
                     Swal.fire({
                         icon: 'error',
@@ -649,15 +708,35 @@
         }
     })
 
-    $('.scan-produk').on('change', 'input[type=checkbox]',function (){
+    $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();
         var title = $(this).parent().prev()[0].textContent;
         var textid = 'text' + $(this).attr('id');
 
         if ($(this).is(':checked')) {
-            $(list).append('<li id='+ textid +'>'+title+'</li>')
+            $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
         } else {
             $('#'+textid).remove()
+        }
+
+        console.log("idd", idd);
+                        console.log("title", title);
+                        console.log("noseri", textid);
+
+    });
+
+    $('.scan-produk').on('change', '#head-cb', function () {
+        if ($(this).is(':checked')) {
+            $('.cb-child').prop('checked', true);
+            $('.cb-child').each(function () {
+                var idd = $(this).val();
+                var title = $(this).parent().prev()[0].textContent;
+                var textid = 'text' + $(this).attr('id');
+                $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
+            })
+        } else {
+            $('.cb-child').prop('checked', false);
+            $(list).html("")
         }
     })
 
@@ -993,7 +1072,6 @@
                 delete editPrd[$(this).val()]
             }
         })
-        console.log(editPrd);
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
