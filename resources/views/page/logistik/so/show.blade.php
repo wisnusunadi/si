@@ -168,7 +168,7 @@
                                                         <th rowspan="2">Tanggal Delivery</th>
                                                         <th colspan="2">Pengiriman</th>
                                                         <th rowspan="2">Customer</th>
-                                                        <th rowspan="2">Alamat</th>
+                                                        {{-- <th rowspan="2">Alamat</th> --}}
                                                         <th rowspan="2">Keterangan</th>
                                                         <th rowspan="2">Aksi</th>
                                                     </tr>
@@ -298,10 +298,11 @@
                     data: 'nama_customer',
                     className: 'align-center minimizechar'
                 },
+                // {
+                //     data: 'alamat',
+                //     className: 'align-center minimizechar'
+                // },
                 {
-                    data: 'alamat',
-                    className: 'align-center minimizechar'
-                }, {
                     data: 'ket',
                     className: 'align-center minimizechar',
                     orderable: false,

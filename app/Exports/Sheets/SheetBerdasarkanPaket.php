@@ -20,7 +20,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SheetSudahPOPaket implements WithTitle, FromView, ShouldAutoSize, WithStyles, WithColumnFormatting
+class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, WithStyles, WithColumnFormatting
 {
     /**
      * @return \Illuminate\Support\Collection
@@ -46,19 +46,19 @@ class SheetSudahPOPaket implements WithTitle, FromView, ShouldAutoSize, WithStyl
     {
         return $this->seri;
     }
-    public function tampilan()
+    public function jenis_laporan()
     {
-        return $this->tampilan;
+        return $this->jenis_laporan;
     }
 
-    public function __construct(string $jenis_penjualan, string $distributor, string $tgl_awal,  string $tgl_akhir, string $seri, string $tampilan)
+    public function __construct(string $jenis_penjualan, string $distributor, string $tgl_awal,  string $tgl_akhir, string $seri, string $jenis_laporan)
     {
         $this->jenis_penjualan = $jenis_penjualan;
         $this->distributor = $distributor;
         $this->tgl_awal = $tgl_awal;
         $this->tgl_akhir = $tgl_akhir;
         $this->seri = $seri;
-        $this->tampilan = $tampilan;
+        $this->jenis_laporan = $jenis_laporan;
     }
 
     public function columnFormats(): array
@@ -139,38 +139,47 @@ class SheetSudahPOPaket implements WithTitle, FromView, ShouldAutoSize, WithStyl
 
     public function view(): View
     {
-        // $Ekatalog  = Pesanan::wherenotnull('no_po')
-        //     ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
-        //     ->where('so', 'LIKE', '%EKAT%')
-        //     ->orderby('so', 'ASC')
-        //     ->get();
-        $data  = Pesanan::wherenotnull('no_po')
+        $jenis_laporan = $this->jenis_laporan;
+        $seri = $this->seri;
+        $x = explode(',', $this->jenis_penjualan);
+        $tanggal_awal = $this->tgl_awal;
+        $tanggal_akhir = $this->tgl_akhir;
+
+        $ekat  = Pesanan::wherenotnull('no_po')
             ->orderby('so', 'ASC')
             ->where('so', 'LIKE', '%EKAT%')
+            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
             ->get();
-        // $data =   DB::table('pesanan')
-        //     ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
-        //     ->join('customer', 'customer.id', '=', 'ekatalog.customer_id')
-        //     ->where('pesanan.no_po', '!=', '')
-        //     ->select(
-        //         'pesanan.id as pesanan_id',
-        //         'customer.nama as customer_nama',
-        //         'pesanan.so',
-        //         'pesanan.no_po',
-        //         'pesanan.tgl_po',
-        //         'pesanan.log_id',
-        //         'ekatalog.no_urut',
-        //         'ekatalog.no_paket',
-        //         'ekatalog.instansi',
-        //         'ekatalog.satuan',
-        //         'ekatalog.tgl_buat',
-        //         'ekatalog.tgl_kontrak',
-        //         'ekatalog.status',
-        //         'ekatalog.ket',
-        //     )
-        //  ->get();
-        $tampilan = 'tidak_merge';
-        return view('page.penjualan.penjualan.LaporanPenjualanPaketEx', ['data' => $data, 'tampilan' => $tampilan]);
+
+        $spa  = Pesanan::wherenotnull('no_po')
+            ->orderby('so', 'ASC')
+            ->where('so', 'LIKE', '%SPA%')
+            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+            ->get();
+
+        $spb  = Pesanan::wherenotnull('no_po')
+            ->orderby('so', 'ASC')
+            ->where('so', 'LIKE', '%SPB%')
+            ->whereBetween('tgl_po', [$tanggal_awal, $tanggal_akhir])
+            ->get();
+
+
+        if ($x == ['ekatalog', 'spa', 'spb']) {
+            $data = $ekat->merge($spa)->merge($spb);
+        } else if ($x == ['ekatalog', 'spa']) {
+            $data = $ekat->merge($spa);
+        } else if ($x == ['ekatalog', 'spb']) {
+            $data = $ekat->merge($spb);
+        } else if ($x == ['spa', 'spb']) {
+            $data = $spa->merge($spb);
+        } else if ($this->jenis_penjualan == 'ekatalog') {
+            $data = $ekat;
+        } else if ($this->jenis_penjualan == 'spa') {
+            $data = $spa;
+        } else if ($this->jenis_penjualan == 'spb') {
+            $data = $spb;
+        }
+        return view('page.penjualan.penjualan.LaporanPenjualanPaketEx', ['data' => $data, 'jenis_laporan' => $jenis_laporan, 'seri' => $seri]);
     }
     public function title(): string
     {

@@ -877,9 +877,9 @@ class PenjualanController extends Controller
             $param = 'semua';
         }
 
-
         return view('page.penjualan.penjualan.detail_spa', ['data' => $data, 'param' => $param]);
     }
+
     public function get_data_detail_ekatalog($value)
     {
         $data  = Ekatalog::find($value);
@@ -959,7 +959,7 @@ class PenjualanController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('paket_produk', function ($data) {
-                return $data->DetailPesanan->PenjualanProduk->nama . ' (' . $data->DetailPesanan->jumlah . ' unit)';
+                return $data->DetailPesanan->PenjualanProduk->nama_alias . ' (' . $data->DetailPesanan->jumlah . ' unit)';
             })
             ->addColumn('nama_produk', function ($data) {
                 return $data->GudangBarangJadi->Produk->nama . ' ' . $data->GudangBarangJadi->nama;
@@ -1065,7 +1065,7 @@ class PenjualanController extends Controller
 
                     if (isset($data->Pesanan->so)) {
                         if ($data->Pesanan->getJumlahPesanan() == $data->Pesanan->getJumlahKirim()) {
-                            return $tgl_parameter;
+                            return Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
                         } else {
                             if ($tgl_sekarang < $tgl_parameter) {
                                 $to = Carbon::now();
@@ -1275,17 +1275,30 @@ class PenjualanController extends Controller
 
                 $return = "";
                 if ($data->status != 'draft') {
-                    $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                <button class="dropdown-item" type="button">
-                      <i class="fas fa-eye"></i>
-                      Detail
-                    </button>
-                </a>';
+                    if ($divisi_id == "26") {
+                        $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button">
+                            <i class="fas fa-eye"></i>
+                            Detail
+                            </button>
+                        </a>';
+                    } else {
+                        $return .= '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                        <button class="btn btn-outline-primary" type="button">
+                            <i class="fas fa-eye"></i>
+                            Detail
+                            </button>
+                        </a>';
+                    }
                 } else {
-                    $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                    if ($divisi_id == "26") {
+                        $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                    } else {
+                        return '';
+                    }
                     // $return .= "-";
                 }
                 if ($divisi_id == "26") {
@@ -1348,8 +1361,9 @@ class PenjualanController extends Controller
                         </a>
                         ';
                     }
+                    $return .= '</div>';
                 }
-                $return .= '</div>';
+
                 return $return;
             })
             ->rawColumns(['button', 'status', 'tgl_kontrak'])
@@ -1437,16 +1451,17 @@ class PenjualanController extends Controller
             ->addColumn('button', function ($data) {
                 $divisi_id = Auth::user()->divisi->id;
                 $return = "";
-                $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '" >
-                <button class="dropdown-item" type="button">
-                      <i class="fas fa-eye"></i>
-                      Detail
-                    </button>
-                </a>';
+
                 if ($divisi_id == "26") {
                     if ($data->log != "batal") {
+                        $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '" >
+                        <button class="dropdown-item" type="button">
+                            <i class="fas fa-eye"></i>
+                            Detail
+                            </button>
+                        </a>';
                         if (!empty($data->Pesanan->log_id)) {
                             if ($data->Pesanan->State->nama == "PO") {
                                 $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
@@ -1495,9 +1510,24 @@ class PenjualanController extends Controller
                             </a>
                             ';
                         }
+                        $return .= '</div>';
+                    } else {
+                        $return .= '<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '" >
+                        <button class="btn btn-outline-primary btn-sm" type="button">
+                            <i class="fas fa-eye"></i>
+                            Detail
+                            </button>
+                        </a>';
                     }
+                } else {
+                    $return .= '<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '" >
+                        <button class="btn btn-outline-primary btn-sm" type="button">
+                            <i class="fas fa-eye"></i>
+                            Detail
+                            </button>
+                        </a>';
                 }
-                $return .= '</div>';
+
                 return $return;
             })
             ->rawColumns(['button', 'status'])
@@ -1581,15 +1611,16 @@ class PenjualanController extends Controller
             ->addColumn('button', function ($data) {
                 $divisi_id = Auth::user()->divisi->id;
                 $return = "";
-                $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '" >
-                <button class="dropdown-item" type="button">
-                      <i class="fas fa-eye"></i>
-                      Detail
-                    </button>
-                </a>';
-                if ($divisi_id == "26" || $divisi_id == "8") {
+
+                if ($divisi_id == "26") {
+                    $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '" >
+                    <button class="dropdown-item" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
                     if ($data->log != "batal") {
                         if (!empty($data->Pesanan->log_id)) {
                             if ($data->Pesanan->State->nama == "PO") {
@@ -1646,8 +1677,16 @@ class PenjualanController extends Controller
                             }
                         }
                     }
+                    $return .= '</div>';
+                } else {
+                    $return .= '<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '" >
+                    <button class="btn btn-outline-primary btn-sm" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
                 }
-                $return .= '</div>';
+
                 return $return;
             })
             ->rawColumns(['button', 'status'])
@@ -3473,25 +3512,25 @@ class PenjualanController extends Controller
     }
 
 
-    public function export_laporan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan)
+    public function export_laporan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan)
     {
         $x = explode(',', $jenis);
         $waktu = Carbon::now();
 
         if ($x == ['ekatalog', 'spa', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Semua ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan Semua ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['ekatalog', 'spa']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Ekatalog dan SPA ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan Ekatalog dan SPA ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['ekatalog', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Ekatalog dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan Ekatalog dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['spa', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan SPA dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan SPA dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'ekatalog') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Ekatalog ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan Ekatalog ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'spa') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan SPA ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan SPA ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'spb') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         }
     }
 }

@@ -175,7 +175,7 @@ class DcController extends Controller
                 if ($name[1] == 'EKAT') {
                     return $data->ekatalog->no_paket;
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('batas_paket', function ($data) {
@@ -616,8 +616,6 @@ class DcController extends Controller
         if ($value == 'ekatalog') {
             $data = Pesanan::find($id);
 
-
-
             $x = array();
 
             $jumlah = 0;
@@ -969,7 +967,7 @@ class DcController extends Controller
                             return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                         }
                     } else {
-                        return '';
+                        return '-';
                     }
                 })
                 ->addColumn('button', function ($data) {
@@ -1159,7 +1157,7 @@ class DcController extends Controller
                             return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                         }
                     } else {
-                        return '';
+                        return '-';
                     }
                 })
                 ->addColumn('button', function ($data) {

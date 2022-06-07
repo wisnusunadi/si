@@ -859,7 +859,7 @@
 <script>
     $(function() {
             $('#jenis_paket').select2();
-            var nopaketdb = "{{ str_replace( array('AK1', 'FKS'), '', $e->no_paket) }}";
+            var nopaketdb = "{{ str_replace( array('AK1-', 'FKS-'), '', $e->no_paket) }}";
             var nopaketubah = false;
             $(".os-content-arrange").remove();
             var today = new Date();

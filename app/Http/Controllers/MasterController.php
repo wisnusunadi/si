@@ -355,6 +355,13 @@ class MasterController extends Controller
                 // })->first();
                 return $data->nama_alias;
             })
+            ->addColumn('jenis_paket', function ($data) {
+                $array = [
+                    '<span class="badge purple-text">Ekatalog</span>','<span class="badge red-text">Non Ekatalog</span>'
+                ];
+                shuffle($array);
+                return $array[0];
+            })
             ->addColumn('no_akd', function ($data) {
                 $id = $data->id;
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
@@ -394,7 +401,7 @@ class MasterController extends Controller
                     </a>
                 </div>';
             })
-            ->rawColumns(['nama', 'button'])
+            ->rawColumns(['nama', 'button', 'jenis_paket'])
             ->make(true);
     }
     public function get_nama_customer($id, $val)

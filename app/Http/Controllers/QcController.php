@@ -329,16 +329,16 @@ class QcController extends Controller
                     $bool = "0";
                     if ($jumlahditrf > 0) {
                         if ($jumlahditrf == $countok) {
-                            return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><i class="fas fa-eye"></i></a>';
+                            return '<a class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                         } else {
-                            return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><i class="fas fa-eye"></i></a>';
+                            return '<a class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                         }
                     }
                 } else {
                     if ($data->jumlah == $data->getJumlahCekPart('ok')) {
-                        return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-eye"></i></a>';
+                        return '<a class="noserishow" data-count="0" data-id="' . $data->id . '" data-jenis="part"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                     } else {
-                        return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-eye"></i></a>';
+                        return '<a class="noserishow" data-count="1" data-id="' . $data->id . '" data-jenis="part"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                     }
                 }
 
@@ -463,7 +463,7 @@ class QcController extends Controller
                 if (!empty($data->so)) {
                     $name = explode('/', $data->so);
                     if ($name[1] == 'EKAT') {
-                        return $data->Ekatalog->satuan_kerja;
+                        return $data->Ekatalog->satuan;
                     } elseif ($name[1] == 'SPA') {
                         return $data->Spa->Customer->nama;
                     } else {
@@ -562,8 +562,8 @@ class QcController extends Controller
                     } else {
                         $x =  'spb';
                     }
-                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '">
-                                <i class="fas fa-eye"></i>
+                    return '<a class="btn btn-outline-primary btn-sm" href="' . route('qc.so.detail', [$data->id, $x]) . '">
+                                <i class="fas fa-eye"></i> Detail
                         </a>';
                 }
             })
@@ -626,7 +626,7 @@ class QcController extends Controller
                 if (!empty($data->so)) {
                     $name = explode('/', $data->so);
                     if ($name[1] == 'EKAT') {
-                        return $data->Ekatalog->satuan_kerja;
+                        return $data->Ekatalog->satuan;
                     } elseif ($name[1] == 'SPA') {
                         return $data->Spa->Customer->nama;
                     } else {
@@ -725,8 +725,8 @@ class QcController extends Controller
                     } else {
                         $x =  'spb';
                     }
-                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '">
-                                <i class="fas fa-eye"></i>
+                    return '<a href="' . route('qc.so.detail', [$data->id, $x]) . '"  class="btn btn-outline-primary btn-sm">
+                                <i class="fas fa-eye"></i> Detail
                         </a>';
                 }
             })
@@ -854,11 +854,11 @@ class QcController extends Controller
                         $produkid = $data->DetailPesananProduk->first()->id;
                     }
                     return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data->penjualan_produk_id . '" data-id="' . $data->id . '" data-count="' . $produkcount . '" data-produk="' . $produkid . '" data-jenis="produk" id="detmodal">
-                        <div><i class="fas fa-eye"></i></div>
+                        <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
                     </a>';
                 } else {
                     return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data->part_id . '" data-id="' . $data->id . '" data-count="1" data-produk="0" data-jenis="part" id="detmodal">
-                        <div><i class="fas fa-eye"></i></div>
+                        <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
                     </a>';
                 }
                 // if ($data['jenis'] == "produk") {
@@ -1144,41 +1144,9 @@ class QcController extends Controller
     //Tambah
     public function create_data_qc(/*$seri_id, $tfgbj_id, */$jenis, $pesanan_id, $produk_id, Request $request)
     {
-        // $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
-        //     $q->where('Pesanan_id', $pesanan_id);
-        // })->where('gudang_barang_jadi_id', $produk_id)->first();
-
-        // $replace_array_seri = strtr($seri_id, array('[' => '', ']' => ''));
-        // $array_seri = explode(',', $replace_array_seri);
-
         $bool = true;
         $bools = true;
-        // for ($i = 0; $i < count($array_seri); $i++) {
 
-        //     $data = NoseriTGbj::find($array_seri[$i]);
-
-
-        //     $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $array_seri[$i])->first();
-        //     if ($check == null) {
-        //         $c = NoseriDetailPesanan::create([
-        //             'detail_pesanan_produk_id' => $data->detail->detail_pesanan_produk_id,
-        //             't_tfbj_noseri_id' => $array_seri[$i],
-        //             'status' => $request->cek,
-        //             'tgl_uji' => $request->tanggal_uji,
-        //         ]);
-        //         if (!$c) {
-        //             $bool = false;
-        //         }
-        //     } else {
-        //         $NoseriDetailPesanan = NoseriDetailPesanan::find($check->id);
-        //         $NoseriDetailPesanan->status = $request->cek;
-        //         $NoseriDetailPesanan->tgl_uji = $request->tanggal_uji;
-        //         $u = $NoseriDetailPesanan->save();
-        //         if (!$u) {
-        //             $bool = false;
-        //         }
-        //     }
-        // }
         if ($jenis == "produk") {
             for ($i = 0; $i < count($request->noseri_id); $i++) {
                 $data = NoseriTGbj::find($request->noseri_id[$i]);
@@ -1220,15 +1188,11 @@ class QcController extends Controller
         }
 
         if ($bool == true) {
-            // $uk = "";
             $po = Pesanan::find($pesanan_id);
-
-            // $uk = count($po->DetailPesanan)." ".count($po->DetailPesananPart);
             if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) <= 0) {
                 if ($po->log_id == "8") {
-                    // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek();
-                    if ($po->getJumlahPesanan() == $po->getJumlahCek()) {
-                        if ($po->getJumlahKirim() == 0) {
+                    if ($po->getJumlahPesanan() <= $po->getJumlahCek()) {
+                        if ($po->getJumlahKirim() <= 0) {
                             $pou = Pesanan::find($pesanan_id);
                             $pou->log_id = '11';
                             $u = $pou->save();
@@ -1253,11 +1217,46 @@ class QcController extends Controller
                             }
                         }
                     }
+                } else if($po->log_id == "6"){
+                    if($po->getJumlahPesanan() <= $po->getJumlahSeri()){
+                        if($po->getJumlahPesanan() > $po->getJumlahCek()){
+                            $pou = Pesanan::find($pesanan_id);
+                            $pou->log_id = '8';
+                            $u = $pou->save();
+                            if (!$u) {
+                                $bools = false;
+                            }
+                        } else if ($po->getJumlahPesanan() <= $po->getJumlahCek()) {
+                            if ($po->getJumlahKirim() <= 0) {
+                                $pou = Pesanan::find($pesanan_id);
+                                $pou->log_id = '11';
+                                $u = $pou->save();
+                                if (!$u) {
+                                    $bools = false;
+                                }
+                            } else {
+                                if ($po->getJumlahKirim() >= $po->getJumlahPesanan()) {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '10';
+                                    $u = $pou->save();
+                                    if (!$u) {
+                                        $bools = false;
+                                    }
+                                } else {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '13';
+                                    $u = $pou->save();
+                                    if (!$u) {
+                                        $bools = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             } else if (count($po->DetailPesanan) <= 0 && count($po->DetailPesananPart) > 0) {
-                // $uk = "Jumlah Pesan Part ".$po->getJumlahPesananPartNonJasa()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
                 if ($po->getJumlahPesananPartNonJasa() <= $po->getJumlahCekPart("ok")) {
-                    if ($po->getJumlahKirimPart() == 0) {
+                    if ($po->getJumlahKirimPart() <= 0) {
                         $pou = Pesanan::find($pesanan_id);
                         $pou->log_id = '11';
                         $u = $pou->save();
@@ -1290,10 +1289,9 @@ class QcController extends Controller
                     }
                 }
             } else if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) > 0) {
-                // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek()." Jumlah Pesan Part ".$po->getJumlahPesananPartNonJasa()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
                 if ($po->log_id == "8") {
-                    if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPartNonJasa() == $po->getJumlahCekPart("ok"))) {
-                        if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
+                    if (($po->getJumlahPesanan() <= $po->getJumlahCek()) && ($po->getJumlahPesananPartNonJasa() <= $po->getJumlahCekPart("ok"))) {
+                        if ($po->getJumlahKirim() <= 0 && $po->getJumlahKirimPart() <= 0) {
                             $pou = Pesanan::find($pesanan_id);
                             $pou->log_id = '11';
                             $u = $pou->save();
@@ -1315,6 +1313,44 @@ class QcController extends Controller
                                 if (!$u) {
                                     $bools = false;
                                 }
+                            }
+                        }
+                    }
+                }
+                else if($po->log_id == "6"){
+                    if($po->getJumlahPesanan() <= $po->getJumlahSeri()){
+                        if (($po->getJumlahPesanan() <= $po->getJumlahCek()) && ($po->getJumlahPesananPartNonJasa() <= $po->getJumlahCekPart("ok"))) {
+                            if ($po->getJumlahKirim() <= 0 && $po->getJumlahKirimPart() <= 0) {
+                                $pou = Pesanan::find($pesanan_id);
+                                $pou->log_id = '11';
+                                $u = $pou->save();
+                                if (!$u) {
+                                    $bools = false;
+                                }
+                            } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
+                                if ($po->getJumlahKirim() >= $po->getJumlahPesanan() && $po->getJumlahKirimPart() >= $po->getJumlahPesananPartNonJasa()) {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '10';
+                                    $u = $pou->save();
+                                    if (!$u) {
+                                        $bools = false;
+                                    }
+                                } else {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '13';
+                                    $u = $pou->save();
+                                    if (!$u) {
+                                        $bools = false;
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            $pou = Pesanan::find($pesanan_id);
+                            $pou->log_id = '8';
+                            $u = $pou->save();
+                            if (!$u) {
+                                $bools = false;
                             }
                         }
                     }

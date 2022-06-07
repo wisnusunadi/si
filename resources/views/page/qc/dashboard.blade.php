@@ -205,7 +205,7 @@
                                                     <tr>
                                                         <th colspan=5>
 
-                                                            <h5><b>Pengujian Terbaru</b></h5>
+                                                            <h5><b class="text-success">Pengujian Terbaru</b></h5>
 
                                                         </th>
                                                     </tr>
@@ -227,7 +227,7 @@
                                                     <tr>
                                                         <th colspan=4>
 
-                                                            <h5><b>Belum Diuji</b></h5>
+                                                            <h5><b class="text-warning">Belum Diuji</b></h5>
 
                                                         </th>
                                                     </tr>
@@ -247,7 +247,7 @@
                                                 <thead>
                                                     <tr>
                                                         <th colspan=5>
-                                                            <h5><b>Lewat Batas Uji</b></h5>
+                                                            <h5><b class="text-danger">Lewat Batas Uji</b></h5>
                                                         </th>
                                                     </tr>
                                                     <tr>
