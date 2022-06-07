@@ -582,7 +582,7 @@
             });
             Swal.fire({
                 title: 'Apakah Kamu Yakin?',
-                text: "Melakukan Perakitan di Tanggal "+ dateFormat($('#tgl_perakitan').val(), 'dd MM yyyy')+ " Sejumlah "+check_seri_length.length+ " Nomor seri",
+                text: "Melakukan Perakitan di Tanggal "+ new Date($('#tgl_perakitan').val()).toLocaleDateString('id-ID', {year:"numeric", month: "long", day: "numeric"})+ " Sejumlah "+check_seri_length.length+ " Nomor seri",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',

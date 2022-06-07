@@ -478,11 +478,11 @@
 <div class="modal fade notice" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
-            <h5>
-                <center>Sebelum Mengunggah Noseri</center>
-            </h5>
-            <p align="center">Pastikan Noseri Sudah Unik atau Tidak Ada Warna Dalam Template</p>
-            <button type="button" class="btn btn-success btnNext"><i class="fas fa-check"> OK</i></button>
+            <div class="modal-body text-center">
+                <h5 class="">Sebelum Mengunggah Noseri</h5>
+                 <p>Pastikan Noseri Sudah Unik atau Tidak Ada Warna Dalam Template</p>
+                <button type="button" class="btn btn-primary btn-lg btnNext"> OK</button>
+            </div>
         </div>
     </div>
 </div>
