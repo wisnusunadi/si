@@ -564,10 +564,84 @@ class GudangController extends Controller
     function list_approve_noseri(Request $request)
     {
         try {
+            $data = NoseriBarangJadi::where([
+                'is_change' => 0,
+                'is_delete' => 1
+            ])->groupBy('gdg_barang_jadi_id')->get();
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('merk', function($d){
+                    return $d->gudang->produk->merk;
+                })
+                ->addColumn('produk', function($d){
+                    return $d->gudang->nama == null ? $d->gudang->produk->nama : $d->gudang->produk->nama.' <b>'.$d->gudang->nama.'</b>';
+                })
+                ->addColumn('kelompok', function($d){
+                    return $d->gudang->produk->KelompokProduk->nama;
+                })
+                ->addColumn('action', function($d) {
+                    return '<a data-toggle="modal" data-target="#deletemodal" class="deletemodal" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
+                                <button class="btn btn-outline-success btn-sm" type="button" >
+                                <i class="far fa-eye"></i> Detail
+                                </button>
+                            </a>';
+                })
+                ->rawColumns(['action', 'produk'])
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function list_update_noseri(Request $request)
+    {
+        try {
+            $data = NoseriBarangJadi::where([
+                'is_change' => 0,
+                'is_delete' => 0
+            ])->groupBy('gdg_barang_jadi_id')->get();
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('merk', function($d){
+                    return $d->gudang->produk->merk;
+                })
+                ->addColumn('produk', function($d){
+                    return $d->gudang->nama == null ? $d->gudang->produk->nama : $d->gudang->produk->nama.' <b>'.$d->gudang->nama.'</b>';
+                })
+                ->addColumn('kelompok', function($d){
+                    return $d->gudang->produk->KelompokProduk->nama;
+                })
+                ->addColumn('action', function($d) {
+                    return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
+                                <button class="btn btn-outline-success btn-sm" type="button" >
+                                <i class="far fa-eye"></i> Detail
+                                </button>
+                            </a>';
+                })
+                ->rawColumns(['action', 'produk'])
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function detail_list_delete_noseri(Request $request)
+    {
+        try {
             $data = NoseriBrgJadiLog::where([
                 'status' => 'waiting',
                 'action' => 'delete'
-            ])->get();
+            ])->whereHas('noseri', function($d) use($request) {
+                $d->where('gdg_barang_jadi_id', $request->gbj);
+            })->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -586,6 +660,9 @@ class GudangController extends Controller
                 ->addColumn('requested', function($d) {
                     return $d->actionn->nama;
                 })
+                ->addColumn('tgl_aju', function($d){
+                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->created_at)->isoFormat('D MMMM YYYY');
+                })
                 ->rawColumns(['checkbox', 'produk'])
                 ->make(true);
         } catch (\Exception $e) {
@@ -596,13 +673,15 @@ class GudangController extends Controller
         }
     }
 
-    function list_update_noseri(Request $request)
+    function detail_list_update_noseri(Request $request)
     {
         try {
             $data = NoseriBrgJadiLog::where([
                 'status' => 'waiting',
-                'action' => 'update'
-            ])->get();
+                'action' => 'update',
+            ])->whereHas('noseri', function($d) use($request) {
+                $d->where('gdg_barang_jadi_id', $request->gbj);
+            })->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -615,11 +694,17 @@ class GudangController extends Controller
                 ->addColumn('merk', function($d){
                     return $d->noseri->gudang->produk->merk;
                 })
+                ->addColumn('kelompok', function($d){
+                    return $d->noseri->gudang->produk->KelompokProduk->nama;
+                })
                 ->addColumn('lama', function($d) {
                     return $d->data_lama;
                 })
                 ->addColumn('baru', function($d) {
                     return $d->data_baru;
+                })
+                ->addColumn('tgl_aju', function($d){
+                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->created_at)->isoFormat('D MMMM YYYY');
                 })
                 ->addColumn('requested', function($d) {
                     return $d->actionn->nama;
@@ -633,6 +718,8 @@ class GudangController extends Controller
             ]);
         }
     }
+
+
 
     function edit_noseri(Request $request) {
         try {

@@ -34,7 +34,7 @@
         </ul>
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-edit" role="tabpanel" aria-labelledby="pills-edit-tab">
-                <table class="table table-bordered">
+                <table class="table table-bordered" id="tableUbah" style="width: 100%">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -58,7 +58,7 @@
                 </table>
             </div>
             <div class="tab-pane fade show" id="pills-hapus" role="tabpanel" aria-labelledby="pills-hapus-tab">
-                <table class="table table-bordered">
+                <table class="table table-bordered" id="tableHapus" style="width: 100%">
                     <thead>
                         <tr>
                             <th>No</th>
@@ -148,8 +148,7 @@
                             <th>Merk</th>
                             <th>Nama Produk</th>
                             <th>Tanggal Pengajuan</th>
-                            <th>No Seri Lama</th>
-                            <th>No Seri Baru</th>
+                            <th>No Seri</th>
                             <th>Diajukan Oleh</th>
                         </tr>
                     </thead>
@@ -159,7 +158,6 @@
                             <td>Elitech</td>
                             <td>Produk 1</td>
                             <td>12 Desember 2020</td>
-                            <td>123456789</td>
                             <td>123456789</td>
                             <td>Admin</td>
                         </tr>
@@ -184,51 +182,120 @@
     $('.buttonReject').attr('id', 'btnRejectEdit');
     var authid = $('#authid').val();
     // Datatable
-    $('#editTable').DataTable({
-        // processing: true,
-        // ordering: false,
-        // ajax: {
-        //     'type': 'POST',
-        //     'datatype': 'JSON',
-        //     'url': '/api/v2/gbj/list-update-noseri',
-        //     'headers': {
-        //         'X-CSRF-TOKEN': '{{csrf_token()}}'
-        //     }
-        // },
-        // columns: [
-        //     {data: 'checkbox'},
-        //     {data: 'merk'},
-        //     {data: 'produk'},
-        //     {data: 'lama'},
-        //     {data: 'baru'},
-        //     {data: 'requested'},
-        // ],
+    $('#tableUbah').DataTable({
+        processing: true,
+        ordering: false,
+        ajax: {
+            'type': 'POST',
+            'datatype': 'JSON',
+            'url': '/api/v2/gbj/list-update-noseri',
+            'headers': {
+                'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+        },
+        columns: [
+            {data: 'DT_RowIndex'},
+            {data: 'merk'},
+            {data: 'produk'},
+            {data: 'kelompok'},
+            {data: 'action'},
+        ],
         language: {
             search: "Cari:"
         }
     });
-    $('#hapusTable').DataTable({
-        // processing: true,
-        // ordering: false,
-        // ajax: {
-        //     'type': 'POST',
-        //     'datatype': 'JSON',
-        //     'url': '/api/v2/gbj/list-approve-noseri',
-        //     'headers': {
-        //         'X-CSRF-TOKEN': '{{csrf_token()}}'
-        //     }
-        // },
-        // columns: [
-        //     {data: 'checkbox'},
-        //     {data: 'merk'},
-        //     {data: 'produk'},
-        //     {data: 'noseri'},
-        //     {data: 'requested'},
-        // ],
+    $('#tableHapus').DataTable({
+        processing: true,
+        ordering: false,
+        ajax: {
+            'type': 'POST',
+            'datatype': 'JSON',
+            'url': '/api/v2/gbj/list-approve-noseri',
+            'headers': {
+                'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+        },
+        columns: [
+            {data: 'DT_RowIndex'},
+            {data: 'merk'},
+            {data: 'produk'},
+            {data: 'kelompok'},
+            {data: 'action'},
+        ],
         language: {
             search: "Cari:"
         }
     });
+
+    let id = '';
+    $(document).on('click', '.editmodal', function(e) {
+        id = $(this).data('id');
+        console.log(id);
+
+        $('#editTable').DataTable({
+            processing: true,
+            ordering: false,
+            destroy: true,
+            ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
+                'url': '/api/v2/gbj/detail-update-noseri',
+                'data': {
+                    gbj: id,
+                },
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            columns: [
+                {data: 'checkbox'},
+                {data: 'merk'},
+                {data: 'produk'},
+                {data: 'tgl_aju'},
+                {data: 'lama'},
+                {data: 'baru'},
+                {data: 'requested'},
+            ],
+            language: {
+                search: "Cari:"
+            }
+        });
+        $('#exampleModal').modal('show');
+    })
+
+    $(document).on('click', '.deletemodal', function(e) {
+        id = $(this).data('id');
+        console.log(id);
+
+        $('#hapusTable').DataTable({
+            processing: true,
+            ordering: false,
+            destroy: true,
+            ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
+                'url': '/api/v2/gbj/detail-delete-noseri',
+                'data': {
+                    gbj: id,
+                },
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            columns: [
+                {data: 'checkbox'},
+                {data: 'merk'},
+                {data: 'produk'},
+                {data: 'tgl_aju'},
+                {data: 'noseri'},
+                {data: 'requested'},
+            ],
+            language: {
+                search: "Cari:"
+            }
+        });
+        $('#exampleModal2').modal('show');
+    })
 
     $('#head-cb').click(function () {
         if ($(this).prop('checked') == true) {

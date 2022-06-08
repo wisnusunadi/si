@@ -18,6 +18,11 @@ class NoseriBrgJadiLog extends Model
         return $this->belongsTo(NoseriBarangJadi::class, 'noseri_id');
     }
 
+    function serii()
+    {
+        return $this->hasMany(NoseriBarangJadi::class, 'gdg_barang_jadi_id')->where('gdg_barang_jadi_id', GudangBarangJadi::class)->groupBy('gdg_barang_jadi_id');
+    }
+
     function actionn()
     {
         return $this->belongsTo(User::class, 'action_by');
