@@ -75,12 +75,18 @@ class MasterController extends Controller
                 if (isset($data->detaillogistik[0])) {
                     $name = explode('/', $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->so);
                     if ($name[1] == 'EKAT') {
-                        return   $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->nama;
-                    } elseif ($name[1] == 'SPA') {
-                        return  $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spa->customer->nama;
+                        return $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->nama;
+                    } else if ($name[1] == 'SPA') {
+                        return $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spa->customer->nama;
+                    } else if ($name[1] == 'SPB') {
+                        return $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spb->customer->nama;
                     }
                 } else {
-                    return  $data->detaillogistikpart->first()->detailpesananpart->pesanan->spb->customer->nama;
+                    if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spa)) {
+                        return $data->detaillogistikpart->first()->detailpesananpart->pesanan->spa->customer->nama;
+                    } else if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spb)) {
+                        return $data->detaillogistikpart->first()->detailpesananpart->pesanan->spb->customer->nama;
+                    }
                 }
                 return;
             })
@@ -89,11 +95,18 @@ class MasterController extends Controller
                     $name = explode('/', $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->so);
                     if ($name[1] == 'EKAT') {
                         return   $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->ekatalog->customer->alamat;
-                    } elseif ($name[1] == 'SPA') {
+                    } else if ($name[1] == 'SPA') {
                         return  $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spa->customer->alamat;
+                    } else if ($name[1] == 'SPB') {
+                        return  $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spb->customer->alamat;
                     }
                 } else {
-                    return  $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->alamat;
+                    if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spa)) {
+                        return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spa->customer->alamat;
+                    }
+                    else if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spb)) {
+                        return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->alamat;
+                    }
                 }
                 return;
             })
@@ -106,7 +119,12 @@ class MasterController extends Controller
                         return  $data->detaillogistik[0]->DetailPesananProduk->detailpesanan->pesanan->spa->customer->telp;
                     }
                 } else {
-                    return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->telp;
+                    if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spa)) {
+                        return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spa->customer->telp;
+                    }
+                    else if(isset($data->detaillogistikpart->first()->detailpesananpart->pesanan->spb)) {
+                        return $data->detaillogistikpart->first()->DetailPesananPart->pesanan->spb->customer->telp;
+                    }
                 }
                 return;
             })
@@ -186,7 +204,7 @@ class MasterController extends Controller
             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a href="' . route('logistik.ekspedisi.detail', ['id' => $data->id]) . '">
                     <button class="dropdown-item" type="button">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-eye"></i>
                         Detail
                     </button>
                 </a>';
@@ -279,7 +297,7 @@ class MasterController extends Controller
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 <a href="' . route('penjualan.customer.detail', $data->id) . '">
                     <button class="dropdown-item" type="button">
-                      <i class="fas fa-search"></i>
+                      <i class="fas fa-eye"></i>
                       Detail
                     </button>
                 </a>';
@@ -359,7 +377,7 @@ class MasterController extends Controller
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <button class="dropdown-item" type="button" id="showmodal">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-eye"></i>
                         Detail
                     </button>
                     <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
@@ -560,16 +578,16 @@ class MasterController extends Controller
 
                     if ($name == 'ekatalog') {
                         return  '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                                  <i class="fas fa-search"></i>
+                                  <i class="fas fa-eye"></i>
                             </a>';
                     } else if ($name == 'spa') {
                         return  '<a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
-                                  <i class="fas fa-search"></i>
+                                  <i class="fas fa-eye"></i>
                             </a>';
                     } else {
                         return  '
                             <a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
-                                  <i class="fas fa-search"></i>
+                                  <i class="fas fa-eye"></i>
                             </a>';
                     }
                 })

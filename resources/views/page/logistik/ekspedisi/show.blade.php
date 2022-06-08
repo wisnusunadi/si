@@ -227,12 +227,12 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama</th>
-                                                <th>Alamat</th>
+                                                {{-- <th>Alamat</th> --}}
                                                 <th>Email</th>
                                                 <th>Telp</th>
                                                 <th>Jalur</th>
                                                 <th>Jurusan</th>
-                                                <th>Keterangan</th>
+                                                {{-- <th>Keterangan</th> --}}
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -366,14 +366,16 @@
                 searchable: false
             }, {
                 data: 'nama',
-                className: 'nowrap-text minimizechar',
+                className: 'nowrap-text',
                 orderable: true,
                 searchable: true
 
-            }, {
-                data: 'alamat',
-                className: 'nowrap-text minimizechar',
-            }, {
+            },
+            // {
+            //     data: 'alamat',
+            //     className: 'nowrap-text minimizechar',
+            // },
+            {
                 data: 'email',
                 orderable: false,
                 searchable: false
@@ -389,13 +391,15 @@
                 orderable: false,
                 searchable: true
 
-            }, {
-                data: 'ket',
-                className: 'nowrap-text minimizechar',
-                orderable: false,
-                searchable: false
+            },
+            // {
+            //     data: 'ket',
+            //     className: 'nowrap-text minimizechar',
+            //     orderable: false,
+            //     searchable: false
 
-            }, {
+            // },
+            {
                 data: 'button',
                 orderable: false,
                 searchable: false

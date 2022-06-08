@@ -34,7 +34,114 @@
         </ul>
         <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active" id="pills-edit" role="tabpanel" aria-labelledby="pills-edit-tab">
-                <table class="table table-bordered" id="editTable" style                                                                                   ="width: 100%">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Merk</th>
+                            <th>Nama Produk</th>
+                            <th>Kelompok</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1.</td>
+                            <td>Elitech</td>
+                            <td>ASL300</td>
+                            <td>Water Treatment</td>
+                            <td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
+                                <i class="far fa-eye"></i> Detail
+                              </button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="tab-pane fade show" id="pills-hapus" role="tabpanel" aria-labelledby="pills-hapus-tab">
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Merk</th>
+                            <th>Nama Produk</th>
+                            <th>Kelompok</th>
+                            <th>Aksi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1.</td>
+                            <td>Elitech</td>
+                            <td>ASL300</td>
+                            <td>Water Treatment</td>
+                            <td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal2">
+                                <i class="far fa-eye"></i> Detail
+                              </button></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal Edit -->
+<div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+            <table class="table table-bordered" id="editTable">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="head-cb"></th>
+                        <th>Merk</th>
+                        <th>Nama Produk</th>
+                        <th>Tanggal Pengajuan</th>
+                        <th>No Seri Lama</th>
+                        <th>No Seri Baru</th>
+                        <th>Diajukan Oleh</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><input type="checkbox" name="cb-child" id=""></td>
+                        <td>Elitech</td>
+                        <td>Produk 1</td>
+                        <td>12 Desember 2020</td>
+                        <td>123456789</td>
+                        <td>123456789</td>
+                        <td>Admin</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-primary buttonSubmit" id="btnApproveEdit"><i class="fas fa-check"></i> Setujui</button>&nbsp;
+            <button class="btn btn-danger buttonReject" id="btn-reject"><i class="fas fa-ban"></i> Reject</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+    <!-- Modal Hapus -->
+    <div class="modal" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+          <div class="modal-content">
+            <div class="modal-header">`
+              <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered" id="hapusTable">
                     <thead>
                         <tr>
                             <th><input type="checkbox" id="head-cb"></th>
@@ -59,45 +166,18 @@
                     </tbody>
                 </table>
             </div>
-            <div class="tab-pane fade show" id="pills-hapus" role="tabpanel" aria-labelledby="pills-hapus-tab">
-                <table class="table table-bordered" id="hapusTable" style="width: 100%">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" id="head-cb1"></th>
-                            <th>Merk</th>
-                            <th>Tanggal Pengajuan</th>
-                            <th>Nama Produk</th>
-                            <th>No Seri</th>
-                            <th>Diajukan Oleh</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><input type="checkbox" name="cb-child1" id=""></td>
-                            <td>Elitech</td>
-                            <td>Produk 1</td>
-                            <td>12 Desember 2020</td>
-                            <td>123456789</td>
-                            <td>123456789</td>
-                            <td>Admin</td>
-                        </tr>
-                    </tbody>
-                </table>
+            <div class="modal-footer">
+                <button class="btn btn-primary buttonSubmit" id="btnApproveEdit"><i class="fas fa-check"></i> Setujui</button>&nbsp;
+                <button class="btn btn-danger buttonReject" id="btn-reject"><i class="fas fa-ban"></i> Reject</button>
             </div>
+          </div>
         </div>
+      </div>
     </div>
-    <div class="card-footer">
-        <div class="d-flex justify-content-end bd-example">
-            <button class="btn btn-primary buttonSubmit" id="btnApproveEdit"><i class="fas fa-check"></i> Setujui</button>&nbsp;
-            <button class="btn btn-danger buttonReject" id="btn-reject"><i class="fas fa-ban"></i> Reject</button>
-        </div>
-    </div>
-</div>
-
 @stop
 
 @section('adminlte_js')
-{{-- <script>
+<script>
     $("#head-cb").prop('checked', false);
     $("#head-cb1").prop('checked', false);
     $('.buttonSubmit').attr('id', 'btnApproveEdit');
@@ -105,46 +185,46 @@
     var authid = $('#authid').val();
     // Datatable
     $('#editTable').DataTable({
-        processing: true,
-        ordering: false,
-        ajax: {
-            'type': 'POST',
-            'datatype': 'JSON',
-            'url': '/api/v2/gbj/list-update-noseri',
-            'headers': {
-                'X-CSRF-TOKEN': '{{csrf_token()}}'
-            }
-        },
-        columns: [
-            {data: 'checkbox'},
-            {data: 'merk'},
-            {data: 'produk'},
-            {data: 'lama'},
-            {data: 'baru'},
-            {data: 'requested'},
-        ],
+        // processing: true,
+        // ordering: false,
+        // ajax: {
+        //     'type': 'POST',
+        //     'datatype': 'JSON',
+        //     'url': '/api/v2/gbj/list-update-noseri',
+        //     'headers': {
+        //         'X-CSRF-TOKEN': '{{csrf_token()}}'
+        //     }
+        // },
+        // columns: [
+        //     {data: 'checkbox'},
+        //     {data: 'merk'},
+        //     {data: 'produk'},
+        //     {data: 'lama'},
+        //     {data: 'baru'},
+        //     {data: 'requested'},
+        // ],
         language: {
             search: "Cari:"
         }
     });
     $('#hapusTable').DataTable({
-        processing: true,
-        ordering: false,
-        ajax: {
-            'type': 'POST',
-            'datatype': 'JSON',
-            'url': '/api/v2/gbj/list-approve-noseri',
-            'headers': {
-                'X-CSRF-TOKEN': '{{csrf_token()}}'
-            }
-        },
-        columns: [
-            {data: 'checkbox'},
-            {data: 'merk'},
-            {data: 'produk'},
-            {data: 'noseri'},
-            {data: 'requested'},
-        ],
+        // processing: true,
+        // ordering: false,
+        // ajax: {
+        //     'type': 'POST',
+        //     'datatype': 'JSON',
+        //     'url': '/api/v2/gbj/list-approve-noseri',
+        //     'headers': {
+        //         'X-CSRF-TOKEN': '{{csrf_token()}}'
+        //     }
+        // },
+        // columns: [
+        //     {data: 'checkbox'},
+        //     {data: 'merk'},
+        //     {data: 'produk'},
+        //     {data: 'noseri'},
+        //     {data: 'requested'},
+        // ],
         language: {
             search: "Cari:"
         }
@@ -387,5 +467,5 @@
         }
     });
 
-</script> --}}
+</script>
 @stop

@@ -113,7 +113,7 @@
                     {{ $p->gudangbarangjadi->nama}}
                     @endif
 
-                    @if( !$loop->last)
+                    @if(!$loop->last)
                     ,
                     @endif
 

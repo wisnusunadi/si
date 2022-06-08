@@ -35,8 +35,10 @@ foreach ($data as $i) {
     $rowpesanan = 0;
     $rowpesananc = 0;
     foreach ($i->DetailRencanaPenjualan as $j) {
-        foreach ($j->DetailPesanan as $k) {
-            $rowpesananc++;
+        if(isset($j->DetailPesanan)){
+            foreach ($j->DetailPesanan as $k) {
+                $rowpesananc++;
+            }
         }
     }
     if ($rowpesananc >= count($i->DetailRencanaPenjualan)) {
@@ -59,25 +61,34 @@ foreach ($data as $i) {
                         <td rowspan=" . $rowdetailpesanan . ">" . $j->harga . "</td>
                         <td rowspan=" . $rowdetailpesanan . ">" . $j->jumlah * $j->harga . "</td>";
             $cdp = 0;
-            foreach ($j->DetailPesanan as $k) {
-                if ($cdp <= 0) {
-                    echo "<td>" . $k->Pesanan->no_po . "</td>
-                                <td>" . date_format(date_create($k->Pesanan->tgl_po), "d-m-Y") . "</td>
-                                <td>" . $k->jumlah . "</td>
-                                <td>" . $k->harga . "</td>
-                                <td>" . $k->harga * $k->jumlah . "</td>
-                                </tr>";
-                } else {
-                    echo "<tr>
-                                <td>" . $k->Pesanan->no_po . "</td>
-                                <td>" . date_format(date_create($k->Pesanan->tgl_po), "d-m-Y") . "</td>
-                                <td>" . $k->jumlah . "</td>
-                                <td>" . $k->harga . "</td>
-                                <td>" . $k->harga * $k->jumlah . "</td>
-                                </tr>";
+            if(isset($j->DetailPesanan)){
+                foreach ($j->DetailPesanan as $k) {
+                    if ($cdp <= 0) {
+                        echo "<td>" . $k->Pesanan->no_po . "</td>
+                                    <td>" . date_format(date_create($k->Pesanan->tgl_po), "d-m-Y") . "</td>
+                                    <td>" . $k->jumlah . "</td>
+                                    <td>" . $k->harga . "</td>
+                                    <td>" . $k->harga * $k->jumlah . "</td>
+                                    </tr>";
+                    } else {
+                        echo "<tr>
+                                    <td>" . $k->Pesanan->no_po . "</td>
+                                    <td>" . date_format(date_create($k->Pesanan->tgl_po), "d-m-Y") . "</td>
+                                    <td>" . $k->jumlah . "</td>
+                                    <td>" . $k->harga . "</td>
+                                    <td>" . $k->harga * $k->jumlah . "</td>
+                                    </tr>";
+                    }
+                    $totalrealisasi = $totalrealisasi + ($k->jumlah * $k->harga);
+                    $cdp++;
                 }
-                $totalrealisasi = $totalrealisasi + ($k->jumlah * $k->harga);
-                $cdp++;
+            }else{
+                echo "<td>-</td>
+                     <td>-</td>
+                     <td>-</td>
+                     <td>-</td>
+                     <td>-</td>
+                </tr>";
             }
         } else {
             echo "<tr>
@@ -86,25 +97,34 @@ foreach ($data as $i) {
                         <td rowspan=" . $rowdetailpesanan . ">" . $j->harga . "</td>
                         <td rowspan=" . $rowdetailpesanan . ">" . $j->jumlah * $j->harga . "</td>";
             $cdp = 0;
-            foreach ($j->DetailPesanan as $k) {
-                if ($cdp <= 0) {
-                    echo "<td>" . $k->Pesanan->no_po . "</td>
-                                <td>" . date_format(date_create($k->Pesanan->tgl_po), "d-m-Y") . "</td>
-                                <td>" . $k->jumlah . "</td>
-                                <td>" . $k->harga . "</td>
-                                <td>" . $k->harga * $k->jumlah . "</td>
-                                </tr>";
-                } else {
-                    echo "<tr>
-                                <td>" . $k->Pesanan->no_po . "</td>
-                                <td>" . date_format(date_create($k->Pesanan->tgl_po), "d-m-Y") . "</td>
-                                <td>" . $k->jumlah . "</td>
-                                <td>" . $k->harga . "</td>
-                                <td>" . $k->harga * $k->jumlah . "</td>
-                                </tr>";
+            if(isset($j->DetailPesanan)){
+                foreach ($j->DetailPesanan as $k) {
+                    if ($cdp <= 0) {
+                        echo "<td>" . $k->Pesanan->no_po . "</td>
+                                    <td>" . date_format(date_create($k->Pesanan->tgl_po), "d-m-Y") . "</td>
+                                    <td>" . $k->jumlah . "</td>
+                                    <td>" . $k->harga . "</td>
+                                    <td>" . $k->harga * $k->jumlah . "</td>
+                                    </tr>";
+                    } else {
+                        echo "<tr>
+                                    <td>" . $k->Pesanan->no_po . "</td>
+                                    <td>" . date_format(date_create($k->Pesanan->tgl_po), "d-m-Y") . "</td>
+                                    <td>" . $k->jumlah . "</td>
+                                    <td>" . $k->harga . "</td>
+                                    <td>" . $k->harga * $k->jumlah . "</td>
+                                    </tr>";
+                    }
+                    $totalrealisasi = $totalrealisasi + ($k->jumlah * $k->harga);
+                    $cdp++;
                 }
-                $totalrealisasi = $totalrealisasi + ($k->jumlah * $k->harga);
-                $cdp++;
+            }else{
+                echo "<td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                        <td>-</td>
+                    </tr>";
             }
         }
         $totalrencana = $totalrencana + ($j->jumlah * $j->harga);
