@@ -545,7 +545,7 @@ class GudangController extends Controller
                                 'action_by' => $request->actionby,
                                 'status' => 'waiting'
                             ]);
-                        NoseriBarangJadi::find($d->noseri_id)->update(['is_change' => 0]);
+                        NoseriBarangJadi::find($d->noseri_id)->update(['is_change' => 0, 'is_delete' => 1]);
                     }
 
                 }
