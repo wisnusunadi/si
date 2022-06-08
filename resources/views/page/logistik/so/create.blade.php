@@ -136,6 +136,4 @@
         {{-- </div> --}}
         </div>
     </div>
-    <!-- {{$prd_array}}
-    {{$part_array}} -->
 </form>

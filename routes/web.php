@@ -199,6 +199,7 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
         Route::group(['prefix' => '/riwayat'], function () {
             Route::view('/show', 'page.qc.so.riwayat.show')->name('qc.so.riwayat.show');
         });
+        Route::get('/export/{id}', [App\Http\Controllers\QcController::class, 'get_cetak_noseri_qc'])->name('qc.so.export');
         Route::group(['prefix' => '/laporan'], function () {
             Route::view('/show', 'page.qc.laporan.show')->name('qc.so.laporan.show');
             Route::get('/export/{jenis}/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_cetak_laporan_qc']);

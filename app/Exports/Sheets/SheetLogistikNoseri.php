@@ -12,6 +12,8 @@ use Maatwebsite\Excel\Concerns\ShouldAutoSize;
 use Maatwebsite\Excel\Concerns\WithColumnFormatting;
 use Maatwebsite\Excel\Concerns\WithStyles;
 use Maatwebsite\Excel\Concerns\WithTitle;
+use Maatwebsite\Excel\Events\AfterSheet;
+use Maatwebsite\Excel\Concerns\WithEvents;
 use Maatwebsite\Excel\Facades\Excel;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat\DateFormatter;
@@ -19,12 +21,11 @@ use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
 
 
-class SheetLogistikNoseri implements FromView, ShouldAutoSize, WithStyles, WithColumnFormatting, WithTitle
+class SheetLogistikNoseri implements FromView, ShouldAutoSize, WithStyles, WithEvents, WithColumnFormatting, WithTitle
 {
     /**
      * @return \Illuminate\Support\Collection
      */
-
     public function jenis_laporan()
     {
         return $this->jenis_laporan;
@@ -83,6 +84,7 @@ class SheetLogistikNoseri implements FromView, ShouldAutoSize, WithStyles, WithC
         $sheet->getStyle('o2')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setRGB('89d0b4');
+
         $sheet->getStyle('A:C')->getAlignment()
             ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('G:I')->getAlignment()
@@ -101,6 +103,27 @@ class SheetLogistikNoseri implements FromView, ShouldAutoSize, WithStyles, WithC
         $sheet->getColumnDimension('N')->setAutoSize(false)->setWidth(45);
         $sheet->getStyle('N')->getAlignment()->setWrapText(true);
     }
+
+    public function registerEvents(): array
+    {
+    // $alphabetRange = range('A', 'Z');
+    // // $alphabet = $alphabetRange[$this->totalValue+6]; // returns Alphabet
+
+        return [
+            AfterSheet::class => function(AfterSheet $event)  {
+                $cellRange = 'A2:O'.$event->sheet->getHighestRow();
+                $event->sheet->getStyle($cellRange)->applyFromArray([
+                    'borders' => [
+                        'allBorders' => [
+                            'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                            'color' => ['argb' => '000000'],
+                        ],
+                    ],
+                ])->getAlignment()->setWrapText(true);
+            },
+        ];
+    }
+
 
     public function view(): View
     {

@@ -311,7 +311,7 @@
 @stop
 
 @section('adminlte_js')
-
+<script src="{{ asset('vendor/x-editable/jquery-editable-poshytip.min.js') }}"></script>
 <script>
     $(document).ready(function () {
         $.ajaxSetup({

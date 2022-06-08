@@ -33,6 +33,14 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="form-group row hide">
+                                                <label for="pemilik" class="col-lg-4 col-md-12 col-form-label labelket">Nama Pemilik</label>
+                                                <div class="col-lg-5 col-md-12">
+                                                    <input type="text" class="form-control col-form-label" placeholder="Nama Pemilik" id="pemilik" name="pemilik" value="{{old('pemilik', $customer->nama_pemilik)}}" />
+                                                    <div class="invalid-feedback" id="msgpemilik">
+                                                    </div>
+                                                </div>
+                                            </div>
                                             <div class="form-group row">
                                                 <label for="telepon" class="col-lg-4 col-md-12 col-form-label labelket">No Telp</label>
                                                 <div class="col-lg-5 col-md-12">
@@ -56,14 +64,6 @@
                                 <div class="col-12">
                                     <div class="card removeboxshadow">
                                         <div class="card-body">
-                                            <div class="form-group row">
-                                                <label for="pemilik" class="col-lg-4 col-md-12 col-form-label labelket">Nama Pemilik</label>
-                                                <div class="col-lg-5 col-md-12">
-                                                    <input type="text" class="form-control col-form-label" placeholder="Nama Pemilik" id="pemilik" name="pemilik" value="{{old('pemilik', $customer->nama_pemilik)}}" />
-                                                    <div class="invalid-feedback" id="msgpemilik">
-                                                    </div>
-                                                </div>
-                                            </div>
                                             <div class="form-group row">
                                                 <label for="alamat" class="col-lg-4 col-md-12 col-form-label labelket">Alamat</label>
                                                 <div class="col-lg-8 col-md-12">
@@ -106,7 +106,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
+                                            <div class="form-group row hide">
                                                 <label for="izin_usaha" class="col-lg-4 col-md-12 col-form-label labelket">Izin Usaha</label>
                                                 <div class="col-lg-8 col-md-12 col-form-label">
                                                     <div class="form-check form-check-inline">
@@ -131,7 +131,7 @@
                                 <div class="col-12">
                                     <div class="card removeboxshadow">
                                         <div class="card-body">
-                                            <div class="form-group row">
+                                            <div class="form-group row hide">
                                                 <label for="modal_usaha" class="col-lg-4 col-md-12 col-form-label labelket">Modal Usaha</label>
                                                 <div class="col-lg-8 col-md-11 col-form-label">
                                                     <div class="form-check form-check-inline">
@@ -150,7 +150,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group row">
+                                            <div class="form-group row hide">
                                                 <label for="hasil_penjualan" class="col-lg-4 col-md-12 col-form-label labelket">Hasil Penjualan</label>
                                                 <div class="col-lg-8 col-md-11 col-form-label">
                                                     <div class="form-check form-check-inline">

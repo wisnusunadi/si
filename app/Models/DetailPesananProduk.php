@@ -27,6 +27,10 @@ class DetailPesananProduk extends Model
     {
         return $this->hasMany(DetailLogistik::class, 'detail_pesanan_produk_id');
     }
+    public function TFProduksiDetail()
+    {
+        return $this->hasMany(TFProduksiDetail::class, 'detail_pesanan_produk_id');
+    }
 
     public function getJumlahPesanans()
     {
@@ -80,11 +84,12 @@ class DetailPesananProduk extends Model
         return $this->belongsTo(Status::class, 'status_cek');
     }
 
-    public function LaporanQcProduk($hasil, $tgl_awal, $tgl_akhir){
+    public function LaporanQcProduk($hasil, $tgl_awal, $tgl_akhir)
+    {
         $id = $this->id;
         $res = "";
-        if($hasil != "semua"){
-            $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where([['status','=', $hasil],['detail_pesanan_produk_id', '=', $id]])->get();
+        if ($hasil != "semua") {
+            $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where([['status', '=', $hasil], ['detail_pesanan_produk_id', '=', $id]])->get();
         } else {
             $res = NoseriDetailPesanan::whereBetween('tgl_uji', [$tgl_awal, $tgl_akhir])->where('detail_pesanan_produk_id', $id)->get();
         }

@@ -334,8 +334,6 @@ class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, W
                 $header = 'Laporan Penjualan SPB';
             }
         }
-
-
         return view('page.penjualan.penjualan.LaporanPenjualanEx', ['data' => $data, 'header' => $header, 'seri' => $seri, 'tampilan' => $tampilan]);
     }
     public function title(): string

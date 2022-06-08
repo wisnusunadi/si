@@ -186,39 +186,42 @@
                                     <span class="margin-side"><i class="fas fa-envelope text-muted margin-side"></i><b>@if(!empty($customer->email)) {{$customer->email}} @else - @endif</b></span>
                                 </div>
                                 <div class="margin-all"><a class="text-muted margin-side">NPWP :</a><b>{{$customer->npwp}}</b></div>
-                                <div class="margin-all">
+                                <div class="margin-all hide">
                                    <span><a class="text-muted margin-side">IZIN USAHA :</a><b class="badge blue-text"> @if(isset($customer->izin_usaha)) {{$customer->izin_usaha}} @else - @endif</b></span> |
-                                   <span><a class="text-muted margin-side">MODAL USAHA :</a><b class="badge blue-text">
-                                        @switch($customer->modal_usaha)
-                                        @case(1)
-                                        <span>< 1 M </span>
-                                        @break
-                                        @case(2)
-                                        <span>> 1 M & < 5 M </span>
-                                        @break
-                                        @case(3)
-                                        <span>> 5 M & < 10 M</span>
-                                        @break
-                                    @default
-                                        <span>-</span>
-                                        @endswitch
-                                  </b>
-                                </span>
-                                    |<span><a class="text-muted margin-side">HASIL PENJUALAN :</a><b class="badge blue-text">
-                                        @switch($customer->hasil_penjualan)
-                                        @case(1)
-                                        <span>< 2 M </span>
-                                        @break
-                                        @case(2)
-                                        <span>> 2 M & < 15 M </span>
-                                        @break
-                                        @case(3)
-                                        <span>> 15 M & < 50 M</span>
-                                        @break
-                                    @default
-                                        <span>-</span>
-                                        @endswitch
-                                    </b></span>
+                                   <span>
+                                        <a class="text-muted margin-side">MODAL USAHA :</a><b class="badge blue-text">
+                                            @switch($customer->modal_usaha)
+                                            @case(1)
+                                            <span>< 1 M </span>
+                                            @break
+                                            @case(2)
+                                            <span>> 1 M & < 5 M </span>
+                                            @break
+                                            @case(3)
+                                            <span>> 5 M & < 10 M</span>
+                                            @break
+                                        @default
+                                            <span>-</span>
+                                            @endswitch
+                                    </b>
+                                    </span>
+                                    |<span>
+                                        <a class="text-muted margin-side">HASIL PENJUALAN :</a><b class="badge blue-text">
+                                            @switch($customer->hasil_penjualan)
+                                            @case(1)
+                                            <span>< 2 M </span>
+                                            @break
+                                            @case(2)
+                                            <span>> 2 M & < 15 M </span>
+                                            @break
+                                            @case(3)
+                                            <span>> 15 M & < 50 M</span>
+                                            @break
+                                        @default
+                                            <span>-</span>
+                                            @endswitch
+                                        </b>
+                                    </span>
                                 </div>
                                 <div class="margin-all"><a class="text-muted">{{$customer->ket}}</a></div>
                             </div>

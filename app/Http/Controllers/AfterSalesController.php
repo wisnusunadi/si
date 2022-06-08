@@ -147,13 +147,13 @@ class AfterSalesController extends Controller
                 } else {
                     $jenis = "part";
                 }
-                return '<a href="' . route('as.so.detail', ['id' => $data->id, 'jenis' => $jenis]) . '"><i class="fas fa-search"></i></a>';
+                return '<a href="' . route('as.so.detail', ['id' => $data->id, 'jenis' => $jenis]) . '"><i class="fas fa-eye"></i></a>';
                 // $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
                 // return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 // <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                 //     <a href="' . route('logistik.pengiriman.detail', ['id' => $data->id, 'jenis' => $name[1]]) . '">
                 //         <button class="dropdown-item" type="button">
-                //             <i class="fas fa-search"></i>
+                //             <i class="fas fa-eye"></i>
                 //             Detail
                 //         </button>
                 //     </a>
@@ -231,7 +231,7 @@ class AfterSalesController extends Controller
         //         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
         //             <a href="' . route('logistik.pengiriman.detail', ['id' => $data->id, 'jenis' => $name[1]]) . '">
         //                 <button class="dropdown-item" type="button">
-        //                     <i class="fas fa-search"></i>
+        //                     <i class="fas fa-eye"></i>
         //                     Detail
         //                 </button>
         //             </a>
@@ -347,7 +347,7 @@ class AfterSalesController extends Controller
             })
             ->addColumn('button', function ($data) {
                 return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
-                <div><i class="fas fa-search"></i></div>
+                <div><i class="fas fa-eye"></i></div>
             </a>';
             })
             ->rawColumns(['checkbox', 'button', 'status'])

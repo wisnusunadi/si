@@ -353,7 +353,7 @@ class DcController extends Controller
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-eye"></i>
                             Detail
                         </a>
                         <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'kosong']) . '" target="_blank" class="' . $class . '">
@@ -379,7 +379,7 @@ class DcController extends Controller
                     return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                     <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                     <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-eye"></i>
                             Detail
                         </a>
                         <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'kosong']) . '" target="_blank" class="' . $class . '">
@@ -1024,7 +1024,7 @@ class DcController extends Controller
                         return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
-                            <i class="fas fa-search"></i>
+                            <i class="fas fa-eye"></i>
                                 Detail
                             </a>
                                 <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'kosong']) . '" target="_blank" class="' . $class . '">
@@ -1051,7 +1051,7 @@ class DcController extends Controller
                         return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
-                            <i class="fas fa-search"></i>
+                            <i class="fas fa-eye"></i>
                                 Detail
                             </a>
                             <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'kosong']) . '" target="_blank" class="' . $class . '">
@@ -1214,7 +1214,7 @@ class DcController extends Controller
                         return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
-                            <i class="fas fa-search"></i>
+                            <i class="fas fa-eye"></i>
                                 Detail
                             </a>
                             <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'ekatalog', 'kosong']) . '" target="_blank" class="' . $class . '">
@@ -1241,7 +1241,7 @@ class DcController extends Controller
                         return ' <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                         <a  class="dropdown-item" href="' . route('dc.so.detail', [$data->id, 'spa']) . '">
-                            <i class="fas fa-search"></i>
+                            <i class="fas fa-eye"></i>
                                 Detail
                             </a>
                             <a href="' . route('dc.coo.semua.so.pdf', [$data->id, 'spa', 'kosong']) . '" target="_blank" class="' . $class . '">
@@ -1350,7 +1350,7 @@ class DcController extends Controller
                         $y = $data->spb->id;
                     }
                     return '<a href="' . route('dc.so.detail', [$data->id, 'ekatalog']) . '">
-                    <i class="fas fa-search"></i>
+                    <i class="fas fa-eye"></i>
                     </a>';
                 })
                 ->rawColumns(['batas_kontrak', 'status', 'button'])
