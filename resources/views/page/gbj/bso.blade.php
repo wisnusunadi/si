@@ -721,10 +721,6 @@
             $('#'+textid).remove()
         }
 
-        console.log("idd", idd);
-                        console.log("title", title);
-                        console.log("noseri", textid);
-
     });
 
     $('.scan-produk').on('change', '#head-cb', function () {

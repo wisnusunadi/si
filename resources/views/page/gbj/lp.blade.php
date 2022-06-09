@@ -42,7 +42,7 @@
     }
 
     .my-float {
-        margin-top: 22px;
+        margin-top: -10px;
     }
     #DataTables_Table_0_filter{
         display: none;
@@ -174,9 +174,9 @@
                                     <div class="col-lg-8 col-md-12 col-sm-12">
                                         <div class="row">
                                             <div class="col-12 d-flex justify-content-end mb-3">
-                                                <a href="#" class="float btn-tambah">
-                                                    <i class="fa fa-plus my-float"></i>
-                                                </a>
+                                                <button class="float btn-tambah">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
                                             </div>
                                             <div class="col-12 table-responsive mb-4">
                                                 <table class="table table-hover addData">
