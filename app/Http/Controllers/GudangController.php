@@ -785,37 +785,63 @@ class GudangController extends Controller
                 array_push($dataseri, $nbj->is_ready);
             }
             if ($request->is_acc == 'rejected') {
-                foreach($check->get() as $ddd) {
-                    NoseriBrgJadiLog::where('noseri_id', $ddd->noseri_id)->where([
-                        'action' => 'delete',
-                        'status' => 'waiting'
-                    ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
-                    NoseriBarangJadi::find($ddd->noseri_id)->update(['is_change' => 1]);
-                }
-                return response()->json(['error'=>false, 'msg'=> 'Penolakan Berhasil Dilakukan']);
-            } else {
-                if (empty(array_filter($dataseri))) {
-                    foreach($check->get() as $d) {
-                        NoseriBrgJadiLog::where('noseri_id', $d->noseri_id)->where([
-                            'action' => 'delete',
-                            'status' => 'waiting'
-                        ])->update(['status' => 'approve', 'acc_by' => $request->accby]);
-                        NoseriTGbj::where('noseri_id',$d->noseri_id)->delete();
-                        NoseriBarangJadi::find($d->noseri_id)->delete();
-                        // NoseriBarangJadi::find($d->noseri_id)->update(['is_delete' => 1]);
-                    }
-                    return response()->json(['error'=>false, 'msg'=> 'Noseri Berhasil Dihapus']);
-                } else {
-                    return 'ok';
-                    foreach($check->get() as $dd) {
-                        NoseriBrgJadiLog::where('noseri_id', $dd->noseri_id)->where([
+                if (count($dataseri) == 0) {
+                    $cek = NoseriBarangJadi::whereIn('id', $request->noseriid)->get();
+
+                    foreach($cek as $cc) {
+                        NoseriBrgJadiLog::where('noseri_id', $cc->id)->where([
                             'action' => 'delete',
                             'status' => 'waiting'
                         ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
-                        NoseriBarangJadi::find($dd->noseri_id)->update(['is_change' => 1]);
+                        NoseriBarangJadi::find($cc->id)->update(['is_change' => 1, 'is_delete' => 0]);
                     }
-                    return response()->json(['error' => true, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
+                } else {
+                    foreach($check->get() as $ddd) {
+                        NoseriBrgJadiLog::where('noseri_id', $ddd->noseri_id)->where([
+                            'action' => 'delete',
+                            'status' => 'waiting'
+                        ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                        NoseriBarangJadi::find($ddd->noseri_id)->update(['is_change' => 1, 'is_delete' => 0]);
+                    }
                 }
+                return response()->json(['error'=>false, 'msg'=> 'Penolakan Berhasil Dilakukan']);
+            } else {
+                if (count($dataseri) == 0) {
+                    $cekk = NoseriBarangJadi::whereIn('id', $request->noseriid)->get();
+
+                    foreach($cekk as $ckc) {
+                        NoseriBrgJadiLog::where('noseri_id', $ckc->id)->where([
+                            'action' => 'delete',
+                            'status' => 'waiting'
+                        ])->update(['status' => 'approve', 'acc_by' => $request->accby]);
+                        NoseriBarangJadi::find($ckc->id)->delete();
+                    }
+                    return response()->json(['error'=>false, 'msg'=> 'Noseri Berhasil Dihapus']);
+                } else {
+                    if (empty(array_filter($dataseri))) {
+                        foreach($check->get() as $d) {
+                            NoseriBrgJadiLog::where('noseri_id', $d->noseri_id)->where([
+                                'action' => 'delete',
+                                'status' => 'waiting'
+                            ])->update(['status' => 'approve', 'acc_by' => $request->accby]);
+                            NoseriTGbj::where('noseri_id',$d->noseri_id)->delete();
+                            NoseriBarangJadi::find($d->noseri_id)->delete();
+                        }
+                        return response()->json(['error'=>false, 'msg'=> 'Noseri Berhasil Dihapus']);
+                    } else {
+                        return 'ok';
+                        foreach($check->get() as $dd) {
+                            NoseriBrgJadiLog::where('noseri_id', $dd->noseri_id)->where([
+                                'action' => 'delete',
+                                'status' => 'waiting'
+                            ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                            NoseriBarangJadi::find($dd->noseri_id)->update(['is_change' => 1]);
+                        }
+                        return response()->json(['error' => true, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
+                    }
+                }
+
+
             }
 
         } catch (\Exception $e) {
