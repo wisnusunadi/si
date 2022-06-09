@@ -369,8 +369,10 @@
             destroy: true,
             processing: true,
             autoWidth: false,
+            deferRender: true,
             ajax: {
                 url: "/api/transaksi/all",
+                // type: "post",
             },
             columns: [
                 { data: 'date_in', name: 'date_in'},
@@ -391,6 +393,7 @@
                                         <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
                                 </span>&emsp;Mohon Tunggu ...",
             },
+            order: [[0, 'desc']],
         });
      // Tanggal Masuk
      $('#kt_datepicker_1').daterangepicker({
