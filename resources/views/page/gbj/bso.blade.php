@@ -252,7 +252,7 @@
                     </div>
                   </div>
                 <div class="d-flex justify-content-end">
-                    
+
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -660,6 +660,7 @@
             if (e.keyCode == 13) {
                 if (datas !== undefined) {
                     let checkeds = $('.cb-child').prop('checked', true);
+                    tmp.push(datas.id);
                     $(this).val('');
                     setTimeout(() => {
                         mytable.search('').draw();
@@ -675,8 +676,9 @@
             let data = mytable.row('tr:contains("' + barcode + '")').data();
             if(barcode.length >= 10){
                 if (data !== undefined) {
+                    console.log(data);
                     let checked = $('.cb-child').prop('checked', true);
-                    dataTampungSeri.push(data.noseri);
+                    tmp.push(data.id);
                     $(this).val('');
                     if(checked){
                         var idd = $(checked).val();
@@ -701,14 +703,14 @@
         });
     });
 
-    $('.scan-produk').on('click', 'input[type=checkbox]',function (){
-        if ($(this).is(':checked')) {
-            var checked = ($(this).val());
-            tmp.push(checked);
-        } else {
-            tmp.splice($.inArray(checked, tmp),1);
-        }
-    })
+    // $('.scan-produk').on('click', 'input[type=checkbox]',function (){
+    //     if ($(this).is(':checked')) {
+    //         var checked = ($(this).val());
+    //         tmp.push(checked);
+    //     } else {
+    //         tmp.splice($.inArray(checked, tmp),1);
+    //     }
+    // })
 
     $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();
