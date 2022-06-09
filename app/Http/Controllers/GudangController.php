@@ -533,25 +533,43 @@ class GudangController extends Controller
                 $nbj = NoseriBarangJadi::find($c->noseri_id);
                 array_push($dataseri, $nbj->is_ready);
             }
-            if (empty(array_filter($dataseri))) {
-                if (count($check->get()) > 0) {
-                    foreach($check->get() as $d) {
-                        $nbjj = NoseriBarangJadi::find($d->noseri_id);
+            if (count($dataseri) == 0) {
+                $cek = NoseriBarangJadi::whereIn('id', $request->noseriid)->get();
 
-                        NoseriBrgJadiLog::create([
-                                'noseri_id' => $d->noseri_id,
-                                'data_lama' => $nbjj->noseri,
-                                'action' => 'delete',
-                                'action_by' => $request->actionby,
-                                'status' => 'waiting'
-                            ]);
-                        NoseriBarangJadi::find($d->noseri_id)->update(['is_change' => 0, 'is_delete' => 1]);
-                    }
-
+                foreach($cek as $cc) {
+                    $nbjj = NoseriBarangJadi::find($cc->id);
+                    // return $nbjj;
+                    NoseriBrgJadiLog::create([
+                            'noseri_id' => $cc->id,
+                            'data_lama' => $nbjj->noseri,
+                            'action' => 'delete',
+                            'action_by' => $request->actionby,
+                            'status' => 'waiting'
+                        ]);
+                    NoseriBarangJadi::find($cc->id)->update(['is_change' => 0, 'is_delete' => 1]);
                 }
                 return response()->json(['error'=>false, 'msg'=> 'Mohon Tunggu Persetujuan dari Manajer']);
             } else {
-                return response()->json(['error' => true, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
+                if (empty(array_filter($dataseri))) {
+                    if (count($check->get()) > 0) {
+                        foreach($check->get() as $d) {
+                            $nbjj = NoseriBarangJadi::find($d->noseri_id);
+
+                            NoseriBrgJadiLog::create([
+                                    'noseri_id' => $d->noseri_id,
+                                    'data_lama' => $nbjj->noseri,
+                                    'action' => 'delete',
+                                    'action_by' => $request->actionby,
+                                    'status' => 'waiting'
+                                ]);
+                            NoseriBarangJadi::find($d->noseri_id)->update(['is_change' => 0, 'is_delete' => 1]);
+                        }
+
+                    }
+                    return response()->json(['error'=>false, 'msg'=> 'Mohon Tunggu Persetujuan dari Manajer']);
+                } else {
+                    return response()->json(['error' => true, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
+                }
             }
         } catch (\Exception $e) {
             return response()->json([
