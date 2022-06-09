@@ -292,7 +292,6 @@ class GudangController extends Controller
                 ->leftjoin('divisi as dd', 'd.id', '=', 'h.ke')
                 ->select('p.so', 'p.no_po', 'p.log_id', 'h.tgl_masuk', 'h.tgl_keluar', 'h.jenis', 'h.deskripsi', 't_gbj_detail.qty', 'stt.nama', 'd.nama as dari', 'dd.nama as ke', DB::raw('concat(prd.nama, " ", g.nama) as produkk'), 't_gbj_detail.id')
                 ->get();
-        // $data1 = TFProduksiDetail::with(['header', 'produk.satuan', 'noseri', 'header.pesanan.log'])->limit(10)->get()->sortByDesc('header.tgl_keluar');
         $g = datatables()->of($data1)
             ->addIndexColumn()
             ->addColumn('so', function ($d) {
@@ -401,7 +400,7 @@ class GudangController extends Controller
     function getDetailHistory($id)
     {
         $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
-
+        
         return datatables()->of($data1)
             ->addIndexColumn()
             ->addColumn('so', function ($d) {
