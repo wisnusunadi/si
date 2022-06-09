@@ -239,15 +239,15 @@
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="switchScan" checked>
-                            <label class="custom-control-label" id="switchScanLabel" for="switchScan">Scan Nomor Seri Untuk Alat (Aktif)</label>
+                            <input type="checkbox" class="custom-control-input" id="switchScan">
+                            <label class="custom-control-label" id="switchScanLabel" for="switchScan">Scan Nomor Seri Untuk Alat (Tidak Aktif)</label>
                           </div>
                     </div>
                     <div class="p-2 bd-highlight">
                         <div class="form-group">
                             <label for="">Scan Nomor Seri</label>
-                            <input type="text" name="" class="form-control barcodeScanAlat" id="" >
-                            <input type="text" name="" class="form-control barcodeScanNonAlat" id="" hidden>
+                            <input type="text" name="" class="form-control barcodeScanAlat" id="" hidden>
+                            <input type="text" name="" class="form-control barcodeScanNonAlat" id="" >
                         </div>
                     </div>
                   </div>
@@ -700,14 +700,14 @@
         });
     });
 
-    // $('.scan-produk').on('click', 'input[type=checkbox]',function (){
-    //     if ($(this).is(':checked')) {
-    //         var checked = ($(this).val());
-    //         tmp.push(checked);
-    //     } else {
-    //         tmp.splice($.inArray(checked, tmp),1);
-    //     }
-    // })
+    $('.scan-produk').on('click', 'input[type=checkbox]',function (){
+        if ($(this).is(':checked')) {
+            var checked = ($(this).val());
+            tmp.push(checked);
+        } else {
+            tmp.splice($.inArray(checked, tmp),1);
+        }
+    })
 
     $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();
