@@ -661,11 +661,8 @@
                 if (datas !== undefined) {
                     let checkeds = $('.cb-child').prop('checked', true);
                     tmp.push(datas.id);
-                    $(this).val('');
-                    setTimeout(() => {
-                        mytable.search('').draw();
-                    }, 100);
                 }
+                mytable.search('').draw();
             }
         });
 
