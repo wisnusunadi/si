@@ -475,16 +475,6 @@
         $('div#bppb').text($(this).parent().prev().prev().prev().html());
         $('div#produk').text($(this).parent().prev().prev().html());
         $('div#jml').text($(this).parent().prev().html());
-        // $.ajax({
-        //     url: "/api/prd/history/header/" + id,
-        //     type: "get",
-        //     success: function(res) {
-        //         console.log(res);
-
-        //         $('p#t_rakit').text($(this).parent().prev().prev().prev().prev().prev().html());
-        //         $('p#t_kirim').text($(this).parent().prev().prev().prev().prev().html());
-        //     }
-        // });
 
         $('.scan-produk').DataTable({
             destroy: true,
@@ -492,9 +482,6 @@
             "autoWidth": false,
             "pageLength": 10,
             processing: true,
-            // ajax: {
-            //     url: "/api/prd/historySeri/" + id + "/" + time,
-            // },
             ajax: {
                 url: "/api/prd/riwayat_seri_rakit/" + id + "/" + rakit,
             },
@@ -522,12 +509,6 @@
         },
         "responsive": true,
         "order": [[ 0, 'asc' ]],
-        // ajax: {
-        //     url: "/api/prd/ajax_his_rakit",
-        //     headers: {
-        //         'X-CSRF-TOKEN': '{{csrf_token()}}'
-        //     }
-        // },
         ajax: {
             url: "/api/prd/riwayat_rakit",
             type: "post",
@@ -604,58 +585,58 @@
         });
 
         // Tabel PerProduk
-        $('.tablePerProduk').DataTable({
-            destroy: true,
-            "autoWidth": false,
-            processing: true,
-            ajax: {
-                url: "/api/prd/ajax_perproduk",
-            },
-            columns: [
-                {data: 'no_bppb'},
-                {data: 'produk'},
-                {data: 'aksi',
-                    "render": function ( data, type, row, meta ) {
-                        return '<button class="btn btn-sm btn-outline-secondary buttonModalProduk" data-id="'+data+'" data-bppb="'+row.no_bppb+'" data-produk="'+row.produk+'"><i class="far fa-eye"></i> Detail</button>';
-                    }
-                },
-            ],
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-        });
+        // $('.tablePerProduk').DataTable({
+        //     destroy: true,
+        //     "autoWidth": false,
+        //     processing: true,
+        //     ajax: {
+        //         url: "/api/prd/ajax_perproduk",
+        //     },
+        //     columns: [
+        //         {data: 'no_bppb'},
+        //         {data: 'produk'},
+        //         {data: 'aksi',
+        //             "render": function ( data, type, row, meta ) {
+        //                 return '<button class="btn btn-sm btn-outline-secondary buttonModalProduk" data-id="'+data+'" data-bppb="'+row.no_bppb+'" data-produk="'+row.produk+'"><i class="far fa-eye"></i> Detail</button>';
+        //             }
+        //         },
+        //     ],
+        //     "language": {
+        //         "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        //     }
+        // });
 
-        $(document).on('click','.buttonModalProduk', function () {
-            var id = $(this).data('id');
-            var bppb = $(this).data('bppb');
-            var produk = $(this).data('produk');
-            $('#no_bppb').text(bppb);
-            $('#nama_produk').text(produk);
-            var table = $('.table-history-produk').DataTable({
-                destroy: true,
-                "lengthChange": false,
-                "autoWidth": false,
-                "info": false,
-                "responsive": true,
-                "order": [[ 0, 'asc' ], [2, 'asc']],
-                ajax: {
-                    url: "/api/prd/detail_perproduk/"+id,
-                },
-                columns: [
-                    {data: 'day_rakit'},
-                    {data: 'time_rakit'},
-                    {data: 'day_kirim'},
-                    {data: 'time_kirim'},
-                    {data: 'jml'},
-                ],
-                autoWidth: false,
-                processing: true,
-                "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                },
-            });
-            $('.modalTableProduk').modal('show');
-        });
+        // $(document).on('click','.buttonModalProduk', function () {
+        //     var id = $(this).data('id');
+        //     var bppb = $(this).data('bppb');
+        //     var produk = $(this).data('produk');
+        //     $('#no_bppb').text(bppb);
+        //     $('#nama_produk').text(produk);
+        //     var table = $('.table-history-produk').DataTable({
+        //         destroy: true,
+        //         "lengthChange": false,
+        //         "autoWidth": false,
+        //         "info": false,
+        //         "responsive": true,
+        //         "order": [[ 0, 'asc' ], [2, 'asc']],
+        //         ajax: {
+        //             url: "/api/prd/detail_perproduk/"+id,
+        //         },
+        //         columns: [
+        //             {data: 'day_rakit'},
+        //             {data: 'time_rakit'},
+        //             {data: 'day_kirim'},
+        //             {data: 'time_kirim'},
+        //             {data: 'jml'},
+        //         ],
+        //         autoWidth: false,
+        //         processing: true,
+        //         "language": {
+        //             "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        //         },
+        //     });
+        //     $('.modalTableProduk').modal('show');
+        // });
 
         // Transfer Lain lain
         const produkTable = [];
@@ -839,22 +820,22 @@
         });
 
         // Per Produk
-        $('.tableDetailProduk').DataTable({});
-        $(document).on('click','.btnClickDetailProduk', function () {
-            $('.tableNoseriProduk').dataTable({
-                destroy: true,
-                "autoWidth": false,
-                processing: true,
-                lengthChange: false,
-                // ajax: {
-                //     url: "#",
-                //     type: "post",
-                // },
-                // columns: [
-                //     {data: 'noseri'}
-                // ],
-            })
-            $('.modalRakitProduk').modal('show');
-        });
+        // $('.tableDetailProduk').DataTable({});
+        // $(document).on('click','.btnClickDetailProduk', function () {
+        //     $('.tableNoseriProduk').dataTable({
+        //         destroy: true,
+        //         "autoWidth": false,
+        //         processing: true,
+        //         lengthChange: false,
+        //         // ajax: {
+        //         //     url: "#",
+        //         //     type: "post",
+        //         // },
+        //         // columns: [
+        //         //     {data: 'noseri'}
+        //         // ],
+        //     })
+        //     $('.modalRakitProduk').modal('show');
+        // });
 </script>
 @stop

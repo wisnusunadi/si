@@ -659,8 +659,13 @@
             let datas = mytable.row('tr:contains("' + barcodes + '")').data();
             if (e.keyCode == 13) {
                 if (datas !== undefined) {
+                    console.log(datas);
                     let checkeds = $('.cb-child').prop('checked', true);
-                    tmp.push(datas.id);
+                    if (checkeds) {
+                        tmp.push(datas.id);
+                    } else {
+                        tmp.splice($.inArray(datas.id, tmp),1);
+                    }
                 }
                 mytable.search('').draw();
             }
@@ -683,6 +688,8 @@
                         var textid = 'text' + $(checked).attr('id');
 
                         $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
+                    } else {
+                        tmp.splice($.inArray(data.id, tmp),1);
                     }
 
                 }else{
@@ -700,14 +707,14 @@
         });
     });
 
-    // $('.scan-produk').on('click', 'input[type=checkbox]',function (){
-    //     if ($(this).is(':checked')) {
-    //         var checked = ($(this).val());
-    //         tmp.push(checked);
-    //     } else {
-    //         tmp.splice($.inArray(checked, tmp),1);
-    //     }
-    // })
+    $('.scan-produk').on('click', 'input[type=checkbox]',function (){
+        if ($(this).is(':checked')) {
+            var checked = ($(this).val());
+            // tmp.push(checked);
+        } else {
+            tmp.splice($.inArray(checked, tmp),1);
+        }
+    })
 
     $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();

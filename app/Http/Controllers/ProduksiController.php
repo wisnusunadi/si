@@ -2852,6 +2852,7 @@ class ProduksiController extends Controller
     function ajax_sisa_transfer()
     {
         $data = JadwalPerakitan::whereNotNull('keterangan_transfer')->orWhereNotNull('keterangan')->get();
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('periode', function ($d) {
@@ -2973,13 +2974,16 @@ class ProduksiController extends Controller
 
     function get_his_rakit()
     {
-        $data = JadwalRakitNoseri::select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', 'jadwal_rakit_noseri.waktu_tf', 'jadwal_perakitan.produk_id', DB::raw('count(jadwal_id) as jml'), 'jadwal_perakitan.no_bppb')
-            ->join('jadwal_perakitan', 'jadwal_perakitan.id', '=', 'jadwal_rakit_noseri.jadwal_id')
-            ->groupBy('jadwal_rakit_noseri.jadwal_id')
-            ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
-            // ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.waktu_tf, '%Y-%m-%d %H:%i')"))
-            // ->whereNotNull('jadwal_rakit_noseri.waktu_tf')
-            ->get()->sortByDesc('date_in');
+        $data =
+            DB::table('jadwal_rakit_noseri')
+                    ->join('jadwal_perakitan as jp', 'jp.id', '=', 'jadwal_rakit_noseri.jadwal_id')
+                    ->join('gdg_barang_jadi as gdg', 'gdg.id', '=', 'jp.produk_id')
+                    ->join('produk as p', 'p.id', '=', 'gdg.produk_id')
+                    ->groupBy('jadwal_rakit_noseri.jadwal_id')
+                    ->groupBy(DB::raw("date_format(jadwal_rakit_noseri.date_in, '%Y-%m-%d %H:%i')"))
+                    ->select('jadwal_rakit_noseri.jadwal_id', 'jadwal_rakit_noseri.date_in', 'jadwal_rakit_noseri.created_at', DB::raw('concat(p.nama," ", gdg.nama) as produkk'), 'jp.produk_id', DB::raw('count(jadwal_rakit_noseri.jadwal_id) as jml'), 'jp.no_bppb')
+                    ->orderByDesc('date_in')
+                    ->get();
 
         return datatables()->of($data)
             ->addColumn('day_rakit', function ($d) {
@@ -2992,8 +2996,7 @@ class ProduksiController extends Controller
                 return $d->no_bppb == null ? '-' : $d->no_bppb;
             })
             ->addColumn('produk', function ($d) {
-                $a = GudangBarangJadi::find($d->produk_id);
-                return $a->produk->nama . ' ' . $a->nama;
+                return $d->produkk;
             })
             ->addColumn('jml', function ($d) {
                 return $d->jml . ' Unit';
