@@ -738,16 +738,13 @@
             $(list).html("")
         }
     });
-
-    console.log("tmp", tmp);
-
     var t = 0;
     var dataTemp = [];
 
     $(document).on('click', '#simpan', function (e) {
         $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
-
-        if (tmp.length > max) {
+        let a = $('.scan-produk').find('input.cb-child:checked').length;
+        if (a > max) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
