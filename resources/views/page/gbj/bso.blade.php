@@ -239,15 +239,15 @@
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="switchScan" checked>
-                            <label class="custom-control-label" id="switchScanLabel" for="switchScan">Scan Nomor Seri Untuk Alat (Aktif)</label>
+                            <input type="checkbox" class="custom-control-input" id="switchScan">
+                            <label class="custom-control-label" id="switchScanLabel" for="switchScan">Scan Nomor Seri Untuk Alat (Tidak Aktif)</label>
                           </div>
                     </div>
                     <div class="p-2 bd-highlight">
                         <div class="form-group">
                             <label for="">Scan Nomor Seri</label>
-                            <input type="text" name="" class="form-control barcodeScanAlat" id="" >
-                            <input type="text" name="" class="form-control barcodeScanNonAlat" id="" hidden>
+                            <input type="text" name="" class="form-control barcodeScanAlat" id="" hidden>
+                            <input type="text" name="" class="form-control barcodeScanNonAlat" id="" >
                         </div>
                     </div>
                   </div>
@@ -707,11 +707,12 @@
         });
     });
 
-    $('.scan-produk').on('click', 'input[type=checkbox]',function (){
+    $('.scan-produk').on('click', 'input.cb-child',function (){
         if ($(this).is(':checked')) {
             var checked = ($(this).val());
-            // tmp.push(checked);
+            tmp.push(checked);
         } else {
+            console.log(checked);
             tmp.splice($.inArray(checked, tmp),1);
         }
     })
@@ -734,23 +735,23 @@
             $('.cb-child').prop('checked', true);
             $('.cb-child').each(function () {
                 var idd = $(this).val();
+                tmp.push(idd);
                 var title = $(this).parent().prev()[0].textContent;
                 var textid = 'text' + $(this).attr('id');
                 $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
-            })
+            });
         } else {
             $('.cb-child').prop('checked', false);
             $(list).html("")
         }
-    })
-
+    });
     var t = 0;
     var dataTemp = [];
 
     $(document).on('click', '#simpan', function (e) {
         $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
-
-        if (tmp.length > max) {
+        let a = $('.scan-produk').find('input.cb-child:checked').length;
+        if (a > max) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
