@@ -700,11 +700,12 @@
         });
     });
 
-    $('.scan-produk').on('click', 'input[type=checkbox]',function (){
+    $('.scan-produk').on('click', 'input.cb-child',function (){
         if ($(this).is(':checked')) {
             var checked = ($(this).val());
             tmp.push(checked);
         } else {
+            console.log(checked);
             tmp.splice($.inArray(checked, tmp),1);
         }
     })
@@ -727,15 +728,18 @@
             $('.cb-child').prop('checked', true);
             $('.cb-child').each(function () {
                 var idd = $(this).val();
+                tmp.push(idd);
                 var title = $(this).parent().prev()[0].textContent;
                 var textid = 'text' + $(this).attr('id');
                 $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
-            })
+            });
         } else {
             $('.cb-child').prop('checked', false);
             $(list).html("")
         }
-    })
+    });
+
+    console.log("tmp", tmp);
 
     var t = 0;
     var dataTemp = [];
