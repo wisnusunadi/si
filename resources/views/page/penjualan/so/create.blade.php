@@ -58,15 +58,6 @@
         }
 
         @media screen and (max-width: 1219px) {
-
-            /* label,
-                                                        .row {
-                                                            font-size: 12px;
-                                                        }
-
-                                                        h4 {
-                                                            font-size: 20px;
-                                                        } */
             body {
                 font-size: 12px;
             }

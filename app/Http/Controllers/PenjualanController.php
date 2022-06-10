@@ -49,22 +49,22 @@ class PenjualanController extends Controller
         $y = explode(',', $status);
         $data = "";
         if ($jenis == "semua" && $status == "semua") {
-            $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
-            $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
-            $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+            $Ekatalog = collect(Ekatalog::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+            $Spa = collect(Spa::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+            $Spb = collect(Spb::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
             $data = $Ekatalog->merge($Spa)->merge($Spb);
         } else if ($jenis != "semua" && $status == "semua") {
             $Ekatalog = "";
             $Spa = "";
             $Spb = "";
             if (in_array('ekatalog', $x)) {
-                $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
+                $Ekatalog = collect(Ekatalog::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
             }
             if (in_array('spa', $x)) {
-                $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
+                $Spa = collect(Spa::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
             }
             if (in_array('spb', $x)) {
-                $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+                $Spb = collect(Spb::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
             }
             if ($Ekatalog != "" && $Spa != "" && $Spb != "") {
                 $data = $Ekatalog->merge($Spa)->merge($Spb);
@@ -101,13 +101,13 @@ class PenjualanController extends Controller
             // }
         } else if ($jenis == "semua" && $status != "semua") {
             $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
-                $q->whereIN('log_id', $y);
+                $q->whereIN('log_id', $y)->with('Customer');
             })->orderBy('id', 'DESC')->get());
             $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
-                $q->whereIN('log_id', $y);
+                $q->whereIN('log_id', $y)->with('Customer');
             })->orderBy('id', 'DESC')->get());
             $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
-                $q->whereIN('log_id', $y);
+                $q->whereIN('log_id', $y)->with('Customer');
             })->orderBy('id', 'DESC')->get());
             $data = $Ekatalog->merge($Spa)->merge($Spb);
         } else {
@@ -116,17 +116,17 @@ class PenjualanController extends Controller
             $Spb = "";
             if (in_array('ekatalog', $x)) {
                 $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
-                    $q->whereIN('log_id', $y);
+                    $q->whereIN('log_id', $y)->with('Customer');
                 })->orderBy('id', 'DESC')->get());
             }
             if (in_array('spa', $x)) {
                 $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
-                    $q->whereIN('log_id', $y);
+                    $q->whereIN('log_id', $y)->with('Customer');
                 })->orderBy('id', 'DESC')->get());
             }
             if (in_array('spb', $x)) {
                 $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
-                    $q->whereIN('log_id', $y);
+                    $q->whereIN('log_id', $y)->with('Customer');
                 })->orderBy('id', 'DESC')->get());
             }
             if ($Ekatalog != "" && $Spa != "" && $Spb != "") {

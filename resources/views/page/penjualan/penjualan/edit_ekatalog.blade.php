@@ -381,7 +381,6 @@
                                                             <input type="text" class="form-control col-form-label" name="telepon" id="telepon_customer" readonly value="{{$e->customer->telp}}" />
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>

@@ -24,7 +24,21 @@
 @stop
 
 @section('adminlte_css')
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <style>
+
+ul#status {
+    padding: 0;
+}
+        ul#status li {
+            /* float: left; */
+            display:inline;
+            padding: 0;
+            list-style-type: none;
+            margin: 0; /* To remove default bottom margin */
+            /* margin: 10px; */
+        }
+
         .alert-danger {
             color: #a94442;
             background-color: #f2dede;
@@ -1012,6 +1026,7 @@
                         $('#detail').html(result).show();
 
                         if (label == 'ekatalog') {
+                            apexchart();
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-orange bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-purple');
@@ -1311,6 +1326,103 @@
             //         }
             //     }
             // });
+            function apexchart(){
+                // var options = {
+                //     series: [76, 67, 61],
+                //     chart: {
+                //         height: 270,
+                //         type: 'radialBar',
+                //     },
+                //     plotOptions: {
+                //         radialBar: {
+                //             offsetY: 0,
+                //             startAngle: 0,
+                //             endAngle: 270,
+                //             hollow: {
+                //                 margin: 5,
+                //                 size: '30%',
+                //                 background: 'transparent',
+                //                 image: undefined,
+                //             },
+                //             dataLabels: {
+                //                 name: {
+                //                     show: false,
+                //                 },
+                //                 value: {
+                //                     show: false,
+                //                 }
+                //             }
+                //         }
+                //     },
+                //     colors: ['#EA8B1B', '#FFC700', '#456600'],
+                //     labels: ['Gudang', 'QC', 'Logistik'],
+                //     legend: {
+                //         show: true,
+                //         floating: true,
+                //         fontSize: '14px',
+                //         position: 'left',
+                //         offsetX: 15,
+                //         offsetY: 15,
+                //         labels: {
+                //             useSeriesColors: true,
+                //         },
+                //         markers: {
+                //             size: 0
+                //         },
+                //         formatter: function(seriesName, opts) {
+                //             return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex]
+                //         },
+                //         itemMargin: {
+                //             vertical: 3
+                //         }
+                //     },
+                //     responsive: [{
+                //         breakpoint: 480,
+                //         options: {
+                //             legend: {
+                //                 show: false
+                //             }
+                //         }
+                //     }]
+                // };
+
+                // var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
+                // chart.render();
+                var options = {
+                    series: [44, 55, 67],
+                    chart: {
+                        height: 300,
+                        type: 'radialBar',
+                    },
+                    plotOptions: {
+                        radialBar: {
+                            dataLabels: {
+                                name: {
+                                    fontSize: '20px',
+                                },
+                                value: {
+                                    fontSize: '14px',
+                                },
+                                total: {
+                                    show: true,
+                                    label: 'Total',
+                                    color: '#5F7A90',
+                                    formatter: function (w) {
+                                        // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+                                        return 249
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    colors: ['#EA8B1B', '#FFC700', '#456600'],
+                    labels: ['Gudang', 'QC', 'Logistik'],
+                };
+
+                var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
+                chart.render();
+
+            }
 
             function detailtabel_ekatalog(id) {
                 var dt = $('#detailtabel').DataTable({

@@ -100,6 +100,7 @@ Route::group(['prefix' => 'master', 'middleware' => 'auth'], function () {
         Route::get('/edit_coo/{id}', [App\Http\Controllers\MasterController::class, 'edit_coo_data_produk'])->name('master.produk.edit_coo');
 
         Route::get('/export', [App\Http\Controllers\MasterController::class, 'export_produk'])->name('master.produk.export');
+        Route::get('/cancel_po', [App\Http\Controllers\MasterController::class, 'cancel_po'])->name('master.cancel_po');
     });
 });
 
@@ -304,6 +305,15 @@ Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/penjualan'], function () {
         Route::view('/show', 'page.as.penjualan.show')->name('as.penjualan.show');
+    });
+
+    Route::group(['prefix' => '/retur'], function () {
+        Route::view('/show', 'page.as.retur.show')->name('as.retur.show');
+        Route::get('/create', [App\Http\Controllers\AfterSalesController::class, 'create_retur'])->name('as.retur.create');
+        Route::post('/store', [App\Http\Controllers\AfterSalesController::class, 'store_retur'])->name('as.retur.store');
+        Route::get('/edit/{id}', [App\Http\Controllers\AfterSalesController::class, 'edit_retur'])->name('as.retur.edit');
+        Route::put('/update/{id}', [App\Http\Controllers\AfterSalesController::class, 'update_retur'])->name('as.retur.update');
+        Route::delete('/delete', [App\Http\Controllers\AfterSalesController::class, 'delete_retur'])->name('as.retur.delete');
     });
 
     Route::group(['prefix' => '/so'], function () {

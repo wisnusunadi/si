@@ -542,4 +542,28 @@ class AfterSalesController extends Controller
             ->rawColumns(['button', 'status', 'jenis'])
             ->make(true);
     }
+
+
+    public function show_retur(){
+        return view('page.as.retur.show');
+    }
+
+    public function get_data_retur(){
+
+    }
+
+    public function create_retur(){
+        return view('page.as.retur.create');
+    }
+
+    public function store_retur(Request $r){
+
+    }
+
+    public function edit_retur($id){
+        return view('page.as.retur.edit', ['id' =>$id]);
+    }
+
+    public function update_retur(Request $r, $id){
+    }
 }
