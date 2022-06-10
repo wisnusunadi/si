@@ -214,7 +214,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="form-group row">
+                                        {{-- <div class="form-group row">
                                             <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tampilan Export</label>
                                             <div class="col-lg-5 col-md-12 col-form-label">
                                                 <div class="form-check form-check-inline">
@@ -231,8 +231,8 @@
                                                     @endif
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="form-group row">
+                                        </div> --}}
+                                        {{-- <div class="form-group row">
                                             <label for="tambahan" class="col-form-label col-lg-5 col-md-12 labelket"></label>
                                             <div class="col-5 col-form-label">
                                                 <div class="form-check form-check-inline">
@@ -240,7 +240,7 @@
                                                     <label class="form-check-label" for="inlineCheckbox1">Sertakan nomer seri</label>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div> --}}
                                         <div class="form-group row">
                                             <div class="col-5"></div>
                                             <div class="col-lg-4 col-md-12">
@@ -418,21 +418,7 @@
                     </div>
                     <div class="modal-body px-4" id="laporan">
                         <div class="row row-cols-1 row-cols-md-2 g-4">
-                            <div class="col my-2">
-                                <div class="card h-100">
-                                    <div class="media mx-2 my-auto">
-                                        <div class="radio icheck-primary mx-3">
-                                            <input id="no_so" type="radio" name="jenis_laporan" value="no_so" class="pilih_laporan" />
-                                            <label for="no_so"></label>
-                                        </div>
-                                        <div class="media-body align-middle mr-2">
-                                            <h5><b>Sales Order</b></h5>
-                                            <p>Laporan akan ditampilkan berdasarkan Sales Order</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col my-2">
+                            {{-- <div class="col my-2">
                                 <div class="card h-100">
                                     <div class="media mx-2 my-auto">
                                         <div class="radio icheck-primary mx-3">
@@ -445,8 +431,36 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div> --}}
+                            <div class="col my-2">
+                                <div class="card h-100">
+                                    <div class="media mx-2 my-auto">
+                                        <div class="radio icheck-primary mx-3">
+                                            <input id="paket_produk" type="radio" name="jenis_laporan" value="paket_produk" class="pilih_laporan" />
+                                            <label for="paket_produk"></label>
+                                        </div>
+                                        <div class="media-body align-middle mr-2">
+                                            <h5><b>Paket Produk</b></h5>
+                                            <p>Laporan akan ditampilkan berdasarkan Paket Produk dan tidak menampilkan variasi</p>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col my-2">
+                                <div class="card h-100">
+                                    <div class="media mx-2 my-auto">
+                                        <div class="radio icheck-primary mx-3">
+                                            <input id="detail_produk" type="radio" name="jenis_laporan" value="detail_produk" class="pilih_laporan" />
+                                            <label for="detail_produk"></label>
+                                        </div>
+                                        <div class="media-body align-middle mr-2">
+                                            <h5><b>Detail Produk</b></h5>
+                                            <p>Laporan akan ditampilkan berdasarkan Paket Produk dan menampilkan variasi warna dll</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {{-- <div class="col my-2">
                                 <div class="card h-100">
                                     <div class="media mx-2 my-auto">
                                         <div class="radio icheck-primary mx-3">
@@ -459,21 +473,11 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="col my-2">
-                                <div class="card h-100">
-                                    <div class="media mx-2 my-auto">
-                                        <div class="radio icheck-primary mx-3">
-                                            <input id="paket_produk" type="radio" name="jenis_laporan" value="paket_produk" class="pilih_laporan" />
-                                            <label for="paket_produk"></label>
-                                        </div>
-                                        <div class="media-body align-middle mr-2">
-                                            <h5><b>Paket Produk</b></h5>
-                                            <p>Laporan akan ditampilkan berdasarkan Paket Produk</p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            </div> --}}
+                        </div>
+                        <div class="radio icheck-primary mx-3">
+                            <input id="seri" type="checkbox" name="tambahan" value="seri" class="pilih_laporan" />
+                            <label for="seri">Sertakan No Seri</label>
                         </div>
                     </div>
                     <div class="modal-footer">
@@ -634,7 +638,8 @@
             var tanggal_mulai = $('#tanggal_mulai').val();
             var tanggal_akhir = $('#tanggal_akhir').val();
             var customer_id = $('#customer_id').val();
-            var tampilan_export = $('input[type="radio"][name="tampilan_export"]:checked').val();
+            var jenis_laporan = $('input[type="radio"][name="jenis_laporan"]:checked').val();
+
 
             $("input[name=penjualan]:checked").each(function() {
                 penjualan.push($(this).val());
@@ -656,6 +661,11 @@
                 var y = ['kosong'];
             }
 
+            window.location.href = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y + '/' + jenis_laporan;
+            setTimeout(function() {
+                $("#laporanmodal").modal('hide');
+                $('#loader').fadeOut();
+            }, 2000);
             $.ajax({
                 url: '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y + '/' + tampilan_export,
                 type: 'GET',
@@ -686,7 +696,6 @@
                 document.body.appendChild(link);
                 link.click();
             });
-
             // window.location.href = '/penjualan/penjualan/export/' + x + '/' + customer_id + '/' + tanggal_mulai + '/' + tanggal_akhir + '/' + y + '/' + tampilan_export;
             // setTimeout(function() {
             //     $("#laporanmodal").modal('hide');

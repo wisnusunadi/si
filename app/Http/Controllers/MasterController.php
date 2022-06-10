@@ -1121,6 +1121,21 @@ class MasterController extends Controller
 
         echo json_encode($data);
     }
+    public function select_penjualan_produk_param(Request $request, $value)
+    {
+        if($value == 'ekatalog')
+    {
+        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+        ->where('status', 'ekat')
+        ->orderby('nama', 'ASC')
+        ->get();
+    }else{
+        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+        ->orderby('nama', 'ASC')
+        ->get();
+    }
+        echo json_encode($data);
+    }
     public function check_no_akd($id, $val)
     {
         $data = Produk::where('no_akd', $val)->whereNotIn('id', $id)->count();

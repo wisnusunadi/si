@@ -1523,7 +1523,7 @@
                         dataType: 'json',
                         delay: 250,
                         type: 'GET',
-                        url: '/api/penjualan_produk/select/',
+                        url: '/api/penjualan_produk/select_param/ekatalog',
                         data: function(params) {
                             return {
                                 term: params.term

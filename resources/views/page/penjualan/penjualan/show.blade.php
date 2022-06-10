@@ -346,40 +346,13 @@ ul#status {
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="8"
-                                                                    name="status_penjualan[]" id="status6" />
-                                                                <label class="form-check-label" for="status6">
-                                                                    QC
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="13"
-                                                                    name="status_penjualan[]" id="status7" />
-                                                                <label class="form-check-label" for="status7">
-                                                                    Terkirim Sebagian
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="11"
-                                                                    name="status_penjualan[]" id="status8" />
-                                                                <label class="form-check-label" for="status8">
-                                                                    Kirim
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <span class="float-right">
-                                                                <button class="btn btn-primary" id="filter_penjualan"
-                                                                    type="submit">
-                                                                    Cari
-                                                                </button>
-                                                            </span>
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input class="form-check-input" type="checkbox" value="10" name="status_penjualan[]" id="status8" />
+                                                            <label class="form-check-label" for="status8">
+                                                                Kirim
+                                                            </label>
                                                         </div>
                                                     </div>
                                                 </div>

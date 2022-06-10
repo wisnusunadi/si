@@ -1424,22 +1424,6 @@ class QcController extends Controller
         })->get();
 
         $arrayid = array();
-        // foreach ($cekhasil as $h) {
-        //     if (count($h->DetailPesanan) > 0 && count($h->DetailPesananPart) <= 0) {
-        //         if ($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) {
-        //             $arrayid[] = $h->id;
-        //         }
-        //     } else if (count($h->DetailPesanan) <= 0 && count($h->DetailPesananPart) > 0) {
-        //         if ($h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
-        //             $arrayid[] = $h->id;
-        //         }
-        //     } else {
-        //         if (($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) || $h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
-        //             $arrayid[] = $h->id;
-        //         }
-        //     }
-        // }
-
         foreach ($cekhasil as $h) {
             if (count($h->DetailPesanan) > 0 && count($h->DetailPesananPart) <= 0) {
                 if ($h->getJumlahSeri() > $h->getJumlahCek()) {

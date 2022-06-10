@@ -19,7 +19,7 @@ use Maatwebsite\Excel\Events\AfterSheet;
 use PhpOffice\PhpSpreadsheet\Style\NumberFormat;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 
-class SheetSudahPO implements WithTitle, FromView, ShouldAutoSize, WithStyles, WithColumnFormatting
+class SheetBerdasarkanDetailProduk implements WithTitle, FromView, ShouldAutoSize, WithStyles, WithColumnFormatting
 {
     /**
      * @return \Illuminate\Support\Collection
