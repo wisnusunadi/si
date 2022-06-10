@@ -183,16 +183,16 @@
                 <div class="card-body">
                     <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="pills-spa-tab" data-toggle="pill" href="#pills-spa" role="tab"
-                                aria-controls="pills-spa" aria-selected="true">SPA</a>
+                            <a class="nav-link active" id="pills-belum_proses-tab" data-toggle="pill" href="#pills-belum_proses" role="tab"
+                                aria-controls="pills-belum_proses" aria-selected="true">Belum Proses</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-spb-tab" data-toggle="pill" href="#pills-spb" role="tab"
-                                aria-controls="pills-spb" aria-selected="false">SPB</a>
+                            <a class="nav-link" id="pills-selesai_proses-tab" data-toggle="pill" href="#pills-selesai_proses" role="tab"
+                                aria-controls="pills-selesai_proses" aria-selected="false">Selesai Proses</a>
                         </li>
                     </ul>
                     <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade show active" id="pills-spa" role="tabpanel"
+                        <div class="tab-pane fade show active" id="pills-belum_proses" role="tabpanel"
                             aria-labelledby="pills-spa-tab">
                             <div class="row">
                                 <div class="col-12">
@@ -281,6 +281,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
+                                                    <th>Jenis</th>
                                                     <th>Nomor SO</th>
                                                     <th>Nomor PO</th>
                                                     <th>Tanggal Order</th>
@@ -296,7 +297,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="tab-pane fade show" id="pills-spb" role="tabpanel" aria-labelledby="pills-spb-tab">
+                        <div class="tab-pane fade show" id="pills-selesai_proses" role="tabpanel" aria-labelledby="pills-selesai_proses-tab">
                             <div class="row">
                                 <div class="col-12">
                                     <span class="float-right filter">
@@ -384,6 +385,7 @@
                                             <thead>
                                                 <tr>
                                                     <th>No</th>
+                                                    <th>Jenis</th>
                                                     <th>Nomor SO</th>
                                                     <th>Nomor PO</th>
                                                     <th>Tanggal Order</th>
@@ -393,52 +395,6 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <!-- <tr>
-                                                                                                                                                                    <td>1</td>
-                                                                                                                                                                    <td>SOSPB0902012910</td>
-                                                                                                                                                                    <td>PO/ON/51/10/21</td>
-                                                                                                                                                                    <td>05-10-2021</td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <span class="urgent">19-10-2021</span>
-                                                                                                                                                                    </td>
-                                                                                                                                                                    <td><span class="minimizechar">RS Soeryadi Kendal</span></td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <span class="yellow-text badge">Gudang</span>
-                                                                                                                                                                    </td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <i class="fas fa-ellipsis-v"></i>
-                                                                                                                                                                    </td>
-                                                                                                                                                                </tr>
-                                                                                                                                                                <tr>
-                                                                                                                                                                    <td>2</td>
-                                                                                                                                                                    <td>SOSPB0902012910</td>
-                                                                                                                                                                    <td>PO/ON/51/10/21</td>
-                                                                                                                                                                    <td>14-10-2021</td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <span class="warning">28-10-2021</span>
-                                                                                                                                                                    </td>
-                                                                                                                                                                    <td><span class="minimizechar">PT Cipta Medika Pasuruan</span></td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <span class="yellow-text badge">Gudang</span>
-                                                                                                                                                                    </td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <i class="fas fa-ellipsis-v"></i>
-                                                                                                                                                                    </td>
-                                                                                                                                                                </tr>
-                                                                                                                                                                <tr>
-                                                                                                                                                                    <td>3</td>
-                                                                                                                                                                    <td>SOSPB0902012910</td>
-                                                                                                                                                                    <td>PO/ON/51/10/21</td>
-                                                                                                                                                                    <td>15-10-2021</td>
-                                                                                                                                                                    <td>29-10-2021</td>
-                                                                                                                                                                    <td><span class="minimizechar">PT Emiindo Jakarta</span></td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <span class="green-text badge">Pengiriman</span>
-                                                                                                                                                                    </td>
-                                                                                                                                                                    <td>
-                                                                                                                                                                        <i class="fas fa-ellipsis-v"></i>
-                                                                                                                                                                    </td>
-                                                                                                                                                                </tr> -->
                                             </tbody>
                                         </table>
                                     </div>
@@ -492,7 +448,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/penjualan/penjualan/spa/data/semua',
+                    'url': '/api/as/penjualan/belum_proses',
                     "dataType": "json",
                     'type': 'POST',
                     'headers': {
@@ -507,6 +463,9 @@
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'jenis'
                     },
                     {
                         data: 'so',
@@ -620,7 +579,7 @@
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/penjualan/penjualan/spb/data/semua',
+                    'url': '/api/as/penjualan/selesai_proses',
                     "dataType": "json",
                     'type': 'POST',
                     'headers': {
@@ -635,6 +594,9 @@
                         className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
+                    },
+                    {
+                        data: 'jenis'
                     },
                     {
                         data: 'so',

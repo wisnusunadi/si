@@ -357,7 +357,7 @@ class MasterController extends Controller
             })
             ->addColumn('jenis_paket', function ($data) {
                 $array = [
-                    '<span class="badge purple-text">Ekatalog</span>','<span class="badge red-text">Non Ekatalog</span>'
+                    '<span class="badge purple-text">Ekatalog</span>','<span class="badge blue-text">Non Ekatalog</span>'
                 ];
                 shuffle($array);
                 return $array[0];
@@ -1119,6 +1119,21 @@ class MasterController extends Controller
         $data = PenjualanProduk::with('Produk.GudangBarangJadi')->where('id', $id)
             ->get();
 
+        echo json_encode($data);
+    }
+    public function select_penjualan_produk_param(Request $request, $value)
+    {
+        if($value == 'ekatalog')
+    {
+        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+        ->where('status', 'ekat')
+        ->orderby('nama', 'ASC')
+        ->get();
+    }else{
+        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+        ->orderby('nama', 'ASC')
+        ->get();
+    }
         echo json_encode($data);
     }
     public function check_no_akd($id, $val)

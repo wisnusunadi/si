@@ -396,7 +396,7 @@ class LogistikController extends Controller
                         })->count();
                         $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id])->count();
                         $s = $jumlahsudahuji - $jumlahterkirim;
-                        return '<input type="number" class="form-control jumlah_kirim" max="'.$s.'" min="0" value="'.$s.'" style="width:100%;" name="jumlah_dikirim[]"/>';
+                        return '<input type="number" class="form-control jumlah_kirim" max="'.$s.'" min="0" value="'.$s.'" style="width:100%;" readonly="true" name="jumlah_dikirim[]"/>';
                 })
                 ->addColumn('button', function ($data) {
                     return '<a class="noserishow" data-id="' . $data->id . '"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
@@ -509,7 +509,7 @@ class LogistikController extends Controller
                         })->count();
                         $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id])->count();
                         $s = $jumlahsudahuji - $jumlahterkirim;
-                        return '<input type="number" max="'.$s.'" min="0" value="'.$s.'" name="jumlah_dikirim[]" style="width:100%;" class="form-control jumlah_kirim"/>';
+                        return '<input type="number" max="'.$s.'" min="0" value="'.$s.'" name="jumlah_dikirim[]" style="width:100%;" readonly="true" class="form-control jumlah_kirim"/>';
                     } else {
                         return '<input type="number" max="'.$data->jumlah.'" min="0" value="'.$data->jumlah.'" name="jumlah_dikirim[]" style="width:100%;" class="form-control jumlah_kirim"/>';
                     }
@@ -628,8 +628,8 @@ class LogistikController extends Controller
                 })
                 ->addColumn('button', function ($data) {
                     return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
-                <div><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></div>
-            </a>';
+                        <div><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></div>
+                    </a>';
                 })
                 ->rawColumns(['checkbox', 'button', 'status'])
                 ->make(true);
@@ -3753,23 +3753,25 @@ class LogistikController extends Controller
     }
     public function get_surat_jalan_belum_kirim($customer)
     {
-        $dataekat = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function($q) use($customer){
-            $q->where('customer_id', $customer);
-        })->get();
-        $dataspa = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa', function($q) use($customer){
-            $q->where('customer_id', $customer);
-        })->get();
-        $dataspb = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb', function($q) use($customer){
-            $q->where('customer_id', $customer);
-        })->get();
-        $dataspap = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa', function($q) use($customer){
-            $q->where('customer_id', $customer);
-        })->get();
-        $dataspbp = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb', function($q) use($customer){
-            $q->where('customer_id', $customer);
-        })->get();
+        // $dataekat = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function($q) use($customer){
+        //     $q->where('customer_id', $customer);
+        // })->get();
+        // $dataspa = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa', function($q) use($customer){
+        //     $q->where('customer_id', $customer);
+        // })->get();
+        // $dataspb = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb', function($q) use($customer){
+        //     $q->where('customer_id', $customer);
+        // })->get();
+        // $dataspap = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa', function($q) use($customer){
+        //     $q->where('customer_id', $customer);
+        // })->get();
+        // $dataspbp = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb', function($q) use($customer){
+        //     $q->where('customer_id', $customer);
+        // })->get();
 
-        $data = $dataekat->merge($dataspa)->merge($dataspb)->merge($dataspap)->merge($dataspbp);
+        // $data = $dataekat->merge($dataspa)->merge($dataspb)->merge($dataspap)->merge($dataspbp);
+
+        $data = Logistik::where('status_id', '=', '11')->get();
         echo json_encode($data);
     }
 

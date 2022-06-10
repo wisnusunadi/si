@@ -438,9 +438,25 @@ class QcController extends Controller
 
         $arrayid = array();
 
+        // foreach ($data as $i) {
+        //     if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
+        //         if ($i->getJumlahSeri() > 0 && $i->getJumlahPesanan() > $i->getJumlahCek()) {
+        //             $arrayid[] = $i->id;
+        //         }
+        //     } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
+        //         if ($i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
+        //             $arrayid[] = $i->id;
+        //         }
+        //     } else {
+        //         if (($i->getJumlahSeri() > 0 && $i->getJumlahPesanan() > $i->getJumlahCek()) || $i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
+        //             $arrayid[] = $i->id;
+        //         }
+        //     }
+        // }
+
         foreach ($data as $i) {
             if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
-                if ($i->getJumlahSeri() > 0 && $i->getJumlahPesanan() > $i->getJumlahCek()) {
+                if ($i->getJumlahSeri() > $i->getJumlahCek()) {
                     $arrayid[] = $i->id;
                 }
             } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
@@ -448,7 +464,7 @@ class QcController extends Controller
                     $arrayid[] = $i->id;
                 }
             } else {
-                if (($i->getJumlahSeri() > 0 && $i->getJumlahPesanan() > $i->getJumlahCek()) || $i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
+                if (($i->getJumlahSeri() > $i->getJumlahCek()) || $i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
                     $arrayid[] = $i->id;
                 }
             }
@@ -601,17 +617,33 @@ class QcController extends Controller
 
         $arrayid = array();
 
+        // foreach ($data as $i) {
+        //     if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
+        //         if ($i->getJumlahPesanan() == $i->getJumlahCek()) {
+        //             $arrayid[] = $i->id;
+        //         }
+        //     } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
+        //         if ($i->getJumlahPesananPartNonJasa() == $i->getJumlahCekPart("ok")) {
+        //             $arrayid[] = $i->id;
+        //         }
+        //     } else {
+        //         if (($i->getJumlahPesanan() == $i->getJumlahCek()) && ($i->getJumlahPesananPartNonJasa() == $i->getJumlahCekPart("ok"))) {
+        //             $arrayid[] = $i->id;
+        //         }
+        //     }
+        // }
+
         foreach ($data as $i) {
             if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
-                if ($i->getJumlahPesanan() == $i->getJumlahCek()) {
+                if ($i->getJumlahSeri() <= $i->getJumlahCek()) {
                     $arrayid[] = $i->id;
                 }
             } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
-                if ($i->getJumlahPesananPartNonJasa() == $i->getJumlahCekPart("ok")) {
+                if ($i->getJumlahPesananPartNonJasa() <= $i->getJumlahCekPart("ok")) {
                     $arrayid[] = $i->id;
                 }
             } else {
-                if (($i->getJumlahPesanan() == $i->getJumlahCek()) && ($i->getJumlahPesananPartNonJasa() == $i->getJumlahCekPart("ok"))) {
+                if (($i->getJumlahSeri() <= $i->getJumlahCek()) || $i->getJumlahPesananPartNonJasa() <= $i->getJumlahCekPart("ok")) {
                     $arrayid[] = $i->id;
                 }
             }
@@ -1394,7 +1426,7 @@ class QcController extends Controller
         $arrayid = array();
         foreach ($cekhasil as $h) {
             if (count($h->DetailPesanan) > 0 && count($h->DetailPesananPart) <= 0) {
-                if ($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) {
+                if ($h->getJumlahSeri() > $h->getJumlahCek()) {
                     $arrayid[] = $h->id;
                 }
             } else if (count($h->DetailPesanan) <= 0 && count($h->DetailPesananPart) > 0) {
@@ -1402,7 +1434,7 @@ class QcController extends Controller
                     $arrayid[] = $h->id;
                 }
             } else {
-                if (($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) || $h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
+                if (($h->getJumlahSeri() > $h->getJumlahCek()) || $h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
                     $arrayid[] = $h->id;
                 }
             }
@@ -1573,21 +1605,38 @@ class QcController extends Controller
             })->get();
 
             $arrayid = array();
+            // foreach ($cekhasil as $h) {
+            //     if (count($h->DetailPesanan) > 0 && count($h->DetailPesananPart) <= 0) {
+            //         if ($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) {
+            //             $arrayid[] = $h->id;
+            //         }
+            //     } else if (count($h->DetailPesanan) <= 0 && count($h->DetailPesananPart) > 0) {
+            //         if ($h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
+            //             $arrayid[] = $h->id;
+            //         }
+            //     } else {
+            //         if (($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) || $h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
+            //             $arrayid[] = $h->id;
+            //         }
+            //     }
+            // }
+
             foreach ($cekhasil as $h) {
-                if (count($h->DetailPesanan) > 0 && count($h->DetailPesananPart) <= 0) {
-                    if ($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) {
-                        $arrayid[] = $h->id;
-                    }
-                } else if (count($h->DetailPesanan) <= 0 && count($h->DetailPesananPart) > 0) {
-                    if ($h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
-                        $arrayid[] = $h->id;
-                    }
-                } else {
-                    if (($h->getJumlahSeri() > 0 && $h->getJumlahPesanan() > $h->getJumlahCek()) || $h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
-                        $arrayid[] = $h->id;
+                    if (count($h->DetailPesanan) > 0 && count($h->DetailPesananPart) <= 0) {
+                        if ($h->getJumlahSeri() > $h->getJumlahCek()) {
+                            $arrayid[] = $h->id;
+                        }
+                    } else if (count($h->DetailPesanan) <= 0 && count($h->DetailPesananPart) > 0) {
+                        if ($h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
+                            $arrayid[] = $h->id;
+                        }
+                    } else {
+                        if (($h->getJumlahSeri() > $h->getJumlahCek()) || $h->getJumlahPesananPartNonJasa() > $h->getJumlahCekPart("ok")) {
+                            $arrayid[] = $h->id;
+                        }
                     }
                 }
-            }
+
             $data = Pesanan::whereIn('id', $arrayid)->get();
 
             // $hasilprd = Pesanan::doesntHave('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->whereNotIn('log_id', ['7', '10'])->whereIN('id',  $this->check_input())->get();

@@ -861,6 +861,8 @@
             $('#jenis_paket').select2();
             var nopaketdb = "{{ str_replace( array('AK1-', 'FKS-'), '', $e->no_paket) }}";
             var nopaketubah = false;
+
+            var status_akn = '{{$e->status}}';
             $(".os-content-arrange").remove();
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
@@ -1111,9 +1113,34 @@
                         $("#batas_kontrak").attr('disabled', true);
                         $("#provinsi").attr('disabled', true);
                         $("#provinsi").empty().trigger('change')
+                    } else if($(this).val() == "batal"){
+                        if(status_akn != "draft"){
+                            $('#checkbox_nopaket').addClass('hide');
+                            $('#isi_nopaket').prop("checked", false);
+                            $('#no_paket').attr('readonly', false);
+                            numberRowsProduk($("#produktable"));
+                            $("#batas_kontrak").val("");
+                            $("#batas_kontrak").attr('disabled', true);
+                            $("#dataproduk").removeClass("hide");
+                            $("#provinsi").attr('disabled', true);
+                            $("#provinsi").empty().trigger('change')
+                            if(nopaketubah == false){
+                                $('#no_paket').val(nopaketdb);
+                            }
+                        }
+                        else{
+                            $('#checkbox_nopaket').removeClass('hide');
+                            $('#isi_nopaket').prop("checked", false);
+                            $('#no_paket').val("");
+                            $('#no_paket').attr('readonly', true);
+                            $("#produktable tbody").empty();
+                            $("#totalhargaprd").text("Rp. 0");
+                            $("#dataproduk").addClass("hide");
+                            $("#batas_kontrak").attr('disabled', true);
+                            $("#provinsi").attr('disabled', true);
+                            $("#provinsi").empty().trigger('change');
+                        }
                     } else {
-                        //$("#produktable tbody").empty();
-                        //$('#produktable tbody').append(trproduktable());
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
                         $('#no_paket').attr('readonly', false);
@@ -1497,7 +1524,7 @@
                         dataType: 'json',
                         delay: 250,
                         type: 'GET',
-                        url: '/api/penjualan_produk/select/',
+                        url: '/api/penjualan_produk/select_param/ekatalog',
                         data: function(params) {
                             return {
                                 term: params.term

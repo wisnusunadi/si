@@ -101,6 +101,7 @@ Route::prefix('/penjualan_produk')->group(function () {
     Route::get('check/{id}/{val}', [App\Http\Controllers\MasterController::class, 'check_penjualan_produk']);
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk']);
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk_id']);
+    Route::get('select_param/{penjualan}', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk_param']);
 });
 
 Route::prefix('/penjualan')->group(function () {
@@ -577,6 +578,9 @@ Route::prefix('/dc')->group(function () {
 Route::prefix('/as')->group(function () {
     Route::post('/so/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so']);
     Route::post('/so/detail/{id}/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_pengiriman']);
+
+    Route::post('/penjualan/belum_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_belum_kirim']);
+    Route::post('/penjualan/selesai_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_selesai_kirim']);
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {

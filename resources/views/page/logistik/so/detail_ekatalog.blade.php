@@ -323,7 +323,7 @@
                                                                                     <span class="float-right filter">
                                                                                         <button class="btn btn-primary"
                                                                                             type="button" id="kirim_produk"
-                                                                                            disabled><i
+                                                                                            disabled="true"><i
                                                                                                 class="fas fa-plus"></i>
                                                                                             Pengiriman</button>
                                                                                     </span>
@@ -1310,6 +1310,7 @@
                 $('#nama_pengirim').val('');
                 $('#no_invoice').val('');
                 $('input[name="pengiriman"]').removeAttr('checked');
+                $('#ekspedisi_nama').text('');
                 if ($(this).val() == "baru") {
                     $('#sj_baru').removeClass('hide');
                     $('.sj_lamas').addClass('hide');
@@ -1317,6 +1318,8 @@
                     $('#tgl_kirim').attr('disabled', false);
                     $('#nama_pengirim').attr('disabled', false);
                     $('.ekspedisi_id').removeAttr('disabled');
+                    $('.ekspedisi_id').next(".select2-container").show();
+                    $('#ekspedisi_nama').addClass('hide');
                     $('input[name="pengiriman"]').removeAttr('disabled');
                 } else if ($(this).val() == "lama") {
                     $('#sj_baru').addClass('hide');
@@ -1325,6 +1328,8 @@
                     $('#tgl_kirim').attr('disabled', true);
                     $('#nama_pengirim').attr('disabled', true);
                     $('.ekspedisi_id').attr('disabled', 'disabled');
+                    $('.ekspedisi_id').next(".select2-container").hide();
+                    $('#ekspedisi_nama').removeClass('hide');
                     $('input[name="pengiriman"]').attr('disabled', true);
                 }
                 validasi();
@@ -1370,7 +1375,9 @@
                                 if(data[0]['ekspedisi_id'] !== ""){
                                     $('input[name="pengiriman"][value="ekspedisi"]').prop("checked", "checked");
                                     $('#ekspedisi').removeClass('hide');
-                                    $(".ekspedisi_id").val(data[0]['ekspedisi_id']);
+                                    $('.ekspedisi_id').addClass('hide');
+                                    $('#ekspedisi_nama').removeClass('hide');
+                                    $("#ekspedisi_nama").text(data[0]['ekspedisi']['nama']);
                                 }else{
                                     $('input[name="pengiriman"][value="nonekspedisi"]').prop("checked", "checked");
                                     $('#nonekspedisi').removeClass('hide');
