@@ -127,7 +127,7 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <a href="{{route('as.retur.create')}}" type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Tambah</a>
+                        <a href="{{route('as.retur.create')}}" type="button" class="btn btn-info float-right my-2"><i class="fas fa-plus"></i> Tambah</a>
                         <div class="table-responsive">
                             <table class="table table-hover" id="showtable" style="text-align: center;">
                                 <thead>
@@ -148,8 +148,17 @@
                                         <td>20 Februari 2022</td>
                                         <td>PO2022021009189</td>
                                         <td>PT. Emiindo Jaya Bersama</td>
-                                        <td></td>
-                                        <td></td>
+                                        <td><span class="badge red-text">Belum Diproses</span></td>
+                                        <td><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td>2</td>
+                                        <td>RET/0012/02/1293</td>
+                                        <td>20 Februari 2022</td>
+                                        <td>PO2022021009189</td>
+                                        <td>PT. Emiindo Jaya Bersama</td>
+                                        <td><span class="badge red-text">Belum Diproses</span></td>
+                                        <td><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></td>
                                     </tr>
                                 </tbody>
                             </table>
