@@ -707,15 +707,25 @@
         });
     });
 
-    $('.scan-produk').on('click', 'input.cb-child',function (){
-        if ($(this).is(':checked')) {
-            var checked = ($(this).val());
-            tmp.push(checked);
-        } else {
-            console.log(checked);
-            tmp.splice($.inArray(checked, tmp),1);
-        }
-    })
+    // $('.scan-produk').on('click', 'input.cb-child',function (){
+    //     // let arr = tmp;
+    //     // let ckid = $(this).val()
+    //     var checked = $(this).val();
+    //     if ($(this).is(':checked')) {
+    //         tmp.push(checked);
+    //         // arr=tmp
+    //         // console.log(ckid);
+    //     } else {
+    //         // console.log(checked);
+    //         // // tmp.splice($.inArray(checked, tmp),1);
+    //         $.each(tmp, function(i, item){
+    //             if (tmp[i] == checked) {
+    //                 tmp.splice(i, 1)
+    //             }
+    //         })
+    //         // tmp = arr;
+    //     }
+    // })
 
     $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();
@@ -750,7 +760,9 @@
 
     $(document).on('click', '#simpan', function (e) {
         $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
-        let a = $('.scan-produk').find('input.cb-child:checked').length;
+        let a = $('.scan-produk').find('input.cb-child:checked').on('click', function(){
+            $(this).value();
+        });
         if (a > max) {
             Swal.fire({
                 icon: 'error',
@@ -769,7 +781,7 @@
             prd1[dpp] = {
                 "jumlah": jml,
                 "prd": prd,
-                "noseri": tmp
+                "noseri": a
             };
             $('.modal-scan').modal('hide');
             if (prd1[dpp].noseri.length == 0) {
