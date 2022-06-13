@@ -434,7 +434,7 @@
                         noseri_id : seri,
                     },
                     success: function (res) {
-                        location.reload();
+                        console.log(res);
                     }
                 });
 

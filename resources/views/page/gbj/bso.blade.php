@@ -743,7 +743,6 @@
 
     $(document).on('click', '#simpan', function (e) {
         $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
-        let a = $('.scan-produk').find('input.cb-child:checked').length;
         if (a > max) {
             Swal.fire({
                 icon: 'error',
