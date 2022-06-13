@@ -400,7 +400,7 @@ class GudangController extends Controller
     function getDetailHistory($id)
     {
         $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
-        
+
         return datatables()->of($data1)
             ->addIndexColumn()
             ->addColumn('so', function ($d) {
@@ -2682,7 +2682,7 @@ class GudangController extends Controller
 
     function TfbySOFinal(Request $request)
     {
-        // dd($request->data);
+        // dd($request->all());
         $a = TFProduksi::where('pesanan_id', $request->pesanan_id)->first();
         if ($a) {
             foreach ($request->data as $key => $values) {
