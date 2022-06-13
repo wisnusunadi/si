@@ -325,6 +325,26 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalPreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="bodyPreview">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @stop
 
 @section('adminlte_js')
@@ -780,20 +800,32 @@
                 text: 'Batas Maksimal ' + max + ' Barang!',
             })
         } else {
-            Swal.fire({
-                position: 'center',
-                icon: 'success',
-                title: 'Noseri Berhasil Disimpan',
-                showConfirmButton: false,
-                timer: 1500
-            })
+            // let html = "<table class='table' style='width:100%'/>"
+            // for (let index = 0; index < prd1[dpp].noseri.length; index++) {
 
-            prd1[dpp].jumlah = jml;
-            prd1[dpp].prd = prd;
-            $('.modal-scan').modal('hide');
-            if (prd1[dpp].noseri.length == 0) {
-                delete prd1[dpp]
+            // }
+            var content = "<table>"
+            for(i=0; i<3; i++){
+                content += '<tr><td>('+i+')</td><td>' + 'result ' +  i + '</td></tr>';
             }
+            content += "</table>"
+
+            $('#bodyPreview').append(content);
+            $('#modalPreview').modal('show')
+            // Swal.fire({
+            //     position: 'center',
+            //     icon: 'success',
+            //     title: 'Noseri Berhasil Disimpan',
+            //     showConfirmButton: false,
+            //     timer: 1500
+            // })
+
+            // prd1[dpp].jumlah = jml;
+            // prd1[dpp].prd = prd;
+            // $('.modal-scan').modal('hide');
+            // if (prd1[dpp].noseri.length == 0) {
+            //     delete prd1[dpp]
+            // }
         }
         console.log("prd1", prd1);
     })
