@@ -81,18 +81,16 @@ class ProduksiController extends Controller
             ]);
         }
 
-        $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
-        $i = 0;
-        foreach ($gdg as $vv) {
-            $vv['stok'] = $vv['stok'] - $request->qty[$i];
-            print_r($vv['stok']);
+        // $gdg = GudangBarangJadi::whereIn('id', $request->gdg_brg_jadi_id)->get()->toArray();
+        // $i = 0;
+        // foreach ($gdg as $vv) {
+        //     $vv['stok'] = $vv['stok'] - $request->qty[$i];
+        //     print_r($vv['stok']);
+        //     GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
+        //     $i++;
+        // }
 
-            GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok']]);
-
-            $i++;
-        }
-
-        return response()->json(['msg' => 'Successfully']);
+        return response()->json(['msg' => 'Data Berhasil Ditransfer']);
     }
 
     function TfbySO(Request $request)
