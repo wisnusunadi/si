@@ -160,7 +160,6 @@ Route::prefix('/gbj')->group(function () {
     Route::post('data-so', [GudangController::class, 'getSODone']);
 
     Route::get('/test', [App\Http\Controllers\GudangController::class, 'test']);
-
     // select
     Route::get('sel-product', [GudangController::class, 'select_product']);
     Route::get('sel-product/{id}', [GudangController::class, 'select_product_by_id']);

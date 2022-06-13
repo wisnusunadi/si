@@ -984,7 +984,7 @@ return [
             'text' => 'Dashboard',
             'url' => '/gbj/dashboard',
             'icon' => 'fas fa-layer-group',
-            'auth' => [13],
+            'auth' => [13, 31],
         ],
         // [
         //     'header' => 'Produksi',
@@ -1007,6 +1007,7 @@ return [
             'icon' => 'fas fa-boxes',
             'auth' => [13],
         ],
+
         // [
         //     'text' => 'Stok',
         //     'url' => '/gbj/stok',
@@ -1019,6 +1020,7 @@ return [
             'icon' => 'fas fa-history',
             'auth' => [13],
         ],
+
         [
             'header' => 'Penerimaan',
             'auth' => [13]
@@ -1426,17 +1428,23 @@ return [
         //         ],
         //     ],
         // ],
-
-
-
-
-
         [
             'text' => 'Transfer Produk',
             'url' => 'gk/transfer',
             'icon' => 'fas fa-cubes',
             'auth' => [12],
         ],
+
+        [
+            'header' => 'Persetujuan',
+            'auth' => [31]
+        ],
+        [
+            'text' => 'Produk',
+            'url' => 'gbjmanager/produksi',
+            'icon' => 'fas fa-cubes',
+            'auth' => [31],
+        ]
     ],
 
     /*
