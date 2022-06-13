@@ -581,6 +581,8 @@ Route::prefix('/as')->group(function () {
 
     Route::post('/penjualan/belum_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_belum_kirim']);
     Route::post('/penjualan/selesai_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_selesai_kirim']);
+
+    Route::get('/retur/detail', [App\Http\Controllers\AfterSalesController::class, 'detail_retur']);
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {

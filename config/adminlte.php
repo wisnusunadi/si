@@ -1166,19 +1166,19 @@ return [
         ],
         [
             'text' => 'Customer',
-            'icon' => 'fas fa-users',
+            'icon' => 'fas fa-users fa-fw',
             'url' => '/penjualan/customer/show',
             'auth' => [8],
         ],
         [
             'text' => 'Sales Order',
-            'icon' => 'fas fa-history',
+            'icon' => 'fas fa-history fa-fw',
             'url' => '/as/so/show',
             'auth' => [8],
         ],
         [
             'text' => 'Lacak',
-            'icon' => 'fas fa-search',
+            'icon' => 'fas fa-search fa-fw',
             'url' => '/penjualan/lacak/show',
             'auth' => [8],
         ],
@@ -1188,8 +1188,14 @@ return [
         ],
         [
             'text' => 'Penjualan',
-            'icon' => 'fas fa-mail-bulk',
+            'icon' => 'fas fa-mail-bulk fa-fw',
             'url' => '/as/penjualan/show',
+            'auth' => [8],
+        ],
+        [
+            'text' => 'Retur',
+            'icon' => 'fas fa-exchange-alt fa-fw',
+            'url' => '/as/retur/show',
             'auth' => [8],
         ],
         [

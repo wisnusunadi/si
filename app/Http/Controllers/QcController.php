@@ -390,12 +390,12 @@ class QcController extends Controller
         $data = "";
         $x = explode(',', $value);
         if ($value == 'semua') {
-            // $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function ($q) {
-            //     $q->where('nama', 'not like', '%JASA%');
-            // })->get();
-            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function ($q) {
-                    $q->where('nama', 'not like', '%JASA%');
-                })->paginate(10);
+            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function ($q) {
+                $q->where('nama', 'not like', '%JASA%');
+            })->get();
+            // $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function ($q) {
+            //         $q->where('nama', 'not like', '%JASA%');
+            //     })->paginate(10);
         } else if ($x == ['ekatalog', 'spa']) {
             $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Ekatalog')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function ($q) {
                 $q->where('nama', 'not like', '%JASA%');

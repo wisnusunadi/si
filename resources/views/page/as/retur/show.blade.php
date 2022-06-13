@@ -158,10 +158,25 @@
                                         <td>PO2022021009189</td>
                                         <td>PT. Emiindo Jaya Bersama</td>
                                         <td><span class="badge red-text">Belum Diproses</span></td>
-                                        <td><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></td>
+                                        <td><a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" id="detailmodal"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a></td>
                                     </tr>
                                 </tbody>
                             </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal fade" id="detail_modal" role="dialog" aria-labelledby="detail_modal" aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content" style="margin: 10px">
+                        <div class="modal-header bg-info">
+                            <h4 class="modal-title">Detail</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="detail">
+
                         </div>
                     </div>
                 </div>
@@ -175,6 +190,28 @@
 <script>
     $(function(){
         $('#showtable').DataTable();
+        $(document).on('click', "#detailmodal", function(event){
+            event.preventDefault();
+            $.ajax({
+                url: "/api/as/retur/detail",
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#detail_modal').modal("show");
+                    $('#detail').html(result).show();
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
     })
 </script>
 @endsection

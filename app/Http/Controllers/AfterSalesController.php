@@ -552,6 +552,10 @@ class AfterSalesController extends Controller
 
     }
 
+    public function detail_retur(){
+        return view('page.as.retur.detail');
+    }
+
     public function create_retur(){
         return view('page.as.retur.create');
     }
@@ -561,7 +565,7 @@ class AfterSalesController extends Controller
     }
 
     public function edit_retur($id){
-        return view('page.as.retur.edit', ['id' =>$id]);
+        return view('page.as.retur.edit', ['id' => $id]);
     }
 
     public function update_retur(Request $r, $id){

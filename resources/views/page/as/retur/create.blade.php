@@ -137,7 +137,7 @@
                                 <h5>Referensi Transaksi</h5>
                                 <div class="form-group row" id="no_retur_input">
                                     <label for="no_retur" class="col-lg-5 col-md-12 col-form-label labelket">No Retur</label>
-                                    <div class="col-lg-2 col-md-6">
+                                    <div class="col-lg-2 col-md-8">
                                         <input name="no_retur" id="no_retur" class="form-control col-form-label no_retur  @error('no_retur') is-invalid @enderror">
                                         <div class="invalid-feedback" id="msgno_retur"></div>
                                     </div>
@@ -147,6 +147,13 @@
                                     <div class="col-lg-2 col-md-6">
                                         <input type="date" name="tgl_retur" id="tgl_retur" class="form-control col-form-label tgl_retur  @error('tgl_retur') is-invalid @enderror">
                                         <div class="invalid-feedback" id="msgtgl_retur"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="keterangan_input">
+                                    <label for="keterangan" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan Retur</label>
+                                    <div class="col-lg-4 col-md-12">
+                                        <textarea name="keterangan" id="keterangan" class="form-control col-form-label keterangan  @error('keterangan') is-invalid @enderror"></textarea>
+                                        <div class="invalid-feedback" id="msgketerangan"></div>
                                     </div>
                                 </div>
                                 <hr class="my-4"/>
