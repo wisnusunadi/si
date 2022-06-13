@@ -49,22 +49,28 @@ class PenjualanController extends Controller
         $y = explode(',', $status);
         $data = "";
         if ($jenis == "semua" && $status == "semua") {
-            $Ekatalog = collect(Ekatalog::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
-            $Spa = collect(Spa::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
-            $Spb = collect(Spb::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+            // $Ekatalog = collect(Ekatalog::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+            // $Spa = collect(Spa::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+            // $Spb = collect(Spb::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+            $Ekatalog = Ekatalog::query()->with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get();
+            $Spa = Spa::query()->with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get();
+            $Spb = Spb::query()->with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get();
             $data = $Ekatalog->merge($Spa)->merge($Spb);
         } else if ($jenis != "semua" && $status == "semua") {
             $Ekatalog = "";
             $Spa = "";
             $Spb = "";
             if (in_array('ekatalog', $x)) {
-                $Ekatalog = collect(Ekatalog::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+                // $Ekatalog = collect(Ekatalog::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+                $Ekatalog = Ekatalog::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->paginate(10);
             }
             if (in_array('spa', $x)) {
-                $Spa = collect(Spa::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+                // $Spa = collect(Spa::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+                $Spa = Spa::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->paginate(10);
             }
             if (in_array('spb', $x)) {
-                $Spb = collect(Spb::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+                // $Spb = collect(Spb::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->get());
+                $Spb = Spb::with(['Pesanan', 'Customer'])->orderBy('id', 'DESC')->paginate(10);
             }
             if ($Ekatalog != "" && $Spa != "" && $Spb != "") {
                 $data = $Ekatalog->merge($Spa)->merge($Spb);

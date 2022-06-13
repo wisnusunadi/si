@@ -495,7 +495,6 @@
                     $('#loader').hide();
                 },
                 error: function(jqXHR, testStatus, error) {
-                    console.log(error);
                     alert("Page " + href + " cannot open. Error:" + error);
                     $('#loader').hide();
                 },
@@ -587,7 +586,6 @@
             url: "/api/penjualan/chart",
             method: "GET",
             success: function(data) {
-                console.log(data.ekatalog_graph);
                 var ctx = document.getElementById("myChart");
                 var myChart = new Chart(ctx, {
                     type: 'line',

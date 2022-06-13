@@ -388,14 +388,60 @@ class QcController extends Controller
     public function get_data_so($value)
     {
         $data = "";
+        $arrayid = array();
         $x = explode(',', $value);
         if ($value == 'semua') {
-            $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function ($q) {
-                $q->where('nama', 'not like', '%JASA%');
-            })->get();
-            // $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function ($q) {
-            //         $q->where('nama', 'not like', '%JASA%');
-            //     })->paginate(10);
+            // $data = Pesanan::whereNotIn('log_id', ['7', '9', '10'])
+
+            // ->chunk(100, function ($data){
+            //     foreach ($data as $i){
+            //         if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
+            //             if ($i->getJumlahSeri() > $i->getJumlahCek()) {
+            //                 $arrayid[] = $i->id;
+            //             }
+            //         } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
+            //             if ($i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
+            //                 $arrayid[] = $i->id;
+            //             }
+            //         } else {
+            //             if (($i->getJumlahSeri() > $i->getJumlahCek()) || $i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
+            //                 $arrayid[] = $i->id;
+            //             }
+            //         }
+            //     }
+            // });
+
+            $prd = Pesanan::with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->whereIn('id', function($q) {
+                  $q->select('pesanan.id')
+                  ->from('pesanan')
+                  ->leftJoin('t_gbj', 't_gbj.pesanan_id', '=', 'pesanan.id')
+                  ->leftJoin('t_gbj_detail', 't_gbj_detail.t_gbj_id', '=', 't_gbj.id')
+                  ->leftJoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+                  ->leftJoin('detail_pesanan', 'detail_pesanan.pesanan_id', '=', 'pesanan.id')
+                  ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                  ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                  ->havingRaw('count(noseri_detail_pesanan.id) < count(t_gbj_noseri.id)')
+                  ->groupBy('pesanan.id');
+                })->whereNotIn('log_id', ['7', '9', '10'])->get();
+            $part = Pesanan::with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
+                ->whereIn('id', function($q) {
+                  $q->select('pesanan.id')
+                    ->from('pesanan')
+                    ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.pesanan_id', '=', 'pesanan.id')
+                    ->leftJoin('outgoing_pesanan_part', 'outgoing_pesanan_part.detail_pesanan_part_id', '=', 'detail_pesanan_part.id')
+                    ->havingRaw("sum(outgoing_pesanan_part.jumlah_ok) < (
+                        select sum(detail_pesanan_part.jumlah)
+                        from detail_pesanan_part left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE 'JASA%'
+                        where detail_pesanan_part.pesanan_id = pesanan.id)")
+                    ->groupBy('pesanan.id');
+                  })->whereNotIn('log_id', ['7', '9', '10'])->get();
+            // $data = Pesanan::whereIN('id', $this->check_input())->orderby('id', 'ASC')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function ($q) {
+            //     $q->where('nama', 'not like', '%JASA%');
+            // })->get();
+            // $spa = Pesanan::whereNotIn('log_id', ['7', '9', '10'])->with(['Spa.Customer.Provinsi'])->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function ($q) { $q->where('nama', 'not like', '%JASA%');})->orderby('id', 'ASC')->get();
+            // $spb = Pesanan::whereNotIn('log_id', ['7', '9', '10'])->with(['Spb.Customer.Provinsi'])->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function ($q) { $q->where('nama', 'not like', '%JASA%');})->orderby('id', 'ASC')->get();
+            $data = $prd->merge($part);
         } else if ($x == ['ekatalog', 'spa']) {
             $Ekat = collect(Pesanan::whereIN('id', $this->check_input())->has('Ekatalog')->orHas('DetailPesanan')->orWhereHas('DetailPesananPart.Sparepart', function ($q) {
                 $q->where('nama', 'not like', '%JASA%');
@@ -439,7 +485,7 @@ class QcController extends Controller
         }
 
 
-        $arrayid = array();
+        // $arrayid = array();
 
         // foreach ($data as $i) {
         //     if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
@@ -457,26 +503,26 @@ class QcController extends Controller
         //     }
         // }
 
-        foreach ($data as $i) {
-            if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
-                if ($i->getJumlahSeri() > $i->getJumlahCek()) {
-                    $arrayid[] = $i->id;
-                }
-            } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
-                if ($i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
-                    $arrayid[] = $i->id;
-                }
-            } else {
-                if (($i->getJumlahSeri() > $i->getJumlahCek()) || $i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
-                    $arrayid[] = $i->id;
-                }
-            }
-        }
+        // foreach ($data as $i) {
+        //     if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
+        //         if ($i->getJumlahSeri() > $i->getJumlahCek()) {
+        //             $arrayid[] = $i->id;
+        //         }
+        //     } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
+        //         if ($i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
+        //             $arrayid[] = $i->id;
+        //         }
+        //     } else {
+        //         if (($i->getJumlahSeri() > $i->getJumlahCek()) || $i->getJumlahPesananPartNonJasa() > $i->getJumlahCekPart("ok")) {
+        //             $arrayid[] = $i->id;
+        //         }
+        //     }
+        // }
 
-        $s = Pesanan::whereIn('id', $arrayid)->get();
+        // $s = Pesanan::whereIn('id', $arrayid)->get();
 
         // echo json_encode($data);
-        return datatables()->of($s)
+        return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('nama_customer', function ($data) {
                 if (!empty($data->so)) {
@@ -539,37 +585,37 @@ class QcController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) <= 0) {
-                    if ($data->getJumlahCek() == 0) {
-                        return '<span class="badge red-text">Belum diuji</span>';
-                    } else {
-                        if ($data->getJumlahCek() >= $data->getJumlahPesanan()) {
-                            return  '<span class="badge green-text">Selesai</span>';
-                        } else {
-                            return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                        }
-                    }
-                } else if (count($data->DetailPesanan) <= 0 && count($data->DetailPesananPart) > 0) {
-                    if ($data->getJumlahCekPart('ok') == 0) {
-                        return '<span class="badge red-text">Belum diuji</span>';
-                    } else {
-                        if ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa()) {
-                            return  '<span class="badge green-text">Selesai</span>';
-                        } else {
-                            return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                        }
-                    }
-                } else if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) > 0) {
-                    if ($data->getJumlahCek() == 0 && $data->getJumlahCekPart('ok') == 0) {
-                        return '<span class="badge red-text">Belum diuji</span>';
-                    } else {
-                        if (($data->getJumlahCek() >= $data->getJumlahPesanan()) && ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa())) {
-                            return  '<span class="badge green-text">Selesai</span>';
-                        } else {
-                            return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                        }
-                    }
-                }
+                // if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) <= 0) {
+                //     if ($data->getJumlahCek() == 0) {
+                //         return '<span class="badge red-text">Belum diuji</span>';
+                //     } else {
+                //         if ($data->getJumlahCek() >= $data->getJumlahPesanan()) {
+                //             return  '<span class="badge green-text">Selesai</span>';
+                //         } else {
+                //             return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                //         }
+                //     }
+                // } else if (count($data->DetailPesanan) <= 0 && count($data->DetailPesananPart) > 0) {
+                //     if ($data->getJumlahCekPart('ok') == 0) {
+                //         return '<span class="badge red-text">Belum diuji</span>';
+                //     } else {
+                //         if ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa()) {
+                //             return  '<span class="badge green-text">Selesai</span>';
+                //         } else {
+                //             return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                //         }
+                //     }
+                // } else if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) > 0) {
+                //     if ($data->getJumlahCek() == 0 && $data->getJumlahCekPart('ok') == 0) {
+                //         return '<span class="badge red-text">Belum diuji</span>';
+                //     } else {
+                //         if (($data->getJumlahCek() >= $data->getJumlahPesanan()) && ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa())) {
+                //             return  '<span class="badge green-text">Selesai</span>';
+                //         } else {
+                //             return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                //         }
+                //     }
+                // }
             })
             ->addColumn('button', function ($data) {
                 if (!empty($data->so)) {
@@ -619,22 +665,6 @@ class QcController extends Controller
         }
 
         $arrayid = array();
-
-        // foreach ($data as $i) {
-        //     if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
-        //         if ($i->getJumlahPesanan() == $i->getJumlahCek()) {
-        //             $arrayid[] = $i->id;
-        //         }
-        //     } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
-        //         if ($i->getJumlahPesananPartNonJasa() == $i->getJumlahCekPart("ok")) {
-        //             $arrayid[] = $i->id;
-        //         }
-        //     } else {
-        //         if (($i->getJumlahPesanan() == $i->getJumlahCek()) && ($i->getJumlahPesananPartNonJasa() == $i->getJumlahCekPart("ok"))) {
-        //             $arrayid[] = $i->id;
-        //         }
-        //     }
-        // }
 
         foreach ($data as $i) {
             if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {

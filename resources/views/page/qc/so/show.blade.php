@@ -320,70 +320,75 @@
             return false;
         });
 
+        $('#pills-selesai_uji-tab').on('click', function(){
+            selesai_data();
+        })
 
-        var showtable = $('#selesaitable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '/api/qc/so/data/selesai/semua',
-                'type': 'POST',
-                'datatype': 'JSON',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
+        function selesai_data(){
+            var showtable = $('#selesaitable').DataTable({
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/qc/so/data/selesai/semua',
+                    'type': 'POST',
+                    'datatype': 'JSON',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
 
-            },
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            columns: [{
-                data: 'DT_RowIndex',
-                className: 'nowrap-text align-center',
-                orderable: true,
-                searchable: false
-            }, {
-                data: 'so',
-            }, {
-                data: 'no_po',
-            }, {
-                data: 'batas_uji',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false,
-            }, {
-                data: 'nama_customer',
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: false
+                }, {
+                    data: 'so',
+                }, {
+                    data: 'no_po',
+                }, {
+                    data: 'batas_uji',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false,
+                }, {
+                    data: 'nama_customer',
 
-            }, {
-                data: 'keterangan',
-                className: 'minimizechar',
-            }, {
-                data: 'status',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'button',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
-            }]
-        });
-
-        $('#filter_selesai').submit(function() {
-            var values2 = [];
-            var x2 = [];
-            $("input[name='jenis_penj2[]']:checked").each(function() {
-                values2.push($(this).val());
+                }, {
+                    data: 'keterangan',
+                    className: 'minimizechar',
+                }, {
+                    data: 'status',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'button',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }]
             });
-            if (values2 != 0) {
-                x2 = values2;
-            } else {
-                x2 = ['semua']
-            }
-            console.log(x2);
-            $('#selesaitable').DataTable().ajax.url('/api/qc/so/data/selesai/' + x2).load();
-            return false;
-        });
+
+            $('#filter_selesai').submit(function() {
+                var values2 = [];
+                var x2 = [];
+                $("input[name='jenis_penj2[]']:checked").each(function() {
+                    values2.push($(this).val());
+                });
+                if (values2 != 0) {
+                    x2 = values2;
+                } else {
+                    x2 = ['semua']
+                }
+                console.log(x2);
+                $('#selesaitable').DataTable().ajax.url('/api/qc/so/data/selesai/' + x2).load();
+                return false;
+            });
+        }
     })
 </script>
 @stop
