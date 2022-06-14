@@ -800,32 +800,20 @@
                 text: 'Batas Maksimal ' + max + ' Barang!',
             })
         } else {
-            // let html = "<table class='table' style='width:100%'/>"
-            // for (let index = 0; index < prd1[dpp].noseri.length; index++) {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Noseri Berhasil Disimpan',
+                showConfirmButton: false,
+                timer: 1500
+            })
 
-            // }
-            var content = "<table>"
-            for(i=0; i<3; i++){
-                content += '<tr><td>('+i+')</td><td>' + 'result ' +  i + '</td></tr>';
+            prd1[dpp].jumlah = jml;
+            prd1[dpp].prd = prd;
+            $('.modal-scan').modal('hide');
+            if (prd1[dpp].noseri.length == 0) {
+                delete prd1[dpp]
             }
-            content += "</table>"
-
-            $('#bodyPreview').append(content);
-            $('#modalPreview').modal('show')
-            // Swal.fire({
-            //     position: 'center',
-            //     icon: 'success',
-            //     title: 'Noseri Berhasil Disimpan',
-            //     showConfirmButton: false,
-            //     timer: 1500
-            // })
-
-            // prd1[dpp].jumlah = jml;
-            // prd1[dpp].prd = prd;
-            // $('.modal-scan').modal('hide');
-            // if (prd1[dpp].noseri.length == 0) {
-            //     delete prd1[dpp]
-            // }
         }
         console.log("prd1", prd1);
     })
