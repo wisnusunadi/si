@@ -163,7 +163,7 @@
                                                     <th>Batas Pengujian</th>
                                                     <th>Customer</th>
                                                     <th>Keterangan</th>
-                                                    <th>Status</th>
+                                                    {{-- <th>Status</th> --}}
                                                     <th>Aksi</th>
                                                 </thead>
                                                 <tbody>
@@ -292,12 +292,14 @@
             }, {
                 data: 'keterangan',
                 className: 'minimizechar',
-            }, {
-                data: 'status',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
-            }, {
+            },
+            // {
+            //     data: 'status',
+            //     className: 'nowrap-text align-center',
+            //     orderable: false,
+            //     searchable: false
+            // },
+            {
                 data: 'button',
                 className: 'nowrap-text align-center',
                 orderable: false,
