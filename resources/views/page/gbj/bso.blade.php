@@ -678,12 +678,27 @@
     });
     $('.scan-produk').on('click', '.cb-child',function (){
         if ($(this).is(':checked')) {
-            console.log("checked");
-            // var checked = ($(this).val());
-            // tmp.push(checked);
+            // for(dataseri in prd1[dpp]){
+            //     if(dataseri == "noseri"){
+            //         for(let i = 0; i < prd1[dpp][dataseri].length; i++){
+            //             if(prd1[dpp][dataseri][i] == $(this).val()){
+            //                 prd1[dpp][dataseri].push($(this).val());
+            //             }
+            //         }
+            //     }
+            // }
         } else {
-            console.log(make_temp_array(prd1));
+            for (dataseri in prd1[dpp]) {
+                if (dataseri == "noseri") {
+                    for (let i = 0; i < prd1[dpp][dataseri].length; i++) {
+                        if (prd1[dpp][dataseri][i] == $(this).val()) {
+                            prd1[dpp][dataseri].splice(i, 1);
+                        }
+                    }
+                }
+            };
         }
+        console.log(prd1);
     })
     $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();
