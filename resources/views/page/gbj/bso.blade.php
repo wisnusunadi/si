@@ -10,14 +10,12 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
-
     .nomor-akn {
         background-color: #DF7458;
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
-
     .nomor-po {
         background-color: #85D296;
         color: #fff;
@@ -27,11 +25,15 @@
     .hidden {
         display: none;
     }
-
     #listseri{
         width: 100%;
         height: 100%;
         overflow-y: scroll;
+        overflow-x: hidden;
+    }
+    .overflowAuto{
+        height: 100%;
+        overflow-y: auto;
         overflow-x: hidden;
     }
 </style>
@@ -239,20 +241,20 @@
                 <div class="d-flex bd-highlight">
                     <div class="p-2 flex-grow-1 bd-highlight">
                         <div class="custom-control custom-switch">
-                            <input type="checkbox" class="custom-control-input" id="switchScan">
-                            <label class="custom-control-label" id="switchScanLabel" for="switchScan">Scan Nomor Seri Untuk Alat (Tidak Aktif)</label>
+                            <input type="checkbox" class="custom-control-input" id="switchScan" checked>
+                            <label class="custom-control-label" id="switchScanLabel" for="switchScan">Scan Nomor Seri Untuk Alat (Aktif)</label>
                           </div>
                     </div>
                     <div class="p-2 bd-highlight">
                         <div class="form-group">
                             <label for="">Scan Nomor Seri</label>
-                            <input type="text" name="" class="form-control barcodeScanAlat" id="" hidden>
-                            <input type="text" name="" class="form-control barcodeScanNonAlat" id="" >
+                            <input type="text" name="" class="form-control barcodeScanAlat" id="" >
+                            <input type="text" name="" class="form-control barcodeScanNonAlat" id="" hidden>
                         </div>
                     </div>
                   </div>
                 <div class="d-flex justify-content-end">
-
+                    
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -332,7 +334,6 @@
     var mytable = '';
     let prd1 = {};
     let tmp = []
-
     $(document).ready(function () {
         $('#head-cb').prop('checked', false);
         $('#head-cb-produk').prop('checked', false);
@@ -347,9 +348,7 @@
                 .to$()
                 .find('input[type=checkbox]')
                 .prop('checked', isChecked);
-
         });
-
         $("#head-cb-edit").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
             // $('.cb-child-edit').prop('checked', isChecked)
@@ -360,7 +359,6 @@
                 .find('input[type=checkbox]')
                 .prop('checked', isChecked);
         });
-
         $("#head-cb-produk").on('click', function () {
             if ($(this).is(':checked')) {
                 var isChecked = $("#head-cb-produk").prop('checked')
@@ -373,7 +371,6 @@
                     .removeClass('disabled').attr('disabled', true);
             }
         });
-
         let a = $('#gudang-barang').DataTable({
             processing: true,
             destroy: true,
@@ -420,7 +417,6 @@
                                 </span>&emsp;Mohon Tunggu ...",
             }
         });
-
         a.on('order.dt search.dt', function () {
             a.column(0, {
                 search: 'applied',
@@ -429,16 +425,12 @@
                 cell.innerHTML = i + 1;
             });
         }).draw();
-
-
     });
-
     // add
     var id = '';
     $(document).on('click', '.editmodal', function (e) {
         var x = $(this).data('value');
         console.log(x);
-
         id = $(this).data('id');
         console.log(id);
         $.ajax({
@@ -498,11 +490,9 @@
                     page: 'current'
                 }).nodes();
                 var last = null;
-
                 api.column(0, {
                     page: 'current'
                 }).data().each(function (group, i) {
-
                     if (last !== group) {
                         var rowData = api.row(i).data();
                         $(rows).eq(i).before(
@@ -540,7 +530,6 @@
         });
         $('#addProdukModal').modal('show');
     });
-
     function make_temp_array(prd1) {
         let result = {};
         console.log("func", prd1)
@@ -552,29 +541,23 @@
         console.log("res", result)
         return result;
     }
-
     var prd = '';
     var jml = '';
     var dpp = '';
     let dataTampungSeri = [];
     const list  = document.getElementById('listseri');
-
     $(document).on('click', '.detailmodal', function (e) {
         let gh = $(this).parent().prev().prev().prev().prev()[0].textContent;
         let ghh = gh.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toUpperCase();
         });
         $('#namaproduk').html('<b>' + ghh + '</b>')
-
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
-
         jml = $(this).parent().prev().prev().prev().text();
         max = $(this).data('jml');
         dpp = $(this).data('dpp');
-
         let temp_array = make_temp_array(prd1);
-
         $(list).html("")
         for (const dataseri in prd1[dpp]) {
             if (dataseri == "noseri") {
@@ -617,7 +600,6 @@
                                 return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}">`
                             }
                         }
-
                     }
                 },
             ],
@@ -651,7 +633,6 @@
                 $('.barcodeScanAlat').attr('hidden', true);
             }
         });
-
         // scan produk non alat
         $('.barcodeScanNonAlat').on('keyup', function (e) {
             let barcodes = $(this).val();
@@ -660,12 +641,11 @@
             if (e.keyCode == 13) {
                 if (datas !== undefined) {
                     let checkeds = $('.cb-child').prop('checked', true);
-                    tmp.push(datas.id);
+                    tmp.push(datas.ids);
                 }
                 mytable.search('').draw();
             }
         });
-
         // scan produk dengan alat
         $('.barcodeScanAlat').on('keyup', function (e) {
             let barcode = $(this).val();
@@ -673,18 +653,15 @@
             let data = mytable.row('tr:contains("' + barcode + '")').data();
             if(barcode.length >= 10){
                 if (data !== undefined) {
-                    console.log(data);
                     let checked = $('.cb-child').prop('checked', true);
-                    tmp.push(data.id);
+                    tmp.push(data.ids);
                     $(this).val('');
                     if(checked){
                         var idd = $(checked).val();
                         var title = $(checked).parent().prev()[0].textContent;
                         var textid = 'text' + $(checked).attr('id');
-
                         $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
                     }
-
                 }else{
                     Swal.fire({
                         icon: 'error',
@@ -699,51 +676,47 @@
             }
         });
     });
-
-    $('.scan-produk').on('click', 'input.cb-child',function (){
+    $('.scan-produk').on('click', '.cb-child',function (){
         if ($(this).is(':checked')) {
-            var checked = ($(this).val());
-            tmp.push(checked);
+            console.log("checked");
+            // var checked = ($(this).val());
+            // tmp.push(checked);
         } else {
-            console.log(checked);
-            tmp.splice($.inArray(checked, tmp),1);
+            console.log(make_temp_array(prd1));
         }
     })
-
     $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();
         var title = $(this).parent().prev()[0].textContent;
         var textid = 'text' + $(this).attr('id');
-
         if ($(this).is(':checked')) {
             $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
         } else {
             $('#'+textid).remove()
         }
-
     });
-
     $('.scan-produk').on('change', '#head-cb', function () {
         if ($(this).is(':checked')) {
             $('.cb-child').prop('checked', true);
             $('.cb-child').each(function () {
                 var idd = $(this).val();
-                tmp.push(idd);
                 var title = $(this).parent().prev()[0].textContent;
                 var textid = 'text' + $(this).attr('id');
                 $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
-            });
+            })
         } else {
             $('.cb-child').prop('checked', false);
             $(list).html("")
         }
-    });
+    })
     var t = 0;
     var dataTemp = [];
-
     $(document).on('click', '#simpan', function (e) {
         $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
-        if (a > max) {
+        let checked = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        if (checked.length > max) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
@@ -757,12 +730,12 @@
                 showConfirmButton: false,
                 timer: 1500
             })
-
             prd1[dpp] = {
                 "jumlah": jml,
                 "prd": prd,
-                "noseri": tmp
+                "noseri": [...new Set(tmp)]
             };
+            tmp = [];
             $('.modal-scan').modal('hide');
             if (prd1[dpp].noseri.length == 0) {
                 delete prd1[dpp]
@@ -770,16 +743,13 @@
         }
         console.log("prd1", prd1);
     })
-
     $(document).on('click', '#rancang', function (e) {
         e.preventDefault();
-
         $('.cb-child-prd').each(function () {
             if ($(this).is(":checked")) {} else {
                 delete prd1[$(this).val()]
             }
         })
-
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -812,10 +782,8 @@
             }
         })
     })
-
     $(document).on('click', '#okk', function (e) {
         e.preventDefault();
-
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -847,11 +815,9 @@
                         })
                     }
                 })
-
             }
         });
     });
-
     $(document).on('click', '.cb-child-prd', function () {
         if ($(this).is(":checked")) {
             $(this).parent().next().next().next().next().children().find('button').removeClass('disabled').attr(
@@ -861,12 +827,10 @@
                 'disabled', true);
         }
     })
-
     // edit
     $(document).on('click', '.ubahmodal', function (e) {
         var x = $(this).data('value');
         console.log(x);
-
         id = $(this).data('id');
         console.log(id);
         $.ajax({
@@ -878,7 +842,6 @@
                 $('span#akn-edit').text(res.akn);
             }
         });
-
         $('#editProduk').DataTable({
             destroy: true,
             autoWidth: false,
@@ -917,13 +880,11 @@
         })
         $('#editProdukModal').modal('show');
     })
-
     $(document).on('click', '.serimodal', function (e) {
         var tr = $(this).closest('tr');
         prd = tr.find('#gdg_brg_jadi_id').val();
         so = $(this).data('so');
         jml = $(this).data('jml');
-
         $('.scan-produk-edit').DataTable({
             processing: false,
             serverSide: false,
@@ -962,7 +923,6 @@
         });
         $('#modal-scan-edit').modal('show');
     })
-
     $(document).on('click', '.cb-child-edit', function () {
         if ($(this).is(':checked')) {
             console.log($(this).val());
@@ -1003,7 +963,6 @@
                 delete editPrd[$(this).val()]
             }
         })
-
         const ids = [];
         $('.cb-child-edit').each(function () {
             if ($(this).is(":checked")) {
@@ -1025,12 +984,10 @@
                     $('#modal-scan-edit').modal('hide');
                 }
             }
-
         })
         editPrd[prd].noseri = ids;
         console.log(editPrd);
     })
-
     $(document).on('click', '#rancang-edit', function (e) {
         e.preventDefault();
         $('.cb-prd-edit').each(function () {
@@ -1061,7 +1018,6 @@
             }
         })
     })
-
     $(document).on('click', '#okk-edit', function (e) {
         e.preventDefault();
         $('.cb-prd-edit').each(function () {
@@ -1116,6 +1072,5 @@
         $('#jml').val(jml);
         $('#dpp').val(dpp);
     });
-
 </script>
 @stop

@@ -416,11 +416,6 @@
             }).then((result) => {
             if (result.isConfirmed) {
                 $(this).prop('disabled', true);
-                Swal.fire(
-                'Sukses!',
-                'Data Berhasil Ditransfer',
-                'success'
-                )
                 $.ajax({
                     url: "/api/tfp/create",
                     type:"POST",
@@ -434,13 +429,32 @@
                         noseri_id : seri,
                     },
                     success: function (res) {
-                        console.log(res);
+                        Swal.fire(
+                            'Sukses!',
+                            res.msg,
+                            'success'
+                        ).then(function() {
+                            location.reload();
+                        });
                     }
                 });
-
             }
         })
 
+        // Swal.fire({
+        //     title: 'Do you want to save the changes?',
+        //     showDenyButton: true,
+        //     showCancelButton: true,
+        //     confirmButtonText: 'Save',
+        //     denyButtonText: `Don't save`,
+        // }).then((result) => {
+        //     /* Read more about isConfirmed, isDenied below */
+        //     if (result.isConfirmed) {
+        //         Swal.fire('Saved!', 'Ok', 'success')
+        //     } else if (result.isDenied) {
+        //         Swal.fire('Changes are not saved', '', 'info')
+        //     }
+        // })
 
     })
 

@@ -370,6 +370,7 @@
             processing: true,
             autoWidth: false,
             deferRender: true,
+            searching: false,
             ajax: {
                 url: "/api/transaksi/all",
                 // type: "post",
