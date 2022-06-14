@@ -49,22 +49,22 @@ class PenjualanController extends Controller
         $y = explode(',', $status);
         $data = "";
         if ($jenis == "semua" && $status == "semua") {
-            $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
-            $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
-            $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+            $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+            $Spa = collect(Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+            $Spb = collect(Spb::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             $data = $Ekatalog->merge($Spa)->merge($Spb);
         } else if ($jenis != "semua" && $status == "semua") {
             $Ekatalog = "";
             $Spa = "";
             $Spb = "";
             if (in_array('ekatalog', $x)) {
-                $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
+                $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             }
             if (in_array('spa', $x)) {
-                $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
+                $Spa = collect(Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             }
             if (in_array('spb', $x)) {
-                $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+                $Spb = collect(Spb::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             }
             if ($Ekatalog != "" && $Spa != "" && $Spb != "") {
                 $data = $Ekatalog->merge($Spa)->merge($Spb);
@@ -100,13 +100,13 @@ class PenjualanController extends Controller
             //     $data = $Spa->merge($Spb);
             // }
         } else if ($jenis == "semua" && $status != "semua") {
-            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
+            $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                 $q->whereIN('log_id', $y);
             })->orderBy('id', 'DESC')->get());
-            $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
+            $Spa = collect(Spa::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                 $q->whereIN('log_id', $y);
             })->orderBy('id', 'DESC')->get());
-            $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
+            $Spb = collect(Spb::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                 $q->whereIN('log_id', $y);
             })->orderBy('id', 'DESC')->get());
             $data = $Ekatalog->merge($Spa)->merge($Spb);
@@ -115,17 +115,17 @@ class PenjualanController extends Controller
             $Spa = "";
             $Spb = "";
             if (in_array('ekatalog', $x)) {
-                $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
+                $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                     $q->whereIN('log_id', $y);
                 })->orderBy('id', 'DESC')->get());
             }
             if (in_array('spa', $x)) {
-                $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
+                $Spa = collect(Spa::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                     $q->whereIN('log_id', $y);
                 })->orderBy('id', 'DESC')->get());
             }
             if (in_array('spb', $x)) {
-                $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
+                $Spb = collect(Spb::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                     $q->whereIN('log_id', $y);
                 })->orderBy('id', 'DESC')->get());
             }
@@ -953,7 +953,7 @@ class PenjualanController extends Controller
             ->rawColumns(['button', 'variasi'])
             ->make(true);
     }
-    
+
     public function get_data_paket_pesanan_ekat($id)
     {
         $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($id) {
@@ -1147,9 +1147,9 @@ class PenjualanController extends Controller
         $data = "";
 
         if ($value == 'semua') {
-            $data  = Ekatalog::with('pesanan', 'customer')->orderBy('no_urut', 'DESC')->get();
+            $data  = Ekatalog::with([ 'Customer','Pesanan.State'])->orderBy('no_urut', 'DESC')->get();
         } else {
-            $data  = Ekatalog::orderBy('no_urut', 'DESC')->whereIN('status', $x)->get();
+            $data  = Ekatalog::with([ 'Customer','Pesanan.State'])->orderBy('no_urut', 'DESC')->whereIN('status', $x)->get();
         }
 
         return datatables()->of($data)
@@ -1379,9 +1379,9 @@ class PenjualanController extends Controller
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
-            $data  = Spa::with('pesanan')->orderBy('id', 'DESC')->get();
+            $data  = Spa::with([ 'Customer','Pesanan.State'])->orderBy('id', 'DESC')->get();
         } else {
-            $data  = Spa::whereHas('pesanan', function ($q) use ($x) {
+            $data  = Spa::with([ 'Customer','Pesanan.State'])->whereHas('pesanan', function ($q) use ($x) {
                 $q->whereIN('log_id', $x);
             })->orderBy('id', 'DESC')->get();
         }
@@ -1543,9 +1543,9 @@ class PenjualanController extends Controller
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
-            $data  = Spb::with('pesanan')->orderBy('id', 'DESC')->get();
+            $data  = Spb::with([ 'Customer','Pesanan.State'])->orderBy('id', 'DESC')->get();
         } else {
-            $data  = Spb::whereHas('pesanan', function ($q) use ($x) {
+            $data  = Spb::with([ 'Customer','Pesanan.State'])->whereHas('pesanan', function ($q) use ($x) {
                 $q->whereIN('log_id', $x);
             })->orderBy('id', 'DESC')->get();
         }
