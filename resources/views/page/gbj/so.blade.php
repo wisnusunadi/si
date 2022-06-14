@@ -54,6 +54,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Dicek</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-batal-tab" data-toggle="pill" href="#pills-batal" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Batal PO</a>
+                            </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-proses_kirim" role="tabpanel" aria-labelledby="pills-proses_kirim-tab">
@@ -68,6 +71,7 @@
                                                         <th>Nomor PO</th>
                                                         <th>Customer</th>
                                                         <th>Batas Transfer</th>
+                                                        <th>Status</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -88,9 +92,36 @@
                                                         <th>Nomor PO</th>
                                                         <th>Customer</th>
                                                         <th>Batas Transfer</th>
+                                                        <th>Status</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
+                                            </table>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="pills-batal" role="tabpanel" aria-labelledby="pills-batal-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" style="width: 100%" id="batal-table">
+                                                <thead>
+                                                    <tr>
+                                                        <th><input type="checkbox" name="" id=""></th>
+                                                        <th>Nomor SO</th>
+                                                        <th>Nomor PO</th>
+                                                        <th>Customer</th>
+                                                        <th>Batas Transfer</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
                                             </table>
 
                                         </div>
@@ -282,33 +313,6 @@
             $('.cb-child-so').prop('checked', isChecked)
         });
 
-        $('#sudah-dicek').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: false,
-            ajax: {
-                url: '/api/tfp/sudah-dicek',
-            },
-            columns: [
-                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
-                { data: 'so', name: 'so'},
-                {data: 'po'},
-                { data: 'nama_customer', name: 'nama_customer'},
-                { data: 'batas_out', name: 'batas_out'},
-                { data: 'action', name: 'action'},
-            ],
-            "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        },
-            "columnDefs": [
-                {
-                    "targets": [5],
-                    "visible": document.getElementById('auth').value == '2' ? false : true,
-                    "width": "20%",
-                }
-            ]
-        });
-
         $('#belum-dicek').DataTable({
             destroy: true,
             processing: true,
@@ -322,19 +326,65 @@
                 {data: 'po'},
                 { data: 'nama_customer', name: 'nama_customer'},
                 { data: 'batas_out', name: 'batas_out'},
+                {data: 'logs'},
                 { data: 'action', name: 'action'},
             ],
             "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        },
+                // url: "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json",
+                processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
+            },
             "columnDefs": [
                 {
-                    "targets": [5],
+                    "targets": [6],
                     "visible": document.getElementById('auth').value == '2' ? false : true,
                     "width": "20%",
-                }
+                },
+                { "width": "10%", "targets": 5 }
             ]
         });
+
+        $('#sudah-dicek').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: false,
+            ajax: {
+                url: '/api/tfp/sudah-dicek',
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'so', name: 'so'},
+                {data: 'po'},
+                { data: 'nama_customer', name: 'nama_customer'},
+                { data: 'batas_out', name: 'batas_out'},
+                {data: 'logs'},
+                { data: 'action', name: 'action'},
+            ],
+            "language": {
+                // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
+            },
+            "columnDefs": [
+                {
+                    "targets": [6],
+                    "visible": document.getElementById('auth').value == '2' ? false : true,
+                    "width": "20%",
+                },
+                { "width": "10%", "targets": 5 }
+            ]
+        });
+
+        $('#batal-table').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: false,
+            "language": {
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            },
+        })
     });
 
     var id = '';

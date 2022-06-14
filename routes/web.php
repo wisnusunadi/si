@@ -75,6 +75,8 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     });
     Route::get('/data', [GudangController::class, 'get_data_barang_jadi']);
     Route::get('/export_spb/{id}', [GudangController::class, 'exportSpb'])->name('gbj.spb');
+
+    // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
 Route::middleware('auth')->prefix('/produksi')->group(function () {
@@ -355,4 +357,8 @@ Route::group(['prefix' => '/gk', 'middleware' => 'auth'], function () {
 Route::view('/uit', 'page.login_page.index');
 // Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
 //     Route::view('/stok', 'page.gbj.stok_show');
+// });
+// Route::group(['prefix' => '/gbj/manager', 'middleware' => 'auth'], function ()
+// {
+//     Route::view('/produksi', 'manager.gbj.produksi');
 // });

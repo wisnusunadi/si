@@ -148,8 +148,16 @@
         };
     }(jQuery));
     $(document).ready(function () {
-        $('.ke').select2();
-        $('.product').select2();
+        $('.deskripsi').val('')
+        $('.qtyy').val('')
+        $('.ke').select2({
+            placeholder: "Pilih Tujuan",
+            allowClear: true
+        });
+        $('.product').select2({
+            placeholder: "Pilih Produk",
+            allowClear: true
+        });
 
         $(".number-input").inputFilter(function (value) {
             return /^\d*$/.test(value);
@@ -176,7 +184,7 @@
                 if(res) {
                     console.log(res);
                     $("#gdg_brg_jadi_id").empty();
-                    $("#gdg_brg_jadi_id").append('<option value="">Pilih Item</option>');
+                    $("#gdg_brg_jadi_id").append('<option selected></option>');
                     $.each(res, function(key, value) {
                         $("#gdg_brg_jadi_id").append('<option value="'+value.id+'">'+value.produk.nama+' '+value.nama+'</option');
                     });
@@ -193,7 +201,7 @@
                 type: "post",
                 data: {gdg_brg_jadi_id: $(this).val()},
                 success: function(res) {
-                    $('span#stock').text(res.stok);
+                    $('span#stock').text(res.stok_siap);
                 }
             })
         })
@@ -207,7 +215,7 @@
                 if(res) {
                     console.log(res);
                     $("#ke").empty();
-                    $("#ke").append('<option value="">Pilih Item</option>');
+                    $("#ke").append('<option selected></option>');
                     $.each(res, function(key, value) {
                         $("#ke").append('<option value="'+value.id+'">'+value.nama+'</option');
                     });
@@ -246,7 +254,7 @@
                         position: 'center',
                         icon: 'error',
                         title: 'Stok Tidak Mencukupi',
-                        text: 'Stok gudang produk saat ini '+res.stok,
+                        text: 'Stok gudang produk saat ini '+res.stok_siap,
                         confirmButtonText: 'Oke',
                     })
                 } else {
@@ -408,11 +416,6 @@
             }).then((result) => {
             if (result.isConfirmed) {
                 $(this).prop('disabled', true);
-                Swal.fire(
-                'Sukses!',
-                'Data Berhasil Ditransfer',
-                'success'
-                )
                 $.ajax({
                     url: "/api/tfp/create",
                     type:"POST",
@@ -426,13 +429,32 @@
                         noseri_id : seri,
                     },
                     success: function (res) {
-                        location.reload();
+                        Swal.fire(
+                            'Sukses!',
+                            res.msg,
+                            'success'
+                        ).then(function() {
+                            location.reload();
+                        });
                     }
                 });
-
             }
         })
 
+        // Swal.fire({
+        //     title: 'Do you want to save the changes?',
+        //     showDenyButton: true,
+        //     showCancelButton: true,
+        //     confirmButtonText: 'Save',
+        //     denyButtonText: `Don't save`,
+        // }).then((result) => {
+        //     /* Read more about isConfirmed, isDenied below */
+        //     if (result.isConfirmed) {
+        //         Swal.fire('Saved!', 'Ok', 'success')
+        //     } else if (result.isDenied) {
+        //         Swal.fire('Changes are not saved', '', 'info')
+        //     }
+        // })
 
     })
 

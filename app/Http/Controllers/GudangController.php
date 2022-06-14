@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Exports\GBJExportSPB;
+use App\Exports\ImportNoseri;
+use App\Exports\SpbExport;
 use App\Models\DetailEkatalog;
 use App\Models\DetailEkatalogProduk;
 use App\Models\DetailPesanan;
@@ -11,9 +13,11 @@ use App\Models\Divisi;
 use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
+use App\Models\JadwalRakitNoseri;
 use App\Models\Layout;
 use App\Models\LogSurat;
 use App\Models\NoseriBarangJadi;
+use App\Models\NoseriBrgJadiLog;
 use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
 use App\Models\Produk;
@@ -27,15 +31,39 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 use PDF;
+use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
+use PhpOffice\PhpSpreadsheet\Cell\DataValidation;
+use PhpOffice\PhpSpreadsheet\Reader\Xlsx as ReaderXlsx;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpSpreadsheet\Style\Color;
+use PhpOffice\PhpSpreadsheet\Style\Conditional;
+use PhpOffice\PhpSpreadsheet\Style\Fill;
+use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Illuminate\Support\Str;
 
 class GudangController extends Controller
 {
-    // get
-    public function get_data_barang_jadi()
+    function updateStokGudang($id)
     {
+        // $id = $this->id;
+        $d = NoseriBarangJadi::whereHas('gudang', function($q) use($id) {
+            $q->where('gdg_barang_jadi_id', $id);
+        })->where('is_aktif', 1)->count();
+        $a = NoseriBarangJadi::whereHas('gudang', function($q) use($id) {
+            $q->where('gdg_barang_jadi_id', $id);
+        })->where('is_aktif', 1)->where('is_ready', 0)->count();
+        GudangBarangJadi::find($id)->update(['stok' => $d, 'stok_siap' => $a]);
+    }
+    // get
+    public function get_data_barang_jadi(Request $request)
+    {
+
         $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get()->sortBy('produk.nama');
         return datatables()->of($data)
             ->addIndexColumn()
@@ -47,7 +75,9 @@ class GudangController extends Controller
             })
             ->addColumn('jumlah', function ($data) {
                 $d = $data->get_sum_noseri();
-                return $d . ' ' . $data->satuan->nama;
+                $a = $data->get_sum_seri_siap();
+                $this->updateStokGudang($data->id);
+                return $d . ' ' . $data->satuan->nama.'<br><span class="badge badge-dark">Stok Siap: '.$a.' '.$data->satuan->nama.'</span>';
             })
             ->addColumn('jumlah1', function ($data) {
                 $d = $data->get_sum_noseri();
@@ -86,7 +116,7 @@ class GudangController extends Controller
                             </button>
                         </a>';
             })
-            ->rawColumns(['action', 'action_direksi'])
+            ->rawColumns(['action', 'action_direksi', 'jumlah'])
             ->make(true);
     }
 
@@ -105,7 +135,13 @@ class GudangController extends Controller
     {
         $data = NoseriBarangJadi::whereHas('gudang', function ($d) use ($id) {
             $d->where('id', $id);
-        })->where('is_aktif', 1)->where('is_ready', 0)->get();
+        })
+        ->where([
+            'is_aktif' => 1,
+            'is_ready' => 0,
+            'is_change' => 1,
+            'is_delete' => 0
+        ])->get();
         $layout = Layout::where('jenis_id', 1)->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -113,6 +149,9 @@ class GudangController extends Controller
                 return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
             })
             ->addColumn('seri', function ($d) {
+                return '<input type="hidden" class="form-control" id="noseriOri[]" value="' . $d->noseri . '"><input type="text" class="form-control" id="noseri[]" value="' . $d->noseri . '" disabled>';
+            })
+            ->addColumn('nomor', function($d){
                 return $d->noseri;
             })
             ->addColumn('Layout', function ($d) use ($layout) {
@@ -135,7 +174,7 @@ class GudangController extends Controller
                         </button>
                     </a>';
             })
-            ->rawColumns(['ids', 'Layout', 'aksi'])
+            ->rawColumns(['ids', 'Layout', 'aksi', 'seri'])
             ->make(true);
     }
 
@@ -143,14 +182,22 @@ class GudangController extends Controller
     {
         $data = NoseriBarangJadi::whereHas('gudang', function ($d) use ($id) {
             $d->where('id', $id);
-        })->where('is_aktif', 1)->where('is_ready', 1)->get();
+        })->where([
+            'is_aktif' => 1,
+            'is_ready' => 1,
+            'is_change' => 1,
+            'is_delete' => 0
+        ])->get();
         $layout = Layout::where('jenis_id', 1)->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('ids', function ($d) {
-                return '<input type="checkbox" class="cb-child" value="' . $d->id . '">';
+                return '<input type="checkbox" class="cb-child1" value="' . $d->id . '">';
             })
             ->addColumn('seri', function ($d) {
+                return '<input type="hidden" class="form-control" id="noseriOri[]" value="' . $d->noseri . '"><input type="text" class="form-control" id="noseri[]" value="' . $d->noseri . '" disabled>';
+            })
+            ->addColumn('nomor', function($d){
                 return $d->noseri;
             })
             ->addColumn('Layout', function ($d) use ($layout) {
@@ -176,7 +223,7 @@ class GudangController extends Controller
                         </button>
                     </a>';
             })
-            ->rawColumns(['ids', 'Layout', 'aksi'])
+            ->rawColumns(['ids', 'Layout', 'aksi', 'seri'])
             ->make(true);
     }
 
@@ -203,12 +250,14 @@ class GudangController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('stock', function ($d) {
-                return $d->stok . ' ' . $d->satuan->nama;
+                $dd = $d->get_sum_noseri();
+                return $dd . ' ' . $d->satuan->nama;
             })
             ->addColumn('stok_jual', function ($data) {
                 if ($data->id) {
-                    $ss = DetailPesananProduk::with('detailpesanan')->where('gudang_barang_jadi_id', $data->id)->get();
-                    return $data->stok - $ss->sum('detailpesanan.jumlah') . ' ' . $data->satuan->nama;
+                    $d = $data->get_sum_noseri();
+                    $ss = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+                    return $d - $ss . ' ' . $data->satuan->nama;
                 } else {
                     return '-';
                 }
@@ -232,45 +281,83 @@ class GudangController extends Controller
 
     function getAllTransaksi()
     {
-        $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->get()->sortByDesc('header.tgl_keluar');
+        $data1 = DB::table('t_gbj_detail')
+                ->leftjoin('t_gbj as h', 'h.id', '=', 't_gbj_detail.t_gbj_id')
+                ->leftjoin('gdg_barang_jadi as g', 'g.id', '=', 't_gbj_detail.gdg_brg_jadi_id')
+                ->leftjoin('m_satuan as satuan', 'satuan.id', '=', 'g.satuan_id')
+                ->leftjoin('produk as prd', 'prd.id', '=', 'g.produk_id')
+                ->leftjoin('pesanan as p', 'p.id', '=', 'h.pesanan_id')
+                ->leftjoin('m_state as stt', 'stt.id', '=', 'p.log_id')
+                ->leftjoin('divisi as d', 'd.id', '=', 'h.dari')
+                ->leftjoin('divisi as dd', 'd.id', '=', 'h.ke')
+                ->select('p.so', 'p.no_po', 'p.log_id', 'h.tgl_masuk', 'h.tgl_keluar', 'h.jenis', 'h.deskripsi', 't_gbj_detail.qty', 'stt.nama', 'd.nama as dari', 'dd.nama as ke', DB::raw('concat(prd.nama, " ", g.nama) as produkk'), 't_gbj_detail.id')
+                ->get();
         $g = datatables()->of($data1)
             ->addIndexColumn()
             ->addColumn('so', function ($d) {
-                if (isset($d->header->pesanan_id)) {
-                    return $d->header->pesanan->so;
+                if (isset($d->so)) {
+                    return $d->so;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('po', function ($d) {
+                if (isset($d->no_po)) {
+                    return $d->no_po;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('logs', function($d) {
+                if (isset($d->so)) {
+                    if ($d->log_id == 9) {
+                        $ax = "<span class='badge badge-pill badge-secondary'>".$d->nama."</span>";
+                    } else if ($d->log_id == 6) {
+                        $ax = "<span class='badge badge-pill badge-warning'>".$d->nama."</span>";
+                    } elseif ($d->log_id == 8) {
+                        $ax = "<span class='badge badge-pill badge-info'>".$d->nama."</span>";
+                    } elseif ($d->log_id == 11) {
+                        $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
+                    } elseif ($d->log_id == 10) {
+                        $ax = "<span class='badge badge-pill badge-success'>".$d->nama."</span>";
+                    } else {
+                        $ax = "<span class='badge badge-pill badge-danger'>".$d->nama."</span>";
+                    }
+
+                    return $ax;
                 } else {
                     return '-';
                 }
             })
             ->addColumn('date_in', function ($d) {
-                if (isset($d->header->tgl_masuk)) {
-                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMMM Y');
+                if (isset($d->tgl_masuk)) {
+                    return Carbon::parse($d->tgl_masuk)->isoFormat('D MMMM Y');
                 } else {
                     return "-";
                 }
             })
             ->addColumn('date_out', function ($d) {
-                if (isset($d->header->tgl_keluar)) {
-                    return Carbon::parse($d->header->tgl_keluar)->isoFormat('D MMMM Y');
+                if (isset($d->tgl_keluar)) {
+                    return Carbon::parse($d->tgl_keluar)->isoFormat('D MMMM Y');
                 } else {
                     return "-";
                 }
             })
             ->addColumn('divisi', function ($d) {
-                if ($d->header->jenis == 'keluar') {
-                    return '<span class="badge badge-info">' . $d->header->divisi->nama . '</span>';
+                if ($d->jenis == 'keluar') {
+                    return '<span class="badge badge-info">' . $d->ke . '</span>';
                 } else {
-                    return '<span class="badge badge-success">' . $d->header->darii->nama . '</span>';
+                    return '<span class="badge badge-success">' . $d->dari . '</span>';
                 }
             })
             ->addColumn('tujuan', function ($d) {
-                return $d->header->deskripsi;
+                return $d->deskripsi;
             })
             ->addColumn('jumlah', function ($d) {
-                return $d->qty . ' ' . $d->produk->satuan->nama;
+                return $d->qty.' Unit';
             })
             ->addColumn('product', function ($d) {
-                return $d->produk->produk->nama . ' ' . $d->produk->nama;
+                return $d->produkk;
             })
             ->addColumn('action', function ($d) {
                 return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
@@ -278,7 +365,7 @@ class GudangController extends Controller
                 class="far fa-eye"></i> Detail</button>
                         </a>';
             })
-            ->rawColumns(['divisi', 'action'])
+            ->rawColumns(['divisi', 'action', 'logs'])
             ->make(true);
 
         return $g;
@@ -313,12 +400,40 @@ class GudangController extends Controller
     function getDetailHistory($id)
     {
         $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
-
+        
         return datatables()->of($data1)
             ->addIndexColumn()
             ->addColumn('so', function ($d) {
                 if (isset($d->header->pesanan_id)) {
                     return $d->header->pesanan->so;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('po', function ($d) {
+                if (isset($d->header->pesanan_id)) {
+                    return $d->header->pesanan->no_po;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('logs', function($d) {
+                if (isset($d->header->pesanan_id)) {
+                    if ($d->header->pesanan->log_id == 9) {
+                        $ax = "<span class='badge badge-pill badge-secondary'>".$d->header->pesanan->log->nama."</span>";
+                    } else if ($d->header->pesanan->log_id == 6) {
+                        $ax = "<span class='badge badge-pill badge-warning'>".$d->header->pesanan->log->nama."</span>";
+                    } elseif ($d->header->pesanan->log_id == 8) {
+                        $ax = "<span class='badge badge-pill badge-info'>".$d->header->pesanan->log->nama."</span>";
+                    } elseif ($d->header->pesanan->log_id == 11) {
+                        $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
+                    } elseif ($d->header->pesanan->log_id == 10) {
+                        $ax = "<span class='badge badge-pill badge-success'>".$d->header->pesanan->log->nama."</span>";
+                    } else {
+                        $ax = "<span class='badge badge-pill badge-danger'>".$d->header->pesanan->log->nama."</span>";
+                    }
+
+                    return $ax;
                 } else {
                     return '-';
                 }
@@ -356,7 +471,7 @@ class GudangController extends Controller
                             class="far fa-eye"> Detail</i></button>
                         </a>';
             })
-            ->rawColumns(['divisi', 'action'])
+            ->rawColumns(['divisi', 'action', 'logs'])
             ->make(true);
     }
 
@@ -369,7 +484,8 @@ class GudangController extends Controller
                 return $d->seri->noseri;
             })
             ->addColumn('posisi', function ($d) {
-                return $d->layout->ruang;
+                return $d->layout_id == null ? '-' : $d->layout->ruang;
+                // return $d
             })
             ->make(true);
     }
@@ -380,6 +496,406 @@ class GudangController extends Controller
         $data = GudangBarangJadi::with('produk')->where('id', $id)->get();
         $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
         return view('page.gbj.tp.show', compact('data', 'data1', 'header'));
+    }
+
+    function get_data_waiting_approve(Request $request) {
+        try {
+            $data = NoseriBrgJadiLog::where([
+                'status' => 'waiting'
+            ])->whereHas('noseri', function($d) use($request){
+                $d->where('gdg_barang_jadi_id', $request->gbjid);
+            })->get();
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('checkbox', function($d) {
+                    return '<input type="checkbox" id="noseriid" name="id" value="'.$d->noseri_id.'">';
+                })
+                ->addColumn('noseri_lama', function($d) {
+                    return $d->data_lama;
+                })
+                ->addColumn('noseri', function($d) {
+                    return $d->data_baru == null ? '-' : $d->data_baru;
+                })
+                ->editColumn('action',function($d){
+                    return $d->action == 'delete' ? '<span class="badge badge-danger">Hapus</span>': '<span class="badge badge-info">Ubah</span>';
+                })
+                ->addColumn('requested', function($d) {
+                    return $d->actionn->nama;
+                })
+                ->rawColumns(['checkbox', 'action'])
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function delete_noseri(Request $request) {
+        try {
+            // dd($request->all());
+            $check = NoseriTGbj::whereIn('noseri_id', $request->noseriid);
+            $dataseri = [];
+
+            foreach($check->get() as $c) {
+                $nbj = NoseriBarangJadi::find($c->noseri_id);
+                array_push($dataseri, $nbj->is_ready);
+            }
+            if (count($dataseri) == 0) {
+                $cek = NoseriBarangJadi::whereIn('id', $request->noseriid)->get();
+
+                foreach($cek as $cc) {
+                    $nbjj = NoseriBarangJadi::find($cc->id);
+                    // return $nbjj;
+                    NoseriBrgJadiLog::create([
+                            'noseri_id' => $cc->id,
+                            'data_lama' => $nbjj->noseri,
+                            'action' => 'delete',
+                            'action_by' => $request->actionby,
+                            'status' => 'waiting'
+                        ]);
+                    NoseriBarangJadi::find($cc->id)->update(['is_change' => 0, 'is_delete' => 1]);
+                }
+                return response()->json(['error'=>false, 'msg'=> 'Mohon Tunggu Persetujuan dari Manajer']);
+            } else {
+                if (empty(array_filter($dataseri))) {
+                    if (count($check->get()) > 0) {
+                        foreach($check->get() as $d) {
+                            $nbjj = NoseriBarangJadi::find($d->noseri_id);
+
+                            NoseriBrgJadiLog::create([
+                                    'noseri_id' => $d->noseri_id,
+                                    'data_lama' => $nbjj->noseri,
+                                    'action' => 'delete',
+                                    'action_by' => $request->actionby,
+                                    'status' => 'waiting'
+                                ]);
+                            NoseriBarangJadi::find($d->noseri_id)->update(['is_change' => 0, 'is_delete' => 1]);
+                        }
+
+                    }
+                    return response()->json(['error'=>false, 'msg'=> 'Mohon Tunggu Persetujuan dari Manajer']);
+                } else {
+                    return response()->json(['error' => true, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
+                }
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function list_approve_noseri(Request $request)
+    {
+        try {
+            $data = NoseriBarangJadi::where([
+                'is_change' => 0,
+                'is_delete' => 1
+            ])->groupBy('gdg_barang_jadi_id')->get();
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('merk', function($d){
+                    return $d->gudang->produk->merk;
+                })
+                ->addColumn('produk', function($d){
+                    return $d->gudang->nama == null ? $d->gudang->produk->nama : $d->gudang->produk->nama.' <b>'.$d->gudang->nama.'</b>';
+                })
+                ->addColumn('kelompok', function($d){
+                    return $d->gudang->produk->KelompokProduk->nama;
+                })
+                ->addColumn('action', function($d) {
+                    return '<a data-toggle="modal" data-target="#deletemodal" class="deletemodal" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
+                                <button class="btn btn-outline-success btn-sm" type="button" >
+                                <i class="far fa-eye"></i> Detail
+                                </button>
+                            </a>';
+                })
+                ->rawColumns(['action', 'produk'])
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function list_update_noseri(Request $request)
+    {
+        try {
+            $data = NoseriBarangJadi::where([
+                'is_change' => 0,
+                'is_delete' => 0
+            ])->groupBy('gdg_barang_jadi_id')->get();
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('merk', function($d){
+                    return $d->gudang->produk->merk;
+                })
+                ->addColumn('produk', function($d){
+                    return $d->gudang->nama == null ? $d->gudang->produk->nama : $d->gudang->produk->nama.' <b>'.$d->gudang->nama.'</b>';
+                })
+                ->addColumn('kelompok', function($d){
+                    return $d->gudang->produk->KelompokProduk->nama;
+                })
+                ->addColumn('action', function($d) {
+                    return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
+                                <button class="btn btn-outline-success btn-sm" type="button" >
+                                <i class="far fa-eye"></i> Detail
+                                </button>
+                            </a>';
+                })
+                ->rawColumns(['action', 'produk'])
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function detail_list_delete_noseri(Request $request)
+    {
+        try {
+            $data = NoseriBrgJadiLog::where([
+                'status' => 'waiting',
+                'action' => 'delete'
+            ])->whereHas('noseri', function($d) use($request) {
+                $d->where('gdg_barang_jadi_id', $request->gbj);
+            })->get();
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('checkbox', function($d) {
+                    return '<input type="checkbox" class="cb-child1" id="noseriid" name="id" value="'.$d->noseri_id.'">';
+                })
+                ->addColumn('produk', function($d){
+                    return $d->noseri->gudang->nama == null ? $d->noseri->gudang->produk->nama : $d->noseri->gudang->produk->nama.' <b>'.$d->noseri->gudang->nama.'</b>';
+                })
+                ->addColumn('merk', function($d){
+                    return $d->noseri->gudang->produk->merk;
+                })
+                ->addColumn('noseri', function($d) {
+                    return $d->noseri->noseri;
+                })
+                ->addColumn('requested', function($d) {
+                    return $d->actionn->nama;
+                })
+                ->addColumn('tgl_aju', function($d){
+                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->created_at)->isoFormat('D MMMM YYYY');
+                })
+                ->rawColumns(['checkbox', 'produk'])
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function detail_list_update_noseri(Request $request)
+    {
+        try {
+            $data = NoseriBrgJadiLog::where([
+                'status' => 'waiting',
+                'action' => 'update',
+            ])->whereHas('noseri', function($d) use($request) {
+                $d->where('gdg_barang_jadi_id', $request->gbj);
+            })->get();
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('checkbox', function($d) {
+                    return '<input type="checkbox" class="cb-child" id="noseriid" name="id" value="'.$d->noseri_id.'">';
+                })
+                ->addColumn('produk', function($d){
+                    return $d->noseri->gudang->nama == null ? $d->noseri->gudang->produk->nama : $d->noseri->gudang->produk->nama.' <b>'.$d->noseri->gudang->nama.'</b>';
+                })
+                ->addColumn('merk', function($d){
+                    return $d->noseri->gudang->produk->merk;
+                })
+                ->addColumn('kelompok', function($d){
+                    return $d->noseri->gudang->produk->KelompokProduk->nama;
+                })
+                ->addColumn('lama', function($d) {
+                    return $d->data_lama;
+                })
+                ->addColumn('baru', function($d) {
+                    return $d->data_baru;
+                })
+                ->addColumn('tgl_aju', function($d){
+                    return Carbon::createFromFormat('Y-m-d H:i:s', $d->created_at)->isoFormat('D MMMM YYYY');
+                })
+                ->addColumn('requested', function($d) {
+                    return $d->actionn->nama;
+                })
+                ->rawColumns(['checkbox', 'produk'])
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+
+
+    function edit_noseri(Request $request) {
+        try {
+            // dd($request->all());
+            $dataseri = [];
+            $data = NoseriBarangJadi::whereIn('id',$request->data);
+            $check = NoseriBarangJadi::whereIn('noseri', $request->new)->get();
+            if (count($check) > 0) {
+                foreach($check as $d) {
+                    array_push($dataseri, $d->noseri);
+                }
+                return response()->json(['error' => true, 'msg' => 'Noseri '.implode(', ', $dataseri).' Sudah Terdaftar']);
+            } else {
+                foreach($data->get() as $k => $c) {
+                    NoseriBrgJadiLog::create([
+                        'noseri_id' => $c->id,
+                        'data_lama' => $c->noseri,
+                        'data_baru' => $request->new[$k],
+                        'action' => 'update',
+                        'action_by' => $request->actionby,
+                        'status' => 'waiting'
+                    ]);
+                    NoseriBarangJadi::find($c->id)->update(['noseri' => $request->new[$k], 'is_change' => 0]);
+                }
+
+                return response()->json(['error' => false, 'msg' => 'Mohon Tunggu Persetujuan dari Manager']);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function proses_delete_noseri(Request $request)
+    {
+        try {
+            $check = NoseriTGbj::whereIn('noseri_id', $request->noseriid);
+            $dataseri = [];
+
+            foreach($check->get() as $c) {
+                $nbj = NoseriBarangJadi::find($c->noseri_id);
+                array_push($dataseri, $nbj->is_ready);
+            }
+            if ($request->is_acc == 'rejected') {
+                if (count($dataseri) == 0) {
+                    $cek = NoseriBarangJadi::whereIn('id', $request->noseriid)->get();
+
+                    foreach($cek as $cc) {
+                        NoseriBrgJadiLog::where('noseri_id', $cc->id)->where([
+                            'action' => 'delete',
+                            'status' => 'waiting'
+                        ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                        NoseriBarangJadi::find($cc->id)->update(['is_change' => 1, 'is_delete' => 0]);
+                    }
+                } else {
+                    foreach($check->get() as $ddd) {
+                        NoseriBrgJadiLog::where('noseri_id', $ddd->noseri_id)->where([
+                            'action' => 'delete',
+                            'status' => 'waiting'
+                        ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                        NoseriBarangJadi::find($ddd->noseri_id)->update(['is_change' => 1, 'is_delete' => 0]);
+                    }
+                }
+                return response()->json(['error'=>false, 'msg'=> 'Penolakan Berhasil Dilakukan']);
+            } else {
+                if (count($dataseri) == 0) {
+                    $cekk = NoseriBarangJadi::whereIn('id', $request->noseriid)->get();
+
+                    foreach($cekk as $ckc) {
+                        NoseriBrgJadiLog::where('noseri_id', $ckc->id)->where([
+                            'action' => 'delete',
+                            'status' => 'waiting'
+                        ])->update(['status' => 'approve', 'acc_by' => $request->accby]);
+                        NoseriBarangJadi::find($ckc->id)->delete();
+                    }
+                    return response()->json(['error'=>false, 'msg'=> 'Noseri Berhasil Dihapus']);
+                } else {
+                    if (empty(array_filter($dataseri))) {
+                        foreach($check->get() as $d) {
+                            NoseriBrgJadiLog::where('noseri_id', $d->noseri_id)->where([
+                                'action' => 'delete',
+                                'status' => 'waiting'
+                            ])->update(['status' => 'approve', 'acc_by' => $request->accby]);
+                            NoseriTGbj::where('noseri_id',$d->noseri_id)->delete();
+                            NoseriBarangJadi::find($d->noseri_id)->delete();
+                        }
+                        return response()->json(['error'=>false, 'msg'=> 'Noseri Berhasil Dihapus']);
+                    } else {
+                        return 'ok';
+                        foreach($check->get() as $dd) {
+                            NoseriBrgJadiLog::where('noseri_id', $dd->noseri_id)->where([
+                                'action' => 'delete',
+                                'status' => 'waiting'
+                            ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                            NoseriBarangJadi::find($dd->noseri_id)->update(['is_change' => 1]);
+                        }
+                        return response()->json(['error' => true, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
+                    }
+                }
+
+
+            }
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function proses_update_noseri(Request $request)
+    {
+        try {
+            if ($request->is_acc == 'rejected') {
+                $a = NoseriBrgJadiLog::whereIn('noseri_id', $request->noseriid)->where([
+                    'action' => 'update',
+                    'status' => 'waiting'
+                    ])->get()->pluck('data_lama');
+                for ($i=0; $i < count($a); $i++) {
+                    NoseriBrgJadiLog::where('noseri_id', $request->noseriid[$i])->where([
+                        'action' => 'update',
+                        'status' => 'waiting'
+                    ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                    NoseriBarangJadi::where('id', $request->noseriid[$i])->update(['is_change' => 1, 'noseri'=> $a[$i]]);
+                }
+                return response()->json(['error' => false, 'msg' => 'Noseri Batal Diubah']);
+            } else {
+                // return 'acc';
+                $data = NoseriBarangJadi::whereIn('id',$request->noseriid);
+                foreach($data->get() as $k => $c) {
+                    NoseriBrgJadiLog::where('noseri_id', $c->id)->where([
+                        'action' => 'update',
+                        'status' => 'waiting'
+                    ])->update(['status' => 'approved', 'acc_by' => $request->accby]);
+                    NoseriBarangJadi::find($c->id)->update(['is_change' => 1]);
+                }
+                return response()->json(['error' => false, 'msg' => 'Noseri Berhasil Diubah']);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
     }
 
     function getRakit()
@@ -436,6 +952,17 @@ class GudangController extends Controller
 
         return datatables()->of($datax)
             ->addIndexColumn()
+            ->addColumn('bppb', function($d) {
+                $seri_done = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
+                    $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
+                    $q->whereHas('header', function ($a) use ($d) {
+                        $a->where('tgl_masuk', $d->header->tgl_masuk)->where('ke', 13)->where('dari', 17);
+                    });
+                })->where('jenis', 'masuk')->first();
+
+                $nobppb = JadwalRakitNoseri::with('header')->where('noseri', $seri_done->seri->noseri)->first();
+                return $nobppb->header->no_bppb == '-' ? '-' : $nobppb->header->no_bppb;
+            })
             ->addColumn('tgl_masuk', function ($d) {
                 if (isset($d->header->tgl_masuk)) {
                     return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMMM Y');
@@ -451,7 +978,6 @@ class GudangController extends Controller
                     $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
                     $q->whereHas('header', function ($a) use ($d) {
                         $a->where('tgl_masuk', $d->header->tgl_masuk)->where('ke', 13)->where('dari', 17);
-                        // $a->where('dari', 17);
                     });
                 })->where('jenis', 'masuk')->where('status_id', 3)->get()->count();
 
@@ -473,16 +999,14 @@ class GudangController extends Controller
                         $a->where('dari', 17);
                     });
                 })->where('jenis', 'masuk')->get()->count();
-                // return $seri_done;
+
                 if ($seri == $seri_done) {
-                    // return 'a';
                     return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="' . $d->produk->produk->nama . '" data-var="' . $d->produk->nama . '" data-attr=""  data-id="' . $d->id . '" data-tgl="' . $d->header->tgl_masuk . '" data-brgid="' . $d->gdg_brg_jadi_id . '">
                                 <button class="btn btn-outline-info btn-sm" type="button" >
                                 <i class="far fa-eye"></i>&nbsp;Detail
                                 </button>
                             </a>';
                 } else {
-                    // return 'b';
                     return  '
                             <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="' . $d->produk->produk->nama . '" data-var="' . $d->produk->nama . '" data-attr=""  data-id="' . $d->id . '" data-tgl="' . $d->header->tgl_masuk . '" data-brgid="' . $d->gdg_brg_jadi_id . '">
                                 <button class="btn btn-outline-info btn-sm" type="button" >
@@ -504,7 +1028,6 @@ class GudangController extends Controller
 
     function getRakitNoseri($id, $value)
     {
-        // $data = NoseriTGbj::with('layout', 'detail', 'seri')->where('t_gbj_detail_id', $id)->where('status_id', 3)->get();
         $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $value) {
             $q->where('gdg_brg_jadi_id', $id);
             $q->whereHas('header', function ($a) use ($value) {
@@ -526,7 +1049,6 @@ class GudangController extends Controller
 
     function getTerimaRakit($id, $value)
     {
-        // $data = NoseriTGbj::with('layout', 'detail', 'seri')->where('t_gbj_detail_id', $id)->where('status_id', null)->get();
         $data = NoseriTGbj::whereHas('detail', function ($q) use ($id, $value) {
             $q->where('gdg_brg_jadi_id', $id);
             $q->whereHas('header', function ($a) use ($value) {
@@ -656,15 +1178,28 @@ class GudangController extends Controller
     function ceknoseri(Request $request)
     {
         $data = NoseriBarangJadi::whereIn('noseri', $request->noseri)->get();
+        $datarakit = JadwalRakitNoseri::whereIn('noseri', $request->noseri)->get();
         $arr_seri = [];
+        $arr_rakit = [];
 
-        if (count($data) == 0) {
+        if (count($data) == 0 && count($datarakit) == 0) {
             return response()->json(['msg' => 'Noseri tersimpan']);
         } else {
             foreach ($data as $d) {
                 array_push($arr_seri, $d->noseri);
             }
-            return response()->json(['error' => 'Nomor seri ' . implode(', ', $arr_seri) . ' sudah terdaftar']);
+
+            foreach($datarakit as $c) {
+                array_push($arr_rakit, $c->noseri);
+            }
+
+            if (count($data) > 0) {
+                return response()->json(['error' => 'Nomor seri ' . implode(', ', $arr_seri) . ' sudah terdaftar di gudang']);
+            }
+
+            if (count($datarakit) > 0) {
+                return response()->json(['error' => 'Nomor seri ' . implode(', ', $arr_rakit) . ' sudah terdaftar di perakitan']);
+            }
         }
     }
 
@@ -691,6 +1226,27 @@ class GudangController extends Controller
             ->addColumn('nopo', function ($d) {
                 return $d->pesanan->no_po;
             })
+            ->addColumn('logs', function($d) {
+                if (isset($d->pesanan_id)) {
+                    if ($d->pesanan->log_id == 9) {
+                        $ax = "<span class='badge badge-pill badge-secondary'>".$d->pesanan->log->nama."</span>";
+                    } else if ($d->pesanan->log_id == 6) {
+                        $ax = "<span class='badge badge-pill badge-warning'>".$d->pesanan->log->nama."</span>";
+                    } elseif ($d->pesanan->log_id == 8) {
+                        $ax = "<span class='badge badge-pill badge-info'>".$d->pesanan->log->nama."</span>";
+                    } elseif ($d->pesanan->log_id == 11) {
+                        $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
+                    } elseif ($d->pesanan->log_id == 10) {
+                        $ax = "<span class='badge badge-pill badge-success'>".$d->pesanan->log->nama."</span>";
+                    } else {
+                        $ax = "<span class='badge badge-pill badge-danger'>".$d->pesanan->log->nama."</span>";
+                    }
+
+                    return $ax;
+                } else {
+                    return '-';
+                }
+            })
             ->addColumn('customer', function ($data) {
                 $name = explode('/', $data->pesanan->so);
                 for ($i = 1; $i < count($name); $i++) {
@@ -707,12 +1263,10 @@ class GudangController extends Controller
                 if (isset($d->pesanan->Ekatalog->tgl_kontrak)) {
 
                     if ($d->pesanan->Ekatalog->Provinsi->status == 1) {
-                        // return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
                         return Carbon::parse($d->pesanan->Ekatalog->tgl_kontrak)->subWeeks(5)->format('d-m-Y');
                     }
 
                     if ($d->pesanan->Ekatalog->Provinsi->status == 2) {
-                        // return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
                         return Carbon::parse($d->pesanan->Ekatalog->tgl_kontrak)->subWeeks(4)->format('d-m-Y');
                     }
                 } else {
@@ -725,34 +1279,217 @@ class GudangController extends Controller
                         <button class="btn btn-outline-primary"><i class="fas fa-print"></i> Cetak</button>
                         </a></td>';
             })
-            ->rawColumns(['aksi'])
+            ->rawColumns(['aksi', 'logs'])
             ->make(true);
     }
     // Export Excell
     function exportSpb($id)
     {
-        $tfbyid = LogSurat::where('pesanan_id', $id)->get();
-        if (count($tfbyid) > 0) {
-            LogSurat::where('pesanan_id', $id)->update(['transfer_by' => Auth::user()->id]);
-        } else {
-            LogSurat::create([
-                'pesanan_id' => $id,
-                'transfer_by' => Auth::user()->id,
-            ]);
+        $header = TFProduksi::where('pesanan_id', $id)->with('pesanan')->get()->pluck('pesanan.so');
+        return Excel::download(new SpbExport($id), 'SPB.xlsx');
+    }
+
+    function download_template_noseri(Request $request)
+    {
+        $no = 1;
+
+        $produk = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get()->sortBy('produk.nama');
+
+        // spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->createSheet();
+
+        // workshet noseri
+        $spreadsheet->setActiveSheetIndex(0);
+        $spreadsheet->getActiveSheet()->setTitle('Noseri');
+        $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
+        $spreadsheet->getActiveSheet()->setCellValue('B1', 'Nama Produk');
+        $spreadsheet->getActiveSheet()->setCellValue('C1', 'Noseri');
+
+        $validation = $spreadsheet->getActiveSheet()->getCell('B2')
+            ->getDataValidation();
+        $validation->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST );
+        $validation->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_INFORMATION );
+        $validation->setAllowBlank(false);
+        $validation->setShowInputMessage(true);
+        $validation->setShowErrorMessage(true);
+        $validation->setShowDropDown(true);
+        $validation->setErrorTitle('Input error');
+        $validation->setError('Value is not in list.');
+        $validation->setPromptTitle('Pick from list');
+        $validation->setPrompt('Please pick a value from the drop-down list.');
+
+        $validation->setFormula1('\'Produk\'!$C$2:$C$288');
+        // $validation->setFormula1('"Item A,Item B,Item C"');
+        $validation->setSqref('B2:B10000');
+
+        // check duplicate input noseri
+        $duplicate = new Conditional();
+        $duplicate->setConditionType(Conditional::CONDITION_DUPLICATES);
+        $duplicate->getStyle()->getFont()->getColor()->setARGB(Color::COLOR_BLACK);
+        $duplicate->getStyle()->getFill()->setFillType(Fill::FILL_SOLID);
+        $duplicate->getStyle()->getFill()->getEndColor()->setARGB(Color::COLOR_YELLOW);
+
+        $conditionalStyles = $spreadsheet->getActiveSheet()->getStyle('C2:C10000')->getConditionalStyles();
+        $conditionalStyles[] = $duplicate;
+
+        $spreadsheet->getActiveSheet()->getStyle('C2:C10000')->setConditionalStyles($conditionalStyles);
+
+        // workshet master
+        $spreadsheet->setActiveSheetIndex(1);
+        $spreadsheet->getActiveSheet()->setTitle('Produk');
+        $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
+        $spreadsheet->getActiveSheet()->setCellValue('B1', 'Merk');
+        $spreadsheet->getActiveSheet()->setCellValue('C1', 'Nama Produk');
+        $spreadsheet->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+
+        $noo = 2;
+        foreach($produk as $p) {
+            $spreadsheet->getActiveSheet()->setCellValue('A'. $noo, $p->id);
+            $spreadsheet->getActiveSheet()->setCellValue('B'. $noo, $p->produk->merk);
+            $spreadsheet->getActiveSheet()->setCellValue('C'. $noo, $p->produk->nama.' '.$p->nama);
+            $noo++;
+            $no++;
         }
-        $tfby = LogSurat::where('pesanan_id', $id)->get();
-        $data = TFProduksiDetail::whereHas('header', function ($q) use ($id) {
-            $q->where('pesanan_id', $id);
-        })->with('seri.seri', 'produk.produk', 'paket.detailpesanan.penjualanproduk')->groupBy('detail_pesanan_produk_id')->groupBy('gdg_brg_jadi_id')->get();
-        $header = TFProduksi::where('pesanan_id', $id)->with('pesanan')->get();
-        $pdf = PDF::setOptions(['isHtml5ParserEnabled' => true, 'isRemoteEnabled' => true])->loadView('page.gbj.reports.spb', ['data' => $data, 'tfby' => $tfby, 'header' => $header])->setPaper('a4', 'portrait');
-        return $pdf->stream();
-        // return response()->json(['data' => $data]);
-        return view('page.gbj.reports.spb', ['data' => $data, 'tfby' => $tfby, 'header' => $header]);
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Template Noseri.xlsx"'); // Set nama file excel nya
+        header('Cache-Control: max-age=0');
+
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+    }
+
+    function import_noseri(Request $request)
+    {
+        $file = $request->file('file_csv');
+        $filename = $file->getClientOriginalName();
+        $extension = $file->getClientOriginalExtension(); //Get extension of uploaded file
+        $tempPath = $file->getRealPath();
+        $fileSize = $file->getSize();
+
+        $file->move(public_path('upload/noseri/'), $filename);
+
+        $reader = new ReaderXlsx();
+        $spreadsheet = $reader->load(public_path('upload/noseri/'. $filename));
+        $spreadsheet->setActiveSheetIndex(0);
+
+        $sheet        = $spreadsheet->getActiveSheet();
+        $row_limit    = $sheet->getHighestDataRow();
+        $column_limit = $sheet->getHighestDataColumn();
+        $row_range    = range( 2, $row_limit );
+        $column_range = range( 'C', $column_limit );
+        $startcount = 2;
+        $data = array();
+        foreach ( $row_range as $row ) {
+            $data[] = [
+                'no' =>$sheet->getCell( 'A' . $row )->getValue(),
+                'produk' => $sheet->getCell( 'B' . $row )->getValue(),
+                'noseri' => $sheet->getCell( 'C' . $row )->getValue()
+            ];
+            $startcount++;
+        }
+
+        foreach($data as $d) {
+            $aa[] = $d['noseri'];
+            $bb[] = $d['produk'];
+        }
+
+        $check = NoseriBarangJadi::whereIn('noseri', $aa)->get()->pluck('noseri');
+        $seri = [];
+        $sheet1 = $sheet->toArray(null, true, true, true);
+        $numrow = 1;
+        $html = "<input type='hidden' name='namafile' value='" . $filename . "'>";
+        $html .= "<table class='table table-bordered table-striped table-hover tableImport'>
+                <thead>
+                <tr>
+                <th>No</th>
+                <th>Nama</th>
+                <th>Noseri</th>
+                </tr>
+                </thead>
+                <tbody>";
+        foreach($sheet1 as $key => $row) {
+            $a = $row['A'];
+            $b = $row['B'];
+            $c = $row['C'];
+            if($numrow > 1) {
+                $nis_td = (!empty($c)) ? "" : " style='background: #E07171;'";
+                $html .= "<tr>";
+                $html .= "<td" . $nis_td . ">" . $a . "</td>";
+                $html .= "<td" . $nis_td . ">" . $b . "</td>";
+                $html .= "<td" . $nis_td . ">" . $c . "</td>";
+                $html .= "</tr>";
+            }
+            $numrow++;
+        }
+        $html .= "</tbody></table>";
+
+        if(count($check) > 0) {
+            foreach ($check as $item) {
+                array_push($seri, $item);
+            }
+            return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar', 'error' => true, 'data' => $html, 'noseri' => implode(', ', $seri)]);
+        } else {
+            return response()->json(['msg' => 'Noseri Sudah Bisa Diunggah', 'error' => false, 'data' => $html]);
+        }
+    }
+
+    function import_noseri_to_db(Request $request)
+    {
+        $reader = new ReaderXlsx();
+        $spreadsheet = $reader->load(public_path('upload/noseri/'. $request->namafile));
+        $spreadsheet->setActiveSheetIndex(0);
+
+        $sheet        = $spreadsheet->getActiveSheet();
+        $row_limit    = $sheet->getHighestDataRow();
+        $column_limit = $sheet->getHighestDataColumn();
+        $row_range    = range( 2, $row_limit );
+        $column_range = range( 'C', $column_limit );
+        $startcount = 2;
+        $data = array();
+        foreach ( $row_range as $row ) {
+            $data[] = [
+                'no' =>$sheet->getCell( 'A' . $row )->getValue(),
+                'produk' => $sheet->getCell( 'B' . $row )->getValue(),
+                'noseri' => $sheet->getCell( 'C' . $row )->getValue()
+            ];
+            $startcount++;
+        }
+
+        foreach($data as $d) {
+            $aa[] = $d['noseri'];
+            $bb[] = $d['produk'];
+        }
+
+        // array_unique($bb);
+        $check = GudangBarangJadi::select('gdg_barang_jadi.id', DB::raw("concat(produk.nama, ' ', gdg_barang_jadi.nama) as produk"))
+            ->whereIn(DB::raw("concat(produk.nama, ' ', gdg_barang_jadi.nama)"), $bb)
+            ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+            ->get()->pluck('id');
+        // return ;
+        foreach($aa as $key => $nn) {
+            $dat_arr[] = [
+                'gdg_barang_jadi_id' => GudangBarangJadi::select('gdg_barang_jadi.id')
+                ->where(DB::raw("concat(produk.nama, ' ', gdg_barang_jadi.nama)"), $bb[$key])
+                ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+                ->first()->id,
+                'dari' => 13,
+                'noseri' => $nn,
+                'jenis' => 'MASUK',
+                'is_ready' => 0,
+                'is_aktif' => 1,
+                'created_by' => $request->userid,
+                'created_at' => Carbon::now(),
+            ];
+        }
+        NoseriBarangJadi::insert($dat_arr);
+        return response()->json(['msg' => 'Data Berhasil Diunggah', 'error' => false]);
+
     }
 
     function getListSODone()
-    {
+        {
         $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) {
             $q->whereNotNull('no_po');
         })->get());
@@ -801,82 +1538,85 @@ class GudangController extends Controller
     function StoreBarangJadi(Request $request)
     {
         $id = $request->id;
-        if ($id) {
-            $brg_jadi = GudangBarangJadi::find($id);
-            $brg_his = new GudangBarangJadiHis();
+        if(($request->produk_id && $request->satuan_id) == null) {
+            return response()->json(['msg' => 'Produk dan Satuan Harus Diisi', 'error' => true]);
+        }else{
+            if ($id) {
+                $brg_jadi = GudangBarangJadi::find($id);
+                $brg_his = new GudangBarangJadiHis();
 
-            if (empty($brg_jadi->id)) {
-                return response()->json(['msg' => 'Data not found']);
+                if (empty($brg_jadi->id)) {
+                    return response()->json(['msg' => 'Data not found']);
+                }
+
+                $brg_jadi->produk_id = $request->produk_id;
+                $brg_jadi->satuan_id = $request->satuan_id;
+                $brg_jadi->nama = $request->nama == null ? ' ' : $request->nama;
+                $brg_jadi->deskripsi = $request->deskripsi;
+                $image = $request->file('gambar');
+                if ($image) {
+                    $path = 'upload/gbj/';
+                    $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                    $image->move($path, $nameImage);
+                    $brg_jadi->gambar = $nameImage;
+                }
+                $brg_jadi->dim_p = $request->dim_p;
+                $brg_jadi->dim_l = $request->dim_l;
+                $brg_jadi->dim_t = $request->dim_t;
+                $brg_jadi->status = $request->status;
+                $brg_jadi->updated_at = Carbon::now();
+                $brg_jadi->updated_by = $request->userid;
+                $brg_jadi->save();
+
+                $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
+                $brg_his->produk_id = $request->produk_id;
+                $brg_his->satuan_id = $request->satuan_id;
+                $brg_his->nama = $request->nama;
+                $brg_his->deskripsi = $request->deskripsi;
+                $brg_his->status = $request->status;
+                $brg_his->created_at = Carbon::now();
+                $brg_his->created_by = $request->userid;
+                $brg_his->save();
+            } else {
+                $brg_jadi = new GudangBarangJadi();
+                $brg_jadi->produk_id = $request->produk_id;
+                $brg_jadi->satuan_id = $request->satuan_id;
+                $brg_jadi->nama = $request->nama == null ? ' ' : $request->nama;
+                $brg_jadi->stok = 0;
+                $brg_jadi->deskripsi = $request->deskripsi;
+                $image = $request->file('gambar');
+                if ($image) {
+                    $path = 'upload/gbj/';
+                    $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
+                    $image->move($path, $nameImage);
+                    $brg_jadi->gambar = $nameImage;
+                }
+                $brg_jadi->dim_p = $request->dim_p;
+                $brg_jadi->dim_l = $request->dim_l;
+                $brg_jadi->dim_t = $request->dim_t;
+                $brg_jadi->status = $request->status;
+                $brg_jadi->created_at = Carbon::now();
+                $brg_jadi->created_by = $request->userid;
+                $brg_jadi->save();
+
+                $brg_his = new GudangBarangJadiHis();
+                $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
+                $brg_his->satuan_id = $request->satuan_id;
+                $brg_his->produk_id = $request->produk_id;
+                $brg_his->nama = $request->nama;
+                $brg_his->stok = 0;
+                $brg_his->deskripsi = $request->deskripsi;
+                $brg_his->status = $request->status;
+                $brg_his->created_at = Carbon::now();
+                $brg_his->created_by = $request->userid;
+                $brg_his->save();
             }
-
-            $brg_jadi->produk_id = $request->produk_id;
-            $brg_jadi->satuan_id = $request->satuan_id;
-            $brg_jadi->nama = $request->nama;
-            $brg_jadi->deskripsi = $request->deskripsi;
-            $image = $request->file('gambar');
-            if ($image) {
-                $path = 'upload/gbj/';
-                $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-                $image->move($path, $nameImage);
-                $brg_jadi->gambar = $nameImage;
-            }
-            $brg_jadi->dim_p = $request->dim_p;
-            $brg_jadi->dim_l = $request->dim_l;
-            $brg_jadi->dim_t = $request->dim_t;
-            $brg_jadi->status = $request->status;
-            $brg_jadi->updated_at = Carbon::now();
-            $brg_jadi->updated_by = $request->userid;
-            $brg_jadi->save();
-
-            $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
-            $brg_his->produk_id = $request->produk_id;
-            $brg_his->satuan_id = $request->satuan_id;
-            $brg_his->nama = $request->nama;
-            $brg_his->deskripsi = $request->deskripsi;
-            $brg_his->status = $request->status;
-            $brg_his->created_at = Carbon::now();
-            $brg_his->created_by = $request->userid;
-            $brg_his->save();
-        } else {
-            $brg_jadi = new GudangBarangJadi();
-            $brg_jadi->produk_id = $request->produk_id;
-            $brg_jadi->satuan_id = $request->satuan_id;
-            $brg_jadi->nama = $request->nama;
-            $brg_jadi->stok = 0;
-            $brg_jadi->deskripsi = $request->deskripsi;
-            $image = $request->file('gambar');
-            if ($image) {
-                $path = 'upload/gbj/';
-                $nameImage = date('YmdHis') . "." . $image->getClientOriginalExtension();
-                $image->move($path, $nameImage);
-                $brg_jadi->gambar = $nameImage;
-            }
-            $brg_jadi->dim_p = $request->dim_p;
-            $brg_jadi->dim_l = $request->dim_l;
-            $brg_jadi->dim_t = $request->dim_t;
-            $brg_jadi->status = $request->status;
-            $brg_jadi->created_at = Carbon::now();
-            $brg_jadi->created_by = $request->userid;
-            $brg_jadi->save();
-
-            $brg_his = new GudangBarangJadiHis();
-            $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
-            $brg_his->satuan_id = $request->satuan_id;
-            $brg_his->produk_id = $request->produk_id;
-            $brg_his->nama = $request->nama;
-            $brg_his->stok = 0;
-            $brg_his->deskripsi = $request->deskripsi;
-            $brg_his->status = $request->status;
-            $brg_his->created_at = Carbon::now();
-            $brg_his->created_by = $request->userid;
-            $brg_his->save();
-        }
         return response()->json(['msg' => 'Successfully']);
+        }
     }
 
     function storeDraftRancang(Request $request)
     {
-        // dd($request->all());
         $h = new TFProduksi();
         $h->tgl_masuk = $request->tgl_masuk;
         $h->dari = $request->dari;
@@ -1239,6 +1979,7 @@ class GudangController extends Controller
             ->addColumn('jumlah', function ($d) {
                 return $d->qty . ' ' . $d->produk->satuan->nama;
             })
+            ->rawColumns(['tgl_masuk'])
             ->make(true);
     }
 

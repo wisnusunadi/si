@@ -89,7 +89,7 @@
                     },
                     {
                         text: 'Nomor BPPB',
-                        value: 'nomor_bppb'
+                        value: 'bppb'
                     },
                     {
                         text: 'Produk',

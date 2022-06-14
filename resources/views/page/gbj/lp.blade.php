@@ -42,7 +42,7 @@
     }
 
     .my-float {
-        margin-top: 22px;
+        margin-top: -10px;
     }
     #DataTables_Table_0_filter{
         display: none;
@@ -174,9 +174,9 @@
                                     <div class="col-lg-8 col-md-12 col-sm-12">
                                         <div class="row">
                                             <div class="col-12 d-flex justify-content-end mb-3">
-                                                <a href="#" class="float btn-tambah">
-                                                    <i class="fa fa-plus my-float"></i>
-                                                </a>
+                                                <button class="float btn-tambah">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
                                             </div>
                                             <div class="col-12 table-responsive mb-4">
                                                 <table class="table table-hover addData">
@@ -432,11 +432,15 @@
             type: 'GET',
             dataType: 'json',
             success: function (res) {
-                $(".productt").append('<option value="">Pilih Item</option>');
+                $(".productt").append('<option selected></option>');
                 $.each(res, function (key, value) {
                     $(".productt").append('<option value="' + value.id + '">' + value.produk.nama +
                         ' ' + value.nama + '</option');
                 });
+                $('.productt').select2({
+                    placeholder: "Pilih Produk",
+                    allowClear: true
+                })
             }
         });
 
@@ -597,8 +601,10 @@
     $(document).ready(function () {
         $('#head-cb-rancang').prop('checked', false);
         $('#head-cb').prop('checked', false);
-        $('.division').select2();
-        $('.productt').select2();
+        $('.division').select2({
+            placeholder: "Pilih Divisi",
+            allowClear: true
+        });
 
         $.ajax({
             url: '/api/gbj/sel-layout',
@@ -687,7 +693,7 @@
                 if (res) {
                     console.log(res);
                     $(".division").empty();
-                    $(".division").append('<option value="">Pilih Item</option>');
+                    $(".division").append('<option selected></option>');
                     $.each(res, function (key, value) {
                         $(".division").append('<option value="' + value.id + '">' + value
                             .nama + '</option');
@@ -933,7 +939,7 @@
                     timer: 1500
                 })
             }
-            
+
         })
         console.log(serir);
         $('.tambahan-rancangan').modal('hide');
