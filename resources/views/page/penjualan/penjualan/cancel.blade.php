@@ -67,6 +67,12 @@
             <form method="POST" action="{{}}">
                 <div class="card-body">
                     <div class="form-horizontal">
+                        <div class="form-group row" for="keterangan">
+                            <label for="tanggal" class="col-form-label col-12">Tanggal</label>
+                            <div class="col-lg-4 col-md-6 col-sm-6">
+                                <input type="date" class="form-control col-form-label" name="tanggal" id="tanggal">
+                            </div>
+                        </div>
                         <div class="form-group" for="keterangan">
                             <label for="" class="col-form-label">Alasan Batal</label>
                             <textarea class="form-control col-form-label" name="alasan" id="alasan"></textarea>

@@ -696,6 +696,7 @@
                     'search': 'applied'
                 }).nodes();
                 if($('.check_detail:checked', rows).length <= 0){
+                    $('#check_all').prop('checked', false);
                     $('#kirim_produk').attr('disabled', true);
                 }
                 else{
