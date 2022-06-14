@@ -1188,15 +1188,16 @@
                 serverSide: true,
                 destroy: true,
                 autoWidth: false,
+                scrollY: "500px",
                 ajax: {
                     url: '/api/dashboard-gbj/in/36',
                     type: "post",
                 },
                 columns: [
-                    {data: 'DT_RowIndex'},
-                    {data: 'tgl_masuk'},
-                    {data: 'product'},
-                    {data: 'jumlah'},
+                    {data: 'DT_RowIndex', width: '20%'},
+                    {data: 'tgl_masuk', width: '30%'},
+                    {data: 'product', width: '40%'},
+                    {data: 'jumlah', width: '10%'},
                 ]
             });
             $('.waktu-produk2').DataTable({
@@ -1204,15 +1205,16 @@
                 serverSide: true,
                 destroy: true,
                 autoWidth: false,
+                scrollY: "500px",
                 ajax: {
                     url: '/api/dashboard-gbj/in/612',
                     type: "post",
                 },
                 columns: [
-                    {data: 'DT_RowIndex'},
-                    {data: 'tgl_masuk'},
-                    {data: 'product'},
-                    {data: 'jumlah'},
+                    {data: 'DT_RowIndex', width: '20%'},
+                    {data: 'tgl_masuk', width: '30%'},
+                    {data: 'product', width: '40%'},
+                    {data: 'jumlah', width: '10%'},
                 ]
             });
             $('.waktu-produk3').DataTable({
@@ -1220,15 +1222,16 @@
                 serverSide: true,
                 destroy: true,
                 autoWidth: false,
+                scrollY: "500px",
                 ajax: {
                     url: '/api/dashboard-gbj/in/1236',
                     type: "post",
                 },
                 columns: [
-                    {data: 'DT_RowIndex'},
-                    {data: 'tgl_masuk'},
-                    {data: 'product'},
-                    {data: 'jumlah'},
+                    {data: 'DT_RowIndex', width: '20%'},
+                    {data: 'tgl_masuk', width: '30%'},
+                    {data: 'product', width: '40%'},
+                    {data: 'jumlah', width: '10%'},
                 ]
             });
             $('.waktu-produk4').DataTable({
@@ -1236,15 +1239,16 @@
                 serverSide: true,
                 destroy: true,
                 autoWidth: false,
+                scrollY: "500px",
                 ajax: {
                     url: '/api/dashboard-gbj/in/36plus',
                     type: "post",
                 },
                 columns: [
-                    {data: 'DT_RowIndex'},
-                    {data: 'tgl_masuk'},
-                    {data: 'product'},
-                    {data: 'jumlah'},
+                    {data: 'DT_RowIndex', width: '20%'},
+                    {data: 'tgl_masuk', width: '30%'},
+                    {data: 'product', width: '40%'},
+                    {data: 'jumlah', width: '10%'},
                 ]
             });
         }

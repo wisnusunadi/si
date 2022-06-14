@@ -5,6 +5,7 @@
 @section('content')
 <div class="content-header">
     <input type="hidden" name="" id="authid" value="{{ Auth::user()->divisi_id }}">
+
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
@@ -21,6 +22,19 @@
                     <div class="card-header">
                         <div class="row">
                             <div class="col-8">
+                                <div class="row">
+                                    <span class="float-left mr-1">
+                                        <button type="button" class="btn btn-success" id="downloadTemplate">
+                                            <i class="fas fa-download"></i>&nbsp;Template
+                                        </button>
+                                    </span>
+
+                                    <span class="float-left mr-1">
+                                        <button type="button" class="btn btn-outline-success" id="importTemplate">
+                                            <i class="fas fa-file-import"></i>&nbsp;Import
+                                        </button>
+                                    </span>
+                                </div>
                             </div>
                             <div class="col-4">
                                 <div class="row">
@@ -33,6 +47,7 @@
                                             </button>
                                         </span>
                                         @endif
+
                                         <span class="float-right mr-1">
                                             <button class="btn btn-outline-info dropdown-toggle" type="button"
                                                 id="semuaprodukfilter" data-toggle="dropdown" aria-haspopup="true"
@@ -122,8 +137,7 @@
                                 <label for="">Produk</label>
                                 <input type="hidden" name="produk_id" id="produk_idd">
                                 <select name="produk_id" id="produk_id" class="form-control produk-add">
-                                    <option value="">Buku</option>
-                                    <option value="">Bolpoin</option>
+
                                 </select>
                             </div>
                         </div>
@@ -140,9 +154,8 @@
                         </div>
                         <div class="col">
                             <label for="">Satuan</label>
-                            <select name="satuan_id" id="satuan_id" class="form-control">
-                                <option value="">mm</option>
-                                <option value="">unit</option>
+                            <select name="satuan_id" id="satuan_id" class="form-control satuan_id">
+                                <option selected></option>
                             </select>
                         </div>
                     </div>
@@ -277,68 +290,87 @@
                         </tbody>
 
                     </table> --}}
-                <div class="card card-primary card-outline card-outline-tabs">
-                    <div class="card-header p-0 border-bottom-0">
-                        <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill"
-                                    href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
-                                    aria-selected="true">Belum Digunakan</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
-                                    href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile"
-                                    aria-selected="false">Sudah Digunakan</a>
-                            </li>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="tab-content" id="custom-tabs-four-tabContent">
-                            <div class="tab-pane fade active show" id="custom-tabs-four-home" role="tabpanel"
-                                aria-labelledby="custom-tabs-four-home-tab">
-                                <form action="" id="noseriForm" name="noseriForm">
-                                    <table class="table scan-produk">
+                    <div class="card card-primary card-outline card-outline-tabs">
+                        <div class="card-header p-0 border-bottom-0">
+                            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                                <li class="nav-item">
+                                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
+                                        aria-selected="true">Belum Digunakan</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-profile" role="tab"
+                                        aria-controls="custom-tabs-four-profile" aria-selected="false">Sudah
+                                        Digunakan</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-wait-approved-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-wait-approved" role="tab"
+                                        aria-controls="custom-tabs-four-wait-approved" aria-selected="false">Menunggu Persetujuan</a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="card-body">
+                            <div class="tab-content" id="custom-tabs-four-tabContent">
+                                <div class="tab-pane fade active show" id="custom-tabs-four-home" role="tabpanel"
+                                    aria-labelledby="custom-tabs-four-home-tab">
+                                    <form action="" id="noseriForm" name="noseriForm">
+                                        <input type="hidden" name="action_by" id="actionby" value="{{ Auth::user()->id }}">
+                                        <table class="table scan-produk">
+                                            <thead>
+                                                <tr>
+                                                    <th><input type="checkbox" id="head-cb"></th>
+                                                    <th>No. Seri</th>
+                                                    <th>Nomor</th>
+                                                    <th>Layout</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                            </tbody>
+                                        </table>
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
+                                    aria-labelledby="custom-tabs-four-profile-tab">
+                                    <table class="table scan-produk1">
                                         <thead>
                                             <tr>
-                                                <th><input type="checkbox" id="head-cb"></th>
+                                                <th><input type="checkbox" id="head-cb1"></th>
                                                 <th>No. Seri</th>
+                                                <th>Nomor</th>
+                                                <th>Digunakan</th>
                                                 <th>Layout</th>
-                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody>
-
                                         </tbody>
-
                                     </table>
-                            </div>
-                            <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel"
-                                aria-labelledby="custom-tabs-four-profile-tab">
-                                <table class="table scan-produk1">
+                                </div>
+                                <div class="tab-pane fade" id="custom-tabs-four-wait-approved" role="tabpanel"
+                                aria-labelledby="custom-tabs-four-wait-approved-tab">
+                                <table class="table scan-produk2">
                                     <thead>
                                         <tr>
                                             <th>No</th>
-                                            <th>No. Seri</th>
-                                            <th>Digunakan</th>
-                                            <th>Layout</th>
+                                            <th>No. Seri Lama</th>
+                                            <th>No. Seri Baru</th>
+                                            <th>Permintaan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-
                                     </tbody>
-
                                 </table>
+                            </div>
                             </div>
                         </div>
                     </div>
-
-                </div>
-
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary" id="ubahSeri">Simpan</button>
+                <button type="button" class="btn btn-primary simpanSeri" id="simpanSeriBelumDigunakan">Simpan</button>
                 <button type="button" class="btn btn-success" data-toggle="modal" data-target=".edit-stok">Ubah
                     Layout</button>
+                <button type="button" class="btn btn-danger hapusSeri">Hapus</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
             </div>
             </form>
@@ -358,9 +390,7 @@
                             <b>Produk</b>
                             <p id="namaa">Ambulatory</p>
                         </div>
-                        {{-- <div class="col">
-                            <b>Nomor SO</b><p>8457938475938475</p>
-                        </div> --}}
+
                     </div>
                 </h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -404,6 +434,56 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
                 <button type="button" class="btn btn-primary" onclick="ubahData()">Simpan</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade import-seri" id="" role="dialog" aria-labelledby="modelTitleId">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Unggah File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form name="formImport" id="formImport" method="post" enctype="multipart/form-data">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Noseri</label>
+                        <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".xlsx">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-outline-info"><i class="fas fa-eye"> Preview</i></button>
+                    </div>
+            </form>
+        </div>
+        <form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">
+            <div class="modal-footer" id="csv_data_file">
+
+            </div>
+            <div class="modal-footer justify-content-between" id="footer-btn">
+                <p id="bodyNoseri">Noseri Yang Terdaftar:
+                    <br>
+                    <span id="existNoseri"></span>
+                </p>
+                <button type="submit" class="btn btn-default float-right btnImport"><i class="fas fa-upload">
+                        Unggah</i></button>
+            </div>
+        </form>
+    </div>
+</div>
+</div>
+
+<div class="modal fade notice" tabindex="-1" role="dialog" aria-labelledby="mySmallModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-body text-center">
+                <h5 class="">Sebelum Mengunggah Noseri</h5>
+                 <p>Pastikan Noseri Sudah Unik atau Tidak Ada Warna Dalam Template</p>
+                <button type="button" class="btn btn-primary btn-lg btnNext"> OK</button>
             </div>
         </div>
     </div>
@@ -467,9 +547,11 @@
         $('.modal-view').modal('show');
     });
     $(document).ready(function () {
-        $('.produk-add ').select2();
+        $('.produk-add').select2({
+            placeholder: "Choose ...",
+            allowClear: true
+        });
         $('.layout-add').select2();
-
         $("#head-cb").on('click', function () {
             var isChecked = $("#head-cb").prop('checked')
             // $('.cb-child').prop('checked', isChecked)
@@ -479,6 +561,50 @@
                 .to$()
                 .find('input[type=checkbox]')
                 .prop('checked', isChecked);
+
+            if (isChecked) {
+                $('.scan-produk').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=text]')
+                .prop('disabled', false);
+            } else {
+                $('.scan-produk').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=text]')
+                .prop('disabled', true);
+            }
+
+        });
+
+        $("#head-cb1").on('click', function () {
+            var isChecked = $("#head-cb1").prop('checked')
+            // $('.cb-child').prop('checked', isChecked)
+            $('.scan-produk1').DataTable()
+                .column(0)
+                .nodes()
+                .to$()
+                .find('input[type=checkbox]')
+                .prop('checked', isChecked);
+
+            if (isChecked) {
+                $('.scan-produk1').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=text]')
+                .prop('disabled', false);
+            } else {
+                $('.scan-produk1').DataTable()
+                .column(1)
+                .nodes()
+                .to$()
+                .find('input[type=text]')
+                .prop('disabled', true);
+            }
         });
 
         $.ajax({
@@ -518,12 +644,37 @@
     $('.viewStock').click(function (e) {
         $('.modalViewStock').modal('show');
     });
-    $('#satuan_id').select2();
+    $('.satuan_id').select2({
+        placeholder: "Choose...",
+        allowClear: true
+    });
+
+    // hidden hapus
+    $('#custom-tabs-four-profile-tab').click(function () {
+        $('.simpanSeri').prop('disabled', false);
+        $('.hapusSeri').prop('disabled', true);
+        $('.simpanSeri').removeAttr('id');
+        $('.simpanSeri').attr('id', 'simpanSeriSudahDigunakan');
+    });
+
+    $('#custom-tabs-four-home-tab').click(function () {
+        $('.simpanSeri').prop('disabled', false);
+        $('.hapusSeri').prop('disabled', false);
+        $('.simpanSeri').removeAttr('id');
+        $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
+    });
+
+    $('#custom-tabs-four-wait-approved-tab').click(function () {
+        $('.hapusSeri').prop('disabled', true);
+        $('.simpanSeri').prop('disabled', true);
+    });
 
 </script>
 
 {{-- data --}}
 <script type="text/javascript">
+    $('#footer-btn').hide()
+    $('#bodyNoseri').hide()
     var authid = $('#authid').val();
     // initial
     $.ajaxSetup({
@@ -532,28 +683,26 @@
         }
     });
 
-    $('#alkes').click(function () {
-        if ($(this).prop('checked') == true) {
-            datatable.column(5).search($(this).val()).draw();
-        } else {
-            datatable.column(5).search('').draw();
-        }
+    $('#downloadTemplate').click(function () {
+        // console.log('download');
+        window.location = window.location.origin + '/api/v2/gbj/template_noseri'
     })
 
-    $('#sarkes').click(function () {
-        if ($(this).prop('checked') == true) {
-            datatable.column(5).search($(this).val()).draw();
-        } else {
-            datatable.column(5).search('').draw();
-        }
+    $('#importTemplate').click(function () {
+        $('.notice').modal('show')
     })
 
-    $('#water').click(function () {
-        if ($(this).prop('checked') == true) {
-            datatable.column(5).search($(this).val()).draw();
-        } else {
-            datatable.column(5).search('').draw();
-        }
+    $('.btnNext').click(function () {
+        $('.notice').modal('hide')
+        $('#template_noseri').val('');
+        $('.import-seri').modal('show');
+    })
+
+    $('.import-seri').on('hidden.bs.modal', function () {
+        $('#template_noseri').val('');
+        $('#footer-btn').hide()
+        $('#csv_data_file').empty()
+
     })
 
     // load data
@@ -632,9 +781,37 @@
             }
         ],
         language: {
-            search: "Cari:"
+            search: "Cari:",
+            processing: `<span class='fa-stack fa-md'>\n\
+                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                       </span>&emsp;Mohon Tunggu ...`,
         }
     });
+
+    $('#alkes').click(function () {
+        if ($(this).prop('checked') == true) {
+            datatable.column(6).search($(this).val()).draw();
+        } else {
+            datatable.column(6).search('').draw();
+        }
+    })
+
+    $('#sarkes').click(function () {
+        if ($(this).prop('checked') == true) {
+            datatable.column(6).search($(this).val()).draw();
+        } else {
+            datatable.column(6).search('').draw();
+        }
+    })
+
+    $('#water').click(function () {
+        if ($(this).prop('checked') == true) {
+            datatable.column(6).search($(this).val()).draw();
+        } else {
+            datatable.column(6).search('').draw();
+        }
+    })
+
 
     // load produk
     $.ajax({
@@ -645,7 +822,7 @@
             if (res) {
                 console.log(res);
                 $("#produk_id").empty();
-                $("#produk_id").append('<option value="">Pilih Item</option>');
+                $("#produk_id").append('<option selected></option>');
                 $.each(res, function (key, value) {
                     $("#produk_id").append('<option value="' + value.id + '">' + value.nama +
                         '</option');
@@ -664,14 +841,14 @@
         success: function (res) {
             if (res) {
                 console.log(res);
-                $("#satuan_id").empty();
-                $("#satuan_id").append('<option value="">Pilih Item</option>');
+                $(".satuan_id").empty();
+                $(".satuan_id").append('<option selected></option>');
                 $.each(res, function (key, value) {
-                    $("#satuan_id").append('<option value="' + value.id + '">' + value.nama +
+                    $(".satuan_id").append('<option value="' + value.id + '">' + value.nama +
                         '</option');
                 });
             } else {
-                $("#satuan_id").empty();
+                $(".satuan_id").empty();
             }
         }
     });
@@ -758,6 +935,7 @@
         var actionType = $('#Submitmodalcreate').val();
         $('#Submitmodalcreate').html('Sending..');
         var formData = new FormData(this);
+        console.log(formData.get('produk_id'));
         $.ajax({
             type: 'POST',
             url: "/api/gbj/create",
@@ -766,21 +944,104 @@
             contentType: false,
             processData: false,
             success: (data) => {
-                $('#produkForm').trigger('reset');
-                $('#modal-create').modal('hide');
-                $('#Submitmodalcreate').html('Kirim');
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Data Berhasil Disimpan',
-                    showConfirmButton: false,
-                    timer: 1500
-                });
-                $('.datatable').DataTable().ajax.reload();
-                location.reload();
+                if (data.error == true) {
+                    $('#produkForm').trigger('reset');
+                    // $('#modal-create').modal('hide');
+                    $('#Submitmodalcreate').html('Kirim');
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.msg,
+                    })
+                } else {
+                    $('#produkForm').trigger('reset');
+                    $('#modal-create').modal('hide');
+                    $('#Submitmodalcreate').html('Kirim');
+                    Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: 'Data Berhasil Disimpan',
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                    $('.datatable').DataTable().ajax.reload();
+                    location.reload();
+                }
             }
         });
     });
+
+    // $('body').on('submit', '#formImport', function (e) {
+    $('#formImport').on('submit', function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: "/api/v2/gbj/import-noseri",
+            method: "post",
+            data: new FormData(this),
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function (data) {
+                $('#csv_data_file').html(data.data);
+                if (data.error == true) {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Oops...',
+                        text: data.msg,
+                    }).then((result) => {
+                        if (result.value) {
+                            $('#bodyNoseri').show()
+                            $('#existNoseri').html(data.noseri)
+                            $('.btnImport').removeClass('btn-default')
+                            $('.btnImport').addClass('btn-danger')
+                            $('.btnImport').prop('disabled', true);
+                        }
+                    });
+                } else {
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: data.msg,
+                    }).then((result) => {
+                        if (result.value) {
+                            $('#bodyNoseri').hide()
+                            if ($('.btnImport').hasClass('btn-default')) {
+                                $('.btnImport').removeClass('btn-default')
+                            } else {
+                                $('.btnImport').removeClass('btn-danger')
+                            }
+                            $('.btnImport').addClass('btn-success')
+                            $('.btnImport').prop('disabled', false);
+                        }
+                    });
+                }
+                $('#footer-btn').show()
+            }
+        })
+    })
+
+    $('#formStoreImport').on('submit', function(e){
+        e.preventDefault();
+        $.ajax({
+            url: "/api/v2/gbj/store-importseri",
+            method: "post",
+            data: new FormData(this),
+            dataType: "json",
+            contentType: false,
+            cache: false,
+            processData: false,
+            success: function(data) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil',
+                    text: data.msg,
+                }).then((res) => {
+                    location.reload()
+                })
+            }
+        })
+    })
 
     function select_layout() {
         $.ajax({
@@ -795,6 +1056,60 @@
             }
         });
     }
+
+    $('.hapusSeri').click(function(e){
+        const cekid = [];
+        const layout = [];
+        let a = $('.scan-produk').DataTable().column(0).nodes()
+            .to$().find('input[type=checkbox]:checked');
+        $(a).each(function (index, elm) {
+            cekid.push($(elm).val());
+            layout.push($(elm).parent().next().children().val());
+        });
+        // console.log(layout);
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/v2/gbj/delete-noseri',
+                    type: 'post',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        noseriid: cekid,
+                        actionby: $('#actionby').val()
+                    },
+                    dataType: 'json',
+                    success: function (res) {
+                        if (res.error == true) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: res.msg,
+                            })
+                        } else {
+                            Swal.fire(
+                                'Deleted!',
+                                res.msg,
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            })
+                        }
+                    }
+                });
+                }
+            })
+    })
+
+
     var title = $(this).parent().prev().prev().prev().prev().html();
     // modal noseri
     $(document).on('click', '.stokmodal', function () {
@@ -819,6 +1134,7 @@
                 {
                     data: 'seri'
                 },
+                {data: 'nomor'},
                 {
                     data: 'Layout'
                 },
@@ -826,9 +1142,10 @@
                     data: 'aksi'
                 }
             ],
-            // "columnDefs": [
-            //     { "width": "5%", "targets": 0},
-            // ],
+            "aoColumnDefs": [
+                { "bSearchable": true, "bVisible": false, "aTargets": [ 2 ] },
+                // { "bVisible": false, "aTargets": [ 3 ] }
+            ]
         });
 
         $('.scan-produk1').DataTable({
@@ -842,23 +1159,72 @@
                 url: '/api/gbj/noseri-done/' + id,
             },
             columns: [{
-                    data: 'DT_RowIndex'
+                    data: 'ids'
                 },
                 {
                     data: 'seri'
                 },
-                {data: 'used'},
+                {data: 'nomor'},
+                {
+                    data: 'used'
+                },
                 {
                     data: 'Layout'
                 }
             ],
-            // "columnDefs": [
-            //     { "width": "5%", "targets": 0},
-            // ],
+            "aoColumnDefs": [
+                { "bSearchable": true, "bVisible": false, "aTargets": [ 2 ] },
+                // { "bVisible": false, "aTargets": [ 3 ] }
+            ]
+        });
+
+        $('.scan-produk2').DataTable({
+            destroy: true,
+            "ordering": false,
+            "autoWidth": false,
+            "lengthChange": false,
+            processing: true,
+            serverSide: false,
+            pageLength: 5 ,
+            ajax: {
+                url: '/api/v2/gbj/list-waiting-noseri',
+                type: 'post',
+                data: {
+                    gbjid: id
+                },
+            },
+            columns: [{
+                    data: 'DT_RowIndex'
+                },
+                {data: 'noseri_lama'},
+
+                {
+                    data: 'noseri'
+                },
+                {
+                    data: 'action'
+                },
+            ],
         });
 
         $('.daftar-stok').modal('show');
     });
+
+    $('.scan-produk').on('click', '.cb-child', function () {
+        if($(this).is(':checked')){
+            $(this).parent().next().children().attr('disabled', false);
+        }else{
+            $(this).parent().next().children().attr('disabled', true);
+        }
+    })
+
+    $('.scan-produk1').on('click', '.cb-child1', function () {
+        if($(this).is(':checked')){
+            $(this).parent().next().children().attr('disabled', false);
+        }else{
+            $(this).parent().next().children().attr('disabled', true);
+        }
+    })
 
     // modal history
     $(document).on('click', '.viewStock', function () {
@@ -1086,6 +1452,115 @@
         console.log("noseri", arr.length != datalength);
 
     })
+
+    $(document).on('click', '#simpanSeriSudahDigunakan', function () {
+        let seri = {};
+        const cekid = [];
+        const serii = [];
+        const ori = [];
+        let a = $('.scan-produk1').DataTable().column(0).nodes()
+            .to$().find('input[type=checkbox]:checked');
+        $(a).each(function (index, elm) {
+            cekid.push($(elm).val());
+            serii.push($(elm).parent().next().children()[1].value)
+        });
+
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, change it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/v2/gbj/edit-noseri',
+                        type: 'post',
+                        data: {
+                            "_token": "{{ csrf_token() }}",
+                            data: cekid,
+                            new: serii,
+                            actionby: $('#actionby').val()
+                        },
+                        dataType: 'json',
+                        success: function(res) {
+                            if (res.error == true) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Oops...',
+                                    text: res.msg,
+                                })
+                            } else {
+                                Swal.fire(
+                                    'Updated!',
+                                    res.msg,
+                                    'success'
+                                ).then(function () {
+                                    location.reload();
+                                })
+                            }
+                        }
+                    })
+                }
+            })
+    });
+
+    $(document).on('click', '#simpanSeriBelumDigunakan', function () {
+        let seri = {};
+        const cekid = [];
+        const serii = [];
+        const ori = [];
+        let a = $('.scan-produk').DataTable().column(0).nodes()
+            .to$().find('input[type=checkbox]:checked');
+        $(a).each(function (index, elm) {
+            cekid.push($(elm).val());
+            serii.push($(elm).parent().next().children()[1].value)
+        });
+
+        Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, change it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: '/api/v2/gbj/edit-noseri',
+                    type: 'post',
+                    data: {
+                        "_token": "{{ csrf_token() }}",
+                        data: cekid,
+                        new: serii,
+                        actionby: $('#actionby').val()
+                    },
+                    dataType: 'json',
+                    success: function(res) {
+                        if (res.error == true) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: res.msg,
+                            })
+                        } else {
+                            Swal.fire(
+                                'Updated!',
+                                res.msg,
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
+    });
 
 </script>
 @stop

@@ -19,6 +19,7 @@
             <thead>
                 <tr>
                     <th>No</th>
+                    <th>Nomor BPPB</th>
                     <th>Tanggal Masuk</th>
                     <th>Produk</th>
                     <th>Jumlah</th>
@@ -140,6 +141,7 @@
                 data: 'DT_RowIndex',
                 name: 'DT_RowIndex'
             },
+            {data: 'bppb'},
             {
                 data: 'tgl_masuk'
             },
@@ -157,7 +159,10 @@
                 [1, 'desc']
             ],
         "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
         }
     });
 

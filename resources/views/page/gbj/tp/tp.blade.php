@@ -151,9 +151,11 @@
                                                 <th>Dari/Ke</th>
                                                 <th>Tujuan</th>
                                                 <th>Nomor SO</th>
+                                                <th>Nomor PO</th>
                                                 <th>Produk</th>
                                                 <th>Jumlah</th>
-                                                <td>Aksi</td>
+                                                <th>Status</th>
+                                                <th>Aksi</th>
                                             </tr>
                                         </thead>
                                         <tbody></tbody>
@@ -219,6 +221,7 @@
                                                 <th>Nomor PO</th>
                                                 <th>Customer</th>
                                                 <th>Batas Transfer</th>
+                                                <th>Status</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -366,8 +369,11 @@
             destroy: true,
             processing: true,
             autoWidth: false,
+            deferRender: true,
+            searching: false,
             ajax: {
                 url: "/api/transaksi/all",
+                // type: "post",
             },
             columns: [
                 { data: 'date_in', name: 'date_in'},
@@ -375,14 +381,20 @@
                 { data: 'divisi', name: 'divisi'},
                 { data: 'tujuan', name: 'tujuan'},
                 { data: 'so', name: 'so'},
+                { data: 'po', name: 'po'},
                 { data: 'product', name: 'product'},
                 { data: 'jumlah', name: 'jumlah'},
+                {data: 'logs'},
                 { data: 'action', name: 'action'},
             ],
             dom: 'Bfrtip',
             "language": {
-                "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                // "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
             },
+            order: [[0, 'desc']],
         });
      // Tanggal Masuk
      $('#kt_datepicker_1').daterangepicker({
@@ -456,7 +468,10 @@
                 { data: 'action', name: 'action'},
             ],
             "language": {
-                    "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                    // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                    processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
             },
         });
         $(document).on("click", "#semua-produk-tab", function () {
@@ -525,6 +540,7 @@
             {data: 'nopo'},
             {data: 'customer'},
             {data: 'tgl_kontrak'},
+            {data: 'logs'},
             {data: function(data) {
                 if (userid != 2) {
                     // console.log(data)
@@ -538,6 +554,11 @@
 
             }}
         ],
+        language: {
+            processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
+        }
     });
     // Sales Order Cetak
     $('#gudang-salesorder-search').on('keyup', function() {

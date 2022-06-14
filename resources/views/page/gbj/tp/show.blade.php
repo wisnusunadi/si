@@ -74,6 +74,11 @@
 <div class="content-header">
     <div class="container-fluid">
       <div class="row mb-2">
+        <div class="col-sm-1">
+            {{-- <a href="javascript:;" onclick = "history.back()">Redirect back to Page 1</a> --}}
+            {{-- <a href="javascript:history.back()"><i class="fas fa-arrow-left"></i></a> --}}
+            <button class="btn btn-secondary btnBack" type="button"><i class="fas fa-arrow-left"></i></button>
+        </div>
         <div class="col-sm-6">
           <h4 class="m-0">Detail Riwayat Transaksi {{ $header->produk->nama }} {{ $header->nama }}</h1>
         </div><!-- /.col -->
@@ -177,11 +182,13 @@
                                 <thead>
                                     <tr>
                                         <th>Nomor SO</th>
+                                        <th>Nomor PO</th>
                                         <th>Tanggal Masuk</th>
                                         <th>Tanggal Keluar</th>
                                         <th>Dari/Ke</th>
                                         <th>Tujuan</th>
                                         <th>Jumlah</th>
+                                        <th>Status</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -315,6 +322,15 @@
     })
 
     $(document).ready(function () {
+        // disable button back browser
+        window.history.pushState(null, "", window.location.href);
+        window.onpopstate = function() {
+            window.history.pushState(null, "", window.location.href);
+        };
+
+        $('.btnBack').click(function() {
+            window.location.href = '{{ url('gbj/tp')}}'
+        })
         var id = $('#ids').val();
         console.log(id);
         var table = $('.tableProdukView').dataTable({
@@ -328,11 +344,13 @@
             },
             columns: [
                 { data: 'so', name: 'so'},
+                {data: 'po'},
                 { data: 'date_in', name: 'date_in'},
                 { data: 'date_out', name: 'date_out'},
                 { data: 'divisi', name: 'divisi'},
                 { data: 'tujuan', name: 'tujuan'},
                 { data: 'jumlah', name: 'jumlah'},
+                {data: 'logs'},
                 { data: 'action', name: 'action'},
             ],
             "language": {

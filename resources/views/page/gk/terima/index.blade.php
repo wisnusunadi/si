@@ -695,6 +695,7 @@
                             showConfirmButton: false,
                             timer: 1500
                         }).then(function () {
+
                             // const obj1 = {
                             //         noseri: value.childNodes[0].firstChild.value,
                             //         kerusakan: value.childNodes[1].firstChild.value,
@@ -719,7 +720,8 @@
                             unit_arr.push(obj1);
                             seri_unit[c] = unit_arr;
                             unit_arr = [];
-                            console.log("unit"+ unit_arr);
+                            // console.log("unit"+ unit_arr);
+                            // console.log(res);
                             $('.modalAddUnit').modal('hide');
                         })
                     } else {
@@ -728,6 +730,7 @@
                             title: 'Oops...',
                             text: res.error,
                         })
+                        // console.log(res);
                     }
                 }
             })
