@@ -1065,20 +1065,17 @@ class SparepartController extends Controller
     // cek
     function cekNoseriTerima(Request $request)
     {
-        try {
-            $noseri = GudangKarantinaNoseri::whereIn('noseri', $request->noseri)->where('is_ready',1)->get();
-            $data = GudangKarantinaNoseri::whereIn('noseri', $request->noseri)->where('is_ready',1)->get()->count();
-            $dataseri = [];
-            if ($data <= 1) {
-                foreach ($noseri as $item) {
-                    array_push($dataseri, $item->noseri);
-                }
-                return response()->json(['error' => 'Nomor seri ' . implode(', ', $dataseri) . ' sudah terdaftar, Pastikan Nomor seri sebelumnya sudah keluar']);
-            } else {
-                return response()->json(['msg' => 'Nomor seri tersimpan']);
-            }
-        } catch (\Exception $e) {
-            return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
+        $noseri = GudangKarantinaNoseri::whereIn('noseri', $request->noseri)->where('is_ready',1)->where('status', 1)->get();
+        $data = GudangKarantinaNoseri::whereIn('noseri', $request->noseri)->where('is_ready',0)->get()->count();
+        // $dataseri = [];
+        if ($data > 0) {
+            return response()->json(['error' => 'Nomor seri sudah terdaftar, Pastikan Nomor seri sebelumnya sudah keluar']);
+        } else {
+            return response()->json(['msg' => 'Nomor seri tersimpan']);
+            // foreach ($noseri as $item) {
+            //     array_push($dataseri, $item->noseri);
+            // }
+            // return response()->json(['error' => 'Nomor seri ' . implode(', ', $dataseri) . ' sudah terdaftar']);
         }
     }
 
