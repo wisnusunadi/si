@@ -3386,20 +3386,24 @@ class PenjualanController extends Controller
         $qc = 0;
         $log = 0;
         $dc = 0;
-        $gudang = Pesanan::whereIn('id', function($q){
-                    $q->selectRaw('pesanan.id')
-                    ->from('pesanan')
-                    ->havingRaw("(select COUNT(t_gbj_noseri.id)
-                        from t_gbj_noseri
-                        left join t_gbj_detail on t_gbj_detail.id = t_gbj_noseri.t_gbj_detail_id
-                        left join t_gbj on t_gbj.id = t_gbj_detail.t_gbj_id
-                        where t_gbj.pesanan_id = pesanan.id)
-                        < (select (SUM(SUM(dpp.jumlah) * dp.jumlah)) from detail_penjualan_produk dpp, penjualan_produk pp, detail_pesanan dp where dpp.penjualan_produk_id = pp.id AND pp.id = dp.penjualan_produk_id AND dp.pesanan_id = pesanan.id)");
-                  })->groupBy('pesanan_id')->pluck('pesanan_id')->count();
-
 
         $penj = Pesanan::whereNull('so')->where('log_id', '7')->count();
-        // $gudang = Pesanan::DoesntHave('TFProduksi')->get()->count();
+        $gudang = Pesanan::whereIn('log_id', ['9', '6'])->count();
+
+        $prd_qc = Pesanan::whereIn('id', function($q) {
+            $q->select('pesanan.id')
+            ->from('pesanan')
+            ->leftJoin('t_gbj', 't_gbj.pesanan_id', '=', 'pesanan.id')
+            ->leftJoin('t_gbj_detail', 't_gbj_detail.t_gbj_id', '=', 't_gbj.id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+            ->groupBy('pesanan.id')
+            ->havingRaw('count(t_gbj_noseri.id) > (select count(noseri_detail_pesanan.id)
+            from noseri_detail_pesanan
+            left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+            left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
+            where detail_pesanan.pesanan_id = pesanan.id)');
+        })->whereNotIn('log_id', ['7', '9', '10'])->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])->get();
+
         $qc = Pesanan::DoesntHave('DetailPesanan.DetailPesananProduk.Noseridetailpesanan')->get()->count();
         $log = Pesanan::DoesntHave('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik')->get()->count();
         return view('page.penjualan.dashboard', ['belum_so' => $penj, 'so_belum_gudang' => $gudang, 'so_belum_qc' => $qc, 'so_belum_logistik' => $log]);
