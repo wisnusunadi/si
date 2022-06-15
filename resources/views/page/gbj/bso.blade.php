@@ -619,7 +619,7 @@
             },
         });
         let s = $('.modal-scan').modal('show');
-        console.log("dataTampungSeri", dataTampungSeri);
+        
         $('.modal-scan').on('shown.bs.modal', function () {
             $('#scan_filter').addClass('hidden');
         });
@@ -652,6 +652,16 @@
                                         console.log("ada")
                                     }else{
                                         prd1[dpp][nomorseri].push(datas.ids);
+                                        if (prd1[dpp][nomorseri].length > max) {
+                                            Swal.fire({
+                                                title: 'Gagal',
+                                                text: 'Jumlah Nomor Seri Melebihi Batas',
+                                                type: 'error',
+                                                confirmButtonText: 'Ok'
+                                            })
+                                            prd1[dpp][nomorseri].pop();
+                                            checkeds.prop('checked', false);
+                                        }
                                     }
                             }
                         }
@@ -659,8 +669,6 @@
                 }
                 mytable.search('').draw();
             }
-            console.log("tmp", tmp);
-        console.log("prd1", prd1);
         });
         // scan produk dengan alat
         $('.barcodeScanAlat').on('keyup', function (e) {
@@ -698,8 +706,6 @@
                     mytable.search('').draw();
                 }
             }
-            console.log("tmp", tmp);
-        console.log("prd1", prd1);
         });
     });
     $('.scan-produk').on('click', '.cb-child',function (){
@@ -724,8 +730,6 @@
                 }
             }
         }
-        console.log("tmp", tmp);
-        console.log("prd1", prd1);
     })
     $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();
