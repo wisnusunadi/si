@@ -979,12 +979,12 @@ class SparepartController extends Controller
     function cekNoseriTerima(Request $request)
     {
         $noseri = GudangKarantinaNoseri::whereIn('noseri', $request->noseri)->where('is_ready',1)->where('status', 1)->get();
-        $data = GudangKarantinaNoseri::whereIn('noseri', $request->noseri)->where('is_ready',1)->where('status', 1)->get()->count();
+        $data = GudangKarantinaNoseri::whereIn('noseri', $request->noseri)->where('is_ready',1)->get()->count();
         // $dataseri = [];
         if ($data > 0) {
-            return response()->json(['msg' => 'Nomor seri tersimpan']);
-        } else {
             return response()->json(['error' => 'Nomor seri sudah terdaftar, Pastikan Nomor seri sebelumnya sudah keluar']);
+        } else {
+            return response()->json(['msg' => 'Nomor seri tersimpan']);
             // foreach ($noseri as $item) {
             //     array_push($dataseri, $item->noseri);
             // }
