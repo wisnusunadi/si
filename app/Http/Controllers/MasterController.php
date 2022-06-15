@@ -258,9 +258,9 @@ class MasterController extends Controller
         $divisi = $divisi_id;
         $x = explode(',', $value);
         if ($value == 0 || $value == 'kosong') {
-            $data = Customer::WhereNotIN('id', ['484'])->orderby('nama', 'ASC')->get();
+            $data = Customer::with('provinsi')->WhereNotIN('id', ['484'])->orderby('nama', 'ASC')->get();
         } else {
-            $data = Customer::WhereNotIN('id', ['484'])->whereHas('Provinsi', function ($q) use ($x) {
+            $data = Customer::with('provinsi')->WhereNotIN('id', ['484'])->whereHas('Provinsi', function ($q) use ($x) {
                 $q->whereIN('status', $x);
             })->get();
         }
@@ -356,11 +356,12 @@ class MasterController extends Controller
                 return $data->nama_alias;
             })
             ->addColumn('jenis_paket', function ($data) {
-                $array = [
-                    '<span class="badge purple-text">Ekatalog</span>','<span class="badge blue-text">Non Ekatalog</span>'
-                ];
-                shuffle($array);
-                return $array[0];
+                if($data->status == "ekat"){
+                    return '<span class="badge purple-text">Ekatalog</span>';
+                }
+                else{
+                    return '<span class="badge blue-text">Non Ekatalog</span>';
+                }
             })
             ->addColumn('no_akd', function ($data) {
                 $id = $data->id;
@@ -755,7 +756,6 @@ class MasterController extends Controller
         ]);
 
         if ($c) {
-            // Alert::success('Berhasil', 'Berhasil menambahkan data');
             return redirect()->back()->with('success', 'success');
         } else {
             return redirect()->back()->with('error', 'error');
@@ -779,11 +779,17 @@ class MasterController extends Controller
         //     ]
         // );
         $harga_convert =  str_replace('.', "", $request->harga);
-
+        $status = "";
+        if($request->jenis_paket == "ekatalog"){
+            $status = "ekat";
+        }else{
+            $status = NULL;
+        }
         $PenjualanProduk = PenjualanProduk::create([
             'nama' => $request->nama_paket,
             'nama_alias' => $request->nama_alias,
-            'harga' => $harga_convert
+            'harga' => $harga_convert,
+            'status' => $status
         ]);
         $bool = true;
         if ($PenjualanProduk) {
@@ -817,7 +823,7 @@ class MasterController extends Controller
         //     $q->where('id', $id);
         // })->with('PenjualanProduk')->get();
 
-        return view("page.penjualan.produk.edit", ['penjualanproduk' => $penjualanproduk,]);
+        return view("page.penjualan.produk.edit", ['penjualanproduk' => $penjualanproduk]);
     }
 
 
@@ -960,9 +966,16 @@ class MasterController extends Controller
     public function update_penjualan_produk(Request $request, $id)
     {
         $harga_convert =  str_replace(['.', ','], "", $request->harga);
+        $status = "";
+        if($request->jenis_paket == "ekatalog"){
+            $status = "ekat";
+        }else{
+            $status = NULL;
+        }
         $PenjualanProduk = PenjualanProduk::find($id);
         $PenjualanProduk->nama_alias = $request->nama_alias;
         $PenjualanProduk->nama = $request->nama_paket;
+        $PenjualanProduk->status = $status;
         $PenjualanProduk->harga = $harga_convert;
         $PenjualanProduk->save();
 
@@ -1124,17 +1137,17 @@ class MasterController extends Controller
     public function select_penjualan_produk_param(Request $request, $value)
     {
         if($value == 'ekatalog')
-    {
-        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
-        ->where('status', 'ekat')
-        ->orderby('nama', 'ASC')
-        ->get();
-    }else{
-        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
-        ->orderby('nama', 'ASC')
-        ->get();
-    }
-        echo json_encode($data);
+        {
+            $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->where('status', 'ekat')
+            ->orderby('nama', 'ASC')
+            ->get();
+        }else{
+            $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')
+            ->get();
+        }
+            echo json_encode($data);
     }
     public function check_no_akd($id, $val)
     {

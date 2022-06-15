@@ -210,7 +210,8 @@
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
-            columns: [{
+            columns: [
+                {
                     data: 'DT_RowIndex',
                     className: 'align-center nowrap-text',
                     orderable: false,
@@ -250,89 +251,96 @@
                 }
             ]
 
-        })
+        });
 
-        var selesaitable = $('#selesaitable').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '/api/logistik/so/data/selesai',
-                'dataType': 'json',
-                'type': 'GET',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-            },
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'so',
-                    className: 'align-center nowrap-text'
-                },
-                {
-                    data: 'no_po',
-                    className: 'align-center nowrap-text'
-                },
-                {
-                    data: 'batas',
-                    className: 'align-center nowrap-text',
-                },
-                {
-                    data: 'tgl_awal',
-                    className: 'align-center nowrap-text',
-                },
-                {
-                    data: 'tgl_akhir',
-                    className: 'align-center nowrap-text',
-                },
+        $(document).on('click', '#pills-selesai_kirim-tab', function(){
+            selesaitable();
+        });
 
-                {
-                    data: 'nama_customer',
-                    className: 'align-center minimizechar'
+        function selesaitable(){
+            var selesaitable = $('#selesaitable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/so/data/selesai',
+                    'dataType': 'json',
+                    'type': 'GET',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
                 },
-                // {
-                //     data: 'alamat',
-                //     className: 'align-center minimizechar'
-                // },
-                {
-                    data: 'ket',
-                    className: 'align-center minimizechar',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'button',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }
-            ]
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'align-center nowrap-text',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'so',
+                        className: 'align-center nowrap-text'
+                    },
+                    {
+                        data: 'no_po',
+                        className: 'align-center nowrap-text'
+                    },
+                    {
+                        data: 'batas',
+                        className: 'align-center nowrap-text',
+                    },
+                    {
+                        data: 'tgl_awal',
+                        className: 'align-center nowrap-text',
+                    },
+                    {
+                        data: 'tgl_akhir',
+                        className: 'align-center nowrap-text',
+                    },
+                    {
+                        data: 'nama_customer',
+                        className: 'align-center minimizechar'
+                    },
+                    // {
+                    //     data: 'alamat',
+                    //     className: 'align-center minimizechar'
+                    // },
+                    {
+                        data: 'ket',
+                        className: 'align-center minimizechar',
+                        orderable: false,
+                        searchable: false
+                    },{
+                        data: 'button',
+                        className: 'align-center nowrap-text',
+                        orderable: false,
+                        searchable: false
+                    }
+                ]
+            });
+        }
 
-        })
 
         $('#filter').submit(function() {
             var values = [];
             $("input:checked").each(function() {
                 values.push($(this).val());
             });
-
             if (values != 0) {
                 var x = values;
-
             } else {
-                var x = ['semua']
+                var x = ['semua'];
             }
-
             $('#showtable').DataTable().ajax.url('/logistik/so/data/' + x).load();
             return false;
         });
+
+        function produktable()
+        {
+            $('#produktable').DataTable();
+        }
     })
 </script>
 @stop

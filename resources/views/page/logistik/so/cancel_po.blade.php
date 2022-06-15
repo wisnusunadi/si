@@ -63,8 +63,138 @@
                 </div>
             </div>
         </div>
-        <div class="card">
-            <div class="card-body"></div>
+        <div class="card card-navy card-outline card-tabs">
+            <div class="card-header p-0 pt-1 border-bottom-0">
+                <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="tabs-detail-tab" data-toggle="pill" href="#tabs-detail"
+                            role="tab" aria-controls="tabs-detail" aria-selected="true">Informasi</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="tabs-produk-tab" data-toggle="pill" href="#tabs-produk" role="tab"
+                            aria-controls="tabs-produk" aria-selected="false">Produk</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-body">
+                <div class="tab-content" id="custom-tabs-three-tabContent">
+                    <div class="tab-pane fade active show" id="tabs-detail" role="tabpanel" aria-labelledby="tabs-detail-tab">
+                        <div class="row d-flex justify-content-between">
+                            <div class="p-2">
+                                <div class="margin">
+                                    <div><small class="text-muted">No SO</small></div>
+                                    <div><b>
+                                            @if ($data->Pesanan->so)
+                                                {{ $data->pesanan->so }}
+                                            @else
+                                                <em class="text-muted">Belum Tersedia</em>
+                                            @endif
+                                        </b>
+                                    </div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">No AKN</small></div>
+                                    <div><b>
+                                            @if ($data->no_paket)
+                                                {{ $data->no_paket }}
+                                            @else
+                                                <em class="text-muted">Belum Tersedia</em>
+                                            @endif
+                                        </b>
+                                    </div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">No Urut</small></div>
+                                    <div><b>{{ $data->no_urut }}</b></div>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="margin">
+                                    <div><small class="text-muted">Tgl Buat</small></div>
+                                    <div><b>{{ date('d-m-Y', strtotime($data->tgl_buat)) }}</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Tgl Edit</small></div>
+                                    <div><b>{{ date('d-m-Y', strtotime($data->tgl_edit)) }}</b></div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Tgl Kontrak</small></div>
+                                    <div><b>
+                                            @if (!empty($data->tgl_kontrak))
+                                                {{ date('d-m-Y', strtotime($data->tgl_kontrak)) }}
+                                            @else
+                                                <em class="text-muted">Belum Tersedia</em>
+                                            @endif
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-2">
+                                <div class="margin">
+                                    <div><small class="text-muted">No PO</small></div>
+                                    <div><b>
+                                            @if ($data->Pesanan->no_po)
+                                                {{ $data->Pesanan->no_po }}
+                                            @else
+                                                <em class="text-muted">Belum Tersedia</em>
+                                            @endif
+                                        </b>
+                                    </div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Tanggal PO</small></div>
+                                    <div><b>
+                                            @if ($data->Pesanan->tgl_po)
+                                                {{ date('d-m-Y', strtotime($data->Pesanan->tgl_po)) }}
+                                            @else
+                                                <em class="text-muted">Belum Tersedia</em>
+                                            @endif
+                                        </b>
+                                    </div>
+                                </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Status</small></div>
+                                    <div id="status"><b>
+                                            @if ($data->status == 'sepakat')
+                                                <span class="badge green-text">{{ ucfirst($data->status) }}</span>
+                                            @elseif($data->status == 'negosiasi')
+                                                <span class="badge yellow-text">{{ ucfirst($data->status) }}</span>
+                                            @elseif($data->status == 'batal')
+                                                <span class="badge red-text">{{ ucfirst($data->status) }}</span>
+                                            @elseif($data->status == 'draft')
+                                                <span class="badge blue-text">{{ ucfirst($data->status) }}</span>
+                                            @endif
+                                        </b>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                     <div class="tab-pane fade" id="tabs-produk" role="tabpanel" aria-labelledby="tabs-produk-tab">
+                        <div class="table-responsive">
+                            <table class="table table-hover" id="produktable">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Nama Produk</th>
+                                        <th>Jumlah</th>
+                                        <th>No Seri</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                        <td></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>

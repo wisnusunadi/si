@@ -270,7 +270,7 @@
                                                     </div>
                                                     <div class="filter">
                                                         <div><small class="text-muted">Jenis Produk</small></div>
-                                                        <div><b id="jenis_produk"><span class="badge blue-text">Non Ekatalog</span><span class="badge purple-text">Ekatalog</span></b></div>
+                                                        <div><b id="jenis_produk"></b></div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -461,6 +461,13 @@
                 $('#nama_produk').text(rows[0].nama);
                 var x = (rows[0].harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
                 $('#harga_produk').text('Rp ' + x);
+                var status = "";
+                if(rows[0].status == "ekat"){
+                    status = '<span class="badge purple-text">Ekatalog</span>';
+                }else{
+                    status = '<span class="badge blue-text">Non Ekatalog</span>';
+                }
+                $('#jenis_produk').html(status);
 
                 var showdetailtable = $('#showdetailtable').DataTable({
                     processing: true,
