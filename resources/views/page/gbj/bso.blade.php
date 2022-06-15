@@ -547,6 +547,8 @@
     let dataTampungSeri = [];
     const list  = document.getElementById('listseri');
     $(document).on('click', '.detailmodal', function (e) {
+        $('.barcodeScanAlat').val('');
+        $('.barcodeScanNonAlat').val('');
         let gh = $(this).parent().prev().prev().prev().prev()[0].textContent;
         let ghh = gh.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toUpperCase();
@@ -641,10 +643,24 @@
             if (e.keyCode == 13) {
                 if (datas !== undefined) {
                     let checkeds = $('.cb-child').prop('checked', true);
-                    tmp.push(datas.ids);
+                    if (prd1.length < 0 || prd1[dpp] == undefined) {
+                            tmp.push(datas.ids);
+                        }else{
+                            for (nomorseri in prd1[dpp]){
+                                if(nomorseri == "noseri"){
+                                    if (prd1[dpp][nomorseri].includes(datas.ids)){
+                                        console.log("ada")
+                                    }else{
+                                        prd1[dpp][nomorseri].push(datas.ids);
+                                    }
+                            }
+                        }
+                    }
                 }
                 mytable.search('').draw();
             }
+            console.log("tmp", tmp);
+        console.log("prd1", prd1);
         });
         // scan produk dengan alat
         $('.barcodeScanAlat').on('keyup', function (e) {
@@ -653,8 +669,16 @@
             let data = mytable.row('tr:contains("' + barcode + '")').data();
             if(barcode.length >= 10){
                 if (data !== undefined) {
-                    let checked = $('.cb-child').prop('checked', true);
-                    tmp.push(data.ids);
+                    let checked = $('.cb-child').prop('checked', true);                    
+                    if (prd1.length < 0 || prd1[dpp] == undefined) {
+                            tmp.push(data.ids);
+                        }else{
+                            for (nomorseri in prd1[dpp]){
+                                if(nomorseri == "noseri"){
+                                prd1[dpp][nomorseri].push(data.ids)
+                            }
+                        }
+                    }
                     $(this).val('');
                     if(checked){
                         var idd = $(checked).val();
@@ -674,31 +698,34 @@
                     mytable.search('').draw();
                 }
             }
+            console.log("tmp", tmp);
+        console.log("prd1", prd1);
         });
     });
     $('.scan-produk').on('click', '.cb-child',function (){
         if ($(this).is(':checked')) {
-            // for(dataseri in prd1[dpp]){
-            //     if(dataseri == "noseri"){
-            //         for(let i = 0; i < prd1[dpp][dataseri].length; i++){
-            //             if(prd1[dpp][dataseri][i] == $(this).val()){
-            //                 prd1[dpp][dataseri].push($(this).val());
-            //             }
-            //         }
-            //     }
-            // }
+            if (prd1.length < 0 || prd1[dpp] == undefined) {
+                tmp.push($(this).val());
+            }else{
+                for (nomorseri in prd1[dpp]){
+                    if(nomorseri == "noseri"){
+                     prd1[dpp][nomorseri].push($(this).val())
+                }
+           }
+        }
         } else {
-            for (dataseri in prd1[dpp]) {
-                if (dataseri == "noseri") {
-                    for (let i = 0; i < prd1[dpp][dataseri].length; i++) {
-                        if (prd1[dpp][dataseri][i] == $(this).val()) {
-                            prd1[dpp][dataseri].splice(i, 1);
-                        }
+            if (prd1.length < 0 || prd1[dpp] == undefined) {
+                tmp.splice($.inArray($(this).val(), tmp), 1);
+            }else{
+                for (nomorseri in prd1[dpp]){
+                    if(nomorseri == "noseri"){
+                        prd1[dpp][nomorseri].splice($.inArray($(this).val(), prd1[dpp][nomorseri]), 1)
                     }
                 }
-            };
+            }
         }
-        console.log(prd1);
+        console.log("tmp", tmp);
+        console.log("prd1", prd1);
     })
     $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();
@@ -745,11 +772,15 @@
                 showConfirmButton: false,
                 timer: 1500
             })
-            prd1[dpp] = {
+            if (prd1.length < 0 || prd1[dpp] == undefined) {
+                prd1[dpp] = {
                 "jumlah": jml,
                 "prd": prd,
                 "noseri": [...new Set(tmp)]
-            };
+                };
+            }else{
+                console.log("prd1", prd1);
+            }
             tmp = [];
             $('.modal-scan').modal('hide');
             if (prd1[dpp].noseri.length == 0) {
