@@ -96,52 +96,52 @@ class ProduksiController extends Controller
     {
         try {
             //code...
+            $d = new TFProduksi();
+            $d->pesanan_id = $request->pesanan_id;
+            $d->tgl_keluar = Carbon::now();
+            $d->ke = 23;
+            $d->jenis = 'keluar';
+            $d->status_id = 1;
+            $d->state_id = 2;
+            $d->created_at = Carbon::now();
+            $d->created_by = $request->userid;
+            $d->save();
+
+            foreach ($request->data as $key => $value) {
+                $dd = new TFProduksiDetail();
+                $dd->t_gbj_id = $d->id;
+                $dd->gdg_brg_jadi_id = $key;
+                $dd->qty = $value['jumlah'];
+                $dd->jenis = 'keluar';
+                $dd->status_id = 1;
+                $dd->state_id = 2;
+                $dd->created_at = Carbon::now();
+                $dd->created_by = $request->userid;
+                $dd->save();
+
+                $did = $dd->id;
+                foreach ($value['noseri'] as $k => $v) {
+                    $nn = new NoseriTGbj();
+                    $nn->t_gbj_detail_id = $did;
+                    $nn->noseri_id = $v;
+                    $nn->status_id = 1;
+                    $nn->state_id = 2;
+                    $nn->jenis = 'keluar';
+                    $nn->created_at = Carbon::now();
+                    $nn->created_by = $request->userid;
+                    $nn->save();
+
+                    NoseriBarangJadi::find($v)->update(['is_ready' => 1]);
+                }
+            }
+
+            return response()->json(['msg' => 'Data Tersimpan ke Rancangan']);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
                 'msg' => $e->getMessage(),
             ]);
         }
-        $d = new TFProduksi();
-        $d->pesanan_id = $request->pesanan_id;
-        $d->tgl_keluar = Carbon::now();
-        $d->ke = 23;
-        $d->jenis = 'keluar';
-        $d->status_id = 1;
-        $d->state_id = 2;
-        $d->created_at = Carbon::now();
-        $d->created_by = $request->userid;
-        $d->save();
-
-        foreach ($request->data as $key => $value) {
-            $dd = new TFProduksiDetail();
-            $dd->t_gbj_id = $d->id;
-            $dd->gdg_brg_jadi_id = $key;
-            $dd->qty = $value['jumlah'];
-            $dd->jenis = 'keluar';
-            $dd->status_id = 1;
-            $dd->state_id = 2;
-            $dd->created_at = Carbon::now();
-            $dd->created_by = $request->userid;
-            $dd->save();
-
-            $did = $dd->id;
-            foreach ($value['noseri'] as $k => $v) {
-                $nn = new NoseriTGbj();
-                $nn->t_gbj_detail_id = $did;
-                $nn->noseri_id = $v;
-                $nn->status_id = 1;
-                $nn->state_id = 2;
-                $nn->jenis = 'keluar';
-                $nn->created_at = Carbon::now();
-                $nn->created_by = $request->userid;
-                $nn->save();
-
-                NoseriBarangJadi::find($v)->update(['is_ready' => 1]);
-            }
-        }
-
-        return response()->json(['msg' => 'Data Tersimpan ke Rancangan']);
     }
 
     function updateRancangSO(Request $request)
