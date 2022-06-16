@@ -64,59 +64,59 @@ class GudangController extends Controller
     {
         try {
             $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get()->sortBy('produk.nama');
-        return datatables()->of($data)
-            ->addIndexColumn()
-            ->addColumn('nama_produk', function ($data) {
-                return $data->produk->nama . ' ' . $data->nama;
-            })
-            ->addColumn('kode_produk', function ($data) {
-                return $data->produk->product->kode . '' . $data->produk->kode;
-            })
-            ->addColumn('jumlah', function ($data) {
-                $d = $data->get_sum_noseri();
-                $a = $data->get_sum_seri_siap();
-                $this->updateStokGudang($data->id);
-                return $d . ' ' . $data->satuan->nama.'<br><span class="badge badge-dark">Stok Siap: '.$a.' '.$data->satuan->nama.'</span>';
-            })
-            ->addColumn('jumlah1', function ($data) {
-                $d = $data->get_sum_noseri();
-                $ss = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
-                return $d - $ss . ' ' . $data->satuan->nama;
-            })
-            ->addColumn('kelompok', function ($data) {
-                return $data->produk->KelompokProduk->nama;
-            })
-            ->addColumn('merk', function ($data) {
-                return $data->produk->merk;
-            })
-            ->addColumn('action', function ($data) {
-                return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
-                            <button class="btn btn-outline-success btn-sm" type="button" >
-                            <i class="far fa-edit"></i>&nbsp;Edit
-                            </button>
-                        </a>
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('nama_produk', function ($data) {
+                    return $data->produk->nama . ' ' . $data->nama;
+                })
+                ->addColumn('kode_produk', function ($data) {
+                    return $data->produk->product->kode . '' . $data->produk->kode;
+                })
+                ->addColumn('jumlah', function ($data) {
+                    $d = $data->get_sum_noseri();
+                    $a = $data->get_sum_seri_siap();
+                    $this->updateStokGudang($data->id);
+                    return $d . ' ' . $data->satuan->nama.'<br><span class="badge badge-dark">Stok Siap: '.$a.' '.$data->satuan->nama.'</span>';
+                })
+                ->addColumn('jumlah1', function ($data) {
+                    $d = $data->get_sum_noseri();
+                    $ss = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+                    return $d - $ss . ' ' . $data->satuan->nama;
+                })
+                ->addColumn('kelompok', function ($data) {
+                    return $data->produk->KelompokProduk->nama;
+                })
+                ->addColumn('merk', function ($data) {
+                    return $data->produk->merk;
+                })
+                ->addColumn('action', function ($data) {
+                    return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">
+                                <button class="btn btn-outline-success btn-sm" type="button" >
+                                <i class="far fa-edit"></i>&nbsp;Edit
+                                </button>
+                            </a>
 
-                        <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
-                            <button class="btn btn-outline-info btn-sm" type="button" >
-                            <i class="far fa-eye"></i>&nbsp;Detail
-                            </button>
-                        </a>
+                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                                <button class="btn btn-outline-info btn-sm" type="button" >
+                                <i class="far fa-eye"></i>&nbsp;Detail
+                                </button>
+                            </a>
 
-                        <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id="' . $data->id . '">
-                            <button class="btn btn-outline-warning btn-sm" type="button" >
-                            <i class="far fa-eye"></i>&nbsp;Daftar Stok
-                            </button>
-                        </a>';
-            })
-            ->addColumn('action_direksi', function ($data) {
-                return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
-                            <button class="btn btn-outline-info btn-sm" type="button" >
-                            <i class="far fa-eye"></i>&nbsp;Detail
-                            </button>
-                        </a>';
-            })
-            ->rawColumns(['action', 'action_direksi', 'jumlah'])
-            ->make(true);
+                            <a data-toggle="modal" data-target="#stokmodal" class="stokmodal" data-attr=""  data-id="' . $data->id . '">
+                                <button class="btn btn-outline-warning btn-sm" type="button" >
+                                <i class="far fa-eye"></i>&nbsp;Daftar Stok
+                                </button>
+                            </a>';
+                })
+                ->addColumn('action_direksi', function ($data) {
+                    return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $data->id . '">
+                                <button class="btn btn-outline-info btn-sm" type="button" >
+                                <i class="far fa-eye"></i>&nbsp;Detail
+                                </button>
+                            </a>';
+                })
+                ->rawColumns(['action', 'action_direksi', 'jumlah'])
+                ->make(true);
 
         } catch (\Exception $e) {
             return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
@@ -1539,9 +1539,17 @@ class GudangController extends Controller
                 foreach ($check_rakit as $itemm) {
                     array_push($seri_rakit, $itemm);
                 }
-                return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar di gudang', 'error' => true, 'data' => $html, 'noseri' => implode(', ', $seri)]);
 
-                return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri_rakit) . ' sudah terdaftar di perakitan', 'error' => true, 'data' => $html, 'noseri' => implode(', ', $seri_rakit)]);
+                if (count($check) > 0) {
+                    # code...
+                    return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri) . ' sudah terdaftar di gudang', 'error' => true, 'data' => $html, 'noseri' => implode(', ', $seri)]);
+                }
+
+                if (count($check_rakit) > 0) {
+                    # code...
+                    return response()->json(['msg' => 'Nomor seri ' . implode(', ', $seri_rakit) . ' sudah terdaftar di perakitan', 'error' => true, 'data' => $html, 'noseri' => implode(', ', $seri_rakit)]);
+                }
+
             } else {
                 return response()->json(['msg' => 'Noseri Sudah Bisa Diunggah', 'error' => false, 'data' => $html]);
             }
