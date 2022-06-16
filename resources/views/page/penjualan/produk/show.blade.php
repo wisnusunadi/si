@@ -217,27 +217,27 @@
                                             </span>
                                         </div>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div class="table-responsive">
-                                                <table class="table table-hover" id="showtable">
-                                                    <thead style="text-align: center;">
-                                                        <tr>
-                                                            <th width="5%">No</th>
-                                                            <th width="10%">No AKD</th>
-                                                            <th width="10%">Merk</th>
-                                                            <th width="10%">Jenis Paket</th>
-                                                            <th width="32%">Nama Alias</th>
-                                                            <th width="18%">Nama Produk</th>
-                                                            <th width="10%">Harga</th>
-                                                            <th width="5%">Aksi</th>
-                                                        </tr>
-                                                    </thead>
-                                                    <tbody>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-hover" id="showtable">
+                                                <thead style="text-align: center;">
+                                                    <tr>
+                                                        <th width="5%">No</th>
+                                                        <th width="16%">No AKD</th>
+                                                        <th width="12%">Merk</th>
+                                                        <th width="10%">Jenis Paket</th>
+                                                        <th width="50%">Nama Alias</th>
+                                                        <th width="50%">Nama Produk</th>
+                                                        <th width="12%">Harga</th>
+                                                        <th width="5%">Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
 
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -392,7 +392,79 @@
                 return false;
             });
 
-            var showtable = $('#showtable').DataTable({
+        var showtable = $('#showtable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
+                "dataType": "json",
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'no_akd',
+                    className: 'nowrap-text align-center tabnum',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'merk',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'jenis_paket',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'nama_alias',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'nama',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'harga',
+                    className: 'nowrap-text align-right tabnum',
+                    render: $.fn.dataTable.render.number(',', '.', 2)
+                        // function(data) {
+                        //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
+                        // }
+                        ,
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'button',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        });
+        $('#showtable tbody').on('click', '#showmodal', function() {
+            var rows = showtable.rows($(this).parents('tr')).data();
+            $('#nama_produk').text(rows[0].nama);
+            var x = (rows[0].harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            $('#harga_produk').text('Rp ' + x);
+
+            var showdetailtable = $('#showdetailtable').DataTable({
+                processing: true,
                 destroy: true,
                 processing: true,
                 serverSide: true,

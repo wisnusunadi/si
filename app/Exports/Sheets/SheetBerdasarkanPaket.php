@@ -183,6 +183,6 @@ class SheetBerdasarkanPaket implements WithTitle, FromView, ShouldAutoSize, With
     }
     public function title(): string
     {
-        return 'Sudah PO (Paket)';
+        return 'Sudah PO';
     }
 }

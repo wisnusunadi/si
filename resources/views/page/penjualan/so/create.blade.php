@@ -304,27 +304,26 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-lg-5 col-md-6">
-                                        <div class="row">
-                                            <div class="col-lg-12">
-                                                <div class="card">
-                                                    <div class="card-header">
-                                                        <h6 class="card-title">Info Produk</h6>
+                                </div>
+                                <div class="col-lg-5 col-md-6">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <div class="card-header">
+                                                    <h6 class="card-title">Info Produk</h6>
+                                                </div>
+                                                <div class="card-body overflowy">
+                                                    @if ($ekatalog->ket != null)
+                                                    <div class="alert alert-danger" role="alert">
+                                                        <strong><i class="fas fa-exclamation-triangle"></i> Catatan : </strong>{{ $ekatalog->ket }}
                                                     </div>
-                                                    <div class="card-body overflowy">
-                                                        @if ($ekatalog->ket != null)
-                                                            <div class="alert alert-danger" role="alert">
-                                                                <strong><i class="fas fa-exclamation-triangle"></i> Catatan : </strong>{{ $ekatalog->ket }}
-                                                            </div>
-                                                        @endif
-                                                        <div class="card">
-                                                            <div class="card-body">
-
-                                                                <div class="row d-flex justify-content-around">
-                                                                    <div class="p-2">
-                                                                        <?php $totalharga = 0;
-                                                                        $ongkir = 0; ?>
-                                                                        @foreach ($ekatalog->Pesanan->DetailPesanan as $i)
+                                                @endif
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row d-flex justify-content-around">
+                                                                <div class="p-2">
+                                                                    <?php $totalharga = 0; $ongkir = 0; ?>
+                                                                            @foreach ($ekatalog->Pesanan->DetailPesanan as $i)
                                                                             <?php
                                                                             $totalharga = $totalharga + $i->jumlah * $i->harga;
                                                                             $ongkir = $ongkir + $i->ongkir;

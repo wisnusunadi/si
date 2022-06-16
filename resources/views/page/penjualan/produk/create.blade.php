@@ -61,13 +61,13 @@
                                                     <div class="col-6 col-form-label">
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" name="jenis_paket"
-                                                                id="jenis_paket1" value="ekatalog" checked="true" />
+                                                                id="jenis_paket1" value="ekat" checked="true" />
                                                             <label class="form-check-label" for="jenis_paket1">Produk
                                                                 Ekatalog</label>
                                                         </div>
                                                         <div class="form-check form-check-inline">
                                                             <input class="form-check-input" type="radio" name="jenis_paket"
-                                                                id="jenis_paket2" value="non_ekatalog" />
+                                                                id="jenis_paket2" value="non" />
                                                             <label class="form-check-label" for="jenis_paket2">Produk Non
                                                                 Ekatalog</label>
                                                         </div>

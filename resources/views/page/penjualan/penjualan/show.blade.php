@@ -265,22 +265,19 @@ ul#status {
                             </li>
                         </ul>
                         <div class="tab-content card" id="myTabContent">
-                            <div class="tab-pane fade show active card-body" id="semua-penjualan" role="tabpanel"
-                                aria-labelledby="semua-penjualan-tab">
+                            <div class="tab-pane fade show active card-body" id="semua-penjualan" role="tabpanel" aria-labelledby="semua-penjualan-tab">
                                 <div class="row">
                                     <div class="col-12">
-                                        @if (Auth::user()->divisi->id == '26')
-                                            <span class="float-right filter">
-                                                <a href="{{ route('penjualan.penjualan.create') }}"><button
-                                                        class="btn btn-outline-info">
-                                                        <i class="fas fa-plus"></i> Tambah
-                                                    </button>
-                                                </a>
-                                            </span>
+                                        @if(Auth::user()->divisi->id == "26")
+                                        <span class="float-right filter">
+                                            <a href="{{route('penjualan.penjualan.create')}}"><button class="btn btn-outline-info">
+                                                    <i class="fas fa-plus"></i> Tambah
+                                                </button>
+                                            </a>
+                                        </span>
                                         @endif
                                         <span class="float-right filter">
-                                            <button class="btn btn-outline-secondary" data-toggle="dropdown"
-                                                aria-haspopup="true" aria-expanded="false">
+                                            <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <i class="fas fa-filter"></i> Filter
                                             </button>
                                             <form id="filter_penjualan">
@@ -291,8 +288,7 @@ ul#status {
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox"
-                                                                    value="ekatalog" name="jenis_penjualan[]" id="jenis1" />
+                                                                <input class="form-check-input" type="checkbox" value="ekatalog" name="jenis_penjualan[]" id="jenis1" />
                                                                 <label class="form-check-label" for="jenis1">
                                                                     E-Catalogue
                                                                 </label>
@@ -300,8 +296,7 @@ ul#status {
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="spa"
-                                                                    name="jenis_penjualan[]" id="jenis2" />
+                                                                <input class="form-check-input" type="checkbox" value="spa" name="jenis_penjualan[]" id="jenis2" />
                                                                 <label class="form-check-label" for="jenis2">
                                                                     SPA
                                                                 </label>
@@ -309,8 +304,7 @@ ul#status {
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="spb"
-                                                                    name="jenis_penjualan[]" id="jenis3" />
+                                                                <input class="form-check-input" type="checkbox" value="spb" name="jenis_penjualan[]" id="jenis3" />
                                                                 <label class="form-check-label" for="jenis3">
                                                                     SPB
                                                                 </label>
@@ -321,8 +315,7 @@ ul#status {
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="7"
-                                                                    name="status_penjualan[]" id="status3" />
+                                                                <input class="form-check-input" type="checkbox" value="7" name="status_penjualan[]" id="status3" />
                                                                 <label class="form-check-label" for="status3">
                                                                     Penjualan
                                                                 </label>
@@ -330,8 +323,7 @@ ul#status {
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="9"
-                                                                    name="status_penjualan[]" id="status4" />
+                                                                <input class="form-check-input" type="checkbox" value="9" name="status_penjualan[]" id="status4" />
                                                                 <label class="form-check-label" for="status4">
                                                                     PO
                                                                 </label>
@@ -339,20 +331,42 @@ ul#status {
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="6"
-                                                                    name="status_penjualan[]" id="status5" />
+                                                                <input class="form-check-input" type="checkbox" value="6" name="status_penjualan[]" id="status5" />
                                                                 <label class="form-check-label" for="status5">
                                                                     Gudang
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input class="form-check-input" type="checkbox" value="10" name="status_penjualan[]" id="status8" />
-                                                            <label class="form-check-label" for="status8">
-                                                                Kirim
-                                                            </label>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="8" name="status_penjualan[]" id="status6" />
+                                                                <label class="form-check-label" for="status6">
+                                                                    QC
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="13" name="status_penjualan[]" id="status7" />
+                                                                <label class="form-check-label" for="status7">
+                                                                    Terkirim Sebagian
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="checkbox" value="11" name="status_penjualan[]" id="status8" />
+                                                                <label class="form-check-label" for="status8">
+                                                                    Kirim
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <span class="float-right">
+                                                                <button class="btn btn-primary" id="filter_penjualan" type="submit">
+                                                                    Cari
+                                                                </button>
+                                                            </span>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -708,8 +722,6 @@ ul#status {
                 </div>
             </div>
 
-
-
             <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal"
                 aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
@@ -994,6 +1006,7 @@ ul#status {
                     beforeSend: function() {
                         $('#loader').show();
                     },
+                    // return the result
                     success: function(result) {
                         $('#detailmodal').modal("show");
                         $('#detail').html(result).show();
@@ -1006,12 +1019,16 @@ ul#status {
                             $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
                             detailtabel_ekatalog(id);
                         } else if (label == 'spa') {
+                            // $('#detailmodal').find(".modal-header").attr('id', '');
+                            // $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-purple bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-orange');
                             $('#detailmodal').find(".modal-header > h4").text('SPA');
                             detailtabel_spa(id);
                         } else {
+                            // $('#detailmodal').find(".modal-header").attr('id', '');
+                            // $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-orange bg-purple');
                             $('#detailmodal').find(".modal-header").addClass('bg-lightblue');
@@ -1042,6 +1059,7 @@ ul#status {
                     beforeSend: function() {
                         $('#loader').show();
                     },
+                    // return the result
                     success: function(result) {
                         $('#editmodal').modal("show");
                         $('#edit').html(result).show();

@@ -1102,7 +1102,10 @@
                 $('#btntambah').attr("disabled", true);
             }
         });
+
+
         var prm;
+
         $('input[type="radio"][name="jenis_penjualan"]').on('change', function() {
             reset_akn();
             reset_penjualan();
@@ -2071,7 +2074,7 @@
             } else {
 
                 $('#produktable tbody tr:last').after(data);
-                select_data(prm)
+                select_data(prm);
                 numberRowsProduk($("#produktable"));
                 totalhargaprd();
             }
