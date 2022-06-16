@@ -49,22 +49,22 @@ class PenjualanController extends Controller
         $y = explode(',', $status);
         $data = "";
         if ($jenis == "semua" && $status == "semua") {
-            $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
-            $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
-            $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+            $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+            $Spa = collect(Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+            $Spb = collect(Spb::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             $data = $Ekatalog->merge($Spa)->merge($Spb);
         } else if ($jenis != "semua" && $status == "semua") {
             $Ekatalog = "";
             $Spa = "";
             $Spb = "";
             if (in_array('ekatalog', $x)) {
-                $Ekatalog = collect(Ekatalog::with('Pesanan')->orderBy('id', 'DESC')->get());
+                $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             }
             if (in_array('spa', $x)) {
-                $Spa = collect(Spa::with('Pesanan')->orderBy('id', 'DESC')->get());
+                $Spa = collect(Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             }
             if (in_array('spb', $x)) {
-                $Spb = collect(Spb::with('Pesanan')->orderBy('id', 'DESC')->get());
+                $Spb = collect(Spb::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             }
             if ($Ekatalog != "" && $Spa != "" && $Spb != "") {
                 $data = $Ekatalog->merge($Spa)->merge($Spb);
@@ -100,13 +100,13 @@ class PenjualanController extends Controller
             //     $data = $Spa->merge($Spb);
             // }
         } else if ($jenis == "semua" && $status != "semua") {
-            $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
+            $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                 $q->whereIN('log_id', $y);
             })->orderBy('id', 'DESC')->get());
-            $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
+            $Spa = collect(Spa::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                 $q->whereIN('log_id', $y);
             })->orderBy('id', 'DESC')->get());
-            $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
+            $Spb = collect(Spb::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                 $q->whereIN('log_id', $y);
             })->orderBy('id', 'DESC')->get());
             $data = $Ekatalog->merge($Spa)->merge($Spb);
@@ -115,17 +115,17 @@ class PenjualanController extends Controller
             $Spa = "";
             $Spb = "";
             if (in_array('ekatalog', $x)) {
-                $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($y) {
+                $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                     $q->whereIN('log_id', $y);
                 })->orderBy('id', 'DESC')->get());
             }
             if (in_array('spa', $x)) {
-                $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($y) {
+                $Spa = collect(Spa::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                     $q->whereIN('log_id', $y);
                 })->orderBy('id', 'DESC')->get());
             }
             if (in_array('spb', $x)) {
-                $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($y) {
+                $Spb = collect(Spb::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                     $q->whereIN('log_id', $y);
                 })->orderBy('id', 'DESC')->get());
             }
@@ -1143,9 +1143,9 @@ class PenjualanController extends Controller
         $data = "";
 
         if ($value == 'semua') {
-            $data  = Ekatalog::with('pesanan', 'customer')->orderBy('id', 'DESC')->get();
+            $data  = Ekatalog::with(['Pesanan.State','Customer'])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
         } else {
-            $data  = Ekatalog::orderBy('id', 'DESC')->whereIN('status', $x)->get();
+            $data  = Ekatalog::with(['Pesanan.State','Customer'])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
         }
 
         return datatables()->of($data)
@@ -1361,9 +1361,9 @@ class PenjualanController extends Controller
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
-            $data  = Spa::with('pesanan')->orderBy('id', 'DESC')->get();
+            $data  = Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get();
         } else {
-            $data  = Spa::whereHas('pesanan', function ($q) use ($x) {
+            $data  = Spa::with(['Pesanan.State','Customer'])->whereHas('pesanan', function ($q) use ($x) {
                 $q->whereIN('log_id', $x);
             })->orderBy('id', 'DESC')->get();
         }
@@ -1509,9 +1509,9 @@ class PenjualanController extends Controller
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
-            $data  = Spb::with('pesanan')->orderBy('id', 'DESC')->get();
+            $data  = Spb::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get();
         } else {
-            $data  = Spb::whereHas('pesanan', function ($q) use ($x) {
+            $data  = Spb::with(['Pesanan.State','Customer'])->whereHas('pesanan', function ($q) use ($x) {
                 $q->whereIN('log_id', $x);
             })->orderBy('id', 'DESC')->get();
         }
@@ -3315,55 +3315,111 @@ class PenjualanController extends Controller
         return response()->json(compact('ekatalog_graph', 'spa_graph', 'spb_graph'));
     }
 
-    //Dashboard
+    // //Dashboard
+    // public function dashboard()
+    // {
+    //     $penj = Pesanan::whereNull('so')->where('log_id', '7')->count();
+    //     $gudang = 0;
+    //     $qc = 0;
+    //     $log = 0;
+    //     $dc = 0;
+    //     $pes = Pesanan::whereNotIn('log_id', ['7', '10'])->get();
+    //     foreach ($pes as $i) {
+    //         if (isset($i->DetailPesanan)) {
+    //             if ($i->getJumlahSeri() < $i->getJumlahPesanan()) {
+    //                 $gudang = $gudang + 1;
+    //             }
+    //         }
+
+    //         if (isset($i->DetailPesanan)) {
+    //             if ($i->getJumlahCek() < $i->getJumlahPesanan()) {
+    //                 $qc = $qc + 1;
+    //             }
+    //         }
+
+    //         if (isset($i->DetailPesanan)) {
+    //             if ($i->getJumlahKirim() < $i->getJumlahPesanan()) {
+    //                 $log = $log + 1;
+    //             }
+    //         }
+
+    //         if (isset($i->DetailPesananPart)) {
+    //             if ($i->getJumlahKirimPart() < $i->getJumlahPesananPart()) {
+    //                 $log = $log + 1;
+    //             }
+    //         }
+
+    //         if (isset($i->DetailPesananPart)) {
+    //             if ($i->getJumlahCoo() < $i->getJumlahPesanan()) {
+    //                 $dc = $dc + 1;
+    //             }
+    //         }
+    //     }
+
+
+    //     // $belum_so = Pesanan::whereNull('so')->get()->count();
+    //     // $so_belum_gudang = Pesanan::DoesntHave('TFProduksi')->get()->count();
+    //     // $so_belum_qc = Pesanan::DoesntHave('DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->get()->count();
+    //     // $so_belum_logistik = Pesanan::DoesntHave('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik')->get()->count();
+    //     return view('page.penjualan.dashboard', ['belum_so' => $penj, 'so_belum_gudang' => $gudang, 'so_belum_qc' => $qc, 'so_belum_logistik' => $log]);
+    // }
+
     public function dashboard()
     {
-        $penj = Pesanan::whereNull('so')->where('log_id', '7')->count();
+       $penj = Pesanan::whereNull('so')->where('log_id', '7')->count();
         $gudang = 0;
         $qc = 0;
         $log = 0;
         $dc = 0;
-        $pes = Pesanan::whereNotIn('log_id', ['7', '10'])->get();
-        foreach ($pes as $i) {
-            if (isset($i->DetailPesanan)) {
-                if ($i->getJumlahSeri() < $i->getJumlahPesanan()) {
-                    $gudang = $gudang + 1;
-                }
-            }
 
-            if (isset($i->DetailPesanan)) {
-                if ($i->getJumlahCek() < $i->getJumlahPesanan()) {
-                    $qc = $qc + 1;
-                }
-            }
+        $gudang = Pesanan::whereIn('id', function($q) {
+            $q->select('pesanan.id')
+            ->from('pesanan')
+            ->leftJoin('t_gbj', 't_gbj.pesanan_id', '=', 'pesanan.id')
+            ->leftJoin('t_gbj_detail', 't_gbj_detail.t_gbj_id', '=', 't_gbj.id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+            ->groupBy('pesanan.id')
+            ->havingRaw('count(t_gbj_noseri.id) <  (select sum(detail_pesanan.jumlah) from detail_pesanan where pesanan_id = pesanan.id)');
+        })->whereNotIn('log_id', ['7','10'])->count();
 
-            if (isset($i->DetailPesanan)) {
-                if ($i->getJumlahKirim() < $i->getJumlahPesanan()) {
-                    $log = $log + 1;
-                }
-            }
+        $qc = Pesanan::whereIn('id', function($q) {
+            $q->select('pesanan.id')
+            ->from('pesanan')
+            ->leftJoin('detail_pesanan', 'detail_pesanan.pesanan_id', '=', 'pesanan.id')
+            ->groupBy('pesanan.id')
+            ->havingRaw('sum(detail_pesanan.jumlah) > (select count(noseri_detail_pesanan.id)
+            from noseri_detail_pesanan
+            left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+            left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
+            where detail_pesanan.pesanan_id = pesanan.id)');
+        })->whereNotIn('log_id', ['7','10'])->count();
 
-            if (isset($i->DetailPesananPart)) {
-                if ($i->getJumlahKirimPart() < $i->getJumlahPesananPart()) {
-                    $log = $log + 1;
-                }
-            }
+        $log = Pesanan::whereIn('id', function($q) {
+            $q->select('pesanan.id')
+            ->from('pesanan')
+            ->leftJoin('detail_pesanan', 'detail_pesanan.pesanan_id', '=', 'pesanan.id')
+            ->groupBy('pesanan.id')
+            ->havingRaw('sum(detail_pesanan.jumlah) > (select count(noseri_logistik.id)
+            from noseri_logistik
+            left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
+            left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+            left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
+            where detail_pesanan.pesanan_id = pesanan.id)');
+        })->whereNotIn('log_id', ['7','10'])->count();
 
-            if (isset($i->DetailPesananPart)) {
-                if ($i->getJumlahCoo() < $i->getJumlahPesanan()) {
-                    $dc = $dc + 1;
-                }
-            }
-        }
+        $log_p = Pesanan::whereIn('id', function($q) {
+            $q->select('pesanan.id')
+            ->from('pesanan')
+            ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.pesanan_id', '=', 'pesanan.id')
+            ->groupBy('pesanan.id')
+            ->havingRaw('count(detail_pesanan_part.id) > (select count(detail_logistik_part.id)
+            from detail_logistik_part
+            left join detail_pesanan_part on detail_pesanan_part.id = detail_logistik_part.detail_pesanan_part_id
+            where detail_pesanan_part.pesanan_id = pesanan.id)');
 
-
-        // $belum_so = Pesanan::whereNull('so')->get()->count();
-        // $so_belum_gudang = Pesanan::DoesntHave('TFProduksi')->get()->count();
-        // $so_belum_qc = Pesanan::DoesntHave('DetailPesanan.DetailPesananPRoduk.Noseridetailpesanan')->get()->count();
-        // $so_belum_logistik = Pesanan::DoesntHave('DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik')->get()->count();
-        return view('page.penjualan.dashboard', ['belum_so' => $penj, 'so_belum_gudang' => $gudang, 'so_belum_qc' => $qc, 'so_belum_logistik' => $log]);
+        })->whereNotIn('log_id', ['7','10'])->count();
+        return view('page.penjualan.dashboard', ['belum_so' => $penj, 'so_belum_gudang' => $gudang, 'so_belum_qc' => $qc, 'so_belum_logistik' => $log + $log_p]);
     }
-
     //Another
     function toRomawi($number)
     {

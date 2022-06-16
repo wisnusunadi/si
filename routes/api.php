@@ -101,6 +101,7 @@ Route::prefix('/penjualan_produk')->group(function () {
     Route::get('check/{id}/{val}', [App\Http\Controllers\MasterController::class, 'check_penjualan_produk']);
     Route::get('select', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk']);
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk_id']);
+    Route::get('select_param/{penjualan}', [App\Http\Controllers\MasterController::class, 'select_penjualan_produk_param']);
 });
 
 Route::prefix('/penjualan')->group(function () {

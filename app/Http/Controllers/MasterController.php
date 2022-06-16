@@ -258,9 +258,9 @@ class MasterController extends Controller
         $divisi = $divisi_id;
         $x = explode(',', $value);
         if ($value == 0 || $value == 'kosong') {
-            $data = Customer::WhereNotIN('id', ['484'])->orderby('nama', 'ASC')->get();
+            $data = Customer::with('provinsi')->WhereNotIN('id', ['484'])->orderby('nama', 'ASC')->get();
         } else {
-            $data = Customer::WhereNotIN('id', ['484'])->whereHas('Provinsi', function ($q) use ($x) {
+            $data = Customer::with('provinsi')->WhereNotIN('id', ['484'])->whereHas('Provinsi', function ($q) use ($x) {
                 $q->whereIN('status', $x);
             })->get();
         }
@@ -373,6 +373,15 @@ class MasterController extends Controller
                     return $s->merk;
                 }
             })
+            ->addColumn('jenis_paket', function ($data) {
+                if ($data->status == 'ekat') {
+                    return  '<span class="badge purple-text">Ekatalog</span>';
+                }else{
+                   return '<span class="badge blue-text">Non Ekatalog</span>';
+                }
+
+
+            })
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -394,7 +403,7 @@ class MasterController extends Controller
                     </a>
                 </div>';
             })
-            ->rawColumns(['nama', 'button'])
+            ->rawColumns(['nama', 'button','jenis_paket'])
             ->make(true);
     }
     public function get_nama_customer($id, $val)
@@ -776,7 +785,8 @@ class MasterController extends Controller
         $PenjualanProduk = PenjualanProduk::create([
             'nama' => $request->nama_paket,
             'nama_alias' => $request->nama_alias,
-            'harga' => $harga_convert
+            'harga' => $harga_convert,
+            'status' => $request->jenis_paket
         ]);
         $bool = true;
         if ($PenjualanProduk) {
@@ -957,6 +967,7 @@ class MasterController extends Controller
         $PenjualanProduk->nama_alias = $request->nama_alias;
         $PenjualanProduk->nama = $request->nama_paket;
         $PenjualanProduk->harga = $harga_convert;
+        $PenjualanProduk->status = $request->jenis_paket;
         $PenjualanProduk->save();
 
         $produk_array = [];
@@ -1112,6 +1123,21 @@ class MasterController extends Controller
         $data = PenjualanProduk::with('Produk.GudangBarangJadi')->where('id', $id)
             ->get();
 
+        echo json_encode($data);
+    }
+    public function select_penjualan_produk_param(Request $request, $value)
+    {
+        if($value == 'ekatalog')
+    {
+        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+        ->where('status', 'ekat')
+        ->orderby('nama', 'ASC')
+        ->get();
+    }else{
+        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+        ->orderby('nama', 'ASC')
+        ->get();
+    }
         echo json_encode($data);
     }
     public function check_no_akd($id, $val)

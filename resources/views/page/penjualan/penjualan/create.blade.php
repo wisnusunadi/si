@@ -959,7 +959,7 @@
         $("#batas_kontrak").attr("min", today);
         $("#tanggal_po").attr("max", today);
         $("#tanggal_do").attr("min", today);
-        select_data();
+        select_data(prm);
         load_part();
         load_jasa();
         // $('#customer_id').on('keyup change', function() {
@@ -1103,9 +1103,13 @@
             }
         });
 
+
+        var prm;
+
         $('input[type="radio"][name="jenis_penjualan"]').on('change', function() {
             reset_akn();
             reset_penjualan();
+            select_data($(this).val());
             if ($(this).val() == "ekatalog") {
                 $("#datajasa").addClass("hide");
                 $("#datapart").addClass("hide");
@@ -1668,7 +1672,7 @@
             return string.split(search).join(replace);
         }
 
-        function select_data() {
+        function select_data(prm) {
             // $('.penjualan_produk_id').on('change', function() {
             //     for (i = 0; i < 3; ++i) {
             //         $("#produktable ").append('<tr><td>Detail Paket</td></tr>');
@@ -1684,7 +1688,7 @@
                     theme: "bootstrap",
                     delay: 250,
                     type: 'GET',
-                    url: '/api/penjualan_produk/select',
+                    url: '/api/penjualan_produk/select_param/'+prm,
                     data: function(params) {
                         return {
                             term: params.term
@@ -2063,13 +2067,13 @@
 
             if ($('#produktable > tbody > tr').length <= 0) {
                 $('#produktable tbody').append(data);
-                select_data();
+                select_data(prm);
                 numberRowsProduk($("#produktable"));
                 totalhargaprd();
             } else {
 
                 $('#produktable tbody tr:last').after(data);
-                select_data();
+                select_data(prm);
                 numberRowsProduk($("#produktable"));
                 totalhargaprd();
             }
@@ -2159,7 +2163,7 @@
                 $(el).find('.rencana_id').attr('id', 'rencana_id' + j);
                 $(el).find('.rencana_id').attr('name', 'rencana_id[' + j + ']');
                 $(el).find('.detail_jual').attr('id', 'detail_jual' + j);
-                select_data();
+                select_data(prm);
             });
         }
 
