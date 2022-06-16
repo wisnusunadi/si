@@ -755,7 +755,6 @@
                             }
                         }
                     }
-                    $(this).val('');
                     if(checked){
                         var idd = $(checked).val();
                         var title = $(checked).parent().prev()[0].textContent;
@@ -770,11 +769,11 @@
                         timer: 2000,
                         showConfirmButton: false,
                     })
-                    $(this).val('');
-                    mytable.search('').draw();
                 }
                 console.log("tmp", tmp)
                 console.log("prd1", prd1)
+                $(this).val('');
+                mytable.search('').draw();
             }
         });
     });
@@ -826,6 +825,8 @@
                 }
             }
         }
+        $(this).val('');
+        $('.scan-produk').DataTable().search('').draw();
         console.log("tmp", tmp)
         console.log("prd1", prd1)
     })
