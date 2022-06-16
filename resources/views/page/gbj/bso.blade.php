@@ -568,6 +568,7 @@
     $(document).on('click', '.detailmodal', function (e) {
         $('.barcodeScanAlat').val('');
         $('.barcodeScanNonAlat').val('');
+        tmp = [];
         let gh = $(this).parent().prev().prev().prev().prev()[0].textContent;
         let ghh = gh.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toUpperCase();
@@ -638,7 +639,7 @@
             },
         });
         let s = $('.modal-scan').modal('show');
-        console.log("dataTampungSeri", dataTampungSeri);
+        
         $('.modal-scan').on('shown.bs.modal', function () {
             $('#scan_filter').addClass('hidden');
         });
@@ -663,7 +664,22 @@
                 if (datas !== undefined) {
                     let checkeds = $('.cb-child').prop('checked', true);
                     if (prd1.length < 0 || prd1[dpp] == undefined) {
-                            tmp.push(datas.ids);
+                            if(tmp.includes(datas.ids)){
+                                console.log("sudah ada")
+                            }else{
+                                tmp.push(datas.ids)
+                                if(tmp.length > max){
+                                    Swal.fire({
+                                                icon: 'error',
+                                                title: 'Gagal',
+                                                text: 'Jumlah Nomor Seri Melebihi Batas',
+                                                type: 'error',
+                                                timer: 1000
+                                            })
+                                            tmp.pop()
+                                            checkeds.prop('checked', false);
+                                }
+                            }
                         }else{
                             for (nomorseri in prd1[dpp]){
                                 if(nomorseri == "noseri"){
@@ -671,6 +687,17 @@
                                         console.log("ada")
                                     }else{
                                         prd1[dpp][nomorseri].push(datas.ids);
+                                        if (prd1[dpp][nomorseri].length > max) {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Gagal',
+                                                text: 'Jumlah Nomor Seri Melebihi Batas',
+                                                type: 'error',
+                                                timer: 1000
+                                            })
+                                            prd1[dpp][nomorseri].pop();
+                                            checkeds.prop('checked', false);
+                                        }
                                     }
                             }
                         }
@@ -678,8 +705,8 @@
                 }
                 mytable.search('').draw();
             }
-            console.log("tmp", tmp);
-        console.log("prd1", prd1);
+            console.log("tmp", tmp)
+            console.log("prd1", prd1)
         });
         // scan produk dengan alat
         $('.barcodeScanAlat').on('keyup', function (e) {
@@ -690,11 +717,41 @@
                 if (data !== undefined) {
                     let checked = $('.cb-child').prop('checked', true);
                     if (prd1.length < 0 || prd1[dpp] == undefined) {
-                            tmp.push(data.ids);
+                            if(tmp.includes(data.ids)){
+                                console.log("sudah ada")
+                            }else{
+                                tmp.push(data.ids)
+                                if(tmp.length > max){
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal',
+                                        text: 'Jumlah Nomor Seri Melebihi Batas',
+                                        type: 'error',
+                                        timer: 1000
+                                    })
+                                    tmp.pop();
+                                    checked.prop('checked', false);
+                                }
+                            }
                         }else{
                             for (nomorseri in prd1[dpp]){
                                 if(nomorseri == "noseri"){
-                                prd1[dpp][nomorseri].push(data.ids)
+                                    if (prd1[dpp][nomorseri].includes(data.ids)){
+                                        console.log("ada")
+                                    }else{
+                                        prd1[dpp][nomorseri].push(data.ids);
+                                        if (prd1[dpp][nomorseri].length > max) {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Gagal',
+                                                text: 'Jumlah Nomor Seri Melebihi Batas',
+                                                type: 'error',
+                                                timer: 1000
+                                            })
+                                            prd1[dpp][nomorseri].pop();
+                                            checked.prop('checked', false);
+                                        }
+                                    }
                             }
                         }
                     }
@@ -716,19 +773,45 @@
                     $(this).val('');
                     mytable.search('').draw();
                 }
+                console.log("tmp", tmp)
+                console.log("prd1", prd1)
             }
-            console.log("tmp", tmp);
-        console.log("prd1", prd1);
         });
     });
     $('.scan-produk').on('click', '.cb-child',function (){
         if ($(this).is(':checked')) {
             if (prd1.length < 0 || prd1[dpp] == undefined) {
-                tmp.push($(this).val());
+                if(tmp.includes($(this).val())){
+                    console.log("sudah ada")
+                }else{
+                    tmp.push($(this).val())
+                    if(tmp.length > max){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: 'Jumlah Nomor Seri Melebihi Batas',
+                            type: 'error',
+                            timer: 1000
+                        })
+                        tmp.pop()
+                        $(this).prop('checked', false);
+                    }
+                }
             }else{
                 for (nomorseri in prd1[dpp]){
                     if(nomorseri == "noseri"){
                      prd1[dpp][nomorseri].push($(this).val())
+                     if (prd1[dpp][nomorseri].length > max) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: 'Jumlah Nomor Seri Melebihi Batas',
+                                type: 'error',
+                                timer: 1000
+                            })
+                            prd1[dpp][nomorseri].pop();
+                            $(this).prop('checked', false);
+                        }
                 }
            }
         }
@@ -743,8 +826,8 @@
                 }
             }
         }
-        console.log("tmp", tmp);
-        console.log("prd1", prd1);
+        console.log("tmp", tmp)
+        console.log("prd1", prd1)
     })
     $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();
