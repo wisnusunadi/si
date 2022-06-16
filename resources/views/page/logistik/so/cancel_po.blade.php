@@ -115,16 +115,9 @@
                                 <th>No</th>
                                 <th>Nama Produk</th>
                                 <th>Jumlah</th>
-                                <th>No Seri</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
                         </tbody>
                     </table>
                 </div>

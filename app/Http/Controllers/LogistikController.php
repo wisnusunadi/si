@@ -1032,7 +1032,8 @@ class LogistikController extends Controller
                 //     }
                 // }
                 // return $status;
-                return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-attr="" data-provinsi="">
+                $name = explode('/', $data->so);
+                return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="'.$name[1].'" data-provinsi="">
                         <button type="button" class="btn btn-sm btn-outline-danger" type="button">
                             <i class="fas fa-times"></i>
                             Batal
