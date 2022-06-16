@@ -1073,7 +1073,7 @@ return [
         //LOGISTIK
         [
             'text' => 'Beranda',
-            'icon' => 'fas fa-home',
+            'icon' => 'fas fa-home fa-fw',
             'url' => '/logistik/dashboard',
             'auth' => [15],
         ],
@@ -1083,13 +1083,13 @@ return [
         ],
         [
             'text' => 'Jasa Ekspedisi',
-            'icon' => 'far fa-file-alt',
+            'icon' => 'fa-fw far fa-file-alt',
             'url' => '/logistik/ekspedisi/show',
             'auth' => [15],
         ],
         [
             'text' => 'Customer',
-            'icon' => 'fas fa-users',
+            'icon' => 'fas fa-users fa-fw',
             'url' => '/penjualan/customer/show',
             'auth' => [15],
         ],
@@ -1099,13 +1099,13 @@ return [
         ],
         [
             'text' => 'Sales Order',
-            'icon' => 'fas fa-dolly',
+            'icon' => 'fas fa-dolly fa-fw',
             'url' => '/logistik/so/show',
             'auth' => [15],
         ],
         [
             'text' => 'Pengiriman',
-            'icon' => 'fas fa-shipping-fast',
+            'icon' => 'fas fa-shipping-fast fa-fw',
             'url' => '/logistik/pengiriman/show',
             'auth' => [15],
         ],
@@ -1117,13 +1117,13 @@ return [
         // ],
         [
             'text' => 'Laporan',
-            'icon' => 'fas fa-book-open',
+            'icon' => 'fas fa-book-open fa-fw',
             'url' => '/logistik/laporan/show',
             'auth' => [15],
         ],
         [
             'text' => 'Lacak',
-            'icon' => 'fas fa-search',
+            'icon' => 'fas fa-search fa-fw',
             'url' => '/penjualan/lacak/show',
             'auth' => [15],
         ],

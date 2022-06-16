@@ -189,6 +189,21 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="batalmodal" tabindex="-1" role="dialog" aria-labelledby="batalmodal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-navy">
+                        <h4 id="modal-title">Pesanan Batal</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="batal">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 @stop
@@ -251,6 +266,30 @@
                 }
             ]
 
+        });
+
+        $(document).on('click', '.batalmodal', function(event) {
+            event.preventDefault();
+            var id = $(this).data('id');
+            $.ajax({
+                url: '/logistik/so/cancel/'+id,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                success: function(result) {
+                    $('#batalmodal').modal("show");
+                    $('#batal').html(result).show();
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
         });
 
         $(document).on('click', '#pills-selesai_kirim-tab', function(){
