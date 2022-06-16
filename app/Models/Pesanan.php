@@ -447,6 +447,104 @@ class Pesanan extends Model
     }
 
 
+    public function getJumlahPaketUnique()
+    {
+        $id = $this->id;
+        $jumlah = 0;
+        $data = DetailPesanan::groupby('penjualan_produk_id')->where('pesanan_id', $id)->get();
+        foreach ($data as $d) {
+            $jumlah++;
+        }
+        if ($jumlah == 0) {
+            return $jumlah = 1;
+        } else {
+            return  $jumlah;
+        }
+    }
+    public function DetailPesananUnique()
+    {
+        $id = $this->id;
+        $produk = DetailPesanan::groupby('penjualan_produk_id')->where('pesanan_id', $id)->orderBy('pesanan_id', 'DESC')->get();
+        $part = DetailPesananPart::groupby('m_sparepart_id')->where('pesanan_id', $id)->orderBy('pesanan_id', 'DESC')->get();
+        $data = $produk->merge($part);
+        return $data;
+    }
+
+    public function getJumlahPesananUnique($id_penjualan_produk)
+    {
+        $id = $this->id;
+        $data = DetailPesanan::groupby('penjualan_produk_id')->where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->sum('jumlah');
+        return $data;
+    }
+    public function getJumlahPartUnique($id_penjualan_produk)
+    {
+        $id = $this->id;
+        $data = DetailPesananPart::groupby('m_sparepart_id')->where(['pesanan_id' => $id, 'm_sparepart_id' => $id_penjualan_produk])->sum('jumlah');
+        return $data;
+    }
+    public function getTotalPesananUnique($id_penjualan_produk)
+    {
+        $id = $this->id;
+        $data = DetailPesanan::where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->get();
+        $total = 0;
+        foreach ($data as $d) {
+            $total += $d->harga * $d->jumlah;
+        }
+        return $total;
+    }
+    public function getTotalPartUnique($m_sparepart_id)
+    {
+        $id = $this->id;
+        $data = DetailPesananPart::where(['pesanan_id' => $id, 'm_sparepart_id' => $m_sparepart_id])->get();
+        $total = 0;
+        foreach ($data as $d) {
+            $total += $d->harga * $d->jumlah;
+        }
+        return $total;
+    }
+    public function getOngkirPesananUnique($id_penjualan_produk)
+    {
+        $id = $this->id;
+        $data = DetailPesanan::groupby('penjualan_produk_id')->where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->sum('ongkir');
+        return $data;
+    }
+    public function getSuratJalanProduk($id_penjualan_produk)
+    {
+        $id = $this->id;
+        $detail_pesanan = DetailPesanan::where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->get();
+        $detail_pesanan_id = [];
+        $detail_pesanan_produk_id = [];
+        foreach ($detail_pesanan as $d) {
+            $detail_pesanan_id[] = $d->id;
+        }
+
+        $detail_pesanan_produk = DetailPesananProduk::whereIN('detail_pesanan_id', $detail_pesanan_id)->get();
+        foreach ($detail_pesanan_produk as $e) {
+            $detail_pesanan_produk_id[] = $e->id;
+        }
+
+        $logistik = DetailLogistik::groupby('logistik_id')->whereIN('detail_pesanan_produk_id', $detail_pesanan_produk_id)->get();
+        return $logistik;
+    }
+    public function getNoseri($id_penjualan_produk)
+    {
+        $id = $this->id;
+        $detail_pesanan = DetailPesanan::where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->get();
+        $detail_pesanan_id = [];
+        $detail_pesanan_produk_id = [];
+        foreach ($detail_pesanan as $d) {
+            $detail_pesanan_id[] = $d->id;
+        }
+
+        $detail_pesanan_produk = DetailPesananProduk::whereIN('detail_pesanan_id', $detail_pesanan_id)->get();
+        foreach ($detail_pesanan_produk as $e) {
+            $detail_pesanan_produk_id[] = $e->id;
+        }
+
+        $noseri = NoseriDetailPesanan::whereIN('detail_pesanan_produk_id', $detail_pesanan_produk_id)->get();
+
+        return $noseri;
+    }
     function log()
     {
         return $this->belongsTo(State::class, 'log_id');

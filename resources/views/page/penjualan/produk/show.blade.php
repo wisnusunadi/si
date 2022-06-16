@@ -213,6 +213,7 @@
                                                         <th width="5%">No</th>
                                                         <th width="16%">No AKD</th>
                                                         <th width="12%">Merk</th>
+                                                        <th width="10%">Jenis Paket</th>
                                                         <th width="50%">Nama Alias</th>
                                                         <th width="50%">Nama Produk</th>
                                                         <th width="12%">Harga</th>
@@ -394,6 +395,12 @@
                 },
                 {
                     data: 'merk',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'jenis_paket',
                     className: 'nowrap-text align-center',
                     orderable: true,
                     searchable: true
