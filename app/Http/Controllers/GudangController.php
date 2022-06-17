@@ -945,48 +945,44 @@ class GudangController extends Controller
     function getRakit()
     {
         try {
-            $data = TFProduksiDetail::with('header')
-            ->leftJoin('t_gbj as tg', 't_gbj_detail.t_gbj_id', '=', 'tg.id')
-            ->select('*', DB::raw('sum(t_gbj_detail.qty) as total'))
-            ->groupBy('tg.tgl_masuk')
-            ->groupBy('t_gbj_detail.gdg_brg_jadi_id')
-            ->where('tg.dari', 17)
-            ->where('tg.ke', 13)
-            ->get();
-
+            $data = DB::select("select tg.tgl_masuk, tgd.gdg_brg_jadi_id, concat(p.nama, ' ', gbj.nama) as produkk, count(tgn.noseri_id) as total from t_gbj_noseri tgn
+            left join t_gbj_detail tgd on tgd.id = tgn.t_gbj_detail_id
+            left join t_gbj tg on tg.id  = tgd.t_gbj_id
+            left join gdg_barang_jadi gbj on gbj.id = tgd.gdg_brg_jadi_id
+            left join produk p on p.id = gbj.produk_id
+            where tg.dari = 17 and tg.ke = 13
+            group by tg.tgl_masuk, tgd.gdg_brg_jadi_id
+            except
+            select tg.tgl_masuk, tgd.gdg_brg_jadi_id, concat(p.nama, ' ', gbj.nama) as produkk, count(tgn2.noseri_id) from t_gbj_noseri tgn2
+            left join t_gbj_detail tgd on tgd.id = tgn2.t_gbj_detail_id
+            left join t_gbj tg on tg.id  = tgd.t_gbj_id
+            left join gdg_barang_jadi gbj on gbj.id = tgd.gdg_brg_jadi_id
+            left join produk p on p.id = gbj.produk_id
+            where tg.dari = 17 and tg.ke = 13 and tgn2.status_id = 3
+            group by tg.tgl_masuk, tgd.gdg_brg_jadi_id");
+            // return $data;
         $x = [];
         $y = [];
         foreach ($data as $k) {
-
-            $jumlah_done = NoseriTGbj::whereHas('detail.header', function ($q) use ($k) {
-                $q->where('dari', 17)->where('ke', 13);
-                $q->where('tgl_masuk', $k->header->tgl_masuk);
-            })
-                ->whereHas('detail', function ($qq) use ($k) {
-                    $qq->where('gdg_brg_jadi_id', $k->gdg_brg_jadi_id);
-                })
-                ->where('status_id', 3)
-                ->with('detail.header')
-                ->get()->count();
-
-            $jumlah = NoseriTGbj::whereHas('detail.header', function ($q) use ($k) {
-                $q->where('dari', 17)->where('ke', 13);
-                $q->where('tgl_masuk', $k->header->tgl_masuk);
-            })
-                ->whereHas('detail', function ($qq) use ($k) {
-                    $qq->where('gdg_brg_jadi_id', $k->gdg_brg_jadi_id);
-                })
-                ->with('detail.header')
-                ->get()->count();
-            if ($jumlah != $jumlah_done) {
-                $x[] = $k->header->tgl_masuk;
-                $y[] = $k->gdg_brg_jadi_id;
-            }
+            $x[] = $k->tgl_masuk;
+            $y[] = $k->gdg_brg_jadi_id;
         }
 
-        $datax = TFProduksiDetail::with('header')
-            ->leftJoin('t_gbj as tg', 't_gbj_detail.t_gbj_id', '=', 'tg.id')
-            ->select('*', DB::raw('sum(t_gbj_detail.qty) as total'))
+        // $datax = TFProduksiDetail::with('header')
+        //     ->leftJoin('t_gbj as tg', 't_gbj_detail.t_gbj_id', '=', 'tg.id')
+        //     ->select('*', DB::raw('sum(t_gbj_detail.qty) as total'))
+        //     ->groupBy('tg.tgl_masuk')
+        //     ->groupBy('t_gbj_detail.gdg_brg_jadi_id')
+        //     ->where('tg.dari', 17)
+        //     ->where('tg.ke', 13)
+        //     ->whereIn('tg.tgl_masuk', $x)
+        //     ->whereIn('t_gbj_detail.gdg_brg_jadi_id', $y)
+        //     ->get();
+        $datax = TFProduksiDetail::
+            leftJoin('t_gbj as tg', 't_gbj_detail.t_gbj_id', '=', 'tg.id')
+            ->leftJoin('gdg_barang_jadi as gbj', 'gbj.id','=','t_gbj_detail.gdg_brg_jadi_id')
+            ->leftJoin('produk as p', 'p.id','=','gbj.produk_id')
+            ->select('tg.tgl_masuk', DB::raw("concat(p.nama, ' ', gbj.nama) as produkk"), DB::raw('sum(t_gbj_detail.qty) as total'), 't_gbj_detail.gdg_brg_jadi_id', )
             ->groupBy('tg.tgl_masuk')
             ->groupBy('t_gbj_detail.gdg_brg_jadi_id')
             ->where('tg.dari', 17)
@@ -995,13 +991,15 @@ class GudangController extends Controller
             ->whereIn('t_gbj_detail.gdg_brg_jadi_id', $y)
             ->get();
 
+            // return $datax;
+
         return datatables()->of($datax)
             ->addIndexColumn()
             ->addColumn('bppb', function($d) {
                 $seri_done = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
                     $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
                     $q->whereHas('header', function ($a) use ($d) {
-                        $a->where('tgl_masuk', $d->header->tgl_masuk)->where('ke', 13)->where('dari', 17);
+                        $a->where('tgl_masuk', $d->tgl_masuk)->where('ke', 13)->where('dari', 17);
                     });
                 })->where('jenis', 'masuk')->first();
 
@@ -1009,30 +1007,30 @@ class GudangController extends Controller
                 return $nobppb->header->no_bppb == '-' ? '-' : $nobppb->header->no_bppb;
             })
             ->addColumn('tgl_masuk', function ($d) {
-                if (isset($d->header->tgl_masuk)) {
-                    return Carbon::parse($d->header->tgl_masuk)->isoFormat('D MMMM Y');
+                if (isset($d->tgl_masuk)) {
+                    return Carbon::parse($d->tgl_masuk)->isoFormat('D MMMM Y');
                 } else {
                     return '-';
                 }
             })
             ->addColumn('product', function ($d) {
-                return $d->produk->produk->nama . ' ' . $d->produk->nama;
+                return $d->produkk;
             })
             ->addColumn('jumlah', function ($d) {
                 $seri_done = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
                     $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
                     $q->whereHas('header', function ($a) use ($d) {
-                        $a->where('tgl_masuk', $d->header->tgl_masuk)->where('ke', 13)->where('dari', 17);
+                        $a->where('tgl_masuk', $d->tgl_masuk)->where('ke', 13)->where('dari', 17);
                     });
                 })->where('jenis', 'masuk')->where('status_id', 3)->get()->count();
 
-                return $d->total . ' ' . $d->produk->satuan->nama . '<br><span class="badge badge-dark"> Sisa Diterima ' . intval($d->total - $seri_done) . '</span>';
+                return $d->total.'<br><span class="badge badge-dark"> Sisa Diterima ' . intval($d->total - $seri_done) . '</span>';
             })
             ->addColumn('action', function ($d) {
                 $seri_done = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
                     $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
                     $q->whereHas('header', function ($a) use ($d) {
-                        $a->where('tgl_masuk', $d->header->tgl_masuk);
+                        $a->where('tgl_masuk', $d->tgl_masuk);
                         $a->where('dari', 17);
                     });
                 })->where('jenis', 'masuk')->where('status_id', 3)->get()->count();
@@ -1040,25 +1038,25 @@ class GudangController extends Controller
                 $seri = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
                     $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
                     $q->whereHas('header', function ($a) use ($d) {
-                        $a->where('tgl_masuk', $d->header->tgl_masuk);
+                        $a->where('tgl_masuk', $d->tgl_masuk);
                         $a->where('dari', 17);
                     });
                 })->where('jenis', 'masuk')->get()->count();
 
                 if ($seri == $seri_done) {
-                    return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="' . $d->produk->produk->nama . '" data-var="' . $d->produk->nama . '" data-attr=""  data-id="' . $d->id . '" data-tgl="' . $d->header->tgl_masuk . '" data-brgid="' . $d->gdg_brg_jadi_id . '">
+                    return  '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="' . $d->produkk . '" data-attr=""  data-id="' . $d->id . '" data-tgl="' . $d->tgl_masuk . '" data-brgid="' . $d->gdg_brg_jadi_id . '">
                                 <button class="btn btn-outline-info btn-sm" type="button" >
                                 <i class="far fa-eye"></i>&nbsp;Detail
                                 </button>
                             </a>';
                 } else {
                     return  '
-                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="' . $d->produk->produk->nama . '" data-var="' . $d->produk->nama . '" data-attr=""  data-id="' . $d->id . '" data-tgl="' . $d->header->tgl_masuk . '" data-brgid="' . $d->gdg_brg_jadi_id . '">
+                            <a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-produk="' . $d->produkk . '"data-attr=""  data-id="' . $d->id . '" data-tgl="' . $d->tgl_masuk . '" data-brgid="' . $d->gdg_brg_jadi_id . '">
                                 <button class="btn btn-outline-info btn-sm" type="button" >
                                 <i class="far fa-eye"></i>&nbsp;Detail
                                 </button>
                             </a>
-                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-produk="' . $d->produk->produk->nama . '" data-var="' . $d->produk->nama . '" data-attr=""  data-id="' . $d->id . '" data-tgl="' . $d->header->tgl_masuk . '" data-brgid="' . $d->gdg_brg_jadi_id . '">
+                            <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-produk="' . $d->produkk . '" data-attr=""  data-id="' . $d->id . '" data-tgl="' . $d->tgl_masuk . '" data-brgid="' . $d->gdg_brg_jadi_id . '">
                                 <button class="btn btn-outline-primary btn-sm" type="button" >
                                 <i class="far fa-edit"></i>&nbsp;Terima
                                 </button>

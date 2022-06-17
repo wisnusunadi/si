@@ -463,7 +463,7 @@
             </form>
         </div>
         <form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">
-            <div class="modal-footer" id="csv_data_file">
+            <div class="modal-footer" id="csv_data_file" style="width:100%; height:400px; overflow:auto;">
 
             </div>
             <div class="modal-footer justify-content-between" id="footer-btn">
