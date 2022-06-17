@@ -295,6 +295,7 @@
     }
     $(document).on('click', '.btn-delete', function(e){
         e.preventDefault();
+        delete prd1[idd]
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
         if(check != 0){
@@ -302,6 +303,7 @@
         }else{
             $('.btn-simpan').prop('hidden', true);
         }
+        console.log(prd1);
     });
 
     function make_temp_array(prd1) {
