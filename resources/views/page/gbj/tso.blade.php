@@ -295,15 +295,34 @@
     }
     $(document).on('click', '.btn-delete', function(e){
         e.preventDefault();
-        delete prd1[idd]
-        $(this).parent().parent().remove();
-        var check = $('tbody.tambah_data tr').length;
-        if(check != 0){
-            $('.btn-simpan').prop('hidden', false);
-        }else{
-            $('.btn-simpan').prop('hidden', true);
-        }
-        console.log(prd1);
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire(
+                    'Deleted!',
+                    'Data Berhasil Dihapus',
+                    'success'
+                ).then(() => {
+                    delete prd1[idd]
+                    $(this).parent().parent().remove();
+                    var check = $('tbody.tambah_data tr').length;
+                    if(check != 0){
+                        $('.btn-simpan').prop('hidden', false);
+                    }else{
+                        $('.btn-simpan').prop('hidden', true);
+                    }
+                    console.log(prd1);
+                })
+
+            }
+        })
     });
 
     function make_temp_array(prd1) {
@@ -335,6 +354,7 @@
             processing: false,
             serverSide: false,
             autoWidth: false,
+            ordering: false,
             destroy: true,
             stateSave: true,
             lengthChange: false,
@@ -525,13 +545,21 @@
                         data: prd1
                     },
                     success: function (res) {
-                        Swal.fire(
-                            'Sukses!',
-                            'Data Berhasil Ditransfer',
-                            'success'
-                        ).then(() => {
-                            location.reload();
-                        })
+                        if (res.error == true) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: res.msg
+                            })
+                        } else {
+                            Swal.fire(
+                                'Sukses!',
+                                res.msg,
+                                'success'
+                            ).then(() => {
+                                location.reload();
+                            })
+                        }
                     }
                 });
 

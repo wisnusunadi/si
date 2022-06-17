@@ -76,7 +76,7 @@ class ProduksiController extends Controller
                 }
             }
 
-            return response()->json(['msg' => 'Successfully']);
+            return response()->json(['msg' => 'Data Berhasil ditransfer', 'error' => false,]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
