@@ -254,7 +254,6 @@
                     </div>
                   </div>
                 <div class="d-flex justify-content-end">
-                    
                 </div>
                 <div class="row">
                     <div class="col-12">
@@ -327,6 +326,26 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="modalPreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body" id="bodyPreview">
+
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @stop
 
 @section('adminlte_js')
@@ -547,6 +566,9 @@
     let dataTampungSeri = [];
     const list  = document.getElementById('listseri');
     $(document).on('click', '.detailmodal', function (e) {
+        $('.barcodeScanAlat').val('');
+        $('.barcodeScanNonAlat').val('');
+        tmp = [];
         let gh = $(this).parent().prev().prev().prev().prev()[0].textContent;
         let ghh = gh.replace(/\w\S*/g, function (txt) {
             return txt.charAt(0).toUpperCase() + txt.substr(1).toUpperCase();
@@ -617,7 +639,7 @@
             },
         });
         let s = $('.modal-scan').modal('show');
-        console.log("dataTampungSeri", dataTampungSeri);
+        
         $('.modal-scan').on('shown.bs.modal', function () {
             $('#scan_filter').addClass('hidden');
         });
@@ -641,10 +663,50 @@
             if (e.keyCode == 13) {
                 if (datas !== undefined) {
                     let checkeds = $('.cb-child').prop('checked', true);
-                    tmp.push(datas.ids);
+                    if (prd1.length < 0 || prd1[dpp] == undefined) {
+                            if(tmp.includes(datas.ids)){
+                                console.log("sudah ada")
+                            }else{
+                                tmp.push(datas.ids)
+                                if(tmp.length > max){
+                                    Swal.fire({
+                                                icon: 'error',
+                                                title: 'Gagal',
+                                                text: 'Jumlah Nomor Seri Melebihi Batas',
+                                                type: 'error',
+                                                timer: 1000
+                                            })
+                                            tmp.pop()
+                                            checkeds.prop('checked', false);
+                                }
+                            }
+                        }else{
+                            for (nomorseri in prd1[dpp]){
+                                if(nomorseri == "noseri"){
+                                    if (prd1[dpp][nomorseri].includes(datas.ids)){
+                                        console.log("ada")
+                                    }else{
+                                        prd1[dpp][nomorseri].push(datas.ids);
+                                        if (prd1[dpp][nomorseri].length > max) {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Gagal',
+                                                text: 'Jumlah Nomor Seri Melebihi Batas',
+                                                type: 'error',
+                                                timer: 1000
+                                            })
+                                            prd1[dpp][nomorseri].pop();
+                                            checkeds.prop('checked', false);
+                                        }
+                                    }
+                            }
+                        }
+                    }
                 }
                 mytable.search('').draw();
             }
+            console.log("tmp", tmp)
+            console.log("prd1", prd1)
         });
         // scan produk dengan alat
         $('.barcodeScanAlat').on('keyup', function (e) {
@@ -654,8 +716,45 @@
             if(barcode.length >= 10){
                 if (data !== undefined) {
                     let checked = $('.cb-child').prop('checked', true);
-                    tmp.push(data.ids);
-                    $(this).val('');
+                    if (prd1.length < 0 || prd1[dpp] == undefined) {
+                            if(tmp.includes(data.ids)){
+                                console.log("sudah ada")
+                            }else{
+                                tmp.push(data.ids)
+                                if(tmp.length > max){
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Gagal',
+                                        text: 'Jumlah Nomor Seri Melebihi Batas',
+                                        type: 'error',
+                                        timer: 1000
+                                    })
+                                    tmp.pop();
+                                    checked.prop('checked', false);
+                                }
+                            }
+                        }else{
+                            for (nomorseri in prd1[dpp]){
+                                if(nomorseri == "noseri"){
+                                    if (prd1[dpp][nomorseri].includes(data.ids)){
+                                        console.log("ada")
+                                    }else{
+                                        prd1[dpp][nomorseri].push(data.ids);
+                                        if (prd1[dpp][nomorseri].length > max) {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Gagal',
+                                                text: 'Jumlah Nomor Seri Melebihi Batas',
+                                                type: 'error',
+                                                timer: 1000
+                                            })
+                                            prd1[dpp][nomorseri].pop();
+                                            checked.prop('checked', false);
+                                        }
+                                    }
+                            }
+                        }
+                    }
                     if(checked){
                         var idd = $(checked).val();
                         var title = $(checked).parent().prev()[0].textContent;
@@ -670,20 +769,66 @@
                         timer: 2000,
                         showConfirmButton: false,
                     })
-                    $(this).val('');
-                    mytable.search('').draw();
                 }
+                console.log("tmp", tmp)
+                console.log("prd1", prd1)
+                $(this).val('');
+                mytable.search('').draw();
             }
         });
     });
     $('.scan-produk').on('click', '.cb-child',function (){
         if ($(this).is(':checked')) {
-            console.log("checked");
-            // var checked = ($(this).val());
-            // tmp.push(checked);
-        } else {
-            console.log(make_temp_array(prd1));
+            if (prd1.length < 0 || prd1[dpp] == undefined) {
+                if(tmp.includes($(this).val())){
+                    console.log("sudah ada")
+                }else{
+                    tmp.push($(this).val())
+                    if(tmp.length > max){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: 'Jumlah Nomor Seri Melebihi Batas',
+                            type: 'error',
+                            timer: 1000
+                        })
+                        tmp.pop()
+                        $(this).prop('checked', false);
+                    }
+                }
+            }else{
+                for (nomorseri in prd1[dpp]){
+                    if(nomorseri == "noseri"){
+                     prd1[dpp][nomorseri].push($(this).val())
+                     if (prd1[dpp][nomorseri].length > max) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: 'Jumlah Nomor Seri Melebihi Batas',
+                                type: 'error',
+                                timer: 1000
+                            })
+                            prd1[dpp][nomorseri].pop();
+                            $(this).prop('checked', false);
+                        }
+                }
+           }
         }
+        } else {
+            if (prd1.length < 0 || prd1[dpp] == undefined) {
+                tmp.splice($.inArray($(this).val(), tmp), 1);
+            }else{
+                for (nomorseri in prd1[dpp]){
+                    if(nomorseri == "noseri"){
+                        prd1[dpp][nomorseri].splice($.inArray($(this).val(), prd1[dpp][nomorseri]), 1)
+                    }
+                }
+            }
+        }
+        $(this).val('');
+        $('.scan-produk').DataTable().search('').draw();
+        console.log("tmp", tmp)
+        console.log("prd1", prd1)
     })
     $('.scan-produk').on('change', '.cb-child',function (){
         var idd = $(this).val();
@@ -730,11 +875,15 @@
                 showConfirmButton: false,
                 timer: 1500
             })
-            prd1[dpp] = {
+            if (prd1.length < 0 || prd1[dpp] == undefined) {
+                prd1[dpp] = {
                 "jumlah": jml,
                 "prd": prd,
                 "noseri": [...new Set(tmp)]
-            };
+                };
+            }else{
+                console.log("prd1", prd1);
+            }
             tmp = [];
             $('.modal-scan').modal('hide');
             if (prd1[dpp].noseri.length == 0) {
