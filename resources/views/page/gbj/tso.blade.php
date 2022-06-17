@@ -475,33 +475,33 @@
     $(document).on('click', '.btn-simpan', function(e) {
         e.preventDefault();
 
-        let a = $('#post_ke').val();
-        let b = $('#post_deskripsi').val();
-        let c = $('#post_produk').val();
-        let d = parseInt($('#post_qty').val());
-        let stok_gudang = parseInt($('.stok-gudang').val());
+        // let a = $('#post_ke').val();
+        // let b = $('#post_deskripsi').val();
+        // let c = $('#post_produk').val();
+        // let d = parseInt($('#post_qty').val());
+        // let stok_gudang = parseInt($('.stok-gudang').val());
 
-        let ke = [];
-        let desk = [];
-        let gdg = [];
-        let stok_push = [];
+        // let ke = [];
+        // let desk = [];
+        // let gdg = [];
+        // let stok_push = [];
 
-        $('input[name^="ke"]').each(function() {
-            ke.push($(this).val());
-        });
+        // $('input[name^="ke"]').each(function() {
+        //     ke.push($(this).val());
+        // });
 
-        $('input[name^="deskripsi"]').each(function() {
-            desk.push($(this).val());
-        });
+        // $('input[name^="deskripsi"]').each(function() {
+        //     desk.push($(this).val());
+        // });
 
-        $('input[name^="gdg_brg_jadi_id"]').each(function() {
-            gdg.push($(this).val());
-        });
+        // $('input[name^="gdg_brg_jadi_id"]').each(function() {
+        //     gdg.push($(this).val());
+        // });
 
-        $('input[name^="qty"]').each(function() {
-            // seri[id].qty = stok_push;
-            stok_push.push($(this).val());
-        });
+        // $('input[name^="qty"]').each(function() {
+        //     // seri[id].qty = stok_push;
+        //     stok_push.push($(this).val());
+        // });
 
         Swal.fire({
             title: 'Are you sure?',
@@ -513,7 +513,7 @@
             confirmButtonText: 'Yes, transfer it!'
             }).then((result) => {
             if (result.isConfirmed) {
-                // $(this).prop('disabled', true);
+                $(this).prop('disabled', true);
                 $.ajax({
                     url: "/api/tfp/create",
                     type:"POST",
@@ -521,20 +521,15 @@
                         "_token": "{{ csrf_token() }}",
                         userid: $('#userid').val(),
                         data: prd1
-                        // ke: ke,
-                        // deskripsi: desk,
-                        // gdg_brg_jadi_id: gdg,
-                        // qty: stok_push,
-                        // noseri_id : seri,
                     },
                     success: function (res) {
                         Swal.fire(
                             'Sukses!',
                             'Data Berhasil Ditransfer',
                             'success'
-                        )
-                        console.log(res);
-                        // location.reload();
+                        ).then(() => {
+                            location.reload();
+                        })
                     }
                 });
 

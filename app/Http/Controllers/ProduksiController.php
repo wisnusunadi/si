@@ -33,50 +33,50 @@ class ProduksiController extends Controller
     function CreateTFItem(Request $request)
     {
         try {
-            dd($request->all());
+            // dd($request->all());
             //code...
-            // foreach($request->data as $key => $value) {
-            //     $header = TFProduksi::create([
-            //         'tgl_keluar' => Carbon::now(),
-            //         'ke' => $key,
-            //         'deskripsi' => $value['desk'],
-            //         'jenis' => 'keluar',
-            //         'created_at' => Carbon::now(),
-            //         'created_by' => $request->userid
-            //     ]);
+            foreach($request->data as $key => $value) {
+                $header = TFProduksi::create([
+                    'tgl_keluar' => Carbon::now(),
+                    'ke' => $value['tujuan'],
+                    'deskripsi' => $value['desk'],
+                    'jenis' => 'keluar',
+                    'created_at' => Carbon::now(),
+                    'created_by' => $request->userid
+                ]);
 
-            //     $detail = TFProduksiDetail::create([
-            //         't_gbj_id' => $header->id,
-            //         'gdg_brg_jadi_id' => $value['prd'],
-            //         'qty' => $value['qty'],
-            //         'jenis' => 'keluar',
-            //         'created_at' => Carbon::now(),
-            //         'created_by' => $request->userid
-            //     ]);
+                $detail = TFProduksiDetail::create([
+                    't_gbj_id' => $header->id,
+                    'gdg_brg_jadi_id' => $key,
+                    'qty' => $value['qty'],
+                    'jenis' => 'keluar',
+                    'created_at' => Carbon::now(),
+                    'created_by' => $request->userid
+                ]);
 
-            //     foreach($value['noseri'] as $k => $v) {
-            //         NoseriTGbj::create([
-            //             't_gbj_detail_id' => $detail->id,
-            //             'noseri_id' => $v,
-            //             'layout_id' => 1,
-            //             'status_id' => 2,
-            //             'jenis' => 'keluar',
-            //             'created_at' => Carbon::now(),
-            //             'created_by' => $request->userid
-            //         ]);
+                foreach($value['noseri'] as $k => $v) {
+                    NoseriTGbj::create([
+                        't_gbj_detail_id' => $detail->id,
+                        'noseri_id' => $v,
+                        'layout_id' => 1,
+                        'status_id' => 2,
+                        'jenis' => 'keluar',
+                        'created_at' => Carbon::now(),
+                        'created_by' => $request->userid
+                    ]);
 
-            //         Noseri::find($v)->update(['is_ready' => 1, 'log_id' => $key]);
-            //         NoseriLog::create([
-            //             'gbj_id' => $value['prd'],
-            //             'noseri_id' => $v,
-            //             'nonso' => $header->id,
-            //             'log_id' => $key,
-            //             'created_by' => $request->userid
-            //         ]);
-            //     }
-            // }
+                    NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $value['tujuan']]);
+                    // NoseriLog::create([
+                    //     'gbj_id' => $value['prd'],
+                    //     'noseri_id' => $v,
+                    //     'nonso' => $header->id,
+                    //     'log_id' => $key,
+                    //     'created_by' => $request->userid
+                    // ]);
+                }
+            }
 
-            // return response()->json(['msg' => 'Successfully']);
+            return response()->json(['msg' => 'Successfully']);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
