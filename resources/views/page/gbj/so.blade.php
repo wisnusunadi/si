@@ -55,7 +55,7 @@
                                 <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Dicek</a>
                             </li>
                             {{-- <li class="nav-item">
-                                <a class="nav-link" id="pills-batal-tab" data-toggle="pill" href="#pills-batal" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Batal</a>
+                                <a class="nav-link" id="pills-batal-tab" data-toggle="pill" href="#pills-batal" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Batal PO</a>
                             </li> --}}
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
@@ -109,7 +109,7 @@
                                             <table class="table table-bordered" style="width: 100%" id="batal-table">
                                                 <thead>
                                                     <tr>
-                                                        <th>No</th>
+                                                        <th><input type="checkbox" name="" id=""></th>
                                                         <th>Nomor SO</th>
                                                         <th>Nomor PO</th>
                                                         <th>Customer</th>
@@ -117,6 +117,11 @@
                                                         <th>Status</th>
                                                     </tr>
                                                 </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td></td>
+                                                    </tr>
+                                                </tbody>
                                             </table>
 
                                         </div>

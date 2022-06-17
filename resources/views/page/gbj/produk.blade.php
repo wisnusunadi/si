@@ -23,6 +23,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="row">
+                                @if (Auth::user()->divisi->id != 2)
                                     <span class="float-left mr-1">
                                         <button type="button" class="btn btn-success" id="downloadTemplate">
                                             <i class="fas fa-download"></i>&nbsp;Template
@@ -34,6 +35,7 @@
                                             <i class="fas fa-file-import"></i>&nbsp;Import
                                         </button>
                                     </span>
+                                @endif
                                 </div>
                             </div>
                             <div class="col-4">
