@@ -8,7 +8,7 @@
         <thead>
             <tr>
                 <th colspan="22" style="text-align:center">
-                  f
+                  Laporan Penjualan
                 </th>
             </tr>
             <tr>
@@ -46,7 +46,18 @@
             <td>{{$e->Pesanan->so}}</td>
             <td >{{$e->Pesanan->no_po}}</td>
             <td >{{date('d-m-Y', strtotime($e->Pesanan->tgl_po))}}</td>
-            <td></td>
+            <td>
+                @if ($d->getSuratJalanProduk($d->DetailPesananUnique()[0]->penjualan_produk_id)->count() > 0)
+                @foreach($d->getSuratJalanProduk($d->DetailPesananUnique()[0]->penjualan_produk_id) as $f)
+                {{ $f->Logistik->nosurat }}({{ date('d-m-Y', strtotime($f->Logistik->tgl_kirim)) }})
+                @if( !$loop->last)
+                ,
+                @endif
+                @endforeach
+            @else
+            -
+            @endif
+            </td>
             <td>
                 @if($e->Pesanan->Ekatalog)
                 {{$e->Pesanan->Ekatalog->no_urut}}
