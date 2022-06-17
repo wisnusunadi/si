@@ -287,6 +287,11 @@
                     }
                 }
             $('.btn-simpan').prop('hidden', false);
+            if(prdlist.length > 0) {
+                $('.ke').attr('disabled', true);
+            } else {
+                $('.ke').attr('disabled', false);
+            }
             }
         });
     });
@@ -321,8 +326,10 @@
         var check = $('tbody.tambah_data tr').length;
         if(check != 0){
             $('.btn-simpan').prop('hidden', false);
+            $('.ke').attr('disabled', true);
         }else{
             $('.btn-simpan').prop('hidden', true);
+            $('.ke').attr('disabled', false);
         }
         
     });
