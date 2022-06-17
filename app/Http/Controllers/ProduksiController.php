@@ -33,63 +33,56 @@ class ProduksiController extends Controller
     function CreateTFItem(Request $request)
     {
         try {
-            foreach ($request->gdg_brg_jadi_id as $key => $value) {
-                $tf_prod = new TFProduksi();
-                $tf_prod->tgl_keluar = Carbon::now();
-                $tf_prod->ke = $request->ke[$key];
-                $tf_prod->deskripsi = $request->deskripsi[$key];
-                $tf_prod->jenis = 'keluar';
-                $tf_prod->created_at = Carbon::now();
-                $tf_prod->created_by = $request->userid;
-                $tf_prod->save();
+            dd($request->all());
+            //code...
+            // foreach($request->data as $key => $value) {
+            //     $header = TFProduksi::create([
+            //         'tgl_keluar' => Carbon::now(),
+            //         'ke' => $key,
+            //         'deskripsi' => $value['desk'],
+            //         'jenis' => 'keluar',
+            //         'created_at' => Carbon::now(),
+            //         'created_by' => $request->userid
+            //     ]);
 
-                $tf_prod_det = new TFProduksiDetail();
-                $tf_prod_det->t_gbj_id = $tf_prod->id;
-                $tf_prod_det->gdg_brg_jadi_id = $value;
-                $tf_prod_det->qty = $request->qty[$key];
-                $tf_prod_det->jenis = 'keluar';
-                $tf_prod_det->created_at = Carbon::now();
-                $tf_prod_det->created_by = $request->userid;
-                $tf_prod_det->save();
+            //     $detail = TFProduksiDetail::create([
+            //         't_gbj_id' => $header->id,
+            //         'gdg_brg_jadi_id' => $value['prd'],
+            //         'qty' => $value['qty'],
+            //         'jenis' => 'keluar',
+            //         'created_at' => Carbon::now(),
+            //         'created_by' => $request->userid
+            //     ]);
 
-                $did = $tf_prod_det->id;
-                $checked = $request->noseri_id;
+            //     foreach($value['noseri'] as $k => $v) {
+            //         NoseriTGbj::create([
+            //             't_gbj_detail_id' => $detail->id,
+            //             'noseri_id' => $v,
+            //             'layout_id' => 1,
+            //             'status_id' => 2,
+            //             'jenis' => 'keluar',
+            //             'created_at' => Carbon::now(),
+            //             'created_by' => $request->userid
+            //         ]);
 
-                foreach ($request->noseri_id[$value] as $k => $v) {
-                    if (in_array($request->noseri_id[$value], $checked)) {
-                        $nn = new NoseriTGbj();
-                        $nn->t_gbj_detail_id = $did;
-                        $nn->noseri_id = $v;
-                        $nn->layout_id = 1;
-                        $nn->status_id = 2;
-                        $nn->jenis = 'keluar';
-                        $nn->created_at = Carbon::now();
-                        $nn->created_by = $request->userid;
-                        $nn->save();
+            //         Noseri::find($v)->update(['is_ready' => 1, 'log_id' => $key]);
+            //         NoseriLog::create([
+            //             'gbj_id' => $value['prd'],
+            //             'noseri_id' => $v,
+            //             'nonso' => $header->id,
+            //             'log_id' => $key,
+            //             'created_by' => $request->userid
+            //         ]);
+            //     }
+            // }
 
-                        NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->ke[$key]]);
-                    }
-                }
-                GudangBarangJadiHis::create([
-                    'gdg_brg_jadi_id' => $value,
-                    'stok' => $request->qty[$key],
-                    'tgl_masuk' => Carbon::now(),
-                    'jenis' => 'KELUAR',
-                    'created_by' => $request->userid,
-                    'created_at' => Carbon::now(),
-                    'ke' => $request->ke[$key],
-                    'tujuan' => $request->deskripsi[$key],
-                ]);
-            }
-
-            return response()->json(['msg' => 'Data Berhasil Ditransfer']);
+            // return response()->json(['msg' => 'Successfully']);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'msg' => $e->getMessage(),
+                'msg' => $e->getMessage()
             ]);
         }
-
     }
 
     function TfbySO(Request $request)

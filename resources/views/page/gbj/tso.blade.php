@@ -20,17 +20,22 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-12 mt-3">
-                                    <form method="post">
-                                        <div class="form-group row top-min">
-                                            <label for="" class="col-12 font-weight-bold col-form-label">Tujuan</label>
-                                            <div class="col-12">
-                                                <select class="form-control ke" name="ke" id="ke">
-                                                    <option value="Divisi IT">Divisi IT</option>
-                                                    <option value="Divisi QC">Divisi QC</option>
-                                                    <option value="Divisi Perakitan">Divisi Perakitan</option>
-                                                </select>
-                                            </div>
+                                    <div class="form-group row top-min">
+                                        <label for="" class="col-12 font-weight-bold col-form-label">Tujuan</label>
+                                        <div class="col-12">
+                                            <select class="form-control ke" name="ke" id="ke">
+                                            </select>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card card-primary b-radius">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 mt-3">
+                                    <form method="post">
                                         <div class="form-group row top-min">
                                             <label for="" class="col-12 font-weight-bold col-form-label">Keterangan</label>
                                             <div class="col-12">
@@ -74,7 +79,7 @@
                             <table class="table table-hover addData">
                                 <thead>
                                     <tr>
-                                        <th>Tujuan</th>
+                                        {{-- <th>Tujuan</th> --}}
                                         <th>Keterangan</th>
                                         <th>Produk</th>
                                         <th>Stok</th>
@@ -131,6 +136,7 @@
 
 @section('adminlte_js')
 <script>
+
     (function ($) {
         $.fn.inputFilter = function (inputFilter) {
             return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
@@ -225,7 +231,8 @@
             }
         });
     });
-
+    let prd1 = {};
+    let tmp = [];
     $(document).on('click','.btn-tambah', function (e) {
         e.preventDefault();
 
@@ -281,7 +288,7 @@
         }
 
         i++;
-        let tambah_data = '<tr id=row'+i+'><td>'+d_divisi+'<div id="hidden"><input type="hidden" name="ke['+i+']" id="post_ke'+i+'" value="'+divisi+'"></div></td><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi'+i+'" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'" ><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        let tambah_data = '<tr id=row'+i+'><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'" data-ke="'+divisi+'" data-desk="'+deskripsi+'" data-qty="'+stok+'"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
 
 
@@ -297,82 +304,172 @@
         }
     });
 
+    function make_temp_array(prd1) {
+        let result = {};
+        console.log("func", prd1)
+        for (const dpp in prd1) {
+            for (let i = 0; i < prd1[dpp].noseri.length; i++) {
+                result[prd1[dpp].noseri[i]] = dpp
+            }
+        }
+        console.log("res", result)
+        return result;
+    }
 
     var prd = '';
     var jml = '';
-    var id = '';
+    var idd = '';
+    var tujuan = '';
+    let desk = '';
     $(document).on('click', '.noseriModal', function(e) {
         var tr = $(this).closest('tr');
-        jml = tr.find('#post_qty').val();
-        console.log(jml);
-        id = $(this).data('id');
-        console.log(id);
+        jml = $(this).data('qty');
+        desk = $(this).data('desk');
+        tujuan = $(this).data('ke');
+        idd = $(this).data('id');
+        let temp_array = make_temp_array(prd1);
 
-        $.ajax({
-            url: "/api/tfp/noseri/" + id,
-            type: "get",
-            // data : {id : id},
-            dataType: 'json',
-            success: function(res) {
-                console.log(res);
+        $('.scan-produk').DataTable({
+            processing: false,
+            serverSide: false,
+            autoWidth: false,
+            destroy: true,
+            stateSave: true,
+            lengthChange: false,
+            ajax: {
+                url: "/api/tfp/noseri",
+                type: "post",
+                data: {gbj: idd},
+            },
+            columns: [
+                { data: 'noseri', name: 'noseri'},
+                // { data: 'checkbox', name: 'checkbox', orderable: 'false'},
+                {
+                    data(data) {
+                        // console.log(data.ids, temp_array[data.ids]);
+                        if (temp_array[data.ids] !== undefined) {
+                            if (temp_array[data.ids] == idd)
+                                return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}" checked>`;
+                            else
+                                return '<span class="badge badge-info">Sudah Digunakan</span>'
+                        } else {
+                            if (data.is_change == 1) {
+                                return `<span class="badge badge-warning">Noseri Tidak Bisa Digunakan</span>`
+                            } else {
+                                return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}">`
+                            }
+                            // return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}">`
+                        }
+                    }
+                },
+            ],
 
-                $('.scan-produk').DataTable({
-                    destroy: true,
-                    processing: true,
-                    serverSide: false,
-                    autoWidth: false,
-                    ordering: false,
-                    ajax: {
-                        url: '/api/tfp/noseri/' + id,
-                    },
-                    columns: [
-                        { data: 'noseri', name: 'noseri'},
-                        { data: 'checkbox', name: 'checkbox', orderable: 'false'},
-                    ],
+            'select': {
+                'style': 'multi'
+            },
 
-                    'select': {
-                        'style': 'multi'
-                    },
-
-                    "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
-                });
+            "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
             }
-        })
+        });
         $('.modal-produk').modal('show');
     })
-    const seri = {};
-    $(document).on('click', '#btnSave', function() {
-        let a = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type="checkbox"]:checked').map(function() {
-            return $(this).val();
-        }).get();
-        console.log(a);
-        // console.log('jum '+jml);
 
-        // const ids = [];
-        $('.cb-child').each(function() {
-            if ($(this).is(":checked")) {
-                if (a.length > jml) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Oops...',
-                        text: 'Batas Maksimal '+jml+' Barang!'
-                    })
+    $('.scan-produk').on('click', '.cb-child',function (){
+        if ($(this).is(':checked')) {
+            if (prd1.length < 0 || prd1[idd] == undefined) {
+                if (tmp.includes($(this).val())) {
+                    console.log("sudah ada")
                 } else {
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Noseri Berhasil Disimpan',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    $('.modal-produk').modal('hide');
+                    tmp.push($(this).val())
+                    if(tmp.length > jml){
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Gagal',
+                            text: 'Jumlah Nomor Seri Melebihi Batas',
+                            type: 'error',
+                            timer: 1000
+                        })
+                        tmp.pop()
+                        $(this).prop('checked', false);
+                    }
+                }
+            } else {
+                for (nomorseri in prd1[idd]){
+                    if(nomorseri == "noseri"){
+                     prd1[idd][nomorseri].push($(this).val())
+                     if (prd1[idd][nomorseri].length > jml) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Gagal',
+                                text: 'Jumlah Nomor Seri Melebihi Batas',
+                                type: 'error',
+                                timer: 1000
+                            })
+                            prd1[idd][nomorseri].pop();
+                            $(this).prop('checked', false);
+                        }
+                    }
                 }
             }
-        })
-        seri[id] = a;
-        console.log(seri);
+        } else {
+            if (prd1.length < 0 || prd1[idd] == undefined) {
+                tmp.splice($.inArray($(this).val(), tmp), 1);
+            }else{
+                for (nomorseri in prd1[idd]){
+                    if(nomorseri == "noseri"){
+                        prd1[idd][nomorseri].splice($.inArray($(this).val(), prd1[idd][nomorseri]), 1)
+                    }
+                }
+            }
+        }
+        console.log("tmp", tmp)
+        console.log("prd1", prd1)
+    })
+
+    $(document).on('click', '#btnSave', function() {
+        // console.log(tmp);
+        let checked = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(function () {
+            return $(this).val();
+        }).get();
+        if (checked.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Tidak Ada data yang dipilih'
+            })
+        } else if (checked.length > jml) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Batas Maksimal '+jml+' Barang!'
+            })
+        } else {
+            Swal.fire({
+                position: 'center',
+                icon: 'success',
+                title: 'Noseri Berhasil Disimpan',
+                showConfirmButton: false,
+                timer: 1500
+            }).then(() => {
+                if (prd1.length < 0 || prd1[idd] == undefined) {
+                    prd1[idd] = {
+                        'desk': desk,
+                        'qty': jml,
+                        'tujuan' : $('.ke').val(),
+                        'noseri': [...new Set(tmp)]
+                    }
+                } else {
+                    console.log("prd1", prd1);
+                }
+                tmp = [];
+                if (prd1[idd].noseri.length == 0) {
+                    delete prd1[idd]
+                }
+                console.log(prd1);
+                $('.modal-produk').modal('hide');
+            })
+        }
     })
 
     $(document).on('click', '.btn-simpan', function(e) {
@@ -402,6 +499,7 @@
         });
 
         $('input[name^="qty"]').each(function() {
+            // seri[id].qty = stok_push;
             stok_push.push($(this).val());
         });
 
@@ -415,46 +513,34 @@
             confirmButtonText: 'Yes, transfer it!'
             }).then((result) => {
             if (result.isConfirmed) {
-                $(this).prop('disabled', true);
+                // $(this).prop('disabled', true);
                 $.ajax({
                     url: "/api/tfp/create",
                     type:"POST",
                     data: {
                         "_token": "{{ csrf_token() }}",
                         userid: $('#userid').val(),
-                        ke: ke,
-                        deskripsi: desk,
-                        gdg_brg_jadi_id: gdg,
-                        qty: stok_push,
-                        noseri_id : seri,
+                        data: prd1
+                        // ke: ke,
+                        // deskripsi: desk,
+                        // gdg_brg_jadi_id: gdg,
+                        // qty: stok_push,
+                        // noseri_id : seri,
                     },
                     success: function (res) {
                         Swal.fire(
                             'Sukses!',
-                            res.msg,
+                            'Data Berhasil Ditransfer',
                             'success'
-                        ).then(function() {
-                            location.reload();
-                        });
+                        )
+                        console.log(res);
+                        // location.reload();
                     }
                 });
+
             }
         })
 
-        // Swal.fire({
-        //     title: 'Do you want to save the changes?',
-        //     showDenyButton: true,
-        //     showCancelButton: true,
-        //     confirmButtonText: 'Save',
-        //     denyButtonText: `Don't save`,
-        // }).then((result) => {
-        //     /* Read more about isConfirmed, isDenied below */
-        //     if (result.isConfirmed) {
-        //         Swal.fire('Saved!', 'Ok', 'success')
-        //     } else if (result.isDenied) {
-        //         Swal.fire('Changes are not saved', '', 'info')
-        //     }
-        // })
 
     })
 
