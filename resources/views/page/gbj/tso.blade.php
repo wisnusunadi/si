@@ -353,7 +353,7 @@
                             else
                                 return '<span class="badge badge-info">Sudah Digunakan</span>'
                         } else {
-                            if (data.is_change == 1) {
+                            if (data.is_change == 0) {
                                 return `<span class="badge badge-warning">Noseri Tidak Bisa Digunakan</span>`
                             } else {
                                 return `<input type="checkbox" class="cb-child" name="noseri_id[][]"  value="${data.ids}">`
