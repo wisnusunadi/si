@@ -1000,45 +1000,50 @@ class LogistikController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $status = "";
-                // if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) <= 0) {
-                //     if ($data->getJumlahKirim() == $data->getJumlahPesanan()) {
-                //         $status = '<span class="badge green-text">Sudah Dikirim</span>';
-                //     } else {
-                //         if ($data->getJumlahKirim() == 0) {
-                //             $status = '<span class="badge red-text">Belum Dikirim</span>';
-                //         } else {
-                //             $status = '<span class="badge yellow-text">Sebagian Dikirim</span>';
-                //         }
-                //     }
-                // } else if (count($data->DetailPesanan) <= 0 && count($data->DetailPesananPart) > 0) {
-                //     if ($data->getJumlahKirimPart() == $data->getJumlahPesananPart()) {
-                //         $status = '<span class="badge green-text">Sudah Dikirim</span>';
-                //     } else {
-                //         if ($data->getJumlahKirimPart() == 0) {
-                //             $status =  ' <span class="badge red-text">Belum Dikirim</span>';
-                //         } else {
-                //             $status =   '<span class="badge yellow-text">Sebagian Dikirim</span>';
-                //         }
-                //     }
-                // } else if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) > 0) {
-                //     if ($data->getJumlahKirim() == $data->getJumlahPesanan() && $data->getJumlahKirimPart() == $data->getJumlahPesananPart()) {
-                //         $status = '<span class="badge green-text">Sudah Dikirim</span>';
-                //     } else {
-                //         if ($data->getJumlahKirimPart() == 0 && $data->getJumlahKirim() == 0) {
-                //             $status = ' <span class="badge red-text">Belum Dikirim</span>';
-                //         } else {
-                //             $status = '<span class="badge yellow-text">Sebagian Dikirim</span>';
-                //         }
-                //     }
-                // }
-                // return $status;
-                $name = explode('/', $data->so);
-                return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="'.$name[1].'" data-provinsi="">
-                        <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                            <i class="fas fa-times"></i>
-                            Batal
-                        </button>
-                    </a>';
+                if($data->log_id == "20"){
+                    if($data->Spa->log == "batal" || $data->Spb->log == "batal"){
+                        $name = explode('/', $data->so);
+                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="'.$name[1].'" data-provinsi="">
+                                <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                                    <i class="fas fa-times"></i>
+                                    Batal
+                                </button>
+                            </a>';
+                    }
+                } else {
+                    if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) <= 0) {
+                        if ($data->getJumlahKirim() == $data->getJumlahPesanan()) {
+                            $status = '<span class="badge green-text">Sudah Dikirim</span>';
+                        } else {
+                            if ($data->getJumlahKirim() == 0) {
+                                $status = '<span class="badge red-text">Belum Dikirim</span>';
+                            } else {
+                                $status = '<span class="badge yellow-text">Sebagian Dikirim</span>';
+                            }
+                        }
+                    } else if (count($data->DetailPesanan) <= 0 && count($data->DetailPesananPart) > 0) {
+                        if ($data->getJumlahKirimPart() == $data->getJumlahPesananPart()) {
+                            $status = '<span class="badge green-text">Sudah Dikirim</span>';
+                        } else {
+                            if ($data->getJumlahKirimPart() == 0) {
+                                $status =  ' <span class="badge red-text">Belum Dikirim</span>';
+                            } else {
+                                $status =   '<span class="badge yellow-text">Sebagian Dikirim</span>';
+                            }
+                        }
+                    } else if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) > 0) {
+                        if ($data->getJumlahKirim() == $data->getJumlahPesanan() && $data->getJumlahKirimPart() == $data->getJumlahPesananPart()) {
+                            $status = '<span class="badge green-text">Sudah Dikirim</span>';
+                        } else {
+                            if ($data->getJumlahKirimPart() == 0 && $data->getJumlahKirim() == 0) {
+                                $status = ' <span class="badge red-text">Belum Dikirim</span>';
+                            } else {
+                                $status = '<span class="badge yellow-text">Sebagian Dikirim</span>';
+                            }
+                        }
+                    }
+                    return $status;
+                }
             })
             ->addColumn('batas', function ($data) {
                 $name = explode('/', $data->so);
@@ -1127,7 +1132,8 @@ class LogistikController extends Controller
             left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
             left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
             left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
-            where detail_pesanan.pesanan_id = pesanan.id)');
+            where detail_pesanan.pesanan_id = pesanan.id
+            having count(noseri_logistik.id) > 0)');
         })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->get();
 
         $array_id = $prd->pluck('id')->toArray();

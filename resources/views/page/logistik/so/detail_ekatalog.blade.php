@@ -341,30 +341,16 @@
                                                                                     <thead>
                                                                                         <tr>
                                                                                             <th rowspan="2" width="8%" class="align-middle">
-                                                                                                <div
-                                                                                                    class="form-check">
-                                                                                                    <input
-                                                                                                        class="form-check-input"
-                                                                                                        type="checkbox"
-                                                                                                        value="check_all"
-                                                                                                        id="check_all"
-                                                                                                        name="check_all" />
-                                                                                                    <label
-                                                                                                        class="form-check-label"
-                                                                                                        for="check_all">
-                                                                                                    </label>
+                                                                                                <div class="form-check">
+                                                                                                    <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
+                                                                                                    <label class="form-check-label" for="check_all"></label>
                                                                                                 </div>
                                                                                             </th>
-                                                                                            <th rowspan="2" width="8%">No
-                                                                                            </th>
-                                                                                            <th rowspan="2" width="40%">Nama
-                                                                                                Produk</th>
-
-                                                                                            <th colspan="2" width="30%">
-                                                                                                Jumlah</th>
+                                                                                            <th rowspan="2" width="8%">No </th>
+                                                                                            <th rowspan="2" width="40%">Nama Produk</th>
+                                                                                            <th colspan="2" width="30%">Jumlah</th>
                                                                                             <th rowspan="2">Array Check</th>
-                                                                                            <th rowspan="2" width="14%">Aksi
-                                                                                            </th>
+                                                                                            <th rowspan="2" width="14%">Aksi</th>
                                                                                         </tr>
                                                                                         <tr>
                                                                                             <th width="15%">Diterima</th>

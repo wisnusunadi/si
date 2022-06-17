@@ -267,44 +267,7 @@
             ]
         });
 
-        function produktable(id, jenis){
-            $('#produktable').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/api/logistik/so/data/detail/belum_kirim/' + id + "/" + jenis,
-                    'dataType': 'json',
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [
-                    {
-                        data: 'DT_RowIndex',
-                        className: 'align-center nowrap-text',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'nama_produk',
-                        className: 'align-center',
-                    },
-                    {
-                        data: 'jumlah',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    },
-                ],
-            });
-        }
-
-        $(document).on('click', '.batalmodal', function(event) {
+        $("#showtable").on('click', '.batalmodal', function(event) {
             event.preventDefault();
             var id = $(this).data('id');
             var jenis = $(this).data('jenis');
@@ -314,11 +277,9 @@
                     $('#loader').show();
                 },
                 success: function(result) {
-
                     $('#batalmodal').modal("show");
                     $('#batal').html(result).show();
                     produktable(id, jenis);
-                    console.log(id+" "+jenis);
                 },
                 complete: function() {
                     $('#loader').hide();
@@ -332,11 +293,43 @@
             })
         });
 
+        function produktable(id, jenis){
+            $('#produktable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/so/data/detail/belum_kirim/' + id + '/' + jenis,
+                    'dataType': 'json',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_produk',
+                    },
+                    {
+                        data: 'jumlah',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
+            });
+        }
+
         $(document).on('click', '#pills-selesai_kirim-tab', function(){
             selesaitable();
         });
-
-
 
         function selesaitable(){
             var selesaitable = $('#selesaitable').DataTable({
@@ -418,10 +411,6 @@
             return false;
         });
 
-        function produktable()
-        {
-            $('#produktable').DataTable();
-        }
     })
 </script>
 @stop

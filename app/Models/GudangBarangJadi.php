@@ -223,7 +223,7 @@ class GudangBarangJadi extends Model
         $jumlah = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
             $q->where('gudang_barang_jadi_id', $id);
         })->doesntHave('NoseriDetailLogistik')->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
-            $q->whereNotIn('log_id', ['10']);
+            $q->whereNotIn('log_id', ['7','10']);
         })->count();
         return $jumlah;
     }
@@ -231,10 +231,11 @@ class GudangBarangJadi extends Model
     public function getJumlahKirimPesanan()
     {
         $id = $this->id;
+
         $jumlah = NoseriDetailLogistik::whereHas('NoseriDetailPesanan.DetailPesananProduk', function ($q) use ($id) {
             $q->where('gudang_barang_jadi_id', $id);
         })->whereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
-            $q->whereNotIn('log_id', ['10']);
+            $q->whereNotIn('log_id', ['7','10']);
         })->count();
         return $jumlah;
     }
