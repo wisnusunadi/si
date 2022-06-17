@@ -233,6 +233,7 @@
     });
     let prd1 = {};
     let tmp = [];
+    let prdlist = [];
     $(document).on('click','.btn-tambah', function (e) {
         e.preventDefault();
 
@@ -265,14 +266,25 @@
                         confirmButtonText: 'Oke',
                     })
                 } else {
-                    Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: 'Successfully',
-                        showConfirmButton: false,
-                        timer: 1500
-                    })
-                    addData(divisi, d_divisi, deskripsi, d_produk, produk, stok);
+                    if(prdlist.includes(produk)) {
+                        Swal.fire({
+                            position: 'center',
+                            icon: 'error',
+                            title: 'Produk Sudah Ada',
+                            text: 'Produk sudah ada di list',
+                            confirmButtonText: 'Oke',
+                        })
+                    } else {
+                            Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: 'Successfully',
+                            showConfirmButton: false,
+                            timer: 1500
+                        })
+                        addData(divisi, d_divisi, deskripsi, d_produk, produk, stok);
+                        prdlist.push(produk);
+                    }
                 }
             $('.btn-simpan').prop('hidden', false);
             }
@@ -286,14 +298,24 @@
         }else{
             var a = deskripsi;
         }
-
         i++;
-        let tambah_data = '<tr id=row'+i+'><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'" data-ke="'+divisi+'" data-desk="'+deskripsi+'" data-qty="'+stok+'"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
+        let tambah_data = '<tr id=row'+i+'><td>'+a+'<input type="hidden" name="deskripsi['+i+']" id="post_deskripsi" value="'+deskripsi+'"></td><td>'+d_produk+'<input type="hidden" name="gdg_brg_jadi_id['+i+']" id="post_produk'+i+'" value="'+produk+'"></td><td>'+stok+'<input type="hidden" name="qty['+i+']" id="post_qty" value="'+stok+'"></td><td><button class="btn btn-primary noseriModal" data-toggle="modal" data-id="'+produk+'" data-ke="'+divisi+'" data-desk="'+deskripsi+'" data-qty="'+stok+'"><i class="fas fa-qrcode"></i> Scan Produk</button>&nbsp;<button class="btn btn-danger btn-delete" data-id="'+produk+'"><i class="fas fa-trash"></i> Hapus</button></td></tr>'
         $('tbody.tambah_data').append(tambah_data);
-
-
     }
+    
+    var prd = '';
+    var jml = '';
+    var idd = '';
+    var tujuan = '';
+    let desk = '';
     $(document).on('click', '.btn-delete', function(e){
+        let id = $(this).data('id');
+        prdlist.splice(prdlist.indexOf(id), 1);
+        for (produk in prd1) {
+            if (produk == id) {
+                delete prd1[produk];
+            }
+        }
         e.preventDefault();
         $(this).parent().parent().remove();
         var check = $('tbody.tambah_data tr').length;
@@ -302,6 +324,7 @@
         }else{
             $('.btn-simpan').prop('hidden', true);
         }
+        
     });
 
     function make_temp_array(prd1) {
@@ -316,11 +339,6 @@
         return result;
     }
 
-    var prd = '';
-    var jml = '';
-    var idd = '';
-    var tujuan = '';
-    let desk = '';
     $(document).on('click', '.noseriModal', function(e) {
         var tr = $(this).closest('tr');
         jml = $(this).data('qty');

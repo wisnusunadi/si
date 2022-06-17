@@ -1514,7 +1514,7 @@ class GudangController extends Controller
                     <th>Noseri</th>
                     </tr>
                     </thead>
-                    <tbody>";
+                    <tbody class='overflowAuto'>";
             foreach($sheet1 as $key => $row) {
                 $a = $row['A'];
                 $b = $row['B'];

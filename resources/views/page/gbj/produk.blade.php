@@ -441,8 +441,8 @@
     </div>
 </div>
 
-<div class="modal fade import-seri" id="" role="dialog" aria-labelledby="modelTitleId">
-    <div class="modal-dialog modal-xl" role="document">
+<div class="modal fade import-seri importSeri" id="" role="dialog" aria-labelledby="modelTitleId">
+    <div class="modal-dialog dialogModal modal-xl" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">Unggah File</h5>
@@ -463,7 +463,7 @@
             </form>
         </div>
         <form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">
-            <div class="modal-footer" id="csv_data_file">
+            <div class="modal-footer modalFooter" id="csv_data_file">
 
             </div>
             <div class="modal-footer justify-content-between" id="footer-btn">
@@ -483,9 +483,24 @@
     <div class="modal-dialog modal-md modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-body text-center">
-                <h5 class="">Sebelum Mengunggah Noseri</h5>
-                 <p>Pastikan Noseri Sudah Unik atau Tidak Ada Warna Dalam Template</p>
-                <button type="button" class="btn btn-primary btn-lg btnNext"> OK</button>
+                <h5 class="">Peringatan</h5>
+                <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner">
+                      <div class="carousel-item active">
+                        <p>Hanya untuk upload nomor seri bukan upload nama produk</p>
+                      </div>
+                      <div class="carousel-item">
+                        <p>Pastikan upload nomor seri sesuai dengan nama produk di template</p>
+                      </div>
+                      <div class="carousel-item">
+                        <p>Sebelum upload nomor seri pastikan noseri sudah unik atau tidak ada warna dalam template</p>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-outline-primary btnNext" data-slide="next"> OK</button>
             </div>
         </div>
     </div>
