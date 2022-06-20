@@ -64,32 +64,39 @@ class GudangController extends Controller
     public function get_data_barang_jadi(Request $request)
     {
         try {
-            $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get();
+            // $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get();
+            $data = GudangBarangJadi::leftJoin('produk as p', 'p.id', '=', 'gdg_barang_jadi.produk_id')
+                    ->leftJoin('m_satuan as s', 's.id', '=', 'gdg_barang_jadi.satuan_id')
+                    ->leftJoin('kelompok_produk as kp', 'kp.id', '=', 'p.kelompok_produk_id')
+                    ->select(DB::raw('concat(p.nama," ", gdg_barang_jadi.nama) as produkk'), 'p.merk', 'kp.nama as kel_produk', 'gdg_barang_jadi.id', 's.nama as satuan', 'gdg_barang_jadi.stok', 'gdg_barang_jadi.stok_siap')
+                    ->orderBy(DB::raw('concat(p.nama," ", gdg_barang_jadi.nama)'))
+                    ->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_produk', function ($data) {
-                    return $data->produk->nama . ' ' . $data->nama;
+                    return $data->produkk;
                 })
                 ->addColumn('kode_produk', function ($data) {
-                    return $data->produk->product->kode . '' . $data->produk->kode;
+                    // return $data->produk->product->kode . '' . $data->produk->kode;
+                    return '-';
                 })
                 ->addColumn('jumlah', function ($data) {
-                    $d = $data->get_sum_noseri();
-                    $a = $data->get_sum_seri_siap();
+                    // $d = $data->get_sum_noseri();
+                    // $a = $data->get_sum_seri_siap();
                     $this->updateStokGudang($data->id);
-                    return $d . ' ' . $data->satuan->nama.'<br><span class="badge badge-dark">Stok Siap: '.$a.' '.$data->satuan->nama.'</span>';
+                    return $data->stok . ' ' . $data->satuan.'<br><span class="badge badge-dark">Stok Siap: '.$data->stok_siap.' '.$data->satuan.'</span>';
                 })
                 ->addColumn('jumlah1', function ($data) {
-                    $d = $data->get_sum_noseri();
+                    // $d = $data->get_sum_noseri();
                     $ss = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
-                    return $d - $ss . ' ' . $data->satuan->nama;
+                    return $data->stok - $ss . ' ' . $data->satuan;
                 })
                 ->addColumn('kelompok', function ($data) {
-                    return $data->produk->KelompokProduk->nama;
+                    return $data->kel_produk;
                 })
                 ->addColumn('merk', function ($data) {
-                    return $data->produk->merk;
+                    return $data->merk;
                 })
                 ->addColumn('action', function ($data) {
                     return  '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $data->id . '">

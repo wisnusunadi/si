@@ -725,6 +725,7 @@
     // load data
     var datatable = $('#gudang-barang').DataTable({
         processing: true,
+        deferRender: true,
         ajax: {
             'type': 'POST',
             'datatype': 'JSON',
@@ -797,6 +798,7 @@
                 }
             }
         ],
+        "order": [[ 3, "asc" ]],
         language: {
             search: "Cari:",
             processing: `<span class='fa-stack fa-md'>\n\
