@@ -207,6 +207,7 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
             Route::view('/show', 'page.qc.laporan.show')->name('qc.so.laporan.show');
             Route::get('/export/{jenis}/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_cetak_laporan_qc']);
         });
+        Route::get('/cancel/{id}', [App\Http\Controllers\QcController::class, 'cancel_so'])->name('qc.so.cancel_po');
     });
 });
 

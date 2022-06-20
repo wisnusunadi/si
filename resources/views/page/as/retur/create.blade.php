@@ -162,22 +162,21 @@
                                     <label for="ref_transaksi" class="col-lg-5 col-md-12 col-form-label labelket">Transaksi</label>
                                     <div class="col-lg-2 col-md-6 d-flex justify-content-between">
                                         <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="radio" name="ref_transaksi" id="ref_transaksi1" value="penjualan" />
-                                            <label class="form-check-label" for="ref_transaksi1">Penjualan</label>
+                                            <input class="form-check-input" type="radio" name="ref_transaksi" id="ref_transaksi1" value="tersedia" />
+                                            <label class="form-check-label" for="ref_transaksi1">Tersedia</label>
                                         </div>
                                         <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="radio" name="ref_transaksi" id="ref_transaksi2" value="retur" />
-                                            <label class="form-check-label" for="ref_transaksi2">Retur</label>
+                                            <input class="form-check-input" type="radio" name="ref_transaksi" id="ref_transaksi2" value="tidak_tersedia" />
+                                            <label class="form-check-label" for="ref_transaksi2">Tidak Tersedia</label>
                                         </div>
                                         <div class="invalid-feedback" id="msgref_transaksi"></div>
                                     </div>
                                 </div>
-                                <div class="form-group row hide" id="no_ref_retur_input">
-                                    <label for="no_ref_retur" class="col-lg-5 col-md-12 col-form-label labelket">No Ref Retur</label>
+                                <div class="form-group row hide" id="no_ref_tidak_tersedia_input">
+                                    <label for="no_ref_tidak_tersedia" class="col-lg-5 col-md-12 col-form-label labelket">No Referensi</label>
                                     <div class="col-lg-3 col-md-12">
-                                        <select name="no_ref_retur" id="no_ref_retur" class="form-control custom-select no_ref_retur  @error('no_ref_retur') is-invalid @enderror">
-                                        </select>
-                                        <div class="invalid-feedback" id="msgno_ref_retur"></div>
+                                        <input type="text" class="form-control  col-form-label" id="no_ref_tidak_tersedia" name="no_ref_tidak_tersedia">
+                                        <div class="invalid-feedback" id="msgno_ref_tidak_tersedia"></div>
                                     </div>
                                 </div>
                                 <div class="form-group row hide" id="pilih_ref_penjualan_input">
@@ -338,10 +337,10 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>1</td>
-                                                        <td><select name="paket_produk_id" id="paket_produk_id" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td>
-                                                        <td><select name="produk_id" id="produk_id" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
-                                                        <td><select name="no_seri" id="no_seri" class="form-control custom-select no_seri  @error('no_seri') is-invalid @enderror"></select></td>
-                                                        <td><a><i class="fas fa-plus text-success"></i></a></td>
+                                                        <td><select name="paket_produk_id[]" id="paket_produk_id" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td>
+                                                        <td><select name="produk_id[]" id="produk_id" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
+                                                        <td><select name="no_seri_select" id="no_seri_select" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true" name="no_seri_select[]"></select> <input type="text" class="form-control hide" id="no_seri_input" id="no_seri_input[]"/></td>
+                                                        <td><a href="#" id="tambah_paket_produk"><i class="fas fa-plus text-success"></i></a></td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -365,7 +364,6 @@
 @section('adminlte_js')
 <script>
     $(function(){
-        $('.no_ref_retur').select2();
         $('.no_ref_penjualan').select2();
 
         $('.paket_produk_id').select2();
@@ -374,24 +372,91 @@
 
         $('input[name="ref_transaksi"]').on('change', function(){
             var value = $(this).val();
-            $('#informasi_transaksi').removeClass('hide');
-            $('#info_customer').removeClass('hide');
-            if(value == "retur"){
-                $('#no_ref_retur_input').removeClass('hide');
+
+            if(value == "tidak_tersedia"){
+                $('#informasi_transaksi').addClass('hide');
+                $('#info_customer').addClass('hide');
+                $('#no_ref_tidak_tersedia_input').removeClass('hide');
                 $('#pilih_ref_penjualan_input').addClass('hide');
                 $('#no_ref_penjualan_input').addClass('hide');
-
+                $('#produktable tr').find('#no_seri_input').removeClass('hide');
+                $('#produktable tr').find('#no_seri_select').next(".select2-container").hide();
                 $('#info_penjualan').addClass('hide');
-                $('#info_retur').removeClass('hide');
-            }else if(value == "penjualan"){
-                $('#no_ref_retur_input').addClass('hide');
+            }else if(value == "tersedia"){
+                $('#informasi_transaksi').removeClass('hide');
+                $('#info_customer').removeClass('hide');
+                $('#no_ref_tidak_tersedia_input').addClass('hide');
                 $('#pilih_ref_penjualan_input').removeClass('hide');
                 $('#no_ref_penjualan_input').removeClass('hide');
-
+                $('#produktable tr').find('#no_seri_input').addClass('hide');
+                $('#produktable tr').find('#no_seri_select').next(".select2-container").show();
                 $('#info_penjualan').removeClass('hide');
-                $('#info_retur').addClass('hide');
             }
-        })
+        });
+
+        $('input[name="pilih_ref_penjualan"]').on('change', function(){
+            no_ref_penjualan($(this).val());
+        });
+
+        $('#produktable').on('click', '#tambah_paket_produk', function(){
+            // $('#produktable tr:last')
+        });
+
+        function no_ref_penjualan(jenis)
+        {
+            $('.no_ref_penjualan').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/as/list/so_selesai',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        if(jenis == "so"){
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.so
+                                    };
+                                })
+                            };
+                        }
+                        else if(jenis == "po"){
+                            return {
+                                results: $.map(data, function(obj) {
+                                    return {
+                                        id: obj.id,
+                                        text: obj.no_po
+                                    };
+                                })
+                            };
+                        }
+                        else{
+                            return {
+                                results: $.map(data, function(obj) {
+                                    // if(isset(obj.ekatalog)){
+                                    console.log(obj);
+                                    return {
+                                        id: obj.id,
+                                        text: obj
+                                    };
+                                // }
+                                })
+                            };
+                        }
+                    },
+                }
+            }).change(function() {
+            });
+        }
     })
 </script>
 @stop

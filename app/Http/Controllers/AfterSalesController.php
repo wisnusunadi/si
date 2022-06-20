@@ -544,7 +544,8 @@ class AfterSalesController extends Controller
     }
 
 
-    public function show_retur(){
+    public function show_retur()
+    {
         return view('page.as.retur.show');
     }
 
@@ -569,5 +570,11 @@ class AfterSalesController extends Controller
     }
 
     public function update_retur(Request $r, $id){
+    }
+
+    public function get_list_so_selesai(){
+        $a = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->with(['Ekatalog', 'Spa', 'Spb']);
+        $data = Pesanan::has('DetailPesananPart.DetailLogistikPart')->with(['Ekatalog', 'Spa', 'Spb'])->union($a)->get();
+        echo json_encode($data);
     }
 }

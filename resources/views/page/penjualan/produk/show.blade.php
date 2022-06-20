@@ -392,79 +392,7 @@
                 return false;
             });
 
-        var showtable = $('#showtable').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
-                "dataType": "json",
-                'type': 'POST',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'no_akd',
-                    className: 'nowrap-text align-center tabnum',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'merk',
-                    className: 'nowrap-text align-center',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'jenis_paket',
-                    className: 'nowrap-text align-center',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'nama_alias',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'nama',
-                    orderable: true,
-                    searchable: true
-                },
-                {
-                    data: 'harga',
-                    className: 'nowrap-text align-right tabnum',
-                    render: $.fn.dataTable.render.number(',', '.', 2)
-                        // function(data) {
-                        //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
-                        // }
-                        ,
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'button',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false
-                }
-            ]
-        });
-        $('#showtable tbody').on('click', '#showmodal', function() {
-            var rows = showtable.rows($(this).parents('tr')).data();
-            $('#nama_produk').text(rows[0].nama);
-            var x = (rows[0].harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-            $('#harga_produk').text('Rp ' + x);
-
-            var showdetailtable = $('#showdetailtable').DataTable({
-                processing: true,
+            var showtable = $('#showtable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
@@ -473,7 +401,7 @@
                     "dataType": "json",
                     'type': 'POST',
                     'headers': {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
                     }
                 },
                 columns: [{
@@ -497,7 +425,8 @@
                     {
                         data: 'jenis_paket',
                         className: 'nowrap-text align-center',
-                        orderable: true
+                        orderable: true,
+                        searchable: true
                     },
                     {
                         data: 'nama_alias',
@@ -528,28 +457,20 @@
                     }
                 ]
             });
+
             $('#showtable tbody').on('click', '#showmodal', function() {
                 var rows = showtable.rows($(this).parents('tr')).data();
                 $('#nama_produk').text(rows[0].nama);
                 var x = (rows[0].harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
                 $('#harga_produk').text('Rp ' + x);
-                var status = "";
-                if(rows[0].status == "ekat"){
-                    status = '<span class="badge purple-text">Ekatalog</span>';
-                }else{
-                    status = '<span class="badge blue-text">Non Ekatalog</span>';
-                }
-                $('#jenis_produk').html(status);
 
                 var showdetailtable = $('#showdetailtable').DataTable({
                     processing: true,
                     destroy: true,
+                    processing: true,
                     serverSide: true,
-                    language: {
-                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                    },
                     ajax: {
-                        'url': '/api/penjualan_produk/detail/' + rows[0].id,
+                        'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
                         "dataType": "json",
                         'type': 'POST',
                         'headers': {
@@ -557,314 +478,395 @@
                         }
                     },
                     columns: [{
-                            className: 'nowrap-text align-center',
                             data: 'DT_RowIndex',
+                            className: 'nowrap-text align-center',
                             orderable: false,
                             searchable: false
                         },
                         {
-                            className: 'nowrap-text',
-                            data: 'nama'
+                            data: 'no_akd',
+                            className: 'nowrap-text align-center tabnum',
+                            orderable: true,
+                            searchable: true
                         },
                         {
+                            data: 'merk',
                             className: 'nowrap-text align-center',
-                            data: 'kelompok'
-
-                        }, {
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'jenis_paket',
                             className: 'nowrap-text align-center',
-                            data: 'jumlah'
+                            orderable: true
+                        },
+                        {
+                            data: 'nama_alias',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'nama',
+                            orderable: true,
+                            searchable: true
+                        },
+                        {
+                            data: 'harga',
+                            className: 'nowrap-text align-right tabnum',
+                            render: $.fn.dataTable.render.number(',', '.', 2)
+                                // function(data) {
+                                //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
+                                // }
+                                ,
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'button',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
                         }
-                    ],
+                    ]
                 });
-                $('#modaldetail').modal('show');
             });
 
-            $(document).on('click', '.editmodal', function(event) {
-                event.preventDefault();
+                $('#showtable tbody').on('click', '#showmodal', function() {
+                    var rows = showtable.rows($(this).parents('tr')).data();
+                    $('#nama_produk').text(rows[0].nama);
+                    var x = (rows[0].harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+                    $('#harga_produk').text('Rp ' + x);
+                    var status = "";
+                    if(rows[0].status == "ekat"){
+                        status = '<span class="badge purple-text">Ekatalog</span>';
+                    }else{
+                        status = '<span class="badge blue-text">Non Ekatalog</span>';
+                    }
+                    $('#jenis_produk').html(status);
 
-                var href = $(this).attr('data-attr');
-                var id = $(this).data('id');
-                $.ajax({
-                    url: "/api/penjualan_produk/update_modal/" + id,
-                    beforeSend: function() {
-                        $('#loader').show();
-                    },
-                    // return the result
-                    success: function(result) {
-                        $('#editmodal').modal("show");
-                        $('#edit').html(result).show();
-                        $("#editform").attr("action", href);
-                        var x = 3;
-                        for (i = 0; i < 10; i++) {
-                            select_data(i);
-                        }
+                    var showdetailtable = $('#showdetailtable').DataTable({
+                        processing: true,
+                        destroy: true,
+                        serverSide: true,
+                        language: {
+                            processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                        },
+                        ajax: {
+                            'url': '/api/penjualan_produk/detail/' + rows[0].id,
+                            "dataType": "json",
+                            'type': 'POST',
+                            'headers': {
+                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                            }
+                        },
+                        columns: [{
+                                className: 'nowrap-text align-center',
+                                data: 'DT_RowIndex',
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                className: 'nowrap-text',
+                                data: 'nama'
+                            },
+                            {
+                                className: 'nowrap-text align-center',
+                                data: 'kelompok'
 
-                    },
-                    complete: function() {
-                        $('#loader').hide();
-                    },
-                    error: function(jqXHR, testStatus, error) {
-                        console.log(error);
-                        alert("Page " + href + " cannot open. Error:" + error);
-                        $('#loader').hide();
-                    },
-                    timeout: 8000
-                })
-            });
-            $(document).on('click', '.hapusmodal', function(event) {
-                event.preventDefault();
-                var href = $(this).attr('data-attr');
-                var id = $(this).data("id");
-                $('#hapusmodal').modal("show");
-                $('#hapusmodal').find('form').attr('action', '/api/penjualan_produk/delete/' + id);
-            });
+                            }, {
+                                className: 'nowrap-text align-center',
+                                data: 'jumlah'
+                            }
+                        ],
+                    });
+                    $('#modaldetail').modal('show');
+                });
 
+                $(document).on('click', '.editmodal', function(event) {
+                    event.preventDefault();
 
+                    var href = $(this).attr('data-attr');
+                    var id = $(this).data('id');
+                    $.ajax({
+                        url: "/api/penjualan_produk/update_modal/" + id,
+                        beforeSend: function() {
+                            $('#loader').show();
+                        },
+                        // return the result
+                        success: function(result) {
+                            $('#editmodal').modal("show");
+                            $('#edit').html(result).show();
+                            $("#editform").attr("action", href);
+                            var x = 3;
+                            for (i = 0; i < 10; i++) {
+                                select_data(i);
+                            }
 
-            $(document).on('submit', '#form-hapus', function(e) {
-                e.preventDefault();
-                var action = $(this).attr('action');
-                console.log(action);
-                $.ajax({
-                    url: action,
-                    type: 'DELETE',
-                    headers: {
-                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                    },
-                    success: function(response) {
-                        if (response['data'] == "success") {
-                            swal.fire(
-                                'Berhasil',
-                                'Berhasil melakukan Hapus Data',
-                                'success'
-                            );
-                            $('#showtable').DataTable().ajax.reload();
-                            $("#hapusmodal").modal('hide');
-                        } else if (response['data'] == "error") {
-                            swal.fire(
-                                'Gagal',
-                                'Gagal melakukan Penambahan Data Pengujian',
-                                'error'
-                            );
-                        } else {
+                        },
+                        complete: function() {
+                            $('#loader').hide();
+                        },
+                        error: function(jqXHR, testStatus, error) {
+                            console.log(error);
+                            alert("Page " + href + " cannot open. Error:" + error);
+                            $('#loader').hide();
+                        },
+                        timeout: 8000
+                    })
+                });
+
+                $(document).on('click', '.hapusmodal', function(event) {
+                    event.preventDefault();
+                    var href = $(this).attr('data-attr');
+                    var id = $(this).data("id");
+                    $('#hapusmodal').modal("show");
+                    $('#hapusmodal').find('form').attr('action', '/api/penjualan_produk/delete/' + id);
+                });
+
+                $(document).on('submit', '#form-hapus', function(e) {
+                    e.preventDefault();
+                    var action = $(this).attr('action');
+                    console.log(action);
+                    $.ajax({
+                        url: action,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response['data'] == "success") {
+                                swal.fire(
+                                    'Berhasil',
+                                    'Berhasil melakukan Hapus Data',
+                                    'success'
+                                );
+                                $('#showtable').DataTable().ajax.reload();
+                                $("#hapusmodal").modal('hide');
+                            } else if (response['data'] == "error") {
+                                swal.fire(
+                                    'Gagal',
+                                    'Gagal melakukan Penambahan Data Pengujian',
+                                    'error'
+                                );
+                            } else {
+                                swal.fire(
+                                    'Error',
+                                    'Data telah digunakan dalam Transaksi Lain',
+                                    'warning'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
                             swal.fire(
                                 'Error',
                                 'Data telah digunakan dalam Transaksi Lain',
                                 'warning'
                             );
                         }
-                    },
-                    error: function(xhr, status, error) {
-                        swal.fire(
-                            'Error',
-                            'Data telah digunakan dalam Transaksi Lain',
-                            'warning'
-                        );
-                    }
+                    });
+                    return false;
                 });
-                return false;
-            });
 
-            function numberRows($t) {
-                var c = 0 - 2;
-                $t.find("tr").each(function(ind, el) {
-                    $(el).find("td:eq(0)").html(++c);
-                    var j = c - 1;
-                    $(el).find('input[id="jumlah"]').attr('name', 'jumlah[' + j + ']');
-                    $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
-                    $(el).find('.produk_id').attr('id', j);
-                    $(el).find('.kelompok_produk').attr('id', 'kelompok_produk' + j);
-                    select_data(j);
+                function numberRows($t) {
+                    var c = 0 - 2;
+                    $t.find("tr").each(function(ind, el) {
+                        $(el).find("td:eq(0)").html(++c);
+                        var j = c - 1;
+                        $(el).find('input[id="jumlah"]').attr('name', 'jumlah[' + j + ']');
+                        $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
+                        $(el).find('.produk_id').attr('id', j);
+                        $(el).find('.kelompok_produk').attr('id', 'kelompok_produk' + j);
+                        select_data(j);
+                    });
+                }
+                $(document).on('click', '#addrow', function() {
+                    $('#createtable tr:last').after(`<tr>
+                <td></td>
+                <td>
+                    <div class="form-group">
+                        <select class="select-info form-control  produk_id" name="produk_id[]" id="0" style="width:100%" >
+                        </select>
+                    </div>
+                </td>
+                <td><span class="badge kelompok_produk" id="kelompok_produk0"></span></td>
+                <td>
+                    <div class="form-group d-flex justify-content-center">
+                        <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
+                    </div>
+                </td>
+                <td>
+                    <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
+                </td>
+                </tr>`);
+                    numberRows($("#createtable"));
                 });
-            }
-            $(document).on('click', '#addrow', function() {
-                $('#createtable tr:last').after(`<tr>
-            <td></td>
-            <td>
-                <div class="form-group">
-                    <select class="select-info form-control  produk_id" name="produk_id[]" id="0" style="width:100%" >
-                    </select>
-                </div>
-            </td>
-            <td><span class="badge kelompok_produk" id="kelompok_produk0"></span></td>
-            <td>
-                <div class="form-group d-flex justify-content-center">
-                    <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
-                </div>
-            </td>
-            <td>
-                <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
-            </td>
-            </tr>`);
-                numberRows($("#createtable"));
-            });
 
-            $(document).on('click', '#createtable #removerow', function(e) {
-                $(this).closest('tr').remove();
-                numberRows($("#createtable"));
-            });
+                $(document).on('click', '#createtable #removerow', function(e) {
+                    $(this).closest('tr').remove();
+                    numberRows($("#createtable"));
+                });
 
-            $(document).on('keyup change', '#harga', function() {
-                var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                $(this).val(result);
-                console.log(result);
+                $(document).on('keyup change', '#harga', function() {
+                    var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    $(this).val(result);
+                    console.log(result);
 
-                if ($(this).val() != "") {
-                    $('#msgharga').text("");
-                    $('#harga').removeClass("is-invalid");
-                    console.log($("#createtable tbody").length);
-                    if (($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $(
-                            "#createtable tbody").length > 0) {
-                        $('#btnsimpan').removeClass('disabled');
-                    } else {
+                    if ($(this).val() != "") {
+                        $('#msgharga').text("");
+                        $('#harga').removeClass("is-invalid");
+                        console.log($("#createtable tbody").length);
+                        if (($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $(
+                                "#createtable tbody").length > 0) {
+                            $('#btnsimpan').removeClass('disabled');
+                        } else {
+                            $('#btnsimpan').addClass('disabled');
+                        }
+                    } else if ($(this).val() == "") {
+                        $('#msgharga').text("Harga Harus diisi");
+                        $('#harga').addClass("is-invalid");
                         $('#btnsimpan').addClass('disabled');
                     }
-                } else if ($(this).val() == "") {
-                    $('#msgharga').text("Harga Harus diisi");
-                    $('#harga').addClass("is-invalid");
-                    $('#btnsimpan').addClass('disabled');
-                }
-            });
-
-            function select_data(x) {
-                $('#' + x).select2({
-                    ajax: {
-                        minimumResultsForSearch: 20,
-                        placeholder: "Pilih Produk",
-                        dataType: 'json',
-                        theme: "bootstrap",
-                        delay: 250,
-                        type: 'GET',
-                        url: '/api/produk/select/',
-                        data: function(params) {
-                            return {
-                                term: params.term
-                            }
-                        },
-                        processResults: function(data) {
-                            return {
-                                results: $.map(data, function(obj) {
-                                    return {
-                                        id: obj.id,
-                                        text: obj.nama
-                                    };
-                                })
-                            };
-                        },
-                    }
-                }).change(function() {
-                    var value = $(this).val();
-                    var index = $(this).attr('id');
-                    console.log(index);
-                    // var id = $(#produk_id).val();
-                    $.ajax({
-                        url: '/api/produk/select/' + value,
-                        type: 'GET',
-                        dataType: 'json',
-                        success: function(data) {
-                            console.log(data);
-                            $('#kelompok_produk' + index).text(data[0].kelompok_produk.nama);
-                        }
-                    });
                 });
-            }
-            $(document).on('keyup change', '#nama_paket', function() {
-                var id = $('#form-penjualan-produk-update').attr('data-id');
-                if ($(this).val() != "") {
-                    $.ajax({
-                        type: 'GET',
-                        dataType: 'json',
-                        url: '/api/penjualan_produk/check/' + id + '/' + $(this).val(),
-                        success: function(data) {
-                            if (data.jumlah >= 1) {
-                                $("#msgnama_paket").text("Nama sudah terpakai");
-                                $('#nama_paket').addClass('is-invalid');
-                                $('#btnsimpan').addClass('disabled');
-                            } else {
-                                $('#msgnama_paket').text("");
-                                $('#nama_paket').removeClass("is-invalid");
-                                console.log($("#createtable tbody").length);
-                                if ($('#harga').val() != "" && $("#createtable tbody").length >
-                                    0) {
-                                    $('#btnsimpan').removeClass('disabled');
-                                } else {
+
+                function select_data(x) {
+                    $('#' + x).select2({
+                        ajax: {
+                            minimumResultsForSearch: 20,
+                            placeholder: "Pilih Produk",
+                            dataType: 'json',
+                            theme: "bootstrap",
+                            delay: 250,
+                            type: 'GET',
+                            url: '/api/produk/select/',
+                            data: function(params) {
+                                return {
+                                    term: params.term
+                                }
+                            },
+                            processResults: function(data) {
+                                return {
+                                    results: $.map(data, function(obj) {
+                                        return {
+                                            id: obj.id,
+                                            text: obj.nama
+                                        };
+                                    })
+                                };
+                            },
+                        }
+                    }).change(function() {
+                        var value = $(this).val();
+                        var index = $(this).attr('id');
+                        console.log(index);
+                        // var id = $(#produk_id).val();
+                        $.ajax({
+                            url: '/api/produk/select/' + value,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                console.log(data);
+                                $('#kelompok_produk' + index).text(data[0].kelompok_produk.nama);
+                            }
+                        });
+                    });
+                }
+                $(document).on('keyup change', '#nama_paket', function() {
+                    var id = $('#form-penjualan-produk-update').attr('data-id');
+                    if ($(this).val() != "") {
+                        $.ajax({
+                            type: 'GET',
+                            dataType: 'json',
+                            url: '/api/penjualan_produk/check/' + id + '/' + $(this).val(),
+                            success: function(data) {
+                                if (data.jumlah >= 1) {
+                                    $("#msgnama_paket").text("Nama sudah terpakai");
+                                    $('#nama_paket').addClass('is-invalid');
                                     $('#btnsimpan').addClass('disabled');
+                                } else {
+                                    $('#msgnama_paket').text("");
+                                    $('#nama_paket').removeClass("is-invalid");
+                                    console.log($("#createtable tbody").length);
+                                    if ($('#harga').val() != "" && $("#createtable tbody").length >
+                                        0) {
+                                        $('#btnsimpan').removeClass('disabled');
+                                    } else {
+                                        $('#btnsimpan').addClass('disabled');
+                                    }
                                 }
                             }
-                        }
-                    });
-                } else if ($(this).val() == "") {
-                    $('#msgnama_paket').text("Nama Paket Harus diisi");
-                    $('#nama_paket').addClass("is-invalid");
-                    $('#btnsimpan').addClass('disabled');
-                }
-            });
-
-
-            $('#harga_min').on('keyup change', function() {
-
-                if ($(this).val().startsWith("0")) {
-                    $(this).val('0');
-                    $("#harga_maks").val('0');
-                }
-
-                var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                $(this).val(result);
-                if ($(this).val() == "") {
-                    $("#harga_maks").attr('disabled', true);
-                } else if ($(this).val().startsWith("0")) {
-                    $("#harga_maks").attr('disabled', true);
-                } else {
-                    $("#harga_maks").removeAttr('disabled');
-                }
-
-            });
-            $('#harga_maks').on('keyup change', function() {
-
-                if ($(this).val().startsWith("0")) {
-                    $(this).val('0');
-                }
-                var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                $(this).val(result);
-
-            });
-
-            $('#filter').submit(function() {
-                var produk = [];
-                var harga_min = $('#harga_min').val();
-                var harga_maks = $('#harga_maks').val();
-
-                $("input[name=produk]:checked").each(function() {
-                    produk.push($(this).val());
+                        });
+                    } else if ($(this).val() == "") {
+                        $('#msgnama_paket').text("Nama Paket Harus diisi");
+                        $('#nama_paket').addClass("is-invalid");
+                        $('#btnsimpan').addClass('disabled');
+                    }
                 });
 
-                if (produk != 0) {
-                    var x = produk;
 
-                } else {
-                    var x = ['kosong']
-                }
+                $('#harga_min').on('keyup change', function() {
 
-                if (harga_min != 0) {
-                    var y = harga_min.replace(/\./g, '')
+                    if ($(this).val().startsWith("0")) {
+                        $(this).val('0');
+                        $("#harga_maks").val('0');
+                    }
 
-                } else {
-                    var y = ['kosong']
-                }
-                if (harga_maks != 0) {
-                    var z = harga_maks.replace(/\./g, '');
+                    var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    $(this).val(result);
+                    if ($(this).val() == "") {
+                        $("#harga_maks").attr('disabled', true);
+                    } else if ($(this).val().startsWith("0")) {
+                        $("#harga_maks").attr('disabled', true);
+                    } else {
+                        $("#harga_maks").removeAttr('disabled');
+                    }
 
-                } else {
-                    var z = ['kosong']
-                }
-                console.log(y);
-                console.log(z);
-                console.log(x);
+                });
+                $('#harga_maks').on('keyup change', function() {
 
-                $('#showtable').DataTable().ajax.url('/api/penjualan_produk/data/' + x + '/' + y + '/' + z +
-                    '').load();
-                return false;
+                    if ($(this).val().startsWith("0")) {
+                        $(this).val('0');
+                    }
+                    var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+                    $(this).val(result);
+
+                });
+
+                $('#filter').submit(function() {
+                    var produk = [];
+                    var harga_min = $('#harga_min').val();
+                    var harga_maks = $('#harga_maks').val();
+
+                    $("input[name=produk]:checked").each(function() {
+                        produk.push($(this).val());
+                    });
+
+                    if (produk != 0) {
+                        var x = produk;
+
+                    } else {
+                        var x = ['kosong']
+                    }
+
+                    if (harga_min != 0) {
+                        var y = harga_min.replace(/\./g, '')
+
+                    } else {
+                        var y = ['kosong']
+                    }
+                    if (harga_maks != 0) {
+                        var z = harga_maks.replace(/\./g, '');
+
+                    } else {
+                        var z = ['kosong']
+                    }
+                    console.log(y);
+                    console.log(z);
+                    console.log(x);
+
+                    $('#showtable').DataTable().ajax.url('/api/penjualan_produk/data/' + x + '/' + y + '/' + z +
+                        '').load();
+                    return false;
+                });
             });
-        });
     </script>
 @endsection

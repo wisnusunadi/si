@@ -1134,9 +1134,7 @@ class LogistikController extends Controller
             left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
             where detail_pesanan.pesanan_id = pesanan.id
             having count(noseri_logistik.id) > 0)');
-        })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->get();
-
-        $array_id = $prd->pluck('id')->toArray();
+        })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
 
         $part = Pesanan::whereIn('id', function($q) {
             $q->select('pesanan.id')
@@ -1150,9 +1148,8 @@ class LogistikController extends Controller
                     left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
                     where detail_pesanan_part.pesanan_id = pesanan.id)")
                 ->groupBy('pesanan.id');
-            })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('id', $array_id)->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->get();
+            })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
 
-        $array_id_part = $part->pluck('id')->toArray();
 
         $partjasa = Pesanan::whereIn('id', function($q) {
                 $q->select('pesanan.id')
@@ -1167,9 +1164,9 @@ class LogistikController extends Controller
                         left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode LIKE '%JASA%'
                         where detail_pesanan_part.pesanan_id = pesanan.id)")
                     ->groupBy('pesanan.id');
-                })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('id', $array_id_part)->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->get();
+                })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->union($prd)->union($part)->get();
 
-        $data = $prd->merge($part)->merge($partjasa);
+        $data = $partjasa;
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -1250,32 +1247,34 @@ class LogistikController extends Controller
                 // return $status;
             })
             ->addColumn('batas', function ($data) {
-                // $name = explode('/', $data->so);
                 if (isset($data->Ekatalog) && !empty($data->Ekatalog)) {
                     $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
                     return Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
                 } else {
                     return '-';
                 }
-                // return Carbon::createFromFormat('Y-m-d', $data->DetailPesanan->DetailPesananProduk->NoseriDetailPesanan->NoseriDetailLogistik->DetailLogistik->Logistik)->format('d-m-Y');
             })
             ->addColumn('tgl_awal', function ($data) {
-                // $id = $data->id;
-                // $k = Logistik::orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
-                //     $q->where('pesanan_id', $id);
-                // })->orwhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
-                //     $q->where('pesanan_id', $id);
-                // })->selectRaw('MIN(tgl_kirim) as tgl_awal')->first();
-                // return Carbon::createFromFormat('Y-m-d', $k->tgl_awal)->format('d-m-Y');
+                $id = $data->id;
+                $k = Logistik::orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->orwhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->select('tgl_kirim')->first();
+                if(!empty($k->tgl_kirim)){
+                    return Carbon::createFromFormat('Y-m-d', $k->tgl_kirim)->format('d-m-Y');
+                }
             })
             ->addColumn('tgl_akhir', function ($data) {
-                // $id = $data->id;
-                // $k = Logistik::orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
-                //     $q->where('pesanan_id', $id);
-                // })->orwhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
-                //     $q->where('pesanan_id', $id);
-                // })->selectRaw('MAX(tgl_kirim) as tgl_akhir')->first();
-                // return Carbon::createFromFormat('Y-m-d', $k->tgl_akhir)->format('d-m-Y');
+                $id = $data->id;
+                $k = Logistik::orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->orwhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
+                    $q->where('pesanan_id', $id);
+                })->select('tgl_kirim')->get()->last();
+                if(!empty($k->tgl_kirim)){
+                    return Carbon::createFromFormat('Y-m-d', $k->tgl_kirim)->format('d-m-Y');
+                }
             })
             ->addColumn('button', function ($data) {
                 $name = explode('/', $data->so);
@@ -2787,7 +2786,7 @@ class LogistikController extends Controller
     public function cancel_so($id){
         $p = Pesanan::where('id', $id)->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->first();
 
-        return view('page.logistik.so.cancel_po', ['p' => $p]);
+        return view('page.logistik.so.cancel_po', ['id' => $id, 'p' => $p]);
     }
 
     // public function create_logistik_view($produk_id, $part_id, $pesanan_id, $jenis)
