@@ -46,6 +46,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Str;
+use Mockery\Undefined;
 
 class GudangController extends Controller
 {
@@ -228,7 +229,7 @@ class GudangController extends Controller
                             </select>';
                 })
                 ->addColumn('used', function ($d) {
-                    return $d->pesanan->so;
+                    return $d->used_by == null ? '-' : $d->pesanan->so;
                 })
                 ->addColumn('aksi', function ($d) {
                     return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
