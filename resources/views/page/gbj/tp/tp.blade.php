@@ -366,36 +366,36 @@
     }
 
     var $dTable = $('#history').DataTable({
-            destroy: true,
-            processing: true,
-            autoWidth: false,
-            deferRender: true,
-            searching: false,
-            ajax: {
-                url: "/api/transaksi/all",
-                // type: "post",
-            },
-            columns: [
-                { data: 'date_in', name: 'date_in'},
-                { data: 'date_out', name: 'date_out'},
-                { data: 'divisi', name: 'divisi'},
-                { data: 'tujuan', name: 'tujuan'},
-                { data: 'so', name: 'so'},
-                { data: 'po', name: 'po'},
-                { data: 'product', name: 'product'},
-                { data: 'jumlah', name: 'jumlah'},
-                {data: 'logs'},
-                { data: 'action', name: 'action'},
-            ],
-            dom: 'Bfrtip',
-            "language": {
-                // "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-                processing: "<span class='fa-stack fa-md'>\n\
-                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                </span>&emsp;Mohon Tunggu ...",
-            },
-            order: [[0, 'desc']],
-        });
+        destroy: true,
+        processing: true,
+        autoWidth: false,
+        deferRender: true,
+        searching: false,
+        ajax: {
+            url: "/api/transaksi/all",
+            // type: "post",
+        },
+        columns: [
+            { data: 'date_in', name: 'date_in'},
+            { data: 'date_out', name: 'date_out'},
+            { data: 'divisi', name: 'divisi'},
+            { data: 'tujuan', name: 'tujuan'},
+            { data: 'so', name: 'so'},
+            { data: 'po', name: 'po'},
+            { data: 'product', name: 'product'},
+            { data: 'jumlah', name: 'jumlah'},
+            {data: 'logs'},
+            { data: 'action', name: 'action'},
+        ],
+        dom: 'Bfrtip',
+        "language": {
+            // "url": "//cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            processing: "<span class='fa-stack fa-md'>\n\
+                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                            </span>&emsp;Mohon Tunggu ...",
+        },
+        order: [[0, 'desc']],
+    });
      // Tanggal Masuk
      $('#kt_datepicker_1').daterangepicker({
             autoUpdateInput: false

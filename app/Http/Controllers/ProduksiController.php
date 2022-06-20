@@ -33,63 +33,56 @@ class ProduksiController extends Controller
     function CreateTFItem(Request $request)
     {
         try {
-            foreach ($request->gdg_brg_jadi_id as $key => $value) {
-                $tf_prod = new TFProduksi();
-                $tf_prod->tgl_keluar = Carbon::now();
-                $tf_prod->ke = $request->ke[$key];
-                $tf_prod->deskripsi = $request->deskripsi[$key];
-                $tf_prod->jenis = 'keluar';
-                $tf_prod->created_at = Carbon::now();
-                $tf_prod->created_by = $request->userid;
-                $tf_prod->save();
-
-                $tf_prod_det = new TFProduksiDetail();
-                $tf_prod_det->t_gbj_id = $tf_prod->id;
-                $tf_prod_det->gdg_brg_jadi_id = $value;
-                $tf_prod_det->qty = $request->qty[$key];
-                $tf_prod_det->jenis = 'keluar';
-                $tf_prod_det->created_at = Carbon::now();
-                $tf_prod_det->created_by = $request->userid;
-                $tf_prod_det->save();
-
-                $did = $tf_prod_det->id;
-                $checked = $request->noseri_id;
-
-                foreach ($request->noseri_id[$value] as $k => $v) {
-                    if (in_array($request->noseri_id[$value], $checked)) {
-                        $nn = new NoseriTGbj();
-                        $nn->t_gbj_detail_id = $did;
-                        $nn->noseri_id = $v;
-                        $nn->layout_id = 1;
-                        $nn->status_id = 2;
-                        $nn->jenis = 'keluar';
-                        $nn->created_at = Carbon::now();
-                        $nn->created_by = $request->userid;
-                        $nn->save();
-
-                        NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $request->ke[$key]]);
-                    }
-                }
-                GudangBarangJadiHis::create([
-                    'gdg_brg_jadi_id' => $value,
-                    'stok' => $request->qty[$key],
-                    'tgl_masuk' => Carbon::now(),
-                    'jenis' => 'KELUAR',
-                    'created_by' => $request->userid,
+            // dd($request->all());
+            //code...
+            foreach($request->data as $key => $value) {
+                $header = TFProduksi::create([
+                    'tgl_keluar' => Carbon::now(),
+                    'ke' => $value['tujuan'],
+                    'deskripsi' => $value['desk'],
+                    'jenis' => 'keluar',
                     'created_at' => Carbon::now(),
-                    'ke' => $request->ke[$key],
-                    'tujuan' => $request->deskripsi[$key],
+                    'created_by' => $request->userid
                 ]);
+
+                $detail = TFProduksiDetail::create([
+                    't_gbj_id' => $header->id,
+                    'gdg_brg_jadi_id' => $key,
+                    'qty' => $value['qty'],
+                    'jenis' => 'keluar',
+                    'created_at' => Carbon::now(),
+                    'created_by' => $request->userid
+                ]);
+
+                foreach($value['noseri'] as $k => $v) {
+                    NoseriTGbj::create([
+                        't_gbj_detail_id' => $detail->id,
+                        'noseri_id' => $v,
+                        'layout_id' => 1,
+                        'status_id' => 2,
+                        'jenis' => 'keluar',
+                        'created_at' => Carbon::now(),
+                        'created_by' => $request->userid
+                    ]);
+
+                    NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $value['tujuan']]);
+                    // NoseriLog::create([
+                    //     'gbj_id' => $value['prd'],
+                    //     'noseri_id' => $v,
+                    //     'nonso' => $header->id,
+                    //     'log_id' => $key,
+                    //     'created_by' => $request->userid
+                    // ]);
+                }
             }
 
-            return response()->json(['msg' => 'Data Berhasil Ditransfer']);
+            return response()->json(['msg' => 'Data Berhasil ditransfer', 'error' => false,]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
-                'msg' => $e->getMessage(),
+                'msg' => $e->getMessage()
             ]);
         }
-
     }
 
     function TfbySO(Request $request)
@@ -265,10 +258,10 @@ class ProduksiController extends Controller
 
     }
     // get
-    function getNoseri(Request $request, $id)
+    function getNoseri(Request $request)
     {
         try {
-            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $id)->where('is_ready', 0)->get();
+            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gbj)->where('is_ready', 0)->get();
         $i = 0;
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) use ($i) {
@@ -284,6 +277,9 @@ class ProduksiController extends Controller
             })
             ->addColumn('noseri', function ($data) {
                 return $data->noseri;
+            })
+            ->addColumn('ids', function ($d) {
+                return $d->id;
             })
             ->rawColumns(['checkbox'])
             ->make(true);
@@ -1146,14 +1142,14 @@ class ProduksiController extends Controller
                     $val = $datacek/$x * 100;
 
                     if ($val >= 75 && $val < 101) {
-                        $atr = '<span class="badge badge-success">'.$val.'%</span>';
+                        $atr = '<span class="badge badge-success">'.round($val, 2).'%</span>';
                     } elseif ($val >= 50 && $val < 75) {
-                        $atr = '<span class="badge badge-info">'.$val.'%</span>';
+                        $atr = '<span class="badge badge-info">'.round($val, 2).'%</span>';
                     } elseif ($val >= 25 && $val < 50) {
-                        $atr = '<span class="badge badge-warning">'.$val.'%</span>';
+                        $atr = '<span class="badge badge-warning">'.round($val, 2).'%</span>';
                     }
                     else {
-                        $atr = '<span class="badge badge-danger">'.$val.'%</span>';
+                        $atr = '<span class="badge badge-danger">'.round($val, 2).'%</span>';
                     }
 
                     return $atr;

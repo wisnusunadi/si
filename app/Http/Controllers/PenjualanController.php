@@ -158,7 +158,11 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('nama_customer', function ($data) {
-                return $data->Customer['nama'];
+                if (isset($data->Customer)) {
+                    return $data->Customer['nama'];
+                } else {
+                    return '-';
+                }
             })
             ->addColumn('no_paket', function ($data) {
                 if (isset($data->no_paket)) {
