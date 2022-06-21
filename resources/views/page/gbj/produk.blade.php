@@ -517,11 +517,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table tambah_noseri_tableee">
-                    <thead style="width: 100%">
+                <table class="table tambah_noseri_tableee" width="100%">
+                    <thead>
                         <tr>
-                            <th>No Seri</th>
-                            <th>Layout</th>
+                            <th style="min-width: 500px">No Seri</th>
+                            <th style="min-width: 500px">Layout</th>
                         </tr>
                     </thead>
                     <tbody class="tambah_noseri_table">
@@ -1359,7 +1359,7 @@
             destroy: true,
             searching: false,
             paging: false,
-            scrollY: '200px',
+            scrollY: '500px',
             scrollCollapse: true,
             ordering: false,
             autoWidth: false,

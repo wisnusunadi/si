@@ -261,7 +261,7 @@
                             <thead>
                                 <tr>
                                     <th>Nomor Seri</th>
-                                    <th><input type="checkbox" id="head-cb"></th>
+                                    {{-- <th><input type="checkbox" id="head-cb"></th> --}}
                                 </tr>
                             </thead>
                             <tbody>
