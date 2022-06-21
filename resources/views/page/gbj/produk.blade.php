@@ -1354,7 +1354,6 @@
             $('.layout_seri').append('<option value="' + value[0] + '">' + value[1] + '</option');
         });
         $('.tambah_noseri_tableee').DataTable({
-            destroy: true,
             searching: false,
             paging: false,
             scrollY: '500px',
@@ -1366,10 +1365,6 @@
     });
 
     $(document).on('click', '#save_data', function () {
-        var dataNoSeri = $('.tambah_noseri_tableee').DataTable({
-            ordering: false,
-            autoWidth: false,
-        });
         let datalength = $('#jumlah_noseri').val();
         let no_seri = $('.tambah_noseri_tableee').DataTable().column(0).nodes().to$().find('input[type=text]')
             .map(function (index, elm) {
@@ -1384,11 +1379,11 @@
         let created_by = $('.created_by').val();
 
         let arr = [];
-        const data = dataNoSeri.$('.no_seri').map(function () {
-            return $(this).val();
-        }).get();
+        // const data = dataNoSeri.$('.no_seri').map(function () {
+        //     return $(this).val();
+        // }).get();
 
-        data.forEach(function (item) {
+        no_seri.forEach(function (item) {
             if (item != '') {
                 arr.push(item);
             }
