@@ -518,7 +518,7 @@
             </div>
             <div class="modal-body">
                 <table class="table tambah_noseri_tableee">
-                    <thead>
+                    <thead style="width: 100%">
                         <tr>
                             <th>No Seri</th>
                             <th>Layout</th>
@@ -1358,12 +1358,20 @@
         $('.tambah_noseri_tableee').DataTable({
             destroy: true,
             searching: false,
+            paging: false,
+            scrollY: '200px',
+            scrollCollapse: true,
+            ordering: false,
+            autoWidth: false,
         });
         $('.tambah_seri').modal('show');
     });
 
     $(document).on('click', '#save_data', function () {
-        var dataNoSeri = $('.tambah_noseri_tableee').DataTable();
+        var dataNoSeri = $('.tambah_noseri_tableee').DataTable({
+            ordering: false,
+            autoWidth: false,
+        });
         let datalength = $('#jumlah_noseri').val();
         let no_seri = $('.tambah_noseri_tableee').DataTable().column(0).nodes().to$().find('input[type=text]')
             .map(function (index, elm) {
@@ -1446,16 +1454,16 @@
                             },
                             success: function (res) {
                                 console.log(res);
-                                if (res.success) {
-                                    Swal.fire(
-                                        'Sukses!',
-                                        'Data berhasil ditambahkan',
-                                        'success'
-                                    )
-                                    setTimeout(() => {
-                                        location.reload();
-                                    }, 1000);
-                                }
+                                // if (res.success) {
+                                //     Swal.fire(
+                                //         'Sukses!',
+                                //         'Data berhasil ditambahkan',
+                                //         'success'
+                                //     )
+                                //     setTimeout(() => {
+                                //         location.reload();
+                                //     }, 1000);
+                                // }
                             }
                         });
                     } else {
