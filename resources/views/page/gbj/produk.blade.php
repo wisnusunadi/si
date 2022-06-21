@@ -1356,13 +1356,14 @@
             $('.layout_seri').append('<option value="' + value[0] + '">' + value[1] + '</option');
         });
         $('.tambah_noseri_tableee').DataTable({
-            destroy: true,
+            // destroy: true,
             searching: false,
             paging: false,
             scrollY: '500px',
             scrollCollapse: true,
-            ordering: false,
+            // ordering: false,
             autoWidth: false,
+            retrieve: true,
         });
         $('.tambah_seri').modal('show');
     });
@@ -1433,48 +1434,67 @@
                 }
             });
         } else {
-            $.ajax({
-                url: '/api/gbj/ceknoseri',
-                type: 'post',
-                data: {
-                    noseri: no_seri
-                },
-                success: function (res) {
-                    if (res.msg) {
-                        $.ajax({
-                            type: 'post',
-                            url: '/api/gbj/addSeri',
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                no_seri: no_seri,
-                                layout: layout,
-                                id: id,
-                                dari: dari,
-                                created_by: created_by,
-                            },
-                            success: function (res) {
-                                console.log(res);
-                                // if (res.success) {
-                                //     Swal.fire(
-                                //         'Sukses!',
-                                //         'Data berhasil ditambahkan',
-                                //         'success'
-                                //     )
-                                //     setTimeout(() => {
-                                //         location.reload();
-                                //     }, 1000);
-                                // }
+            Swal.fire({
+                title: 'Kamu Yakin?',
+                text: "Mendaftarkan noseri sejumlah "+no_seri.length+" ",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/gbj/ceknoseri',
+                        type: 'post',
+                        data: {
+                            noseri: no_seri
+                        },
+                        success: function (res) {
+                            if (res.msg) {
+                                $.ajax({
+                                    type: 'post',
+                                    url: '/api/gbj/addSeri',
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        no_seri: no_seri,
+                                        layout: layout,
+                                        id: id,
+                                        dari: dari,
+                                        created_by: created_by,
+                                    },
+                                    success: function (res) {
+                                        console.log(res);
+                                        // if (res.error == false) {
+                                        //     Swal.fire(
+                                        //         'Sukses!',
+                                        //         'Data berhasil ditambahkan',
+                                        //         'success'
+                                        //     )
+                                        //     setTimeout(() => {
+                                        //         location.reload();
+                                        //     }, 1000);
+                                        // } else {
+                                        //     Swal.fire({
+                                        //         icon: 'error',
+                                        //         title: 'Oops...',
+                                        //         text: res.msg,
+                                        //     })
+                                        // }
+                                    }
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Oops',
+                                    res.error,
+                                    'error'
+                                )
                             }
-                        });
-                    } else {
-                        Swal.fire(
-                            'Oops',
-                            res.error,
-                            'error'
-                        )
-                    }
+                        }
+                    })
                 }
             })
+
         }
         console.log("noseri", arr.length != datalength);
 

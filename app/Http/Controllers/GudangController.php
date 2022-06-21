@@ -2953,7 +2953,6 @@ class GudangController extends Controller
     function addSeri(Request $request)
     {
         try {
-
             dd($request->all());
             // $count = count($request->no_seri);
             // for ($i = 0; $i < $count; $i++) {
@@ -2981,7 +2980,7 @@ class GudangController extends Controller
             //     'created_at' => Carbon::now(),
             //     'dari' => $request->dari,
             // ]);
-            // return response()->json(['success' => 'Sukses']);
+            // return response()->json(['success' => 'Sukses', 'error' => false]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
