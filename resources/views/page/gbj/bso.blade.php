@@ -63,6 +63,7 @@
                                     <th>Nomor PO</th>
                                     <th>Customer</th>
                                     <th>Batas Transfer</th>
+                                    <th>Progress</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -415,6 +416,7 @@
                     data: 'batas_out',
                     name: 'batas_out'
                 },
+                {data: 'progress'},
                 {
                     data: 'status',
                     name: 'status'
@@ -639,7 +641,7 @@
             },
         });
         let s = $('.modal-scan').modal('show');
-        
+
         $('.modal-scan').on('shown.bs.modal', function () {
             $('#scan_filter').addClass('hidden');
         });

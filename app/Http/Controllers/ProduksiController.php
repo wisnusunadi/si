@@ -723,6 +723,28 @@ class ProduksiController extends Controller
 
             return datatables()->of($datax)
                 ->addIndexColumn()
+                ->addColumn('progress', function($d) {
+                    $dp = DB::table(DB::raw('pesanan p'))
+                    ->select('p.id','p.so','dp.jumlah')
+                    ->leftJoin(DB::raw('detail_pesanan dp'),'dp.pesanan_id','=','p.id')
+                    ->leftJoin(DB::raw('detail_pesanan_produk dpp'),'dp.id','=','dpp.detail_pesanan_id')
+                    ->where('p.id','=',$d->id)
+                    ->get()->sum('jumlah');
+                    $dpp = DB::table(DB::raw('pesanan p'))
+                    ->selectRaw('COUNT(tgn.noseri_id) AS jml')
+                    ->leftJoin(DB::raw('detail_pesanan dp'),'dp.pesanan_id','=','p.id')
+                    ->leftJoin(DB::raw('detail_pesanan_produk dpp'),'dp.id','=','dpp.detail_pesanan_id')
+                    ->leftJoin(DB::raw('penjualan_produk pp'),'pp.id','=','dp.penjualan_produk_id')
+                    ->leftJoin(DB::raw('gdg_barang_jadi gbj'),'gbj.id','=','dpp.gudang_barang_jadi_id')
+                    ->leftJoin(DB::raw('produk p2'),'p2.id','=','gbj.produk_id')
+                    ->leftJoin(DB::raw('t_gbj tg'),'tg.pesanan_id','=','p.id')
+                    ->leftJoin(DB::raw('t_gbj_detail tgd'),'tgd.detail_pesanan_produk_id','=','dpp.id')
+                    ->leftJoin(DB::raw('t_gbj_noseri tgn'),'tgn.t_gbj_detail_id','=','tgd.id')
+                    ->where('p.id','=',$d->id)
+                    ->get()->sum('jml');
+
+                    return '<span class="badge badge-dark">'.round($dpp / ($dp * 1) * 100,2).'% </span>';
+                })
                 ->addColumn('so', function ($data) {
                     return $data->so;
                 })
@@ -850,7 +872,7 @@ class ProduksiController extends Controller
                         }
                     }
                 })
-                ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd'])
+                ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd', 'progress'])
                 ->make(true);
         } catch (\Exception $e) {
             return response()->json([
@@ -1065,25 +1087,47 @@ class ProduksiController extends Controller
                     $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($data) {
                         $q->where('id', $data->id);
                     })->get();
-                    $x = 0;
+                    $xx = 0;
+                    $xr = null;
                     foreach ($s as $i) {
                         foreach ($i->PenjualanProduk->Produk as $j) {
                             if ($j->id == $data->gudangbarangjadi->produk_id) {
-                                $x = $i->jumlah * $j->pivot->jumlah;
+                                $xx = $i->jumlah * $j->pivot->jumlah;
                             }
+                            $xr = $i->id;
                         }
                     }
-
-                    $datacek = NoseriTGbj::whereHas('detail', function ($q) use ($data) {
-                        $q->where('gdg_brg_jadi_id', $data->gudang_barang_jadi_id);
-                        $q->where('detail_pesanan_produk_id', $data->id);
-                    })->whereHas('detail.header', function ($q) use ($data) {
-                        $q->where('pesanan_id', $data->detailpesanan->pesanan->id);
-                    })->get()->count();
-                    $vall = 0;
-                    $val = $datacek/$x * 100;
-                    $vall += $val/2;
-                    return $data->detailpesanan->penjualanproduk->nama;
+                    // $xy += $xx;
+                    $s = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function($d) use($data) {
+                        $d->where('id', $data->id);
+                    })->first()->id;
+                    $x = DB::table(DB::raw('pesanan p'))
+                            ->select('p.id as pesid','p.so','pp.id as paketid','pp.nama','dp.jumlah','dpp.id as dppid',DB::raw('count(tgn.noseri_id) as jumlah_kirim'))
+                            ->leftJoin(DB::raw('detail_pesanan dp'),'dp.pesanan_id','=','p.id')
+                            ->leftJoin(DB::raw('detail_pesanan_produk dpp'),'dp.id','=','dpp.detail_pesanan_id')
+                            ->leftJoin(DB::raw('penjualan_produk pp'),'pp.id','=','dp.penjualan_produk_id')
+                            ->leftJoin(DB::raw('t_gbj tg'),'tg.pesanan_id','=','p.id')
+                            ->leftJoin(DB::raw('t_gbj_detail tgd'),'tgd.detail_pesanan_produk_id','=','dpp.id')
+                            ->leftJoin(DB::raw('t_gbj_noseri tgn'),'tgn.t_gbj_detail_id','=','tgd.id')
+                            ->where('p.id','=',$s)
+                            ->where('dp.id','=',$xr)
+                            ->groupBy('pp.id')
+                            ->groupBy('dpp.id')
+                            ->get()->sum('jumlah');
+                    $y = DB::table(DB::raw('pesanan p'))
+                            ->select('p.id as pesid','p.so','pp.id as paketid','pp.nama','dp.jumlah','dpp.id as dppid',DB::raw('count(tgn.noseri_id) as jumlah_kirim'))
+                            ->leftJoin(DB::raw('detail_pesanan dp'),'dp.pesanan_id','=','p.id')
+                            ->leftJoin(DB::raw('detail_pesanan_produk dpp'),'dp.id','=','dpp.detail_pesanan_id')
+                            ->leftJoin(DB::raw('penjualan_produk pp'),'pp.id','=','dp.penjualan_produk_id')
+                            ->leftJoin(DB::raw('t_gbj tg'),'tg.pesanan_id','=','p.id')
+                            ->leftJoin(DB::raw('t_gbj_detail tgd'),'tgd.detail_pesanan_produk_id','=','dpp.id')
+                            ->leftJoin(DB::raw('t_gbj_noseri tgn'),'tgn.t_gbj_detail_id','=','tgd.id')
+                            ->where('p.id','=',$s)
+                            ->where('dp.id','=',$xr)
+                            ->groupBy('pp.id')
+                            ->groupBy('dpp.id')
+                            ->get()->sum('jumlah_kirim');
+                    return $data->detailpesanan->penjualanproduk->nama.' '.'<span class="badge badge-light">'.round(($y / $x)*100,2).'%</span>';
                 })
                 ->addColumn('produk', function ($data) {
                     if (empty($data->gudangbarangjadi->nama)) {
@@ -1278,7 +1322,7 @@ class ProduksiController extends Controller
                         return '<input type="checkbox" class="cb-child-prd" name="gbj_id" value="' . $d->gudang_barang_jadi_id . '"><input type="hidden" name="detail_pesanan_produk_id[]" id="detail_pesanan_produk_id" value="' . $d->id . '">';
                     }
                 })
-                ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox', 'status_prd', 'ids', 'progress'])
+                ->rawColumns(['action', 'status', 'produk', 'qty', 'checkbox', 'status_prd', 'ids', 'progress', 'paket'])
                 ->make(true);
         } catch (\Exception $e) {
             return response()->json([
