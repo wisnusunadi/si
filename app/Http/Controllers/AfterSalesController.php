@@ -12,7 +12,11 @@ use App\Models\DetailLogistikPart;
 use App\Models\DetailPesananPart;
 use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
+
+use App\Models\Ekatalog;
+use App\Models\Spa;
 use App\Models\Spb;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -575,6 +579,35 @@ class AfterSalesController extends Controller
     public function get_list_so_selesai(){
         $a = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->with(['Ekatalog', 'Spa', 'Spb']);
         $data = Pesanan::has('DetailPesananPart.DetailLogistikPart')->with(['Ekatalog', 'Spa', 'Spb'])->union($a)->get();
+        echo json_encode($data);
+    }
+
+    public function get_list_so_selesai_paket($id){
+        $data = DetailPesanan::where('pesanan_id', $id)->has('DetailPesananProduk.DetailLogistik')->with('PenjualanProduk')->get();
+        echo json_encode($data);
+    }
+
+    public function get_list_so_selesai_paket_produk($id){
+        $data = DetailPesananProduk::where('detail_pesanan_id', $id)->has('DetailLogistik')->with('GudangBarangJadi.Produk')->get();
+        echo json_encode($data);
+    }
+
+    public function get_detail_so_retur($id){
+        $data = "";
+        $ekat = Ekatalog::where('pesanan_id', $id)->with(['Pesanan', 'Customer.Provinsi'])->first();
+        $spa = Spa::where('pesanan_id', $id)->with(['Pesanan', 'Customer.Provinsi'])->first();
+        $spb = Spb::where('pesanan_id', $id)->with(['Pesanan', 'Customer.Provinsi'])->first();
+
+        if($ekat){
+            $data = $ekat;
+        }
+        if($spa){
+            $data = $spa;
+        }
+        if($spb){
+            $data = $spb;
+        }
+
         echo json_encode($data);
     }
 }

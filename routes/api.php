@@ -584,6 +584,10 @@ Route::prefix('/as')->group(function () {
     Route::get('/retur/detail', [App\Http\Controllers\AfterSalesController::class, 'detail_retur']);
     Route::get('/list/so_selesai', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai']);
 
+    Route::get('/list/so_selesai_paket/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai_paket']);
+    Route::get('/list/so_selesai_paket_produk/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai_paket_produk']);
+
+    Route::get('/detail/so_retur/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_so_retur']);
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {

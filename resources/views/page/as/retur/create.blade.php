@@ -179,6 +179,20 @@
                                         <div class="invalid-feedback" id="msgno_ref_tidak_tersedia"></div>
                                     </div>
                                 </div>
+                                <div class="form-group row hide" id="customer_tidak_tersedia_input">
+                                    <label for="customer_tidak_tersedia" class="col-lg-5 col-md-12 col-form-label labelket">Nama Customer</label>
+                                    <div class="col-lg-3 col-md-12">
+                                        <input type="text" class="form-control  col-form-label" id="customer_tidak_tersedia" name="customer_tidak_tersedia">
+                                        <div class="invalid-feedback" id="msgcustomer_tidak_tersedia"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row hide" id="alamat_tidak_tersedia_input">
+                                    <label for="alamat_tidak_tersedia" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Customer</label>
+                                    <div class="col-lg-3 col-md-12">
+                                        <textarea class="form-control col-form-label" id="alamat_tidak_tersedia" name="alamat_tidak_tersedia"></textarea>
+                                        <div class="invalid-feedback" id="msgalamat_tidak_tersedia"></div>
+                                    </div>
+                                </div>
                                 <div class="form-group row hide" id="pilih_ref_penjualan_input">
                                     <label for="pilih_ref_penjualan" class="col-lg-5 col-md-12 col-form-label labelket">Cari Berdasarkan</label>
                                     <div class="col-lg-3 col-md-8 d-flex justify-content-between">
@@ -214,24 +228,24 @@
                                                 <div class="card-body">
                                                     <h6><b>Customer</b></h6>
                                                     <div class="row">
-                                                        <div class="p-2" style="max-width: 70%">
+                                                        <div class="p-2" style="min-width:60%; max-width: 70%">
                                                             <div class="margin">
                                                                 <div><small class="text-muted">Nama Customer</small></div>
-                                                                <div><b>PT EMIINDO JAYA BERSAMA</b></div>
+                                                                <div><b id="nama_customer">-</b></div>
                                                             </div>
                                                             <div class="margin">
                                                                 <div><small class="text-muted">Alamat</small></div>
-                                                                <div><b>Jl. Perintis Kemerdekaan No.8, RT.7/RW.8, Pulo Gadung, Kec. Pulo Gadung, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13260</b></div>
+                                                                <div><b id="alamat_customer">-</b></div>
                                                             </div>
                                                         </div>
                                                         <div class="p-2">
                                                             <div class="margin">
                                                                 <div><small class="text-muted">No Telp</small></div>
-                                                                <div><b>0838-3490-1233</b></div>
+                                                                <div><b id="telp_customer">-</b></div>
                                                             </div>
                                                             <div class="margin">
                                                                 <div><small class="text-muted">Provinsi</small></div>
-                                                                <div><b>DKI JAKARTA</b></div>
+                                                                <div><b id="provinsi_customer">-</b></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -246,31 +260,31 @@
                                                         <div class="p-2">
                                                             <div class="margin">
                                                                 <div><small class="text-muted">No SO</small></div>
-                                                                <div><b>PT EMIINDO JAYA BERSAMA</b></div>
+                                                                <div><b id="no_so">-</b></div>
                                                             </div>
                                                             <div class="margin">
                                                                 <div><small class="text-muted">No AKN</small></div>
-                                                                <div><b>AK1-P2207-28313</b></div>
+                                                                <div><b id="no_paket">-</b></div>
                                                             </div>
                                                         </div>
                                                         <div class="p-2">
                                                             <div class="margin">
                                                                 <div><small class="text-muted">No PO</small></div>
-                                                                <div><b>MEMO PEMESANAN PO932631903</b></div>
+                                                                <div><b id="no_po">-</b></div>
                                                             </div>
                                                             <div class="margin">
                                                                 <div><small class="text-muted">Tanggal PO</small></div>
-                                                                <div><b>22 Januari 2022</b></div>
+                                                                <div><b id="tgl_po">-</b></div>
                                                             </div>
                                                         </div>
                                                         <div class="p-2">
                                                             <div class="margin">
                                                                 <div><small class="text-muted">No DO</small></div>
-                                                                <div><b>DO/2022/02/01/000832</b></div>
+                                                                <div><b id="no_do">-</b></div>
                                                             </div>
                                                             <div class="margin">
                                                                 <div><small class="text-muted">Tanggal DO</small></div>
-                                                                <div><b>01 Februari 2022</b></div>
+                                                                <div><b id="tgl_do">-</b></div>
                                                             </div>
                                                         </div>
                                                     </div>
@@ -285,7 +299,7 @@
                                                         <div class="p-2">
                                                             <div class="margin">
                                                                 <div><small class="text-muted">No Retur</small></div>
-                                                                <div><b>DO/2022/02/01/000832</b></div>
+                                                                <div><b >DO/2022/02/01/000832</b></div>
                                                             </div>
                                                             <div class="margin">
                                                                 <div><small class="text-muted">Tanggal Retur</small></div>
@@ -337,9 +351,10 @@
                                                 <tbody>
                                                     <tr>
                                                         <td>1</td>
-                                                        <td><select name="paket_produk_id[]" id="paket_produk_id" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td>
-                                                        <td><select name="produk_id[]" id="produk_id" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
-                                                        <td><select name="no_seri_select" id="no_seri_select" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true" name="no_seri_select[]"></select> <input type="text" class="form-control hide" id="no_seri_input" id="no_seri_input[]"/></td>
+                                                        <td><select name="paket_produk_id[0]" id="paket_produk_id0" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td>
+                                                        <td><select name="produk_id[0]" id="produk_id0" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
+                                                        <td><select name="no_seri_select[0]" id="no_seri_select0" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true"></select>
+                                                            <input type="text" class="form-control no_seri_input hide" id="no_seri_input0" name="no_seri_input[0]"/></td>
                                                         <td><a href="#" id="tambah_paket_produk"><i class="fas fa-plus text-success"></i></a></td>
                                                     </tr>
                                                 </tbody>
@@ -365,45 +380,108 @@
 <script>
     $(function(){
         $('.no_ref_penjualan').select2();
-
         $('.paket_produk_id').select2();
         $('.produk_id').select2();
         $('.no_seri').select2();
 
         $('input[name="ref_transaksi"]').on('change', function(){
+            format_informasi_ref_penjualan();
             var value = $(this).val();
+            $('input[name="pilih_ref_penjualan"]').prop('checked', false);
+            $('.no_ref_penjualan').val(null).trigger('change');
+
+            $('.paket_produk_id').val(null).trigger('change');
+            $('.produk_id').val(null).trigger('change');
+            $('.no_seri').val(null).trigger('change');
 
             if(value == "tidak_tersedia"){
                 $('#informasi_transaksi').addClass('hide');
                 $('#info_customer').addClass('hide');
                 $('#no_ref_tidak_tersedia_input').removeClass('hide');
+                $('#customer_tidak_tersedia_input').removeClass('hide');
+                $('#alamat_tidak_tersedia_input').removeClass('hide');
                 $('#pilih_ref_penjualan_input').addClass('hide');
                 $('#no_ref_penjualan_input').addClass('hide');
-                $('#produktable tr').find('#no_seri_input').removeClass('hide');
-                $('#produktable tr').find('#no_seri_select').next(".select2-container").hide();
+                $('#produktable tr').find('.no_seri_input').removeClass('hide');
+                $('#produktable tr').find('.no_seri').next(".select2-container").hide();
                 $('#info_penjualan').addClass('hide');
+                produk_penjualan_tidak_tersedia();
             }else if(value == "tersedia"){
                 $('#informasi_transaksi').removeClass('hide');
                 $('#info_customer').removeClass('hide');
                 $('#no_ref_tidak_tersedia_input').addClass('hide');
+                $('#customer_tidak_tersedia_input').addClass('hide');
+                $('#alamat_tidak_tersedia_input').addClass('hide');
                 $('#pilih_ref_penjualan_input').removeClass('hide');
                 $('#no_ref_penjualan_input').removeClass('hide');
-                $('#produktable tr').find('#no_seri_input').addClass('hide');
-                $('#produktable tr').find('#no_seri_select').next(".select2-container").show();
+                $('#produktable tr').find('.no_seri_input').addClass('hide');
+                $('#produktable tr').find('.no_seri').next(".select2-container").show();
                 $('#info_penjualan').removeClass('hide');
             }
         });
 
         $('input[name="pilih_ref_penjualan"]').on('change', function(){
+            format_informasi_ref_penjualan();
             no_ref_penjualan($(this).val());
         });
 
+        function numberRows($t) {
+            var c = 0 - 1;
+            var referensi = $('input[name="ref_transaksi"]:checked').val();
+            $t.find("tr").each(function(ind, el) {
+                $(el).find("td:eq(0)").html(++c);
+                var j = c - 1;
+                $(el).find('.paket_produk_id').attr('name', 'paket_produk_id[' + j + ']');
+                $(el).find('.paket_produk_id').attr('id', 'paket_produk_id' + j);
+
+                $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
+                $(el).find('.produk_id').attr('id', 'produk_id' + j);
+
+                $(el).find('.no_seri').attr('name', 'no_seri_select[' + j + ']');
+                $(el).find('.no_seri').attr('id', 'no_seri_select' + j);
+
+                $(el).find('.no_seri_input').attr('name', 'no_seri_input[' + j + ']');
+                $(el).find('.no_seri_input').attr('id', 'no_seri_input' + j);
+
+                $('.paket_produk_id').select2();
+                $('.produk_id').select2();
+                $('.no_seri').select2();
+
+                if(referensi == "tersedia"){
+                    produk_penjualan_tersedia($(".no_ref_penjualan").val());
+                    $('.no_seri_input').addClass('hide');
+                    $('.no_seri').next(".select2-container").show();
+
+                } else if(referensi == "tidak_tersedia"){
+                    produk_penjualan_tidak_tersedia();
+                    $('.no_seri_input').removeClass('hide');
+                    $('.no_seri').next(".select2-container").hide();
+                }
+
+                // select_data();
+            });
+        }
+
         $('#produktable').on('click', '#tambah_paket_produk', function(){
-            // $('#produktable tr:last')
+            $('#produktable tr:last').after(`<tr>
+                    <td>1</td>
+                    <td><select name="paket_produk_id[0]" id="paket_produk_id0" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td>
+                    <td><select name="produk_id[0]" id="produk_id0" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
+                    <td><select name="no_seri_select[0]" id="no_seri_select0" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true"></select>
+                        <input type="text" class="form-control no_seri_input hide" id="no_seri_input0" name="no_seri_input[0]"/></td>
+                    <td><a id="remove_paket_produk"><i class="fas fa-minus" style="color: red"></i></a></td>
+                </tr>`);
+                numberRows($("#produktable"));
+        });
+
+        $('#produktable').on('click', '#remove_paket_produk', function(e) {
+            $(this).closest('tr').remove();
+            numberRows($("#produktable"));
         });
 
         function no_ref_penjualan(jenis)
         {
+
             $('.no_ref_penjualan').select2({
                 ajax: {
                     minimumResultsForSearch: 20,
@@ -442,21 +520,259 @@
                         else{
                             return {
                                 results: $.map(data, function(obj) {
-                                    // if(isset(obj.ekatalog)){
-                                    console.log(obj);
-                                    return {
-                                        id: obj.id,
-                                        text: obj
-                                    };
-                                // }
+                                    if(obj.ekatalog != null){
+                                        return {
+                                            id: obj.id,
+                                            text: obj.ekatalog.no_paket
+                                        };
+                                    }
                                 })
                             };
                         }
                     },
                 }
-            }).change(function() {
+            })
+        }
+
+
+
+        function produk_penjualan(id)
+        {
+            $('.paket_produk_id').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Paket Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/as/list/so_selesai_paket/'+ id,
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.penjualan_produk.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            })
+        }
+
+        function format_informasi_ref_penjualan(){
+            $('#nama_customer').text("-");
+            $('#alamat_customer').text("-");
+            $('#telp_customer').text("-");
+            $('#provinsi_customer').text("-");
+
+            $('#no_so').text("-");
+            $('#no_po').text("-");
+            $('#tgl_po').text("-");
+            $('#no_paket').text("-");
+            $('#no_do').text("-");
+            $('#tgl_do').text("-");
+        }
+
+        function informasi_ref_penjualan(id){
+            $.ajax({
+                type: "GET",
+                url: '/api/as/detail/so_retur/' + id,
+                dataType: 'json',
+                success: function(data) {
+                    $('#nama_customer').text(data.customer.nama);
+                    $('#alamat_customer').text(data.customer.alamat);
+                    $('#provinsi_customer').text(data.customer.provinsi.nama);
+
+                    $('#no_so').text(data.pesanan.so);
+
+                    $('#no_po').text(data.pesanan.no_po);
+                    $('#tgl_po').text(data.pesanan.tgl_po);
+                    if(data.no_paket != undefined){
+                        $('#no_paket').text(data.no_paket);
+                    }
+                    else{
+                        $('#no_paket').text("-");
+                    }
+
+                    if(data.customer.telp != null){
+                        $('#telp_customer').text(data.customer.telp);
+                    }
+                    else{
+                        $('#telp_customer').text("-");
+                    }
+
+                    if(data.no_do != null){
+                        $('#no_do').text(data.no_do);
+                    }
+                    else{
+                        $('#no_do').text("-");
+                    }
+
+                    if(data.tgl_do != null){
+                        $('#tgl_do').text(data.tgl_do);
+                    }
+                    else{
+                        $('#tgl_do').text("-");
+                    }
+                },
+                error: function(data) {
+                    alert('Error occured');
+                }
             });
         }
+
+        function produk_penjualan_tersedia(id)
+        {
+            $('.paket_produk_id').val(null).trigger('change');
+            $('.paket_produk_id').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Paket Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/as/list/so_selesai_paket/'+ id,
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.penjualan_produk.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            })
+        }
+
+        function produk_penjualan_tidak_tersedia()
+        {
+            var prm;
+            $('.paket_produk_id').val(null).trigger('change');
+            $('.paket_produk_id').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Paket Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/penjualan_produk/select_param/'+prm,
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            })
+        }
+
+        function produk_gudang_tersedia(column, id)
+        {
+            $(column).val(null).trigger('change');
+            $(column).select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/as/list/so_selesai_paket_produk/'+ id,
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.gudang_barang_jadi.produk.nama +" "+ obj.gudang_barang_jadi.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            })
+        }
+
+        function produk_gudang_tidak_tersedia(column, id)
+        {
+            $(column).select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/penjualan_produk/select/' + id,
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.produk.nama +" "+ obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            })
+        }
+
+        $(document).on('keyup change', '.no_ref_penjualan', function(){
+            var val = $(this).val();
+            if(val != ""){
+                $('.no_ref_penjualan').val(null).trigger('change');
+                informasi_ref_penjualan(val);
+                produk_penjualan_tersedia(val);
+            }
+        });
+
+        $('#produktable').on('keyup change', '.paket_produk_id', function(){
+            var val = $(this).val();
+            var column = $(this).closest('tr').find('.produk_id').attr('id');
+            if(val != ""){
+                $(column).val(null).trigger('change');
+                if($('input[name="pilih_ref_penjualan"]').val() == "tidak_tersedia"){
+                    produk_gudang_tidak_tersedia(column, val);
+                } else if($('input[name="pilih_ref_penjualan"]').val() == "tersedia"){
+                    produk_gudang_tersedia(column, val);
+                }
+            }
+        });
     })
 </script>
 @stop
