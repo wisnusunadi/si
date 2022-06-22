@@ -94,16 +94,16 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Tgl Edit</small></div>
-                                    <div><b>{{ date('d-m-Y', strtotime($data->tgl_edit)) }}</b></div>
+                                    <div><b>@if (!empty($data->edit))
+                                        {{ date('d-m-Y', strtotime($data->tgl_edit)) }}
+                                    @else
+                                     -
+                                    @endif</b></div>
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Tgl Kontrak</small></div>
                                     <div><b>
-                                            @if (!empty($data->tgl_kontrak))
-                                                {{ date('d-m-Y', strtotime($data->tgl_kontrak)) }}
-                                            @else
-                                                <em class="text-muted">Belum Tersedia</em>
-                                            @endif
+                                           {!!$tgl_kontrak!!}
                                         </b>
                                     </div>
                                 </div>
