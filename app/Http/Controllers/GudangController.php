@@ -135,15 +135,23 @@ class GudangController extends Controller
     function GetBarangJadiByID(Request $request)
     {
         try {
-            $data = GudangBarangJadi::with('produk', 'satuan')->where('id', $request->id)->get();
-            $dataid = $data->pluck('produk_id');
-            $datas = Produk::with('product')->where('id', $dataid)->get();
-            return response()->json([
-                'data' => $data,
-                'nama_produk' => $datas
-            ]);
+            if (isset($request->id)) {
+                $data = GudangBarangJadi::with('produk', 'satuan')->where('id', $request->id)->get();
+                $dataid = $data->pluck('produk_id');
+                $datas = Produk::with('product')->where('id', $dataid)->get();
+                return response()->json([
+                    'error' => false,
+                    'data' => $data,
+                    'nama_produk' => $datas
+                ]);
+            } else {
+                return response([
+                    'error' => true,
+                    'msg' => 'Kode Produk Harus Diisi'
+                ], 203);
+            }
         } catch (\Exception $e) {
-            return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
+            return response(['error'=> true, 'msg' => $e->getMessage()], 400);
         }
 
     }
@@ -800,11 +808,8 @@ class GudangController extends Controller
         }
     }
 
-
-
     function edit_noseri(Request $request) {
         try {
-            // dd($request->all());
             $dataseri = [];
             $data = NoseriBarangJadi::whereIn('id',$request->data);
             $check = NoseriBarangJadi::whereIn('noseri', $request->new)->get();
@@ -840,6 +845,7 @@ class GudangController extends Controller
     function proses_delete_noseri(Request $request)
     {
         try {
+            // dd($request->all());
             $check = NoseriTGbj::whereIn('noseri_id', $request->noseriid);
             $dataseri = [];
 
@@ -855,7 +861,7 @@ class GudangController extends Controller
                         NoseriBrgJadiLog::where('noseri_id', $cc->id)->where([
                             'action' => 'delete',
                             'status' => 'waiting'
-                        ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                        ])->update(['status' => 'rejected', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                         NoseriBarangJadi::find($cc->id)->update(['is_change' => 1, 'is_delete' => 0]);
                     }
                 } else {
@@ -863,7 +869,7 @@ class GudangController extends Controller
                         NoseriBrgJadiLog::where('noseri_id', $ddd->noseri_id)->where([
                             'action' => 'delete',
                             'status' => 'waiting'
-                        ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                        ])->update(['status' => 'rejected', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                         NoseriBarangJadi::find($ddd->noseri_id)->update(['is_change' => 1, 'is_delete' => 0]);
                     }
                 }
@@ -876,7 +882,7 @@ class GudangController extends Controller
                         NoseriBrgJadiLog::where('noseri_id', $ckc->id)->where([
                             'action' => 'delete',
                             'status' => 'waiting'
-                        ])->update(['status' => 'approve', 'acc_by' => $request->accby]);
+                        ])->update(['status' => 'approve', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                         NoseriBarangJadi::find($ckc->id)->delete();
                     }
                     return response()->json(['error'=>false, 'msg'=> 'Noseri Berhasil Dihapus']);
@@ -886,7 +892,7 @@ class GudangController extends Controller
                             NoseriBrgJadiLog::where('noseri_id', $d->noseri_id)->where([
                                 'action' => 'delete',
                                 'status' => 'waiting'
-                            ])->update(['status' => 'approve', 'acc_by' => $request->accby]);
+                            ])->update(['status' => 'approve', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                             NoseriTGbj::where('noseri_id',$d->noseri_id)->delete();
                             NoseriBarangJadi::find($d->noseri_id)->delete();
                         }
@@ -897,7 +903,7 @@ class GudangController extends Controller
                             NoseriBrgJadiLog::where('noseri_id', $dd->noseri_id)->where([
                                 'action' => 'delete',
                                 'status' => 'waiting'
-                            ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                            ])->update(['status' => 'rejected', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                             NoseriBarangJadi::find($dd->noseri_id)->update(['is_change' => 1]);
                         }
                         return response()->json(['error' => true, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
@@ -918,6 +924,7 @@ class GudangController extends Controller
     function proses_update_noseri(Request $request)
     {
         try {
+            // dd($request->all());
             if ($request->is_acc == 'rejected') {
                 $a = NoseriBrgJadiLog::whereIn('noseri_id', $request->noseriid)->where([
                     'action' => 'update',
@@ -927,7 +934,7 @@ class GudangController extends Controller
                     NoseriBrgJadiLog::where('noseri_id', $request->noseriid[$i])->where([
                         'action' => 'update',
                         'status' => 'waiting'
-                    ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                    ])->update(['status' => 'rejected', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                     NoseriBarangJadi::where('id', $request->noseriid[$i])->update(['is_change' => 1, 'noseri'=> $a[$i]]);
                 }
                 return response()->json(['error' => false, 'msg' => 'Noseri Batal Diubah']);
@@ -938,7 +945,7 @@ class GudangController extends Controller
                     NoseriBrgJadiLog::where('noseri_id', $c->id)->where([
                         'action' => 'update',
                         'status' => 'waiting'
-                    ])->update(['status' => 'approved', 'acc_by' => $request->accby]);
+                    ])->update(['status' => 'approved', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                     NoseriBarangJadi::find($c->id)->update(['is_change' => 1]);
                 }
                 return response()->json(['error' => false, 'msg' => 'Noseri Berhasil Diubah']);
@@ -2953,34 +2960,34 @@ class GudangController extends Controller
     function addSeri(Request $request)
     {
         try {
-            dd($request->all());
-            // $count = count($request->no_seri);
-            // for ($i = 0; $i < $count; $i++) {
-            //     NoseriBarangJadi::create([
-            //         'noseri' => strtoupper($request->no_seri[$i]),
-            //         'layout_id' => $request->layout[$i],
-            //         'gdg_barang_jadi_id' => $request->id,
-            //         'dari' => $request->dari,
-            //         'created_by' => $request->created_by,
-            //         'jenis' => 'MASUK',
-            //         'is_aktif' => 1
-            //     ]);
-            // }
+            // dd($request->all());
+            $count = count($request->no_seri);
+            for ($i = 0; $i < $count; $i++) {
+                NoseriBarangJadi::create([
+                    'noseri' => strtoupper($request->no_seri[$i]),
+                    'layout_id' => $request->layout[$i],
+                    'gdg_barang_jadi_id' => $request->id,
+                    'dari' => $request->dari,
+                    'created_by' => $request->created_by,
+                    'jenis' => 'MASUK',
+                    'is_aktif' => 1
+                ]);
+            }
 
-            // $a = GudangBarangJadi::where('id', $request->id)->first();
-            // $stok = $a->stok + $count;
-            // // return $stok;
-            // GudangBarangJadi::where('id', $request->id)->update(['stok' => $stok]);
-            // GudangBarangJadiHis::create([
-            //     'gdg_brg_jadi_id' => $request->id,
-            //     'stok' => $count,
-            //     'tgl_masuk' => Carbon::now(),
-            //     'jenis' => 'MASUK',
-            //     'created_by' => $request->created_by,
-            //     'created_at' => Carbon::now(),
-            //     'dari' => $request->dari,
-            // ]);
-            // return response()->json(['success' => 'Sukses', 'error' => false]);
+            $a = GudangBarangJadi::where('id', $request->id)->first();
+            $stok = $a->stok + $count;
+            // return $stok;
+            GudangBarangJadi::where('id', $request->id)->update(['stok' => $stok]);
+            GudangBarangJadiHis::create([
+                'gdg_brg_jadi_id' => $request->id,
+                'stok' => $count,
+                'tgl_masuk' => Carbon::now(),
+                'jenis' => 'MASUK',
+                'created_by' => $request->created_by,
+                'created_at' => Carbon::now(),
+                'dari' => $request->dari,
+            ]);
+            return response()->json(['success' => 'Sukses', 'error' => false]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,

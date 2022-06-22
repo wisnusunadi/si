@@ -1464,23 +1464,23 @@
                                         created_by: created_by,
                                     },
                                     success: function (res) {
-                                        console.log(res);
-                                        // if (res.error == false) {
-                                        //     Swal.fire(
-                                        //         'Sukses!',
-                                        //         'Data berhasil ditambahkan',
-                                        //         'success'
-                                        //     )
-                                        //     setTimeout(() => {
-                                        //         location.reload();
-                                        //     }, 1000);
-                                        // } else {
-                                        //     Swal.fire({
-                                        //         icon: 'error',
-                                        //         title: 'Oops...',
-                                        //         text: res.msg,
-                                        //     })
-                                        // }
+                                        // console.log(res);
+                                        if (res.error == false) {
+                                            Swal.fire(
+                                                'Sukses!',
+                                                'Data berhasil ditambahkan',
+                                                'success'
+                                            )
+                                            setTimeout(() => {
+                                                location.reload();
+                                            }, 1000);
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Oops...',
+                                                text: res.msg,
+                                            })
+                                        }
                                     }
                                 });
                             } else {
@@ -1587,21 +1587,22 @@
                     },
                     dataType: 'json',
                     success: function(res) {
-                        if (res.error == true) {
-                            Swal.fire({
-                                icon: 'error',
-                                title: 'Oops...',
-                                text: res.msg,
-                            })
-                        } else {
-                            Swal.fire(
-                                'Updated!',
-                                res.msg,
-                                'success'
-                            ).then(function () {
-                                location.reload();
-                            })
-                        }
+                        console.log(res);
+                        // if (res.error == true) {
+                        //     Swal.fire({
+                        //         icon: 'error',
+                        //         title: 'Oops...',
+                        //         text: res.msg,
+                        //     })
+                        // } else {
+                        //     Swal.fire(
+                        //         'Updated!',
+                        //         res.msg,
+                        //         'success'
+                        //     ).then(function () {
+                        //         location.reload();
+                        //     })
+                        // }
                     }
                 })
             }

@@ -472,7 +472,6 @@
                             accby: authid,
                         },
                         success: function(res) {
-                            console.log(res);
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Rejected',
