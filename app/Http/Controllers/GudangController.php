@@ -46,6 +46,7 @@ use PhpOffice\PhpSpreadsheet\Style\Fill;
 use PhpOffice\PhpSpreadsheet\Worksheet\Worksheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Illuminate\Support\Str;
+use Mockery\Undefined;
 
 class GudangController extends Controller
 {
@@ -63,7 +64,8 @@ class GudangController extends Controller
     public function get_data_barang_jadi(Request $request)
     {
         try {
-            $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get()->sortBy('produk.nama');
+            $data = GudangBarangJadi::with('produk', 'satuan', 'detailpesananproduk')->get();
+
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_produk', function ($data) {
@@ -228,7 +230,7 @@ class GudangController extends Controller
                             </select>';
                 })
                 ->addColumn('used', function ($d) {
-                    return $d->pesanan->so;
+                    return $d->used_by == null ? '-' : $d->pesanan->so;
                 })
                 ->addColumn('aksi', function ($d) {
                     return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
@@ -1379,8 +1381,14 @@ class GudangController extends Controller
     // Export Excell
     function exportSpb($id)
     {
-        $header = TFProduksi::where('pesanan_id', $id)->with('pesanan')->get()->pluck('pesanan.so');
-        return Excel::download(new SpbExport($id), 'SPB.xlsx');
+        try {
+            return Excel::download(new SpbExport($id), 'SPB.xlsx');
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
     }
 
     function download_template_noseri(Request $request)

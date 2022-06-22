@@ -17,7 +17,7 @@
         width: 100%;
         height: 100%;
         z-index: 10000;
-        background-color: #000;
+        background-color: rgba(0, 0, 0, 0.5);
     }
 
     #loading-gif {

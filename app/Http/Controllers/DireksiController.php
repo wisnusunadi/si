@@ -17,34 +17,46 @@ class DireksiController extends Controller
         $qc = 0;
         $log = 0;
         $dc = 0;
-        $pes = Pesanan::whereNotIn('log_id', ['7', '10'])->get();
+        $pes = Pesanan::whereNotIn('log_id', ['7'])->get();
         foreach ($pes as $i) {
-            if (isset($i->DetailPesanan)) {
+            if (isset($i->DetailPesanan) && !isset($i->DetailPesananPart)) {
                 if ($i->getJumlahSeri() < $i->getJumlahPesanan()) {
                     $gudang = $gudang + 1;
                 }
-            }
 
-            if (isset($i->DetailPesanan)) {
-                if ($i->getJumlahCek() < $i->getJumlahPesanan()) {
+                if ($i->getJumlahCek() < $i->getJumlahSeri()) {
                     $qc = $qc + 1;
                 }
-            }
 
-            if (isset($i->DetailPesanan)) {
-                if ($i->getJumlahKirim() < $i->getJumlahPesanan()) {
+                if ($i->getJumlahKirim() < $i->getJumlahCek()) {
                     $log = $log + 1;
                 }
-            }
 
-            if (isset($i->DetailPesananPart)) {
-                if ($i->getJumlahKirimPart() < $i->getJumlahPesananPart()) {
+                if ($i->getJumlahCoo() < $i->getJumlahSeri()) {
+                    $dc = $dc + 1;
+                }
+            } else if(!isset($i->DetailPesanan) && isset($i->DetailPesananPart)){
+                if ($i->getJumlahCekPart("ok") < $i->getJumlahPesananPartNonJasa()) {
+                    $qc = $qc + 1;
+                }
+
+                if ($i->getJumlahKirimPart() < $i->getJumlahCekPart("ok")) {
                     $log = $log + 1;
                 }
-            }
+            } else if(isset($i->DetailPesanan) && isset($i->DetailPesananPart)){
+                if ($i->getJumlahSeri() < $i->getJumlahPesanan()) {
+                    $gudang = $gudang + 1;
+                }
 
-            if (isset($i->DetailPesananPart)) {
-                if ($i->getJumlahCoo() < $i->getJumlahPesanan()) {
+                if ($i->getJumlahCek() < $i->getJumlahSeri() || $i->getJumlahCekPart("ok") < $i->getJumlahPesananPartNonJasa()) {
+                    $qc = $qc + 1;
+                }
+
+                if ($i->getJumlahKirim() < $i->getJumlahCek() || $i->getJumlahKirimPart() < $i->getJumlahCekPart("ok")) {
+                    $log = $log + 1;
+                }
+
+                if ($i->getJumlahCoo() < $i->getJumlahSeri()) {
                     $dc = $dc + 1;
                 }
             }

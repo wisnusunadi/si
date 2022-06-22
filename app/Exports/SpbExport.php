@@ -31,7 +31,7 @@ class SpbExport implements FromView, WithEvents
         $id = $this->pesanan_id;
         $data = TFProduksiDetail::whereHas('header', function ($q) use ($id) {
             $q->where('pesanan_id', $id);
-        })->with('seri.seri', 'produk.produk', 'paket.detailpesanan.penjualanproduk')->groupBy('detail_pesanan_produk_id')->groupBy('gdg_brg_jadi_id')->get();
+        })->with('noseri', 'produk.produk', 'paket.detailpesanan.penjualanproduk')->groupBy('detail_pesanan_produk_id')->groupBy('gdg_brg_jadi_id')->get();
         $header = TFProduksi::where('pesanan_id', $id)->with('pesanan')->get();
         $tfbyid = LogSurat::where('pesanan_id', $id)->get();
         if (count($tfbyid) > 0) {

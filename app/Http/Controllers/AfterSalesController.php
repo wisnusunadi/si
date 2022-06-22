@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Logistik;
+use App\Models\Pesanan;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
@@ -11,7 +12,11 @@ use App\Models\DetailLogistikPart;
 use App\Models\DetailPesananPart;
 use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
+
+use App\Models\Ekatalog;
+use App\Models\Spa;
 use App\Models\Spb;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -286,6 +291,12 @@ class AfterSalesController extends Controller
         return view('page.as.so.detail', ['id' => $id, 'jenis' => $jenis, 'd' => $d, 'status' => $status]);
     }
 
+    public function get_data_detail_part($id)
+    {
+        $data = DetailPesananPart::find($id);
+        return view('page.as.penjualan.edit', ['id' => $id, 'data' => $data]);
+    }
+
     public function get_detail_pengiriman($id, $jenis)
     {
         $data = "";
@@ -352,5 +363,251 @@ class AfterSalesController extends Controller
             })
             ->rawColumns(['checkbox', 'button', 'status'])
             ->make(true);
+    }
+
+    public function get_data_so_belum_kirim()
+    {
+        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['8', '9', '11', '12'])->orderBy('tgl_po', 'desc')->get();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jenis', function ($data) {
+                if (isset($data->Spa)) {
+                    return '<span class="orange-text badge">SPA</span>';
+                }
+                else if (isset($data->Spb)) {
+                    return '<span class="blue-text badge">SPB</span>';
+                }
+            })
+            ->addColumn('so', function ($data) {
+                if (!empty($data->so)) {
+                        return $data->so;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('nopo', function ($data) {
+                    if (!empty($data->no_po)) {
+                        return $data->no_po;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('status', function ($data) {
+                $datas = "";
+                if ($data->log != "batal") {
+                    if (!empty($data->log_id)) {
+                        if ($data->State->nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->State->nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->State->nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        }
+                        $datas .= ucfirst($data->State->nama) . '</span>';
+                    } else {
+                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                    }
+                } else {
+                    $datas .= '<span class="red-text badge">Batal</span>';
+                }
+                return $datas;
+            })
+            ->addColumn('tglpo', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+            })
+            ->addColumn('nama_customer', function ($data) {
+                if (isset($data->Spa)) {
+                    return $data->Spa->Customer->nama;
+                }
+                else if (isset($data->Spb)) {
+                    return $data->Spb->Customer->nama;
+                }
+            })
+            ->addColumn('button', function ($data) {
+                $return = "";
+                if (isset($data->Spa)) {
+                    $return .= '<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->Spa->id) . '"  data-id="' . $data->Spa->id . '" >
+                        <button class="btn btn-outline-primary btn-sm" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                else if (isset($data->Spb)) {
+                    $return .= '<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '" >
+                    <button class="btn btn-outline-primary btn-sm" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                return $return;
+            })
+            ->rawColumns(['button', 'status', 'jenis'])
+            ->make(true);
+    }
+
+    public function get_data_so_selesai_kirim()
+    {
+        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['10'])->orderBy('tgl_po', 'desc')->get();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jenis', function ($data) {
+                if (isset($data->Spa)) {
+                    return '<span class="orange-text badge">SPA</span>';
+                }
+                else if (isset($data->Spb)) {
+                    return '<span class="blue-text badge">SPB</span>';
+                }
+            })
+            ->addColumn('so', function ($data) {
+                if (!empty($data->so)) {
+                        return $data->so;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('nopo', function ($data) {
+                    if (!empty($data->no_po)) {
+                        return $data->no_po;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('status', function ($data) {
+                $datas = "";
+                if ($data->log != "batal") {
+                    if (!empty($data->log_id)) {
+                        if ($data->State->nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->State->nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->State->nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        }
+                        $datas .= ucfirst($data->State->nama) . '</span>';
+                    } else {
+                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                    }
+                } else {
+                    $datas .= '<span class="red-text badge">Batal</span>';
+                }
+                return $datas;
+            })
+            ->addColumn('tglpo', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+            })
+            ->addColumn('nama_customer', function ($data) {
+                if (isset($data->Spa)) {
+                    return $data->Spa->Customer->nama;
+                }
+                else if (isset($data->Spb)) {
+                    return $data->Spb->Customer->nama;
+                }
+            })
+            ->addColumn('button', function ($data) {
+                $return = "";
+                if (isset($data->Spa)) {
+                    $return .= '<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->Spa->id) . '"  data-id="' . $data->Spa->id . '" >
+                    <button class="btn btn-outline-primary btn-sm" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                else if (isset($data->Spb)) {
+                    $return .= '<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '" >
+                    <button class="btn btn-outline-primary btn-sm" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                return $return;
+            })
+            ->rawColumns(['button', 'status', 'jenis'])
+            ->make(true);
+    }
+
+
+    public function show_retur()
+    {
+        return view('page.as.retur.show');
+    }
+
+    public function get_data_retur(){
+
+    }
+
+    public function detail_retur(){
+        return view('page.as.retur.detail');
+    }
+
+    public function create_retur(){
+        return view('page.as.retur.create');
+    }
+
+    public function store_retur(Request $r){
+
+    }
+
+    public function edit_retur($id){
+        return view('page.as.retur.edit', ['id' => $id]);
+    }
+
+    public function update_retur(Request $r, $id){
+    }
+
+    public function get_list_so_selesai(){
+        $a = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->with(['Ekatalog', 'Spa', 'Spb']);
+        $data = Pesanan::has('DetailPesananPart.DetailLogistikPart')->with(['Ekatalog', 'Spa', 'Spb'])->union($a)->get();
+        echo json_encode($data);
+    }
+
+    public function get_list_so_selesai_paket($id){
+        $data = DetailPesanan::where('pesanan_id', $id)->has('DetailPesananProduk.DetailLogistik')->with('PenjualanProduk')->get();
+        echo json_encode($data);
+    }
+
+    public function get_list_so_selesai_paket_produk($id){
+        $data = DetailPesananProduk::where('detail_pesanan_id', $id)->has('DetailLogistik')->with('GudangBarangJadi.Produk')->get();
+        echo json_encode($data);
+    }
+
+    public function get_detail_so_retur($id){
+        $data = "";
+        $ekat = Ekatalog::where('pesanan_id', $id)->with(['Pesanan', 'Customer.Provinsi'])->first();
+        $spa = Spa::where('pesanan_id', $id)->with(['Pesanan', 'Customer.Provinsi'])->first();
+        $spb = Spb::where('pesanan_id', $id)->with(['Pesanan', 'Customer.Provinsi'])->first();
+
+        if($ekat){
+            $data = $ekat;
+        }
+        if($spa){
+            $data = $spa;
+        }
+        if($spb){
+            $data = $spb;
+        }
+
+        echo json_encode($data);
     }
 }

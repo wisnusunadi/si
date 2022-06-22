@@ -6,9 +6,17 @@
         @foreach ($header as $h)
         <tr align=center>
             <td colspan="2"><b>No SO</b></td>
+            @if (isset($h->pesanan_id))
             <td colspan="3">{{ $h->pesanan->so }}</td>
+            @else
+            <td colspan="3">-</td>
+            @endif
             <td colspan="2"><b>No PO</b></td>
+            @if (isset($h->pesanan_id))
             <td colspan="3">{{ $h->pesanan->no_po }}</td>
+            @else
+            <td colspan="3">-</td>
+            @endif
         </tr>
         <tr>
             <td colspan="2"><b>Distributor</b></td>
@@ -44,12 +52,16 @@
                 <th colspan="9" align="center"><b>({{ $d->paket->detailpesanan->penjualanproduk->nama }})</b></th>
             </tr>
             <tr>
-        @foreach($d->seri as $r)
+        @foreach($d->noseri as $r)
             @php
                 $i++;
             @endphp
             <td align="left">{{ $i }}.</td>
-            <td>{{ $r->seri->noseri }}</td>
+            @if (isset($r->seri->noseri))
+                <td>{{ $r->seri->noseri }}</td>
+            @else
+                <td>-</td>
+            @endif
             @if ($i % 5 == 0)
                 </tr><tr>
             @endif
@@ -74,15 +86,14 @@
         <tr></tr>
         <tr></tr>
         <tr>
-            @foreach ($tfby as $t)
-            <td colspan="3" align="center" ><b>{{ $t->transfer_by == null ? '-' : $t->transfer->nama }}</b></td>
-            <td colspan="3" align="center"><b>{{ $t->check_by == null ? '-' : $t->check->nama }}</b></td>
-            <td colspan="3" align="center"><b>{{ $t->terima_by == null ? '-' : $t->terima->nama }}</b></td>
+            <td colspan="3" align="center" ><b>{{ Auth::user()->nama }}</b></td>
+            <td colspan="3" align="center"><b>-</b></td>
+            <td colspan="3" align="center"><b>-</b></td>
         </tr>
         <tr>
-            <td colspan="3" align="center">{{ $t->transfer_by == null ? '-' : '('.$t->transfer->Divisi->nama.')' }}</td>
-            <td colspan="3" align="center">{{ $t->check_by == null ? '-' : '('.$t->check->Divisi->nama.')' }}</td>
-            <td colspan="3" align="center">{{ $t->terima_by == null ? '-' : '('.$t->terima->Divisi->nama.')' }}</td>
+            <td colspan="3" align="center">(Gudang Barang Jadi)</td>
+            <td colspan="3" align="center">-</td>
+            <td colspan="3" align="center">-</td>
         </tr>
         @foreach ($header as $hh)
         <tr></tr>
@@ -92,9 +103,8 @@
             <td colspan="2">{{ $hh->pesanan->so }}</td>
             <td><b>Tanggal Terbit</b></td>
             <td>:</td>
-            <td colspan="2">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', $t->created_at)->isoFormat('D MMMM Y') }}</td>
+            <td colspan="2">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', Carbon\Carbon::now())->isoFormat('D MMMM Y') }}</td>
         </tr>
-        @endforeach
         @endforeach
     </table>
 

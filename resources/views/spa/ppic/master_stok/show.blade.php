@@ -245,6 +245,9 @@
                         data: 'so',
                     },
                     {
+                        data: 'customer',
+                    },
+                    {
                         data: 'tgl_order',
                     },
                     {
@@ -252,6 +255,9 @@
                     },
                     {
                         data: 'jumlah',
+                    },
+                    {
+                        data: 'status',
                     },
                 ]
             });

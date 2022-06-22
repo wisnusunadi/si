@@ -1679,6 +1679,7 @@
             //     }
             // });
 
+
             $('.penjualan_produk_id').select2({
                 placeholder: "Pilih Produk",
                 width: 'resolve',
