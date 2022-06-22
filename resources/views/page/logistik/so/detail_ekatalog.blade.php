@@ -929,7 +929,7 @@
                 validasi_checked_produk();
             });
 
-            $(document).on('click change', '#noseritable input[name="check_all_noseri"]', function() {
+            $(document).on('change', '#noseritable input[name="check_all_noseri"]', function() {
                 var rows = $('#noseritable').DataTable().rows({
                     'search': 'applied'
                 }).nodes();
@@ -938,7 +938,7 @@
                     $('.check_noseri', rows).prop('checked', true);
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').removeClass(
                         'is-invalid');
-                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr(
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').prop(
                         'disabled', false);
 
                 } else if ($('input[name="check_all_noseri"]:checked').length <= 0) {
@@ -946,11 +946,12 @@
                         'is-invalid');
                     $('.check_noseri', rows).prop('checked', false);
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').addClass('is-invalid');
-                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr(
-                        'disabled', true);
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').prop(
                         'checked', false);
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').prop(
+                        'disabled', true);
                 }
+
                 checkedAry = [];
                 $.each($(".check_noseri:checked", rows), function() {
                     checkedAry.push($(this).closest('tr').find('.check_noseri').attr('data-id'));
@@ -959,51 +960,21 @@
                 $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').val($(
                         '.check_noseri:checked', rows)
                     .length);
-
+                console.log(produk_id);
                 validasi_checked_produk();
             });
 
 
             $('#belumkirimtable').on('click', '.check_detail', function() {
                 $('#check_all').prop('checked', false);
-                if ($('.detail_produk_id:checked').length > 0) {
-                    produk_id = [];
-                    $.each($(".detail_produk_id:checked"), function() {
-                        var produk_id_arr = {};
-                        produk_id_arr.id = $(this).closest('tr').find('.detail_produk_id').attr('data-id');
-                        produk_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
-                        produk_id_arr.array_no_seri = $(this).closest('tr').find('div[name="array_check[]"]').text();
-                        produk_id.push(produk_id_arr);
-                    });
-
-                } else if ($('.detail_produk_id:checked').length <= 0) {
-                    var produk_id_arr = {};
-                    produk_id_arr.id = '0';
-                    produk_id_arr.jumlah_kirim = '0';
-                    produk_id_arr.array_no_seri = '0';
-                    produk_id.push(produk_id_arr);
-                }
-
-                if ($('.detail_part_id:checked').length > 0) {
-                    part_id = [];
-                    $.each($(".detail_part_id:checked"), function() {
-                        var part_id_arr = {};
-                        part_id_arr.id = $(this).closest('tr').find('.detail_part_id').attr('data-id');
-                        part_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
-                        part_id.push(part_id_arr);
-                    });
-                } else if ($('.detail_part_id:checked').length <= 0) {
-                    var part_id_arr = {};
-                    part_id_arr.id = '0';
-                    part_id_arr.jumlah_kirim = '0';
-                    part_id.push(part_id_arr);
-                }
 
                 if ($('.check_detail').is(':checked')) {
                     $('#kirim_produk').removeAttr('disabled');
                 } else {
                     $('#kirim_produk').prop('disabled', true);
                 }
+
+                console.log(produk_id);
                 validasi_checked_produk();
             })
 
@@ -1148,19 +1119,53 @@
                 var href = $(this).attr('data-attr');
                 var id = $(this).data('id');
                 var pesanan_id = '{{ $data->pesanan_id }}';
-                if(produk_id.length <= 0){
-                    var produk_id_arr = {}
-                    produk_id_arr.id = "0";
-                    produk_id_arr.jumlah_kirim = "0";
-                    produk_id_arr.array_no_seri = "0";
+
+                if ($('.detail_produk_id:checked').length > 0) {
+                    produk_id = [];
+                    $.each($(".detail_produk_id:checked"), function() {
+                        var produk_id_arr = {};
+                        produk_id_arr.id = $(this).closest('tr').find('.detail_produk_id').attr('data-id');
+                        produk_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                        produk_id_arr.array_no_seri = $(this).closest('tr').find('div[name="array_check[]"]').text();
+                        produk_id.push(produk_id_arr);
+                    });
+
+                } else if ($('.detail_produk_id:checked').length <= 0) {
+                    var produk_id_arr = {};
+                    produk_id_arr.id = '0';
+                    produk_id_arr.jumlah_kirim = '0';
+                    produk_id_arr.array_no_seri = '0';
                     produk_id.push(produk_id_arr);
                 }
-                if(part_id.length <= 0){
-                    var part_id_arr = {}
-                    part_id_arr.id = "0";
-                    part_id_arr.jumlah_kirim = "0";
+
+                if ($('.detail_part_id:checked').length > 0) {
+                    part_id = [];
+                    $.each($(".detail_part_id:checked"), function() {
+                        var part_id_arr = {};
+                        part_id_arr.id = $(this).closest('tr').find('.detail_part_id').attr('data-id');
+                        part_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                        part_id.push(part_id_arr);
+                    });
+                } else if ($('.detail_part_id:checked').length <= 0) {
+                    var part_id_arr = {};
+                    part_id_arr.id = '0';
+                    part_id_arr.jumlah_kirim = '0';
                     part_id.push(part_id_arr);
                 }
+
+                // if(produk_id.length <= 0){
+                //     var produk_id_arr = {}
+                //     produk_id_arr.id = "0";
+                //     produk_id_arr.jumlah_kirim = "0";
+                //     produk_id_arr.array_no_seri = "0";
+                //     produk_id.push(produk_id_arr);
+                // }
+                // if(part_id.length <= 0){
+                //     var part_id_arr = {}
+                //     part_id_arr.id = "0";
+                //     part_id_arr.jumlah_kirim = "0";
+                //     part_id.push(part_id_arr);
+                // }
                 $.ajax({
                     url: "/logistik/so/create/" + pesanan_id + '/' + jenis_penjualan,
                     data: {'produk_id':produk_id, 'part_id':part_id},
