@@ -881,12 +881,12 @@ class QcController extends Controller
                 }
             })
             ->addColumn('batas_uji', function ($data) {
-                if (!empty($data->so)) {
-                    $name = explode('/', $data->so);
-                    if ($name[1] == 'EKAT') {
+                // if (!empty($data->so)) {
+                //     $name = explode('/', $data->so);
+                //     if ($name[1] == 'EKAT') {
                             // $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                            $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
-                            return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>';
+                            // $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
+                            // return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>';
 
                             // if ($tgl_sekarang < $tgl_parameter) {
                             //     $to = Carbon::now();
@@ -906,10 +906,10 @@ class QcController extends Controller
                             //     $hari = $to->diffInDays($from);
                             //     return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                             // }
-                    } else {
-                        return '-';
-                    }
-                }
+                //     } else {
+                //         return '-';
+                //     }
+                // }
             })
             ->addColumn('keterangan', function ($data) {
                 if (!empty($data->so)) {
@@ -1942,43 +1942,35 @@ class QcController extends Controller
             // $data = $prd->merge($part);
 
             $blm_uji_prd = Pesanan::whereIn('id', function($q) {
-                            $q->select('pesanan.id')
-                                ->from('pesanan')
-                                ->leftJoin('t_gbj', 't_gbj.pesanan_id', '=', 'pesanan.id')
-                                ->leftJoin('t_gbj_detail', 't_gbj_detail.t_gbj_id', '=', 't_gbj.id')
-                                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
-                                ->groupBy('pesanan.id')
-                                ->havingRaw('count(t_gbj_noseri.id) > (select count(noseri_detail_pesanan.id)
-                                    from noseri_detail_pesanan
-                                    left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-                                    left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
-                                    where detail_pesanan.pesanan_id = pesanan.id
-                                    having count(noseri_detail_pesanan.id) <= 0)');
-                            })->whereNotIn('log_id', ['7', '9', '10'])
-                            ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi']);
-
-            // $array_id = $prd->pluck('id')->toArray();
+                $q->select('pesanan.id')
+                    ->from('pesanan')
+                    ->leftJoin('t_gbj', 't_gbj.pesanan_id', '=', 'pesanan.id')
+                    ->leftJoin('t_gbj_detail', 't_gbj_detail.t_gbj_id', '=', 't_gbj.id')
+                    ->leftJoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+                    ->groupBy('pesanan.id')
+                    ->havingRaw('count(t_gbj_noseri.id) > 0 AND NOT EXISTS (select *
+                        from noseri_detail_pesanan
+                        left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+                        left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
+                        where detail_pesanan.pesanan_id = pesanan.id)');
+                })->whereNotIn('log_id', ['7', '9', '10'])
+                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi']);
 
             $blm_uji_part = Pesanan::whereIn('id', function($q) {
-                                $q->select('pesanan.id')
-                                ->from('pesanan')
-                                ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.pesanan_id', '=', 'pesanan.id')
-                                ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-                                ->whereRaw("m_sparepart.kode NOT LIKE '%JASA%'")
-                                ->havingRaw("sum(detail_pesanan_part.jumlah) > (
-                                    select sum(outgoing_pesanan_part.jumlah_ok)
-                                    from outgoing_pesanan_part
-                                    left join detail_pesanan_part on detail_pesanan_part.id = outgoing_pesanan_part.detail_pesanan_part_id
-                                    left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
-                                    where detail_pesanan_part.pesanan_id = pesanan.id) OR NOT EXISTS (select * from outgoing_pesanan_part
-                                    left join detail_pesanan_part on detail_pesanan_part.id = outgoing_pesanan_part.detail_pesanan_part_id
-                                    left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
-                                    where detail_pesanan_part.pesanan_id = pesanan.id)")
-                                ->groupBy('pesanan.id');
-                            })->whereNotIn('log_id', ['7', '10'])
-                            ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
-                            ->union($blm_uji_prd)
-                            ->get();
+                $q->select('pesanan.id')
+                ->from('pesanan')
+                ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.pesanan_id', '=', 'pesanan.id')
+                ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                ->whereRaw("m_sparepart.kode NOT LIKE '%JASA%'")
+                ->havingRaw("sum(detail_pesanan_part.jumlah) > 0 AND NOT EXISTS (select * from outgoing_pesanan_part
+                    left join detail_pesanan_part on detail_pesanan_part.id = outgoing_pesanan_part.detail_pesanan_part_id
+                    left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
+                    where detail_pesanan_part.pesanan_id = pesanan.id)")
+                ->groupBy('pesanan.id');
+                    })->whereNotIn('log_id', ['7', '10'])
+                    ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                    ->union($blm_uji_prd)
+                    ->get();
 
             $data = $blm_uji_part;
 
@@ -2048,22 +2040,21 @@ class QcController extends Controller
             // $data = Pesanan::whereIN('id', $id)->get();
 
             $data = Pesanan::with(['ekatalog.customer.provinsi'])
-            ->whereIn('id', function($q) {
-                $q->select('pesanan.id')
-                ->from('pesanan')
-                ->leftJoin('t_gbj', 't_gbj.pesanan_id', '=', 'pesanan.id')
-                ->leftJoin('t_gbj_detail', 't_gbj_detail.t_gbj_id', '=', 't_gbj.id')
-                ->leftJoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
-                ->groupBy('pesanan.id')
-                ->havingRaw('count(t_gbj_noseri.id) > (select count(noseri_detail_pesanan.id)
-                from noseri_detail_pesanan
-                left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-                left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
-                where detail_pesanan.pesanan_id = pesanan.id)');
-            })->whereNotIn('log_id', ['7', '9', '10'])->whereHas('Ekatalog', function($q){
-                $q->where('tgl_kontrak', '>', Carbon::now());
-            })->get();
-
+        ->whereIn('id', function($q) {
+            $q->select('pesanan.id')
+            ->from('pesanan')
+            ->leftJoin('t_gbj', 't_gbj.pesanan_id', '=', 'pesanan.id')
+            ->leftJoin('t_gbj_detail', 't_gbj_detail.t_gbj_id', '=', 't_gbj.id')
+            ->leftJoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
+            ->groupBy('pesanan.id')
+            ->havingRaw('count(t_gbj_noseri.id) > (select count(noseri_detail_pesanan.id)
+            from noseri_detail_pesanan
+            left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+            left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
+            where detail_pesanan.pesanan_id = pesanan.id)');
+        })->whereNotIn('log_id', ['7', '9', '10'])->whereHas('Ekatalog', function($q){
+            $q->where('tgl_kontrak', '<=', Carbon::now()->toDateString());
+        })->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {

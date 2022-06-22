@@ -231,7 +231,7 @@
                                                     <th>No</th>
                                                     <th>No SO</th>
                                                     <th>No PO</th>
-                                                    <th>Batas Pengujian</th>
+                                                    {{-- <th>Batas Pengujian</th> --}}
                                                     <th>Customer</th>
                                                     <th>Keterangan</th>
                                                     {{-- <th>Status</th> --}}
@@ -427,12 +427,14 @@
                     data: 'so',
                 }, {
                     data: 'no_po',
-                }, {
-                    data: 'batas_uji',
-                    className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: false,
-                }, {
+                },
+                // {
+                //     data: 'batas_uji',
+                //     className: 'nowrap-text align-center',
+                //     orderable: false,
+                //     searchable: false,
+                // },
+                {
                     data: 'nama_customer',
 
                 }, {
