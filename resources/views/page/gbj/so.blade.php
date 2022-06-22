@@ -54,16 +54,15 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Dicek</a>
                             </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="pills-batal-tab" data-toggle="pill" href="#pills-batal" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Batal PO</a>
-                            </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-proses_kirim" role="tabpanel" aria-labelledby="pills-proses_kirim-tab">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered" style="width: 100%" id="belum-dicek">
+                                            <table class="table table-bordered" style="width: 100%"
+                                             {{-- id="belum-dicek" --}}
+                                             >
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
@@ -75,6 +74,21 @@
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>SO-00001</td>
+                                                        <td>PO-00001</td>
+                                                        <td>PT. ABC</td>
+                                                        <td>20 Desember 2019</td>
+                                                        <td>
+                                                            <span class="badge badge-danger">Batal</span>
+                                                        </td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-success"><i class="fas fa-eye"></i> Detail</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -97,33 +111,6 @@
                                                     </tr>
                                                 </thead>
                                             </table>
-
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade show" id="pills-batal" role="tabpanel" aria-labelledby="pills-batal-tab">
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-bordered" style="width: 100%" id="batal-table">
-                                                <thead>
-                                                    <tr>
-                                                        <th><input type="checkbox" name="" id=""></th>
-                                                        <th>Nomor SO</th>
-                                                        <th>Nomor PO</th>
-                                                        <th>Customer</th>
-                                                        <th>Batas Transfer</th>
-                                                        <th>Status</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
-
                                         </div>
                                     </div>
                                 </div>
@@ -295,6 +282,31 @@
         </div>
     </div>
 </div>
+
+{{-- Modal Batal --}}
+<div class="modal fade" id="batalProdukModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <div class="row">
+            <div class="col-12">
+                
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Save changes</button>
+        </div>
+      </div>
+    </div>
+  </div>
 @stop
 
 @section('adminlte_js')

@@ -116,7 +116,7 @@
                                 <th>Nama Produk</th>
                                 <th>Jumlah</th>
                             </tr>
-                        </thead>
+                        </thead> 
                         <tbody>
                         </tbody>
                     </table>
