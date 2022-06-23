@@ -201,7 +201,7 @@
                                             <div class="p-2">
                                                 <div class="margin">
                                                     <div><small class="text-muted">No PO</small></div>
-                                                    <div><b id="no_so"> </b></div>
+                                                    <div><b id="no_so">{{ $data->pesanan->no_po }}</b></div>
                                                 </div>
                                                 <div class="margin">
                                                     <div><small class="text-muted">Batas Pengiriman</small></div>
@@ -986,52 +986,52 @@
 
 
             $('#belumkirimtable').on('click', '.check_detail', function() {
-                $(this).closest('tr').find('.jumlah_kirim').prop('disabled', false);
+             //   $(this).closest('tr').find('.jumlah_kirim').prop('disabled', false);
                 $('#check_all').prop('checked', false);
-                if ($('.detail_produk_id:checked').length > 0) {
-                    //tambahan
-                           if ($('.detail_part_id:checked').length <= 0) {
-                            part_id.splice(0, part_id.length)
-                        }
-                    produk_id = [];
-                    $.each($(".detail_produk_id:checked"), function() {
-                        var produk_id_arr = {};
-                        produk_id_arr.id = $(this).closest('tr').find('.detail_produk_id').attr('data-id');
-                        produk_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
-                        produk_id_arr.array_no_seri = $(this).closest('tr').find('div[name="array_check[]"]').text();
-                        produk_id.push(produk_id_arr);
-                    });
+                // if ($('.detail_produk_id:checked').length > 0) {
+                //     //tambahan
+                //            if ($('.detail_part_id:checked').length <= 0) {
+                //             part_id.splice(0, part_id.length)
+                //         }
+                //     produk_id = [];
+                //     $.each($(".detail_produk_id:checked"), function() {
+                //         var produk_id_arr = {};
+                //         produk_id_arr.id = $(this).closest('tr').find('.detail_produk_id').attr('data-id');
+                //         produk_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                //         produk_id_arr.array_no_seri = $(this).closest('tr').find('div[name="array_check[]"]').text();
+                //         produk_id.push(produk_id_arr);
+                //     });
 
-                } else if ($('.detail_produk_id:checked').length <= 0) {
-                    var produk_id_arr = {};
-                    produk_id_arr.id = '0';
-                    produk_id_arr.jumlah_kirim = '0';
-                    produk_id_arr.array_no_seri = '0';
-                    produk_id.push(produk_id_arr);
-                }
+                // } else if ($('.detail_produk_id:checked').length <= 0) {
+                //     var produk_id_arr = {};
+                //     produk_id_arr.id = '0';
+                //     produk_id_arr.jumlah_kirim = '0';
+                //     produk_id_arr.array_no_seri = '0';
+                //     produk_id.push(produk_id_arr);
+                // }
 
-                if ($('.detail_part_id:checked').length > 0) {
-                    //tambahan
-                    if ($('.detail_produk_id:checked').length <= 0) {
+                // if ($('.detail_part_id:checked').length > 0) {
+                //     //tambahan
+                //     if ($('.detail_produk_id:checked').length <= 0) {
 
-                        produk_id.splice(0, produk_id.length)
-                    }
+                //         produk_id.splice(0, produk_id.length)
+                //     }
 
-                    part_id = [];
+                //     part_id = [];
 
-                    $.each($(".detail_part_id:checked"), function() {
-                        $(this).closest('tr').find('.jumlah_kirim').prop('disabled', true);
-                        var part_id_arr = {};
-                        part_id_arr.id = $(this).closest('tr').find('.detail_part_id').attr('data-id');
-                        part_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
-                        part_id.push(part_id_arr);
-                    });
-                } else if ($('.detail_part_id:checked').length <= 0) {
-                    var part_id_arr = {};
-                    part_id_arr.id = '0';
-                    part_id_arr.jumlah_kirim = '0';
-                    part_id.push(part_id_arr);
-                }
+                //     $.each($(".detail_part_id:checked"), function() {
+                //         $(this).closest('tr').find('.jumlah_kirim').prop('disabled', true);
+                //         var part_id_arr = {};
+                //         part_id_arr.id = $(this).closest('tr').find('.detail_part_id').attr('data-id');
+                //         part_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                //         part_id.push(part_id_arr);
+                //     });
+                // } else if ($('.detail_part_id:checked').length <= 0) {
+                //     var part_id_arr = {};
+                //     part_id_arr.id = '0';
+                //     part_id_arr.jumlah_kirim = '0';
+                //     part_id.push(part_id_arr);
+                // }
 
                 if ($('.check_detail').is(':checked')) {
                     $('#kirim_produk').removeAttr('disabled');
@@ -1189,19 +1189,50 @@
                 var href = $(this).attr('data-attr');
                 var id = $(this).data('id');
                 var pesanan_id = '{{ $data->pesanan_id }}';
-                if(produk_id.length <= 0){
-                    var produk_id_arr = {}
-                    produk_id_arr.id = "0";
-                    produk_id_arr.jumlah_kirim = "0";
-                    produk_id_arr.array_no_seri = "0";
+                if ($('.detail_produk_id:checked').length > 0) {
+                       //tambahan
+                            if ($('.detail_part_id:checked').length <= 0) {
+                                part_id.splice(0, part_id.length)
+                            }
+                    produk_id = [];
+                    $.each($(".detail_produk_id:checked"), function() {
+                        var produk_id_arr = {};
+                        produk_id_arr.id = $(this).closest('tr').find('.detail_produk_id').attr('data-id');
+                        produk_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                        produk_id_arr.array_no_seri = $(this).closest('tr').find('div[name="array_check[]"]').text();
+                        produk_id.push(produk_id_arr);
+                    });
+
+                } else if ($('.detail_produk_id:checked').length <= 0) {
+                    var produk_id_arr = {};
+                    produk_id_arr.id = '0';
+                    produk_id_arr.jumlah_kirim = '0';
+                    produk_id_arr.array_no_seri = '0';
                     produk_id.push(produk_id_arr);
                 }
-                if(part_id.length <= 0){
-                    var part_id_arr = {}
-                    part_id_arr.id = "0";
-                    part_id_arr.jumlah_kirim = "0";
+
+                if ($('.detail_part_id:checked').length > 0) {
+                  //tambahan
+                        if ($('.detail_produk_id:checked').length <= 0) {
+                            produk_id.splice(0, produk_id.length)
+                        }
+                    part_id = [];
+                    $.each($(".detail_part_id:checked"), function() {
+                        var part_id_arr = {};
+                        part_id_arr.id = $(this).closest('tr').find('.detail_part_id').attr('data-id');
+                        part_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                        part_id.push(part_id_arr);
+                    });
+                } else if ($('.detail_part_id:checked').length <= 0) {
+                    var part_id_arr = {};
+                    part_id_arr.id = '0';
+                    part_id_arr.jumlah_kirim = '0';
                     part_id.push(part_id_arr);
                 }
+
+
+
+
                 $.ajax({
                     url: "/logistik/so/create/" + pesanan_id + '/' + jenis_penjualan,
                     data: {'produk_id':produk_id, 'part_id':part_id},

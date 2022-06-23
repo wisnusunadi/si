@@ -104,7 +104,7 @@ class QcController extends Controller
                 $q->where(['pesanan_id' => $idpesanan]);
             })->orderBy('id');
         } elseif ($status == 'belum') {
-            $data = NoseriTGbj::DoesntHave('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
+           $data = NoseriTGbj::DoesntHave('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
                 $q->where(['gdg_brg_jadi_id' => $id]);
             })->whereHas('detail.header', function ($q) use ($idpesanan) {
                 $q->where(['pesanan_id' => $idpesanan]);
@@ -337,9 +337,9 @@ class QcController extends Controller
                 } else {
                     if ($data->jumlah == $data->getJumlahCekPart('ok')) {
                         return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-eye"></i></a>';
-                    } else {
-                        return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-eye"></i></a>';
-                    }
+                   } else {
+                    return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-eye"></i></a>';
+                   }
                 }
 
                 // $id = $data->gudang_barang_jadi_id;
@@ -570,7 +570,6 @@ class QcController extends Controller
             ->rawColumns(['button', 'status', 'batas_uji'])
             ->make(true);
     }
-
     public function get_data_selesai_so($value)
     {
         $data = "";
@@ -734,6 +733,8 @@ class QcController extends Controller
             ->make(true);
     }
 
+
+
     public function get_data_riwayat_pengujian()
     {
         $prd = DetailPesanan::Has('DetailPesananProduk.NoSeriDetailPesanan')->get();
@@ -874,6 +875,8 @@ class QcController extends Controller
             ->rawColumns(['button', 'nama_produk'])
             ->make(true);
     }
+
+
 
     public function get_data_detail_riwayat_pengujian($id, $jenis)
     {
@@ -1130,6 +1133,12 @@ class QcController extends Controller
         }
     }
 
+    public function cancel_so($id){
+        $p = Pesanan::where('id', $id)->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->first();
+
+        return view('page.logistik.so.cancel_po', ['p' => $p]);
+    }
+
     public function detail_modal_riwayat_so($id, $jenis)
     {
         $result = "";
@@ -1144,41 +1153,9 @@ class QcController extends Controller
     //Tambah
     public function create_data_qc(/*$seri_id, $tfgbj_id, */$jenis, $pesanan_id, $produk_id, Request $request)
     {
-        // $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
-        //     $q->where('Pesanan_id', $pesanan_id);
-        // })->where('gudang_barang_jadi_id', $produk_id)->first();
-
-        // $replace_array_seri = strtr($seri_id, array('[' => '', ']' => ''));
-        // $array_seri = explode(',', $replace_array_seri);
-
         $bool = true;
         $bools = true;
-        // for ($i = 0; $i < count($array_seri); $i++) {
 
-        //     $data = NoseriTGbj::find($array_seri[$i]);
-
-
-        //     $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $array_seri[$i])->first();
-        //     if ($check == null) {
-        //         $c = NoseriDetailPesanan::create([
-        //             'detail_pesanan_produk_id' => $data->detail->detail_pesanan_produk_id,
-        //             't_tfbj_noseri_id' => $array_seri[$i],
-        //             'status' => $request->cek,
-        //             'tgl_uji' => $request->tanggal_uji,
-        //         ]);
-        //         if (!$c) {
-        //             $bool = false;
-        //         }
-        //     } else {
-        //         $NoseriDetailPesanan = NoseriDetailPesanan::find($check->id);
-        //         $NoseriDetailPesanan->status = $request->cek;
-        //         $NoseriDetailPesanan->tgl_uji = $request->tanggal_uji;
-        //         $u = $NoseriDetailPesanan->save();
-        //         if (!$u) {
-        //             $bool = false;
-        //         }
-        //     }
-        // }
         if ($jenis == "produk") {
             for ($i = 0; $i < count($request->noseri_id); $i++) {
                 $data = NoseriTGbj::find($request->noseri_id[$i]);
@@ -1220,15 +1197,11 @@ class QcController extends Controller
         }
 
         if ($bool == true) {
-            // $uk = "";
             $po = Pesanan::find($pesanan_id);
-
-            // $uk = count($po->DetailPesanan)." ".count($po->DetailPesananPart);
             if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) <= 0) {
                 if ($po->log_id == "8") {
-                    // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek();
-                    if ($po->getJumlahPesanan() == $po->getJumlahCek()) {
-                        if ($po->getJumlahKirim() == 0) {
+                    if ($po->getJumlahPesanan() <= $po->getJumlahCek()) {
+                        if ($po->getJumlahKirim() <= 0) {
                             $pou = Pesanan::find($pesanan_id);
                             $pou->log_id = '11';
                             $u = $pou->save();
@@ -1253,11 +1226,46 @@ class QcController extends Controller
                             }
                         }
                     }
+                } else if($po->log_id == "6"){
+                    if($po->getJumlahPesanan() <= $po->getJumlahSeri()){
+                        if($po->getJumlahPesanan() > $po->getJumlahCek()){
+                            $pou = Pesanan::find($pesanan_id);
+                            $pou->log_id = '8';
+                            $u = $pou->save();
+                            if (!$u) {
+                                $bools = false;
+                            }
+                        } else if ($po->getJumlahPesanan() <= $po->getJumlahCek()) {
+                            if ($po->getJumlahKirim() <= 0) {
+                                $pou = Pesanan::find($pesanan_id);
+                                $pou->log_id = '11';
+                                $u = $pou->save();
+                                if (!$u) {
+                                    $bools = false;
+                                }
+                            } else {
+                                if ($po->getJumlahKirim() >= $po->getJumlahPesanan()) {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '10';
+                                    $u = $pou->save();
+                                    if (!$u) {
+                                        $bools = false;
+                                    }
+                                } else {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '13';
+                                    $u = $pou->save();
+                                    if (!$u) {
+                                        $bools = false;
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             } else if (count($po->DetailPesanan) <= 0 && count($po->DetailPesananPart) > 0) {
-                // $uk = "Jumlah Pesan Part ".$po->getJumlahPesananPartNonJasa()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
                 if ($po->getJumlahPesananPartNonJasa() <= $po->getJumlahCekPart("ok")) {
-                    if ($po->getJumlahKirimPart() == 0) {
+                    if ($po->getJumlahKirimPart() <= 0) {
                         $pou = Pesanan::find($pesanan_id);
                         $pou->log_id = '11';
                         $u = $pou->save();
@@ -1290,10 +1298,9 @@ class QcController extends Controller
                     }
                 }
             } else if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) > 0) {
-                // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek()." Jumlah Pesan Part ".$po->getJumlahPesananPartNonJasa()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
                 if ($po->log_id == "8") {
-                    if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPartNonJasa() == $po->getJumlahCekPart("ok"))) {
-                        if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
+                    if (($po->getJumlahPesanan() <= $po->getJumlahCek()) && ($po->getJumlahPesananPartNonJasa() <= $po->getJumlahCekPart("ok"))) {
+                        if ($po->getJumlahKirim() <= 0 && $po->getJumlahKirimPart() <= 0) {
                             $pou = Pesanan::find($pesanan_id);
                             $pou->log_id = '11';
                             $u = $pou->save();
@@ -1315,6 +1322,44 @@ class QcController extends Controller
                                 if (!$u) {
                                     $bools = false;
                                 }
+                            }
+                        }
+                    }
+                }
+                else if($po->log_id == "6"){
+                    if($po->getJumlahPesanan() <= $po->getJumlahSeri()){
+                        if (($po->getJumlahPesanan() <= $po->getJumlahCek()) && ($po->getJumlahPesananPartNonJasa() <= $po->getJumlahCekPart("ok"))) {
+                            if ($po->getJumlahKirim() <= 0 && $po->getJumlahKirimPart() <= 0) {
+                                $pou = Pesanan::find($pesanan_id);
+                                $pou->log_id = '11';
+                                $u = $pou->save();
+                                if (!$u) {
+                                    $bools = false;
+                                }
+                            } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
+                                if ($po->getJumlahKirim() >= $po->getJumlahPesanan() && $po->getJumlahKirimPart() >= $po->getJumlahPesananPartNonJasa()) {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '10';
+                                    $u = $pou->save();
+                                    if (!$u) {
+                                        $bools = false;
+                                    }
+                                } else {
+                                    $pou = Pesanan::find($pesanan_id);
+                                    $pou->log_id = '13';
+                                    $u = $pou->save();
+                                    if (!$u) {
+                                        $bools = false;
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            $pou = Pesanan::find($pesanan_id);
+                            $pou->log_id = '8';
+                            $u = $pou->save();
+                            if (!$u) {
+                                $bools = false;
                             }
                         }
                     }
@@ -1388,7 +1433,7 @@ class QcController extends Controller
         $clogistik = Pesanan::where('log_id', ['11', '13'])->count();
         return view('page.qc.dashboard', ['terbaru' => $terbaru, 'hasil' => $hasil, 'lewat_batas' => $lewat_batas, 'po' => $cpo, 'gudang' => $cgudang, 'logistik' => $clogistik]);
     }
-    public function dashboard_data($value)
+     public function dashboard_data($value)
     {
         $a = $this->check_input();
 
@@ -1721,9 +1766,11 @@ class QcController extends Controller
         }
     }
 
+
+
     public function dashboard_so()
     {
-        $data = Pesanan::whereIn('log_id', ['9', '6', '11', '13'])->orderBy('id', 'desc')->get();
+        $data = Pesanan::whereIn('log_id', ['9', '6', '11', '13'])->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi', 'State'])->orderBy('id', 'desc')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
