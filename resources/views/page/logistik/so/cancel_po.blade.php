@@ -17,6 +17,24 @@
                 <div class="tab-content" id="custom-tabs-three-tabContent">
                     <div class="tab-pane fade active show" id="tabs-detail" role="tabpanel" aria-labelledby="tabs-detail-tab">
                         <div class="row">
+                            <div class="col-lg-6 col-md-6">
+                                <div class="info-box bg-warning">
+                                    <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
+                                    <div class="info-box-content">
+                                    <span class="info-box-text">@if(!empty($p->Ekatalog)) No Paket @else No PO @endif</span>
+                                    <span class="info-box-number">@if(!empty($p->Ekatalog)) {{$p->Ekatalog->no_paket}} @else {{$p->no_po}} @endif</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-6 col-md-6">
+                                <div class="info-box bg-olive">
+                                    <span class="info-box-icon"><i class="far fa-user"></i></span>
+                                    <div class="info-box-content">
+                                    <span class="info-box-text">Nama Customer</span>
+                                    <span class="info-box-number">@if(!empty($p->Ekatalog)) {{$p->Ekatalog->Customer->nama}} @elseif(!empty($p->Spa)) {{$p->Spa->Customer->nama}} @else {{$p->Spb->Customer->nama}} @endif</span>
+                                    </div>
+                                </div>
+                            </div>
                             <div class="col-lg-4 col-md-6">
                                 <div class="info-box bg-maroon">
                                     <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
@@ -26,72 +44,26 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="info-box bg-warning">
-                                    <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
-                                    <div class="info-box-content">
-                                    <span class="info-box-text">@if(!empty($p->Ekatalog)) No Paket @else No PO @endif</span>
-                                    <span class="info-box-number">@if(!empty($p->Ekatalog)) {{$p->Ekatalog->no_paket}} @else {{$p->no_po}} @endif</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="info-box bg-olive">
-                                    <span class="info-box-icon"><i class="far fa-user"></i></span>
-                                    <div class="info-box-content">
-                                    <span class="info-box-text">Nama Customer</span>
-                                    <span class="info-box-number">@if(!empty($p->Ekatalog)) {{$p->Ekatalog->Customer->nama}} @elseif(!empty($p->Spa)) {{$p->Spa->Customer->nama}} @else {{$p->Spb->Customer->nama}} @endif</span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="tabs-produk" role="tabpanel" aria-labelledby="tabs-produk-tab">
-                        {{-- <div class="row d-flex justify-content-between">
-                            <div class="p-2">
-                                <div class="margin">
-                                    <div><small class="text-muted">No SO</small></div>
-                                    <div><b>
-                                            <em class="text-muted">Belum Tersedia</em>
-                                        </b>
-                                    </div>
-                                </div>
-                                <div class="margin">
-                                    <div><small class="text-muted">No AKN</small></div>
-                                    <div><b>
-                                            <em class="text-muted">Belum Tersedia</em>
-                                        </b>
-                                    </div>
-                                </div>
-                                <div class="margin">
-                                    <div><small class="text-muted">No Urut</small></div>
-                                    <div><b></b></div>
-                                </div>
-                            </div>
-                            <div class="p-2">
-                                <div class="margin">
-                                    <div><small class="text-muted">Tgl Buat</small></div>
-                                    <div><b></b></div>
-                                </div>
-                                <div class="margin">
-                                    <div><small class="text-muted">Tgl Edit</small></div>
-                                    <div><b></b></div>
-                                </div>
-                                <div class="margin">
-                                    <div><small class="text-muted">Tgl Kontrak</small></div>
-                                    <div><b><em class="text-muted">Belum Tersedia</em></b></div>
-                                </div>
-                            </div>
-                        </div> --}}
-                        <div class="row">
-                            <div class="col-4">
-                                <div class="info-box bg-light" style="box-shadow: none">
+                            <div class="col-4 col-md-6">
+                                <div class="info-box bg-navy" style="box-shadow: none">
                                     <div class="info-box-content">
                                     <span class="info-box-text">Tanggal Batal</span>
                                     <span class="info-box-number">{{Carbon::now()->isoFormat('D MMMM Y')}}</span>
                                     </div>
                                 </div>
                             </div>
+                            <div class="col-4 col-md-6">
+                                <div class="info-box bg-light" style="box-shadow: none">
+                                    <div class="info-box-content">
+                                    <span class="info-box-text">Status</span>
+                                    <span class="info-box-number">{{Carbon::now()->isoFormat('D MMMM Y')}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="tabs-produk" role="tabpanel" aria-labelledby="tabs-produk-tab">
+                        <div class="row">
                             <div class="col-12">
                                 <div class="info-box bg-danger">
                                     <span class="info-box-icon"><i class="fas fa-exclamation-triangle fa-fw"></i></span>
@@ -115,6 +87,7 @@
                                 <th>No</th>
                                 <th>Nama Produk</th>
                                 <th>Jumlah</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody>

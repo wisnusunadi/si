@@ -858,10 +858,7 @@ ul#status {
             });
         }
 
-<<<<<<< HEAD
-=======
         function ekat_show(){
->>>>>>> 3dbc4d5f8e07c17157a0f354bcefef8e418a170a
             var ekatalogtable = $('#ekatalogtable').DataTable({
                 destroy: true,
                 processing: true,

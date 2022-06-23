@@ -265,6 +265,35 @@
             </div>
         </div>
     </div>
+
+    <div class="modal fade" id="noserimodal" tabindex="-1" role="dialog" aria-labelledby="noserimodal" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content" style="margin: 10px">
+                <div class="modal-header bg-light">
+                    <h4 id="modal-title">Noseri</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="noseri">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="table-responsive">
+                                <table class="table" style="text-align:center;width:100%;" id="noseritable">
+                                    <thead>
+                                        <th>No</th>
+                                        <th>No Seri</th>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 @stop
 @section('adminlte_js')
@@ -367,6 +396,14 @@
             })
         });
 
+        $("#produktable").on('click', '.noserimodal', function(event) {
+            event.preventDefault();
+            var id = $(this).data('data-id');
+            var pesan = $(this).data('data-pesan');
+            $('#noserimodal').modal("show");
+            noseritable(id, pesan);
+        });
+
         function produktable(id){
             $('#produktable').DataTable({
                 destroy: true,
@@ -397,8 +434,46 @@
                         orderable: false,
                         searchable: false
                     },
+                    {
+                        data: 'aksi',
+                        orderable: false,
+                        searchable: false
+                    },
                 ],
             });
+        }
+
+        function noseritable(data_id, pesanan_id){
+            $('#noseritable').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: false,
+            autowidth: true,
+            ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
+                'url': '/api/qc/so/seri/belum/'+data_id+'/'+pesanan_id,
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}',
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [
+            {
+                data: 'DT_RowIndex',
+                orderable: false,
+                searchable: false
+            },
+            {
+                data: 'seri',
+                className: 'nowrap-text align-center',
+                orderable: true,
+                searchable: true
+            }]
+        });
+
         }
 
         function selesai_data(){

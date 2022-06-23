@@ -373,7 +373,44 @@ class QcController extends Controller
                 //     }
                 // }
             })
-            ->rawColumns(['nama_produk', 'button'])
+            ->addColumn('aksi', function($data) use ($id){
+                if (isset($data->gudang_barang_jadi_id)) {
+                    $ids = $data->gudang_barang_jadi_id;
+                    $countok = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($ids) {
+                        $q->where([
+                            ['gudang_barang_jadi_id', '=', $ids],
+                            ['status', '=', 'ok']
+                        ]);
+                    })->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                        $q->where('pesanan_id', $id);
+                    })->get()->count();
+
+                    $countnok = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($ids) {
+                        $q->where([
+                            ['gudang_barang_jadi_id', '=', $ids],
+                            ['status', '=', 'ok']
+                        ]);
+                    })->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                        $q->where('pesanan_id', $id);
+                    })->get()->count();
+
+                    $jumlahditrf = NoseriTGbj::whereHas('detail', function ($q) use ($ids) {
+                        $q->where('gdg_brg_jadi_id', $ids);
+                    })->whereHas('detail.header', function ($q) use ($id) {
+                        $q->where('pesanan_id', $id);
+                    })->count();
+
+                    $bool = "0";
+                    if ($jumlahditrf > 0) {
+                        if ($jumlahditrf == $countok) {
+                            return '<a data-toggle="modal" data-target="#noserimodal" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '" data-pesan="'.$id.'" data-jenis="produk"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
+                        } else {
+                            return '<a data-toggle="modal" data-target="#noserimodal" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '" data-pesan="'.$id.'" data-jenis="produk"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
+                        }
+                    }
+                }
+            })
+            ->rawColumns(['nama_produk', 'button', 'aksi'])
             ->make(true);
         //echo json_encode($data);
     }
@@ -710,7 +747,7 @@ class QcController extends Controller
             })
             ->addColumn('status', function ($data) {
 
-                if($data->log_id == "20"){
+                // if($data->log_id == "20"){
                         $name = explode('/', $data->so);
                         return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="'.$name[1].'" data-provinsi="">
                             <button type="button" class="btn btn-sm btn-outline-danger" type="button">
@@ -718,40 +755,40 @@ class QcController extends Controller
                                 Batal
                             </button>
                         </a>';
-                }
-                else{
-                  if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) <= 0) {
-                      if ($data->getJumlahCek() == 0) {
-                          return '<span class="badge red-text">Belum diuji</span>';
-                      } else {
-                          if ($data->getJumlahCek() >= $data->getJumlahPesanan()) {
-                              return  '<span class="badge green-text">Selesai</span>';
-                          } else {
-                              return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                          }
-                      }
-                  } else if (count($data->DetailPesanan) <= 0 && count($data->DetailPesananPart) > 0) {
-                      if ($data->getJumlahCekPart('ok') == 0) {
-                          return '<span class="badge red-text">Belum diuji</span>';
-                      } else {
-                          if ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa()) {
-                              return  '<span class="badge green-text">Selesai</span>';
-                          } else {
-                              return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                          }
-                      }
-                  } else if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) > 0) {
-                      if ($data->getJumlahCek() == 0 && $data->getJumlahCekPart('ok') == 0) {
-                          return '<span class="badge red-text">Belum diuji</span>';
-                      } else {
-                          if (($data->getJumlahCek() >= $data->getJumlahPesanan()) && ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa())) {
-                              return  '<span class="badge green-text">Selesai</span>';
-                          } else {
-                              return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                          }
-                      }
-                  }
-                }
+                // }
+                // else{
+                //   if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) <= 0) {
+                //       if ($data->getJumlahCek() == 0) {
+                //           return '<span class="badge red-text">Belum diuji</span>';
+                //       } else {
+                //           if ($data->getJumlahCek() >= $data->getJumlahPesanan()) {
+                //               return  '<span class="badge green-text">Selesai</span>';
+                //           } else {
+                //               return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                //           }
+                //       }
+                //   } else if (count($data->DetailPesanan) <= 0 && count($data->DetailPesananPart) > 0) {
+                //       if ($data->getJumlahCekPart('ok') == 0) {
+                //           return '<span class="badge red-text">Belum diuji</span>';
+                //       } else {
+                //           if ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa()) {
+                //               return  '<span class="badge green-text">Selesai</span>';
+                //           } else {
+                //               return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                //           }
+                //       }
+                //   } else if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) > 0) {
+                //       if ($data->getJumlahCek() == 0 && $data->getJumlahCekPart('ok') == 0) {
+                //           return '<span class="badge red-text">Belum diuji</span>';
+                //       } else {
+                //           if (($data->getJumlahCek() >= $data->getJumlahPesanan()) && ($data->getJumlahCekPart('ok') >= $data->getJumlahPesananPartNonJasa())) {
+                //               return  '<span class="badge green-text">Selesai</span>';
+                //           } else {
+                //               return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                //           }
+                //       }
+                //   }
+                // }
             })
             ->addColumn('button', function ($data) {
                 if (!empty($data->so)) {
