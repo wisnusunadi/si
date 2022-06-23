@@ -57,7 +57,13 @@ class GudangController extends Controller
         })->where('is_aktif', 1)->count();
         $a = NoseriBarangJadi::whereHas('gudang', function($q) use($id) {
             $q->where('gdg_barang_jadi_id', $id);
-        })->where('is_aktif', 1)->where('is_ready', 0)->count();
+        })
+        ->where([
+            'is_aktif' => 1,
+            'is_ready' => 0,
+            'is_change' => 1,
+            'is_delete' => 0,
+        ])->count();
         GudangBarangJadi::find($id)->update(['stok' => $d, 'stok_siap' => $a]);
     }
     // get
@@ -611,6 +617,7 @@ class GudangController extends Controller
                     $nbjj = NoseriBarangJadi::find($cc->id);
                     // return $nbjj;
                     NoseriBrgJadiLog::create([
+                            'gbj_id' => $request->gbjid,
                             'noseri_id' => $cc->id,
                             'data_lama' => $nbjj->noseri,
                             'action' => 'delete',
@@ -627,6 +634,7 @@ class GudangController extends Controller
                             $nbjj = NoseriBarangJadi::find($d->noseri_id);
 
                             NoseriBrgJadiLog::create([
+                                    'gbj_id' => $request->gbjid,
                                     'noseri_id' => $d->noseri_id,
                                     'data_lama' => $nbjj->noseri,
                                     'action' => 'delete',
@@ -810,6 +818,7 @@ class GudangController extends Controller
 
     function edit_noseri(Request $request) {
         try {
+            // dd($request->all());
             $dataseri = [];
             $data = NoseriBarangJadi::whereIn('id',$request->data);
             $check = NoseriBarangJadi::whereIn('noseri', $request->new)->get();
@@ -821,6 +830,7 @@ class GudangController extends Controller
             } else {
                 foreach($data->get() as $k => $c) {
                     NoseriBrgJadiLog::create([
+                        'gbj_id' => $request->gbjid,
                         'noseri_id' => $c->id,
                         'data_lama' => $c->noseri,
                         'data_baru' => $request->new[$k],

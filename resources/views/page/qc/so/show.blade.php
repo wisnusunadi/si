@@ -231,10 +231,10 @@
                                                     <th>No</th>
                                                     <th>No SO</th>
                                                     <th>No PO</th>
-                                                    <th>Batas Pengujian</th>
+                                                    {{-- <th>Batas Pengujian</th> --}}
                                                     <th>Customer</th>
                                                     <th>Keterangan</th>
-                                                    <th>Status</th>
+                                                    {{-- <th>Status</th> --}}
                                                     <th>Aksi</th>
                                                 </thead>
                                                 <tbody>
@@ -250,6 +250,21 @@
             </div>
         </div>
     </div>
+    <div class="modal fade" id="batalmodal" tabindex="-1" role="dialog" aria-labelledby="batalmodal" aria-hidden="true">
+        <div class="modal-dialog modal-xl" role="document">
+            <div class="modal-content" style="margin: 10px">
+                <div class="modal-header bg-navy">
+                    <h4 id="modal-title">Pesanan Batal</h4>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="batal">
+
+                </div>
+            </div>
+        </div>
+    </div>
 </section>
 @stop
 @section('adminlte_js')
@@ -258,6 +273,7 @@
         var showtable = $('#showtable').DataTable({
             processing: true,
             serverSide: true,
+            destroy : true,
             ajax: {
                 'url': '/api/qc/so/data/semua',
                 'type': 'POST',
@@ -292,12 +308,14 @@
             }, {
                 data: 'keterangan',
                 className: 'minimizechar',
-            }, {
+            },
+            {
                 data: 'status',
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false
-            }, {
+            },
+            {
                 data: 'button',
                 className: 'nowrap-text align-center',
                 orderable: false,
@@ -320,70 +338,139 @@
             return false;
         });
 
+        $('#pills-selesai_uji-tab').on('click', function(){
+            selesai_data();
+        })
 
-        var showtable = $('#selesaitable').DataTable({
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '/api/qc/so/data/selesai/semua',
-                'type': 'POST',
-                'datatype': 'JSON',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-
-            },
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            columns: [{
-                data: 'DT_RowIndex',
-                className: 'nowrap-text align-center',
-                orderable: true,
-                searchable: false
-            }, {
-                data: 'so',
-            }, {
-                data: 'no_po',
-            }, {
-                data: 'batas_uji',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false,
-            }, {
-                data: 'nama_customer',
-
-            }, {
-                data: 'keterangan',
-                className: 'minimizechar',
-            }, {
-                data: 'status',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
-            }, {
-                data: 'button',
-                className: 'nowrap-text align-center',
-                orderable: false,
-                searchable: false
-            }]
+        $("#showtable").on('click', '.batalmodal', function(event) {
+            event.preventDefault();
+            var id = $(this).data('id');
+            $.ajax({
+                url: '/qc/so/cancel/'+id,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                success: function(result) {
+                    $('#batalmodal').modal("show");
+                    $('#batal').html(result).show();
+                    produktable(id);
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
         });
 
-        $('#filter_selesai').submit(function() {
-            var values2 = [];
-            var x2 = [];
-            $("input[name='jenis_penj2[]']:checked").each(function() {
-                values2.push($(this).val());
+        function produktable(id){
+            $('#produktable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/qc/so/detail/' + id,
+                    'dataType': 'json',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [
+                    {
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'nama_produk',
+                    },
+                    {
+                        data: 'jumlah',
+                        orderable: false,
+                        searchable: false
+                    },
+                ],
             });
-            if (values2 != 0) {
-                x2 = values2;
-            } else {
-                x2 = ['semua']
-            }
-            console.log(x2);
-            $('#selesaitable').DataTable().ajax.url('/api/qc/so/data/selesai/' + x2).load();
-            return false;
-        });
+        }
+
+        function selesai_data(){
+            var showtable = $('#selesaitable').DataTable({
+                processing: true,
+                serverSide: true,
+                destroy : true,
+                ajax: {
+                    'url': '/api/qc/so/data/selesai/semua',
+                    'type': 'POST',
+                    'datatype': 'JSON',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: false
+                }, {
+                    data: 'so',
+                }, {
+                    data: 'no_po',
+                },
+                // {
+                //     data: 'batas_uji',
+                //     className: 'nowrap-text align-center',
+                //     orderable: false,
+                //     searchable: false,
+                // },
+                {
+                    data: 'nama_customer',
+
+                }, {
+                    data: 'keterangan',
+                    className: 'minimizechar',
+                },
+                // {
+                //     data: 'status',
+                //     className: 'nowrap-text align-center',
+                //     orderable: false,
+                //     searchable: false
+                // },
+                {
+                    data: 'button',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }]
+            });
+
+            $('#filter_selesai').submit(function() {
+                var values2 = [];
+                var x2 = [];
+                $("input[name='jenis_penj2[]']:checked").each(function() {
+                    values2.push($(this).val());
+                });
+                if (values2 != 0) {
+                    x2 = values2;
+                } else {
+                    x2 = ['semua']
+                }
+                console.log(x2);
+                $('#selesaitable').DataTable().ajax.url('/api/qc/so/data/selesai/' + x2).load();
+                return false;
+            });
+        }
     })
 </script>
 @stop

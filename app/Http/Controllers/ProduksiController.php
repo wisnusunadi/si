@@ -587,7 +587,7 @@ class ProduksiController extends Controller
                         return '<span class="badge badge-primary">Sudah Dicek</span>';
                     } elseif ($sumcek->sum() == 0) {
                         return '<span class="badge badge-danger">Belum Dicek</span>';
-                    } elseif ($sumcek->sum() != $sumprd->sum()) {
+                    } elseif ($sumcek->sum() != $sumprd->sum()) { 
                         return '<span class="badge badge-warning">Pengecekan Berlangsung</span>';
                     }
                 })

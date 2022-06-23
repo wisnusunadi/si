@@ -156,73 +156,125 @@
                             @if (isset($data->Pesanan))
                                 <div class="card removeshadow overflowy">
                                     <div class="card-body">
-                                        <table class="table"
-                                            style="max-width:100%; overflow-x: hidden; background-color:white;"
-                                            id="tabledetailpesan">
-                                            <thead>
-                                                <tr>
-                                                    <th rowspan="2">No</th>
-                                                    <th rowspan="2">Produk</th>
-                                                    <th colspan="2">Qty</th>
-                                                    <th rowspan="2">Harga</th>
-                                                    <th rowspan="2">Ongkir</th>
-                                                    <th rowspan="2">Subtotal</th>
-                                                </tr>
-                                                <tr>
-                                                    <th><i class="fas fa-shopping-cart"></i></th>
-                                                    <th><i class="fas fa-truck"></i></th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @if (isset($data->Pesanan->detailpesanan))
-                                                    @foreach ($data->pesanan->detailpesanan as $e)
-                                                        <?php $no = $no + 1; ?>
-                                                        <tr>
-                                                            <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
-                                                                class="nowraptxt">{{ $no }}</td>
-                                                            <td><b
-                                                                    class="wb">{{ $e->PenjualanProduk->nama }}</b>
-                                                            </td>
-                                                            <td colspan="2" class="nowraptxt">{{ $e->jumlah }}
-                                                            </td>
-                                                            <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
-                                                                class="nowraptxt tabnum">@currency($e->harga)</td>
-                                                            <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
-                                                                class="nowraptxt tabnum">@currency($e->ongkir)</td>
-                                                            <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
-                                                                class="nowraptxt tabnum">@currency($e->harga * $e->jumlah + $e->ongkir)</td>
-                                                            <?php $totalharga = $totalharga + ($e->harga * $e->jumlah + $e->ongkir); ?>
-                                                        </tr>
-                                                        @if (isset($e->DetailPesananProduk))
-                                                            @foreach ($e->DetailPesananProduk as $l)
-                                                                <tr>
-                                                                    <td><span class="text-muted">
-                                                                            @if (!empty($l->GudangBarangJadi->nama))
-                                                                                {{ $l->GudangBarangJadi->Produk->nama }}
-                                                                                -
-                                                                                <b>{{ $l->GudangBarangJadi->nama }}</b>
-                                                                            @else
-                                                                                {{ $l->GudangBarangJadi->Produk->nama }}
-                                                                            @endif
-                                                                        </span>
-                                                                    </td>
-                                                                    <td>
-                                                                        {{ $l->getJumlahPesanan() }}
-                                                                    </td>
-                                                                    <td>{{ $l->getJumlahKirim() }}</td>
-                                                                </tr>
-                                                            @endforeach
-                                                        @endif
-                                                    @endforeach
-                                                @endif
-                                            </tbody>
-                                            <tfoot>
-                                                <tr>
-                                                    <td colspan="6">Total Harga</td>
-                                                    <td class="nowraptxt tabnum">@currency($totalharga)</td>
-                                                </tr>
-                                            </tfoot>
-                                        </table>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-12 mb-3">
+                                            <h6><b>Status Barang</b></h6>
+                                            <div id="chartproduk"></div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                     <div class="info-box bg-light removeshadow" {{--style="background-color:#5F7A90; color:white;" --}}>
+                                                        <div class="info-box-content">
+                                                        <span class="info-box-text">Produk</span>
+                                                        <span class="info-box-number">ONE STATION + UPS + TROLLEY + CMS600 PLUS</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="info-box removeshadow" style="background-color:#EA8B1B; color:white;">
+                                                        <div class="info-box-content">
+                                                        <span class="info-box-text">Gudang</span>
+                                                        <span class="info-box-number">500</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="info-box removeshadow" style="background-color:#FFC700;">
+                                                        <div class="info-box-content">
+                                                        <span class="info-box-text">QC</span>
+                                                        <span class="info-box-number">1000</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-4 col-md-6">
+                                                    <div class="info-box removeshadow" style="background-color:#456600; color:white;">
+                                                        <div class="info-box-content">
+                                                        <span class="info-box-text">Logistik</span>
+                                                        <span class="info-box-number">100</span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            {{-- <div class="container mt-2">
+                                                <ul id="status" class="d-flex justify-content-between">
+                                                    <li><b style="color:#EA8B1B;">Gudang: 500</b></li>
+                                                    <li><b style="color:#FFC700;">QC: 1000</b></li>
+                                                    <li><b style="color:#456600;">Logistik: 100</b></li>
+                                                </ul>
+                                            </div> --}}
+                                        </div>
+                                        <div class="col-lg-8 col-md-12">
+                                            <h6><b>Detail Produk</b></h6>
+                                            <table class="table"
+                                                style="max-width:100%; overflow-x: hidden; background-color:white;"
+                                                id="tabledetailpesan">
+                                                <thead>
+                                                    <tr>
+                                                        <th rowspan="2">No</th>
+                                                        <th rowspan="2">Produk</th>
+                                                        <th colspan="2">Qty</th>
+                                                        <th rowspan="2">Harga</th>
+                                                        <th rowspan="2">Ongkir</th>
+                                                        <th rowspan="2">Subtotal</th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th><i class="fas fa-shopping-cart"></i></th>
+                                                        <th><i class="fas fa-truck"></i></th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @if (isset($data->Pesanan->detailpesanan))
+                                                        @foreach ($data->pesanan->detailpesanan as $e)
+                                                            <?php $no = $no + 1; ?>
+                                                            <tr>
+                                                                <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
+                                                                    class="nowraptxt">{{ $no }}</td>
+                                                                <td><b
+                                                                        class="wb">{{ $e->PenjualanProduk->nama }}</b>
+                                                                </td>
+                                                                <td colspan="2" class="nowraptxt">{{ $e->jumlah }}
+                                                                </td>
+                                                                <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
+                                                                    class="nowraptxt tabnum">@currency($e->harga)</td>
+                                                                <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
+                                                                    class="nowraptxt tabnum">@currency($e->ongkir)</td>
+                                                                <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
+                                                                    class="nowraptxt tabnum">@currency($e->harga * $e->jumlah + $e->ongkir)</td>
+                                                                <?php $totalharga = $totalharga + ($e->harga * $e->jumlah + $e->ongkir); ?>
+                                                            </tr>
+                                                            @if (isset($e->DetailPesananProduk))
+                                                                @foreach ($e->DetailPesananProduk as $l)
+                                                                    <tr>
+                                                                        <td><span class="text-muted">
+                                                                                @if (!empty($l->GudangBarangJadi->nama))
+                                                                                    {{ $l->GudangBarangJadi->Produk->nama }}
+                                                                                    -
+                                                                                    <b>{{ $l->GudangBarangJadi->nama }}</b>
+                                                                                @else
+                                                                                    {{ $l->GudangBarangJadi->Produk->nama }}
+                                                                                @endif
+                                                                            </span>
+                                                                        </td>
+                                                                        <td>
+                                                                            {{ $l->getJumlahPesanan() }}
+                                                                        </td>
+                                                                        <td>{{ $l->getJumlahKirim() }}</td>
+                                                                    </tr>
+                                                                @endforeach
+                                                            @endif
+                                                        @endforeach
+                                                    @endif
+                                                </tbody>
+                                                <tfoot>
+                                                    <tr>
+                                                        <td colspan="6">Total Harga</td>
+                                                        <td class="nowraptxt tabnum">@currency($totalharga)</td>
+                                                    </tr>
+                                                </tfoot>
+                                            </table>
+                                        </div>
+                                        </div>
                                     </div>
                                 </div>
                             @else

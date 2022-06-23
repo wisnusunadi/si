@@ -167,7 +167,7 @@ class DcController extends Controller
             }
         }
 
-        $data = Pesanan::DoesntHave('Spb')->whereIn('id', $array_id)->get();
+        $data = Pesanan::with('Ekatalog.Customer','Spa.Customer')->DoesntHave('Spb')->whereIn('id', $array_id)->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('no_paket', function ($data) {
@@ -175,7 +175,7 @@ class DcController extends Controller
                 if ($name[1] == 'EKAT') {
                     return $data->ekatalog->no_paket;
                 } else {
-                    return '';
+                    return '-';
                 }
             })
             ->addColumn('batas_paket', function ($data) {
@@ -242,36 +242,6 @@ class DcController extends Controller
                 } else {
                     return '';
                 }
-                // $name = explode('/', $data->so);
-                // if ($name[1] == 'EKAT') {
-
-                //     $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                //     $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
-
-
-                //     if ($tgl_sekarang < $tgl_parameter) {
-                //         $to = Carbon::now();
-                //         $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
-                //         $hari = $to->diffInDays($from);
-
-                //         if ($hari > 7) {
-                //             return ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas sisa ' . $hari . ' Hari</small>';
-                //         } else if ($hari > 0 && $hari <= 7) {
-                //             return ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $hari . ' Hari</small>';
-                //         } else {
-                //             return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '<div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
-                //         }
-                //     } elseif ($tgl_sekarang == $tgl_parameter) {
-                //         return  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
-                //     } else {
-                //         $to = Carbon::now();
-                //         $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
-                //         $hari = $to->diffInDays($from);
-                //         return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
-                //     }
-                // } else {
-                //     return '';
-                // }
             })
             ->addColumn('nama_customer', function ($data) {
                 $name = explode('/', $data->so);
@@ -615,8 +585,6 @@ class DcController extends Controller
     {
         if ($value == 'ekatalog') {
             $data = Pesanan::find($id);
-
-
 
             $x = array();
 
@@ -969,7 +937,7 @@ class DcController extends Controller
                             return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                         }
                     } else {
-                        return '';
+                        return '-';
                     }
                 })
                 ->addColumn('button', function ($data) {
@@ -1159,7 +1127,7 @@ class DcController extends Controller
                             return '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                         }
                     } else {
-                        return '';
+                        return '-';
                     }
                 })
                 ->addColumn('button', function ($data) {

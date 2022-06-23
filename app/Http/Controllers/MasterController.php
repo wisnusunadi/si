@@ -355,6 +355,14 @@ class MasterController extends Controller
                 // })->first();
                 return $data->nama_alias;
             })
+            ->addColumn('jenis_paket', function ($data) {
+                if($data->status == "ekat"){
+                    return '<span class="badge purple-text">Ekatalog</span>';
+                }
+                else{
+                    return '<span class="badge blue-text">Non Ekatalog</span>';
+                }
+            })
             ->addColumn('no_akd', function ($data) {
                 $id = $data->id;
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
@@ -757,7 +765,6 @@ class MasterController extends Controller
         ]);
 
         if ($c) {
-            // Alert::success('Berhasil', 'Berhasil menambahkan data');
             return redirect()->back()->with('success', 'success');
         } else {
             return redirect()->back()->with('error', 'error');
@@ -781,7 +788,12 @@ class MasterController extends Controller
         //     ]
         // );
         $harga_convert =  str_replace('.', "", $request->harga);
-
+        $status = "";
+        if($request->jenis_paket == "ekatalog"){
+            $status = "ekat";
+        }else{
+            $status = NULL;
+        }
         $PenjualanProduk = PenjualanProduk::create([
             'nama' => $request->nama_paket,
             'nama_alias' => $request->nama_alias,
@@ -820,7 +832,7 @@ class MasterController extends Controller
         //     $q->where('id', $id);
         // })->with('PenjualanProduk')->get();
 
-        return view("page.penjualan.produk.edit", ['penjualanproduk' => $penjualanproduk,]);
+        return view("page.penjualan.produk.edit", ['penjualanproduk' => $penjualanproduk]);
     }
 
 
@@ -963,9 +975,16 @@ class MasterController extends Controller
     public function update_penjualan_produk(Request $request, $id)
     {
         $harga_convert =  str_replace(['.', ','], "", $request->harga);
+        $status = "";
+        if($request->jenis_paket == "ekatalog"){
+            $status = "ekat";
+        }else{
+            $status = NULL;
+        }
         $PenjualanProduk = PenjualanProduk::find($id);
         $PenjualanProduk->nama_alias = $request->nama_alias;
         $PenjualanProduk->nama = $request->nama_paket;
+        $PenjualanProduk->status = $status;
         $PenjualanProduk->harga = $harga_convert;
         $PenjualanProduk->status = $request->jenis_paket;
         $PenjualanProduk->save();

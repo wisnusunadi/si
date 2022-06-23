@@ -319,6 +319,7 @@
                                     aria-labelledby="custom-tabs-four-home-tab">
                                     <form action="" id="noseriForm" name="noseriForm">
                                         <input type="hidden" name="action_by" id="actionby" value="{{ Auth::user()->id }}">
+                                        <input type="hidden" name="gbjid" id="gbjid" value="">
                                         <table class="table scan-produk">
                                             <thead>
                                                 <tr>
@@ -1103,10 +1104,12 @@
                     data: {
                         "_token": "{{ csrf_token() }}",
                         noseriid: cekid,
+                        gbjid: $('#gbjid').val(),
                         actionby: $('#actionby').val()
                     },
                     dataType: 'json',
                     success: function (res) {
+                        // console.log(res);
                         if (res.error == true) {
                             Swal.fire({
                                 icon: 'error',
@@ -1134,7 +1137,8 @@
     $(document).on('click', '.stokmodal', function () {
         var id = $(this).data('id');
         $('.seri_id').val(id);
-        console.log(id);
+        $('#gbjid').val(id);
+        console.log('gbjid',id);
         $('span#nm_produk').text($(this).parent().prev().prev().prev().prev().html());
 
         $('.scan-produk').DataTable({
@@ -1356,7 +1360,6 @@
             $('.layout_seri').append('<option value="' + value[0] + '">' + value[1] + '</option');
         });
         $('.tambah_noseri_tableee').DataTable({
-            // destroy: true,
             searching: false,
             paging: false,
             scrollY: '500px',
@@ -1369,10 +1372,6 @@
     });
 
     $(document).on('click', '#save_data', function () {
-        var dataNoSeri = $('.tambah_noseri_tableee').DataTable({
-            ordering: false,
-            autoWidth: false,
-        });
         let datalength = $('#jumlah_noseri').val();
         let no_seri = $('.tambah_noseri_tableee').DataTable().column(0).nodes().to$().find('input[type=text]')
             .map(function (index, elm) {
@@ -1387,11 +1386,11 @@
         let created_by = $('.created_by').val();
 
         let arr = [];
-        const data = dataNoSeri.$('.no_seri').map(function () {
-            return $(this).val();
-        }).get();
+        // const data = dataNoSeri.$('.no_seri').map(function () {
+        //     return $(this).val();
+        // }).get();
 
-        data.forEach(function (item) {
+        no_seri.forEach(function (item) {
             if (item != '') {
                 arr.push(item);
             }
@@ -1528,11 +1527,13 @@
                         data: {
                             "_token": "{{ csrf_token() }}",
                             data: cekid,
+                            gbjid: $('#gbjid').val(),
                             new: serii,
                             actionby: $('#actionby').val()
                         },
                         dataType: 'json',
                         success: function(res) {
+                            // console.log(res);
                             if (res.error == true) {
                                 Swal.fire({
                                     icon: 'error',
@@ -1583,26 +1584,27 @@
                         "_token": "{{ csrf_token() }}",
                         data: cekid,
                         new: serii,
+                        gbjid: $('#gbjid').val(),
                         actionby: $('#actionby').val()
                     },
                     dataType: 'json',
                     success: function(res) {
-                        console.log(res);
-                        // if (res.error == true) {
-                        //     Swal.fire({
-                        //         icon: 'error',
-                        //         title: 'Oops...',
-                        //         text: res.msg,
-                        //     })
-                        // } else {
-                        //     Swal.fire(
-                        //         'Updated!',
-                        //         res.msg,
-                        //         'success'
-                        //     ).then(function () {
-                        //         location.reload();
-                        //     })
-                        // }
+                        // console.log(res);
+                        if (res.error == true) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: res.msg,
+                            })
+                        } else {
+                            Swal.fire(
+                                'Updated!',
+                                res.msg,
+                                'success'
+                            ).then(function () {
+                                location.reload();
+                            })
+                        }
                     }
                 })
             }
