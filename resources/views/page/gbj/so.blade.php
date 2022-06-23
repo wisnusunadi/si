@@ -294,11 +294,20 @@
           </button>
         </div>
         <div class="modal-body">
-          <div class="row">
-            <div class="col-12">
-                
+            <div class="card card-navy card-outline card-tabs">
+                <div class="card-header p-0 pt-1 border-bottom-0">
+                    <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tabs-detail-tab" data-toggle="pill" href="#tabs-detail"
+                                role="tab" aria-controls="tabs-detail" aria-selected="true">Informasi Umum</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="tabs-produk-tab" data-toggle="pill" href="#tabs-produk" role="tab"
+                                aria-controls="tabs-produk" aria-selected="false">Detail Pembatalan</a>
+                        </li>
+                    </ul>
+                </div>
             </div>
-          </div>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
