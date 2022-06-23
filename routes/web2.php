@@ -102,6 +102,7 @@ Route::group(['prefix' => 'master', 'middleware' => 'auth'], function () {
         Route::get('/edit_coo/{id}', [App\Http\Controllers\MasterController::class, 'edit_coo_data_produk'])->name('master.produk.edit_coo');
 
         Route::get('/export', [App\Http\Controllers\MasterController::class, 'export_produk'])->name('master.produk.export');
+        Route::get('/cancel_po', [App\Http\Controllers\MasterController::class, 'cancel_po'])->name('master.cancel_po');
     });
 });
 
@@ -164,6 +165,8 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/edit_spa', 'page.penjualan.penjualan.edit_spa')->name('penjualan.penjualan.edit_spa');
         Route::view('/edit_spa', 'page.penjualan.penjualan.edit_spa')->name('penjualan.penjualan.edit_spa');
 
+        Route::get('/cancel/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'cancel_penjualan'])->name('penjualan.penjualan.cancel');
+
         //Export Laporan
         Route::get('/export/{jenis}/{customer_id}/{tgl_awal}/{tgl_akhir}/{seri}/{tampilan}', [App\Http\Controllers\PenjualanController::class, 'export_laporan'])->name('penjualan.penjualan.export');
     });
@@ -214,6 +217,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::post('/data/{value}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
         Route::get('/create/{pesanan_id}/{jenis}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
+        // Route::get('/create/{detail_pesanan_id}/{part}/{pesanan_id}/{jenis}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
 
         Route::view('/edit', 'page.logistik.so.edit')->name('logistik.so.edit');
         Route::group(['prefix' => '/riwayat'], function () {
@@ -285,7 +289,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/coo'], function () {
         Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');
         Route::view('/detail/{id}', 'page.dc.coo.detail')->name('dc.coo.detail');
-        Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
+        // Route::view('/create/{id}', 'page.dc.coo.create')->name('dc.coo.create');
         Route::get('/create/{id}/{Value}', [App\Http\Controllers\DcController::class, 'create_coo'])->name('dc.coo.create');
         Route::get('/edit/{id}/{Value}', [App\Http\Controllers\DcController::class, 'edit_coo'])->name('dc.coo.edit');
         Route::get('/edit_tglkirim/{Value}', [App\Http\Controllers\DcController::class, 'edit_tglkirim_coo'])->name('dc.coo.tglkirim_edit');
@@ -305,11 +309,21 @@ Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
         Route::view('/show', 'page.as.penjualan.show')->name('as.penjualan.show');
     });
 
+    Route::group(['prefix' => '/retur'], function () {
+        Route::view('/show', 'page.as.retur.show')->name('as.retur.show');
+        Route::get('/create', [App\Http\Controllers\AfterSalesController::class, 'create_retur'])->name('as.retur.create');
+        Route::post('/store', [App\Http\Controllers\AfterSalesController::class, 'store_retur'])->name('as.retur.store');
+        Route::get('/edit/{id}', [App\Http\Controllers\AfterSalesController::class, 'edit_retur'])->name('as.retur.edit');
+        Route::put('/update/{id}', [App\Http\Controllers\AfterSalesController::class, 'update_retur'])->name('as.retur.update');
+        Route::delete('/delete', [App\Http\Controllers\AfterSalesController::class, 'delete_retur'])->name('as.retur.delete');
+    });
+
     Route::group(['prefix' => '/so'], function () {
-        Route::get('/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so'])->name('as.so.show');
+        Route::get('/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so']);
         Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_so'])->name('as.so.detail');
         Route::view('/show', 'page.as.so.show')->name('as.so.show');
         Route::view('/list/{id}', 'page.as.so.list')->name('as.so.list');
+        Route::get('/edit/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_data_detail_part']);
     });
 
     Route::group(['prefix' => '/coo'], function () {

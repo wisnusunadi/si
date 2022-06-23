@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class DetailLogistikPart extends Model
 {
     protected $table = 'detail_logistik_part';
-    protected $fillable = ['logistik_id', 'detail_pesanan_part_id'];
+    protected $fillable = ['logistik_id', 'detail_pesanan_part_id','jumlah'];
 
     public function Logistik()
     {
