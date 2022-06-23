@@ -35,6 +35,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-4 col-md-6">
                                 <div class="info-box bg-maroon">
                                     <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
@@ -44,7 +46,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4 col-md-6">
+                            <div class="col-lg-4 col-md-6">
                                 <div class="info-box bg-navy" style="box-shadow: none">
                                     <div class="info-box-content">
                                     <span class="info-box-text">Tanggal Batal</span>
@@ -52,7 +54,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-4 col-md-6">
+                            <div class="col-lg-4 col-md-6">
                                 <div class="info-box bg-light" style="box-shadow: none">
                                     <div class="info-box-content">
                                     <span class="info-box-text">Status</span>

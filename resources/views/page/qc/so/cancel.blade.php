@@ -35,6 +35,8 @@
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                        <div class="row">
                             <div class="col-lg-4 col-md-6">
                                 <div class="info-box bg-maroon">
                                     <span class="info-box-icon"><i class="fas fa-receipt"></i></span>

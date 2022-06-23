@@ -773,11 +773,15 @@
                                 'Berhasil',
                                 'Berhasil menambahkan Pengiriman',
                                 'success'
-                            );
+                            ).then(function(){
+                                location.reload(true);
+                            });
                             $("#editmodal").modal('hide');
                             $('#belumkirimtable').DataTable().ajax.reload();
                             $('#selesaikirimtable').DataTable().ajax.reload();
                             $('#noseridetail').addClass('hide');
+                            $('#check_all').prop('checked', false);
+
                         } else if (response['data'] == "error") {
                             swal.fire(
                                 'Gagal',
@@ -903,9 +907,11 @@
 
 
                 if ($('input[name="check_all"]:checked').length > 0) {
+                    $('.jumlah_kirim').prop('disabled', true);
                     $('.check_detail:not(:disabled)', rows).prop('checked', true);
                     $('#kirim_produk').removeAttr('disabled');
                 } else if ($('input[name="check_all"]:checked').length <= 0) {
+                    $('.jumlah_kirim').prop('disabled', false);
                     $('.check_detail').prop('checked', false);
                     $('#kirim_produk').prop('disabled', true);
                 }
@@ -929,7 +935,7 @@
                 validasi_checked_produk();
             });
 
-            $(document).on('change', '#noseritable input[name="check_all_noseri"]', function() {
+            $(document).on('click change', '#noseritable input[name="check_all_noseri"]', function() {
                 var rows = $('#noseritable').DataTable().rows({
                     'search': 'applied'
                 }).nodes();
@@ -938,7 +944,7 @@
                     $('.check_noseri', rows).prop('checked', true);
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').removeClass(
                         'is-invalid');
-                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').prop(
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr(
                         'disabled', false);
 
                 } else if ($('input[name="check_all_noseri"]:checked').length <= 0) {
@@ -946,12 +952,11 @@
                         'is-invalid');
                     $('.check_noseri', rows).prop('checked', false);
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').addClass('is-invalid');
+                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').attr(
+                        'disabled', true);
                     $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').prop(
                         'checked', false);
-                    $('#belumkirimtable > tbody > tr.bgcolor').find('.check_detail').prop(
-                        'disabled', true);
                 }
-
                 checkedAry = [];
                 $.each($(".check_noseri:checked", rows), function() {
                     checkedAry.push($(this).closest('tr').find('.check_noseri').attr('data-id'));
@@ -960,7 +965,6 @@
                 $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').val($(
                         '.check_noseri:checked', rows)
                     .length);
-                console.log(produk_id);
                 validasi_checked_produk();
             });
 
@@ -973,12 +977,13 @@
                 } else {
                     $('#kirim_produk').prop('disabled', true);
                 }
-
-                console.log(produk_id);
                 validasi_checked_produk();
+
+
             })
 
-            $('#noseritable').on('change', '.check_noseri', function() {
+            $('#noseritable').on('change ', '.check_noseri', function() {
+
                 $('input[name="check_all_noseri"]:checked').prop('checked', false);
                 var rows = $('#noseritable').DataTable().rows({
                     'search': 'applied'
@@ -990,7 +995,9 @@
                     array_noseri_produk = text.split(',');
                 }
                 if ($('.check_noseri:checked', rows).length > 0) {
+
                     if ($(this).is(':checked')) {
+
                         array_noseri_produk.push($(this).closest('tr').find('.check_noseri').attr(
                             'data-id'));
                         $('#belumkirimtable > tbody > tr.bgcolor').find('div[name="array_check[]"]').text(
@@ -1024,6 +1031,8 @@
                 $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').val($(
                     '.check_noseri:checked', rows).length);
                 validasi_checked_produk();
+
+
             });
 
             $(document).on('change keyup', '#belumkirimtable .jumlah_kirim', function() {
@@ -1119,8 +1128,11 @@
                 var href = $(this).attr('data-attr');
                 var id = $(this).data('id');
                 var pesanan_id = '{{ $data->pesanan_id }}';
-
                 if ($('.detail_produk_id:checked').length > 0) {
+                       //tambahan
+                            if ($('.detail_part_id:checked').length <= 0) {
+                                part_id.splice(0, part_id.length)
+                            }
                     produk_id = [];
                     $.each($(".detail_produk_id:checked"), function() {
                         var produk_id_arr = {};
@@ -1139,6 +1151,10 @@
                 }
 
                 if ($('.detail_part_id:checked').length > 0) {
+                  //tambahan
+                        if ($('.detail_produk_id:checked').length <= 0) {
+                            produk_id.splice(0, produk_id.length)
+                        }
                     part_id = [];
                     $.each($(".detail_part_id:checked"), function() {
                         var part_id_arr = {};
@@ -1153,19 +1169,9 @@
                     part_id.push(part_id_arr);
                 }
 
-                // if(produk_id.length <= 0){
-                //     var produk_id_arr = {}
-                //     produk_id_arr.id = "0";
-                //     produk_id_arr.jumlah_kirim = "0";
-                //     produk_id_arr.array_no_seri = "0";
-                //     produk_id.push(produk_id_arr);
-                // }
-                // if(part_id.length <= 0){
-                //     var part_id_arr = {}
-                //     part_id_arr.id = "0";
-                //     part_id_arr.jumlah_kirim = "0";
-                //     part_id.push(part_id_arr);
-                // }
+
+
+
                 $.ajax({
                     url: "/logistik/so/create/" + pesanan_id + '/' + jenis_penjualan,
                     data: {'produk_id':produk_id, 'part_id':part_id},
@@ -1349,7 +1355,7 @@
                         theme: "bootstrap",
                         delay: 250,
                         type: 'GET',
-                        url: '/api/logistik/cek/no_sj_belum_kirim/' + '{{ $data->customer->id }}',
+                        url: '/api/logistik/cek/no_sj_belum_kirim/' + '{{str_replace("/","!",$data->pesanan->no_po); }}',
                         data: function(params) {
                             return {
                                 term: params.term

@@ -244,7 +244,6 @@
                                                     <th>No</th>
                                                     <th>No PO</th>
                                                     <th>No AKN</th>
-                                                    <th>Batas Kontrak</th>
                                                     <th>Customer</th>
                                                     <th>Instansi</th>
                                                     <th>Status</th>
@@ -383,8 +382,6 @@
                     data: 'no_po',
                 }, {
                     data: 'no_paket',
-                }, {
-                    data: 'batas_paket',
                 }, {
                     data: 'nama_customer',
                 }, {

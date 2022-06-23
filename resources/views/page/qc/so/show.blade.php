@@ -396,10 +396,11 @@
             })
         });
 
-        $("#produktable").on('click', '.noserimodal', function(event) {
+        $(document).on('click', '#produktable .noseri', function(event) {
             event.preventDefault();
-            var id = $(this).data('data-id');
-            var pesan = $(this).data('data-pesan');
+            var id = $(this).attr('data-id');
+            var pesan = $(this).attr('data-pesan');
+            console.log(id+" "+pesan);
             $('#noserimodal').modal("show");
             noseritable(id, pesan);
         });

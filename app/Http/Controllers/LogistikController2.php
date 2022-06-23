@@ -23,7 +23,6 @@ use App\Models\Pesanan;
 use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
 use App\Models\NoseriTGbj;
-use App\Models\OutgoingPesananPart;
 use Carbon\Carbon as CarbonCarbon;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Log;
@@ -52,9 +51,43 @@ class LogistikController extends Controller
     }
     public function get_data_select_produk(Request $r, $pesanan_id, $jenis)
     {
-
+        // $x = explode(',', $produk_id);
         if ($jenis == 'EKAT') {
+            // if ($produk_id == 0) {
+            //     $datas = DetailPesananProduk::WhereHas('NoSeriDetailPesanan', function ($q) {
+            //         $q->whereIN('status', ['ok']);
+            //     })->whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
+            //         $q->where('pesanan_id', $pesanan_id);
+            //     })->get();
 
+            //     $array_id = array();
+            //     foreach ($datas as $i) {
+            //         $id = $i->id;
+            //         $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($id) {
+            //             $q->where('detail_pesanan_produk_id', $id);
+            //         })->count();
+            //         $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $id])->count();
+            //         $detail_pesanan = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
+            //             $q->where('id', $id);
+            //         })->get();
+            //         $jumlahpesanan = 0;
+            //         foreach ($detail_pesanan as $j) {
+            //             foreach ($j->PenjualanProduk->Produk as $k) {
+            //                 // echo $k->id . " dengan " . $i->GudangBarangJadi->produk_id . ". ";
+            //                 if ($k->id == $i->GudangBarangJadi->produk_id) {
+            //                     $jumlahpesanan = $jumlahpesanan + ($j->jumlah * $k->pivot->jumlah);
+            //                 }
+            //             }
+            //         }
+            //         $jumlahsekarang = $jumlahsudahuji - $jumlahterkirim;
+            //         if ($jumlahsekarang > 0) {
+            //             $array_id[] = $i->id;
+            //         }
+            //     }
+            //     $data = DetailPesananProduk::whereIN('id', $array_id)->get();
+            // } else {
+            //     $data = DetailPesananProduk::whereIN('id', $x)->get();
+            // }
             $produk_id = $r->produk_id;
             $data = [];
             $i = 0;
@@ -69,6 +102,11 @@ class LogistikController extends Controller
                 ->addIndexColumn()
                 ->addColumn('nama_produk', function ($data) {
                     $produk = DetailPesananProduk::find($data['id']);
+                    // if ($data->GudangBarangJadi->nama == '') {
+                    //     return $data->GudangBarangJadi->produk->nama;
+                    // } else {
+                    //     return $data->GudangBarangJadi->produk->nama . ' - ' . $data->GudangBarangJadi->nama;
+                    // }
                     if ($produk->GudangBarangJadi->nama == '') {
                         return $produk->GudangBarangJadi->produk->nama;
                     } else {
@@ -76,6 +114,8 @@ class LogistikController extends Controller
                     }
                 })
                 ->addColumn('jumlah', function ($data) {
+                    // $c = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $data->id, 'status' => 'ok'])->get()->count();
+                    // return $data->jumlah_kirim;
                     return $data['jumlah_kirim'];
                 })
                 ->make(true);
@@ -207,8 +247,6 @@ class LogistikController extends Controller
             //     ->make(true);
         }
     }
-
-
     public function get_data_detail_so($id)
     {
         $data = DetailPesanan::where('pesanan_id', $id)->with(['DetailLogistik.Logistik.Ekspedisi', 'PenjualanProduk'])->get();
@@ -285,6 +323,7 @@ class LogistikController extends Controller
             })
             ->make(true);
     }
+
     public function get_data_detail_belum_kirim_so($id, $jenis)
     {
 
@@ -404,29 +443,13 @@ class LogistikController extends Controller
                     $array_id[] = $i->id;
                 }
             }
-
-            $datapart = DetailPesananPart::where('pesanan_id', $pesanan_id)->get();
-
+            $datas_part = DetailPesananPart::where('pesanan_id', $pesanan_id)->Has('OutgoingPesananPart')->DoesntHave('DetailLogistikPart')->get();
             $datas_jasa = DetailPesananPart::where('pesanan_id', $pesanan_id)->whereHas('Sparepart', function($q){
                 $q->where('kode', 'LIKE', '%JASA%');
             })->DoesntHave('DetailLogistikPart')->get();
 
-            $pid = array();
-            foreach ($datapart as $z) {
-                $id = $z->id;
-                $jumlahterkirim = DetailLogistikPart::where('detail_pesanan_part_id', $id)->sum('jumlah');
-                $jumlahsudahuji = OutgoingPesananPart::where('detail_pesanan_part_id' , $id)->sum('jumlah_ok');
-
-                $jumlahsekarang = $jumlahsudahuji - $jumlahterkirim;
-                if ($jumlahsekarang > 0) {
-                    $pid[] = $z->id;
-                }
-            }
-
-            $datas_part = DetailPesananPart::whereIN('id', $pid)->get();
-
-            $c_prd = DetailPesanan::where('pesanan_id', $pesanan_id)->count();
-            $c_prt = DetailPesananPart::where('pesanan_id', $pesanan_id)->count();
+            $c_prd = DetailPesanan::where('pesanan_id', $pesanan_id)->get()->count();
+            $c_prt = DetailPesananPart::where('pesanan_id', $pesanan_id)->get()->count();
 
             if ($c_prd <= 0 && $c_prt > 0) {
                 // $data = DetailPesananPart::DoesntHave('DetailLogistikPart')->where('pesanan_id', $pesanan_id)->get();
@@ -474,11 +497,7 @@ class LogistikController extends Controller
                         $s = $jumlahsudahuji - $jumlahterkirim;
                         return '<div id="jumlah_transfer">'.$s.'</div>';
                     } else {
-                        $id = $data->id;
-                        $jumlahterkirim = DetailLogistikPart::where('detail_pesanan_part_id', $id)->sum('jumlah');
-                        $jumlahsudahuji = OutgoingPesananPart::where('detail_pesanan_part_id' , $id)->sum('jumlah_ok');
-                        $s = $jumlahsudahuji - $jumlahterkirim;
-                        return '<div id="jumlah_transfer">'.$s.'</div>';
+                        return '<div id="jumlah_transfer">'.$data->jumlah.'</div>';
                     }
                 })
                 ->addColumn('dikirim', function ($data) {
@@ -491,11 +510,7 @@ class LogistikController extends Controller
                         $s = $jumlahsudahuji - $jumlahterkirim;
                         return '<input type="number" max="'.$s.'" min="0" value="'.$s.'" name="jumlah_dikirim[]" style="width:100%;" readonly="true" class="form-control jumlah_kirim"/>';
                     } else {
-                        $id = $data->id;
-                        $jumlahterkirim = DetailLogistikPart::where('detail_pesanan_part_id', $id)->sum('jumlah');
-                        $jumlahsudahuji = OutgoingPesananPart::where('detail_pesanan_part_id' , $id)->sum('jumlah_ok');
-                        $s = $jumlahsudahuji - $jumlahterkirim;
-                        return '<input type="number" max="'.$s.'" min="0" value="'.$s.'" name="jumlah_dikirim[]" style="width:100%;" class="form-control jumlah_kirim"/>';
+                        return '<input type="number" max="'.$data->jumlah.'" min="0" value="'.$data->jumlah.'" name="jumlah_dikirim[]" style="width:100%;" class="form-control jumlah_kirim"/>';
                     }
                 })
                 ->addColumn('array_check', function($data) {
@@ -542,37 +557,10 @@ class LogistikController extends Controller
             //     ->make(true);
         }
     }
+
     public function get_noseri_so_belum_kirim($id, $array)
     {
         $arr = explode(',', $array);
-       // $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
-        // $data = DB::table('noseri_barang_jadi')
-        //             ->leftjoin('t_gbj_noseri','t_gbj_noseri.noseri_id','=','noseri_barang_jadi.id')
-        //             ->rightjoin('noseri_detail_pesanan','noseri_detail_pesanan.t_tfbj_noseri_id','=','t_gbj_noseri.id')
-        //             ->where(['noseri_detail_pesanan.detail_pesanan_produk_id'=> $id,'noseri_detail_pesanan.status' => 'ok'])
-        //             ->select('noseri_detail_pesanan.id as noseri_detail_pesanan_id','noseri_barang_jadi.noseri as noseri_gbj')
-        //             ->get();
-
-        //             // SELECT * FROM `noseri_detail_pesanan` WHERE (`detail_pesanan_produk_id` = '644' and `status` = 'ok')
-        //             // and not exists (SELECT * FROM `noseri_logistik` WHERE `noseri_detail_pesanan`.`id` = `noseri_logistik`.`noseri_detail_pesanan_id`)
-
-
-        // return datatables()->of($data)
-        //     ->addIndexColumn()
-        //     ->addColumn('checkbox', function ($data) use($arr){
-        //         $checked = "";
-        //         if(in_array($data->noseri_detail_pesanan_id, $arr)) { $checked = "checked"; }
-        //         return '<div class="form-check">
-        //             <input class=" form-check-input yet noseri_checkbox check_noseri"  data-id="' . $data->noseri_detail_pesanan_id . '" type="checkbox" data-value="' . $data->noseri_detail_pesanan_id . '" '.$checked.'  />
-        //         </div>';
-
-        //     })
-        //     ->addColumn('no_seri', function ($data) {
-        //         return $data->noseri_gbj;
-        //     })
-        //     ->rawColumns(['checkbox'])
-        //     ->make(true);
-
         $data = NoseriDetailPesanan::where(['detail_pesanan_produk_id' => $id, 'status' => 'ok'])->doesntHave('NoseriDetailLogistik')->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -589,11 +577,6 @@ class LogistikController extends Controller
             ->rawColumns(['checkbox'])
             ->make(true);
     }
-
-
-
-
-
 
     public function get_data_detail_selesai_kirim_so($id, $jenis)
     {
@@ -644,9 +627,8 @@ class LogistikController extends Controller
                 })
                 ->addColumn('button', function ($data) {
                     return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
-                    <div><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></div>
-
-            </a>';
+                        <div><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></div>
+                    </a>';
                 })
                 ->rawColumns(['checkbox', 'button', 'status'])
                 ->make(true);
@@ -718,7 +700,7 @@ class LogistikController extends Controller
                         $c = NoseriDetailLogistik::where('detail_logistik_id', $data->id)->count();
                         return $c;
                     } else {
-                        return $data->jumlah;
+                        return $data->DetailPesananPart->jumlah;
                     }
                 })
                 ->addColumn('button', function ($data) {
@@ -1114,8 +1096,8 @@ class LogistikController extends Controller
                 }
                 $z = 'proses';
                 return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '" type="button" class="btn btn-outline-primary btn-sm">
-                <i class="fas fa-eye"></i> Detail
-            </a>';
+                        <i class="fas fa-eye"></i> Detail
+                    </a>';
             })
             ->rawColumns(['status', 'button', 'batas'])
             ->make(true);
@@ -1314,7 +1296,7 @@ class LogistikController extends Controller
                 }
                 $z = 'selesai';
                 return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '" type="button" class="btn btn-outline-primary btn-sm">
-                <i class="fas fa-eye"></i> Detail
+                            <i class="fas fa-eye"></i> Detail
                     </a>';
             })
             ->rawColumns(['status', 'button', 'batas'])
@@ -2514,7 +2496,7 @@ class LogistikController extends Controller
                 if (isset($data->DetailPesananProduk)) {
                     return $data->NoseriDetailLogistik->count();
                 } else {
-                    return $data->jumlah;
+                    return $data->DetailPesananPart->jumlah;
                 }
             })
             ->addColumn('no_seri', function ($data) {
@@ -2534,7 +2516,7 @@ class LogistikController extends Controller
             ->addColumn('aksi', function ($data) {
                 if (isset($data->DetailPesananProduk)) {
                     return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '">
-                    <div><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></div>
+                <div><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></div>
             </a>';
                 } else {
                     return '-';
@@ -3076,9 +3058,6 @@ class LogistikController extends Controller
 
         $bool = true;
         $Logistik = "";
-
-        if( $request->no_sj_exist == 'baru'){
-
         if ($request->pengiriman == 'ekspedisi') {
             $Logistik = Logistik::create([
                 'ekspedisi_id' => $request->ekspedisi_id,
@@ -3125,7 +3104,6 @@ class LogistikController extends Controller
                 $iddp = DetailPesananProduk::find($ids);
                 $poid = $iddp->DetailPesanan->pesanan_id;
             }
-
         } else {
             if ($prd_id != '0' && $part_id == '0') {
                 if ($Logistik) {
@@ -3156,24 +3134,23 @@ class LogistikController extends Controller
                     $iddp = DetailPesananProduk::find($ids);
                     $poid = $iddp->DetailPesanan->pesanan_id;
                 }
-
             } else if ($prd_id == '0' && $part_id != '0') {
                 if ($Logistik) {
                     for ($i = 0; $i < count($part_array); $i++) {
                         $c = DetailLogistikPart::create([
                             'logistik_id' => $Logistik->id,
-                            'detail_pesanan_part_id' => $part_array[$i]['id']['id'],
-                            'jumlah' => $part_array[$i]['id']['jumlah_kirim']
+                            'detail_pesanan_part_id' => $part_array[$i]['id']
                         ]);
-                        $ids =  $part_array[$i]['id']['id'];
+                        $ids =  $part_array[$i]['id'];
                         if (!$c) {
                             $bool = false;
                         }
-                     }
-                } else {
-                    return response()->json(['data' =>  $Logistik]);
+                    }
                 }
-
+                if ($ids) {
+                    $iddp = DetailPesananPart::find($ids);
+                    $poid = $iddp->pesanan_id;
+                }
             } else if ($prd_id != '0' && $part_id != '0') {
                 if ($Logistik) {
                     for ($i = 0; $i < count($prd_array); $i++) {
@@ -3200,20 +3177,18 @@ class LogistikController extends Controller
                     return response()->json(['data' =>  $Logistik]);
                 }
 
+
                 if ($Logistik) {
                     for ($i = 0; $i < count($part_array); $i++) {
                         $c = DetailLogistikPart::create([
                             'logistik_id' => $Logistik->id,
-                            'detail_pesanan_part_id' => $part_array[$i]['id']['id'],
-                            'jumlah' => $part_array[$i]['id']['jumlah_kirim']
+                            'detail_pesanan_part_id' => $part_array[$i]['id']
                         ]);
-                        $ids =  $part_array[$i]['id']['id'];
+                        $ids =  $part_array[$i]['id'];
                         if (!$c) {
                             $bool = false;
                         }
-                     }
-                } else {
-                    return response()->json(['data' =>  $Logistik]);
+                    }
                 }
 
                 if ($ids) {
@@ -3222,140 +3197,6 @@ class LogistikController extends Controller
                 }
             }
         }
-    }
-    else {
-
-$Logistik = Logistik::find($request->sj_lama);
-    if ($jenis == "EKAT") {
-        if ($Logistik) {
-            for ($i = 0; $i < count($prd_array); $i++) {
-                $c = DetailLogistik::create([
-                    'logistik_id' => $request->sj_lama,
-                    'detail_pesanan_produk_id' => $prd_array[$i]['id'],
-                ]);
-                $ids =  $prd_array[$i]['id'];
-                if ($c) {
-                    for ($y = 0; $y < count($prd_array[$i]['noseri']); $y++) {
-                        $b = NoseriDetailLogistik::create([
-                            'detail_logistik_id' => $c->id,
-                            'noseri_detail_pesanan_id' => $prd_array[$i]['noseri'][$y],
-                        ]);
-                    }
-                    if (!$b) {
-                        $bool = false;
-                    }
-                } else {
-                    $bool = false;
-                }
-            }
-        } else {
-            return response()->json(['data' =>  $Logistik]);
-        }
-
-        if ($ids) {
-            $iddp = DetailPesananProduk::find($ids);
-            $poid = $iddp->DetailPesanan->pesanan_id;
-        }
-    }else{
-
-        if ($prd_id != '0' && $part_id == '0') {
-            if ($Logistik) {
-                for ($i = 0; $i < count($prd_array); $i++) {
-                    $c = DetailLogistik::create([
-                        'logistik_id' => $request->sj_lama,
-                        'detail_pesanan_produk_id' => $prd_array[$i]['id'],
-                    ]);
-                    $ids =  $prd_array[$i]['id'];
-                    if ($c) {
-                        for ($y = 0; $y < count($prd_array[$i]['noseri']); $y++) {
-                            $b = NoseriDetailLogistik::create([
-                                'detail_logistik_id' => $c->id,
-                                'noseri_detail_pesanan_id' => $prd_array[$i]['noseri'][$y],
-                            ]);
-                        }
-                        if (!$b) {
-                            $bool = false;
-                        }
-                    } else {
-                        $bool = false;
-                    }
-                }
-            } else {
-                return response()->json(['data' =>  $Logistik]);
-            }
-            if ($ids) {
-                $iddp = DetailPesananProduk::find($ids);
-                $poid = $iddp->DetailPesanan->pesanan_id;
-            }
-        }else if ($prd_id == '0' && $part_id != '0') {
-            if ($Logistik) {
-                for ($i = 0; $i < count($part_array); $i++) {
-                    $c = DetailLogistikPart::create([
-                        'logistik_id' => $request->sj_lama,
-                        'detail_pesanan_part_id' => $part_array[$i]['id']['id'],
-                        'jumlah' => $part_array[$i]['id']['jumlah_kirim']
-                    ]);
-                    $ids =  $part_array[$i]['id']['id'];
-                    if (!$c) {
-                        $bool = false;
-                    }
-                 }
-            } else {
-                return response()->json(['data' =>  $Logistik]);
-            }
-        }else if ($prd_id != '0' && $part_id != '0') {
-            if ($Logistik) {
-                for ($i = 0; $i < count($prd_array); $i++) {
-                    $c = DetailLogistik::create([
-                        'logistik_id' => $request->sj_lama,
-                        'detail_pesanan_produk_id' => $prd_array[$i]['id'],
-                    ]);
-                    $ids =  $prd_array[$i]['id'];
-                    if ($c) {
-                        for ($y = 0; $y < count($prd_array[$i]['noseri']); $y++) {
-                            $b = NoseriDetailLogistik::create([
-                                'detail_logistik_id' => $c->id,
-                                'noseri_detail_pesanan_id' => $prd_array[$i]['noseri'][$y],
-                            ]);
-                        }
-                        if (!$b) {
-                            $bool = false;
-                        }
-                    } else {
-                        $bool = false;
-                    }
-                }
-            } else {
-                return response()->json(['data' =>  $Logistik]);
-            }
-
-            if ($Logistik) {
-                for ($i = 0; $i < count($part_array); $i++) {
-                    $c = DetailLogistikPart::create([
-                        'logistik_id' => $Logistik->id,
-                        'detail_pesanan_part_id' => $part_array[$i]['id']['id'],
-                        'jumlah' => $part_array[$i]['id']['jumlah_kirim']
-                    ]);
-                    $ids =  $part_array[$i]['id']['id'];
-                    if (!$c) {
-                        $bool = false;
-                    }
-                 }
-            } else {
-                return response()->json(['data' =>  $Logistik]);
-            }
-
-            if ($ids) {
-                $iddp = DetailPesananPart::find($ids);
-                $poid = $iddp->pesanan_id;
-            }
-        }
-
-
-
-    }
-
-    }
 
         $po = Pesanan::find($poid);
         if ($po) {
@@ -3413,7 +3254,6 @@ $Logistik = Logistik::find($request->sj_lama);
             return response()->json(['data' => 'error']);
         }
     }
-
 
     //Dashboard
     public function dashboard()
@@ -4229,45 +4069,6 @@ $Logistik = Logistik::find($request->sj_lama);
     //         ->rawColumns(['status', 'produk'])
     //         ->make(true);
     // }
-    public function get_data_noseri_array($produk_id, $jumlah_kirim){
-        $data = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $produk_id])->DoesntHave('NoseriDetailLogistik')->skip(0)->take($jumlah_kirim)->pluck('id');
-        echo json_encode($data);
-    }
-    public function get_surat_jalan_belum_kirim($po)
-    {
-        // $dataekat = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function($q) use($customer){
-        //     $q->where('customer_id', $customer);
-        // })->get();
-        // $dataspa = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa', function($q) use($customer){
-        //     $q->where('customer_id', $customer);
-        // })->get();
-        // $dataspb = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb', function($q) use($customer){
-        //     $q->where('customer_id', $customer);
-        // })->get();
-        // $dataspap = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spa', function($q) use($customer){
-        //     $q->where('customer_id', $customer);
-        // })->get();
-        // $dataspbp = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistikPart.DetailPesananPart.Pesanan.Spb', function($q) use($customer){
-        //     $q->where('customer_id', $customer);
-        // })->get();
-
-        // $data = $dataekat->merge($dataspa)->merge($dataspb)->merge($dataspap)->merge($dataspbp);
-
-        //$data = Logistik::where('status_id', '=', '11')->get();
-
-        $nopo = str_replace("!","/",$po);
-        $dataprd = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function($q) use($nopo){
-            $q->where('Pesanan.no_po', $nopo);
-        })->get();
-
-        $datapart = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistikPart.DetailPesananPart.Pesanan', function($q) use($nopo){
-            $q->where('Pesanan.no_po', $nopo);
-        })->get();
-
-        $data = $dataprd->merge($datapart);
-
-        echo json_encode($data);
-    }
 
     public function get_data_noseri_array($produk_id, $jumlah_kirim){
         $data = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $produk_id])->DoesntHave('NoseriDetailLogistik')->skip(0)->take($jumlah_kirim)->pluck('id');
@@ -4444,18 +4245,12 @@ $Logistik = Logistik::find($request->sj_lama);
         $footer = Carbon::createFromFormat('Y-m-d', $value)->isoFormat('D MMMM Y');
         return $footer;
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 7a7145a82c022c08c6dff525fd3eee2afab1b1b4
     public function get_surat_jalan_detail($id){
         $l = Logistik::with('Ekspedisi')->where('id', $id)->get();
         return json_encode($l);
     }
-<<<<<<< HEAD
 
-=======
->>>>>>> 7a7145a82c022c08c6dff525fd3eee2afab1b1b4
     public function check_no_sj($id, $val, $jenis)
     {
         $e = "";
