@@ -3543,6 +3543,17 @@ class PenjualanController extends Controller
         }
     }
 
+    public function check_no_urut($id, $val)
+    {
+        if ($id != "0") {
+            $e = Ekatalog::where('no_urut', $val)->whereNotIn('id', [$id])->count();
+            return $e;
+        } else {
+            $e = Ekatalog::where('no_urut',$val)->count();
+            return $e;
+        }
+    }
+
     public function check_variasi_jumlah($id)
     {
         $gbj = GudangBarangJadi::find($id);
