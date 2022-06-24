@@ -970,14 +970,17 @@ class PpicController extends Controller
               ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.gudang_barang_jadi_id', '=', 'gdg_barang_jadi.id')
               ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
               ->leftJoin('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
-              ->where('pesanan.log_id', '!=', '10')
+              ->leftJoin('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
+              ->whereRaw('pesanan.log_id NOT IN ("10", "20")')
+              ->where('ekatalog.status', '!=', 'batal')
               ->groupBy('gdg_barang_jadi.id')
               ->havingRaw('SUM(detail_pesanan.jumlah) > (
                 SELECT count(t_gbj_noseri.id)
                 FROM t_gbj_noseri
                 LEFT JOIN t_gbj_detail on t_gbj_detail.id = t_gbj_noseri.t_gbj_detail_id
                 LEFT JOIN t_gbj on t_gbj.id = t_gbj_detail.t_gbj_id
-                LEFT JOIN pesanan on pesanan.id = t_gbj.pesanan_id AND pesanan.log_id != "10"
+                LEFT JOIN pesanan on pesanan.id = t_gbj.pesanan_id AND pesanan.log_id NOT IN ("10", "20")
+                LEFT JOIN ekatalog on ekatalog.pesanan_id = pesanan.id AND ekatalog.status != "batal"
                 WHERE t_gbj_noseri.jenis = "keluar" AND t_gbj_detail.gdg_brg_jadi_id = gdg_barang_jadi.id
               )');
         })->with('Produk')->get();
@@ -1055,7 +1058,7 @@ class PpicController extends Controller
     {
         $datas = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);
-        })->whereNotIn('log_id', ['10'])->get();
+        })->whereNotIn('log_id', ['10', '20'])->get();
 
         $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);

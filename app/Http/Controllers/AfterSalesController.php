@@ -576,19 +576,34 @@ class AfterSalesController extends Controller
     public function update_retur(Request $r, $id){
     }
 
-    public function get_list_so_selesai(){
-        $a = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->with(['Ekatalog', 'Spa', 'Spb']);
-        $data = Pesanan::has('DetailPesananPart.DetailLogistikPart')->with(['Ekatalog', 'Spa', 'Spb'])->union($a)->get();
+    public function get_list_so_selesai($jenis, Request $r){
+        $data = "";
+        if($jenis == "so"){
+            $a = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->with(['Ekatalog', 'Spa', 'Spb'])->where('so', 'LIKE', '%'.$r->term.'%')->selectRaw('id, so as nama');
+            $data = Pesanan::has('DetailPesananPart.DetailLogistikPart')->with(['Ekatalog', 'Spa', 'Spb'])->where('so', 'LIKE', '%'.$r->term.'%')->selectRaw('id, so as nama')->union($a)->get();
+        }
+        else if($jenis == "po"){
+            $a = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->with(['Ekatalog', 'Spa', 'Spb'])->where('no_po', 'LIKE', '%'.$r->term.'%')->selectRaw('id, no_po as nama');
+            $data = Pesanan::has('DetailPesananPart.DetailLogistikPart')->with(['Ekatalog', 'Spa', 'Spb'])->where('no_po', 'LIKE', '%'.$r->term.'%')->selectRaw('id, no_po as nama')->union($a)->get();
+        }
+        else{
+            $data = Ekatalog::has('Pesanan.DetailPesanan.DetailPesananProduk.DetailLogistik')->where('no_paket', 'LIKE', '%'.$r->term.'%')->selectRaw('pesanan_id as id, no_paket as nama')->get();
+        }
+
         echo json_encode($data);
     }
 
-    public function get_list_so_selesai_paket($id){
-        $data = DetailPesanan::where('pesanan_id', $id)->has('DetailPesananProduk.DetailLogistik')->with('PenjualanProduk')->get();
+    public function get_list_so_selesai_paket($id, Request $r){
+        $data = DetailPesanan::where('pesanan_id', $id)->has('DetailPesananProduk.DetailLogistik')->with('PenjualanProduk')->whereHas('PenjualanProduk', function($q) use($r){
+            $q->where('nama', 'LIKE', '%'.$r->term.'%');
+        })->get();
         echo json_encode($data);
     }
 
-    public function get_list_so_selesai_paket_produk($id){
-        $data = DetailPesananProduk::where('detail_pesanan_id', $id)->has('DetailLogistik')->with('GudangBarangJadi.Produk')->get();
+    public function get_list_so_selesai_paket_produk($id, Request $r){
+        $data = DetailPesananProduk::where('detail_pesanan_id', $id)->has('DetailLogistik')->with('GudangBarangJadi.Produk')->whereHas('GudangBarangJadi.Produk', function($q) use($r){
+            $q->where('nama', 'LIKE', '%'.$r->term.'%');
+        })->get();
         echo json_encode($data);
     }
 

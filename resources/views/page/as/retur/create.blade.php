@@ -221,9 +221,9 @@
                                 </div>
                                 <div id="informasi_transaksi" class="hide">
                                     <hr class="my-4"/>
-                                    <h5>Info Penjualan / Retur</h5>
+                                    <h5>Info Penjualan</h5>
                                     <div class="row row-cols-1 row-cols-md-2 g-4">
-                                        <div class="col hide" id="info_customer">
+                                        <div class="col" id="info_customer">
                                             <div class="card removeshadow bg-light h-100">
                                                 <div class="card-body">
                                                     <h6><b>Customer</b></h6>
@@ -252,7 +252,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col hide" id="info_penjualan">
+                                        <div class="col" id="info_penjualan">
                                             <div class="card removeshadow bg-light h-100">
                                                 <div class="card-body">
                                                     <h6><b>Transaksi Penjualan</b></h6>
@@ -299,31 +299,31 @@
                                                         <div class="p-2">
                                                             <div class="margin">
                                                                 <div><small class="text-muted">No Retur</small></div>
-                                                                <div><b >DO/2022/02/01/000832</b></div>
+                                                                <div><b>-</b></div>
                                                             </div>
                                                             <div class="margin">
                                                                 <div><small class="text-muted">Tanggal Retur</small></div>
-                                                                <div><b>01 Februari 2022</b></div>
+                                                                <div><b>-</b></div>
                                                             </div>
                                                         </div>
                                                         <div class="p-2">
                                                             <div class="margin">
                                                                 <div><small class="text-muted">No SO</small></div>
-                                                                <div><b>PT EMIINDO JAYA BERSAMA</b></div>
+                                                                <div><b>-</b></div>
                                                             </div>
                                                             <div class="margin">
                                                                 <div><small class="text-muted">No AKN</small></div>
-                                                                <div><b>AK1-P2207-28313</b></div>
+                                                                <div><b>-</b></div>
                                                             </div>
                                                         </div>
                                                         <div class="p-2">
                                                             <div class="margin">
                                                                 <div><small class="text-muted">No PO</small></div>
-                                                                <div><b>MEMO PEMESANAN PO932631903</b></div>
+                                                                <div><b>-</b></div>
                                                             </div>
                                                             <div class="margin">
                                                                 <div><small class="text-muted">Tanggal PO</small></div>
-                                                                <div><b>22 Januari 2022</b></div>
+                                                                <div><b>-</b></div>
                                                             </div>
                                                         </div>
 
@@ -365,7 +365,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <a href="{{asset('as.retur.show')}}" type="button" class="btn btn-danger">Batal</a>
+                            <a href="{{route('as.retur.show')}}" type="button" class="btn btn-danger">Batal</a>
                             <button type="submit" class="btn btn-info float-right" id="btnsubmit">Tambah</button>
                         </div>
                     </form>
@@ -384,39 +384,42 @@
         $('.produk_id').select2();
         $('.no_seri').select2();
 
-        $('input[name="ref_transaksi"]').on('change', function(){
+        $('input[type="radio"][name="ref_transaksi"]').on('change', function(){
             format_informasi_ref_penjualan();
             var value = $(this).val();
             $('input[name="pilih_ref_penjualan"]').prop('checked', false);
-            $('.no_ref_penjualan').val(null).trigger('change');
+            $('.no_ref_penjualan').empty();
 
-            $('.paket_produk_id').val(null).trigger('change');
-            $('.produk_id').val(null).trigger('change');
-            $('.no_seri').val(null).trigger('change');
+            $('.paket_produk_id').empty();
+            $('.produk_id').empty();
+            $('.no_seri').empty();
 
             if(value == "tidak_tersedia"){
                 $('#informasi_transaksi').addClass('hide');
-                $('#info_customer').addClass('hide');
+
                 $('#no_ref_tidak_tersedia_input').removeClass('hide');
                 $('#customer_tidak_tersedia_input').removeClass('hide');
                 $('#alamat_tidak_tersedia_input').removeClass('hide');
+
                 $('#pilih_ref_penjualan_input').addClass('hide');
                 $('#no_ref_penjualan_input').addClass('hide');
+
                 $('#produktable tr').find('.no_seri_input').removeClass('hide');
                 $('#produktable tr').find('.no_seri').next(".select2-container").hide();
-                $('#info_penjualan').addClass('hide');
                 produk_penjualan_tidak_tersedia();
-            }else if(value == "tersedia"){
+            }
+            else if(value == "tersedia"){
                 $('#informasi_transaksi').removeClass('hide');
-                $('#info_customer').removeClass('hide');
+
                 $('#no_ref_tidak_tersedia_input').addClass('hide');
                 $('#customer_tidak_tersedia_input').addClass('hide');
                 $('#alamat_tidak_tersedia_input').addClass('hide');
+
                 $('#pilih_ref_penjualan_input').removeClass('hide');
                 $('#no_ref_penjualan_input').removeClass('hide');
+
                 $('#produktable tr').find('.no_seri_input').addClass('hide');
                 $('#produktable tr').find('.no_seri').next(".select2-container").show();
-                $('#info_penjualan').removeClass('hide');
             }
         });
 
@@ -427,7 +430,7 @@
 
         function numberRows($t) {
             var c = 0 - 1;
-            var referensi = $('input[name="ref_transaksi"]:checked').val();
+            var referensi = $('input[name="ref_transaksi"]').val();
             $t.find("tr").each(function(ind, el) {
                 $(el).find("td:eq(0)").html(++c);
                 var j = c - 1;
@@ -457,12 +460,10 @@
                     $('.no_seri_input').removeClass('hide');
                     $('.no_seri').next(".select2-container").hide();
                 }
-
-                // select_data();
             });
         }
 
-        $('#produktable').on('click', '#tambah_paket_produk', function(){
+        $(document).on('click', '#produktable #tambah_paket_produk', function(){
             $('#produktable tr:last').after(`<tr>
                     <td>1</td>
                     <td><select name="paket_produk_id[0]" id="paket_produk_id0" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td>
@@ -479,9 +480,7 @@
             numberRows($("#produktable"));
         });
 
-        function no_ref_penjualan(jenis)
-        {
-
+        function no_ref_penjualan(jenis) {
             $('.no_ref_penjualan').select2({
                 ajax: {
                     minimumResultsForSearch: 20,
@@ -490,51 +489,25 @@
                     theme: "bootstrap",
                     delay: 250,
                     type: 'GET',
-                    url: '/api/as/list/so_selesai',
+                    url: '/api/as/list/so_selesai/'+jenis,
                     data: function(params) {
                         return {
                             term: params.term
                         }
                     },
                     processResults: function(data) {
-                        if(jenis == "so"){
                             return {
                                 results: $.map(data, function(obj) {
                                     return {
                                         id: obj.id,
-                                        text: obj.so
+                                        text: obj.nama
                                     };
                                 })
                             };
-                        }
-                        else if(jenis == "po"){
-                            return {
-                                results: $.map(data, function(obj) {
-                                    return {
-                                        id: obj.id,
-                                        text: obj.no_po
-                                    };
-                                })
-                            };
-                        }
-                        else{
-                            return {
-                                results: $.map(data, function(obj) {
-                                    if(obj.ekatalog != null){
-                                        return {
-                                            id: obj.id,
-                                            text: obj.ekatalog.no_paket
-                                        };
-                                    }
-                                })
-                            };
-                        }
                     },
                 }
-            })
+            });
         }
-
-
 
         function produk_penjualan(id)
         {
@@ -630,7 +603,7 @@
 
         function produk_penjualan_tersedia(id)
         {
-            $('.paket_produk_id').val(null).trigger('change');
+            $('.paket_produk_id').empty();
             $('.paket_produk_id').select2({
                 ajax: {
                     minimumResultsForSearch: 20,
@@ -659,10 +632,9 @@
             })
         }
 
-        function produk_penjualan_tidak_tersedia()
-        {
+        function produk_penjualan_tidak_tersedia(){
             var prm;
-            $('.paket_produk_id').val(null).trigger('change');
+            $('.paket_produk_id').empty();
             $('.paket_produk_id').select2({
                 ajax: {
                     minimumResultsForSearch: 20,
@@ -691,10 +663,9 @@
             })
         }
 
-        function produk_gudang_tersedia(column, id)
-        {
-            $(column).val(null).trigger('change');
-            $(column).select2({
+        function produk_gudang_tersedia(column, id){
+            $('#'+column).empty();
+            $('#'+column).select2({
                 ajax: {
                     minimumResultsForSearch: 20,
                     placeholder: "Pilih Produk",
@@ -722,9 +693,8 @@
             })
         }
 
-        function produk_gudang_tidak_tersedia(column, id)
-        {
-            $(column).select2({
+        function produk_gudang_tidak_tersedia(column, id){
+            $('#'+column).select2({
                 ajax: {
                     minimumResultsForSearch: 20,
                     placeholder: "Pilih Produk",
@@ -755,20 +725,21 @@
         $(document).on('keyup change', '.no_ref_penjualan', function(){
             var val = $(this).val();
             if(val != ""){
-                $('.no_ref_penjualan').val(null).trigger('change');
+                $('.no_ref_penjualan').empty();
                 informasi_ref_penjualan(val);
                 produk_penjualan_tersedia(val);
             }
         });
 
-        $('#produktable').on('keyup change', '.paket_produk_id', function(){
+        $(document).on('keyup change', '#produktable  .paket_produk_id', function(){
             var val = $(this).val();
             var column = $(this).closest('tr').find('.produk_id').attr('id');
             if(val != ""){
-                $(column).val(null).trigger('change');
-                if($('input[name="pilih_ref_penjualan"]').val() == "tidak_tersedia"){
+                $(column).empty();
+                alert($('input[name="ref_transaksi"]').val());
+                if($('input[name="ref_transaksi"]').val() == "tidak_tersedia"){
                     produk_gudang_tidak_tersedia(column, val);
-                } else if($('input[name="pilih_ref_penjualan"]').val() == "tersedia"){
+                } else if($('input[name="ref_transaksi"]').val() == "tersedia"){
                     produk_gudang_tersedia(column, val);
                 }
             }

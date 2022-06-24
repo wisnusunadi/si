@@ -267,7 +267,7 @@
     </div>
 
     <div class="modal fade" id="noserimodal" tabindex="-1" role="dialog" aria-labelledby="noserimodal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-dialog modal-md" role="document">
             <div class="modal-content" style="margin: 10px">
                 <div class="modal-header bg-light">
                     <h4 id="modal-title">Noseri</h4>
@@ -425,20 +425,24 @@
                     {
                         data: 'DT_RowIndex',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        className: 'nowrap-text align-center',
                     },
                     {
                         data: 'nama_produk',
+                        className: 'align-center',
                     },
                     {
                         data: 'jumlah',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        className: 'nowrap-text align-center',
                     },
                     {
                         data: 'aksi',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        className: 'nowrap-text align-center',
                     },
                 ],
             });

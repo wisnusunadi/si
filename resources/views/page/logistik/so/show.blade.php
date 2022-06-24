@@ -165,7 +165,6 @@
                                                         <th rowspan="2">No</th>
                                                         <th rowspan="2">No SO</th>
                                                         <th rowspan="2">No PO</th>
-                                                        <th rowspan="2">Tanggal Delivery</th>
                                                         <th colspan="2">Pengiriman</th>
                                                         <th rowspan="2">Customer</th>
                                                         {{-- <th rowspan="2">Alamat</th> --}}
@@ -250,7 +249,7 @@
                 },
                 {
                     data: 'ket',
-                    className: 'align-center nowrap-text',
+                    className: 'align-center nowrap-text minimizechar',
                     orderable: false,
                     searchable: false
                 }, {
@@ -360,10 +359,6 @@
                     {
                         data: 'no_po',
                         className: 'align-center nowrap-text'
-                    },
-                    {
-                        data: 'batas',
-                        className: 'align-center nowrap-text',
                     },
                     {
                         data: 'tgl_awal',

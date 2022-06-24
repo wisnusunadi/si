@@ -84,7 +84,7 @@
             <div class="card-body">
                 <div class="table-responsive">
                     <table class="table table-hover" id="produktable">
-                        <thead>
+                        <thead class="align-center">
                             <tr>
                                 <th>No</th>
                                 <th>Nama Produk</th>

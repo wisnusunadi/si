@@ -12,11 +12,7 @@ class DireksiController extends Controller
 {
     public function dashboard()
     {
-        $penj = Ekatalog::whereHas('Pesanan', function($q){ $q->whereNull('so')->where('log_id', '7');})->where('status', 'sepakat')->count();
-        $gudang = 0;
-        $qc = 0;
-        $log = 0;
-        $dc = 0;
+        $penj = Ekatalog::whereHas('Pesanan', function($q){ $q->whereNull('so')->where('log_id', '7')->whereNotIn('log_id', ['10', '20']);})->where('status', 'sepakat')->count();
 
         $gudang = Pesanan::whereIn('id', function($q) {
             $q->select('pesanan.id')
@@ -29,7 +25,7 @@ class DireksiController extends Controller
                     left join t_gbj_detail on t_gbj_detail.id = t_gbj_noseri.t_gbj_detail_id
                     left join t_gbj on t_gbj.id = t_gbj_detail.t_gbj_id
                     where t_gbj.pesanan_id = pesanan.id)');
-            })->whereNotIn('log_id', ['7', '10'])->count();
+            })->whereNotIn('log_id', ['7', '10', '20'])->count();
 
         $qc_prd = Pesanan::whereIn('id', function($q) {
             $q->select('pesanan.id')
@@ -43,7 +39,7 @@ class DireksiController extends Controller
                     left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
                     left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
                     where detail_pesanan.pesanan_id = pesanan.id)');
-            })->whereNotIn('log_id', ['7', '10'])
+            })->whereNotIn('log_id', ['7', '10', '20'])
               ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi']);
 
         $qc_part = Pesanan::whereIn('id', function($q) {
@@ -62,7 +58,7 @@ class DireksiController extends Controller
                         left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
                         where detail_pesanan_part.pesanan_id = pesanan.id)")
                     ->groupBy('pesanan.id');
-                })->whereNotIn('log_id', ['7', '10'])
+                })->whereNotIn('log_id', ['7', '10', '20'])
                 ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
                 ->union($qc_prd)
                 ->orderBy('id', 'desc')
@@ -84,7 +80,7 @@ class DireksiController extends Controller
             left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
             left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
             where detail_pesanan.pesanan_id = pesanan.id)');
-        })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7', '9', '10']);
+        })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7', '9', '10', '20']);
 
         $log_part = Pesanan::whereIn('id', function($q) {
             $q->select('pesanan.id')
@@ -105,7 +101,7 @@ class DireksiController extends Controller
                         left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
                         where detail_pesanan_part.pesanan_id = pesanan.id)) AND SUM(outgoing_pesanan_part.jumlah_ok) > 0")
                 ;
-            })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7', '10']);
+            })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7', '10', '20']);
 
         $log_partjasa = Pesanan::whereIn('id', function($q) {
                 $q->select('pesanan.id')
@@ -124,7 +120,7 @@ class DireksiController extends Controller
                             left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode LIKE '%JASA%'
                             where detail_pesanan_part.pesanan_id = pesanan.id)")
                     ->groupBy('pesanan.id');
-                })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7', '10'])->union($log_prd)->union($log_part)->orderBy('id', 'desc')->count();
+                })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->whereNotIn('log_id', ['7', '10', '20'])->union($log_prd)->union($log_part)->orderBy('id', 'desc')->count();
 
         $log = $log_partjasa;
 
