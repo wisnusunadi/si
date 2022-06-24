@@ -1655,8 +1655,8 @@
     $(document).on('click', '.openModalHistory', function (e) {
         e.preventDefault();
         $('.history_seri').modal('show');
-        let nomor_seri = $(this).parent().prev().children().text();
-        console.log(nomor_seri);
+        let nomor_seri = $(this).parent().prev().text();
+        $('.nomor_seri_history').text(nomor_seri);
     })
 
 </script>
