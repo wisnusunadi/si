@@ -284,38 +284,130 @@
 </div>
 
 {{-- Modal Batal --}}
-<div class="modal fade" id="batalProdukModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
-            <div class="card card-navy card-outline card-tabs">
-                <div class="card-header p-0 pt-1 border-bottom-0">
-                    <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
-                        <li class="nav-item">
-                            <a class="nav-link active" id="tabs-detail-tab" data-toggle="pill" href="#tabs-detail"
-                                role="tab" aria-controls="tabs-detail" aria-selected="true">Informasi Umum</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" id="tabs-produk-tab" data-toggle="pill" href="#tabs-produk" role="tab"
-                                aria-controls="tabs-produk" aria-selected="false">Detail Pembatalan</a>
-                        </li>
-                    </ul>
+<div class="modal fade" id="pesananBatal" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content" style="margin: 10px">
+            <div class="modal-header bg-navy">
+                <h4 class="modal-title">Pesanan Batal</h4>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row filter">
+                    <div class="col-12">
+                        <div class="card card-navy card-outline card-tabs">
+                            <div class="card-header p-0 pt-1 border-bottom-0">
+                                <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="tabs-detail-tab" data-toggle="pill" href="#tabs-detail"
+                                            role="tab" aria-controls="tabs-detail" aria-selected="true">Informasi Umum</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="tabs-produk-tab" data-toggle="pill" href="#tabs-produk" role="tab"
+                                            aria-controls="tabs-produk" aria-selected="false">Detail Pembatalan</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="custom-tabs-three-tabContent">
+                                    <div class="tab-pane fade active show" id="tabs-detail" role="tabpanel" aria-labelledby="tabs-detail-tab">
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="info-box bg-maroon">
+                                                    <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
+                                                    <div class="info-box-content">
+                                                    <span class="info-box-text">No SO</span>
+                                                    <span class="info-box-number">SO 1234</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="info-box bg-warning">
+                                                    <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
+                                                    <div class="info-box-content">
+                                                    <span class="info-box-text">No PO </span>
+                                                    <span class="info-box-number">PO 1234</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6">
+                                                <div class="info-box bg-olive">
+                                                    <span class="info-box-icon"><i class="far fa-user"></i></span>
+                                                    <div class="info-box-content">
+                                                    <span class="info-box-text">Nama Customer</span>
+                                                    <span class="info-box-number">PT Emiindo Jaya</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tabs-produk" role="tabpanel" aria-labelledby="tabs-produk-tab">
+                                        <div class="row d-flex justify-content-between">
+                                            <div class="p-2">
+                                                <div class="margin">
+                                                    <div><small class="text-muted">No SO</small></div>
+                                                    <div><b>
+                                                            <em class="text-muted">Belum Tersedia</em>
+                                                        </b>
+                                                    </div>
+                                                </div>
+                                                <div class="margin">
+                                                    <div><small class="text-muted">No AKN</small></div>
+                                                    <div><b>
+                                                            <em class="text-muted">Belum Tersedia</em>
+                                                        </b>
+                                                    </div>
+                                                </div>
+                                                <div class="margin">
+                                                    <div><small class="text-muted">No Urut</small></div>
+                                                    <div><b></b></div>
+                                                </div>
+                                            </div>
+                                            <div class="p-2">
+                                                <div class="margin">
+                                                    <div><small class="text-muted">Tgl Buat</small></div>
+                                                    <div><b></b></div>
+                                                </div>
+                                                <div class="margin">
+                                                    <div><small class="text-muted">Tgl Edit</small></div>
+                                                    <div><b></b></div>
+                                                </div>
+                                                <div class="margin">
+                                                    <div><small class="text-muted">Tgl Kontrak</small></div>
+                                                    <div><b><em class="text-muted">Belum Tersedia</em></b></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4">
+                                                <div class="info-box bg-light" style="box-shadow: none">
+                                                    <div class="info-box-content">
+                                                    <span class="info-box-text">Tanggal Batal</span>
+                                                    <span class="info-box-number">18 September 2022</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12">
+                                                <div class="info-box bg-danger">
+                                                    <span class="info-box-icon"><i class="fas fa-exclamation-triangle fa-fw"></i></span>
+                                                    <div class="info-box-content">
+                                                    <span class="info-box-text">Alasan Batal</span>
+                                                    <span class="info-box-number"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
 @stop
 
 @section('adminlte_js')
