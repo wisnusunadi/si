@@ -322,6 +322,11 @@
                         orderable: false,
                         searchable: false
                     },
+                    {
+                        data: 'aksi',
+                        orderable: false,
+                        searchable: false
+                    }
                 ],
             });
         }
@@ -372,10 +377,6 @@
                         data: 'nama_customer',
                         className: 'align-center minimizechar'
                     },
-                    // {
-                    //     data: 'alamat',
-                    //     className: 'align-center minimizechar'
-                    // },
                     {
                         data: 'ket',
                         className: 'align-center minimizechar',
@@ -388,6 +389,38 @@
                         searchable: false
                     }
                 ]
+            });
+        }
+
+        function noseritable(id, array){
+            $('#noseritable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: false,
+                autowidth: true,
+                ajax: {
+                    'url': '/api/logistik/so/noseri/detail/belum_kirim/' + id+ '/'+ array,
+                    'dataType': 'json',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [
+                {
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'no_seri',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: true
+                }]
             });
         }
 

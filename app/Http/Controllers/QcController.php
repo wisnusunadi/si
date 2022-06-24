@@ -748,7 +748,7 @@ class QcController extends Controller
             })
             ->addColumn('status', function ($data) {
 
-                // if($data->log_id == "20"){
+                if($data->log_id == "20"){
                         $name = explode('/', $data->so);
                         return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="'.$name[1].'" data-provinsi="">
                             <button type="button" class="btn btn-sm btn-outline-danger" type="button">
@@ -756,27 +756,27 @@ class QcController extends Controller
                                 Batal
                             </button>
                         </a>';
-                // }
-                // else{
-                //     $cqcprd = DB::select(DB::raw('select *
-                //         from noseri_detail_pesanan
-                //         left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-                //         left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
-                //         where detail_pesanan.pesanan_id = '.$data->id));
-                //     $cqcpart = DB::table('outgoing_pesanan_part')
-                //         ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
-                //         ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-                //         ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-                //         ->where('detail_pesanan_part.pesanan_id', $data->id)
-                //         ->sum('outgoing_pesanan_part.jumlah_ok');
+                }
+                else{
+                    $cqcprd = DB::select(DB::raw('select *
+                        from noseri_detail_pesanan
+                        left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+                        left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
+                        where detail_pesanan.pesanan_id = '.$data->id));
+                    $cqcpart = DB::table('outgoing_pesanan_part')
+                        ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                        ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                        ->where('detail_pesanan_part.pesanan_id', $data->id)
+                        ->sum('outgoing_pesanan_part.jumlah_ok');
 
-                //     $cdata = count($cqcprd) + $cqcpart;
-                //     if ($cdata <= 0) {
-                //         return '<span class="badge red-text">Belum diuji</span>';
-                //     } else {
-                //         return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                //     }
-                // }
+                    $cdata = count($cqcprd) + $cqcpart;
+                    if ($cdata <= 0) {
+                        return '<span class="badge red-text">Belum diuji</span>';
+                    } else {
+                        return  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+                    }
+                }
             })
             ->addColumn('button', function ($data) {
                 if (!empty($data->so)) {

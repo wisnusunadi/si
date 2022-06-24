@@ -359,6 +359,9 @@ class LogistikController extends Controller
                 ->addColumn('button', function ($data) {
                     return '<a class="noserishow" data-id="' . $data->id . '"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                 })
+                ->addColumn('aksi', function ($data) {
+                    return '<a data-toggle="modal" data-target="#noserimodal" class="noseri"  data-id="' . $data->id . '"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
+                })
                 ->addColumn('array_check', function($data){
                     if (isset($data->gudangbarangjadi)) {
                         $id = $data->id;
@@ -366,7 +369,7 @@ class LogistikController extends Controller
                         return '<div name="array_check[]">'.$s->implode('id', ',').'</div>';
                     }
                 })
-                ->rawColumns(['checkbox', 'button', 'status', 'dikirim', 'jumlah', 'array_check'])
+                ->rawColumns(['checkbox', 'button', 'status', 'dikirim', 'jumlah', 'array_check', 'aksi'])
                 ->make(true);
         } else {
             $pesanan_id = $id;
@@ -510,7 +513,14 @@ class LogistikController extends Controller
                         return '';
                     }
                 })
-                ->rawColumns(['checkbox', 'button', 'status', 'dikirim', 'jumlah', 'array_check'])
+                ->addColumn('aksi', function($data){
+                    if (isset($data->gudangbarangjadi)) {
+                        return '<a data-toggle="modal" data-target="#noserimodal" class="noseri"  data-id="' . $data->id . '"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
+                    } else {
+                        return '-';
+                    }
+                })
+                ->rawColumns(['checkbox', 'button', 'status', 'dikirim', 'jumlah', 'array_check', 'aksi'])
                 ->make(true);
             // $datas = DetailPesananPart::where('pesanan_id', $id)->get();
             // $array_id = array();
@@ -1007,8 +1017,8 @@ class LogistikController extends Controller
                 return $data->ket;
             })
             ->addColumn('status', function ($data) {
-                $status = "";
-                if($data->log_id == "20"){
+                // $status = "";
+                // if($data->log_id == "20"){
                     $name = explode('/', $data->so);
                     return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="'.$name[1].'" data-provinsi="">
                             <button type="button" class="btn btn-sm btn-outline-danger" type="button">
@@ -1016,25 +1026,25 @@ class LogistikController extends Controller
                                 Batal
                             </button>
                         </a>';
-                } else {
-                    $clogprd = DB::select(DB::raw('select * from noseri_logistik
-                                left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
-                                left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-                                left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
-                                where detail_pesanan.pesanan_id = '.$data->id));
+                // } else {
+                //     $clogprd = DB::select(DB::raw('select * from noseri_logistik
+                //                 left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
+                //                 left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+                //                 left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
+                //                 where detail_pesanan.pesanan_id = '.$data->id));
 
-                    $clogpart = DB::table('detail_logistik_part')
-                                ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-                                ->where('detail_pesanan_part.pesanan_id', $data->id)
-                                ->sum('detail_logistik_part.jumlah');
+                //     $clogpart = DB::table('detail_logistik_part')
+                //                 ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                //                 ->where('detail_pesanan_part.pesanan_id', $data->id)
+                //                 ->sum('detail_logistik_part.jumlah');
 
-                    $cdata = count($clogprd) + $clogpart;
-                    if ($cdata <= 0) {
-                        return '<span class="badge red-text">Belum Dikirim</span>';
-                    } else {
-                        return'<span class="badge yellow-text">Sebagian Dikirim</span>';
-                    }
-                }
+                //     $cdata = count($clogprd) + $clogpart;
+                //     if ($cdata <= 0) {
+                //         return '<span class="badge red-text">Belum Dikirim</span>';
+                //     } else {
+                //         return'<span class="badge yellow-text">Sebagian Dikirim</span>';
+                //     }
+                // }
             })
             ->addColumn('batas', function ($data) {
                 $name = explode('/', $data->so);
