@@ -430,7 +430,7 @@
 
         function numberRows($t) {
             var c = 0 - 1;
-            var referensi = $('input[name="ref_transaksi"]').val();
+            var referensi = $('input[name="ref_transaksi"]:checked').val();
             $t.find("tr").each(function(ind, el) {
                 $(el).find("td:eq(0)").html(++c);
                 var j = c - 1;
@@ -710,10 +710,10 @@
                     },
                     processResults: function(data) {
                         return {
-                            results: $.map(data, function(obj) {
+                            results: $.map(data[0].produk, function(obj) {
                                 return {
                                     id: obj.id,
-                                    text: obj.produk.nama +" "+ obj.nama
+                                    text: obj.nama
                                 };
                             })
                         };
@@ -736,10 +736,9 @@
             var column = $(this).closest('tr').find('.produk_id').attr('id');
             if(val != ""){
                 $(column).empty();
-                alert($('input[name="ref_transaksi"]').val());
-                if($('input[name="ref_transaksi"]').val() == "tidak_tersedia"){
+                if($('input[name="ref_transaksi"]:checked').val() == "tidak_tersedia"){
                     produk_gudang_tidak_tersedia(column, val);
-                } else if($('input[name="ref_transaksi"]').val() == "tersedia"){
+                } else if($('input[name="ref_transaksi"]:checked').val() == "tersedia"){
                     produk_gudang_tersedia(column, val);
                 }
             }
