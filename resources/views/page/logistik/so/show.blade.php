@@ -25,6 +25,9 @@
 
 @section('adminlte_css')
 <style>
+    .hide {
+        display: none !important;
+    }
     .urgent {
         color: #dc3545;
         font-weight: 600;
@@ -188,6 +191,7 @@
                 </div>
             </div>
         </div>
+
         <div class="modal fade" id="batalmodal" tabindex="-1" role="dialog" aria-labelledby="batalmodal" aria-hidden="true">
             <div class="modal-dialog modal-xl" role="document">
                 <div class="modal-content" style="margin: 10px">
@@ -203,6 +207,36 @@
                 </div>
             </div>
         </div>
+
+        <div class="modal fade" id="noserimodal" tabindex="-1" role="dialog" aria-labelledby="noserimodal" aria-hidden="true">
+            <div class="modal-dialog modal-md" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header bg-light">
+                        <h4 id="modal-title">Noseri</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="noseri">
+                        <div class="row">
+                            <div class="col-12">
+                                <div class="table-responsive">
+                                    <table class="table" style="text-align:center;width:100%;" id="noseritable">
+                                        <thead>
+                                            <th>No</th>
+                                            <th>No Seri</th>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 </section>
 @stop
@@ -312,7 +346,8 @@
                     {
                         data: 'DT_RowIndex',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        className: 'align-center nowrap-text'
                     },
                     {
                         data: 'nama_produk',
@@ -320,12 +355,18 @@
                     {
                         data: 'jumlah',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        className: 'align-center nowrap-text'
+                    },
+                    {
+                        data: 'array_check',
+                        className: 'hide'
                     },
                     {
                         data: 'aksi',
                         orderable: false,
-                        searchable: false
+                        searchable: false,
+                        className: 'align-center nowrap-text'
                     }
                 ],
             });
@@ -392,6 +433,15 @@
             });
         }
 
+        $(document).on('click', '#produktable .noseri', function(event) {
+            event.preventDefault();
+            var array = $(this).closest('tr').find('div[name="array_check[]"]').text();
+            var id = $(this).attr('data-id');
+
+            $('#noserimodal').modal("show");
+            noseritable(id, array);
+        });
+
         function noseritable(id, array){
             $('#noseritable').DataTable({
                 destroy: true,
@@ -412,6 +462,7 @@
                 columns: [
                 {
                     data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
                 },

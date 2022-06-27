@@ -37,27 +37,20 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="col-lg-4 col-md-6">
+                            <div class="col-lg-6 col-md-6">
                                 <div class="info-box bg-maroon">
-                                    <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
+                                    <span class="info-box-icon"><i class="fas fa-truck"></i></span>
                                     <div class="info-box-content">
                                     <span class="info-box-text">No SO</span>
                                     <span class="info-box-number">{{$p->so}}</span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-lg-4 col-md-6">
+                            <div class="col-lg-6 col-md-6">
                                 <div class="info-box bg-navy" style="box-shadow: none">
+                                    <span class="info-box-icon"><i class="far fa-calendar"></i></span>
                                     <div class="info-box-content">
                                     <span class="info-box-text">Tanggal Batal</span>
-                                    <span class="info-box-number">{{Carbon::now()->isoFormat('D MMMM Y')}}</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-lg-4 col-md-6">
-                                <div class="info-box bg-light" style="box-shadow: none">
-                                    <div class="info-box-content">
-                                    <span class="info-box-text">Status</span>
                                     <span class="info-box-number">{{Carbon::now()->isoFormat('D MMMM Y')}}</span>
                                     </div>
                                 </div>

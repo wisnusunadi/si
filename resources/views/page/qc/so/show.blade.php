@@ -25,6 +25,8 @@
 
 @section('adminlte_css')
 <style>
+    
+
     .urgent {
         color: #dc3545;
         font-weight: 600;
@@ -450,35 +452,34 @@
 
         function noseritable(data_id, pesanan_id){
             $('#noseritable').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: false,
-            autowidth: true,
-            ajax: {
-                'type': 'POST',
-                'datatype': 'JSON',
-                'url': '/api/qc/so/seri/belum/'+data_id+'/'+pesanan_id,
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}',
-                }
-            },
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            columns: [
-            {
-                data: 'DT_RowIndex',
-                orderable: false,
-                searchable: false
-            },
-            {
-                data: 'seri',
-                className: 'nowrap-text align-center',
-                orderable: true,
-                searchable: true
-            }]
-        });
-
+                destroy: true,
+                processing: true,
+                serverSide: false,
+                autowidth: true,
+                ajax: {
+                    'type': 'POST',
+                    'datatype': 'JSON',
+                    'url': '/api/qc/so/seri/belum/'+data_id+'/'+pesanan_id,
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}',
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [
+                {
+                    data: 'DT_RowIndex',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'seri',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: true
+                }]
+            });
         }
 
         function selesai_data(){
