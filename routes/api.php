@@ -112,6 +112,7 @@ Route::prefix('/penjualan')->group(function () {
     // Rout    Route::post('/penjualan/cancel/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'cancel_spa_spb']);
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::post('check_no_paket/{id}/{val}', [App\Http\Controllers\PenjualanController::class, 'check_no_paket']);
+    Route::post('check_no_urut/{id}/{val}', [App\Http\Controllers\PenjualanController::class, 'check_no_urut']);
     Route::get('check_alamat', [App\Http\Controllers\PenjualanController::class, 'check_alamat']);
     //   Route::get('customer/data/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
     Route::prefix('/rencana')->group(function () {

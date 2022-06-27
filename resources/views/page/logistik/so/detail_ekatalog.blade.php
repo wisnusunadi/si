@@ -970,7 +970,12 @@
 
 
             $('#belumkirimtable').on('click', '.check_detail', function() {
+              $(this).closest('tr').find('.jumlah_kirim').prop('disabled', false);
                 $('#check_all').prop('checked', false);
+
+                $.each($(".detail_part_id:checked"), function() {
+                    $(this).closest('tr').find('.jumlah_kirim').prop('disabled', true);
+                });
 
                 if ($('.check_detail').is(':checked')) {
                     $('#kirim_produk').removeAttr('disabled');
@@ -978,8 +983,6 @@
                     $('#kirim_produk').prop('disabled', true);
                 }
                 validasi_checked_produk();
-
-
             })
 
             $('#noseritable').on('change ', '.check_noseri', function() {
@@ -1170,7 +1173,19 @@
                 }
 
 
-
+                if(produk_id.length <= 0){
+                    var produk_id_arr = {}
+                    produk_id_arr.id = "0";
+                    produk_id_arr.jumlah_kirim = "0";
+                    produk_id_arr.array_no_seri = "0";
+                    produk_id.push(produk_id_arr);
+                }
+                if(part_id.length <= 0){
+                    var part_id_arr = {}
+                    part_id_arr.id = "0";
+                    part_id_arr.jumlah_kirim = "0";
+                    part_id.push(part_id_arr);
+                }
 
                 $.ajax({
                     url: "/logistik/so/create/" + pesanan_id + '/' + jenis_penjualan,

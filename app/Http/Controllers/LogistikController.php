@@ -630,7 +630,7 @@ class LogistikController extends Controller
                     if (isset($data->Logistik)) {
                         if ($data->Logistik->Ekspedisi) {
                             return $data->Logistik->ekspedisi['nama'];
-                        } else if ($data->Logistik->nama_pengirim == ""){
+                        } else if ($data->Logistik->ekspedisi_id == ""){
                             return $data->Logistik->nama_pengirim;
                         } else{
                             return '-';
@@ -1090,8 +1090,8 @@ class LogistikController extends Controller
                 }
                 $z = 'proses';
                 return '<a href="' . route('logistik.so.detail', [$z, $y, $x]) . '" type="button" class="btn btn-outline-primary btn-sm">
-                <i class="fas fa-eye"></i> Detail
-            </a>';
+                        <i class="fas fa-eye"></i> Detail
+                    </a>';
             })
             ->rawColumns(['status', 'button', 'batas'])
             ->make(true);
