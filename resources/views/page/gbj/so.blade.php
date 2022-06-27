@@ -54,15 +54,16 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Dicek</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-batal_po-tab" data-toggle="pill" href="#pills-batal_po" role="tab" aria-controls="pills-batal_po" aria-selected="false">Batal PO</a>
+                            </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-proses_kirim" role="tabpanel" aria-labelledby="pills-proses_kirim-tab">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered" style="width: 100%"
-                                             {{-- id="belum-dicek" --}}
-                                             >
+                                            <table class="table table-bordered" style="width: 100%" id="belum-dicek">
                                                 <thead>
                                                     <tr>
                                                         <th>No</th>
@@ -75,19 +76,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>SO-00001</td>
-                                                        <td>PO-00001</td>
-                                                        <td>PT. ABC</td>
-                                                        <td>20 Desember 2019</td>
-                                                        <td>
-                                                            <span class="badge badge-danger">Batal</span>
-                                                        </td>
-                                                        <td>
-                                                            <button class="btn btn-sm btn-outline-success"><i class="fas fa-eye"></i> Detail</button>
-                                                        </td>
-                                                    </tr>
                                                 </tbody>
                                             </table>
                                         </div>
@@ -110,6 +98,38 @@
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="pills-batal_po" role="tabpanel" aria-labelledby="pills-batal_po-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" style="width: 100%" id="batal-po">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nomor SO</th>
+                                                        <th>Nomor PO</th>
+                                                        <th>Customer</th>
+                                                        <th>Batas Transfer</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>SO-00001</td>
+                                                        <td>PO-00001</td>
+                                                        <td>PT. ABC</td>
+                                                        <td>20 Desember 2019</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-success button_batal"><i class="fas fa-eye"></i> Detail</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -313,7 +333,7 @@
                                 <div class="tab-content" id="custom-tabs-three-tabContent">
                                     <div class="tab-pane fade active show" id="tabs-detail" role="tabpanel" aria-labelledby="tabs-detail-tab">
                                         <div class="row">
-                                            <div class="col-lg-4 col-md-6">
+                                            <div class="col-lg-6 col-md-6">
                                                 <div class="info-box bg-maroon">
                                                     <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
                                                     <div class="info-box-content">
@@ -322,7 +342,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4 col-md-6">
+                                            <div class="col-lg-6 col-md-6">
                                                 <div class="info-box bg-warning">
                                                     <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
                                                     <div class="info-box-content">
@@ -331,7 +351,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-lg-4 col-md-6">
+                                            <div class="col-lg-6 col-md-6">
                                                 <div class="info-box bg-olive">
                                                     <span class="info-box-icon"><i class="far fa-user"></i></span>
                                                     <div class="info-box-content">
@@ -340,54 +360,18 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                    </div>
-                                    <div class="tab-pane fade" id="tabs-produk" role="tabpanel" aria-labelledby="tabs-produk-tab">
-                                        <div class="row d-flex justify-content-between">
-                                            <div class="p-2">
-                                                <div class="margin">
-                                                    <div><small class="text-muted">No SO</small></div>
-                                                    <div><b>
-                                                            <em class="text-muted">Belum Tersedia</em>
-                                                        </b>
-                                                    </div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">No AKN</small></div>
-                                                    <div><b>
-                                                            <em class="text-muted">Belum Tersedia</em>
-                                                        </b>
-                                                    </div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">No Urut</small></div>
-                                                    <div><b></b></div>
-                                                </div>
-                                            </div>
-                                            <div class="p-2">
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Tgl Buat</small></div>
-                                                    <div><b></b></div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Tgl Edit</small></div>
-                                                    <div><b></b></div>
-                                                </div>
-                                                <div class="margin">
-                                                    <div><small class="text-muted">Tgl Kontrak</small></div>
-                                                    <div><b><em class="text-muted">Belum Tersedia</em></b></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-4">
-                                                <div class="info-box bg-light" style="box-shadow: none">
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="info-box bg-indigo" style="box-shadow: none">
                                                     <div class="info-box-content">
                                                     <span class="info-box-text">Tanggal Batal</span>
                                                     <span class="info-box-number">18 September 2022</span>
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tabs-produk" role="tabpanel" aria-labelledby="tabs-produk-tab">
+                                        <div class="row">
                                             <div class="col-12">
                                                 <div class="info-box bg-danger">
                                                     <span class="info-box-icon"><i class="fas fa-exclamation-triangle fa-fw"></i></span>
@@ -679,6 +663,10 @@
         }
         })
         $('#viewProdukModal').modal('show');
+    });
+
+    $(document).on('click', '.button_batal', function(e) {
+        $('#pesananBatal').modal('show');
     })
 
 </script>
