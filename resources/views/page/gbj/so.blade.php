@@ -386,8 +386,29 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card removeshadow">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="produktable">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Produk</th>
+                                                <th>Jumlah</th>
+                                            </tr>
+                                        </thead> 
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fas fa-times"></i> Tutup</button>
+                <button type="button" class="btn btn-dark btn-sm float-right"><i class="fas fa-check"></i> Terima</button>
             </div>
         </div>
     </div>
