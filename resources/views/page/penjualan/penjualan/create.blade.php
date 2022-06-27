@@ -999,7 +999,7 @@
 
         function checkpenjualanform() {
             if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
-                if ($('#no_urut').val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "" && $("#batas_kontrak").val() != "") {
+                if (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "" && $("#batas_kontrak").val() != "") {
                     $('#pills-instansi-tab').removeClass('disabled');
                     if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
                         $('#pills-produk-tab').removeClass('disabled');
@@ -1013,7 +1013,7 @@
             }
 
           else if ($('input[type="radio"][name="status"]:checked').val() == "draft") {
-            if ($('#no_urut').val() != "" && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "") {
+            if (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "") {
 
                 if (($('#no_paket').val() != "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length > 0 ) || ($('#no_paket').val() == "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length <= 0) &&  !$("#no_paket").hasClass('is-invalid') ) {
                     $('#pills-instansi-tab').removeClass('disabled');
@@ -1026,7 +1026,7 @@
             }
 
             else {
-                if ($('#no_urut').val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "") {
+                if (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "") {
                     $('#pills-instansi-tab').removeClass('disabled');
                     if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
                         $('#pills-produk-tab').removeClass('disabled');
@@ -1044,13 +1044,13 @@
         function checkvalidasi() {
 
             if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
-                if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "" && $('#no_urut').val() != "") {
+                if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid'))) {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
             } else if ($('input[type="radio"][name="status"]:checked').val() == "draft") {
-                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#status").val() != "" && $("#deskripsi").val() != "" && $('#no_urut').val() != "") {
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#status").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid'))) {
 
                     if (($('#no_paket').val() != "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length > 0 ) || ($('#no_paket').val() == "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length <= 0) &&  !$("#no_paket").hasClass('is-invalid') ) {
                         $('#btntambah').removeAttr("disabled");
@@ -1063,7 +1063,7 @@
                 }
             }
             else {
-                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "" && $('#no_urut').val() != "") {
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid'))) {
 
                     $('#btntambah').removeAttr("disabled");
                 } else {
@@ -1437,8 +1437,30 @@
 
         $('#no_urut').on('keyup change', function() {
             if ($(this).val() != "") {
-                $("#msgno_urut").text("");
-                $("#no_urut").removeClass('is-invalid');
+                var values = $(this).val();
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'JSON',
+                    url: '/api/penjualan/check_no_urut/' + '0/' + values,
+                    success: function(data) {
+                        if (data > 0) {
+                            $("#msgno_urut").text("No Urut tidak boleh sama");
+                            $("#no_urut").addClass('is-invalid');
+                            $('#btntambah').attr("disabled", true);
+                        } else {
+                            $("#msgno_urut").text("");
+                            $("#no_urut").removeClass('is-invalid');
+                            checkvalidasi();
+                        }
+                    },
+                    error: function(data) {
+                        $("#msgno_urut").text("No Urut tidak boleh sama");
+                        $("#no_urut").addClass('is-invalid');
+                        $('#btntambah').attr("disabled", true);
+                    }
+                });
+                // $("#msgno_urut").text("");
+                // $("#no_urut").removeClass('is-invalid');
                 checkvalidasi();
             } else if ($(this).val() == "") {
                 $("#msgno_urut").text("No Urut Harus diisi");
