@@ -325,6 +325,7 @@
                                     aria-labelledby="custom-tabs-four-home-tab">
                                     <form action="" id="noseriForm" name="noseriForm">
                                         <input type="hidden" name="action_by" id="actionby" value="{{ Auth::user()->id }}">
+                                        <input type="hidden" name="gbjid" id="gbjid" value="">
                                         <table class="table scan-produk">
                                             <thead>
                                                 <tr>
@@ -796,6 +797,7 @@
     // load data
     var datatable = $('#gudang-barang').DataTable({
         processing: true,
+        deferRender: true,
         ajax: {
             'type': 'POST',
             'datatype': 'JSON',
@@ -868,6 +870,7 @@
                 }
             }
         ],
+        "order": [[ 3, "asc" ]],
         language: {
             search: "Cari:",
             processing: `<span class='fa-stack fa-md'>\n\
@@ -1172,10 +1175,12 @@
                     data: {
                         "_token": "{{ csrf_token() }}",
                         noseriid: cekid,
+                        gbjid: $('#gbjid').val(),
                         actionby: $('#actionby').val()
                     },
                     dataType: 'json',
                     success: function (res) {
+                        // console.log(res);
                         if (res.error == true) {
                             Swal.fire({
                                 icon: 'error',
@@ -1203,7 +1208,8 @@
     $(document).on('click', '.stokmodal', function () {
         var id = $(this).data('id');
         $('.seri_id').val(id);
-        console.log(id);
+        $('#gbjid').val(id);
+        console.log('gbjid',id);
         $('span#nm_produk').text($(this).parent().prev().prev().prev().prev().html());
 
         $('.scan-produk').DataTable({
@@ -1428,8 +1434,9 @@
             paging: false,
             scrollY: '500px',
             scrollCollapse: true,
-            ordering: false,
+            // ordering: false,
             autoWidth: false,
+            retrieve: true,
         });
         $('.tambah_seri').modal('show');
     });
@@ -1496,48 +1503,67 @@
                 }
             });
         } else {
-            $.ajax({
-                url: '/api/gbj/ceknoseri',
-                type: 'post',
-                data: {
-                    noseri: no_seri
-                },
-                success: function (res) {
-                    if (res.msg) {
-                        $.ajax({
-                            type: 'post',
-                            url: '/api/gbj/addSeri',
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                no_seri: no_seri,
-                                layout: layout,
-                                id: id,
-                                dari: dari,
-                                created_by: created_by,
-                            },
-                            success: function (res) {
-                                console.log(res);
-                                // if (res.success) {
-                                //     Swal.fire(
-                                //         'Sukses!',
-                                //         'Data berhasil ditambahkan',
-                                //         'success'
-                                //     )
-                                //     setTimeout(() => {
-                                //         location.reload();
-                                //     }, 1000);
-                                // }
+            Swal.fire({
+                title: 'Kamu Yakin?',
+                text: "Mendaftarkan noseri sejumlah "+no_seri.length+" ",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/gbj/ceknoseri',
+                        type: 'post',
+                        data: {
+                            noseri: no_seri
+                        },
+                        success: function (res) {
+                            if (res.msg) {
+                                $.ajax({
+                                    type: 'post',
+                                    url: '/api/gbj/addSeri',
+                                    data: {
+                                        "_token": "{{ csrf_token() }}",
+                                        no_seri: no_seri,
+                                        layout: layout,
+                                        id: id,
+                                        dari: dari,
+                                        created_by: created_by,
+                                    },
+                                    success: function (res) {
+                                        // console.log(res);
+                                        if (res.error == false) {
+                                            Swal.fire(
+                                                'Sukses!',
+                                                'Data berhasil ditambahkan',
+                                                'success'
+                                            )
+                                            setTimeout(() => {
+                                                location.reload();
+                                            }, 1000);
+                                        } else {
+                                            Swal.fire({
+                                                icon: 'error',
+                                                title: 'Oops...',
+                                                text: res.msg,
+                                            })
+                                        }
+                                    }
+                                });
+                            } else {
+                                Swal.fire(
+                                    'Oops',
+                                    res.error,
+                                    'error'
+                                )
                             }
-                        });
-                    } else {
-                        Swal.fire(
-                            'Oops',
-                            res.error,
-                            'error'
-                        )
-                    }
+                        }
+                    })
                 }
             })
+
         }
         console.log("noseri", arr.length != datalength);
 
@@ -1571,11 +1597,13 @@
                         data: {
                             "_token": "{{ csrf_token() }}",
                             data: cekid,
+                            gbjid: $('#gbjid').val(),
                             new: serii,
                             actionby: $('#actionby').val()
                         },
                         dataType: 'json',
                         success: function(res) {
+                            // console.log(res);
                             if (res.error == true) {
                                 Swal.fire({
                                     icon: 'error',
@@ -1626,10 +1654,12 @@
                         "_token": "{{ csrf_token() }}",
                         data: cekid,
                         new: serii,
+                        gbjid: $('#gbjid').val(),
                         actionby: $('#actionby').val()
                     },
                     dataType: 'json',
                     success: function(res) {
+                        // console.log(res);
                         if (res.error == true) {
                             Swal.fire({
                                 icon: 'error',

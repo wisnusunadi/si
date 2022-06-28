@@ -268,6 +268,10 @@
 
 @section('adminlte_js')
 <script>
+    $('#divisi').select2({
+        placeholder: "Choose...",
+        allowClear: true
+    })
     $.ajax({
         url: '/api/gbj/sel-divisi',
         type: 'GET',
@@ -276,7 +280,7 @@
             if(res) {
                 console.log(res);
                 $("#divisi").empty();
-                $("#divisi").append('<option value="">All</option>');
+                $("#divisi").append('<option selected></option>');
                 $.each(res, function(key, value) {
                     $("#divisi").append('<option value="'+value.nama+'">'+value.nama+'</option');
                 });
@@ -442,6 +446,7 @@
 
 
         $("#divisi").on("change", function () {
+            console.log($(this).val());
             $dTable.columns(2).search($(this).val()).draw();
         });
 

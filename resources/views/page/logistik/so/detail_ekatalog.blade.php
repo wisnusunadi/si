@@ -341,16 +341,30 @@
                                                                                     <thead>
                                                                                         <tr>
                                                                                             <th rowspan="2" width="8%" class="align-middle">
-                                                                                                <div class="form-check">
-                                                                                                    <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
-                                                                                                    <label class="form-check-label" for="check_all"></label>
+                                                                                                <div
+                                                                                                    class="form-check">
+                                                                                                    <input
+                                                                                                        class="form-check-input"
+                                                                                                        type="checkbox"
+                                                                                                        value="check_all"
+                                                                                                        id="check_all"
+                                                                                                        name="check_all" />
+                                                                                                    <label
+                                                                                                        class="form-check-label"
+                                                                                                        for="check_all">
+                                                                                                    </label>
                                                                                                 </div>
                                                                                             </th>
-                                                                                            <th rowspan="2" width="8%">No </th>
-                                                                                            <th rowspan="2" width="40%">Nama Produk</th>
-                                                                                            <th colspan="2" width="30%">Jumlah</th>
+                                                                                            <th rowspan="2" width="8%">No
+                                                                                            </th>
+                                                                                            <th rowspan="2" width="40%">Nama
+                                                                                                Produk</th>
+
+                                                                                            <th colspan="2" width="30%">
+                                                                                                Jumlah</th>
                                                                                             <th rowspan="2">Array Check</th>
-                                                                                            <th rowspan="2" width="14%">Aksi</th>
+                                                                                            <th rowspan="2" width="14%">Aksi
+                                                                                            </th>
                                                                                         </tr>
                                                                                         <tr>
                                                                                             <th width="15%">Diterima</th>
@@ -773,11 +787,15 @@
                                 'Berhasil',
                                 'Berhasil menambahkan Pengiriman',
                                 'success'
-                            );
+                            ).then(function(){
+                                location.reload(true);
+                            });
                             $("#editmodal").modal('hide');
                             $('#belumkirimtable').DataTable().ajax.reload();
                             $('#selesaikirimtable').DataTable().ajax.reload();
                             $('#noseridetail').addClass('hide');
+                            $('#check_all').prop('checked', false);
+
                         } else if (response['data'] == "error") {
                             swal.fire(
                                 'Gagal',
@@ -903,9 +921,11 @@
 
 
                 if ($('input[name="check_all"]:checked').length > 0) {
+                    $('.jumlah_kirim').prop('disabled', true);
                     $('.check_detail:not(:disabled)', rows).prop('checked', true);
                     $('#kirim_produk').removeAttr('disabled');
                 } else if ($('input[name="check_all"]:checked').length <= 0) {
+                    $('.jumlah_kirim').prop('disabled', false);
                     $('.check_detail').prop('checked', false);
                     $('#kirim_produk').prop('disabled', true);
                 }
@@ -965,40 +985,47 @@
 
 
             $('#belumkirimtable').on('click', '.check_detail', function() {
+              $(this).closest('tr').find('.jumlah_kirim').prop('disabled', false);
                 $('#check_all').prop('checked', false);
-                if ($('.detail_produk_id:checked').length > 0) {
-                    produk_id = [];
-                    $.each($(".detail_produk_id:checked"), function() {
-                        var produk_id_arr = {};
-                        produk_id_arr.id = $(this).closest('tr').find('.detail_produk_id').attr('data-id');
-                        produk_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
-                        produk_id_arr.array_no_seri = $(this).closest('tr').find('div[name="array_check[]"]').text();
-                        produk_id.push(produk_id_arr);
-                    });
-
-                } else if ($('.detail_produk_id:checked').length <= 0) {
-                    var produk_id_arr = {};
-                    produk_id_arr.id = '0';
-                    produk_id_arr.jumlah_kirim = '0';
-                    produk_id_arr.array_no_seri = '0';
-                    produk_id.push(produk_id_arr);
-                }
-
-                if ($('.detail_part_id:checked').length > 0) {
-                    part_id = [];
-                    $.each($(".detail_part_id:checked"), function() {
-                        var part_id_arr = {};
-                        part_id_arr.id = $(this).closest('tr').find('.detail_part_id').attr('data-id');
-                        part_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
-                        part_id.push(part_id_arr);
-                    });
-                } else if ($('.detail_part_id:checked').length <= 0) {
-                    var part_id_arr = {};
-                    part_id_arr.id = '0';
-                    part_id_arr.jumlah_kirim = '0';
-                    part_id.push(part_id_arr);
-                }
-
+                // if ($('.detail_produk_id:checked').length > 0) {
+                //     //tambahan
+                //            if ($('.detail_part_id:checked').length <= 0) {
+                //             part_id.splice(0, part_id.length)
+                //         }
+                //     produk_id = [];
+                //     $.each($(".detail_produk_id:checked"), function() {
+                //         var produk_id_arr = {};
+                //         produk_id_arr.id = $(this).closest('tr').find('.detail_produk_id').attr('data-id');
+                //         produk_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                //         produk_id_arr.array_no_seri = $(this).closest('tr').find('div[name="array_check[]"]').text();
+                //         produk_id.push(produk_id_arr);
+                //     });
+                // } else if ($('.detail_produk_id:checked').length <= 0) {
+                //     var produk_id_arr = {};
+                //     produk_id_arr.id = '0';
+                //     produk_id_arr.jumlah_kirim = '0';
+                //     produk_id_arr.array_no_seri = '0';
+                //     produk_id.push(produk_id_arr);
+                // }
+                // if ($('.detail_part_id:checked').length > 0) {
+                //     //tambahan
+                //     if ($('.detail_produk_id:checked').length <= 0) {
+                //         produk_id.splice(0, produk_id.length)
+                //     }
+                //     part_id = [];
+                   $.each($(".detail_part_id:checked"), function() {
+                   $(this).closest('tr').find('.jumlah_kirim').prop('disabled', true);
+                //         var part_id_arr = {};
+                //         part_id_arr.id = $(this).closest('tr').find('.detail_part_id').attr('data-id');
+                //         part_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                //         part_id.push(part_id_arr);
+                   });
+                // } else if ($('.detail_part_id:checked').length <= 0) {
+                //     var part_id_arr = {};
+                //     part_id_arr.id = '0';
+                //     part_id_arr.jumlah_kirim = '0';
+                //     part_id.push(part_id_arr);
+                // }
                 if ($('.check_detail').is(':checked')) {
                     $('#kirim_produk').removeAttr('disabled');
                 } else {
@@ -1007,7 +1034,8 @@
                 validasi_checked_produk();
             })
 
-            $('#noseritable').on('change', '.check_noseri', function() {
+            $('#noseritable').on('change ', '.check_noseri', function() {
+
                 $('input[name="check_all_noseri"]:checked').prop('checked', false);
                 var rows = $('#noseritable').DataTable().rows({
                     'search': 'applied'
@@ -1019,7 +1047,9 @@
                     array_noseri_produk = text.split(',');
                 }
                 if ($('.check_noseri:checked', rows).length > 0) {
+
                     if ($(this).is(':checked')) {
+
                         array_noseri_produk.push($(this).closest('tr').find('.check_noseri').attr(
                             'data-id'));
                         $('#belumkirimtable > tbody > tr.bgcolor').find('div[name="array_check[]"]').text(
@@ -1053,6 +1083,8 @@
                 $('#belumkirimtable > tbody > tr.bgcolor').find('.jumlah_kirim').val($(
                     '.check_noseri:checked', rows).length);
                 validasi_checked_produk();
+
+
             });
 
             $(document).on('change keyup', '#belumkirimtable .jumlah_kirim', function() {
@@ -1148,6 +1180,48 @@
                 var href = $(this).attr('data-attr');
                 var id = $(this).data('id');
                 var pesanan_id = '{{ $data->pesanan_id }}';
+                if ($('.detail_produk_id:checked').length > 0) {
+                       //tambahan
+                            if ($('.detail_part_id:checked').length <= 0) {
+                                part_id.splice(0, part_id.length)
+                            }
+                    produk_id = [];
+                    $.each($(".detail_produk_id:checked"), function() {
+                        var produk_id_arr = {};
+                        produk_id_arr.id = $(this).closest('tr').find('.detail_produk_id').attr('data-id');
+                        produk_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                        produk_id_arr.array_no_seri = $(this).closest('tr').find('div[name="array_check[]"]').text();
+                        produk_id.push(produk_id_arr);
+                    });
+
+                } else if ($('.detail_produk_id:checked').length <= 0) {
+                    var produk_id_arr = {};
+                    produk_id_arr.id = '0';
+                    produk_id_arr.jumlah_kirim = '0';
+                    produk_id_arr.array_no_seri = '0';
+                    produk_id.push(produk_id_arr);
+                }
+
+                if ($('.detail_part_id:checked').length > 0) {
+                  //tambahan
+                        if ($('.detail_produk_id:checked').length <= 0) {
+                            produk_id.splice(0, produk_id.length)
+                        }
+                    part_id = [];
+                    $.each($(".detail_part_id:checked"), function() {
+                        var part_id_arr = {};
+                        part_id_arr.id = $(this).closest('tr').find('.detail_part_id').attr('data-id');
+                        part_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                        part_id.push(part_id_arr);
+                    });
+                } else if ($('.detail_part_id:checked').length <= 0) {
+                    var part_id_arr = {};
+                    part_id_arr.id = '0';
+                    part_id_arr.jumlah_kirim = '0';
+                    part_id.push(part_id_arr);
+                }
+
+
                 if(produk_id.length <= 0){
                     var produk_id_arr = {}
                     produk_id_arr.id = "0";
@@ -1344,7 +1418,7 @@
                         theme: "bootstrap",
                         delay: 250,
                         type: 'GET',
-                        url: '/api/logistik/cek/no_sj_belum_kirim/' + '{{ $data->customer->id }}',
+                        url: '/api/logistik/cek/no_sj_belum_kirim/' + '{{str_replace("/","!",$data->pesanan->no_po); }}',
                         data: function(params) {
                             return {
                                 term: params.term
