@@ -1697,8 +1697,8 @@ class QcController extends Controller
             left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
             left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
             where detail_pesanan.pesanan_id = pesanan.id)');
-        })->whereNotIn('log_id', ['7', '9', '10'])->whereHas('Ekatalog', function($q){
-            $q->where('tgl_kontrak', '<=', Carbon::now()->toDateString());
+        })->whereNotIn('log_id', ['7', '9', '10'])->whereHas('Ekatalog.Provinsi', function($q){
+            $q->whereRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY) < CURDATE(), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY) < CURDATE())');
         })->count();
 
         $cpo = Pesanan::where('log_id', ['9'])->count();
@@ -1972,8 +1972,8 @@ class QcController extends Controller
                 left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
                 left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
                 where detail_pesanan.pesanan_id = pesanan.id)');
-            })->whereNotIn('log_id', ['7', '9', '10'])->whereHas('Ekatalog', function($q){
-                $q->where('tgl_kontrak', '<=', Carbon::now()->toDateString());
+            })->whereNotIn('log_id', ['7', '9', '10'])->whereHas('Ekatalog.Provinsi', function($q){
+                $q->whereRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY) < CURDATE(), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY) < CURDATE())');
             })->with(['Ekatalog.Customer.Provinsi'])->get();
             return datatables()->of($data)
                 ->addIndexColumn()

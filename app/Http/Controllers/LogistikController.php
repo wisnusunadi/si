@@ -3473,8 +3473,8 @@ $Logistik = Logistik::find($request->sj_lama);
                 left join detail_pesanan_produk on noseri_detail_pesanan.detail_pesanan_produk_id = detail_pesanan_produk.id
                 left join detail_pesanan on detail_pesanan_produk.detail_pesanan_id = detail_pesanan.id
                 where detail_pesanan.pesanan_id = pesanan.id)');
-        })->whereHas('Ekatalog', function($q){
-            $q->where('tgl_kontrak', '<', Carbon::now()->format('Y-m-d'));
+        })->whereHas('Ekatalog.Provinsi', function($q){
+            $q->whereRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY) < CURDATE(), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY) < CURDATE())');
         })->count();
 
         $cpo = Pesanan::where('log_id', ['9'])->count();
@@ -3745,8 +3745,8 @@ $Logistik = Logistik::find($request->sj_lama);
                             left join detail_pesanan_produk on noseri_detail_pesanan.detail_pesanan_produk_id = detail_pesanan_produk.id
                             left join detail_pesanan on detail_pesanan_produk.detail_pesanan_id = detail_pesanan.id
                             where detail_pesanan.pesanan_id = pesanan.id)');
-                    })->whereHas('Ekatalog', function($q){
-                        $q->where('tgl_kontrak', '<=', Carbon::now()->format('Y-m-d'));
+                    })->whereHas('Ekatalog.Provinsi', function($q){
+                        $q->whereRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY) < CURDATE(), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY) < CURDATE())');
                     })->with('Ekatalog.Customer.Provinsi')->get();
             // $lewat_batas_data = Ekatalog::Has('Pesanan.DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->get();
             // $tgl_sekarang = Carbon::now()->format('Y-m-d');
@@ -3873,9 +3873,9 @@ $Logistik = Logistik::find($request->sj_lama);
     public function getHariBatasKontrak($value, $limit)
     {
         if ($limit == 2) {
-            $days = '28';
+            $days = '14';
         } else {
-            $days = '35';
+            $days = '21';
         }
         return Carbon::parse($value)->subDays($days);
     }
