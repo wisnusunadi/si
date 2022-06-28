@@ -86,16 +86,16 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" style="text-align:center;" id="showtable">
+                                    <table class="table table-hover table-striped" style="text-align:center;" id="showtable">
                                         <thead>
-                                            <tr>
+                                            <tr class="bg-navy">
                                                 <th class="nowrap" rowspan="2">No</th>
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th class="nowrap borderright" colspan="2">Stok</th>
                                                 <th class="nowrap borderright" colspan="5">Penjualan</th>
                                                 <th rowspan="2">Aksi</th>
                                             </tr>
-                                            <tr>
+                                            <tr class="bg-secondary">
                                                 <th>GBJ</th>
                                                 <th>Sisa</th>
                                                 <th>Permintaan</th>

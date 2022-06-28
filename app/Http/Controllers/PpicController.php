@@ -1077,9 +1077,9 @@ class PpicController extends Controller
                 // $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
                 $jumlah = $jumlah_gbj - $jumlah_stok_permintaan;
                 if ($jumlah >= 0) {
-                    return "<div>" . $jumlah . "</div>";
+                    return "<div>" . intval($jumlah) . "</div>";
                 } else {
-                    return '<div style="color:red;">' . $jumlah . '</div>';
+                    return '<div style="color:red;">' . intval($jumlah) . '</div>';
                 }
             })
             ->addColumn('total', function ($data) {
@@ -1091,30 +1091,30 @@ class PpicController extends Controller
                 $jumlahtf = intval($data->count_transfer);
                 // $jumlah_stok_permintaan = $jumlahdiminta - $jumlahtf;
                 $jumlah = $jumlahdiminta - $jumlahtf;
-                return $jumlah;
+                return intval($jumlah);
             })
             ->addColumn('sepakat', function ($data) {
                 // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") - $data->getJumlahTransferPesanan("ekatalog");
                 // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat");
                 // return $jumlah." ".
-                return $data->count_ekat_sepakat;
+                return intval($data->count_ekat_sepakat);
             })
             ->addColumn('nego', function ($data) {
                 // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") - $data->getJumlahTransferPesanan("ekatalog", "negosiasi");
                 // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi");
                 // return $jumlah." ".
-                return $data->count_ekat_nego;
+                return intval($data->count_ekat_nego);
             })
             ->addColumn('batal', function ($data) {
                 // return $data->getJumlahPermintaanPesanan("ekatalog", "batal")." ".
-                return $data->count_ekat_batal;
+                return intval($data->count_ekat_batal);
             })
             ->addColumn('po', function ($data) {
                 // $jumlah = ($data->getJumlahPermintaanPesanan("ekatalog_po", "") - $data->getJumlahTransferPesanan("ekatalog")) + ($data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa")) + ($data->getJumlahPermintaanPesanan("spb", "") - $data->getJumlahTransferPesanan("spb"));
                 // $jumlahs = ($data->count_ekat_po + $data->count_spa_po + $data->count_spb_po) - $data->count_transfer;
                 // return $jumlah." ".$jumlahs;
                 $jumlah = $data->count_ekat_po + $data->count_spa_po + $data->count_spb_po;
-                return $jumlah;
+                return intval($jumlah);
             })
             ->addColumn('aksi', function ($data) {
                 return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '" id="detmodal">
@@ -1192,7 +1192,7 @@ class PpicController extends Controller
             ->limit(1);
         }])->with('Produk')->first();
 
-        $data = GudangBarangJadi::find($id);
+        // $data = GudangBarangJadi::find($id);
         $jumlahdiminta = intval($data->count_ekat_sepakat) + intval($data->count_ekat_nego) + intval($data->count_ekat_po) + intval($data->count_spa_po) + intval($data->count_spb_po);
         $jumlahtf = intval($data->count_transfer);
         $jumlah = ($jumlahdiminta - $jumlahtf);
@@ -1201,7 +1201,6 @@ class PpicController extends Controller
 
     public function get_detail_master_stok($id)
     {
-
         $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
             $q->where('id', $id);
         })->first();
@@ -1362,6 +1361,24 @@ class PpicController extends Controller
                 left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
                 where detail_pesanan_produk.gudang_barang_jadi_id = gdg_barang_jadi.id)');
             })
+            ->addSelect(['count_pesanan' => function ($q){
+                $q->selectRaw('count(noseri_detail_pesanan.id)')
+                  ->from('noseri_detail_pesanan')
+                  ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                  ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                  ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                  ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gudang_barang_jadi.id')
+                  ->limit(1)
+            }
+                
+                
+                NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($produk_id) {
+                $q->where('gudang_barang_jadi_id', $produk_id);
+            })->doesntHave('NoseriDetailLogistik')->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($po_id) {
+                $q->where('id', $po_id)->whereNotIn('log_id', ['10']);
+            })->count();
+
+            ])
             ->with('Produk')
             ->get();
         return datatables()->of($data)
