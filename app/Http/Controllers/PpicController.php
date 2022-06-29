@@ -1362,24 +1362,30 @@ class PpicController extends Controller
                 where detail_pesanan_produk.gudang_barang_jadi_id = gdg_barang_jadi.id)');
             })
             ->addSelect(['count_pesanan' => function ($q){
-                $q->selectRaw('count(noseri_detail_pesanan.id)')
-                  ->from('noseri_detail_pesanan')
-                  ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                  ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                  ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
-                  ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gudang_barang_jadi.id')
-                  ->limit(1)
-            }
-                
-                
-                NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($produk_id) {
-                $q->where('gudang_barang_jadi_id', $produk_id);
-            })->doesntHave('NoseriDetailLogistik')->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) use ($po_id) {
-                $q->where('id', $po_id)->whereNotIn('log_id', ['10']);
-            })->count();
-
-            ])
+                    $q->selectRaw('count(noseri_detail_pesanan.id)')
+                    ->from('noseri_detail_pesanan')
+                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                    ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+                    ->whereNotIn('pesanan.log_id', ['10'])
+                    ->limit(1);
+                }, 'count_pengiriman' => function($q){
+                    $q->selectRaw('count(noseri_logistik.id)')
+                    ->from('noseri_logistik')
+                    ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                    ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+                    ->whereNotIn('pesanan.log_id', ['10'])
+                    ->limit(1);
+                }
+            ])->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+                $q->whereNotIn('log_id', ['7', '10']);
+            })
             ->with('Produk')
+            ->havingRaw('count_pesanan > count_pengiriman')
             ->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1391,14 +1397,16 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('jumlah', function ($data) {
-                $jumlah = $data->getJumlahCekPesanan() + $data->getJumlahKirimPesanan();
+                // $jumlah = $data->getJumlahCekPesanan() + $data->getJumlahKirimPesanan();
                 // $id = $data->id;
                 // $j = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
                 //     $q->where('gudang_barang_jadi_id', $id);
                 // })->doesntHave('NoseriDetailLogistik')->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
                 //     $q->whereNotIn('log_id', ['10']);
                 // })->get();
-                return $jumlah;
+                // return $jumlah;
+
+                return $data->count_pesanan;
             })
             ->addColumn('jumlah_pengiriman', function ($data) {
                 // $jumlah = 0;
@@ -1417,8 +1425,9 @@ class PpicController extends Controller
                 // $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk', function($q) use ($id){
                 //     $q->where('gudang_barang_jadi_id', $id);
                 // })->whereNotIn('log_id', ['10'])->has('DetailPesanan.DetailPesananProduk.DetailLogistik')->first();
-                return $data->getJumlahKirimPesanan();
+                // return $data->getJumlahKirimPesanan();
                 // return $data;
+                return $data->count_pengiriman;
             })
 
             ->addColumn('belum_pengiriman', function ($data) {
@@ -1426,7 +1435,8 @@ class PpicController extends Controller
                 // $jumlahselesai = $data->getJumlahKirimPesanan();
                 // $jumlahproses = $jumlah - $jumlahselesai;
                 // return $jumlahproses;
-                return $data->getJumlahCekPesanan();
+                // return $data->getJumlahCekPesanan();
+                return $data->count_pesanan - $data->count_pengiriman;
             })
             ->addColumn('aksi', function ($data) {
                 return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-id="' . $data->id . '" id="detmodal">
