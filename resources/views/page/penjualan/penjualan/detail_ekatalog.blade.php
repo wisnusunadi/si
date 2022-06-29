@@ -153,7 +153,8 @@
                         <div class="table-responsive">
                             <?php $totalharga = 0; ?>
                             <?php $no = 0; ?>
-                            @if (isset($data->Pesanan))
+                            @if(count($data->Pesanan->DetailPesanan) > 0)
+
                                 <div class="card removeshadow overflowy">
                                     <div class="card-body">
                                         <div class="row">
@@ -278,7 +279,7 @@
                                     </div>
                                 </div>
                             @else
-                                <div class="align-center"><i>Detail Pesanan Belum Tersedia</i></div>
+                                <div class="align-center text-danger"><i>Detail Pesanan Belum Tersedia</i></div>
                             @endif
                         </div>
                     </div>

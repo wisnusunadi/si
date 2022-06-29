@@ -50,7 +50,13 @@ class PenjualanController extends Controller
         $y = explode(',', $status);
         $data = "";
         if ($jenis == "semua" && $status == "semua") {
-            $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+            $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->addSelect(['tgl_kontrak_custom' => function($q){
+                $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+                  ->from('ekatalog as e')
+                  ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                  ->whereColumn('e.id', 'ekatalog.id')
+                  ->limit(1);
+                }])->orderBy('id', 'DESC')->get());
             $Spa = collect(Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             $Spb = collect(Spb::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             $data = $Ekatalog->merge($Spa)->merge($Spb);
@@ -59,7 +65,13 @@ class PenjualanController extends Controller
             $Spa = "";
             $Spb = "";
             if (in_array('ekatalog', $x)) {
-                $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+                $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->addSelect(['tgl_kontrak_custom' => function($q){
+                    $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+                      ->from('ekatalog as e')
+                      ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                      ->whereColumn('e.id', 'ekatalog.id')
+                      ->limit(1);
+                    }])->orderBy('id', 'DESC')->get());
             }
             if (in_array('spa', $x)) {
                 $Spa = collect(Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
@@ -181,20 +193,31 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('tgl_kontrak', function ($data) {
-                if($data->tgl_kontrak_custom != ""){
-                    $tgl_sekarang = Carbon::now();
-                    $tgl_parameter = $data->tgl_kontrak_custom;
-                    $hari = $tgl_sekarang->diffInDays($tgl_parameter);
-                    if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
-                        if ($hari > 7) {
-                            return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                            <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
-                        } else if ($hari > 0 && $hari <= 7) {
-                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                            <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
-                        } else {
-                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                $name = $data->getTable();
+                if($name == 'ekatalog'){
+                    if($data->tgl_kontrak_custom != ""){
+                        if($data->Pesanan->log_id){
+                            $tgl_sekarang = Carbon::now();
+                            $tgl_parameter = $data->tgl_kontrak_custom;
+                            $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                            if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                                if ($hari > 7) {
+                                    return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                } else if ($hari > 0 && $hari <= 7) {
+                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                } else {
+                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                                }
+                            }
+                            else{
+                                return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            }
+                        } else{
+                            return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
                         }
                     }
                 }
@@ -1242,7 +1265,13 @@ class PenjualanController extends Controller
                   ->limit(1);
                 }])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
         } else {
-            $data  = Ekatalog::with(['Pesanan.State','Customer'])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
+            $data  = Ekatalog::with(['Pesanan.State','Customer'])->addSelect(['tgl_kontrak_custom' => function($q){
+                $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+                  ->from('ekatalog as e')
+                  ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                  ->whereColumn('e.id', 'ekatalog.id')
+                  ->limit(1);
+                }])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
         }
 
         return datatables()->of($data)

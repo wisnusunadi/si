@@ -1357,7 +1357,7 @@
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
                     $('#isi_nopaket').prop("checked", false);
-                      $('#isi_nopaket').val("true");
+                    $('#isi_nopaket').val("true");
                     $('#no_paket').attr('readonly', false);
                     $("#batas_kontrak").val("");
                     $("#batas_kontrak").attr('disabled', true);

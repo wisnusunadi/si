@@ -711,6 +711,7 @@ ul#status {
                                                         <th>Nomor AKN</th>
                                                         <th>Nomor PO</th>
                                                         <th>Tanggal PO</th>
+                                                        <th>Tanggal Kontrak</th>
                                                         <th>Customer</th>
                                                         <th>Status</th>
                                                         <th>Aksi</th>
@@ -840,6 +841,8 @@ ul#status {
                         data: 'nopo',
                     }, {
                         data: 'tgl_order',
+                    }, {
+                        data: 'tgl_kontrak',
                     }, {
                         data: 'nama_customer',
                     },
