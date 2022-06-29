@@ -2014,156 +2014,91 @@ class GudangController extends Controller
 
             $arr = [];
             $arrm = [];
-            $newdata = $this->groupBy($dat_arr, 'paket');
-            // foreach (array_replace($data, $dat_arr) as $key => $value) {
-            //     $arr[$value['paket']] = [
-            //         'produk' => $value['produk'],
-            //         'noseri' => $key,
-            //     ];
-            //     // foreach($value['noseri'] as $vn) {
-            //     //     // $arr[$value['paket']]['noseri'] = $vn;
-            //     //     return $vn;
-            //     // }
-            //     // $arr[$value['paket']]['noseri'] = $value['noseri'];
-            // }
-            // for ($i=0; $i < count($dat_arr); $i++) {
-            //     $arr[$dat_arr[$i]['paket']] = [
-            //         'produk' => $dat_arr[$i]['produk'],
-            //         'noseri' => $dat_arr[$i]['noseri']
-            //     ];
-            // }
-            // return $newdata;
-            $a = TFProduksi::where('pesanan_id', $request->soid)->first();
-            if ($a) {
-            //     foreach($dat_arr as $kk => $dt) {
-            //         // print_r($dt);
-            //         // $check = TFProduksiDetail::where([
-            //         //     't_gbj_id' => $a->id,
-            //         //     'gdg_brg_jadi_id' => $dt['gdg_brg_jadi_id'],
-            //         //     'detail_pesanan_produk_id' => $dt['detail_pesanan_produk_id'],
-            //         // ])->first();
-            //         // return $check;
-            //         // if ($check) {
-            //         //     foreach($seri as $k => $v) {
-            //         //         $seri_out[] = [
-            //         //             't_gbj_detail_id' => $check->id,
-            //         //             'noseri_id' => NoseriBarangJadi::where('noseri', $v)->first()->id,
-            //         //             'status_id' => 2,
-            //         //             'state_id' => 8,
-            //         //             'jenis' => 'keluar',
-            //         //             'created_at' => Carbon::now(),
-            //         //             'created_by' => $request->userid
-            //         //         ];
+            foreach ($dat_arr as $inner) {
 
-            //         //         NoseriBarangJadi::where('noseri', $v)->update(['is_ready' => 1, 'used_by' => $request->soid]);
-            //         //         // $seri_log[] = [
-            //         //         //     'gbj_id' => $dt['gdg_brg_jadi_id'],
-            //         //         //     'noseri_id' => Noseri::where('noseri', $v)->first()->id,
-            //         //         //     'dpp_id' => $dt['detail_pesanan_produk_id'],
-            //         //         //     'log_id' => 23,
-            //         //         //     'created_by' => $request->userid
-            //         //         // ];
-            //         //     }
-            //         //     NoseriTGbj::insert($seri_out);
-            //         //     // NoseriLog::insert($seri_log);
-            //         // } else {
-            //         //     $detail = TFProduksiDetail::create([
-            //         //         't_gbj_id' => $a->id,
-            //         //         'detail_pesanan_produk_id' => $dt['detail_pesanan_produk_id'],
-            //         //         'gdg_brg_jadi_id' => $dt['gdg_brg_jadi_id'],
-            //         //         'qty' => count($seri),
-            //         //         'jenis' => 'keluar',
-            //         //         'status_id' => 2,
-            //         //         'state_id' => 8,
-            //         //         'created_at' => Carbon::now(),
-            //         //         'created_by' => $request->userid
-            //         //     ]);
-
-            //         //     foreach($seri as $k => $v) {
-            //         //         $seri_out[] = [
-            //         //             't_gbj_detail_id' => $detail->id,
-            //         //             'noseri_id' => NoseriBarangJadi::where('noseri', $v)->first()->id,
-            //         //             'status_id' => 2,
-            //         //             'state_id' => 8,
-            //         //             'jenis' => 'keluar',
-            //         //             'created_at' => Carbon::now(),
-            //         //             'created_by' => $request->userid
-            //         //         ];
-
-            //         //         NoseriBarangJadi::where('noseri', $v)->update(['is_ready' => 1, 'used_by' => $request->soid]);
-            //         //         // $seri_log[] = [
-            //         //         //     'gbj_id' => $dt['gdg_brg_jadi_id'],
-            //         //         //     'noseri_id' => Noseri::where('noseri', $v)->first()->id,
-            //         //         //     'dpp_id' => $dt['detail_pesanan_produk_id'],
-            //         //         //     'log_id' => 23,
-            //         //         //     'created_by' => $request->userid
-            //         //         // ];
-            //         //     }
-            //         //     NoseriTGbj::insert($seri_out);
-            //         //     // NoseriLog::insert($seri_log);
-            //         // }
-            //     }
-            } else {
-                // $header = TFProduksi::create([
-                //     'pesanan_id' => $request->soid,
-                //     'tgl_keluar' => Carbon::now(),
-                //     'ke' => 23,
-                //     'jenis' => 'keluar',
-                //     'status_id' => 2,
-                //     'state_id' => 8,
-                //     'created_at' => Carbon::now(),
-                //     'created_by' => $request->userid
-                // ]);
-
-                foreach($newdata as $ky => $vy) {
-                    echo $vy['produk'];
-                    // array_push($arr, $vy['noseri']);
-                    // $detail = TFProduksiDetail::create([
-                    //     't_gbj_id' => $header->id,
-                    //     'detail_pesanan_produk_id' => $vy[],
-                    //     'gdg_brg_jadi_id' => $vy['produk'],
-                    //     'qty' => 0,
-                    //     'jenis' => 'keluar',
-                    //     'status_id' => 2,
-                    //     'state_id' => 8,
-                    //     'created_at' => Carbon::now(),
-                    //     'created_by' => $request->userid
-                    // ]);
-
-                    // NoseriTGbj::create([
-                    //     't_gbj_detail_id' => $detail->id,
-                    //     'noseri_id' => $vy['noseri'],
-                    //     'status_id' => 2,
-                    //     'state_id' => 8,
-                    //     'jenis' => 'keluar',
-                    //     'created_at' => Carbon::now(),
-                    //     'created_by' => $request->userid
-                    // ]);
+                //  Check type
+                if (is_array($inner)) {
+                    //  Scan through inner loop
+                    foreach ($inner[1] as $value) {
+                       echo "$value \n";
+                    }
                 }
-
-                // foreach($arr as $k => $v) {
-                //    NoseriTGbj::create([
-                //         't_gbj_detail_id' => $detail->id,
-                //         'noseri_id' => $v,
-                //         'status_id' => 2,
-                //         'state_id' => 8,
-                //         'jenis' => 'keluar',
-                //         'created_at' => Carbon::now(),
-                //         'created_by' => $request->userid
-                //     ]);
-
-                //     // NoseriBarangJadi::where('noseri', $v)->update(['is_ready' => 1, 'used_by' => $request->soid]);
-                //     // $seri_log[] = [
-                //     //     'gbj_id' => $vy['gdg_brg_jadi_id'],
-                //     //     'noseri_id' => Noseri::where('noseri', $v)->first()->id,
-                //     //     'dpp_id' => $vy['detail_pesanan_produk_id'],
-                //     //     'log_id' => 23,
-                //     //     'created_by' => $request->userid
-                //     // ];
-                // }
-                // NoseriTGbj::insert($seri_out);
-            //     // NoseriLog::insert($seri_log);
             }
+            // foreach($dat_arr as $da){
+            //     foreach($da as $da1) {
+            //     //     foreach($da1 as $da2) {
+            //             $arrm[] = $da1;
+            //     //     }
+            //     }
+            //     // $arr[$da['paket']][] = $da['noseri'];
+            //     // array_push($arr[$da['paket']]['noseri'], $da['noseri']);
+            //     // foreach($arr as $tp => $vp) {
+            //     //     $arr[$da['paket']][] = [
+            //     //         'produk' => $vp['produk'],
+            //     //     ];
+            //     // }
+            // }
+            // return $arrm;
+            // foreach($arr as $tp => $vp) {
+            //     $arrm[] = [
+            //         'paket' => $tp,
+            //         'noseri' => $vp,
+            //     ];
+            // }
+            // return $arrm;
+            // foreach($arrm as $k => $v) {
+            //     print_r($v);
+            // }
+
+            // $a = TFProduksi::where('pesanan_id', $request->soid)->first();
+            // // return $a;
+            // if ($a) {
+            //     return 'ada';
+            // } else {
+            //     // $header = TFProduksi::create([
+            //     //     'pesanan_id' => $request->soid,
+            //     //     'tgl_keluar' => Carbon::now(),
+            //     //     'ke' => 23,
+            //     //     'jenis' => 'keluar',
+            //     //     'status_id' => 2,
+            //     //     'state_id' => 8,
+            //     //     'created_at' => Carbon::now(),
+            //     //     'created_by' => $request->userid
+            //     // ]);
+
+            //     foreach($arrm as $k => $v) {
+            //         foreach($v['produk'] as $kk => $vv){
+            //             $detail[] = [
+            //                 't_gbj_id' => '-',
+            //                 'detail_pesanan_produk_id' => $v['paket'],
+            //                 'gdg_brg_jadi_id' => $kk,
+            //                 'qty' => count($vv),
+            //                 'jenis' => 'keluar',
+            //                 'status_id' => 2,
+            //                 'state_id' => 8,
+            //                 'created_at' => Carbon::now(),
+            //                 'created_by' => $request->userid
+            //             ];
+
+            //             // NoseriTGbj::create([
+            //             $no[] = [
+            //                 't_gbj_detail_id' => '-',
+            //                 'noseri_id' => $vv,
+            //                 'status_id' => 2,
+            //                 'state_id' => 8,
+            //                 'jenis' => 'keluar',
+            //                 'created_at' => Carbon::now(),
+            //                 'created_by' => $request->userid
+            //                 ];
+            //             // ]);
+
+            //             // NoseriBarangJadi::find($vv)->update(['is_ready' => 1, 'used_by' => $request->soid]);
+            //         }
+            //     }
+            //     // TFProduksiDetail::insert($detail);
+            //     // NoseriTGbj::insert($no);
+            //     return $no;
+            // }
 
             // $po = Pesanan::find($request->soid);
 
@@ -2175,7 +2110,7 @@ class GudangController extends Controller
             // $del = new Filesystem;
             // $del->cleanDirectory(public_path('upload/so/'));
             // File::delete(public_path('upload/so/'.$request->namafile));
-            // return response()->json(['msg' => 'Data Terkirim ke QC']);
+            return response()->json(['msg' => 'Data Terkirim ke QC']);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
