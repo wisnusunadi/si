@@ -352,8 +352,7 @@ ul#status {
                                                         <th>Nomor PO</th>
                                                         <th>Tanggal Buat</th>
                                                         <th>Tanggal Edit</th>
-
-
+                                                        <th>Tanggal Kontrak</th>
                                                         <th>Customer</th>
                                                         <th>Status</th>
                                                         <th>Aksi</th>
@@ -875,7 +874,6 @@ ul#status {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 columns: [
-
                     {
                         data: 'DT_RowIndex',
                         className: 'nowrap-text align-center',
@@ -904,7 +902,11 @@ ul#status {
                         orderable: false,
                         searchable: false
                     },
-
+                    {
+                        data: 'tgl_kontrak',
+                        orderable: false,
+                        searchable: false
+                    },
                     {
                         data: 'nama_customer',
                     },
@@ -916,14 +918,14 @@ ul#status {
                         orderable: false,
                         searchable: false
                     },
-                    {
-                        data: 'instansi',
-                    },
+                    // {
+                    //     data: 'instansi',
+                    // },
                 ],
-                "columnDefs": [{
-                    "visible": false,
-                    "targets": [10]
-                }],
+                // "columnDefs": [{
+                //     "visible": false,
+                //     "targets": [10]
+                // }],
 
             });
         }

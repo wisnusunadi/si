@@ -1485,7 +1485,26 @@ class PpicController extends Controller
               ->where('detail_pesanan_produk.gudang_barang_jadi_id', '=', $id)
               ->groupBy('pesanan.id')
               ->havingRaw('count(noseri_detail_pesanan.id) > 0');
-        })->get();
+        })->addSelect(['count_pesanan' => function($q) use($id){
+            $q->selectRaw('count(noseri_detail_pesanan.id)')
+            ->from('noseri_detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+            ->where('detail_pesanan_produk.gudang_barang_jadi_id', $id)
+            ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+            ->limit(1);
+        },
+        'count_pengiriman' => function($q) use($id){
+            $q->selectRaw('count(noseri_logistik.id)')
+            ->from('noseri_logistik')
+            ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+            ->where('detail_pesanan_produk.gudang_barang_jadi_id', $id)
+            ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+            ->limit(1);
+        }
+        ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])->get();
 
 
         return datatables()->of($data)
@@ -1503,12 +1522,7 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('jumlah_pesanan', function ($data) use ($id) {
-                $jumlahpesan = $this->getJumlahCekPesanan($id, $data->id);
-                $jumlahselesai = $this->getJumlahKirimPesanan($id, $data->id);
-                $jumlah = $jumlahpesan + $jumlahselesai;
-                if($jumlah < 0){
-                    $jumlah = 0;
-                }
+
                 // $res = DetailPesanan::where('pesanan_id', $ids)->get();
                 // $jumlah = 0;
                 // foreach ($res as $a) {
@@ -1518,7 +1532,7 @@ class PpicController extends Controller
                 //         }
                 //     }
                 // }
-                return $jumlah;
+                return $data->count_pesanan;
             })
             ->addColumn('jumlah_selesai_kirim', function ($data) use ($id) {
                 // $ids = $data->id;
@@ -1527,10 +1541,7 @@ class PpicController extends Controller
                 // })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($ids) {
                 //     $q->where('pesanan_id', $ids);
                 // })->count();
-
-
-                $jumlah = $this->getJumlahKirimPesanan($id, $data->id);
-                return $jumlah;
+                return $data->count_pengiriman;
             })
             ->addColumn('jumlah_belum_kirim', function ($data) use ($id) {
                 // $ids = $data->id;
@@ -1550,7 +1561,7 @@ class PpicController extends Controller
                 //     $q->where('pesanan_id', $ids);
                 // })->count();
 
-                $jumlahpesan = $this->getJumlahCekPesanan($id, $data->id);
+                $jumlahpesan = $data->count_pesanan - $data->count_pengiriman;
 
                 return $jumlahpesan;
             })

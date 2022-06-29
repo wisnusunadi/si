@@ -217,30 +217,31 @@
                                             </span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover" id="showtable">
-                                                <thead style="text-align: center;">
-                                                    <tr>
-                                                        <th width="5%">No</th>
-                                                        <th width="16%">No AKD</th>
-                                                        <th width="12%">Merk</th>
-                                                        <th width="10%">Jenis Paket</th>
-                                                        <th width="50%">Nama Alias</th>
-                                                        <th width="50%">Nama Produk</th>
-                                                        <th width="12%">Harga</th>
-                                                        <th width="5%">Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover" id="showtable">
+                                                    <thead style="text-align: center;">
+                                                        <tr>
+                                                            <th width="5%">No</th>
+                                                            <th width="10%">No AKD</th>
+                                                            <th width="5%">Merk</th>
+                                                            <th width="5%">Jenis Paket</th>
+                                                            <th width="30%">Nama Alias</th>
+                                                            <th width="25%">Nama Produk</th>
+                                                            <th width="10%">Harga</th>
+                                                            <th width="5%">Aksi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
 
-                                                </tbody>
-                                            </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>

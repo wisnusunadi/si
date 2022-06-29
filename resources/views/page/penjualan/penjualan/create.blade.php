@@ -427,6 +427,15 @@
                                                                     </div>
                                                                 </div>
                                                                 <div class="form-group row">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket"></label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input" type="checkbox" name="" id="isi_produk" value="isi" />
+                                                                            <label class="form-check-label" for="isi_produk">Isi Produk</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="form-group row">
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Buat</label>
                                                                     <div class="col-lg-4">
                                                                         <input type="date" class="form-control col-form-label @error('tanggal_pemesanan') is-invalid @enderror" name="tanggal_pemesanan" id="tanggal_pemesanan" />

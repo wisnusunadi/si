@@ -33,6 +33,7 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Excel as ExcelExcel;
 use Symfony\Component\Console\Input\Input;
+use DB;
 
 use function PHPUnit\Framework\assertIsNotArray;
 
@@ -180,6 +181,24 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('tgl_kontrak', function ($data) {
+                if($data->tgl_kontrak_custom != ""){
+                    $tgl_sekarang = Carbon::now();
+                    $tgl_parameter = $data->tgl_kontrak_custom;
+                    $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                    if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                        if ($hari > 7) {
+                            return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                            <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                        } else if ($hari > 0 && $hari <= 7) {
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                            <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                        } else {
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                        }
+                    }
+                }
+
                 // if (isset($data->tgl_kontrak)) {
                 //     $tgl_sekarang = Carbon::now()->format('Y-m-d');
                 //     $tgl_parameter = $data->tgl_kontrak;
@@ -1215,7 +1234,13 @@ class PenjualanController extends Controller
         $data = "";
 
         if ($value == 'semua') {
-            $data  = Ekatalog::with(['Pesanan.State','Customer'])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
+            $data  = Ekatalog::with(['Pesanan.State','Customer', 'Provinsi'])->addSelect(['tgl_kontrak_custom' => function($q){
+                $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+                  ->from('ekatalog as e')
+                  ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                  ->whereColumn('e.id', 'ekatalog.id')
+                  ->limit(1);
+                }])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
         } else {
             $data  = Ekatalog::with(['Pesanan.State','Customer'])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
         }
@@ -1273,6 +1298,31 @@ class PenjualanController extends Controller
                     return Carbon::createFromFormat('Y-m-d', $data->tgl_edit)->format('d-m-Y');
                 }
             })->editColumn('tgl_kontrak', function ($data) {
+
+                if($data->tgl_kontrak_custom != ""){
+                    if($data->Pesanan->log_id != "10"){
+                        $tgl_sekarang = Carbon::now();
+                        $tgl_parameter = $data->tgl_kontrak_custom;
+                        $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                        if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                            if ($hari > 7) {
+                                return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                        <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                        <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else {
+                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                        <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                            }
+                        } else {
+                            return  '<div class="text-danger"><b>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i><b> Lebih ' . $hari . ' Hari</b></small></div>';
+                        }
+                    } else{
+                        return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
+                    }
+                }
                 // if (isset($data->tgl_kontrak)) {
                 //     $tgl_sekarang = Carbon::now()->format('Y-m-d');
                 //     $tgl_parameter = $data->tgl_kontrak;
