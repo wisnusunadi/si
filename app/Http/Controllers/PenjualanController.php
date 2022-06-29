@@ -1417,6 +1417,14 @@ class PenjualanController extends Controller
                     if ($divisi_id == "26") {
                         $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                        if(isset($data->Pesanan->DetailPesanan)){
+                            $return .= '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-eye"></i>
+                                Detail
+                                </button>
+                            </a>';
+                        }
                     } else {
                         return '';
                     }
@@ -1953,7 +1961,40 @@ class PenjualanController extends Controller
                         }
                     }
                 } else {
-                    $bool = true;
+                    if($request->isi_produk == "isi"){
+                        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                            if (empty($request->produk_ongkir[$i])) {
+                                $ongkir[$i] = 0;
+                            } else {
+                                $ongkir[$i] =  str_replace('.', "", $request->produk_ongkir[$i]);
+                            }
+                            $dekat = DetailPesanan::create([
+                                'pesanan_id' => $x,
+                                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                                'detail_rencana_penjualan_id' => $request->rencana_id[$i],
+                                'jumlah' => $request->produk_jumlah[$i],
+                                'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                                'ongkir' => $ongkir[$i],
+                            ]);
+
+                            if (!$dekat) {
+                                $bool = false;
+                            } else {
+                                for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                                    $dekatp = DetailPesananProduk::create([
+                                        'detail_pesanan_id' => $dekat->id,
+                                        'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                                    ]);
+                                    if (!$dekatp) {
+                                        $bool = false;
+                                    }
+                                }
+                            }
+                        }
+                    } else {
+                        $bool = true;
+                    }
+
                 }
             } else {
                 $bool = false;
