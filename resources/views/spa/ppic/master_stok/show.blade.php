@@ -86,7 +86,7 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover table-striped" style="text-align:center;" id="showtable">
+                                    <table class="table table-hover table-striped table-bordered" style="text-align:center;" id="showtable">
                                         <thead>
                                             <tr class="bg-navy">
                                                 <th class="nowrap" rowspan="2">No</th>

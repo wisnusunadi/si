@@ -1175,12 +1175,9 @@ class PenjualanController extends Controller
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                <button class="dropdown-item" type="button">
-                      <i class="fas fa-eye"></i>
-                      Detail
-                    </button>
-                </a>
+                    <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button"><i class="fas fa-eye"></i> Detail</button>
+                    </a>
                 </div>';
             })
             ->rawColumns(['batas_kontrak', 'button', 'status'])
@@ -1283,7 +1280,7 @@ class PenjualanController extends Controller
                             }
                         } else {
                             return  '<div class="text-danger"><b>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i><b> Lebih ' . $hari . ' Hari</b></small></div>';
+                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih ' . $hari . ' Hari</small></div>';
                         }
                     } else{
                         return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
