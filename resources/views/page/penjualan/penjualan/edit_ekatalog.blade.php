@@ -869,7 +869,10 @@
             $('#jenis_paket').select2();
             var nopaketdb = "{{ str_replace( array('AK1-', 'FKS-'), '', $e->no_paket) }}";
             var nopaketubah = false;
+<<<<<<< HEAD
 
+=======
+>>>>>>> e729f2308f6f88254886fd962d78f91763af18ee
             var status_akn = '{{$e->status}}';
             $(".os-content-arrange").remove();
             var today = new Date();
@@ -1062,6 +1065,7 @@
                         $("#dataproduk").addClass("hide");
                     }
                 }
+            }
                 $("#provinsi").attr('disabled', true);
                 $("#provinsi").empty().trigger('change')
                 $("#batas_kontrak").attr('disabled', true);
@@ -1191,7 +1195,6 @@
                     $('#no_paket').val("");
                 }
             })
-
             $('input[type="checkbox"][name="isi_produk"]').change(function() {
                 $("#produktable tbody").empty();
                 $('#produktable tbody').append(trproduktable());
@@ -1205,7 +1208,6 @@
                 }
                 checkvalidasi();
             });
-
             $(document).on('keyup', '#no_paket', function(){
                 nopaketubah = true;
             })

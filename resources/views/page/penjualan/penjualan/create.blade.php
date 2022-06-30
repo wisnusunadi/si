@@ -1388,6 +1388,19 @@
                 checkvalidasi();
             });
         });
+        $('input[type="checkbox"][name="isi_produk"]').change(function() {
+            $("#produktable tbody").empty();
+            $('#produktable tbody').append(trproduktable());
+            numberRowsProduk($("#produktable"));
+            $("#totalhargaprd").text("Rp. 0");
+
+            if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
+                $("#dataproduk").removeClass("hide");
+            } else {
+                $("#dataproduk").addClass("hide");
+            }
+            checkvalidasi();
+        });
 
         $('input[type="checkbox"][name="isi_produk"]').change(function() {
             $("#produktable tbody").empty();
