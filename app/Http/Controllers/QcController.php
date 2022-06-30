@@ -430,7 +430,7 @@ class QcController extends Controller
                     }])
                       ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
                       ->union($prd)
-                      ->orderBy('id', 'desc')
+                      ->orderBy('tgl_kontrak', 'asc')
                       ->get();
 
             $data = $part;
@@ -479,7 +479,7 @@ class QcController extends Controller
                     ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
                     ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
                     ->limit(1);
-                }])->whereNotIn('log_id', ['7', '10'])->doesntHave('Spb')->union($prd)->orderBy('id', 'desc')->get();
+                }])->whereNotIn('log_id', ['7', '10'])->doesntHave('Spb')->union($prd)->orderBy('tgl_kontrak', 'asc')->get();
 
             $data = $part;
         } else if ($x == ['ekatalog', 'spb']) {
@@ -525,7 +525,7 @@ class QcController extends Controller
                     ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
                     ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
                     ->limit(1);
-                }])->whereNotIn('log_id', ['7', '10'])->with(['Ekatalog.Customer.Provinsi', 'Spb.Customer.Provinsi'])->doesntHave('Spa')->union($prd)->orderBy('id', 'desc')->get();
+                }])->whereNotIn('log_id', ['7', '10'])->with(['Ekatalog.Customer.Provinsi', 'Spb.Customer.Provinsi'])->doesntHave('Spa')->union($prd)->orderBy('tgl_kontrak', 'asc')->get();
 
             $data = $part;
         } else if ($x == ['spa', 'spb']) {
@@ -571,7 +571,7 @@ class QcController extends Controller
                     ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
                     ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
                     ->limit(1);
-                }])->whereNotIn('log_id', ['7', '10'])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->doesntHave('Ekatalog')->union($prd)->orderBy('id', 'desc')->get();
+                }])->whereNotIn('log_id', ['7', '10'])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->doesntHave('Ekatalog')->union($prd)->orderBy('tgl_kontrak', 'asc')->get();
 
             $data = $part;
         } else if ($value == 'ekatalog') {
@@ -593,7 +593,7 @@ class QcController extends Controller
                 ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
                 ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
                 ->limit(1);
-            }])->whereNotIn('log_id', ['7', '9', '10'])->with('Ekatalog.Customer.Provinsi')->doesntHave('Spa')->doesntHave('Spb')->orderBy('id', 'desc')->get();
+            }])->whereNotIn('log_id', ['7', '9', '10'])->with('Ekatalog.Customer.Provinsi')->doesntHave('Spa')->doesntHave('Spb')->orderBy('tgl_kontrak', 'asc')->get();
         } else if ($value == 'spa') {
             $prd = Pesanan::whereIn('id', function($q) {
                 $q->select('pesanan.id')
@@ -637,7 +637,7 @@ class QcController extends Controller
                     ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
                     ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
                     ->limit(1);
-                }])->whereNotIn('log_id', ['7','10'])->with('Spa.Customer.Provinsi')->doesntHave('Ekatalog')->doesntHave('Spb')->union($prd)->orderBy('id', 'desc')->get();
+                }])->whereNotIn('log_id', ['7','10'])->with('Spa.Customer.Provinsi')->doesntHave('Ekatalog')->doesntHave('Spb')->union($prd)->orderBy('tgl_kontrak', 'asc')->get();
 
             $data = $part;
         } else if ($value == 'spb') {
@@ -683,7 +683,7 @@ class QcController extends Controller
                     ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
                     ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
                     ->limit(1);
-                }])->whereNotIn('log_id', ['7', '10'])->with('Spb.Customer.Provinsi')->doesntHave('Ekatalog')->doesntHave('Spa')->union($prd)->orderBy('id', 'desc')->get();
+                }])->whereNotIn('log_id', ['7', '10'])->with('Spb.Customer.Provinsi')->doesntHave('Ekatalog')->doesntHave('Spa')->union($prd)->orderBy('tgl_kontrak', 'asc')->get();
 
             $data = $part;
         } else {
@@ -729,7 +729,7 @@ class QcController extends Controller
                     ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
                     ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
                     ->limit(1);
-                }])->whereNotIn('log_id', ['7', '10'])->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])->union($prd)->orderBy('id', 'desc')->get();
+                }])->whereNotIn('log_id', ['7', '10'])->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])->union($prd)->orderBy('tgl_kontrak', 'asc')->get();
 
             $data = $part;
         }
@@ -750,7 +750,7 @@ class QcController extends Controller
             })
             ->addColumn('batas_uji', function ($data) {
                 if($data->tgl_kontrak != ""){
-                    if($data->log_id){
+                    if($data->log_id != "10"){
                         $tgl_sekarang = Carbon::now();
                         $tgl_parameter = $data->tgl_kontrak;
                         $hari = $tgl_sekarang->diffInDays($tgl_parameter);
@@ -1816,6 +1816,7 @@ class QcController extends Controller
                             ->where('tgl_po', '>=', Carbon::now()->subdays(7))
                             ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                             ->union($terbaru_prd)
+                            ->orderBy('tgl_kontrak', 'asc')
                             ->get();
 
             $data = $terbaru_part;
@@ -1986,6 +1987,7 @@ class QcController extends Controller
                               ->limit(1);
                         }])
                         ->union($blm_uji_prd)
+                        ->orderBy('tgl_kontrak', 'asc')
                         ->get();
 
             $data = $blm_uji_part;
@@ -2059,7 +2061,7 @@ class QcController extends Controller
                   ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
                   ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
                   ->limit(1);
-            }])->with(['Ekatalog.Customer.Provinsi'])->get();
+            }])->with(['Ekatalog.Customer.Provinsi'])->orderBy('tgl_kontrak', 'asc')->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {

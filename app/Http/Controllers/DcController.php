@@ -168,6 +168,8 @@ class DcController extends Controller
         //     }
         // }
 
+
+
         $data = Pesanan::whereIn('id', function($q){
             $q->select('pesanan.id')
                 ->from('pesanan')
@@ -189,7 +191,38 @@ class DcController extends Controller
                     left join produk on produk.id = gdg_barang_jadi.produk_id AND produk.coo = 1
                     left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
                     where detail_pesanan.pesanan_id = pesanan.id)');
-                })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->orderBy('id', 'desc')->get();
+                })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
+                    ->addSelect(['tgl_kontrak' => function($q){
+                    $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
+                      ->from('ekatalog')
+                      ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
+                      ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
+                      ->limit(1);
+                },
+                'ccoo' => function($q){
+                    $q->selectRaw('noseri_coo.id')
+                    ->from('noseri_coo')
+                    ->leftJoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                    ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->where('produk.coo', 1)
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                },
+                'cseri' => function($q){
+                    $q->selectRaw('noseri_logistik.id')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                    ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->where('produk.coo', 1)
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                }
+                ])->orderBy('tgl_kontrak', 'desc')->get();
 
         // $data = Pesanan::with('Ekatalog.Customer','Spa.Customer')->DoesntHave('Spb')->whereIn('id', $array_id)->get();
         return datatables()->of($data)
@@ -203,37 +236,30 @@ class DcController extends Controller
                 }
             })
             ->addColumn('batas_paket', function ($data) {
-
-                if (isset($data->ekatalog->tgl_kontrak)) {
-                    $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                    $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
-
-                    if (isset($data->so)) {
-                        if ($tgl_sekarang <= $tgl_parameter) {
-                            $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
-                            $hari = $to->diffInDays($from);
+                if($data->tgl_kontrak != ""){
+                    if($data->log_id){
+                        $tgl_sekarang = Carbon::now();
+                        $tgl_parameter = $data->tgl_kontrak;
+                        $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                        if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
                             if ($hari > 7) {
                                 return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                  <div><small><i class="fas fa-clock info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                <div><small><i class="fas fa-clock info"></i> ' . $hari . ' Hari Lagi</small></div>';
                             } else if ($hari > 0 && $hari <= 7) {
                                 return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                <div><small><i class="fas fa-exclamation-circle warning"></i> ' . $hari . ' Hari Lagi</small></div>';
                             } else {
-                                return  '<div class="text-danger"><b>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
                                 <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
                             }
                         }
-                        else {
-                            $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
-                            $hari = $to->diffInDays($from);
-                            return '<div class="text-danger"><b>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
+                        else{
+                            return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
                         }
+                    } else{
+                        return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak)->format('d-m-Y');
                     }
-                } else {
-                    return '-';
                 }
             })
             ->addColumn('nama_customer', function ($data) {
@@ -264,27 +290,7 @@ class DcController extends Controller
                 //         return '<span class="badge yellow-text">Sebagian Diproses</span>';
                 //     }
                 // }
-
-                $ccoo = DB::select(DB::raw('select *
-                    from noseri_coo
-                    left join noseri_logistik on noseri_logistik.id = noseri_coo.noseri_logistik_id
-                    left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
-                    left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-                    left join gdg_barang_jadi on gdg_barang_jadi.id = detail_pesanan_produk.gudang_barang_jadi_id
-                    left join produk on produk.id = gdg_barang_jadi.produk_id AND produk.coo = 1
-                    left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
-                    where detail_pesanan.pesanan_id = '.$data->id));
-
-                $cseri = DB::select(DB::raw('select *
-                    from noseri_logistik
-                    left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
-                    left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-                    left join gdg_barang_jadi on gdg_barang_jadi.id = detail_pesanan_produk.gudang_barang_jadi_id
-                    left join produk on produk.id = gdg_barang_jadi.produk_id AND produk.coo = 1
-                    left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
-                    where detail_pesanan.pesanan_id = '.$data->id));
-
-                if(count($ccoo) <= 0){
+                if($data->ccoo <= 0){
                     return  '<span class="badge red-text">Belum Diproses</span>';
                 }
                 else{
@@ -327,31 +333,12 @@ class DcController extends Controller
 
                 // $coo = NoseriCoo::whereIN('noseri_logistik_id', $d)->get()->count();
 
-                $ccoo = DB::select(DB::raw('select *
-                from noseri_coo
-                left join noseri_logistik on noseri_logistik.id = noseri_coo.noseri_logistik_id
-                left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
-                left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-                left join gdg_barang_jadi on gdg_barang_jadi.id = detail_pesanan_produk.gudang_barang_jadi_id
-                left join produk on produk.id = gdg_barang_jadi.produk_id AND produk.coo = 1
-                left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
-                where detail_pesanan.pesanan_id = '.$data->id));
-
-                $cseri = DB::select(DB::raw('select *
-                from noseri_logistik
-                left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
-                left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-                left join gdg_barang_jadi on gdg_barang_jadi.id = detail_pesanan_produk.gudang_barang_jadi_id
-                left join produk on produk.id = gdg_barang_jadi.produk_id AND produk.coo = 1
-                left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
-                where detail_pesanan.pesanan_id = '.$data->id));
 
 
-
-                if (count($cseri) == count($ccoo)) {
+                if ($data->cseri == $data->ccoo) {
                     $class = '';
                 } else {
-                    if (count($ccoo) == 0) {
+                    if ($data->ccoo <= 0) {
                         $class = 'd-none';
                     } else {
                         $class = '';
