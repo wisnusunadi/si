@@ -48,6 +48,13 @@
         white-space: nowrap;
     }
 
+    .minimizechar {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 25ch;
+    }
+
     @media screen and (min-width: 1440px) {
         section {
             font-size: 14px;
@@ -77,143 +84,177 @@
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <span class="float-right filter">
-                                    <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <i class="fas fa-filter"></i> Filter
-                                    </button>
-                                    <form id="filter">
-                                        <div class="dropdown-menu">
-                                            <div class="px-3 py-3">
-                                                <div class="form-group">
-                                                    <label for="status">Status</label>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" value="semua" id="status3" name="status" />
-                                                        <label class="form-check-label" for="status3">
-                                                            Semua
-                                                        </label>
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-proses_coo-tab" data-toggle="pill" href="#pills-proses_coo" role="tab" aria-controls="pills-proses_coo" aria-selected="true">COO Dalam Proses</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-selesai_coo-tab" data-toggle="pill" href="#pills-selesai_coo" role="tab" aria-controls="pills-selesai_coo" aria-selected="false">COO Selesai</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-proses_coo" role="tabpanel" aria-labelledby="pills-proses_coo-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <span class="float-right filter">
+                                            <button class="btn btn-outline-secondary" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <i class="fas fa-filter"></i> Filter
+                                            </button>
+                                            <form id="filter">
+                                                <div class="dropdown-menu">
+                                                    <div class="px-3 py-3">
+                                                        <div class="form-group">
+                                                            <label for="status">Status</label>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" value="semua" id="status3" name="status" />
+                                                                <label class="form-check-label" for="status3">
+                                                                    Semua
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" value="belum_diproses" id="status2" name="status" />
+                                                                <label class="form-check-label" for="status2">
+                                                                    Belum Diproses
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio" value="sebagian_diproses" id="status1" name="status" />
+                                                                <label class="form-check-label" for="status1">
+                                                                    Sebagian Diproses
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group">
+                                                            <span class="float-right">
+                                                                <button class="btn btn-primary">
+                                                                    Cari
+                                                                </button>
+                                                            </span>
+                                                        </div>
                                                     </div>
                                                 </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" value="belum_diproses" id="status2" name="status" />
-                                                        <label class="form-check-label" for="status2">
-                                                            Belum Diproses
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <div class="form-check">
-                                                        <input class="form-check-input" type="radio" value="sebagian_diproses" id="status1" name="status" />
-                                                        <label class="form-check-label" for="status1">
-                                                            Sebagian Diproses
-                                                        </label>
-                                                    </div>
-                                                </div>
-                                                <div class="form-group">
-                                                    <span class="float-right">
-                                                        <button class="btn btn-primary">
-                                                            Cari
-                                                        </button>
-                                                    </span>
-                                                </div>
-                                            </div>
+                                            </form>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table nowraptext" style="text-align:center;" id="showtable">
+                                                <thead>
+                                                    <th>No</th>
+                                                    <th>No PO</th>
+                                                    <th>No AKN</th>
+                                                    <th>Batas Kontrak</th>
+                                                    <th>Customer</th>
+                                                    <th>Instansi</th>
+                                                    <th>Status</th>
+                                                    <th>Keterangan</th>
+                                                    <th>Aksi</th>
+                                                </thead>
+                                                <tbody>
+                                                    <!-- <tr>
+                                                        <td>1</td>
+                                                        <td>SO/EKAT/X/02/98</td>
+                                                        <td>AK1-909090-1892180</td>
+                                                        <td>
+                                                            <div class="urgent">31-10-2021</div>
+                                                            <small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Kontrak</small>
+                                                        </td>
+                                                        <td>CV. Cipta Jaya Mandiri</td>
+                                                        <td>Pemerintah Kota Gorontalo</td>
+                                                        <td><span class="badge yellow-text">Sebagian Diproses</span></td>
+                                                        <td>-</td>
+                                                        <td><a href="/dc/so/detail/1">
+                                                                <i class="fas fa-search"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>2</td>
+                                                        <td>SO/EKAT/X/02/100</td>
+                                                        <td>AK1-909090-1892180</td>
+                                                        <td>
+                                                            <div class="urgent">31-10-2021</div>
+                                                            <small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Kontrak</small>
+                                                        </td>
+                                                        <td>CV. Cipta Jaya Mandiri</td>
+                                                        <td>Rumah Sakit Santo Paulus</td>
+                                                        <td>
+                                                            <span class="badge red-text">Belum Diproses</span>
+                                                        </td>
+                                                        <td>-</td>
+                                                        <td><a href="/dc/so/detail/1">
+                                                                <i class="fas fa-search"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>3</td>
+                                                        <td>SO/SPA/XI/02/01</td>
+                                                        <td>AK1-909090-1892180</td>
+                                                        <td>
+                                                            <div class="warning">04-11-2021</div>
+                                                            <small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa 2 Hari</small>
+                                                        </td>
+                                                        <td>PT. Emiindo Jaya Bersama</td>
+                                                        <td>Pemerintah Kota Padang</td>
+                                                        <td><span class="badge yellow-text">Sebagian Diproses</span></td>
+                                                        <td>-</td>
+                                                        <td><a href="/dc/so/detail/1">
+                                                                <i class="fas fa-search"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>4</td>
+                                                        <td>SO/SPB/XI/02/01</td>
+                                                        <td>AK1-909090-1892180</td>
+                                                        <td>
+                                                            <div>21-09-2021</div>
+                                                            <small><i class="fas fa-clock info"></i> Batas sisa 6 Hari</small>
+                                                        </td>
+                                                        <td>PT. Emiindo Jaya Bersama</td>
+                                                        <td>Rumah Sakit Santo Paulus</td>
+                                                        <td><span class="badge red-text">Belum Diproses</span></td>
+                                                        <td>-</td>
+                                                        <td><a href="/dc/so/detail/1">
+                                                                <i class="fas fa-search"></i>
+                                                            </a>
+                                                        </td>
+                                                    </tr> -->
+                                                </tbody>
+                                            </table>
                                         </div>
-                                    </form>
-                                </span>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table nowraptext" style="text-align:center;" id="showtable">
-                                        <thead>
-                                            <th>No</th>
-                                            <th>No PO</th>
-                                            <th>No AKN</th>
-                                            <th>Batas Kontrak</th>
-                                            <th>Customer</th>
-                                            <th>Instansi</th>
-                                            <th>Status</th>
-                                            <th>Keterangan</th>
-                                            <th>Aksi</th>
-                                        </thead>
-                                        <tbody>
-                                            <!-- <tr>
-                                                <td>1</td>
-                                                <td>SO/EKAT/X/02/98</td>
-                                                <td>AK1-909090-1892180</td>
-                                                <td>
-                                                    <div class="urgent">31-10-2021</div>
-                                                    <small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Kontrak</small>
-                                                </td>
-                                                <td>CV. Cipta Jaya Mandiri</td>
-                                                <td>Pemerintah Kota Gorontalo</td>
-                                                <td><span class="badge yellow-text">Sebagian Diproses</span></td>
-                                                <td>-</td>
-                                                <td><a href="/dc/so/detail/1">
-                                                        <i class="fas fa-search"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>SO/EKAT/X/02/100</td>
-                                                <td>AK1-909090-1892180</td>
-                                                <td>
-                                                    <div class="urgent">31-10-2021</div>
-                                                    <small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Kontrak</small>
-                                                </td>
-                                                <td>CV. Cipta Jaya Mandiri</td>
-                                                <td>Rumah Sakit Santo Paulus</td>
-                                                <td>
-                                                    <span class="badge red-text">Belum Diproses</span>
-                                                </td>
-                                                <td>-</td>
-                                                <td><a href="/dc/so/detail/1">
-                                                        <i class="fas fa-search"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>3</td>
-                                                <td>SO/SPA/XI/02/01</td>
-                                                <td>AK1-909090-1892180</td>
-                                                <td>
-                                                    <div class="warning">04-11-2021</div>
-                                                    <small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa 2 Hari</small>
-                                                </td>
-                                                <td>PT. Emiindo Jaya Bersama</td>
-                                                <td>Pemerintah Kota Padang</td>
-                                                <td><span class="badge yellow-text">Sebagian Diproses</span></td>
-                                                <td>-</td>
-                                                <td><a href="/dc/so/detail/1">
-                                                        <i class="fas fa-search"></i>
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>4</td>
-                                                <td>SO/SPB/XI/02/01</td>
-                                                <td>AK1-909090-1892180</td>
-                                                <td>
-                                                    <div>21-09-2021</div>
-                                                    <small><i class="fas fa-clock info"></i> Batas sisa 6 Hari</small>
-                                                </td>
-                                                <td>PT. Emiindo Jaya Bersama</td>
-                                                <td>Rumah Sakit Santo Paulus</td>
-                                                <td><span class="badge red-text">Belum Diproses</span></td>
-                                                <td>-</td>
-                                                <td><a href="/dc/so/detail/1">
-                                                        <i class="fas fa-search"></i>
-                                                    </a>
-                                                </td>
-                                            </tr> -->
-                                        </tbody>
-                                    </table>
+                            <div class="tab-pane fade show" id="pills-selesai_coo" role="tabpanel" aria-labelledby="pills-selesai_coo-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table nowraptext" style="text-align:center;" id="selesaitable">
+                                                <thead>
+                                                    <th>No</th>
+                                                    <th>No PO</th>
+                                                    <th>No AKN</th>
+                                                    <th>Customer</th>
+                                                    <th>Instansi</th>
+                                                    <th>Status</th>
+                                                    <th>Keterangan</th>
+                                                    <th>Aksi</th>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -270,6 +311,10 @@
         //         timeout: 8000
         //     })
         // });
+        $(document).on('click', '#pills-selesai_coo-tab', function(){
+            selesaitable();
+        });
+
         var showtable = $('#showtable').DataTable({
             destroy: true,
             processing: true,
@@ -305,10 +350,53 @@
                 data: 'status',
             }, {
                 data: 'ket',
+                class: 'minimizechar'
             }, {
                 data: 'button',
             }]
         })
+
+        function selesaitable(){
+            var showtable = $('#selesaitable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/dc/so/selesai/semua',
+                    'type': 'POST',
+                    'datatype': 'JSON',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'no_po',
+                }, {
+                    data: 'no_paket',
+                }, {
+                    data: 'nama_customer',
+                }, {
+                    data: 'instansi',
+                }, {
+                    data: 'status',
+                }, {
+                    data: 'ket',
+                    class: 'minimizechar'
+                }, {
+                    data: 'button',
+                }]
+            });
+        }
+
         $('#filter').submit(function() {
             var values = [];
             $("input:checked").each(function() {

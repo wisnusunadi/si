@@ -217,6 +217,7 @@
             <div class="col-7">
                 <div class="card">
                     <div class="card-body">
+                        @if(Auth::user()->divisi->id == "23")
                         <div class="row" style="margin-bottom: 5px">
                             <div class="col-12">
                                 <span class="float-left filter">
@@ -227,6 +228,7 @@
                                 </span>
                             </div>
                         </div>
+                        @endif
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
@@ -294,6 +296,7 @@
                                         </form>
                                     </div>
                                 </span>
+                                @if(Auth::user()->divisi->id == "23")
                                 <span class="float-right filter">
                                     <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
                                         <button class="btn btn-warning" id="cekbrg" disabled="true">
@@ -301,6 +304,7 @@
                                         </button>
                                     </a>
                                 </span>
+                                @endif
                             </div>
                         </div>
 
@@ -375,6 +379,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var divisi = '{{Auth::user()->divisi->id}}';
         var showtable = $('#showtable').DataTable({
             destroy: true,
             processing: true,
@@ -449,7 +454,12 @@
                     $('#noseritable').DataTable().column(0).visible(false);
                 } else {
                     // $('.sericheckbox').removeClass("hide");
-                    $('#noseritable').DataTable().column(0).visible(true);
+                    if(divisi == '23'){
+                        $('#noseritable').DataTable().column(0).visible(true);
+                    }
+                    else{
+                        $('#noseritable').DataTable().column(0).visible(false);
+                    }
                 }
 
             } else {
@@ -614,7 +624,8 @@
                 data: 'checkbox',
                 className: 'nowrap-text align-center',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                visible: divisi == '23' ? true : false
             }, {
                 data: 'seri',
                 className: 'nowrap-text align-center',

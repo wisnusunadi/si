@@ -24,7 +24,21 @@
 @stop
 
 @section('adminlte_css')
+    <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <style>
+
+ul#status {
+    padding: 0;
+}
+        ul#status li {
+            /* float: left; */
+            display:inline;
+            padding: 0;
+            list-style-type: none;
+            margin: 0; /* To remove default bottom margin */
+            /* margin: 10px; */
+        }
+
         .alert-danger {
             color: #a94442;
             background-color: #f2dede;
@@ -807,9 +821,6 @@
                     "headers": {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     }
-                    // 'headers': {
-                    //     'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    // },
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -831,11 +842,7 @@
                         data: 'tgl_kontrak',
                     }, {
                         data: 'nama_customer',
-                    },
-                    // {
-                    //     data: 'jenis',
-                    // },
-                    {
+                    }, {
                         data: 'status',
                     }, {
                         data: 'button',
@@ -863,7 +870,6 @@
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 columns: [
-
                     {
                         data: 'DT_RowIndex',
                         className: 'nowrap-text align-center',
@@ -897,7 +903,6 @@
                         orderable: false,
                         searchable: false
                     },
-
                     {
                         data: 'nama_customer',
                     },
@@ -1033,6 +1038,7 @@
                         $('#detail').html(result).show();
 
                         if (label == 'ekatalog') {
+                            apexchart();
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-orange bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-purple');
@@ -1111,62 +1117,90 @@
                 var jenis = $(this).attr('data-jenis');
                 var id = $(this).attr("data-id");
 
-                swalWithBootstrapButtons.fire({
-                    title: 'Batalkan Pesanan',
-                    text: "Ingin membatalkan Pesanan ini?",
-                    icon: 'warning',
-                    showCancelButton: true,
-                    confirmButtonText: 'Batalkan',
-                    cancelButtonText: 'Tutup',
-                    reverseButtons: true
-                }).then((result) => {
-                    if (result.isConfirmed) {
+                $.ajax({
+                    url: '/penjualan/penjualan/cancel/'+id+'/'+jenis,
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    success: function(result) {
+                        $('#detailmodal').modal("show");
+                        $('#detail').html(result).show();
+                        $('#detailmodal').find(".modal-header").removeClass('bg-purple bg-orange bg-lightblue');
+                        $('#detailmodal').find(".modal-header").addClass('bg-dark');
+                        $('#detailmodal').find(".modal-header > h4").text('Pesanan Batal');
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+            });
 
+            $(document).on('submit', '#btnkirimbatal', function(event) {
+                event.preventDefault();
+                var alasan = $(this).find('#alasan').val();
+                var jenis = $(this).find('#jenis').val();
+                var id = $(this).find('#id').val();
+
+                swal({
+                    title: "Batalkan Pesanan",
+                    text: "Apakah anda yakin ingin membatalkan pesanan?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Batalkan",
+                    cancelButtonText: "Kembali",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
                         $.ajax({
-                            url: '/api/penjualan/penjualan/cancel/' + id + '/' + jenis,
-                            type: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
-                            success: function(response) {
+                            url: '/api/penjualan/penjualan/cancel',
+                            type: 'POST',
+                            data: {'id': id, 'jenis': jenis, 'alasan': alasan},
+                            beforeSend: function() {
+                                $('#loader').show();
+                            },
+                            success: function(result) {
                                 if (response['data'] == "success") {
                                     swal.fire(
-                                        'Batal',
-                                        'Sukses Batalkan Pesanan',
+                                        'Berhasil',
+                                        'Berhasil melakukan Perubahan Pesanan',
                                         'success'
                                     );
-                                    $('#penjualantable').DataTable().ajax.reload();
-                                    if (jenis == 'spa') {
-                                        $('#spatable').DataTable().ajax.reload();
-                                    } else if (jenis == 'spb') {
-                                        $('#spbtable').DataTable().ajax.reload();
-                                    }
-                                    $("#deletemodal").modal('hide');
+                                    $("#editmodal").modal('hide');
+                                    location.reload();
                                 } else if (response['data'] == "error") {
                                     swal.fire(
                                         'Gagal',
-                                        'Gagal melakukan Hapus Data',
+                                        'Gagal melakukan Perubahan Pesanan',
                                         'error'
                                     );
                                 }
                             },
-                            error: function(xhr, status, error) {
-                                swal.fire(
-                                    'Error',
-                                    'Data telah digunakan dalam Transaksi Lain',
-                                    'warning'
-                                );
-                                // console.log(action);
-                            }
-                        });
-                        return false;
-                        swalWithBootstrapButtons.fire(
-                            'Deleted!',
-                            'Your file has been deleted.',
-                            'success'
-                        )
+                            complete: function() {
+                                $('#loader').hide();
+                            },
+                            error: function(jqXHR, testStatus, error) {
+                                console.log(error);
+                                alert("Page " + href + " cannot open. Error:" + error);
+                                $('#loader').hide();
+                            },
+                            timeout: 8000
+                        })
+                    } else {
+                        swal("Cancelled", "Your imaginary file is safe :)", "error");
                     }
-                })
+                });
             });
 
             $(document).on('submit', '#form-pesanan-update', function(e) {
@@ -1230,27 +1264,7 @@
                     $('#deletemodal').find('form').attr('action', '/api/spb/delete/' + id);
                     $('#deletemodal').find('form').attr('data-target', 'spb');
                 }
-                // $.ajax({
-                //     url: href,
-                //     beforeSend: function() {
-                //         $('#loader').show();
-                //     },
-                //     // return the result
-                //     success: function(result) {
                 $('#deletemodal').modal("show");
-                // $('#detail').html(result).show();
-
-                //     },
-                //     complete: function() {
-                //         $('#loader').hide();
-                //     },
-                //     error: function(jqXHR, testStatus, error) {
-                //         console.log(error);
-                //         alert("Page " + href + " cannot open. Error:" + error);
-                //         $('#loader').hide();
-                //     },
-                //     timeout: 8000
-                // })
             });
 
 
@@ -1329,6 +1343,103 @@
             //         }
             //     }
             // });
+            function apexchart(){
+                // var options = {
+                //     series: [76, 67, 61],
+                //     chart: {
+                //         height: 270,
+                //         type: 'radialBar',
+                //     },
+                //     plotOptions: {
+                //         radialBar: {
+                //             offsetY: 0,
+                //             startAngle: 0,
+                //             endAngle: 270,
+                //             hollow: {
+                //                 margin: 5,
+                //                 size: '30%',
+                //                 background: 'transparent',
+                //                 image: undefined,
+                //             },
+                //             dataLabels: {
+                //                 name: {
+                //                     show: false,
+                //                 },
+                //                 value: {
+                //                     show: false,
+                //                 }
+                //             }
+                //         }
+                //     },
+                //     colors: ['#EA8B1B', '#FFC700', '#456600'],
+                //     labels: ['Gudang', 'QC', 'Logistik'],
+                //     legend: {
+                //         show: true,
+                //         floating: true,
+                //         fontSize: '14px',
+                //         position: 'left',
+                //         offsetX: 15,
+                //         offsetY: 15,
+                //         labels: {
+                //             useSeriesColors: true,
+                //         },
+                //         markers: {
+                //             size: 0
+                //         },
+                //         formatter: function(seriesName, opts) {
+                //             return seriesName + ":  " + opts.w.globals.series[opts.seriesIndex]
+                //         },
+                //         itemMargin: {
+                //             vertical: 3
+                //         }
+                //     },
+                //     responsive: [{
+                //         breakpoint: 480,
+                //         options: {
+                //             legend: {
+                //                 show: false
+                //             }
+                //         }
+                //     }]
+                // };
+
+                // var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
+                // chart.render();
+                var options = {
+                    series: [44, 55, 67],
+                    chart: {
+                        height: 300,
+                        type: 'radialBar',
+                    },
+                    plotOptions: {
+                        radialBar: {
+                            dataLabels: {
+                                name: {
+                                    fontSize: '20px',
+                                },
+                                value: {
+                                    fontSize: '14px',
+                                },
+                                total: {
+                                    show: true,
+                                    label: 'Total',
+                                    color: '#5F7A90',
+                                    formatter: function (w) {
+                                        // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+                                        return 249
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    colors: ['#EA8B1B', '#FFC700', '#456600'],
+                    labels: ['Gudang', 'QC', 'Logistik'],
+                };
+
+                var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
+                chart.render();
+
+            }
 
             function detailtabel_ekatalog(id) {
                 var dt = $('#detailtabel').DataTable({

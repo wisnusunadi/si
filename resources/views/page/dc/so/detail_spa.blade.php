@@ -205,48 +205,6 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <!-- <tr>
-                                    <td class="nowrap-text">1</td>
-                                    <td class="nowrap-text">19-10-2021</td>
-                                    <td class="nowrap-text minimizechar">B-ULTRASOUND DIAGNOSTIC SYSTEM CMS-600 PLUS PRINTER TROLLEY UPS</td>
-                                    <td class="nowrap-text">21102900256</td>
-                                    <td class="nowrap-text">X</td>
-                                    <td class="nowrap-text">5</td>
-                                    <td class="nowrap-text"><span class="badge green-text">Tersedia</span></td>
-                                    <td class="nowrap-text"></a>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="noserishow dropdown-item" type="button">
-                                                <i class="fas fa-eye"></i>
-                                                Detail
-                                            </a>
-                                            <a href="{{route('dc.coo.pdf')}}">
-                                                <button class="dropdown-item" type="button">
-                                                    <i class="fas fa-file"></i>
-                                                    Laporan PDF
-                                                </button>
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>2</td>
-                                    <td>21-10-2021</td>
-                                    <td class="minimizechar">PULSE OXIMETER/OXYMETER FOX-2</td>
-                                    <td>20502210102</td>
-                                    <td></td>
-                                    <td>2</td>
-                                    <td><span class="badge red-text">Belum Tersedia</span></td>
-                                    <td class="nowrap-text"></a>
-                                        <div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                            <a class="noserishow dropdown-item" type="button">
-                                                <i class="fas fa-eye"></i>
-                                                Detail
-                                            </a>
-                                        </div>
-                                    </td>
-                                </tr> -->
                             </tbody>
                         </table>
                     </div>
@@ -258,18 +216,20 @@
                 <div class="card-body">
                     <div>
                         <h5 style="display: inline;" class="filter">No Seri</h5>
+                        @if(Auth::user()->divisi->kode == "dc")
                         <span class="float-right filter">
                             <a data-toggle="modal" data-target="#createmodal" class="createmodal hide" data-attr="" data-id="">
-                                <button class="btn btn-info" id="cekbrg" disabled="true">
+                                <button class="btn btn-info btn-sm" id="cekbrg" disabled="true">
                                     <i class="fas fa-plus"></i> Tambah COO
                                 </button>
                             </a>
                             <a data-toggle="modal" data-target="#editmodal" class="editmodal hide" data-attr="" data-id="">
-                                <button class="btn btn-warning" id="cekbrgedit" disabled="true">
+                                <button class="btn btn-warning btn-sm" id="cekbrgedit" disabled="true">
                                     <i class="fas fa-pencil-alt"></i> Edit COO
                                 </button>
                             </a>
                         </span>
+                        @endif
                     </div>
                     <div class="table-responsive">
                         <table class="table table-hover table-striped" style="text-align: center; width:100%;" id="noseritable">
@@ -346,6 +306,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var divisi = '{{Auth::user()->divisi->kode}}';
         $('#showtable').DataTable({
             destroy: true,
             processing: true,
@@ -410,7 +371,8 @@
                 data: 'checkbox',
                 className: 'nowrap-text align-center',
                 orderable: false,
-                searchable: false
+                searchable: false,
+                visible: divisi == "dc" ? true : false,
             }, {
                 data: 'noseri',
 

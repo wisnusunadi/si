@@ -133,7 +133,7 @@
         }
 
         h4 {
-            font-size: 20px;
+            font-size: 20px;e
         } */
         section {
             font-size: 12px;
@@ -1352,12 +1352,12 @@
                     $("#dataproduk").addClass("hide");
                     $("#batas_kontrak").attr('disabled', true);
                     $("#provinsi").attr('disabled', true);
-                    $("#provinsi").empty().trigger('change');
+                    $("#provinsi").empty().trigger('change')
                     $('#isi_produk_input').removeClass('hide');
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
                     $('#isi_nopaket').prop("checked", false);
-                      $('#isi_nopaket').val("true");
+                    $('#isi_nopaket').val("true");
                     $('#no_paket').attr('readonly', false);
                     $("#batas_kontrak").val("");
                     $("#batas_kontrak").attr('disabled', true);
@@ -1388,6 +1388,20 @@
                 checkvalidasi();
             });
         });
+        $('input[type="checkbox"][name="isi_produk"]').change(function() {
+            $("#produktable tbody").empty();
+            $('#produktable tbody').append(trproduktable());
+            numberRowsProduk($("#produktable"));
+            $("#totalhargaprd").text("Rp. 0");
+
+            if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
+                $("#dataproduk").removeClass("hide");
+            } else {
+                $("#dataproduk").addClass("hide");
+            }
+            checkvalidasi();
+        });
+
         $('input[type="checkbox"][name="isi_produk"]').change(function() {
             $("#produktable tbody").empty();
             $('#produktable tbody').append(trproduktable());
@@ -1724,6 +1738,7 @@
             //         $("#produktable ").append('<tr><td>Detail Paket</td></tr>');
             //     }
             // });
+
 
             $('.penjualan_produk_id').select2({
                 placeholder: "Pilih Produk",

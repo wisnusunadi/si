@@ -381,7 +381,6 @@
                                                             <input type="text" class="form-control col-form-label" name="telepon" id="telepon_customer" readonly value="{{$e->customer->telp}}" />
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -870,6 +869,10 @@
             $('#jenis_paket').select2();
             var nopaketdb = "{{ str_replace( array('AK1-', 'FKS-'), '', $e->no_paket) }}";
             var nopaketubah = false;
+<<<<<<< HEAD
+
+=======
+>>>>>>> e729f2308f6f88254886fd962d78f91763af18ee
             var status_akn = '{{$e->status}}';
             $(".os-content-arrange").remove();
             var today = new Date();
@@ -1059,7 +1062,8 @@
             if ('{{$e->status}}' != 'sepakat') {
                 if ('{{$e->status}}' == 'draft') {
                     if('{{count($e->Pesanan->DetailPesanan)}}' <= 0){
-                    $("#dataproduk").addClass("hide");
+                        $("#dataproduk").addClass("hide");
+                    }
                 }
             }
                 $("#provinsi").attr('disabled', true);
@@ -1098,7 +1102,7 @@
             });
 
             $('input[type="radio"][name="status_akn"]').on('change', function() {
-                 $('#isi_produk_input').addClass('hide');
+                $('#isi_produk_input').addClass('hide');
                 $('input[type="checkbox"][name="isi_produk"]').attr('checked', false);
                 if ($(this).val() != "") {
                     if ($(this).val() == "sepakat") {
@@ -1112,7 +1116,7 @@
                             $('#no_paket').val(nopaketdb);
                         }
                         $("#produktable tbody").empty();
-                         $('#produktable tbody').append(trproduktable());
+                        $('#produktable tbody').append(trproduktable());
                         numberRowsProduk($("#produktable"));
                     } else if ($(this).val() == "draft") {
                         $('#isi_produk_input').removeClass('hide');

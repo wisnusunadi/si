@@ -86,21 +86,22 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" style="text-align:center;" id="showtable">
+                                    <table class="table table-hover table-striped" style="text-align:center;" id="showtable">
                                         <thead>
-                                            <tr>
+                                            <tr class="bg-navy">
                                                 <th class="nowrap" rowspan="2">No</th>
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th class="nowrap borderright" colspan="2">Stok</th>
-                                                <th class="nowrap borderright" colspan="5">Penjualan</th>
+                                                <th class="nowrap borderright" colspan="6">Penjualan</th>
                                                 <th rowspan="2">Aksi</th>
                                             </tr>
-                                            <tr>
+                                            <tr class="bg-secondary">
                                                 <th>GBJ</th>
                                                 <th>Sisa</th>
                                                 <th>Permintaan</th>
                                                 <th>Sepakat</th>
                                                 <th>Nego</th>
+                                                <th>Draft</th>
                                                 <th>Batal</th>
                                                 <th>PO</th>
                                             </tr>
@@ -206,6 +207,9 @@
                     data: 'nego',
                 },
                 {
+                    data: 'draft',
+                },
+                {
                     data: 'batal',
                 },
                 {
@@ -245,6 +249,9 @@
                         data: 'so',
                     },
                     {
+                        data: 'customer',
+                    },
+                    {
                         data: 'tgl_order',
                     },
                     {
@@ -252,6 +259,9 @@
                     },
                     {
                         data: 'jumlah',
+                    },
+                    {
+                        data: 'status',
                     },
                 ]
             });

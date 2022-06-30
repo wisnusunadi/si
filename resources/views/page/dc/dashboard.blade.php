@@ -145,9 +145,8 @@
                             <div class="card-body">
                                 <h4>Penjualan 2021</h4>
                                 <div class="row">
-
-                                    <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
-                                        <div class="small-box bg-success flex-fill">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
+                                        <div class="small-box bg-success flex-fill d-flex flex-column">
                                             <div class="inner">
                                                 <h3>{{$daftar_so}}</h3>
                                                 <p>Daftar SO</p>
@@ -155,11 +154,11 @@
                                             <div class="icon">
                                                 <i class="fas fa-truck"></i>
                                             </div>
-                                            <a class="small-box-footer active" id="pengirimanso">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer active mt-auto" id="pengirimanso">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
-                                        <div class="small-box warning-bg flex-fill">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
+                                        <div class="small-box warning-bg flex-fill d-flex flex-column">
                                             <div class="inner">
                                                 <h3>{{$belum_coo}}</h3>
                                                 <p>Belum memiliki COO</p>
@@ -167,11 +166,11 @@
                                             <div class="icon">
                                                 <i class="fas fa-certificate"></i>
                                             </div>
-                                            <a class="small-box-footer" id="sotanpacoo">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer mt-auto" id="sotanpacoo">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
-                                        <div class="small-box bg-danger flex-fill">
+                                    <div class="col-lg-4 col-md-4 col-sm-12 d-flex">
+                                        <div class="small-box bg-danger flex-fill d-flex flex-column">
                                             <div class="inner">
                                                 <h3>{{$lewat_batas}}</h3>
                                                 <p>Lewat Batas Kontrak</p>
@@ -179,169 +178,72 @@
                                             <div class="icon">
                                                 <i class="fas fa-exclamation-circle"></i>
                                             </div>
-                                            <a class="small-box-footer" id="lewatbataskontrak">Detail <i class="fas fa-arrow-circle-right"></i></a>
+                                            <a class="small-box-footer mt-auto" id="lewatbataskontrak">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-
                                 </div>
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="table-responsive">
-                                        <table class="table table-hover" id="pengirimansotable" style="width:100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan=5>
+                                            <table class="table table-hover" id="pengirimansotable" style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan=5>
 
-                                                        <h5><b>Daftar SO milik Logistik</b></h5>
+                                                            <h5><b class="text-success">Daftar SO milik Logistik</b></h5>
 
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>No SO</th>
-                                                    <th>Batas Pengiriman</th>
-                                                    <th>Status</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>SOSPA102100001</td>
-                                                    <td>
-                                                        <div class="urgent">12-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
-                                                    </td>
-                                                    <td><span class="badge red-text">Belum Dikirim</span></td>
-                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>SOSPA102100002</td>
-                                                    <td>
-                                                        <div class="urgent">11-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                    </td>
-                                                    <td><span class="badge blue-text">Draft Pengiriman</span></td>
-                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>SOSPA102100003</td>
-                                                    <td>
-                                                        <div class="urgent">11-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                    </td>
-                                                    <td><span class="badge red-text">Belum Dikirim</span></td>
-                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                            </tbody> -->
-                                        </table>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>No SO</th>
+                                                        <th>Batas Pengiriman</th>
+                                                        <th>Status</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
 
 
-                                        <table class="table table-hover hide" id="sotanpacootable" style="width:100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan=4>
-                                                        <h5><b>Daftar SO belum memiliki COO</b></h5>
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>No SO</th>
-                                                    <th>Batas Kontrak</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>SOSPA092100093</td>
-                                                    <td>
-                                                        <div class="urgent">31-10-2021</div>
-                                                        <small><i class="fas fa-exclamation-circle" id="warning"></i> 2 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>SOSPA092100121</td>
-                                                    <td>
-                                                        <div class="urgent">01-11-2021</div>
-                                                        <small><i class="fas fa-exclamation-circle" id="warning"></i> 3 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>SOSPA102100001</td>
-                                                    <td>
-                                                        <div class="urgent">12-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 6 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>4</td>
-                                                    <td>SOSPA102100002</td>
-                                                    <td>
-                                                        <div class="urgent">11-10-2021</div>
-                                                        <small><i class="fas fa-clock" id="info"></i> 7 Hari Lagi</small>
-                                                    </td>
-                                                    <td><a href=""><i class="fas fa-search"></i></a></td>
-                                                </tr> -->
-                                            </tbody>
-                                        </table>
+                                            <table class="table table-hover hide" id="sotanpacootable" style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan=4>
+                                                            <h5><b class="text-warning">Daftar SO belum memiliki COO</b></h5>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>No SO</th>
+                                                        <th>Batas Kontrak</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
 
-                                        <table class="table table-hover hide" id="lewatbataskontraktable" style="width:100%;">
-                                            <thead>
-                                                <tr>
-                                                    <th colspan=5>
-                                                        <h5><b>Lewat Batas Kontrak</b></h5>
-                                                    </th>
-                                                </tr>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>No SO</th>
-                                                    <th>Batas Kontrak</th>
-                                                    <th>Status</th>
-                                                    <th>Aksi</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <!-- <tr>
-                                                    <td>1</td>
-                                                    <td>SOSPA092100093</td>
-                                                    <td>
-                                                        <div class="urgent">31-10-2021</div>
-                                                        <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 3 Hari</small>
-                                                    </td>
-                                                    <td><span class="badge yellow-text">Sebagian diproses</span></td>
-                                                    <td><a href="{{route('dc.so.detail', ['id' => '1','value' => 's'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>2</td>
-                                                    <td>SOSPA092100121</td>
-                                                    <td>
-                                                        <div class="urgent">01-11-2021</div>
-                                                        <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
-                                                    </td>
-                                                    <td><span class="badge yellow-text">Sebagian diproses</span></td>
-                                                    <td><a href="{{route('dc.so.detail', ['id' => '1','value' => 's'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>3</td>
-                                                    <td>SOSPA092100311</td>
-                                                    <td>
-                                                        <div class="urgent">01-11-2021</div>
-                                                        <small class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Lewat 2 Hari</small>
-                                                    </td>
-                                                    <td><span class="badge red-text">Belum diproses</span></td>
-                                                    <td><a href="{{route('dc.so.detail', ['id' => '1','value' => 's'])}}"><i class="fas fa-search"></i></a></td>
-                                                </tr> -->
-                                            </tbody>
-                                        </table>
-                                    </div>
+                                            <table class="table table-hover hide" id="lewatbataskontraktable" style="width:100%;">
+                                                <thead>
+                                                    <tr>
+                                                        <th colspan=5>
+                                                            <h5><b class="text-danger">Lewat Batas Kontrak</b></h5>
+                                                        </th>
+                                                    </tr>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>No SO</th>
+                                                        <th>Batas Kontrak</th>
+                                                        <th>Status</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
