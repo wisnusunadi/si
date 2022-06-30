@@ -1012,20 +1012,42 @@ class QcController extends Controller
 
     public function get_data_riwayat_pengujian()
     {
-        $prd = DetailPesanan::whereIn('id', function($q){
+        $prd = DetailPesanan::addSelect(['tgl_mulai' => function($q){
+                    $q->selectRaw('MIN(noseri_detail_pesanan.tgl_uji)')
+                    ->from('noseri_detail_pesanan')
+                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                    ->limit(1);
+                }, 'tgl_selesai' => function($q){
+                    $q->selectRaw('MAX(noseri_detail_pesanan.tgl_uji)')
+                    ->from('noseri_detail_pesanan')
+                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                    ->limit(1);
+                }])->whereIn('id', function($q){
                 $q->select('detail_pesanan.id')
-                ->from('detail_pesanan')
-                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                ->groupBy('detail_pesanan.id')
-                ->havingRaw('count(noseri_detail_pesanan.id) >= (
-                    select SUM(detail_penjualan_produk.jumlah) * detail_pesanan.jumlah
-                    from detail_penjualan_produk
-                    left join penjualan_produk on penjualan_produk.id = detail_penjualan_produk.penjualan_produk_id
-                    where penjualan_produk.id = detail_pesanan.penjualan_produk_id)');
+                    ->from('detail_pesanan')
+                    ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                    ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                    ->groupBy('detail_pesanan.id')
+                    ->havingRaw('count(noseri_detail_pesanan.id) >= (
+                        select SUM(detail_penjualan_produk.jumlah) * detail_pesanan.jumlah
+                        from detail_penjualan_produk
+                        left join penjualan_produk on penjualan_produk.id = detail_penjualan_produk.penjualan_produk_id
+                        where penjualan_produk.id = detail_pesanan.penjualan_produk_id)');
                 })->with(['PenjualanProduk.Produk', 'DetailPesananProduk.NoseriDetailPesanan', 'Pesanan'])->get();
 
-        $part = DetailPesananPart::whereIn('id', function($q){
+        $part = DetailPesananPart::addSelect(['tgl_mulai' => function($q){
+                    $q->selectRaw('MIN(outgoing_pesanan_part.tanggal_uji)')
+                    ->from('outgoing_pesanan_part')
+                    ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
+                    ->limit(1);
+                }, 'tgl_selesai' => function($q){
+                    $q->selectRaw('MAX(outgoing_pesanan_part.tanggal_uji)')
+                    ->from('outgoing_pesanan_part')
+                    ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
+                    ->limit(1);
+                }])->whereIn('id', function($q){
                     $q->select('detail_pesanan_part.id')
                       ->from('detail_pesanan_part')
                       ->groupBy('detail_pesanan_part.id')
@@ -1047,16 +1069,10 @@ class QcController extends Controller
                 }
             })
             ->addColumn('tgl_mulai', function ($data) {
-                if(isset($data->DetailPesananProduk)){
-                    return Carbon::createFromFormat('Y-m-d', $data->DetailPesananProduk->first()->NoseriDetailPesanan->first()->tgl_uji)->format('d-m-Y');
-                }else{
-                    return Carbon::createFromFormat('Y-m-d', $data->OutgoingPesananPart->first()->tanggal_uji)->format('d-m-Y');}
+                return  Carbon::createFromFormat('Y-m-d', $data->tgl_mulai)->format('d-m-Y');
             })
             ->addColumn('tgl_selesai', function ($data) {
-                if(isset($data->DetailPesananProduk)){
-                    return Carbon::createFromFormat('Y-m-d', $data->DetailPesananProduk->last()->NoseriDetailPesanan->last()->tgl_uji)->format('d-m-Y');
-                }else{
-                    return Carbon::createFromFormat('Y-m-d', $data->OutgoingPesananPart->last()->tanggal_uji)->format('d-m-Y');}
+                return  Carbon::createFromFormat('Y-m-d', $data->tgl_selesai)->format('d-m-Y');
             })
             ->addColumn('jumlah', function ($data) {
                 return $data->jumlah;

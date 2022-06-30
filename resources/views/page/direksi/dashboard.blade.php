@@ -177,15 +177,15 @@
                                 <div class="card-deck">
                                 <div class="card">
                                     <div class="card-body">
-                                        <div class="row">
-                                            <div class="col-12">
+                                        {{-- <div class="row"> --}}
+                                            {{-- <div class="col-12"> --}}
                                                 <h4><b>Grafik</b></h4>
-                                                <div class="chart h-100">
+                                                <div class="chart">
                                                     <canvas id="myChart"
-                                                        style="position: relative; height:91vh; width:80vw;"></canvas>
+                                                        style="position: relative; height:95vh; width:95vw;"></canvas>
                                                 </div>
-                                            </div>
-                                        </div>
+                                            {{-- </div> --}}
+                                        {{-- </div> --}}
                                     </div>
                                 </div>
                             {{-- </div>
@@ -194,9 +194,9 @@
                                     <div class="card-body">
                                         <h4><b>Sales Order</b></h4>
                                         <div class="row">
-                                            <div class="col-12 col-lg-8 align-center">
+                                            <div class="col-xl-8 col-lg-12 align-center">
                                                 <div class="row">
-                                                    <div class="col-lg-6 col-12 py-2">
+                                                    <div class="col-lg-12 col-xl-6 py-2">
                                                         <div class="card h-100 purple">
                                                             <div class="card-body">
                                                                 <h3 id="so_gudang">{{$gudang}}</h3>
@@ -207,7 +207,7 @@
                                                                         class="fas fa-arrow-circle-right"></i></a></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6 col-12 py-2">
+                                                    <div class="col-lg-12 col-xl-6 py-2">
                                                         <div class="card h-100 yellow">
                                                             <div class="card-body ">
                                                                 <h3 id="so_qc">{{$qc}}</h3>
@@ -220,19 +220,17 @@
                                                     </div>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-lg-6 col-12 py-2">
+                                                    <div class="col-lg-12 col-xl-6 py-2">
                                                         <div class="card h-100 green">
                                                             <div class="card-body">
                                                                 <h3 id="so_logistik">{{$log}}</h3>
                                                                 <p class="so-title">SO Belum Diproses Logistik</p>
                                                             </div>
-                                                            <div class="card-footer align-center"><a
-                                                                    href="/logistik/so/show" id="belumdikirim"
-                                                                    class="link">Lihat Laporan <i
-                                                                        class="fas fa-arrow-circle-right"></i></a></div>
+                                                            <div class="card-footer align-center">
+                                                                <a href="/logistik/so/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a></div>
                                                         </div>
                                                     </div>
-                                                    <div class="col-lg-6 col-12 py-2">
+                                                    <div class="col-lg-12 col-xl-6 py-2">
                                                         <div class="card h-100 midnightblue">
                                                             <div class="card-body">
                                                                 <h3 id="so_dc">{{$dc}}</h3>
@@ -245,21 +243,20 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-12 col-lg-4">
-                                                <div class="row">
-                                                    <div class="col-lg-12 col-12 py-2">
+                                            <div class="col-lg-12 col-xl-4 py-2">
+                                                {{-- <div class="row">
+                                                    <div class="col-lg-12 col-12 py-2"> --}}
                                                         <div class="card h-100 red">
-                                                            <div class="card-body p-5">
+                                                            <div class="card-body text-center">
                                                                 <h3 id="so_dc">{{$penj}}</h3>
                                                                 <p class="so-title">AKN Belum Memiliki SO</p>
                                                             </div>
-                                                            <div class="card-footer align-center"><a
-                                                                    href="/penjualan/penjualan/show" id="belumdikirim"
-                                                                    class="link">Lihat Laporan <i
-                                                                        class="fas fa-arrow-circle-right"></i></a></div>
+                                                            <div class="card-footer align-center">
+                                                                <a href="/penjualan/penjualan/show" id="belumdikirim" class="link">Lihat Laporan <i class="fas fa-arrow-circle-right"></i></a>
+                                                            </div>
                                                         </div>
-                                                    </div>
-                                                </div>
+                                                    {{-- </div>
+                                                </div> --}}
                                             </div>
                                         </div>
                                     </div>

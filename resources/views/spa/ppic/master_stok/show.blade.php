@@ -92,7 +92,7 @@
                                                 <th class="nowrap" rowspan="2">No</th>
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th class="nowrap borderright" colspan="2">Stok</th>
-                                                <th class="nowrap borderright" colspan="5">Penjualan</th>
+                                                <th class="nowrap borderright" colspan="6">Penjualan</th>
                                                 <th rowspan="2">Aksi</th>
                                             </tr>
                                             <tr class="bg-secondary">
@@ -101,6 +101,7 @@
                                                 <th>Permintaan</th>
                                                 <th>Sepakat</th>
                                                 <th>Nego</th>
+                                                <th>Draft</th>
                                                 <th>Batal</th>
                                                 <th>PO</th>
                                             </tr>
@@ -204,6 +205,9 @@
                 },
                 {
                     data: 'nego',
+                },
+                {
+                    data: 'draft',
                 },
                 {
                     data: 'batal',

@@ -991,6 +991,15 @@ class PpicController extends Controller
             ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
             ->whereRaw('pesanan.log_id in ("7") AND ekatalog.status = "batal"')
             ->limit(1);
+        },'count_ekat_draft' => function ($query) {
+            $query->selectRaw('sum(detail_pesanan.jumlah)')
+            ->from('detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+            ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
+            ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+            ->whereRaw('pesanan.log_id in ("7") AND ekatalog.status = "draft"')
+            ->limit(1);
         },'count_ekat_po' => function ($query) {
             $query->selectRaw('sum(detail_pesanan.jumlah)')
             ->from('detail_pesanan')
@@ -1027,7 +1036,8 @@ class PpicController extends Controller
             ->whereNotIn('pesanan.log_id', ["7", "10", "20"])
             ->where([['t_gbj_noseri.jenis', '=', "keluar"], ['t_gbj_detail.gdg_brg_jadi_id', '=', 'gdg_barang_jadi.id']])
             ->limit(1);
-        }])->whereIn('id', function($q){
+        }])
+        ->whereIn('id', function($q){
                     $q->select('gdg_barang_jadi.id')
                     ->from('gdg_barang_jadi')
                     ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.gudang_barang_jadi_id', '=', 'gdg_barang_jadi.id')
@@ -1048,7 +1058,8 @@ class PpicController extends Controller
                         LEFT JOIN ekatalog on ekatalog.pesanan_id = pesanan.id AND ekatalog.status != "batal"
                         WHERE t_gbj_noseri.jenis = "keluar" AND t_gbj_detail.gdg_brg_jadi_id = gdg_barang_jadi.id
                     )');
-                })->with('Produk')->get();
+                })
+                ->with('Produk')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1069,7 +1080,7 @@ class PpicController extends Controller
             ->addColumn('penjualan', function ($data) {
                 $jumlah_gbj = intval($data->stok);
                 // $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
-                $jumlahdiminta = intval($data->count_ekat_sepakat) + intval($data->count_ekat_nego) + intval($data->count_ekat_po) + intval($data->count_spa_po) + intval($data->count_spb_po);
+                $jumlahdiminta = intval($data->count_ekat_sepakat) + intval($data->count_ekat_nego) + intval($data->count_ekat_draft) + intval($data->count_ekat_po) + intval($data->count_spa_po) + intval($data->count_spb_po);
                 // $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
                 $jumlahtf = intval($data->count_transfer);
                 // $jumlah_stok_permintaan = $jumlahdiminta - $jumlahtf;
@@ -1086,7 +1097,7 @@ class PpicController extends Controller
                 // $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
                 // $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
                 // $jumlah = $jumlahdiminta - $jumlahtf;
-                $jumlahdiminta = intval($data->count_ekat_sepakat) + intval($data->count_ekat_nego) + intval($data->count_ekat_po) + intval($data->count_spa_po) + intval($data->count_spb_po);
+                $jumlahdiminta = intval($data->count_ekat_sepakat) + intval($data->count_ekat_nego) + intval($data->count_ekat_draft) + intval($data->count_ekat_po) + intval($data->count_spa_po) + intval($data->count_spb_po);
                 // $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
                 $jumlahtf = intval($data->count_transfer);
                 // $jumlah_stok_permintaan = $jumlahdiminta - $jumlahtf;
@@ -1104,6 +1115,12 @@ class PpicController extends Controller
                 // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi");
                 // return $jumlah." ".
                 return intval($data->count_ekat_nego);
+            })
+            ->addColumn('draft', function ($data) {
+                // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") - $data->getJumlahTransferPesanan("ekatalog");
+                // $jumlah = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat");
+                // return $jumlah." ".
+                return intval($data->count_ekat_draft);
             })
             ->addColumn('batal', function ($data) {
                 // return $data->getJumlahPermintaanPesanan("ekatalog", "batal")." ".
@@ -1144,6 +1161,15 @@ class PpicController extends Controller
             ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
             ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
             ->whereRaw('pesanan.log_id in ("7") AND ekatalog.status = "negosiasi"')
+            ->limit(1);
+        },'count_ekat_draft' => function ($query) {
+            $query->selectRaw('sum(detail_pesanan.jumlah)')
+            ->from('detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+            ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
+            ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+            ->whereRaw('pesanan.log_id in ("7") AND ekatalog.status = "draft"')
             ->limit(1);
         },'count_ekat_batal' => function ($query) {
             $query->selectRaw('sum(detail_pesanan.jumlah)')
@@ -1193,7 +1219,7 @@ class PpicController extends Controller
         }])->with('Produk')->first();
 
         // $data = GudangBarangJadi::find($id);
-        $jumlahdiminta = intval($data->count_ekat_sepakat) + intval($data->count_ekat_nego) + intval($data->count_ekat_po) + intval($data->count_spa_po) + intval($data->count_spb_po);
+        $jumlahdiminta = intval($data->count_ekat_sepakat) + intval($data->count_ekat_nego) + intval($data->count_ekat_draft) + intval($data->count_ekat_po) + intval($data->count_spa_po) + intval($data->count_spb_po);
         $jumlahtf = intval($data->count_transfer);
         $jumlah = ($jumlahdiminta - $jumlahtf);
         return view('spa.ppic.master_stok.detail', ['id' => $id, 'data' => $data, 'jumlah' => $jumlah]);
@@ -1201,10 +1227,6 @@ class PpicController extends Controller
 
     public function get_detail_master_stok($id)
     {
-        $prd = Produk::whereHas('GudangBarangJadi', function ($q) use ($id) {
-            $q->where('id', $id);
-        })->first();
-
         $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
                 $q->where('id', $id);
             })->addSelect(['count_pesanan' => function($q) use($id){
@@ -1223,7 +1245,14 @@ class PpicController extends Controller
                     ->where('t_gbj_detail.gdg_brg_jadi_id', $id)
                     ->whereColumn('t_gbj.pesanan_id', 'pesanan.id')
                     ->limit(1);
-                }])->whereNotIn('log_id', ['10', '20'])->havingRaw('count_pesanan > count_transfer')->get();
+                }, 'tgl_kontrak_custom' => function($q){
+                    $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
+                    ->from('ekatalog')
+                    ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
+                    ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
+                    ->limit(1);
+                }
+            ])->whereNotIn('log_id', ['10', '20'])->havingRaw('count_pesanan > count_transfer')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1261,52 +1290,33 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('tgl_delivery', function ($data) {
-                if (isset($data->Ekatalog)) {
-                    $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                    $tgl_parameter = $data->ekatalog->tgl_kontrak;
-                    $param = "";
-
-                    if ($tgl_sekarang < $tgl_parameter) {
-                        $to = Carbon::now();
-                        $from = $data->ekatalog->tgl_kontrak;
-                        $hari = $to->diffInDays($from);
-
-                        if ($hari > 7) {
-                            $param = ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas Sisa ' . $hari . ' Hari</small>';
-                        } else if ($hari > 0 && $hari <= 7) {
-                            $param = ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $hari . ' Hari</small>';
-                        } else {
-                            $param = '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
+                if($data->tgl_kontrak_custom != ""){
+                    if($data->log_id){
+                        $tgl_sekarang = Carbon::now();
+                        $tgl_parameter = $data->tgl_kontrak_custom;
+                        $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                        if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                            if ($hari > 7) {
+                                return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-clock info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-exclamation-circle warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else {
+                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                            }
                         }
-                    } elseif ($tgl_sekarang == $tgl_parameter) {
-                        $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
-                    } else {
-                        if (isset($data->ekatalog->provinsi)) {
-                            $to = Carbon::now();
-                            $from = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status);
-                            $hari = $to->diffInDays($from);
-                            $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
-                        } else {
-                            $param = '-';
+                        else{
+                            return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
                         }
+                    } else{
+                        return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
                     }
-                    return $param;
-                } else {
-                    return '-';
                 }
             })
-            ->addColumn('jumlah', function ($data) use ($prd, $id) {
-                $jumlah = $this->getJumlahPermintaanPesanan($prd->id, $id, $data->id) - $this->getJumlahTransferPesanan($id, $data->id);
-                // $id = $data->id;
-                // $res = DetailPesanan::where('pesanan_id', $id)->get();
-                // $jumlah = 0;
-                // foreach ($res as $a) {
-                //     foreach ($a->PenjualanProduk->Produk as $b) {
-                //         if ($b->id == $prd->id) {
-                //             $jumlah = $jumlah + ($a->jumlah * $b->pivot->jumlah);
-                //         }
-                //     }
-                // }
+            ->addColumn('jumlah', function ($data) {
                 return $data->count_pesanan - $data->count_transfer;
             })
             ->addColumn('status', function($data){
@@ -1319,6 +1329,8 @@ class PpicController extends Controller
                             }
                         }else if($data->Ekatalog->status == "negosiasi"){
                             return '<span class="badge yellow-text">Negosiasi</span>';
+                        }else if($data->Ekatalog->status == "draft"){
+                            return '<span class="badge blue-text">Draft</span>';
                         }else if($data->Ekatalog->status == "batal"){
                             return '<span class="badge red-text">Batal</span>';
                         }
@@ -1385,7 +1397,6 @@ class PpicController extends Controller
             ])
             ->havingRaw('count_pesanan > count_pengiriman')
             ->with('Produk')
-            ->havingRaw('count_pesanan > count_pengiriman')
             ->get();
         return datatables()->of($data)
             ->addIndexColumn()
@@ -1493,8 +1504,7 @@ class PpicController extends Controller
             ->where('detail_pesanan_produk.gudang_barang_jadi_id', $id)
             ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
             ->limit(1);
-        },
-        'count_pengiriman' => function($q) use($id){
+        }, 'count_pengiriman' => function($q) use($id){
             $q->selectRaw('count(noseri_logistik.id)')
             ->from('noseri_logistik')
             ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
@@ -1502,6 +1512,12 @@ class PpicController extends Controller
             ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
             ->where('detail_pesanan_produk.gudang_barang_jadi_id', $id)
             ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+            ->limit(1);
+        }, 'tgl_kontrak_custom' => function($q){
+            $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
+            ->from('ekatalog')
+            ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
+            ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
             ->limit(1);
         }
         ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])->get();
@@ -1566,34 +1582,30 @@ class PpicController extends Controller
                 return $jumlahpesan;
             })
             ->addColumn('tgl_delivery', function ($data) {
-                if (isset($data->Ekatalog)) {
-                    $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                    $tgl_parameter = $data->ekatalog->tgl_kontrak;
-                    $param = "";
-
-                    if ($tgl_sekarang < $tgl_parameter) {
-                        $to = Carbon::now();
-                        $from = $data->ekatalog->tgl_kontrak;
-                        $hari = $to->diffInDays($from);
-
-                        if ($hari > 7) {
-                            $param = ' <div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div> <small><i class="fas fa-clock info"></i> Batas Sisa ' . $hari . ' Hari</small>';
-                        } else if ($hari > 0 && $hari <= 7) {
-                            $param = ' <div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small><i class="fa fa-exclamation-circle warning"></i> Batas Sisa ' . $hari . ' Hari</small>';
-                        } else {
-                            $param = '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
+                if($data->tgl_kontrak_custom != ""){
+                    if($data->log_id){
+                        $tgl_sekarang = Carbon::now();
+                        $tgl_parameter = $data->tgl_kontrak_custom;
+                        $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                        if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                            if ($hari > 7) {
+                                return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-clock info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-exclamation-circle warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else {
+                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                            }
                         }
-                    } elseif ($tgl_sekarang == $tgl_parameter) {
-                        $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
-                    } else {
-                        $to = Carbon::now();
-                        $from = $data->ekatalog->tgl_kontrak;
-                        $hari = $to->diffInDays($from);
-                        $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
+                        else{
+                            return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                        }
+                    } else{
+                        return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
                     }
-                    return $param;
-                } else {
-                    return '-';
                 }
             })
             ->rawColumns(['tgl_delivery'])
