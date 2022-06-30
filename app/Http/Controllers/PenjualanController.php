@@ -49,7 +49,13 @@ class PenjualanController extends Controller
         $y = explode(',', $status);
         $data = "";
         if ($jenis == "semua" && $status == "semua") {
-            $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+            $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->addSelect(['tgl_kontrak_custom' => function($q){
+                $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+                  ->from('ekatalog as e')
+                  ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                  ->whereColumn('e.id', 'ekatalog.id')
+                  ->limit(1);
+                }])->orderBy('id', 'DESC')->get());
             $Spa = collect(Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             $Spb = collect(Spb::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             $data = $Ekatalog->merge($Spa)->merge($Spb);
@@ -58,7 +64,13 @@ class PenjualanController extends Controller
             $Spa = "";
             $Spb = "";
             if (in_array('ekatalog', $x)) {
-                $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+                $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->addSelect(['tgl_kontrak_custom' => function($q){
+                    $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+                      ->from('ekatalog as e')
+                      ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                      ->whereColumn('e.id', 'ekatalog.id')
+                      ->limit(1);
+                    }])->orderBy('id', 'DESC')->get());
             }
             if (in_array('spa', $x)) {
                 $Spa = collect(Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
@@ -180,6 +192,34 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('tgl_kontrak', function ($data) {
+                  $name = $data->getTable();
+                if($name == 'ekatalog'){
+                    if($data->tgl_kontrak_custom != ""){
+                        if($data->Pesanan->log_id){
+                            $tgl_sekarang = Carbon::now();
+                            $tgl_parameter = $data->tgl_kontrak_custom;
+                            $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                            if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                                if ($hari > 7) {
+                                    return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                } else if ($hari > 0 && $hari <= 7) {
+                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                } else {
+                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                                }
+                            }
+                            else{
+                                return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            }
+                        } else{
+                            return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
+                        }
+                    }
+                }
                 // if (isset($data->tgl_kontrak)) {
                 //     $tgl_sekarang = Carbon::now()->format('Y-m-d');
                 //     $tgl_parameter = $data->tgl_kontrak;
@@ -887,71 +927,9 @@ class PenjualanController extends Controller
     public function get_data_detail_ekatalog($value)
     {
         $data  = Ekatalog::find($value);
-        $tgl_kontrak = '';
-        if (isset($data->tgl_kontrak)) {
-            $tgl_sekarang = Carbon::now()->format('Y-m-d');
-            $tgl_parameter = $data->tgl_kontrak;
 
-            if (isset($data->Pesanan->so)) {
-                if ($data->Pesanan->getJumlahPesanan() == $data->Pesanan->getJumlahKirim()) {
-                     $tgl_kontrak = Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
-                } else {
-                    if ($tgl_sekarang < $tgl_parameter) {
-                        $to = Carbon::now();
-                        $from = $data->tgl_kontrak;
-                        $hari = $to->diffInDays($from);
-                        if ($hari > 7) {
-                             $tgl_kontrak =  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                            <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
-                        } else if ($hari > 0 && $hari <= 7) {
-                             $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                            <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
-                        } else {
-                             $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                        }
-                    } else if ($tgl_sekarang == $tgl_parameter) {
-                         $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                        <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                    } else {
-                        $to = Carbon::now();
-                        $from = $data->tgl_kontrak;
-                        $hari = $to->diffInDays($from);
-                         $tgl_kontrak = '<div id="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                        <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
-                    }
-                }
-            } else {
-                if ($tgl_sekarang < $tgl_parameter) {
-                    $to = Carbon::now();
-                    $from = $data->tgl_kontrak;
-                    $hari = $to->diffInDays($from);
-                    if ($hari > 7) {
-                         $tgl_kontrak =  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                        <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
-                    } else if ($hari > 0 && $hari <= 7) {
-                         $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                        <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
-                    } else {
-                         $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                        <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                    }
-                } else if ($tgl_sekarang == $tgl_parameter) {
-                     $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                } else {
-                    $to = Carbon::now();
-                    $from = $data->tgl_kontrak;
-                    $hari = $to->diffInDays($from);
-                     $tgl_kontrak = '<div id="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
-                }
-            }
-        } else {
-             $tgl_kontrak = '-';
-        }
 
-        return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data,'tgl_kontrak' => $tgl_kontrak]);
+        return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data]);
     }
 
     public function get_data_detail_spb($value)
@@ -1211,9 +1189,21 @@ class PenjualanController extends Controller
         $data = "";
 
         if ($value == 'semua') {
-            $data  = Ekatalog::with(['Pesanan.State','Customer'])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
+            $data  = Ekatalog::with(['Pesanan.State','Customer', 'Provinsi'])->addSelect(['tgl_kontrak_custom' => function($q){
+                $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+                  ->from('ekatalog as e')
+                  ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                  ->whereColumn('e.id', 'ekatalog.id')
+                  ->limit(1);
+                }])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
         } else {
-            $data  = Ekatalog::with(['Pesanan.State','Customer'])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
+            $data  = Ekatalog::with(['Pesanan.State','Customer'])->addSelect(['tgl_kontrak_custom' => function($q){
+                $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+                  ->from('ekatalog as e')
+                  ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                  ->whereColumn('e.id', 'ekatalog.id')
+                  ->limit(1);
+                }])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
         }
 
         return datatables()->of($data)
@@ -1269,6 +1259,30 @@ class PenjualanController extends Controller
                     return Carbon::createFromFormat('Y-m-d', $data->tgl_edit)->format('d-m-Y');
                 }
             })->editColumn('tgl_kontrak', function ($data) {
+                if($data->tgl_kontrak_custom != ""){
+                if($data->Pesanan->log_id != "10"){
+                    $tgl_sekarang = Carbon::now();
+                    $tgl_parameter = $data->tgl_kontrak_custom;
+                    $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                    if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                        if ($hari > 7) {
+                            return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                        } else if ($hari > 0 && $hari <= 7) {
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                        } else {
+                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                        }
+                    } else {
+                        return  '<div class="text-danger"><b>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i><b> Lebih ' . $hari . ' Hari</b></small></div>';
+                    }
+                } else{
+                    return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
+                }
+            }
                 // if (isset($data->tgl_kontrak)) {
                 //     $tgl_sekarang = Carbon::now()->format('Y-m-d');
                 //     $tgl_parameter = $data->tgl_kontrak;
@@ -1339,23 +1353,44 @@ class PenjualanController extends Controller
                     return '-';
                 }
             })
-            ->addColumn('button', function ($data) use ($divisi_id) {
-
+             ->addColumn('button', function ($data) use ($divisi_id) {
                 $return = "";
                 if ($data->status != 'draft') {
-                    $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                <button class="dropdown-item" type="button">
-                      <i class="fas fa-eye"></i>
-                      Detail
-                    </button>
-                </a>';
+                    if ($divisi_id == "26") {
+                        $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                        <button class="dropdown-item" type="button">
+                            <i class="fas fa-eye"></i>
+                            Detail
+                            </button>
+                        </a>';
+                    } else {
+                        $return .= '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                        <button class="btn btn-outline-primary" type="button">
+                            <i class="fas fa-eye"></i>
+                            Detail
+                            </button>
+                        </a>';
+                    }
                 } else {
-                    $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                    if ($divisi_id == "26") {
+                        $return .= '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">';
+                        if(isset($data->Pesanan->DetailPesanan)){
+                            $return .= '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                            <button class="dropdown-item" type="button">
+                                <i class="fas fa-eye"></i>
+                                Detail
+                                </button>
+                            </a>';
+                        }
+                    } else {
+                        return '';
+                    }
                     // $return .= "-";
                 }
+
                 if ($divisi_id == "26") {
                     if (!empty($data->Pesanan->log_id)) {
                         if ($data->Pesanan->State->nama == "Penjualan") {
@@ -1416,10 +1451,13 @@ class PenjualanController extends Controller
                         </a>
                         ';
                     }
+                    $return .= '</div>';
                 }
-                $return .= '</div>';
+
                 return $return;
             })
+
+
             ->rawColumns(['button', 'status', 'tgl_kontrak'])
             ->make(true);
     }
@@ -1759,73 +1797,108 @@ class PenjualanController extends Controller
     public function create_penjualan(Request $request)
     {
         if ($request->jenis_penjualan == 'ekatalog') {
-            // $this->validate(
-            //     $request,
-            //     [
-            //         'no_paket' => 'required',
-            //         'customer_id' => 'required',
-            //         'status' => 'required',
-            //         'tgl_kontrak' => 'required',
-            //         'jumlah.*' => 'required',
-            //         'penjualan_produk_id.*' => 'required'
-            //     ],
-            //     [
-            //         'no_paket.required' => 'No Paket harus di isi',
-            //         'customer_id.required' => 'Customer harus di isi',
-            //         'status.required' => 'Status harus di pilih',
-            //         'tgl_kontrak.required' => 'Tg; Kontrak harus di isi',
-            //         'jumlah.required' => 'Jumlah Produk harus di isi',
-            //         'penjualan_produk_id.required' => 'Produk harus di pilih',
-            //     ]
-            // );
+        // $this->validate(
+        //     $request,
+        //     [
+        //         'no_paket' => 'required',
+        //         'customer_id' => 'required',
+        //         'status' => 'required',
+        //         'tgl_kontrak' => 'required',
+        //         'jumlah.*' => 'required',
+        //         'penjualan_produk_id.*' => 'required'
+        //     ],
+        //     [
+        //         'no_paket.required' => 'No Paket harus di isi',
+        //         'customer_id.required' => 'Customer harus di isi',
+        //         'status.required' => 'Status harus di pilih',
+        //         'tgl_kontrak.required' => 'Tg; Kontrak harus di isi',
+        //         'jumlah.required' => 'Jumlah Produk harus di isi',
+        //         'penjualan_produk_id.required' => 'Produk harus di pilih',
+        //     ]
+        // );
 
 
-            //Konversi No SO
-            // $x = Ekatalog::max('id') + 1;
-            // $y = Carbon::now()->format('Y');
-            // $m = Carbon::now()->format('m');
-            // $filter = new IntToRoman();
-            $x = "";
-            $pesanan = Pesanan::create([
-                'log_id' => '7',
-                'created_at' => Carbon::now()->toDateTimeString(),
-                'updated_at' => Carbon::now()->toDateTimeString(),
-            ]);
-            $x = $pesanan->id;
-            if ($request->namadistributor == 'belum') {
-                $c_id = '484';
+        //Konversi No SO
+        // $x = Ekatalog::max('id') + 1;
+        // $y = Carbon::now()->format('Y');
+        // $m = Carbon::now()->format('m');
+        // $filter = new IntToRoman();
+        $x = "";
+        $pesanan = Pesanan::create([
+            'log_id' => '7',
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'updated_at' => Carbon::now()->toDateTimeString(),
+        ]);
+        $x = $pesanan->id;
+        if ($request->namadistributor == 'belum') {
+            $c_id = '484';
+        } else {
+            $c_id = $request->customer_id;
+        }
+
+        if ($request->no_paket != "") {
+            $nopaket = $request->jenis_paket . $request->no_paket;
+        } else {
+            $nopaket = "";
+        }
+
+
+        $Ekatalog = Ekatalog::create([
+            'customer_id' => $c_id,
+            'provinsi_id' => $request->provinsi,
+            'pesanan_id' => $x,
+            'no_paket' => $nopaket,
+            'no_urut' => $request->no_urut,
+            'deskripsi' => $request->deskripsi,
+            'instansi' => $request->instansi,
+            'alamat' => $request->alamatinstansi,
+            'satuan' => $request->satuan_kerja,
+            'status' => $request->status,
+            'tgl_kontrak' => $request->batas_kontrak,
+            'tgl_buat' => $request->tanggal_pemesanan,
+            'tgl_edit' => $request->tanggal_edit,
+            'ket' => $request->keterangan,
+            'log' => 'penjualan'
+        ]);
+
+        $bool = true;
+        if ($Ekatalog) {
+            if ($request->status != 'draft') {
+                if($request->status == 'batal' && !isset($request->penjualan_produk_id)){
+                    $bool = true;
+                } else {
+                    for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                        if (empty($request->produk_ongkir[$i])) {
+                            $ongkir[$i] = 0;
+                        } else {
+                            $ongkir[$i] =  str_replace('.', "", $request->produk_ongkir[$i]);
+                        }
+                        $dekat = DetailPesanan::create([
+                            'pesanan_id' => $x,
+                            'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                            'detail_rencana_penjualan_id' => $request->rencana_id[$i],
+                            'jumlah' => $request->produk_jumlah[$i],
+                            'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                            'ongkir' => $ongkir[$i],
+                        ]);
+
+                        if (!$dekat) {
+                            $bool = false;
+                        } else {
+                            for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                                $dekatp = DetailPesananProduk::create([
+                                    'detail_pesanan_id' => $dekat->id,
+                                    'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                                ]);
+                                if (!$dekatp) {
+                                    $bool = false;
+                                }
+                            }
+                        }
+                    }
+                }
             } else {
-                $c_id = $request->customer_id;
-            }
-
-            if ($request->no_paket != "") {
-                $nopaket = $request->jenis_paket . $request->no_paket;
-            } else {
-                $nopaket = "";
-            }
-
-
-            $Ekatalog = Ekatalog::create([
-                'customer_id' => $c_id,
-                'provinsi_id' => $request->provinsi,
-                'pesanan_id' => $x,
-                'no_paket' => $nopaket,
-                'no_urut' => $request->no_urut,
-                'deskripsi' => $request->deskripsi,
-                'instansi' => $request->instansi,
-                'alamat' => $request->alamatinstansi,
-                'satuan' => $request->satuan_kerja,
-                'status' => $request->status,
-                'tgl_kontrak' => $request->batas_kontrak,
-                'tgl_buat' => $request->tanggal_pemesanan,
-                'tgl_edit' => $request->tanggal_edit,
-                'ket' => $request->keterangan,
-                'log' => 'penjualan'
-            ]);
-
-            $bool = true;
-            if ($Ekatalog) {
-                if ($request->status != 'draft') {
+                if($request->isi_produk == "isi"){
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                         if (empty($request->produk_ongkir[$i])) {
                             $ongkir[$i] = 0;
@@ -1858,123 +1931,126 @@ class PenjualanController extends Controller
                 } else {
                     $bool = true;
                 }
-            } else {
-                $bool = false;
+
             }
-            if ($bool == true) {
-                return redirect()->back()->with('success', 'Berhasil menambahkan Ekatalog');
-            } else if ($bool == false) {
-                return redirect()->back()->with('error', 'Gagal menambahkan Ekatalog');
-            }
-        } else if ($request->jenis_penjualan == 'spa' || $request->jenis_penjualan == 'spb') {
-            $count_array = count($request->jenis_pen);
-            if (in_array("jasa", $request->jenis_pen) && $count_array == 1) {
-                $k = '11';
-            } else {
-                $k = '9';
-            }
-            if ($request->jenis_penjualan == 'spa') {
-                $var = 'SPA';
-            } else if ($request->jenis_penjualan == 'spb') {
-                $var = 'SPB';
-            }
-            $pesanan = Pesanan::create([
-                'so' => $this->createSO($var),
-                'no_po' => $request->no_po,
-                'tgl_po' => $request->tanggal_po,
-                'no_do' => $request->no_do,
-                'tgl_do' => $request->tanggal_do,
-                'ket' =>  $request->keterangan,
-                'log_id' => $k
+        } else {
+            $bool = false;
+        }
+        if ($bool == true) {
+            return redirect()->back()->with('success', 'Berhasil menambahkan Ekatalog');
+        } else if ($bool == false) {
+            return redirect()->back()->with('error', 'Gagal menambahkan Ekatalog');
+        }
+    } else if ($request->jenis_penjualan == 'spa' || $request->jenis_penjualan == 'spb') {
+        $count_array = count($request->jenis_pen);
+        if (in_array("jasa", $request->jenis_pen) && $count_array == 1) {
+            $k = '11';
+        } else {
+            $k = '9';
+        }
+        if ($request->jenis_penjualan == 'spa') {
+            $var = 'SPA';
+        } else if ($request->jenis_penjualan == 'spb') {
+            $var = 'SPB';
+        }
+        $pesanan = Pesanan::create([
+            'so' => $this->createSO($var),
+            'no_po' => $request->no_po,
+            'tgl_po' => $request->tanggal_po,
+            'no_do' => $request->no_do,
+            'tgl_do' => $request->tanggal_do,
+            'ket' =>  $request->keterangan,
+            'log_id' => $k
+        ]);
+        $x = $pesanan->id;
+        if ($request->jenis_penjualan == 'spa') {
+            $p = Spa::create([
+                'customer_id' => $request->customer_id,
+                'pesanan_id' => $x,
+                'ket' => $request->keterangan,
+                'log' => 'po'
             ]);
-            $x = $pesanan->id;
-            if ($request->jenis_penjualan == 'spa') {
-                $p = Spa::create([
-                    'customer_id' => $request->customer_id,
-                    'pesanan_id' => $x,
-                    'ket' => $request->keterangan,
-                    'log' => 'po'
-                ]);
-            } else if ($request->jenis_penjualan == 'spb') {
-                $p = Spb::create([
-                    'customer_id' => $request->customer_id,
-                    'pesanan_id' => $x,
-                    'ket' => $request->keterangan,
-                    'log' => 'po'
-                ]);
-            }
-            $bool = true;
-            if ($p) {
-                if (in_array("produk", $request->jenis_pen)) {
-                    for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                        $dspa = DetailPesanan::create([
-                            'pesanan_id' => $x,
-                            'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                            'jumlah' => $request->produk_jumlah[$i],
-                            'harga' => str_replace('.', "", $request->produk_harga[$i]),
-                            'ongkir' => 0,
-                        ]);
-                        if (!$dspa) {
-                            $bool = false;
-                        } else {
-                            for ($j = 0; $j < count(array($request->variasi[$i])); $j++) {
-                                $dspap = DetailPesananProduk::create([
-                                    'detail_pesanan_id' => $dspa->id,
-                                    'gudang_barang_jadi_id' => $request->variasi[$i][$j]
-                                ]);
-                                if (!$dspap) {
-                                    $bool = false;
-                                }
+        } else if ($request->jenis_penjualan == 'spb') {
+            $p = Spb::create([
+                'customer_id' => $request->customer_id,
+                'pesanan_id' => $x,
+                'ket' => $request->keterangan,
+                'log' => 'po'
+            ]);
+        }
+        $bool = true;
+        if ($p) {
+            if (in_array("produk", $request->jenis_pen)) {
+                for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                    $dspa = DetailPesanan::create([
+                        'pesanan_id' => $x,
+                        'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                        'jumlah' => $request->produk_jumlah[$i],
+                        'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                        'ongkir' => 0,
+                    ]);
+                    if (!$dspa) {
+                        $bool = false;
+                    } else {
+                        for ($j = 0; $j < count(array($request->variasi[$i])); $j++) {
+                            $dspap = DetailPesananProduk::create([
+                                'detail_pesanan_id' => $dspa->id,
+                                'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                            ]);
+                            if (!$dspap) {
+                                $bool = false;
                             }
                         }
                     }
                 }
-                if (in_array("sparepart", $request->jenis_pen)) {
-                    for ($i = 0; $i < count($request->part_id); $i++) {
-                        $dspb = DetailPesananPart::create([
-                            'pesanan_id' => $x,
-                            'm_sparepart_id' => $request->part_id[$i],
-                            'jumlah' => $request->part_jumlah[$i],
-                            'harga' => str_replace('.', "", $request->part_harga[$i]),
-                            'ongkir' => 0,
-                        ]);
-                        if (!$dspb) {
-                            $bool = false;
-                        }
+            }
+            if (in_array("sparepart", $request->jenis_pen)) {
+                for ($i = 0; $i < count($request->part_id); $i++) {
+                    $dspb = DetailPesananPart::create([
+                        'pesanan_id' => $x,
+                        'm_sparepart_id' => $request->part_id[$i],
+                        'jumlah' => $request->part_jumlah[$i],
+                        'harga' => str_replace('.', "", $request->part_harga[$i]),
+                        'ongkir' => 0,
+                    ]);
+                    if (!$dspb) {
+                        $bool = false;
                     }
                 }
-                if (in_array("jasa", $request->jenis_pen)) {
-                    for ($i = 0; $i < count($request->jasa_id); $i++) {
-                        $dspb = DetailPesananPart::create([
-                            'pesanan_id' => $x,
-                            'm_sparepart_id' => $request->jasa_id[$i],
-                            'jumlah' => 1,
-                            'harga' => str_replace('.', "", $request->jasa_harga[$i]),
-                            'ongkir' => 0,
-                        ]);
+            }
+            if (in_array("jasa", $request->jenis_pen)) {
+                for ($i = 0; $i < count($request->jasa_id); $i++) {
+                    $dspb = DetailPesananPart::create([
+                        'pesanan_id' => $x,
+                        'm_sparepart_id' => $request->jasa_id[$i],
+                        'jumlah' => 1,
+                        'harga' => str_replace('.', "", $request->jasa_harga[$i]),
+                        'ongkir' => 0,
+                    ]);
 
-                        $qcspb = OutgoingPesananPart::create([
-                            'detail_pesanan_part_id' => $dspb->id,
-                            'tanggal_uji' => $request->tanggal_po,
-                            'jumlah_ok' => 1,
-                            'jumlah_nok' => 0
-                        ]);
+                    $qcspb = OutgoingPesananPart::create([
+                        'detail_pesanan_part_id' => $dspb->id,
+                        'tanggal_uji' => $request->tanggal_po,
+                        'jumlah_ok' => 1,
+                        'jumlah_nok' => 0
+                    ]);
 
-                        if (!$dspb) {
-                            $bool = false;
-                        }
+                    if (!$dspb) {
+                        $bool = false;
                     }
                 }
-            } else {
-                $bool = false;
             }
-
-            if ($bool == true) {
-                return redirect()->back()->with('success', 'Berhasil menambahkan SPA');
-            } else if ($bool == false) {
-                return redirect()->back()->with('error', 'Gagal menambahkan SPA');
-            }
+        } else {
+            $bool = false;
         }
+
+        if ($bool == true) {
+            return redirect()->back()->with('success', 'Berhasil menambahkan SPA');
+        } else if ($bool == false) {
+            return redirect()->back()->with('error', 'Gagal menambahkan SPA');
+        }
+    }
+
     }
 
     public function view_so_ekatalog($value)
@@ -2152,6 +2228,9 @@ class PenjualanController extends Controller
             }
             if ($bool == true) {
                 if ($request->status_akn != "draft") {
+                    if ($request->status_akn == "batal" && !isset($request->penjualan_produk_id)){
+                        $bool = true;
+                    }else{
                     for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                         if (empty($request->produk_ongkir[$i])) {
                             $ongkir[$i] = 0;
@@ -2181,6 +2260,38 @@ class PenjualanController extends Controller
                         }
                     }
                 }
+            } elseif ($request->status_akn == "draft"){
+                if($request->isi_produk == "isi"){
+                for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                    if (empty($request->produk_ongkir[$i])) {
+                        $ongkir[$i] = 0;
+                    } else {
+                        $ongkir[$i] =  str_replace('.', "", $request->produk_ongkir[$i]);
+                    }
+                    $c = DetailPesanan::create([
+                        'pesanan_id' => $poid,
+                        'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                        'jumlah' => $request->produk_jumlah[$i],
+                        'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                        'ongkir' => $ongkir[$i],
+                        'detail_rencana_penjualan_id' => $request->rencana_id[$i],
+                    ]);
+                    if ($c) {
+                        for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                            $v = DetailPesananProduk::create([
+                                'detail_pesanan_id' => $c->id,
+                                'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                            ]);
+                            if (!$v) {
+                                $bool = false;
+                            }
+                        }
+                    } else {
+                        $bool = false;
+                    }
+                }
+            }
+            }
             } else {
                 $bool = false;
             }

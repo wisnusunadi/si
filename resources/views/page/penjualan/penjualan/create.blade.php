@@ -426,6 +426,15 @@
                                                                         </div>
                                                                     </div>
                                                                 </div>
+                                                                <div class="form-group row hide" id="isi_produk_input">
+                                                                    <label for="" class="col-form-label col-lg-5 col-md-12 labelket"></label>
+                                                                    <div class="col-lg-6 col-md-12 col-form-label">
+                                                                        <div class="form-check form-check-inline">
+                                                                            <input class="form-check-input" type="checkbox" name="isi_produk" id="isi_produk" value="isi" />
+                                                                            <label class="form-check-label" for="isi_produk">Isi Produk</label>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
                                                                 <div class="form-group row">
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Buat</label>
                                                                     <div class="col-lg-4">
@@ -1317,6 +1326,7 @@
         });
 
         $('input[type="radio"][name="status"]').on('change', function() {
+            $('#isi_produk_input').addClass('hide');
             if ($(this).val() != "") {
                 checkvalidasi();
                 if ($(this).val() == "sepakat") {
@@ -1342,7 +1352,8 @@
                     $("#dataproduk").addClass("hide");
                     $("#batas_kontrak").attr('disabled', true);
                     $("#provinsi").attr('disabled', true);
-                    $("#provinsi").empty().trigger('change')
+                    $("#provinsi").empty().trigger('change');
+                    $('#isi_produk_input').removeClass('hide');
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
                     $('#isi_nopaket').prop("checked", false);
@@ -1376,6 +1387,19 @@
                 }
                 checkvalidasi();
             });
+        });
+        $('input[type="checkbox"][name="isi_produk"]').change(function() {
+            $("#produktable tbody").empty();
+            $('#produktable tbody').append(trproduktable());
+            numberRowsProduk($("#produktable"));
+            $("#totalhargaprd").text("Rp. 0");
+
+            if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
+                $("#dataproduk").removeClass("hide");
+            } else {
+                $("#dataproduk").addClass("hide");
+            }
+            checkvalidasi();
         });
 
         $('#satuan_kerja').on('keyup', function() {
