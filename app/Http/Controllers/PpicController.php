@@ -1766,10 +1766,10 @@ class PpicController extends Controller
     public function get_count_selesai_pengiriman_produk($id)
     {
         $res = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
-            $q->where('gudang_barang_jadi_id', $id);
-        })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
-            $q->whereNotIn('log_id', ['7', '9', '10']);
-        })->count();
+                  $q->where('gudang_barang_jadi_id', $id);
+               })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+                  $q->whereNotIn('log_id', ['7', '9', '10']);
+               })->count();
         // $jumlah = 0;
         // foreach ($res as $a) {
         //     $a->jumlah;

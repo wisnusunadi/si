@@ -754,7 +754,7 @@ class QcController extends Controller
                         $tgl_sekarang = Carbon::now();
                         $tgl_parameter = $data->tgl_kontrak;
                         $hari = $tgl_sekarang->diffInDays($tgl_parameter);
-                        if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                        if ($tgl_sekarang->format('Y-m-d') <= $tgl_parameter) {
                             if ($hari > 7) {
                                 return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
                                 <div><small><i class="fas fa-clock info"></i> ' . $hari . ' Hari Lagi</small></div>';
@@ -1828,11 +1828,11 @@ class QcController extends Controller
                 })
                 ->addColumn('batas', function ($data) {
                     if($data->tgl_kontrak != ""){
-                        if($data->log_id){
+                        if($data->log_id != "10"){
                             $tgl_sekarang = Carbon::now();
                             $tgl_parameter = $data->tgl_kontrak;
                             $hari = $tgl_sekarang->diffInDays($tgl_parameter);
-                            if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                            if ($tgl_sekarang->format('Y-m-d') <= $tgl_parameter) {
                                 if ($hari > 7) {
                                     return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
                                     <div><small><i class="fas fa-clock info"></i> ' . $hari . ' Hari Lagi</small></div>';
@@ -1846,7 +1846,7 @@ class QcController extends Controller
                             }
                             else{
                                 return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lewat ' . $hari . ' Hari</small></div>';
                             }
                         } else{
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak)->format('d-m-Y');
@@ -1999,11 +1999,11 @@ class QcController extends Controller
                 })
                 ->addColumn('batas', function ($data) {
                     if($data->tgl_kontrak != ""){
-                        if($data->log_id){
+                        if($data->log_id != "10"){
                             $tgl_sekarang = Carbon::now();
                             $tgl_parameter = $data->tgl_kontrak;
                             $hari = $tgl_sekarang->diffInDays($tgl_parameter);
-                            if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                            if ($tgl_sekarang->format('Y-m-d') <= $tgl_parameter) {
                                 if ($hari > 7) {
                                     return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
                                     <div><small><i class="fas fa-clock info"></i> ' . $hari . ' Hari Lagi</small></div>';
@@ -2017,7 +2017,7 @@ class QcController extends Controller
                             }
                             else{
                                 return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lewat ' . $hari . ' Hari</small></div>';
                             }
                         } else{
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak)->format('d-m-Y');
@@ -2069,11 +2069,11 @@ class QcController extends Controller
                 })
                 ->addColumn('batas', function ($data) {
                     if($data->tgl_kontrak != ""){
-                        if($data->log_id){
+                        if($data->log_id != "10"){
                             $tgl_sekarang = Carbon::now();
                             $tgl_parameter = $data->tgl_kontrak;
                             $hari = $tgl_sekarang->diffInDays($tgl_parameter);
-                            if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                            if ($tgl_sekarang->format('Y-m-d') <= $tgl_parameter) {
                                 if ($hari > 7) {
                                     return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
                                     <div><small><i class="fas fa-clock info"></i> ' . $hari . ' Hari Lagi</small></div>';
@@ -2087,7 +2087,7 @@ class QcController extends Controller
                             }
                             else{
                                 return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lewat ' . $hari . ' Hari</small></div>';
                             }
                         } else{
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak)->format('d-m-Y');
