@@ -1981,11 +1981,6 @@ class GudangController extends Controller
                 $seri[] = $d['noseri'];
                 $produk[] = $d['produk'];
                 $paket[] = $d['paket'];
-                // $so[$d['paket']] = [
-                //     'produk' => $d['produk'],
-                //     'noseri' => $d['noseri'],
-                //     'jumlah' => count(array($d['produk']))
-                // ];
             }
 
             foreach($produk as $key => $prd) {
@@ -3719,5 +3714,70 @@ class GudangController extends Controller
                 'msg' => $e->getMessage(),
             ]);
         }
+    }
+
+    function get_so_batal()
+    {
+        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereIn('log_id', [20])->get());
+        $Spa = collect(Pesanan::has('Spa')->whereIn('log_id', [20])->get());
+        $Spb = collect(Pesanan::has('Spb')->whereIn('log_id', [20])->get());
+
+        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $x = [];
+        foreach ($data as $k) {
+            if ($k->getJumlahPesanan() != $k->cekJumlahkirim()) {
+                $x[] = $k->id;
+            }
+        }
+
+        $datax = Pesanan::whereIn('id', $x)->get();
+
+        return datatables()->of($datax)
+            ->addIndexColumn()
+            ->addColumn('so', function ($data) {
+                return $data->so;
+            })
+            ->addColumn('no_po', function ($data) {
+                return $data->no_po;
+            })
+            ->addColumn('nama_customer', function ($data) {
+                $name = explode('/', $data->so);
+                for ($i = 1; $i < count($name); $i++) {
+                    if ($name[1] == 'EKAT') {
+                        return $data->Ekatalog->Customer->nama;
+                    } elseif ($name[1] == 'SPA') {
+                        return $data->Spa->Customer->nama;
+                    } elseif ($name[1] == 'SPB') {
+                        return $data->Spb->Customer->nama;
+                    }
+                }
+            })
+            ->addColumn('aksi', function($data){
+                $name = explode('/', $data->so);
+                for ($i = 1; $i < count($name); $i++) {
+                    if ($name[1] == 'EKAT') {
+                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
+                                    <button class="btn btn-outline-info btn-sm" type="button">
+                                        <i class="fas fa-eye"></i>&nbsp;Detail
+                                    </button>
+                                </a>';
+                    } elseif ($name[1] == 'SPA') {
+                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="spa"  data-id="' . $data->id . '">
+                                    <button class="btn btn-outline-info btn-sm" type="button">
+                                        <i class="fas fa-eye"></i>&nbsp;Detail
+                                    </button>
+                                </a>';
+                    } elseif ($name[1] == 'SPB') {
+                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="spb"  data-id="' . $data->id . '">
+                                    <button class="btn btn-outline-info btn-sm" type="button">
+                                        <i class="fas fa-eye"></i>&nbsp;Detail
+                                    </button>
+                                </a>';
+                    }
+                }
+                return $a;
+            })
+            ->rawColumns(['aksi'])
+            ->make(true);
     }
 }

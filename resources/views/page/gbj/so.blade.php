@@ -114,21 +114,12 @@
                                                         <th>Nomor SO</th>
                                                         <th>Nomor PO</th>
                                                         <th>Customer</th>
-                                                        <th>Batas Transfer</th>
+                                                        {{-- <th>Batas Transfer</th> --}}
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>SO-00001</td>
-                                                        <td>PO-00001</td>
-                                                        <td>PT. ABC</td>
-                                                        <td>20 Desember 2019</td>
-                                                        <td>
-                                                            <button class="btn btn-sm btn-outline-success button_batal"><i class="fas fa-eye"></i> Detail</button>
-                                                        </td>
-                                                    </tr>
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -338,7 +329,7 @@
                                                     <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
                                                     <div class="info-box-content">
                                                     <span class="info-box-text">No SO</span>
-                                                    <span class="info-box-number">SO 1234</span>
+                                                    <span class="info-box-number" id="noso">SO 1234</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -347,7 +338,7 @@
                                                     <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
                                                     <div class="info-box-content">
                                                     <span class="info-box-text">No PO </span>
-                                                    <span class="info-box-number">PO 1234</span>
+                                                    <span class="info-box-number" id="nopo">PO 1234</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -356,7 +347,7 @@
                                                     <span class="info-box-icon"><i class="far fa-user"></i></span>
                                                     <div class="info-box-content">
                                                     <span class="info-box-text">Nama Customer</span>
-                                                    <span class="info-box-number">PT Emiindo Jaya</span>
+                                                    <span class="info-box-number" id="cust">PT Emiindo Jaya</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -364,7 +355,7 @@
                                                 <div class="info-box bg-indigo" style="box-shadow: none">
                                                     <div class="info-box-content">
                                                     <span class="info-box-text">Tanggal Batal</span>
-                                                    <span class="info-box-number">18 September 2022</span>
+                                                    <span class="info-box-number" id="tglbatal">18 September 2022</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -394,9 +385,10 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Produk</th>
+                                                <th>Nama Produk</th>
                                                 <th>Jumlah</th>
                                             </tr>
-                                        </thead> 
+                                        </thead>
                                         <tbody>
                                         </tbody>
                                     </table>
@@ -495,12 +487,28 @@
             ]
         });
 
-        $('#batal-table').DataTable({
+        $('#batal-po').DataTable({
             destroy: true,
             processing: true,
             serverSide: false,
+            ajax: {
+                url: '/api/v2/gbj/so_batal',
+                type: 'post',
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'so', name: 'so'},
+                {data: 'no_po'},
+                { data: 'nama_customer', name: 'nama_customer'},
+                // { data: 'batas_out', name: 'batas_out'},
+                // {data: 'logs'},
+                { data: 'aksi', name: 'aksi'},
+            ],
             "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
             },
         })
     });
@@ -686,7 +694,60 @@
         $('#viewProdukModal').modal('show');
     });
 
-    $(document).on('click', '.button_batal', function(e) {
+    $(document).on('click', '.btndetail', function(e) {
+        let so = $(this).parent().prev().prev().prev().html();
+        let po = $(this).parent().prev().prev().html();
+        let customer = $(this).parent().prev().html();
+        let id = $(this).data('id');
+        let x = $(this).data('value');
+
+        $('span#noso').text(so);
+        $('span#nopo').text(po);
+        $('span#cust').text(customer);
+
+        $('#produktable').DataTable({
+            destroy: true,
+            processing: true,
+            autoWidth: false,
+            bPaginate: false,
+            ordering: false,
+            scrollY: 300,
+            ajax: {
+                url: "/api/tfp/detail-so/" +id+"/"+x,
+                // url: "/api/testingJson",
+            },
+            columns: [
+                {data: 'detail_pesanan_id'},
+                { data: 'paket' },
+                { data: 'produk' },
+                { data: 'qty' },
+                // { data: 'status' },
+            ],
+            "drawCallback": function ( settings ) {
+                var api = this.api();
+                var rows = api.rows( {page:'current'} ).nodes();
+                var last=null;
+
+                api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                    if (last !== group) {
+                        var rowData = api.row(i).data();
+
+                        $(rows).eq(i).before(
+                        '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="3">' + rowData.paket + '</td></tr>'
+                    );
+                        last = group;
+                    }
+                });
+            },
+            "columnDefs":[
+                    {"targets": [0], "visible": false},
+                    {"targets": [1], "visible": false},
+                ],
+                "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        })
         $('#pesananBatal').modal('show');
     })
 
