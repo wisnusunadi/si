@@ -85,7 +85,7 @@
                                 <th>Array</th>
                                 <th>Aksi</th>
                             </tr>
-                        </thead>
+                        </thead> 
                         <tbody>
                         </tbody>
                     </table>

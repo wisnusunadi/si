@@ -420,6 +420,9 @@ class PpicController extends Controller
             ->addColumn('batal', function ($data) {
                 return $data->getJumlahPermintaanPesanan("ekatalog", "batal");
             })
+            ->addColumn('draft', function ($data) {
+                return $data->getJumlahPermintaanPesanan("ekatalog", "draft");
+            })
             ->addColumn('po', function ($data) {
                 $jumlah = ($data->getJumlahPermintaanPesanan("ekatalog_po", "") - $data->getJumlahTransferPesanan("ekatalog")) + ($data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa")) + ($data->getJumlahPermintaanPesanan("spb", "") - $data->getJumlahTransferPesanan("spb"));
                 return $jumlah;

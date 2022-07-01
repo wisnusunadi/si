@@ -1142,14 +1142,14 @@ class ProduksiController extends Controller
                     $val = $datacek/$x * 100;
 
                     if ($val >= 75 && $val < 101) {
-                        $atr = '<span class="badge badge-success">'.round($val, 2).'%</span>';
+                        $atr = '<span class="badge badge-success">Terkirim QC: '.round($val, 2).'%</span>';
                     } elseif ($val >= 50 && $val < 75) {
-                        $atr = '<span class="badge badge-info">'.round($val, 2).'%</span>';
+                        $atr = '<span class="badge badge-info">Terkirim QC: '.round($val, 2).'%</span>';
                     } elseif ($val >= 25 && $val < 50) {
-                        $atr = '<span class="badge badge-warning">'.round($val, 2).'%</span>';
+                        $atr = '<span class="badge badge-warning">Terkirim QC: '.round($val, 2).'%</span>';
                     }
                     else {
-                        $atr = '<span class="badge badge-danger">'.round($val, 2).'%</span>';
+                        $atr = '<span class="badge badge-danger">Terkirim QC: '.round($val, 2).'%</span>';
                     }
 
                     return $atr;

@@ -311,6 +311,12 @@
                                         href="#custom-tabs-four-wait-approved" role="tab"
                                         aria-controls="custom-tabs-four-wait-approved" aria-selected="false">Menunggu Persetujuan</a>
                                 </li>
+                                {{-- History Nomor Seri --}}
+                                <li class="nav-item">
+                                    <a class="nav-link" id="custom-tabs-four-history-tab" data-toggle="pill"
+                                        href="#custom-tabs-four-history" role="tab"
+                                        aria-controls="custom-tabs-four-history" aria-selected="false">Riwayat Hapus Nomor Seri</a>
+                                </li>
                             </ul>
                         </div>
                         <div class="card-body">
@@ -364,6 +370,25 @@
                                     </tbody>
                                 </table>
                             </div>
+                            <div class="tab-pane fade" id="custom-tabs-four-history" role="tabpanel"
+                                aria-labelledby="custom-tabs-four-history-tab">
+                                <table class="table history-produk">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>No. Seri</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>123456789</td>
+                                            <td><button class="btn btn-outline-info btn-sm openModalHistory"><i class="fas fa-eye"></i>Detail</button></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                             </div>
                         </div>
                     </div>
@@ -401,14 +426,36 @@
             </div>
             <div class="modal-body">
 
-                <table class="table view_produk">
+                <table class="table
+                {{-- view_produk --}}
+                ">
                     <thead>
                         <tr>
                             <th>Tanggal Masuk</th>
                             <th>Dari</th>
+                            <th>Status</th>
+                            <th>Komentar</th>
                         </tr>
                     </thead>
                     <tbody>
+                        <tr>
+                            <td>Selasa, 14 Juni 2019</td>
+                            <td>Admin</td>
+                            <td><span class="badge badge-success">Edit Diterima</span></td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
+                        </tr>
+                        <tr>
+                            <td>Rabu, 15 Juni 2019</td>
+                            <td>Admin</td>
+                            <td><span class="badge badge-danger">Edit Ditolak</span></td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
+                        </tr>
+                        <tr>
+                            <td>Rabu, 15 Juni 2019</td>
+                            <td>Admin</td>
+                            <td><span class="badge badge-danger">Hapus Ditolak</span></td>
+                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -440,7 +487,7 @@
         </div>
     </div>
 </div>
-
+ 
 <div class="modal fade import-seri importSeri" id="" role="dialog" aria-labelledby="modelTitleId">
     <div class="modal-dialog dialogModal modal-xl" role="document">
         <div class="modal-content">
@@ -517,11 +564,11 @@
                 </button>
             </div>
             <div class="modal-body">
-                <table class="table tambah_noseri_tableee">
+                <table class="table tambah_noseri_tableee" width="100%">
                     <thead>
                         <tr>
-                            <th>No Seri</th>
-                            <th>Layout</th>
+                            <th style="min-width: 500px">No Seri</th>
+                            <th style="min-width: 500px">Layout</th>
                         </tr>
                     </thead>
                     <tbody class="tambah_noseri_table">
@@ -535,6 +582,30 @@
         </div>
     </div>
 </div>
+
+{{-- Modal History Hapus NoSeri --}}
+<div class="modal fade history_seri" id="" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel">Nomor Seri <span class="nomor_seri_history"></span></h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <label for="">Alasan Dihapus</label>
+        <textarea name="" id="" cols="10" rows="10" disabled class="form-control">
+            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Commodi, quaerat? Cum, exercitationem expedita. Aliquid, temporibus, modi est exercitationem voluptatum soluta tempora amet nostrum dolorem, distinctio cumque saepe. Natus, nesciunt repellat.
+        </textarea>
+        </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <style>
     img {
         width: 100%;
@@ -1245,10 +1316,9 @@
 
     // modal history
     $(document).on('click', '.viewStock', function () {
-        var id = $(this).parent().prev().prev().text();
+        var id = $(this).parent().prev().prev().children().eq(1).val();
         let judul_detail = $('#nm_produk').text();
         $('p#namaa').text(judul_detail);
-        console.log(id);
         var i = 0;
         $('.view_produk').DataTable().destroy();
         $('view_produk tbody').empty();
@@ -1354,14 +1424,17 @@
             $('.layout_seri').append('<option value="' + value[0] + '">' + value[1] + '</option');
         });
         $('.tambah_noseri_tableee').DataTable({
-            destroy: true,
             searching: false,
+            paging: false,
+            scrollY: '500px',
+            scrollCollapse: true,
+            ordering: false,
+            autoWidth: false,
         });
         $('.tambah_seri').modal('show');
     });
 
     $(document).on('click', '#save_data', function () {
-        var dataNoSeri = $('.tambah_noseri_tableee').DataTable();
         let datalength = $('#jumlah_noseri').val();
         let no_seri = $('.tambah_noseri_tableee').DataTable().column(0).nodes().to$().find('input[type=text]')
             .map(function (index, elm) {
@@ -1376,11 +1449,11 @@
         let created_by = $('.created_by').val();
 
         let arr = [];
-        const data = dataNoSeri.$('.no_seri').map(function () {
-            return $(this).val();
-        }).get();
+        // const data = dataNoSeri.$('.no_seri').map(function () {
+        //     return $(this).val();
+        // }).get();
 
-        data.forEach(function (item) {
+        no_seri.forEach(function (item) {
             if (item != '') {
                 arr.push(item);
             }
@@ -1444,16 +1517,16 @@
                             },
                             success: function (res) {
                                 console.log(res);
-                                if (res.success) {
-                                    Swal.fire(
-                                        'Sukses!',
-                                        'Data berhasil ditambahkan',
-                                        'success'
-                                    )
-                                    setTimeout(() => {
-                                        location.reload();
-                                    }, 1000);
-                                }
+                                // if (res.success) {
+                                //     Swal.fire(
+                                //         'Sukses!',
+                                //         'Data berhasil ditambahkan',
+                                //         'success'
+                                //     )
+                                //     setTimeout(() => {
+                                //         location.reload();
+                                //     }, 1000);
+                                // }
                             }
                         });
                     } else {
@@ -1578,6 +1651,13 @@
         })
 
     });
+
+    $(document).on('click', '.openModalHistory', function (e) {
+        e.preventDefault();
+        $('.history_seri').modal('show');
+        let nomor_seri = $(this).parent().prev().text();
+        $('.nomor_seri_history').text(nomor_seri);
+    })
 
 </script>
 @stop

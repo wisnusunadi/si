@@ -89,7 +89,6 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -172,6 +171,27 @@
         </div>
       </div>
     </div>
+
+    {{-- Modal Komentar --}}
+    <div class="modal modalKomentar" aria-labelledby="testing" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title judulKomentar" id="staticBackdropLabel"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <textarea name="" id="" cols="10" rows="10" class="form-control textcomentar"></textarea>
+          </div>
+           <div class="modal-footer">
+            <button class="btn btn-primary kirimKomentar">Kirim</button>
+           </div>
+        </div>
+      </div>
+    </div>
+    
 @stop
 
 @section('adminlte_js')
@@ -346,6 +366,84 @@
     });
 
     $(document).on('click', '#btnApproveEdit', function () {
+        $('.judulKomentar').text('Alasan Persetujuan Edit Nomor Seri');
+        $('.modalKomentar').modal('show');
+        $('.kirimKomentar').removeAttr('id');
+        $('.kirimKomentar').attr('id', 'btnApproveEditKomentar');
+    })
+
+    $(document).on('click', '#btnApproveHapus', function () {
+        $('.judulKomentar').text('Alasan Persetujuan Hapus Nomor Seri');
+        $('.modalKomentar').modal('show');
+        $('.kirimKomentar').removeAttr('id');
+        $('.kirimKomentar').attr('id', 'btnApproveHapusKomentar');
+    });
+
+    $(document).on('click', '#btnRejectHapus', function () {
+
+        $('.judulKomentar').text('Alasan Penolakan Hapus Nomor Seri');
+        $('.modalKomentar').modal('show');
+        $('.kirimKomentar').removeAttr('id');
+        $('.kirimKomentar').attr('id', 'btnRejectHapusKomentar');
+    });
+
+    $(document).on('click', '#btnRejectEdit', function () {
+        $('.judulKomentar').text('Alasan Penolakan Edit Nomor Seri');
+        $('.modalKomentar').modal('show');
+        $('.kirimKomentar').removeAttr('id');
+        $('.kirimKomentar').attr('id', 'btnRejectEditKomentar');
+    });
+
+    $(document).on('click', '#btnApproveEditKomentar', function () {
+        let komentar = $('.textcomentar').val();
+        alert(komentar);
+        $('.textcomentar').val('');
+        // let a = $('#editTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+        //     function () {
+        //         return $(this).val();
+        //     }).get();
+
+        // if (a.length == 0) {
+        //     Swal.fire({
+        //         icon: 'error',
+        //         title: 'Oops...',
+        //         text: 'Minimal 1 Data Dipilih!',
+        //     })
+        // } else {
+        //     Swal.fire({
+        //         title: 'Kamu Yakin?',
+        //         text: "You won't be able to revert this!",
+        //         icon: 'warning',
+        //         showCancelButton: true,
+        //         confirmButtonColor: '#3085d6',
+        //         cancelButtonColor: '#d33',
+        //         confirmButtonText: 'Yes, approve it!'
+        //     }).then((result) => {
+        //         if (result.isConfirmed) {
+        //             $.ajax({
+        //                 url: '/api/v2/gbj/proses-update-noseri',
+        //                 type: 'post',
+        //                 data: {
+        //                     is_acc: 'approved',
+        //                     noseriid: a,
+        //                     accby: authid,
+        //                 },
+        //                 success: function(res) {
+        //                     Swal.fire({
+        //                         icon: 'success',
+        //                         title: 'Approved',
+        //                         text: res.msg,
+        //                     }).then(() => {
+        //                         location.reload()
+        //                     });
+        //                 }
+        //             })
+        //         }
+        //     })
+        // }
+        })
+
+        $(document).on('click', '#btnApproveHapusKomentar', function () {
         let a = $('#editTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
             function () {
                 return $(this).val();
@@ -389,110 +487,13 @@
                 }
             })
         }
+        })
 
-    })
-
-    $(document).on('click', '#btnApproveHapus', function () {
-        let a = $('#hapusTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
-            function () {
-                return $(this).val();
-            }).get();
-        console.log(a);
-
-        if (a.length == 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Minimal 1 Data Dipilih untuk Dihapus!',
-            })
-        } else {
-            Swal.fire({
-                title: 'Kamu Yakin?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, Approved it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/api/v2/gbj/proses-delete-noseri',
-                        type: 'post',
-                        data: {
-                            is_acc: 'approved',
-                            noseriid: a,
-                            accby: authid,
-                        },
-                        success: function(res) {
-                            console.log(res);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Approved',
-                                text: res.msg,
-                            }).then(() => {
-                                location.reload()
-                            });
-                        }
-                    })
-                }
-            })
-        }
-    });
-
-    $(document).on('click', '#btnRejectHapus', function () {
-        let a = $('#hapusTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
-            function () {
-                return $(this).val();
-            }).get();
-        // console.log(a);
-        if (a.length == 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Minimal 1 Data Dipilih untuk Dihapus!',
-            })
-        } else {
-            Swal.fire({
-                title: 'Kamu Yakin?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, reject it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/api/v2/gbj/proses-delete-noseri',
-                        type: 'post',
-                        data: {
-                            is_acc: 'rejected',
-                            noseriid: a,
-                            accby: authid,
-                        },
-                        success: function(res) {
-                            console.log(res);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Rejected',
-                                text: res.msg,
-                            }).then(() => {
-                                location.reload()
-                            });
-                        }
-                    })
-                }
-            })
-        }
-    });
-
-    $(document).on('click', '#btnRejectEdit', function () {
+        $(document).on('click', '#btnRejectEditKomentar', function () {
         let a = $('#editTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
             function () {
                 return $(this).val();
             }).get();
-        console.log(a.length);
 
         if (a.length == 0) {
             Swal.fire({
@@ -508,21 +509,21 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, reject it!'
+                confirmButtonText: 'Yes, approve it!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
                         url: '/api/v2/gbj/proses-update-noseri',
                         type: 'post',
                         data: {
-                            is_acc: 'rejected',
+                            is_acc: 'approved',
                             noseriid: a,
                             accby: authid,
                         },
                         success: function(res) {
                             Swal.fire({
                                 icon: 'success',
-                                title: 'Rejected',
+                                title: 'Approved',
                                 text: res.msg,
                             }).then(() => {
                                 location.reload()
@@ -532,7 +533,53 @@
                 }
             })
         }
-    });
+        })
+
+        $(document).on('click', '#btnRejectEditKomentar', function () {
+        let a = $('#editTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+            function () {
+                return $(this).val();
+            }).get();
+
+        if (a.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Minimal 1 Data Dipilih!',
+            })
+        } else {
+            Swal.fire({
+                title: 'Kamu Yakin?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, approve it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/v2/gbj/proses-update-noseri',
+                        type: 'post',
+                        data: {
+                            is_acc: 'approved',
+                            noseriid: a,
+                            accby: authid,
+                        },
+                        success: function(res) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Approved',
+                                text: res.msg,
+                            }).then(() => {
+                                location.reload()
+                            });
+                        }
+                    })
+                }
+            })
+        }
+        })
 
 </script>
 @stop

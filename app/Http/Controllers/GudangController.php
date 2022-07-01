@@ -2946,33 +2946,35 @@ class GudangController extends Controller
     function addSeri(Request $request)
     {
         try {
-            $count = count($request->no_seri);
-            for ($i = 0; $i < $count; $i++) {
-                NoseriBarangJadi::create([
-                    'noseri' => strtoupper($request->no_seri[$i]),
-                    'layout_id' => $request->layout[$i],
-                    'gdg_barang_jadi_id' => $request->id,
-                    'dari' => $request->dari,
-                    'created_by' => $request->created_by,
-                    'jenis' => 'MASUK',
-                    'is_aktif' => 1
-                ]);
-            }
 
-            $a = GudangBarangJadi::where('id', $request->id)->first();
-            $stok = $a->stok + $count;
-            // return $stok;
-            GudangBarangJadi::where('id', $request->id)->update(['stok' => $stok]);
-            GudangBarangJadiHis::create([
-                'gdg_brg_jadi_id' => $request->id,
-                'stok' => $count,
-                'tgl_masuk' => Carbon::now(),
-                'jenis' => 'MASUK',
-                'created_by' => $request->created_by,
-                'created_at' => Carbon::now(),
-                'dari' => $request->dari,
-            ]);
-            return response()->json(['success' => 'Sukses']);
+            dd($request->all());
+            // $count = count($request->no_seri);
+            // for ($i = 0; $i < $count; $i++) {
+            //     NoseriBarangJadi::create([
+            //         'noseri' => strtoupper($request->no_seri[$i]),
+            //         'layout_id' => $request->layout[$i],
+            //         'gdg_barang_jadi_id' => $request->id,
+            //         'dari' => $request->dari,
+            //         'created_by' => $request->created_by,
+            //         'jenis' => 'MASUK',
+            //         'is_aktif' => 1
+            //     ]);
+            // }
+
+            // $a = GudangBarangJadi::where('id', $request->id)->first();
+            // $stok = $a->stok + $count;
+            // // return $stok;
+            // GudangBarangJadi::where('id', $request->id)->update(['stok' => $stok]);
+            // GudangBarangJadiHis::create([
+            //     'gdg_brg_jadi_id' => $request->id,
+            //     'stok' => $count,
+            //     'tgl_masuk' => Carbon::now(),
+            //     'jenis' => 'MASUK',
+            //     'created_by' => $request->created_by,
+            //     'created_at' => Carbon::now(),
+            //     'dari' => $request->dari,
+            // ]);
+            // return response()->json(['success' => 'Sukses']);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,

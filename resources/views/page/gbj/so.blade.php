@@ -49,14 +49,14 @@
                     <div class="card-body">
                         <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="pills-proses_kirim-tab" data-toggle="pill" href="#pills-proses_kirim" role="tab" aria-controls="pills-proses_kirim" aria-selected="true">Proses Dicek</a>
+                                <a class="nav-link active" id="pills-proses_kirim-tab" data-toggle="pill" href="#pills-proses_kirim" role="tab" aria-controls="pills-proses_kirim" aria-selected="true">Dalam Proses</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Dicek</a>
+                                <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Proses</a>
                             </li>
-                            {{-- <li class="nav-item">
-                                <a class="nav-link" id="pills-batal-tab" data-toggle="pill" href="#pills-batal" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Batal PO</a>
-                            </li> --}}
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-batal_po-tab" data-toggle="pill" href="#pills-batal_po" role="tab" aria-controls="pills-batal_po" aria-selected="false">Batal Proses</a>
+                            </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-proses_kirim" role="tabpanel" aria-labelledby="pills-proses_kirim-tab">
@@ -75,6 +75,8 @@
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
+                                                <tbody>
+                                                </tbody>
                                             </table>
                                         </div>
                                     </div>
@@ -97,37 +99,42 @@
                                                     </tr>
                                                 </thead>
                                             </table>
-
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            {{-- <div class="tab-pane fade show" id="pills-batal" role="tabpanel" aria-labelledby="pills-batal-tab">
+                            <div class="tab-pane fade show" id="pills-batal_po" role="tabpanel" aria-labelledby="pills-batal_po-tab">
                                 <div class="row">
                                     <div class="col-12">
                                         <div class="table-responsive">
-                                            <table class="table table-bordered" style="width: 100%" id="batal-table">
+                                            <table class="table table-bordered" style="width: 100%" id="batal-po">
                                                 <thead>
                                                     <tr>
-                                                        <th><input type="checkbox" name="" id=""></th>
+                                                        <th>No</th>
                                                         <th>Nomor SO</th>
                                                         <th>Nomor PO</th>
                                                         <th>Customer</th>
                                                         <th>Batas Transfer</th>
-                                                        <th>Status</th>
+                                                        <th>Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
                                                     <tr>
-                                                        <td></td>
+                                                        <td>1</td>
+                                                        <td>SO-00001</td>
+                                                        <td>PO-00001</td>
+                                                        <td>PT. ABC</td>
+                                                        <td>20 Desember 2019</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-success button_batal"><i class="fas fa-eye"></i> Detail</button>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
-
                                         </div>
                                     </div>
                                 </div>
-                            </div> --}}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -291,6 +298,117 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{{-- Modal Batal --}}
+<div class="modal fade" id="pesananBatal" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content" style="margin: 10px">
+            <div class="modal-header bg-navy">
+                <h4 class="modal-title">Pesanan Batal</h4>
+                <button class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="row filter">
+                    <div class="col-12">
+                        <div class="card card-navy card-outline card-tabs">
+                            <div class="card-header p-0 pt-1 border-bottom-0">
+                                <ul class="nav nav-tabs" id="custom-tabs-three-tab" role="tablist">
+                                    <li class="nav-item">
+                                        <a class="nav-link active" id="tabs-detail-tab" data-toggle="pill" href="#tabs-detail"
+                                            role="tab" aria-controls="tabs-detail" aria-selected="true">Informasi Umum</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" id="tabs-produk-tab" data-toggle="pill" href="#tabs-produk" role="tab"
+                                            aria-controls="tabs-produk" aria-selected="false">Detail Pembatalan</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="card-body">
+                                <div class="tab-content" id="custom-tabs-three-tabContent">
+                                    <div class="tab-pane fade active show" id="tabs-detail" role="tabpanel" aria-labelledby="tabs-detail-tab">
+                                        <div class="row">
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="info-box bg-maroon">
+                                                    <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
+                                                    <div class="info-box-content">
+                                                    <span class="info-box-text">No SO</span>
+                                                    <span class="info-box-number">SO 1234</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="info-box bg-warning">
+                                                    <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
+                                                    <div class="info-box-content">
+                                                    <span class="info-box-text">No PO </span>
+                                                    <span class="info-box-number">PO 1234</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="info-box bg-olive">
+                                                    <span class="info-box-icon"><i class="far fa-user"></i></span>
+                                                    <div class="info-box-content">
+                                                    <span class="info-box-text">Nama Customer</span>
+                                                    <span class="info-box-number">PT Emiindo Jaya</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-6 col-md-6">
+                                                <div class="info-box bg-indigo" style="box-shadow: none">
+                                                    <div class="info-box-content">
+                                                    <span class="info-box-text">Tanggal Batal</span>
+                                                    <span class="info-box-number">18 September 2022</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="tabs-produk" role="tabpanel" aria-labelledby="tabs-produk-tab">
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="info-box bg-danger">
+                                                    <span class="info-box-icon"><i class="fas fa-exclamation-triangle fa-fw"></i></span>
+                                                    <div class="info-box-content">
+                                                    <span class="info-box-text">Alasan Batal</span>
+                                                    <span class="info-box-number"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card removeshadow">
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover" id="produktable">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                <th>Nama Produk</th>
+                                                <th>Jumlah</th>
+                                            </tr>
+                                        </thead> 
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fas fa-times"></i> Tutup</button>
+                <button type="button" class="btn btn-dark btn-sm float-right"><i class="fas fa-check"></i> Terima</button>
             </div>
         </div>
     </div>
@@ -566,6 +684,10 @@
         }
         })
         $('#viewProdukModal').modal('show');
+    });
+
+    $(document).on('click', '.button_batal', function(e) {
+        $('#pesananBatal').modal('show');
     })
 
 </script>
