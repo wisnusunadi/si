@@ -11,7 +11,7 @@
                     <th rowspan="2">No</th>
                     <th rowspan="2">Nama Produk</th>
                     <th colspan="2">Stok</th>
-                    <th colspan="5">Penjualan</th>
+                    <th colspan="6">Penjualan</th>
                     <th rowspan="2">Aksi</th>
                 </tr>
                 <tr>
@@ -21,6 +21,7 @@
                     <th>Sepakat</th>
                     <th>Nego</th>
                     <th>Batal</th>
+                    <th>Draft</th>
                     <th>PO</th>
                 </tr>
             </thead>
@@ -34,6 +35,7 @@
               <td>{{ item.sepakat }}</td>
               <td>{{ item.nego }}</td>
               <td>{{ item.batal }}</td>
+              <td>{{ item.draft }}</td>
               <td>{{ item.po }}</td>
               <td>
                 <button
