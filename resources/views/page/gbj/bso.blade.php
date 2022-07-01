@@ -368,7 +368,7 @@
                 <input type="hidden" name="soid1" id="soid1" value="">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="">Noseri</label>
+                        <label for="">Sales Order File</label>
                         <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".xlsx">
                     </div>
 
