@@ -151,7 +151,7 @@
                                 <div class="card removeshadow overflowy">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-lg-4 col-md-12 mb-3">
+                                        <div class="col-lg-4 col-md-12 mb-3 hide">
                                             <h6><b>Status Barang</b></h6>
                                             <div id="chartproduk"></div>
                                             <div class="row">
@@ -198,7 +198,7 @@
                                                 </ul>
                                             </div> --}}
                                         </div>
-                                        <div class="col-lg-8 col-md-12">
+                                        <div class="col-lg-12 col-md-12">
                                             <h6><b>Detail Produk</b></h6>
                                             <table class="table"
                                                 style="max-width:100%; overflow-x: hidden; background-color:white;"
