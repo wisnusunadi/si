@@ -465,10 +465,21 @@ return [
         ],
         [
             'text' => 'Penjualan',
-            'url'  => '/penjualan/penjualan/show',
             'icon' => 'fas fa-mail-bulk',
-            'auth' => [26]
-        ],
+            'auth' => [26],
+            'submenu' => [
+                    [
+                        'text' => 'Transaksi Internal',
+                        'url'  => '/penjualan/penjualan/show',
+                        'icon' => 'far fa-circle',
+                    ],
+                    [
+                        'text' => 'Transaksi Eksternal',
+                        'url'  => '/penjualan/penjualan/eksternal',
+                        'icon' => 'far fa-circle',
+                    ],
+                ]
+                ],
         // [
         //     'text' => 'Sales Order',
         //     'url'  => '/penjualan/so/show',
