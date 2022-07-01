@@ -1467,10 +1467,34 @@ class PpicController extends Controller
 
     public function master_pengiriman_detail_show($id)
     {
-        $data = GudangBarangJadi::find($id);
-        $jumlah = $data->getJumlahCekPesanan() + $data->getJumlahKirimPesanan();
-        $jumlahselesai = $data->getJumlahKirimPesanan();
-        $jumlahproses = $data->getJumlahCekPesanan();
+        $data = GudangBarangJadi::where('id', $id)
+            ->addSelect(['count_pesanan' => function ($q){
+                    $q->selectRaw('count(noseri_detail_pesanan.id)')
+                    ->from('noseri_detail_pesanan')
+                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                    ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+                    ->whereNotIn('pesanan.log_id', ['10', '20'])
+                    ->limit(1);
+                },
+                'count_pengiriman' => function($q){
+                    $q->selectRaw('count(noseri_logistik.id)')
+                      ->from('noseri_logistik')
+                      ->leftJoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                      ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+                      ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                      ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                      ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+                      ->whereNotIn('pesanan.log_id', ['10', '20'])
+                      ->limit(1);
+                }
+            ])
+            ->with('Produk')
+            ->first();
+        $jumlah = $data->count_pesanan + $data->count_pengiriman;
+        $jumlahselesai = $data->count_pengiriman;
+        $jumlahproses = $data->count_pesanan;
         return view('spa.ppic.master_pengiriman.detail', ['id' => $id, 'data' => $data, 'jumlah' => $jumlah, 'jumlahselesai' => $jumlahselesai, 'jumlahproses' => $jumlahproses]);
     }
 
