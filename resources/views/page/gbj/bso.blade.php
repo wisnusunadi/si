@@ -135,7 +135,6 @@
                                         <tr>
                                             <th>Produk</th>
                                             <th>Produk</th>
-                                            {{-- <th><input type="checkbox" id="head-cb-produk"></th> --}}
                                             <th>Produk</th>
                                             <th>Jumlah</th>
                                             <th>Merk</th>
@@ -443,6 +442,8 @@
         let a = $('#gudang-barang').DataTable({
             processing: true,
             destroy: true,
+            ordering: false,
+            autoWidth: false,
             ajax: {
                 url: '/api/tfp/data-so',
             },

@@ -2014,16 +2014,17 @@ class GudangController extends Controller
 
             $arr = [];
             $arrm = [];
-            foreach ($dat_arr as $inner) {
+            
+            // foreach ($dat_arr as $inner) {
 
-                //  Check type
-                if (is_array($inner)) {
-                    //  Scan through inner loop
-                    foreach ($inner[1] as $value) {
-                       echo "$value \n";
-                    }
-                }
-            }
+            //     //  Check type
+            //     if (is_array($inner)) {
+            //         //  Scan through inner loop
+            //         foreach ($inner[1] as $value) {
+            //            echo "$value \n";
+            //         }
+            //     }
+            // }
             // foreach($dat_arr as $da){
             //     foreach($da as $da1) {
             //     //     foreach($da1 as $da2) {
