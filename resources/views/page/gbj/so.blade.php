@@ -35,7 +35,11 @@
     <div class="container-fluid">
       <div class="row mb-2">
         <div class="col-sm-6">
+            @if(Auth::user()->divisi_id !== 31)
           <h1 class="m-0">Daftar Sales Order</h1>
+          @else
+          <h1 class="m-0">Daftar Batal PO</h1>
+            @endif
         </div><!-- /.col -->
       </div><!-- /.row -->
     </div><!-- /.container-fluid -->
@@ -48,6 +52,7 @@
                 <div class="card">
                     <div class="card-body">
                         <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
+                            @if(Auth::user()->divisi_id !== 31)
                             <li class="nav-item">
                                 <a class="nav-link active" id="pills-proses_kirim-tab" data-toggle="pill" href="#pills-proses_kirim" role="tab" aria-controls="pills-proses_kirim" aria-selected="true">Dalam Proses</a>
                             </li>
@@ -57,8 +62,10 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-batal_po-tab" data-toggle="pill" href="#pills-batal_po" role="tab" aria-controls="pills-batal_po" aria-selected="false">Batal Proses</a>
                             </li>
+                            @endif
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
+                            @if(Auth::user()->divisi_id !== 31)
                             <div class="tab-pane fade show active" id="pills-proses_kirim" role="tabpanel" aria-labelledby="pills-proses_kirim-tab">
                                 <div class="row">
                                     <div class="col-12">
@@ -135,6 +142,40 @@
                                     </div>
                                 </div>
                             </div>
+                            @else
+                            <div class="tab-pane fade show active" id="pills-batal_po" role="tabpanel" aria-labelledby="pills-batal_po-tab">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="table-responsive">
+                                            <table class="table table-bordered" style="width: 100%" id="batal-po">
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>Nomor SO</th>
+                                                        <th>Nomor PO</th>
+                                                        <th>Customer</th>
+                                                        <th>Batas Transfer</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td>SO-00001</td>
+                                                        <td>PO-00001</td>
+                                                        <td>PT. ABC</td>
+                                                        <td>20 Desember 2019</td>
+                                                        <td>
+                                                            <button class="btn btn-sm btn-outline-success button_batal"><i class="fas fa-eye"></i> Detail</button>
+                                                        </td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            @endif
                         </div>
                     </div>
                 </div>
@@ -408,7 +449,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fas fa-times"></i> Tutup</button>
+                @if(Auth::user()->divisi_id !== 31)
                 <button type="button" class="btn btn-dark btn-sm float-right"><i class="fas fa-check"></i> Terima</button>
+                @endif
             </div>
         </div>
     </div>
@@ -418,6 +461,7 @@
 @section('adminlte_js')
 <script>
     $(document).ready(function () {
+        let auth = $('#auth').val();
         $('#head-cb-so').prop('checked', false);
         $('.addProduk').click(function (e) {
             $('#addProdukModal').modal('show');
@@ -463,7 +507,7 @@
             ]
         });
 
-        $('#sudah-dicek').DataTable({
+        $('#sudah-dicek').DataTable({ 
             destroy: true,
             processing: true,
             serverSide: false,
