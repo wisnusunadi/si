@@ -114,7 +114,7 @@
                                                         <th>Nomor SO</th>
                                                         <th>Nomor PO</th>
                                                         <th>Customer</th>
-                                                        {{-- <th>Batas Transfer</th> --}}
+                                                        <th>Status</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
@@ -353,6 +353,7 @@
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="info-box bg-indigo" style="box-shadow: none">
+                                                    <span class="info-box-icon"><i class="far fa-calendar"></i></span>
                                                     <div class="info-box-content">
                                                     <span class="info-box-text">Tanggal Batal</span>
                                                     <span class="info-box-number" id="tglbatal">18 September 2022</span>
@@ -400,7 +401,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fas fa-times"></i> Tutup</button>
-                <button type="button" class="btn btn-dark btn-sm float-right"><i class="fas fa-check"></i> Terima</button>
+                <button type="button" class="btn btn-dark btn-sm float-right" id="btnProsesBatal"><i class="fas fa-check"></i> Terima</button>
             </div>
         </div>
     </div>
@@ -501,7 +502,7 @@
                 {data: 'no_po'},
                 { data: 'nama_customer', name: 'nama_customer'},
                 // { data: 'batas_out', name: 'batas_out'},
-                // {data: 'logs'},
+                {data: 'logs'},
                 { data: 'aksi', name: 'aksi'},
             ],
             "language": {
@@ -694,11 +695,12 @@
         $('#viewProdukModal').modal('show');
     });
 
+    let idd;
     $(document).on('click', '.btndetail', function(e) {
-        let so = $(this).parent().prev().prev().prev().html();
-        let po = $(this).parent().prev().prev().html();
-        let customer = $(this).parent().prev().html();
-        let id = $(this).data('id');
+        let so = $(this).parent().prev().prev().prev().prev().html();
+        let po = $(this).parent().prev().prev().prev().html();
+        let customer = $(this).parent().prev().prev().html();
+        idd = $(this).data('id');
         let x = $(this).data('value');
 
         $('span#noso').text(so);
@@ -713,15 +715,13 @@
             ordering: false,
             scrollY: 300,
             ajax: {
-                url: "/api/tfp/detail-so/" +id+"/"+x,
-                // url: "/api/testingJson",
+                url: "/api/tfp/detail-so/" +idd+"/"+x,
             },
             columns: [
                 {data: 'detail_pesanan_id'},
                 { data: 'paket' },
                 { data: 'produk' },
                 { data: 'qty' },
-                // { data: 'status' },
             ],
             "drawCallback": function ( settings ) {
                 var api = this.api();
@@ -749,6 +749,47 @@
             }
         })
         $('#pesananBatal').modal('show');
+    })
+
+    $(document).on('click', '#btnProsesBatal', function(e) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, save it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/api/v2/gbj/proses_so_batal",
+                    type: "post",
+                    data: {
+                        pesananid: idd,
+                    },
+                    success: function(res) {
+                        // console.log(res)
+                        if (res.error == true) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: res.msg
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: res.msg
+                            }).then(() => {
+                                console.log('ok');
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
     })
 
 </script>

@@ -31,6 +31,7 @@ Route::prefix('/v2')->group(function() {
         Route::post('store-sodb', [GudangController::class, 'store_so_to_db']);
 
         Route::post('so_batal', [GudangController::class, 'get_so_batal']);
+        Route::post('proses_so_batal', [GudangController::class, 'proses_so_batal']);
     });
 
 });

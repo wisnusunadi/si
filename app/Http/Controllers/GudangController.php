@@ -18,6 +18,7 @@ use App\Models\Layout;
 use App\Models\LogSurat;
 use App\Models\NoseriBarangJadi;
 use App\Models\NoseriBrgJadiLog;
+use App\Models\NoseriDetailPesanan;
 use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
 use App\Models\Produk;
@@ -3718,57 +3719,56 @@ class GudangController extends Controller
 
     function get_so_batal()
     {
-        $Ekatalog = collect(Pesanan::has('Ekatalog')->whereIn('log_id', [20])->get());
+        try {
+            $Ekatalog = collect(Pesanan::has('Ekatalog')->whereIn('log_id', [20])->get());
         $Spa = collect(Pesanan::has('Spa')->whereIn('log_id', [20])->get());
         $Spb = collect(Pesanan::has('Spb')->whereIn('log_id', [20])->get());
 
         $data = $Ekatalog->merge($Spa)->merge($Spb);
         $x = [];
         foreach ($data as $k) {
-            if ($k->getJumlahPesanan() != $k->cekJumlahkirim()) {
-                $x[] = $k->id;
-            }
+            $x[] = $k->id;
         }
 
-        $datax = Pesanan::whereIn('id', $x)->get();
+        $datax = TFProduksi::whereIn('pesanan_id', $x)->get();
 
         return datatables()->of($datax)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
-                return $data->so;
+                return $data->pesanan->so;
             })
             ->addColumn('no_po', function ($data) {
-                return $data->no_po;
+                return $data->pesanan->no_po;
             })
             ->addColumn('nama_customer', function ($data) {
-                $name = explode('/', $data->so);
+                $name = explode('/', $data->pesanan->so);
                 for ($i = 1; $i < count($name); $i++) {
                     if ($name[1] == 'EKAT') {
-                        return $data->Ekatalog->Customer->nama;
+                        return $data->pesanan->Ekatalog->Customer->nama;
                     } elseif ($name[1] == 'SPA') {
-                        return $data->Spa->Customer->nama;
+                        return $data->pesanan->Spa->Customer->nama;
                     } elseif ($name[1] == 'SPB') {
-                        return $data->Spb->Customer->nama;
+                        return $data->pesanan->Spb->Customer->nama;
                     }
                 }
             })
             ->addColumn('aksi', function($data){
-                $name = explode('/', $data->so);
+                $name = explode('/', $data->pesanan->so);
                 for ($i = 1; $i < count($name); $i++) {
                     if ($name[1] == 'EKAT') {
-                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
+                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="ekatalog"  data-id="' . $data->pesanan->id . '">
                                     <button class="btn btn-outline-info btn-sm" type="button">
                                         <i class="fas fa-eye"></i>&nbsp;Detail
                                     </button>
                                 </a>';
                     } elseif ($name[1] == 'SPA') {
-                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="spa"  data-id="' . $data->id . '">
+                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="spa"  data-id="' . $data->pesanan->id . '">
                                     <button class="btn btn-outline-info btn-sm" type="button">
                                         <i class="fas fa-eye"></i>&nbsp;Detail
                                     </button>
                                 </a>';
                     } elseif ($name[1] == 'SPB') {
-                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="spb"  data-id="' . $data->id . '">
+                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="spb"  data-id="' . $data->pesanan->id . '">
                                     <button class="btn btn-outline-info btn-sm" type="button">
                                         <i class="fas fa-eye"></i>&nbsp;Detail
                                     </button>
@@ -3777,7 +3777,75 @@ class GudangController extends Controller
                 }
                 return $a;
             })
-            ->rawColumns(['aksi'])
+            ->addColumn('logs', function($d) {
+                if ($d->pesanan->log_id == 9) {
+                    $ax = "<span class='badge badge-pill badge-secondary'>".$d->pesanan->log->nama."</span>";
+                } else if ($d->pesanan->log_id == 6) {
+                    $ax = "<span class='badge badge-pill badge-warning'>".$d->pesanan->log->nama."</span>";
+                } elseif ($d->pesanan->log_id == 8) {
+                    $ax = "<span class='badge badge-pill badge-info'>".$d->pesanan->log->nama."</span>";
+                } elseif ($d->pesanan->log_id == 11) {
+                    $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
+                } else {
+                    $ax = "<span class='badge badge-pill badge-danger'>".$d->pesanan->log->nama."</span>";
+                }
+
+                return $ax;
+            })
+            ->rawColumns(['aksi', 'logs'])
             ->make(true);
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function proses_so_batal(Request $request)
+    {
+        try {
+            $check = TFProduksi::where('pesanan_id', $request->pesananid)->first();
+            if ($check) {
+                $chk_detail = TFProduksiDetail::whereIn('t_gbj_id', [$check->id])->get();
+                $did = [];
+                foreach($chk_detail as $detail) {
+                    $did[] = $detail->id;
+                }
+                $nid = [];
+                $nidd = [];
+                $chk_noseri = NoseriTGbj::whereIn('t_gbj_detail_id', $did)->get();
+                foreach($chk_noseri as $noseri) {
+                    $nid[] = $noseri->id;
+                    $nidd[] = $noseri->noseri_id;
+                }
+
+                $seri = NoseriBarangJadi::whereIn('id', $nidd)->get();
+                $seri_qc = NoseriDetailPesanan::whereIn('t_tfbj_noseri_id', $nid)->get();
+                if (count($seri_qc) != 0) {
+                    return response()->json([
+                        'error' => true,
+                        'msg' => 'Mohon Tunggu Proses Batal dari QC'
+                    ]);
+                } else {
+                    NoseriBarangJadi::whereIn('id', $nidd)->update(['is_ready' => 0, 'used_by' => null]);
+                    NoseriTGbj::whereIn('t_gbj_detail_id', $did)->delete();
+                    TFProduksiDetail::where('t_gbj_id', $check->id)->delete();
+                    TFProduksi::where('pesanan_id', $request->pesananid)->delete();
+                    return response()->json([
+                        'error' => false,
+                        'msg' => 'Proses Restock Berhasil'
+                    ]);
+                }
+            } else {
+                return 'tidak ada';
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
     }
 }
