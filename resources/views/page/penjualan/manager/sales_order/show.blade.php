@@ -487,14 +487,6 @@ ul#status {
                             <div class="tab-pane fade card-body" id="spa" role="tabpanel" aria-labelledby="spa-tab">
                                 <div class="row">
                                     <div class="col-12">
-                                        @if(Auth::user()->divisi->id == "26")
-                                        <span class="float-right filter">
-                                            <a href="{{route('penjualan.penjualan.create')}}"><button class="btn btn-outline-info">
-                                                    <i class="fas fa-plus"></i> Tambah
-                                                </button>
-                                            </a>
-                                        </span>
-                                        @endif
                                         <span class="float-right filter">
                                             <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                 aria-haspopup="true" aria-expanded="false">
@@ -599,14 +591,6 @@ ul#status {
                             <div class="tab-pane fade card-body" id="spb" role="tabpanel" aria-labelledby="spb-tab">
                                 <div class="row">
                                     <div class="col-12">
-                                        @if(Auth::user()->divisi->id == "26")
-                                        <span class="float-right filter">
-                                            <a href="{{route('penjualan.penjualan.create')}}"><button class="btn btn-outline-info">
-                                                    <i class="fas fa-plus"></i> Tambah
-                                                </button>
-                                            </a>
-                                        </span>
-                                        @endif
                                         <span class="float-right filter">
                                             <button class="btn btn-outline-secondary" data-toggle="dropdown"
                                                 aria-haspopup="true" aria-expanded="false">
@@ -782,20 +766,20 @@ ul#status {
 @stop
 @section('adminlte_js')
     <script>
-        $(function() {
-            document.querySelector('#spa-tab').addEventListener('click', spa_show);
-            document.querySelector('#spb-tab').addEventListener('click', spb_show);
-            document.querySelector('#ekat-tab').addEventListener('click', ekat_show);
+    $(function() {
+        document.querySelector('#spa-tab').addEventListener('click', spa_show);
+        document.querySelector('#spb-tab').addEventListener('click', spb_show);
+        document.querySelector('#ekatalog-tab').addEventListener('click', ekat_show);
 
-            p_show();
-            function tbldetailpesanan() {
-                $('#tabledetailpesan').DataTable({
-                    "scrollX": false
-                });
-            }
-            var divisi_id = "{{ Auth::user()->divisi->id }}";
+        p_show();
+        function tbldetailpesanan() {
+            $('#tabledetailpesan').DataTable({
+                "scrollX": false
+            });
+        }
+        var divisi_id = "{{ Auth::user()->divisi->id }}";
 
-            function p_show(){
+        function p_show(){
             var penjualantable = $('#penjualantable').DataTable({
                 destroy: true,
                 processing: true,
@@ -845,7 +829,7 @@ ul#status {
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/penjualan/penjualan/ekatalog/data/semua',
+                    'url': '/manager/penjualan/show_data/ekatalog/semua',
                     "dataType": "json",
                     'type': 'POST',
                     'headers': {
@@ -912,13 +896,13 @@ ul#status {
             });
         }
 
-            function spa_show(){
+        function spa_show(){
             var spatable = $('#spatable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/penjualan/penjualan/spa/data/semua',
+                    'url': '/manager/penjualan/show_data/spa/semua',
                     "dataType": "json",
                     'type': 'POST',
                     'headers': {
@@ -958,15 +942,15 @@ ul#status {
                     }
                 ]
             });
-          }
+        }
 
-            function spb_show(){
+        function spb_show(){
             var spbtable = $('#spbtable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/penjualan/penjualan/spb/data/semua',
+                    'url': '/manager/penjualan/show_data/spb/semua',
                     "dataType": "json",
                     'type': 'POST',
                     'headers': {
@@ -1007,7 +991,7 @@ ul#status {
                 ],
             });
         }
-        })
+    })
     </script>
     <script>
         $(function() {
@@ -1728,7 +1712,7 @@ ul#status {
                     var x = ['semua'];
                 }
                 console.log(x);
-                $('#ekatalogtable').DataTable().ajax.url('/penjualan/penjualan/ekatalog/data/' + x).load();
+                $('#ekatalogtable').DataTable().ajax.url('/manager/penjualan/show_data/ekatalog/' + x).load();
                 return false;
             });
             $('#filter_spa').submit(function() {
@@ -1742,7 +1726,7 @@ ul#status {
                 } else {
                     var x = ['semua'];
                 }
-                $('#spatable').DataTable().ajax.url('/penjualan/penjualan/spa/data/' + x).load();
+                $('#spatable').DataTable().ajax.url('/manager/penjualan/show_data/spa/' + x).load();
                 return false;
 
             });
@@ -1760,7 +1744,7 @@ ul#status {
                     var x = ['semua'];
                 }
 
-                $('#spbtable').DataTable().ajax.url('/penjualan/penjualan/spb/data/' + x).load();
+                $('#spbtable').DataTable().ajax.url('/manager/penjualan/show_data/spb/' + x).load();
                 return false;
             });
         })

@@ -1099,7 +1099,7 @@
             });
 
             $('input[type="radio"][name="status_akn"]').on('change', function() {
-                 $('#isi_produk_input').addClass('hide');
+                $('#isi_produk_input').addClass('hide');
 
                 if ($(this).val() != "") {
                     if ($(this).val() == "sepakat") {
@@ -1113,16 +1113,17 @@
                             $('#no_paket').val(nopaketdb);
                         }
                         if(jum_produk <= 0){
-                        $("#produktable tbody").empty();
-                         $('#produktable tbody').append(trproduktable());
+                            $("#produktable tbody").empty();
+                            $('#produktable tbody').append(trproduktable());
                         }
+
                         numberRowsProduk($("#produktable"));
                     } else if ($(this).val() == "draft") {
                         $('#isi_produk_input').removeClass('hide');
                         $('#checkbox_nopaket').removeClass('hide');
                         $('#no_paket').val("");
                         $('#no_paket').attr('readonly', true);
-                         $("#batas_kontrak").attr('disabled', true);
+                        $("#batas_kontrak").attr('disabled', true);
                         $("#provinsi").attr('disabled', true);
                         $("#provinsi").empty().trigger('change')
                         if(jum_produk <= 0){

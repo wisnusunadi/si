@@ -348,7 +348,7 @@ ul#status {
                                                         <th>No</th>
                                                         <th>No Urut</th>
                                                         <th>Nomor SO</th>
-                                                        <th>Nomor AKzN</th>
+                                                        <th>Nomor AKN</th>
                                                         <th>Nomor PO</th>
                                                         <th>Tanggal Buat</th>
                                                         <th>Tanggal Edit</th>
