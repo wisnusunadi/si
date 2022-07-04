@@ -2940,4 +2940,9 @@ class QcController extends Controller
         $result = DetailPesananProduk::where('detail_pesanan_id', $id)->with('GudangBarangJadi.Produk')->get();
         return $result;
     }
+
+    //MANAGER
+    public function manager_qc_show(){
+        return view('page.qc.manager.sales_order.show');
+    }
 }

@@ -4339,4 +4339,9 @@ $Logistik = Logistik::find($request->sj_lama);
             return Excel::download(new LaporanLogistik($jenis, $ekspedisi, $tgl_awal, $tgl_akhir), 'Laporan Pengiriman Ekspedisi dan Non Ekspedisi ' . $waktu->toDateTimeString() . '.xlsx');
         }
     }
+
+    //MANAGER
+    public function manager_logistik_show(){
+        return view('page.logistik.manager.sales_order.show');
+    }
 }
