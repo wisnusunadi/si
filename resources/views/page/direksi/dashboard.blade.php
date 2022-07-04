@@ -14,7 +14,7 @@
         display: none;
     }
 
-    body {
+    section {
         font-size: 14px;
     }
 

@@ -2937,7 +2937,6 @@ class LogistikController extends Controller
         return view('page.logistik.so.cancel', ['id' => $id, 'p' => $p]);
     }
 
-    // public function create_logistik_view($produk_id, $part_id, $pesanan_id, $jenis)
     public function create_logistik_view(Request $r, $pesanan_id, $jenis)
     {
         $value = [];
@@ -4304,7 +4303,8 @@ $Logistik = Logistik::find($request->sj_lama);
         $footer = Carbon::createFromFormat('Y-m-d', $value)->isoFormat('D MMMM Y');
         return $footer;
     }
-    public function get_surat_jalan_detail($id){
+    public function get_surat_jalan_detail($id)
+    {
         $l = Logistik::with('Ekspedisi')->where('id', $id)->get();
         return json_encode($l);
     }
@@ -4328,7 +4328,6 @@ $Logistik = Logistik::find($request->sj_lama);
 
     public function export_laporan($jenis, $ekspedisi, $tgl_awal, $tgl_akhir)
     {
-
         $waktu = Carbon::now();
 
         if ($jenis == "ekspedisi") {
@@ -4342,6 +4341,6 @@ $Logistik = Logistik::find($request->sj_lama);
 
     //MANAGER
     public function manager_logistik_show(){
-        return view('page.logistik.manager.sales_order.show');
+        return view('manager.logistik.so.show');
     }
 }

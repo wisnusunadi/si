@@ -1186,7 +1186,6 @@
                     part_id_arr.jumlah_kirim = "0";
                     part_id.push(part_id_arr);
                 }
-
                 $.ajax({
                     url: "/logistik/so/create/" + pesanan_id + '/' + jenis_penjualan,
                     data: {'produk_id':produk_id, 'part_id':part_id},

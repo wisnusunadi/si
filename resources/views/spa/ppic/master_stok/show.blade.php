@@ -21,6 +21,9 @@
 @stop
 @section('adminlte_css')
 <style>
+    .va-middle {
+        vertical-align: middle;
+    }
     .urgent {
         color: #dc3545;
         font-weight: 600;
@@ -51,7 +54,7 @@
     }
 
     @media screen and (min-width: 1440px) {
-        body {
+        section {
             font-size: 14px;
         }
 
@@ -61,7 +64,7 @@
     }
 
     @media screen and (max-width: 1439px) {
-        body {
+        section {
             font-size: 12px;
         }
 
@@ -182,20 +185,19 @@
             },
             columns: [{
                     data: 'DT_RowIndex',
-                    className: 'borderright',
+                    className: 'borderright align-middle',
                     orderable: false,
                     searchable: false
                 },
                 {
                     data: 'nama_produk',
-                    className: 'borderright',
+                    className: 'borderright align-middle',
                 },
                 {
                     data: 'gbj',
                 },
                 {
                     data: 'penjualan',
-                    className: 'borderright',
                 },
                 {
                     data: 'total',
@@ -218,6 +220,7 @@
                 },
                 {
                     data: 'aksi',
+                    className: 'align-middle',
                     orderable: false,
                     searchable: false
                 },

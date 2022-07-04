@@ -948,7 +948,13 @@ class PpicController extends Controller
 
     public function get_master_stok_data()
     {
-        $data = GudangBarangJadi::addSelect(['count_ekat_sepakat' => function ($query) {
+        $data = GudangBarangJadi::addSelect(['count_barang' => function ($query) {
+            $query->selectRaw('count(noseri_barang_jadi.id)')
+            ->from('noseri_barang_jadi')
+            ->where('noseri_barang_jadi.is_ready', '0')
+            ->whereColumn('noseri_barang_jadi.gdg_barang_jadi_id', 'gdg_barang_jadi.id')
+            ->limit(1);
+        },'count_ekat_sepakat' => function ($query) {
             $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
             ->from('detail_pesanan')
             ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
@@ -1056,7 +1062,11 @@ class PpicController extends Controller
                         LEFT JOIN pesanan on pesanan.id = t_gbj.pesanan_id AND pesanan.log_id NOT IN ("7", "10", "20")
                         LEFT JOIN ekatalog on ekatalog.pesanan_id = pesanan.id AND ekatalog.status != "batal"
                         WHERE t_gbj_noseri.jenis = "keluar" AND t_gbj_detail.gdg_brg_jadi_id = gdg_barang_jadi.id
-                    )');
+                    ) OR NOT EXISTS (SELECT *
+                    FROM t_gbj_noseri
+                    LEFT JOIN t_gbj_detail on t_gbj_detail.id = t_gbj_noseri.t_gbj_detail_id
+                    LEFT JOIN t_gbj on t_gbj.id = t_gbj_detail.t_gbj_id
+                    WHERE t_gbj_detail.gdg_brg_jadi_id = gdg_barang_jadi.id)');
                 })
                 ->with('Produk')->get();
 
@@ -1070,14 +1080,14 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('gbj', function ($data) {
-                if ($data->stok >= 0) {
-                    return "<div>" . $data->stok . "</div>";
+                if ($data->count_barang >= 0) {
+                    return "<div>" . $data->count_barang . "</div>";
                 } else {
-                    return '<div style="color:red;">' . $data->stok . '</div>';
+                    return '<div style="color:red;">' . $data->count_barang . '</div>';
                 }
             })
             ->addColumn('penjualan', function ($data) {
-                $jumlah_gbj = intval($data->stok);
+                $jumlah_gbj = intval($data->count_barang);
                 // $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
                 $jumlahdiminta = intval($data->count_ekat_sepakat) + intval($data->count_ekat_nego) + intval($data->count_ekat_draft) + intval($data->count_ekat_po) + intval($data->count_spa_po) + intval($data->count_spb_po);
                 // $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
@@ -1093,13 +1103,8 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('total', function ($data) {
-                // $jumlahdiminta = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("ekatalog_po", "") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
-                // $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
-                // $jumlah = $jumlahdiminta - $jumlahtf;
                 $jumlahdiminta = intval($data->count_ekat_sepakat) + intval($data->count_ekat_nego) + intval($data->count_ekat_draft) + intval($data->count_ekat_po) + intval($data->count_spa_po) + intval($data->count_spb_po);
-                // $jumlahtf = $data->getJumlahTransferPesanan("ekatalog") + $data->getJumlahTransferPesanan("spa") + $data->getJumlahTransferPesanan("spb");
                 $jumlahtf = intval($data->count_transfer);
-                // $jumlah_stok_permintaan = $jumlahdiminta - $jumlahtf;
                 $jumlah = $jumlahdiminta - $jumlahtf;
                 return intval($jumlah);
             })
@@ -1143,7 +1148,13 @@ class PpicController extends Controller
 
     public function master_stok_detail_show($id)
     {
-        $data = GudangBarangJadi::where('id', $id)->addSelect(['count_ekat_sepakat' => function ($query) {
+        $data = GudangBarangJadi::where('id', $id)->addSelect(['count_barang' => function ($query) {
+            $query->selectRaw('count(noseri_barang_jadi.id)')
+            ->from('noseri_barang_jadi')
+            ->where('noseri_barang_jadi.is_ready', '0')
+            ->whereColumn('noseri_barang_jadi.gdg_barang_jadi_id', 'gdg_barang_jadi.id')
+            ->limit(1);
+        },'count_ekat_sepakat' => function ($query) {
             $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
             ->from('detail_pesanan')
             ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
@@ -1235,7 +1246,7 @@ class PpicController extends Controller
         $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
                 $q->where('id', $id);
             })->addSelect(['count_pesanan' => function($q) use($id){
-                    $q->selectRaw('sum(detail_pesanan.jumlah)')
+                    $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
                     ->from('detail_pesanan')
                     ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
                     ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
@@ -1307,7 +1318,7 @@ class PpicController extends Controller
                                 return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
                                 <div><small><i class="fas fa-clock info"></i> ' . $hari . ' Hari Lagi</small></div>';
                             } else if ($hari > 0 && $hari <= 7) {
-                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                return  '<div class="warning">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
                                 <div><small><i class="fas fa-exclamation-circle warning"></i> ' . $hari . ' Hari Lagi</small></div>';
                             } else {
                                 return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
@@ -1324,7 +1335,8 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->count_pesanan - $data->count_transfer;
+                $jumlah = $data->count_pesanan - $data->count_transfer;
+                return $jumlah;
             })
             ->addColumn('status', function($data){
                 if(isset($data->Ekatalog)){

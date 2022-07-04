@@ -51,7 +51,7 @@
     }
 
     @media screen and (min-width: 1440px) {
-        body {
+        section {
             font-size: 14px;
         }
 
@@ -61,7 +61,7 @@
     }
 
     @media screen and (max-width: 1439px) {
-        body {
+        section {
             font-size: 12px;
         }
 

@@ -25,6 +25,10 @@ Route::prefix('/v2')->group(function() {
         Route::post('proses-delete-noseri', [GudangController::class, 'proses_delete_noseri']);
         Route::post('proses-update-noseri', [GudangController::class, 'proses_update_noseri']);
         Route::post('tets',[GudangController::class, 'updateStokGudang']);
+
+        Route::get('template_so/{id}', [GudangController::class, 'download_template_so']);
+        Route::post('preview-so', [GudangController::class, 'preview_so']);
+        Route::post('store-sodb', [GudangController::class, 'store_so_to_db']);
     });
 
 });

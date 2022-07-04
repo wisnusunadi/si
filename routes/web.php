@@ -146,6 +146,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/penjualan'], function () {
         Route::view('/show', 'page.penjualan.penjualan.show')->name('penjualan.penjualan.show');
+        Route::view('/eksternal', 'page.penjualan.penjualan.trs_eksternal');
         Route::view('/create', 'page.penjualan.penjualan.create')->name('penjualan.penjualan.create');
         Route::view('/create_new', 'page.penjualan.penjualan.create_new')->name('penjualan.penjualan.create_new');
 

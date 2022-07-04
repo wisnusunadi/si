@@ -3760,10 +3760,9 @@ class PenjualanController extends Controller
         }
     }
 
-
     public function manager_penjualan_show()
     {
-        return view('page.penjualan.manager.sales_order.show');
+        return view('manager.penjualan.so.show');
     }
 
     public function manager_penjualan_show_data($jenis, $value)
@@ -3877,12 +3876,23 @@ class PenjualanController extends Controller
                     }
                 })
                 ->addColumn('button', function ($data) {
-                    $return = '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                    <button class="btn btn-outline-primary btn-sm" type="button">
-                        <i class="fas fa-eye"></i>
-                        Detail
-                        </button>
-                    </a>';
+                    $return = "";
+                    if($data->Pesanan->log_id != "20"){
+                        $return = '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                        <button class="btn btn-outline-primary btn-sm" type="button">
+                            <i class="fas fa-eye"></i>
+                            Detail
+                            </button>
+                        </a>';
+                    }
+                    else {
+                        $return = '<a data-toggle="modal" data-jenis="ekatalog" class="batalmodal" data-id="' . $data->id . '" >
+                            <button class="btn btn-outline-danger btn-sm" type="button">
+                                <i class="fas fa-times"></i>
+                                Batal
+                                </button>
+                            </a>';
+                    }
                     return $return;
                 })
                 ->rawColumns(['button', 'status', 'tgl_kontrak'])
@@ -3963,12 +3973,23 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-                $return = '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
-                    <button class="btn btn-outline-primary btn-sm" type="button">
-                        <i class="fas fa-eye"></i>
-                        Detail
-                        </button>
-                    </a>';
+                $return = "";
+                if($data->Pesanan->log_id != "20"){
+                    $return = '<a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
+                        <button class="btn btn-outline-primary btn-sm" type="button">
+                            <i class="fas fa-eye"></i>
+                            Detail
+                            </button>
+                        </a>';
+                }
+                else{
+                    $return = '<a data-toggle="modal" data-jenis="spa" class="batalmodal" data-id="' . $data->id . '" >
+                        <button class="btn btn-outline-danger btn-sm" type="button">
+                            <i class="fas fa-times"></i>
+                            Batal
+                            </button>
+                        </a>';
+                }
                 return $return;
 
             })
@@ -4050,23 +4071,28 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-                $return = '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
-                    <button class="btn btn-outline-primary btn-sm" type="button">
-                        <i class="fas fa-eye"></i>
-                        Detail
-                        </button>
-                    </a>';
+                $return = "";
+                if($data->Pesanan->log_id != "20"){
+                    $return = '<a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
+                        <button class="btn btn-outline-primary btn-sm" type="button">
+                            <i class="fas fa-eye"></i>
+                            Detail
+                            </button>
+                        </a>';
+                }
+                else{
+                    $return = '<a data-toggle="modal" data-jenis="spb" class="batalmodal" data-id="' . $data->id . '" >
+                        <button class="btn btn-outline-danger btn-sm" type="button">
+                            <i class="fas fa-times"></i>
+                            Batal
+                            </button>
+                        </a>';
+                }
                 return $return;
-
             })
             ->rawColumns(['button', 'status'])
             ->make(true);
         }
-    }
-
-    public function manager_penjualan_detail()
-    {
-        return view('page.penjualan.manager.detail');
     }
 }
 

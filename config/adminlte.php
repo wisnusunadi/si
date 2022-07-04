@@ -403,13 +403,23 @@ return [
             'icon' => 'fas fa-circle',
             'auth' => [3]
         ],
+        [
+            'header' => 'QC',
+            'auth' => [3]
+        ],
+        [
+            'text' => 'Pengujian',
+            'url'  => '/manager/qc/show',
+            'icon' => 'fas fa-settings',
+            'auth' => [3]
+        ],
 
         // other
         [
             'text' => 'Beranda',
             'url'  => '/penjualan/dashboard',
             'icon' => 'fas fa-home',
-            'auth' => [26, 8]
+            'auth' => [26, 8, 32]
         ],
 
         [
@@ -465,9 +475,20 @@ return [
         ],
         [
             'text' => 'Penjualan',
-            'url'  => '/penjualan/penjualan/show',
             'icon' => 'fas fa-mail-bulk',
-            'auth' => [26]
+            'auth' => [26],
+            'submenu' => [
+                    [
+                        'text' => 'Transaksi Internal',
+                        'url'  => '/penjualan/penjualan/show',
+                        'icon' => 'far fa-circle',
+                    ],
+                    [
+                        'text' => 'Transaksi Eksternal',
+                        'url'  => '/penjualan/penjualan/eksternal',
+                        'icon' => 'far fa-circle',
+                    ],
+                ]
         ],
         // [
         //     'text' => 'Sales Order',
@@ -1039,13 +1060,13 @@ return [
         ],
         [
             'header' => 'Penjualan',
-            'auth' => [13, 17]
+            'auth' => [13, 17, 31]
         ],
         [
             'text' => 'Sales Order',
             'url' => '/gbj/so',
             'icon' => 'fas fa-people-carry',
-            'auth' => [13],
+            'auth' => [13, 31],
         ],
         [
             'text' => 'Sales Order',
@@ -1440,7 +1461,7 @@ return [
             'icon' => 'fas fa-cubes',
             'auth' => [12],
         ],
-
+        // Manager Gudang
         [
             'header' => 'Persetujuan',
             'auth' => [31]
@@ -1450,7 +1471,25 @@ return [
             'url' => 'gbjmanager/produksi',
             'icon' => 'fas fa-cubes',
             'auth' => [31],
-        ]
+        ],
+
+        //Manager Penjualan
+        [
+            'header' => 'TRANSAKSI',
+            'auth'   => [32]
+        ],
+        [
+            'text' => 'Penjualan',
+            'icon' => 'fas fa-mail-bulk',
+            'auth' => [32],
+            'url'  => '/manager/penjualan/show',
+        ],
+        [
+            'text' => 'Logistik',
+            'icon' => 'fas fa-dolly fa-fw',
+            'url' => '/manager/logistik/show',
+            'auth' => [32],
+        ],
     ],
 
     /*

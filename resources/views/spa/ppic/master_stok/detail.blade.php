@@ -13,7 +13,7 @@
                             <span class="info-box-icon"><i class="fas fa-warehouse"></i></span>
                             <div class="info-box-content">
                             <span class="info-box-text">Gudang</span>
-                            <span class="info-box-number">{{$data->stok}} pcs</span>
+                            <span class="info-box-number">{{$data->count_barang}} pcs</span>
                             </div>
                         </div>
                     </div>
@@ -34,7 +34,7 @@
                             </span>
                             <div class="info-box-content">
                             <span class="info-box-text">Sisa</span>
-                            <span class="info-box-number">{{$data->stok - $jumlah}} pcs</span>
+                            <span class="info-box-number">{{$data->count_barang - $jumlah}} pcs</span>
                             </div>
                         </div>
                     </div>

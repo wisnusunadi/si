@@ -424,6 +424,7 @@
         });
 
         $('input[name="pilih_ref_penjualan"]').on('change', function(){
+            $('.no_ref_penjualan').empty();
             format_informasi_ref_penjualan();
             no_ref_penjualan($(this).val());
         });
@@ -634,7 +635,7 @@
 
         function produk_penjualan_tidak_tersedia(){
             var prm;
-            $('.paket_produk_id').empty();
+            // $('.paket_produk_id').empty();
             $('.paket_produk_id').select2({
                 ajax: {
                     minimumResultsForSearch: 20,
@@ -725,7 +726,7 @@
         $(document).on('keyup change', '.no_ref_penjualan', function(){
             var val = $(this).val();
             if(val != ""){
-                $('.no_ref_penjualan').empty();
+
                 informasi_ref_penjualan(val);
                 produk_penjualan_tersedia(val);
             }

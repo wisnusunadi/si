@@ -58,22 +58,38 @@
     }
 
     @media screen and (min-width: 1440px) {
-        section {
+        body {
+            font-size: 14px;
+        }
+
+        .btn {
             font-size: 14px;
         }
 
         .dropdown-item {
             font-size: 14px;
+        }
+
+        .labelket {
+            text-align: right;
         }
     }
 
     @media screen and (max-width: 1439px) {
-        section {
+        body {
             font-size: 12px;
         }
 
         .dropdown-item {
             font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+        .labelket {
+            text-align: right;
         }
     }
 </style>
