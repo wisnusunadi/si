@@ -20,7 +20,7 @@
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
-    }
+    } 
 
     .nomor-po {
         background-color: #85D296;
@@ -103,7 +103,6 @@
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-
                                                 </tbody>
                                             </table>
                                         </div>
@@ -472,8 +471,6 @@
     var gbj;
     $(document).on('click', '.editmodal', function () {
         id = $(this).data('id');
-
-
         $.ajax({
             url: '/api/draft/data',
             type: "post",
@@ -486,7 +483,6 @@
                 $('span#from').text(res.data[0].from);
                 $('span#tujuan').text(res.data[0].tujuan);
             },
-
         });
         $('.table-rancangan').DataTable().destroy();
         $('.table-rancangan').DataTable({
