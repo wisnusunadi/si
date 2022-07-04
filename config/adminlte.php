@@ -1451,6 +1451,7 @@ return [
             'icon' => 'fas fa-cubes',
             'auth' => [12],
         ],
+        // Manager Gudang
         [
             'header' => 'Persetujuan',
             'auth' => [31]
