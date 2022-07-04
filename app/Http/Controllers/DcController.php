@@ -17,6 +17,7 @@ use App\Models\Pesanan;
 use App\Models\Produk;
 
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Facades\DB;
 
 class DcController extends Controller
 {
@@ -403,7 +404,10 @@ class DcController extends Controller
             ->rawColumns(['button', 'status', 'batas_paket'])
             ->make(true);
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> 053aeb9491118567e7b5048be699e177983f2422
     public function get_data_so_selesai($value){
         $data = Pesanan::whereIn('id', function($q){
             $q->select('pesanan.id')

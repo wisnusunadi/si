@@ -1081,7 +1081,6 @@ class QcController extends Controller
             ->rawColumns(['button', 'status', 'batas_uji'])
             ->make(true);
     }
-
     public function get_data_selesai_so($value)
     {
         $data = "";
@@ -1294,7 +1293,6 @@ class QcController extends Controller
             ->rawColumns(['button', 'status', 'batas_uji'])
             ->make(true);
     }
-
     public function get_data_riwayat_pengujian()
     {
         $prd = DetailPesanan::addSelect(['tgl_mulai' => function($q){
@@ -1381,6 +1379,8 @@ class QcController extends Controller
             ->rawColumns(['button', 'nama_produk'])
             ->make(true);
     }
+
+
 
     public function get_data_detail_riwayat_pengujian($id, $jenis)
     {
@@ -1877,8 +1877,8 @@ class QcController extends Controller
             return response()->json(['data' =>  'error']);
         }
     }
-    //Dashboard
-    public function dashboard()
+    //Dashboardpublic
+    function dashboard()
     {
         $terbaru = 0;
         $hasil = 0;
@@ -2007,6 +2007,7 @@ class QcController extends Controller
         $clogistik = Pesanan::where('log_id', ['11', '13'])->count();
         return view('page.qc.dashboard', ['terbaru' => $terbaru, 'hasil' => $hasil, 'lewat_batas' => $lewat_batas, 'po' => $cpo, 'gudang' => $cgudang, 'logistik' => $clogistik]);
     }
+
     public function dashboard_data($value)
     {
 
