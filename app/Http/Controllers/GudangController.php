@@ -99,7 +99,7 @@ class GudangController extends Controller
                 })
                 ->addColumn('jumlah1', function ($data) {
                     // $d = $data->get_sum_noseri();
-                    $ss = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
+                    $ss = $data->getJumlahPermintaanPesanan("ekatalog", "sepakat") + $data->getJumlahPermintaanPesanan("ekatalog", "negosiasi") + $data->getJumlahPermintaanPesanan("ekatalog", "draft") + $data->getJumlahPermintaanPesanan("spa", "") + $data->getJumlahPermintaanPesanan("spb", "");
                     return $data->stok - $ss . ' ' . $data->satuan;
                 })
                 ->addColumn('kelompok', function ($data) {

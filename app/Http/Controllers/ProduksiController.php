@@ -520,6 +520,7 @@ class ProduksiController extends Controller
                 }
             }
             $datax = Pesanan::whereIn('id', $x)->get();
+
             return datatables()->of($datax)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {

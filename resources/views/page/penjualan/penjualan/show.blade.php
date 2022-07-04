@@ -352,8 +352,7 @@ ul#status {
                                                         <th>Nomor PO</th>
                                                         <th>Tanggal Buat</th>
                                                         <th>Tanggal Edit</th>
-
-
+                                                        <th>Tanggal Kontrak</th>
                                                         <th>Customer</th>
                                                         <th>Status</th>
                                                         <th>Aksi</th>
@@ -712,6 +711,7 @@ ul#status {
                                                         <th>Nomor AKN</th>
                                                         <th>Nomor PO</th>
                                                         <th>Tanggal PO</th>
+                                                        <th>Tanggal Kontrak</th>
                                                         <th>Customer</th>
                                                         <th>Status</th>
                                                         <th>Aksi</th>
@@ -842,6 +842,8 @@ ul#status {
                     }, {
                         data: 'tgl_order',
                     }, {
+                        data: 'tgl_kontrak',
+                    }, {
                         data: 'nama_customer',
                     },
                     // {
@@ -904,6 +906,11 @@ ul#status {
                         orderable: false,
                         searchable: false
                     },
+                    {
+                        data: 'tgl_kontrak',
+                        orderable: false,
+                        searchable: false
+                    },
 
                     {
                         data: 'nama_customer',
@@ -916,14 +923,9 @@ ul#status {
                         orderable: false,
                         searchable: false
                     },
-                    {
-                        data: 'instansi',
-                    },
+
                 ],
-                "columnDefs": [{
-                    "visible": false,
-                    "targets": [10]
-                }],
+
 
             });
         }
