@@ -454,23 +454,32 @@
                                                                                 <label class="form-check-label" for="status_akn4">Draft</label>
                                                                             </div> -->
                                                                             <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn1" value="sepakat" />
+                                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn1" value="sepakat" @if($e->status == 'sepakat') checked @endif/>
                                                                                 <label class="form-check-label" for="status_akn1">Sepakat</label>
                                                                             </div>
                                                                             <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn2" value="negosiasi" />
+                                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn2" value="negosiasi" @if($e->status == 'negosiasi') checked @endif/>
                                                                                 <label class="form-check-label" for="status_akn2">Negosiasi</label>
                                                                             </div>
                                                                             <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="batal" />
+                                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="batal" @if($e->status == 'batal') checked @endif/>
                                                                                 <label class="form-check-label" for="status_akn3">Batal</label>
                                                                             </div>
                                                                             @if($e->status == 'draft')
                                                                             <div class="form-check form-check-inline">
-                                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="draft" />
+                                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn3" value="draft" @if($e->status == 'draft') checked @endif/>
                                                                                 <label class="form-check-label" for="status_akn3">Draft</label>
                                                                             </div>
                                                                             @endif
+                                                                        </div>
+                                                                    </div>
+                                                                    <div class="form-group row  @if($e->status != 'draft') hide @endif" id="isi_produk_input">
+                                                                        <label for="" class="col-form-label col-lg-5 col-md-12 labelket"></label>
+                                                                        <div class="col-lg-6 col-md-12 col-form-label">
+                                                                            <div class="form-check form-check-inline">
+                                                                                <input class="form-check-input" type="checkbox" name="isi_produk" id="isi_produk" value="isi" @if(count($e->Pesanan->DetailPesanan) > 0) checked @endif/>
+                                                                                <label class="form-check-label" for="isi_produk">Isi Produk</label>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                     <div class="form-group row">
@@ -860,8 +869,8 @@
             $('#jenis_paket').select2();
             var nopaketdb = "{{ str_replace( array('AK1-', 'FKS-'), '', $e->no_paket) }}";
             var nopaketubah = false;
-
             var status_akn = '{{$e->status}}';
+            var jum_produk = '{{count($e->Pesanan->DetailPesanan)}}';
             $(".os-content-arrange").remove();
             var today = new Date();
             var dd = String(today.getDate()).padStart(2, '0');
@@ -1047,13 +1056,16 @@
                 var cust_id = 'sudah';
             }
 
-            if ('{{$e->status}}' != 'sepakat') {
-                if ('{{$e->status}}' == 'draft') {
-                    $("#dataproduk").addClass("hide");
+            if (status_akn != 'sepakat') {
+                if (status_akn == 'draft') {
+
+                    if(jum_produk <= 0){
+                        $("#dataproduk").addClass("hide");
+                    }
+                    $("#provinsi").attr('disabled', true);
+                    $("#provinsi").empty().trigger('change')
+                    $("#batas_kontrak").attr('disabled', true);
                 }
-                $("#provinsi").attr('disabled', true);
-                $("#provinsi").empty().trigger('change')
-                $("#batas_kontrak").attr('disabled', true);
             }
 
             $('input[type="radio"][name="namadistributor"]').on('change', function() {
@@ -1087,6 +1099,8 @@
             });
 
             $('input[type="radio"][name="status_akn"]').on('change', function() {
+                 $('#isi_produk_input').addClass('hide');
+
                 if ($(this).val() != "") {
                     if ($(this).val() == "sepakat") {
                         $('#checkbox_nopaket').addClass('hide');
@@ -1098,20 +1112,31 @@
                         if(nopaketubah == false){
                             $('#no_paket').val(nopaketdb);
                         }
-                        // $("#produktable tbody").empty();
-                        // $('#produktable tbody').append(trproduktable());
+                        if(jum_produk <= 0){
+                        $("#produktable tbody").empty();
+                         $('#produktable tbody').append(trproduktable());
+                        }
                         numberRowsProduk($("#produktable"));
                     } else if ($(this).val() == "draft") {
+                        $('#isi_produk_input').removeClass('hide');
                         $('#checkbox_nopaket').removeClass('hide');
-                        $('#isi_nopaket').prop("checked", false);
                         $('#no_paket').val("");
                         $('#no_paket').attr('readonly', true);
-                        $("#produktable tbody").empty();
-                        $("#totalhargaprd").text("Rp. 0");
-                        $("#dataproduk").addClass("hide");
-                        $("#batas_kontrak").attr('disabled', true);
+                         $("#batas_kontrak").attr('disabled', true);
                         $("#provinsi").attr('disabled', true);
                         $("#provinsi").empty().trigger('change')
+                        if(jum_produk <= 0){
+                            $('input[type="checkbox"][name="isi_produk"]').attr('checked', false);
+                            $("#produktable tbody").empty();
+                            $('#produktable tbody').append(trproduktable());
+                            $("#totalhargaprd").text("Rp. 0");
+                            $("#dataproduk").addClass("hide");
+                            $('#isi_nopaket').prop("checked", false);
+                        }
+                        if($('input[type="checkbox"][name="isi_produk"]:checked').length <= 0){
+                            $("#dataproduk").addClass("hide");
+                        }
+
                     } else if($(this).val() == "batal"){
                         if(status_akn != "draft"){
                             $('#checkbox_nopaket').addClass('hide');
@@ -1132,12 +1157,15 @@
                             $('#isi_nopaket').prop("checked", false);
                             $('#no_paket').val("");
                             $('#no_paket').attr('readonly', true);
-                            $("#produktable tbody").empty();
-                            $("#totalhargaprd").text("Rp. 0");
-                            $("#dataproduk").addClass("hide");
                             $("#batas_kontrak").attr('disabled', true);
                             $("#provinsi").attr('disabled', true);
                             $("#provinsi").empty().trigger('change');
+                            if(jum_produk <= 0){
+                                $('#dataproduk').addClass('hide');
+                                $("#produktable tbody").empty();
+                                $('#produktable tbody').append(trproduktable());
+                                $("#totalhargaprd").text("Rp. 0");
+                            }
                         }
                     } else {
                         $('#checkbox_nopaket').addClass('hide');
@@ -1151,6 +1179,10 @@
                         $("#provinsi").empty().trigger('change')
                         if(nopaketubah == false){
                             $('#no_paket').val(nopaketdb);
+                        }
+                        if(jum_produk <= 0){
+                            $("#produktable tbody").empty();
+                            $('#produktable tbody').append(trproduktable());
                         }
                     }
                 } else {
@@ -1177,7 +1209,19 @@
                     $('#no_paket').val("");
                 }
             })
+            $('input[type="checkbox"][name="isi_produk"]').change(function() {
+                $("#produktable tbody").empty();
+                $('#produktable tbody').append(trproduktable());
+                numberRowsProduk($("#produktable"));
+                $("#totalhargaprd").text("Rp. 0");
 
+                if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
+                    $("#dataproduk").removeClass("hide");
+                } else {
+                    $("#dataproduk").addClass("hide");
+                }
+                checkvalidasi();
+            });
             $(document).on('keyup', '#no_paket', function(){
                 nopaketubah = true;
             })

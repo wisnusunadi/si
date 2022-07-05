@@ -135,7 +135,6 @@
                                         <tr>
                                             <th>Produk</th>
                                             <th>Produk</th>
-                                            {{-- <th><input type="checkbox" id="head-cb-produk"></th> --}}
                                             <th>Produk</th>
                                             <th>Jumlah</th>
                                             <th>Merk</th>
@@ -369,7 +368,7 @@
                 <input type="hidden" name="soid1" id="soid1" value="">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="">Noseri</label>
+                        <label for="">Sales Order File</label>
                         <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".xlsx">
                     </div>
 
@@ -443,6 +442,8 @@
         let a = $('#gudang-barang').DataTable({
             processing: true,
             destroy: true,
+            ordering: false,
+            autoWidth: false,
             ajax: {
                 url: '/api/tfp/data-so',
             },

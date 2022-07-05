@@ -29,6 +29,9 @@ Route::prefix('/v2')->group(function() {
         Route::get('template_so/{id}', [GudangController::class, 'download_template_so']);
         Route::post('preview-so', [GudangController::class, 'preview_so']);
         Route::post('store-sodb', [GudangController::class, 'store_so_to_db']);
+
+        Route::post('so_batal', [GudangController::class, 'get_so_batal']);
+        Route::post('proses_so_batal', [GudangController::class, 'proses_so_batal']);
     });
 
 });

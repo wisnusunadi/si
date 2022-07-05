@@ -520,6 +520,7 @@ class ProduksiController extends Controller
                 }
             }
             $datax = Pesanan::whereIn('id', $x)->get();
+
             return datatables()->of($datax)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {
@@ -743,7 +744,7 @@ class ProduksiController extends Controller
                     ->where('p.id','=',$d->id)
                     ->get()->sum('jml');
 
-                    return '<span class="badge badge-dark">'.round($dpp / ($dp * 1) * 100,2).'% </span>';
+                    return '<span class="badge badge-dark">Terkirim QC: '.round($dpp / ($dp * 1) * 100,2).'% </span>';
                 })
                 ->addColumn('so', function ($data) {
                     return $data->so;
@@ -820,7 +821,7 @@ class ProduksiController extends Controller
                                             </a>
                                             <a data-toggle="modal" data-target="#importtemplate" class="importtemplate" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
                                                 <button class="btn btn-outline-info btn-sm" type="button">
-                                                    <i class="fas fa-file-import"></i>&nbsp;Import
+                                                    <i class="fas fa-file-import"></i>&nbsp;Unggah
                                                 </button>
                                             </a>';
                                 } elseif ($x[1] == 'SPA') {
@@ -836,7 +837,7 @@ class ProduksiController extends Controller
                                             </a>
                                             <a data-toggle="modal" data-target="#importtemplate" class="importtemplate" data-attr="" data-value="spa"  data-id="' . $data->id . '">
                                                 <button class="btn btn-outline-info btn-sm" type="button">
-                                                    <i class="fas fa-file-import"></i>&nbsp;Import
+                                                    <i class="fas fa-file-import"></i>&nbsp;Unggah
                                                 </button>
                                             </a>';
                                 } elseif ($x[1] == 'SPB') {
@@ -852,7 +853,7 @@ class ProduksiController extends Controller
                                             </a>
                                             <a data-toggle="modal" data-target="#importtemplate" class="importtemplate" data-attr="" data-value="spb"  data-id="' . $data->id . '">
                                                 <button class="btn btn-outline-info btn-sm" type="button">
-                                                    <i class="fas fa-file-import"></i>&nbsp;Import
+                                                    <i class="fas fa-file-import"></i>&nbsp;Unggah
                                                 </button>
                                             </a>';
                                 }
@@ -1175,7 +1176,7 @@ class ProduksiController extends Controller
                             ->groupBy('pp.id')
                             ->groupBy('dpp.id')
                             ->get()->sum('jumlah_kirim');
-                    return $data->detailpesanan->penjualanproduk->nama.' '.'<span class="badge badge-light">'.round(($y / $x)*100,2).'%</span>';
+                    return $data->detailpesanan->penjualanproduk->nama.' '.'<span class="badge badge-light">Terkirim QC: '.round(($y / $x)*100,2).'%</span>';
                 })
                 ->addColumn('produk', function ($data) {
                     if (empty($data->gudangbarangjadi->nama)) {
