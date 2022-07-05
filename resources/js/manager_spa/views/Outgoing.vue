@@ -29,9 +29,9 @@
                             class="table is-hoverable is-striped is-fullwidth"
                             id="dalamujitable"
                         >
-                            <thead>
+                            <thead class="has-text-centered">
                                 <tr>
-                                    <th></th>
+                                    <th>No</th>
                                     <th>No SO</th>
                                     <th>No PO</th>
                                     <th>Batas Pengujian</th>
@@ -46,13 +46,42 @@
                                     v-for="item in data_belum_uji"
                                     :key="item.id"
                                 >
-                                    <td v-html="item.DT_RowIndex"></td>
-                                    <td v-html="item.so"></td>
+                                    <td
+                                        v-html="item.DT_RowIndex"
+                                        class="has-text-centered"
+                                    ></td>
+                                    <td
+                                        v-html="item.so"
+                                        class="has-text-centered"
+                                    ></td>
                                     <td v-html="item.no_po"></td>
-                                    <td v-html="item.batas_uji"></td>
+                                    <td
+                                        class="has-text-centered"
+                                        v-html="item.batas_uji"
+                                    ></td>
                                     <td v-html="item.nama_customer"></td>
-                                    <td v-html="item.ket"></td>
-                                    <td v-html="item.status"></td>
+                                    <td
+                                        class="has-text-centered"
+                                        v-html="item.ket"
+                                    ></td>
+
+                                    <td
+                                        v-if="item.log_id == 20"
+                                        class="has-text-centered"
+                                    >
+                                        <button
+                                            class="button is-danger is-small js-modal-trigger"
+                                            @click="batal_so(item.id)"
+                                        >
+                                            <i class="fas fa-times"></i
+                                            >&nbsp;Batal
+                                        </button>
+                                    </td>
+                                    <td
+                                        v-else
+                                        v-html="item.status"
+                                        class="has-text-centered"
+                                    ></td>
                                     <td>
                                         <button
                                             class="button is-info is-small js-modal-trigger"
@@ -72,10 +101,10 @@
                 <div class="column is-full">
                     <div class="table-responsive">
                         <table
-                            class="table is-hoverable is-striped is-fullwidth"
+                            class="table is-hoverable is-striped is-fullwidth has-text-centered"
                             id="selesaiujitable"
                         >
-                            <thead class="text-centered">
+                            <thead class="has-text-centered">
                                 <tr>
                                     <th>No</th>
                                     <th>No SO</th>
@@ -131,66 +160,77 @@
                         <div class="columns">
                             <div class="column is-full">
                                 <div class="box">
-                                    <div class="tile is-ancestor">
-                                        <div class="tile is-parent">
-                                            <article
-                                                class="tile is-child notification is-link"
-                                            >
-                                                <p class="title is-spaced is-6">
-                                                    Nama Customer
-                                                </p>
-                                                <p
-                                                    class="subtitle is-6"
-                                                    v-html="nama_customer"
-                                                ></p>
-                                            </article>
+                                    <div class="block">
+                                        <div class="tile is-ancestor">
+                                            <div class="tile is-parent">
+                                                <article
+                                                    class="tile is-child notification is-link"
+                                                >
+                                                    <p
+                                                        class="title is-spaced is-6"
+                                                    >
+                                                        Nama Customer
+                                                    </p>
+                                                    <p
+                                                        class="subtitle is-6"
+                                                        v-html="nama_customer"
+                                                    ></p>
+                                                </article>
+                                            </div>
+                                            <div class="tile is-parent">
+                                                <article
+                                                    class="tile is-child notification is-warning"
+                                                >
+                                                    <p
+                                                        class="title is-spaced is-6"
+                                                    >
+                                                        Alamat
+                                                    </p>
+                                                    <p
+                                                        class="subtitle is-6"
+                                                        v-html="alamat"
+                                                    ></p>
+                                                </article>
+                                            </div>
                                         </div>
-                                        <div class="tile is-parent">
-                                            <article
-                                                class="tile is-child notification is-warning"
-                                            >
-                                                <p class="title is-spaced is-6">
-                                                    Alamat
-                                                </p>
-                                                <p
-                                                    class="subtitle is-6"
-                                                    v-html="alamat"
-                                                ></p>
-                                            </article>
+                                        <div class="tile is-ancestor">
+                                            <div class="tile is-parent">
+                                                <article
+                                                    class="tile is-child notification is-primary"
+                                                >
+                                                    <p
+                                                        class="title is-spaced is-6"
+                                                    >
+                                                        No SO
+                                                    </p>
+                                                    <p
+                                                        class="subtitle is-6"
+                                                        v-html="no_so"
+                                                    ></p>
+                                                </article>
+                                            </div>
+                                            <div class="tile is-parent">
+                                                <article
+                                                    class="tile is-child notification is-info"
+                                                >
+                                                    <p
+                                                        class="title is-spaced is-6"
+                                                    >
+                                                        No PO
+                                                    </p>
+                                                    <p
+                                                        class="subtitle is-6"
+                                                        v-html="no_po"
+                                                    ></p>
+                                                </article>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="tile is-ancestor">
-                                        <div class="tile is-parent">
-                                            <article
-                                                class="tile is-child notification is-primary"
-                                            >
-                                                <p class="title is-spaced is-6">
-                                                    No SO
-                                                </p>
-                                                <p
-                                                    class="subtitle is-6"
-                                                    v-html="no_so"
-                                                ></p>
-                                            </article>
-                                        </div>
-                                        <div class="tile is-parent">
-                                            <article
-                                                class="tile is-child notification is-danger"
-                                            >
-                                                <p class="title is-spaced is-6">
-                                                    No PO
-                                                </p>
-                                                <p
-                                                    class="subtitle is-6"
-                                                    v-html="no_po"
-                                                ></p>
-                                            </article>
-                                        </div>
-                                    </div>
+
                                     <div class="block">
                                         <div class="table-responsive">
                                             <table
-                                                class="table is-hoverable is-striped"
+                                                class="table is-hoverable is-striped has-text-centered"
                                                 width="100%"
                                                 id="produktable"
                                             >
@@ -208,6 +248,9 @@
                                                             class="collapsable"
                                                         >
                                                             Hasil
+                                                        </th>
+                                                        <th rowspan="2">
+                                                            Aksi
                                                         </th>
                                                     </tr>
                                                     <tr>
@@ -251,6 +294,28 @@
                                                                 item.jumlah_nok
                                                             "
                                                         ></td>
+                                                        <td
+                                                            v-if="
+                                                                item.gudang_barang_jadi_id !=
+                                                                null
+                                                            "
+                                                        >
+                                                            <button
+                                                                class="button is-info is-small js-modal-trigger"
+                                                                @click="
+                                                                    detail_noseri(
+                                                                        item.gudang_barang_jadi_id,
+                                                                        pesanan_id
+                                                                    )
+                                                                "
+                                                            >
+                                                                <i
+                                                                    class="fas fa-eye"
+                                                                ></i
+                                                                >&nbsp;Detail
+                                                            </button>
+                                                        </td>
+                                                        <td v-else>-</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -260,9 +325,9 @@
                             </div>
                         </div>
                     </section>
-                    <footer class="modal-card-foot">
+                    <footer class="modal-card-foot is-align-content-flex-end">
                         <button
-                            class="button is-dark float-right"
+                            class="button is-dark is-pulled-right"
                             @click="detailModal = false"
                         >
                             Tutup
@@ -277,80 +342,159 @@
                 :class="{ 'is-active': batalModal }"
             >
                 <div class="modal-background"></div>
-                <div class="modal-card is-info">
-                    <header class="modal-card-head">
-                        <p class="modal-card-title">Sales Order Batal</p>
+                <div class="modal-card">
+                    <header class="modal-card-head has-background-danger">
+                        <p class="modal-card-title has-text-white is-size-4">
+                            Sales Order Batal
+                        </p>
                         <button
                             class="delete"
                             @click="batalModal = false"
                         ></button>
                     </header>
-                    <section class="modal-card-body">
+                    <section
+                        class="modal-card-body has-background-danger-light"
+                    >
                         <div class="columns">
                             <div class="column is-full">
                                 <div class="box">
-                                    <div class="tile is-ancestor">
-                                        <div class="tile is-parent">
-                                            <article
-                                                class="tile is-child notification is-link"
+                                    <div class="tabs is-centered">
+                                        <ul>
+                                            <li
+                                                :class="{
+                                                    'is-active': !tabsdetail,
+                                                }"
+                                                @click="tabsdetail = false"
                                             >
-                                                <p class="title is-6 is-spaced">
-                                                    Nama Customer
-                                                </p>
-                                                <p
-                                                    class="subtitle is-6"
-                                                    v-html="nama_customer"
-                                                ></p>
-                                            </article>
+                                                <a>Info Penjualan</a>
+                                            </li>
+                                            <li
+                                                :class="{
+                                                    'is-active': tabsdetail,
+                                                }"
+                                                @click="tabsdetail = true"
+                                            >
+                                                <a>Info Pembatalan</a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div
+                                        class="block"
+                                        :class="{
+                                            'is-hidden': tabsdetail,
+                                        }"
+                                    >
+                                        <div class="tile is-ancestor">
+                                            <div class="tile is-parent">
+                                                <article
+                                                    class="tile is-child notification is-link"
+                                                >
+                                                    <p
+                                                        class="title is-6 is-spaced"
+                                                    >
+                                                        Nama Customer
+                                                    </p>
+                                                    <p
+                                                        class="subtitle is-6"
+                                                        v-html="nama_customer"
+                                                    ></p>
+                                                </article>
+                                            </div>
+                                            <div class="tile is-parent">
+                                                <article
+                                                    class="tile is-child notification is-warning"
+                                                >
+                                                    <p
+                                                        class="title is-6 is-spaced"
+                                                    >
+                                                        Alamat
+                                                    </p>
+                                                    <p
+                                                        class="subtitle is-6"
+                                                        v-html="alamat"
+                                                    ></p>
+                                                </article>
+                                            </div>
                                         </div>
-                                        <div class="tile is-parent">
-                                            <article
-                                                class="tile is-child notification is-warning"
-                                            >
-                                                <p class="title is-6 is-spaced">
-                                                    Alamat
-                                                </p>
-                                                <p
-                                                    class="subtitle is-6"
-                                                    v-html="alamat"
-                                                ></p>
-                                            </article>
+                                        <div class="tile is-ancestor">
+                                            <div class="tile is-parent">
+                                                <article
+                                                    class="tile is-child notification is-primary"
+                                                >
+                                                    <p
+                                                        class="title is-6 is-spaced"
+                                                    >
+                                                        No SO
+                                                    </p>
+                                                    <p
+                                                        class="subtitle is-6"
+                                                        v-html="no_so"
+                                                    ></p>
+                                                </article>
+                                            </div>
+                                            <div class="tile is-parent">
+                                                <article
+                                                    class="tile is-child notification is-info"
+                                                >
+                                                    <p
+                                                        class="title is-6 is-spaced"
+                                                    >
+                                                        No PO
+                                                    </p>
+                                                    <p
+                                                        class="subtitle is-6"
+                                                        v-html="no_po"
+                                                    ></p>
+                                                </article>
+                                            </div>
+                                            <div class="tile is-parent">
+                                                <article
+                                                    class="tile is-child notification is-danger"
+                                                >
+                                                    <p
+                                                        class="title is-spaced is-6"
+                                                    >
+                                                        Tanggal Batal
+                                                    </p>
+                                                    <p
+                                                        class="subtitle is-6"
+                                                        v-html="tanggal_batal"
+                                                    ></p>
+                                                </article>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="tile is-ancestor">
-                                        <div class="tile is-parent">
-                                            <article
-                                                class="tile is-child notification is-primary"
-                                            >
-                                                <p class="title is-6 is-spaced">
-                                                    No SO
-                                                </p>
-                                                <p
-                                                    class="subtitle is-6"
-                                                    v-html="no_so"
-                                                ></p>
-                                            </article>
-                                        </div>
-                                        <div class="tile is-parent">
-                                            <article
-                                                class="tile is-child notification is-danger"
-                                            >
-                                                <p class="title is-6 is-spaced">
-                                                    No PO
-                                                </p>
-                                                <p
-                                                    class="subtitle is-6"
-                                                    v-html="no_po"
-                                                ></p>
-                                            </article>
+
+                                    <div
+                                        class="block"
+                                        :class="{
+                                            'is-hidden': !tabsdetail,
+                                        }"
+                                    >
+                                        <div class="tile is-ancestor">
+                                            <div class="tile is-parent">
+                                                <article
+                                                    class="tile is-child notification is-danger"
+                                                >
+                                                    <p
+                                                        class="title is-spaced is-6"
+                                                    >
+                                                        Alasan Batal
+                                                    </p>
+                                                    <p
+                                                        class="subtitle is-6"
+                                                        v-html="nama_customer"
+                                                    ></p>
+                                                </article>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="block">
                                         <div class="table-responsive">
                                             <table
-                                                class="table is-hoverable is-striped"
+                                                class="table is-hoverable is-striped has-text-centered"
                                                 width="100%"
-                                                id="produktable"
+                                                id="bataltable"
                                             >
                                                 <thead>
                                                     <tr>
@@ -366,6 +510,9 @@
                                                             class="collapsable"
                                                         >
                                                             Hasil
+                                                        </th>
+                                                        <th rowspan="2">
+                                                            Aksi
                                                         </th>
                                                     </tr>
                                                     <tr>
@@ -409,6 +556,28 @@
                                                                 item.jumlah_nok
                                                             "
                                                         ></td>
+                                                        <td
+                                                            v-if="
+                                                                item.gudang_barang_jadi_id !=
+                                                                null
+                                                            "
+                                                        >
+                                                            <button
+                                                                class="button is-info is-small js-modal-trigger"
+                                                                @click="
+                                                                    detail_noseri(
+                                                                        item.gudang_barang_jadi_id,
+                                                                        pesanan_id
+                                                                    )
+                                                                "
+                                                            >
+                                                                <i
+                                                                    class="fas fa-eye"
+                                                                ></i
+                                                                >&nbsp;Detail
+                                                            </button>
+                                                        </td>
+                                                        <td v-else>-</td>
                                                     </tr>
                                                 </tbody>
                                             </table>
@@ -420,8 +589,86 @@
                     </section>
                     <footer class="modal-card-foot">
                         <button
-                            class="button is-dark float-right"
+                            class="button is-dark is-pulled-right"
                             @click="batalModal = false"
+                        >
+                            Tutup
+                        </button>
+                    </footer>
+                </div>
+            </div>
+
+            <div
+                id="noseri_modal"
+                class="modal"
+                :class="{ 'is-active': noseriModal }"
+            >
+                <div class="modal-background"></div>
+                <div class="modal-card">
+                    <header class="modal-card-head has-background-dark">
+                        <p class="modal-card-title has-text-white is-size-4">
+                            Noseri
+                        </p>
+                        <button
+                            class="delete"
+                            @click="noseriModal = false"
+                        ></button>
+                    </header>
+                    <section class="modal-card-body has-background-dark-light">
+                        <div class="columns">
+                            <div class="column is-full">
+                                <div class="box">
+                                    <div class="block">
+                                        <div class="table-responsive">
+                                            <table
+                                                class="table is-hoverable is-striped has-text-centered"
+                                                width="100%"
+                                                id="noseritable"
+                                            >
+                                                <thead>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>No Seri</th>
+                                                        <th>Tanggal Uji</th>
+                                                        <th>Status</th>
+                                                    </tr>
+                                                </thead>
+                                                <tbody>
+                                                    <tr
+                                                        v-for="items in noseri_uji"
+                                                        :key="items.id"
+                                                    >
+                                                        <td
+                                                            v-html="
+                                                                items.DT_RowIndex
+                                                            "
+                                                        ></td>
+                                                        <td
+                                                            v-html="items.seri"
+                                                        ></td>
+                                                        <td
+                                                            v-html="
+                                                                items.tgl_uji
+                                                            "
+                                                        ></td>
+                                                        <td
+                                                            v-html="
+                                                                items.status
+                                                            "
+                                                        ></td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                    <footer class="modal-card-foot is-align-items-end">
+                        <button
+                            class="button is-dark float-right"
+                            @click="noseriModal = false"
                         >
                             Tutup
                         </button>
@@ -444,15 +691,19 @@ export default {
             no_po: "",
             no_so: "",
             tanggal_batal: "",
+            pesanan_id: "",
 
             data_belum_uji: [],
             data_selesai_uji: [],
             produk_uji: [],
+            noseri_uji: [],
 
             batalModal: false,
             detailModal: false,
+            noseriModal: false,
             detailSo: false,
             tabs: false,
+            tabsdetail: false,
         };
     },
 
@@ -482,6 +733,7 @@ export default {
         },
 
         async detail_so(id) {
+            this.pesanan_id = id;
             $("#produktable").DataTable().destroy();
             await axios.get("/api/manager/pesanan/" + id).then((response) => {
                 console.log(response.data);
@@ -508,7 +760,54 @@ export default {
                         pagingType: "simple_numbers_no_ellipses",
                     })
                 );
+
             this.detailModal = true;
+        },
+
+        async batal_so(id) {
+            this.pesanan_id = id;
+            $("#bataltable").DataTable().destroy();
+            await axios.get("/api/manager/pesanan/" + id).then((response) => {
+                console.log(response.data);
+                if (response.data.ekatalog != null) {
+                    this.nama_customer = response.data.ekatalog.satuan;
+                    this.alamat = response.data.ekatalog.alamat;
+                } else if (response.data.spa != null) {
+                    this.nama_customer = response.data.spa.customer.nama;
+                    this.alamat = response.data.spa.customer.alamat;
+                } else if (response.data.spb != null) {
+                    this.nama_customer = response.data.spb.customer.nama;
+                    this.alamat = response.data.spb.customer.alamat;
+                }
+                this.no_so = response.data.so;
+                this.no_po = response.data.no_po;
+            });
+            await axios
+                .post("/api/qc/so/detail/" + id)
+                .then((response) => {
+                    this.produk_uji = response.data.data;
+                })
+                .then(() =>
+                    $("#bataltable").DataTable({
+                        pagingType: "simple_numbers_no_ellipses",
+                    })
+                );
+            this.batalModal = true;
+        },
+
+        async detail_noseri(id, pesananid) {
+            $("#noseritable").DataTable().destroy();
+            await axios
+                .post("/api/qc/so/seri/semua/" + id + "/" + pesananid)
+                .then((response) => {
+                    this.noseri_uji = response.data.data;
+                })
+                .then(() =>
+                    $("#noseritable").DataTable({
+                        pagingType: "simple_numbers_no_ellipses",
+                    })
+                );
+            this.noseriModal = true;
         },
     },
 
