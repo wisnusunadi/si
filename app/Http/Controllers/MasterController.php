@@ -29,6 +29,7 @@ use App\Exports\ProdukData;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
+use App\Models\DetailPesananPart;
 use App\Models\Ekspedisi;
 use App\Models\Logistik;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -1072,9 +1073,7 @@ class MasterController extends Controller
         return view("page.logistik.ekspedisi.edit", ['ekspedisi' => $ekspedisi]);
     }
 
-
     //Show Detail
-
     public function detail_customer($id)
     {
         $customer = Customer::find($id);
@@ -1147,16 +1146,16 @@ class MasterController extends Controller
     public function select_penjualan_produk_param(Request $request, $value)
     {
         if($value == 'ekatalog')
-    {
-        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
-        ->where('status', 'ekat')
-        ->orderby('nama', 'ASC')
-        ->get();
-    }else{
-        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
-        ->orderby('nama', 'ASC')
-        ->get();
-    }
+        {
+            $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->where('status', 'ekat')
+            ->orderby('nama', 'ASC')
+            ->get();
+        } else {
+            $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')
+            ->get();
+        }
         echo json_encode($data);
     }
     public function check_no_akd($id, $val)
@@ -1263,5 +1262,85 @@ class MasterController extends Controller
     {
         $waktu = Carbon::now();
         return Excel::download(new ProdukData(), 'Daftar Produk ' . $waktu->toDateTimeString() . '.xlsx');
+    }
+
+    public function get_stok_pesanan(Request $r){
+        if($r->jenis == "paket"){
+            $data = DetailPesanan::where('id', $r->id)->addSelect(['count_gudang' => function($q){
+                $q->selectRaw('count(t_gbj_noseri.id)')
+                    ->from('t_gbj_noseri')
+                    ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 't_gbj_detail.detail_pesanan_produk_id')
+                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                    ->limit(1);
+            }, 'count_qc' => function($q){
+                $q->selectRaw('count(noseri_detail_pesanan.id)')
+                    ->from('noseri_detail_pesanan')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                    // ->where('noseri_detail_pesanan.status', 'ok')
+                    ->limit(1);
+            }, 'count_log' => function($q){
+                $q->selectRaw('count(noseri_logistik.id)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                    ->limit(1);
+            }, 'count_jumlah' => function($q){
+                $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                ->from('detail_pesanan_produk')
+                ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                ->join('detail_penjualan_produk', 'detail_penjualan_produk.produk_id', '=', 'gdg_barang_jadi.produk_id')
+                ->whereColumn('detail_penjualan_produk.penjualan_produk_id', 'detail_pesanan.penjualan_produk_id')
+                ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                ->limit(1);
+            }])->with('PenjualanProduk')->first();
+
+            echo json_encode($data);
+        }
+        else if($r->jenis == "variasi"){
+            $data = DetailPesananProduk::where('id', $r->id)->addSelect(['count_gudang' => function($q){
+                $q->selectRaw('count(t_gbj_noseri.id)')
+                    ->from('t_gbj_noseri')
+                    ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->whereColumn('t_gbj_detail.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
+                    ->limit(1);
+            }, 'count_qc' => function($q){
+                $q->selectRaw('count(noseri_detail_pesanan.id)')
+                    ->from('noseri_detail_pesanan')
+                    ->whereColumn('noseri_detail_pesanan.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
+                    ->where('status', 'ok')
+                    ->limit(1);
+            }, 'count_log' => function($q){
+                $q->selectRaw('count(noseri_logistik.id)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->whereColumn('noseri_detail_pesanan.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
+                    ->limit(1);
+            }, 'count_jumlah' => function($q){
+                $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                ->from('detail_pesanan')
+                ->join('detail_penjualan_produk', 'detail_pesanan.penjualan_produk_id', '=', 'detail_penjualan_produk.penjualan_produk_id')
+                ->join('gdg_barang_jadi', 'gdg_barang_jadi.produk_id', '=', 'detail_penjualan_produk.produk_id')
+                ->whereColumn('detail_pesanan.id', 'detail_pesanan_produk.detail_pesanan_id')
+                ->whereColumn('gdg_barang_jadi.id', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                ->limit(1);
+            }])->with('GudangBarangJadi.Produk')->first();
+
+            echo json_encode($data);
+        }
+        else if($r->jenis == "part"){
+            $data = DetailPesananPart::where('id', $r->id)->addSelect(['count_qc' => function($q){
+                $q->selectRaw('sum(outgoing_pesanan_part.jumlah_ok)')
+                    ->from('outgoing_pesanan_part')
+                    ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id', 'detail_pesanan_part.id');
+            }, 'count_log' => function($q){
+                $q->selectRaw('sum(detail_logistik_part.jumlah)')
+                    ->from('detail_logistik_part')
+                    ->whereColumn('detail_logistik_part.detail_pesanan_part_id', 'detail_pesanan_part.id');
+            }])->with('Sparepart')->first();
+            echo json_encode($data);
+        }
     }
 }

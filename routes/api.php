@@ -604,6 +604,7 @@ Route::prefix('/manager')->group(function () {
 
     Route::get('pesanan/{id}', [App\Http\Controllers\PpicController::class, 'pesanan']);
 });
+Route::get('/get_stok_pesanan', [MasterController::class, 'get_stok_pesanan']);
 
 Route::get('testingJson', [GudangController::class, 'dataTesting']);
 
