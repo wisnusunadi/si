@@ -583,7 +583,7 @@
                             <th style="min-width: 500px">No Seri</th>
                             <th style="min-width: 500px">Layout</th>
                         </tr>
-                    </thead>
+                    </thead>    
                     <tbody class="tambah_noseri_table">
                     </tbody>
                 </table>
