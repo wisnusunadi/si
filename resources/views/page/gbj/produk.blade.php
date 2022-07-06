@@ -65,7 +65,7 @@
                                                             value="Alat Kesehatan" />
                                                         <label class="form-check-label" for="sp_kelompok">
                                                             Alat Kesehatan
-                                                        </label>
+                                                        </label> 
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -378,6 +378,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>No. Seri</th>
+                                            <th>Status</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -385,6 +386,25 @@
                                         <tr>
                                             <td>1</td>
                                             <td>123456789</td>
+                                            <td><span class="badge badge-success">Edit Diterima</span></td>
+                                            <td><button class="btn btn-outline-info btn-sm openModalHistory"><i class="fas fa-eye"></i>Detail</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>123456789</td>
+                                            <td><span class="badge badge-danger">Edit Ditolak</span></td>
+                                            <td><button class="btn btn-outline-info btn-sm openModalHistory"><i class="fas fa-eye"></i>Detail</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>3</td>
+                                            <td>123456789</td>
+                                            <td><span class="badge badge-success">Hapus Diterima</span></td>
+                                            <td><button class="btn btn-outline-info btn-sm openModalHistory"><i class="fas fa-eye"></i>Detail</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>4</td>
+                                            <td>123456789</td>
+                                            <td><span class="badge badge-danger">Hapus Ditolak</span></td>
                                             <td><button class="btn btn-outline-info btn-sm openModalHistory"><i class="fas fa-eye"></i>Detail</button></td>
                                         </tr>
                                     </tbody>
@@ -434,28 +454,20 @@
                         <tr>
                             <th>Tanggal Masuk</th>
                             <th>Dari</th>
-                            <th>Status</th>
-                            <th>Komentar</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td>Selasa, 14 Juni 2019</td>
                             <td>Admin</td>
-                            <td><span class="badge badge-success">Edit Diterima</span></td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
                         </tr>
                         <tr>
                             <td>Rabu, 15 Juni 2019</td>
                             <td>Admin</td>
-                            <td><span class="badge badge-danger">Edit Ditolak</span></td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
                         </tr>
                         <tr>
                             <td>Rabu, 15 Juni 2019</td>
                             <td>Admin</td>
-                            <td><span class="badge badge-danger">Hapus Ditolak</span></td>
-                            <td>Lorem ipsum dolor sit amet consectetur adipisicing elit.</td>
                         </tr>
                     </tbody>
                 </table>
