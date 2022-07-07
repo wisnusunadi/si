@@ -412,17 +412,35 @@
             });
             noseri.push($(this).find('td:nth-child(2) input').val());
             layout.push($(this).find('td:nth-child(3) select').val());
+            // console.log(noseri);
+            $.ajax({
+                url: "/api/gbj/ceknoseri",
+                type: "post",
+                data: {
+                    noseri: noseri
+                },
+                success: function(res) {
+                    if (res.msg) {
+                        if(noseri.length == jml) return produk.find(function(element, index) {
+                            if(element.prd == prd ) return element.noseri = noseri, element.layout = layout,
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Data berhasil disimpan!',
+                            }).then(function() {
+                                $('.tambahan-perakitan').modal('hide');
+                            });
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: res.error,
+                        });
+                    }
+                }
+            })
 
-            if(noseri.length == jml) return produk.find(function(element, index) {
-            if(element.prd == prd ) return element.noseri = noseri, element.layout = layout,
-            Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data berhasil disimpan!',
-            }).then(function() {
-                $('.tambahan-perakitan').modal('hide');
-            });
-        });
         });
     });
     $(document).on('click', '#head-cb', function() {
