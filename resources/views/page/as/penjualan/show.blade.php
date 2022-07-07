@@ -26,6 +26,7 @@
 @stop
 
 @section('adminlte_css')
+<script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <style>
         .filter {
             margin: 5px;
@@ -443,6 +444,38 @@
 @section('adminlte_js')
     <script>
         $(function() {
+            var options = {
+                series: [0, 0, 0],
+                chart: {
+                    height: 300,
+                    type: 'radialBar',
+                },
+                plotOptions: {
+                    radialBar: {
+                        dataLabels: {
+                            name: {
+                                fontSize: '20px',
+                            },
+                            value: {
+                                fontSize: '14px',
+                            },
+                            total: {
+                                show: true,
+                                label: 'Total',
+                                color: '#5F7A90',
+                                // formatter: function (val) {
+                                //     console.log(val);
+                                //     // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
+                                //     return val
+                                // }
+                            }
+                        }
+                    }
+                },
+                colors: ['#EA8B1B', '#FFC700', '#456600'],
+                labels: ['Gudang', 'QC', 'Logistik'],
+            };
+
             var spatable = $('#spatable').DataTable({
                 destroy: true,
                 processing: true,
@@ -731,6 +764,8 @@
                     success: function(result) {
                         $('#detailmodal').modal("show");
                         $('#detail').html(result).show();
+                        var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
+                        chart.render();
                         if (label == 'spa') {
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-purple bg-lightblue');
@@ -785,6 +820,51 @@
                     },
                     timeout: 8000
                 })
+            });
+
+            $(document).on('click', '#tabledetailpesan #lihatstok', function(){
+                var id = $(this).attr('data-id');
+                var produk = $(this).attr('data-produk');
+                var array = [];
+                $.ajax({
+                    url: '/api/get_stok_pesanan',
+                    data: {'id': id, 'jenis': produk},
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(result) {
+
+
+                        $('#count_qc').text(result.count_qc);
+                        $('#count_log').text(result.count_log);
+
+                        if(produk == 'paket'){
+                            $('#nama_produk').text(result.penjualan_produk.nama);
+                            array = [Math.round((result.count_gudang / result.count_jumlah) * 100), Math.round((result.count_qc / result.count_jumlah) * 100), Math.round((result.count_log/ result.count_jumlah) * 100)];
+                            $('#count_gudang').text(result.count_gudang);
+                        }else if(produk == 'variasi'){
+                            $('#nama_produk').text(result.gudang_barang_jadi.produk.nama +" "+ result.gudang_barang_jadi.nama);
+                            array = [Math.round((result.count_gudang / result.count_jumlah) * 100), Math.round((result.count_qc / result.count_jumlah) * 100), Math.round((result.count_log/ result.count_jumlah) * 100)];
+                            $('#count_gudang').text(result.count_gudang);
+                        }else{
+                            $('#nama_produk').text(result.sparepart.nama);
+                            array = [Math.round((result.jumlah / result.jumlah) * 100), Math.round((result.count_qc / result.jumlah) * 100), Math.round((result.count_log/ result.jumlah) * 100)];
+                            $('#count_gudang').text(result.jumlah);
+                        }
+                        var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
+                        chart.render();
+                        chart.updateSeries(array);
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+
             });
         })
     </script>

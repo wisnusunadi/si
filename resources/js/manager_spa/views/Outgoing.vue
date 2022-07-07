@@ -651,7 +651,7 @@
                                                                 items.tgl_uji
                                                             "
                                                         ></td>
-                                                        <td
+                                                        <td 
                                                             v-html="
                                                                 items.status
                                                             "

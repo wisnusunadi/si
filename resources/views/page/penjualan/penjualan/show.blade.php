@@ -816,116 +816,116 @@ ul#status {
             var divisi_id = "{{ Auth::user()->divisi->id }}";
 
             function p_show(){
-            var penjualantable = $('#penjualantable').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': "/api/penjualan/penjualan/data/semua/semua",
-                    "dataType": "json",
-                    'type': 'POST',
-                    "headers": {
-                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
-                    }
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    }, {
-                        data: 'so',
-                    }, {
-                        data: 'no_paket',
-                    }, {
-                        data: 'nopo',
-                    }, {
-                        data: 'tgl_order',
-                    }, {
-                        data: 'tgl_kontrak',
-                    }, {
-                        data: 'nama_customer',
-                    }, {
-                        data: 'status',
-                    }, {
-                        data: 'button',
-                        orderable: false,
-                        searchable: false
+                var penjualantable = $('#penjualantable').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        'url': "/api/penjualan/penjualan/data/semua/semua",
+                        "dataType": "json",
+                        'type': 'POST',
+                        "headers": {
+                            'X-CSRF-TOKEN': "{{ csrf_token() }}"
+                        }
                     },
-                ]
-            });
-        }
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        }, {
+                            data: 'so',
+                        }, {
+                            data: 'no_paket',
+                        }, {
+                            data: 'nopo',
+                        }, {
+                            data: 'tgl_order',
+                        }, {
+                            data: 'tgl_kontrak',
+                        }, {
+                            data: 'nama_customer',
+                        }, {
+                            data: 'status',
+                        }, {
+                            data: 'button',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ]
+                });
+            }
 
-        function ekat_show(){
-            var ekatalogtable = $('#ekatalogtable').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/penjualan/penjualan/ekatalog/data/semua',
-                    "dataType": "json",
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    }
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [
-                    {
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
+            function ekat_show(){
+                var ekatalogtable = $('#ekatalogtable').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        'url': '/penjualan/penjualan/ekatalog/data/semua',
+                        "dataType": "json",
+                        'type': 'POST',
+                        'headers': {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
                     },
-                    {
-                        data: 'no_urut',
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
-                    {
-                        data: 'so',
-                    },
-                    {
-                        data: 'no_paket',
-                    },
-                    {
-                        data: 'nopo',
-                    },
-                    {
-                        data: 'tgl_buat',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'tgl_edit',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'tgl_kontrak',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'nama_customer',
-                    },
-                    {
-                        data: 'status',
-                    },
-                    {
-                        data: 'button',
-                        orderable: false,
-                        searchable: false
-                    },
+                    columns: [
+                        {
+                            data: 'DT_RowIndex',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'no_urut',
+                        },
+                        {
+                            data: 'so',
+                        },
+                        {
+                            data: 'no_paket',
+                        },
+                        {
+                            data: 'nopo',
+                        },
+                        {
+                            data: 'tgl_buat',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'tgl_edit',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'tgl_kontrak',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'nama_customer',
+                        },
+                        {
+                            data: 'status',
+                        },
+                        {
+                            data: 'button',
+                            orderable: false,
+                            searchable: false
+                        },
 
-                ],
+                    ],
 
 
-            });
-        }
+                });
+            }
 
             function spa_show(){
             var spatable = $('#spatable').DataTable({
@@ -1049,7 +1049,6 @@ ul#status {
                                 //     console.log(val);
                                 //     // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
                                 //     return val
-
                                 // }
                             }
                         }
@@ -1718,7 +1717,6 @@ ul#status {
                             $('#nama_produk').text(result.sparepart.nama);
                             array = [Math.round((result.jumlah / result.jumlah) * 100), Math.round((result.count_qc / result.jumlah) * 100), Math.round((result.count_log/ result.jumlah) * 100)];
                             $('#count_gudang').text(result.jumlah);
-
                         }
                         var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
                         chart.render();

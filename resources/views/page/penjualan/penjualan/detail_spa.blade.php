@@ -225,6 +225,7 @@
                                                                                             class="wb">{{ $e->PenjualanProduk->nama }}</b>
                                                                                     </td>
                                                                                     <td class="nowraptxt">
+
                                                                                         <button class="btn btn-sm btn-outline-primary" id="lihatstok" data-id="{{$e->id}}" data-produk="paket"><i class="fas fa-eye"></i></button>
                                                                                     </td>
                                                                                     <td colspan="2" class="nowraptxt tabnum">
@@ -275,7 +276,9 @@
                                                                                         <b>{{ $e->Sparepart->nama }}</b> <i class="fas fa-info-circle text-danger" data-toggle="tooltip" data-html="true" data-placement="bottom" role="button" title='Ini Adalah Tooltipnya' ></i>
                                                                                     </td>
                                                                                     <td class="nowraptxt">
+                                                                                        @if(strpos($e->Sparepart->kode, 'JASA') === false)
                                                                                         <button class="btn btn-sm btn-outline-primary" id="lihatstok" data-id="{{$e->id}}" data-produk="part"><i class="fas fa-eye"></i></button>
+                                                                                        @endif
                                                                                     </td>
                                                                                     <td class="nowraptxt tabnum"><span
                                                                                             class="text-muted">{{ $e->jumlah }}</span>

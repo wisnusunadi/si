@@ -134,7 +134,7 @@
                         @csrf
                         <div class="card-body">
                             <div class="form-horizontal">
-                                <h5>Referensi Transaksi</h5>
+                                <h5>Informasi Transaksi</h5>
                                 <div class="form-group row" id="no_retur_input">
                                     <label for="no_retur" class="col-lg-5 col-md-12 col-form-label labelket">No Retur</label>
                                     <div class="col-lg-2 col-md-8">
@@ -147,6 +147,42 @@
                                     <div class="col-lg-2 col-md-6">
                                         <input type="date" name="tgl_retur" id="tgl_retur" class="form-control col-form-label tgl_retur  @error('tgl_retur') is-invalid @enderror">
                                         <div class="invalid-feedback" id="msgtgl_retur"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="pilih_jenis_retur_input">
+                                    <label for="pilih_jenis_retur" class="col-lg-5 col-md-12 col-form-label labelket">Jenis Retur</label>
+                                    <div class="col-lg-4 col-md-8 d-flex justify-content-between">
+                                        <div class="form-check form-check-inline col-form-label">
+                                            <input class="form-check-input" type="radio" name="pilih_jenis_retur" id="pilih_jenis_retur1" value="peminjaman" />
+                                            <label class="form-check-label" for="pilih_jenis_retur1">Peminjaman</label>
+                                        </div>
+                                        <div class="form-check form-check-inline col-form-label">
+                                            <input class="form-check-input" type="radio" name="pilih_jenis_retur" id="pilih_jenis_retur2" value="komplain" />
+                                            <label class="form-check-label" for="pilih_jenis_retur2">Komplain</label>
+                                        </div>
+                                        <div class="form-check form-check-inline col-form-label">
+                                            <input class="form-check-input" type="radio" name="pilih_jenis_retur" id="pilih_jenis_retur3" value="service" />
+                                            <label class="form-check-label" for="pilih_jenis_retur3">Service</label>
+                                        </div>
+                                        <div class="invalid-feedback" id="msgpilih_jenis_retur"></div>
+                                    </div>
+                                </div>
+                                <div class="form-group row" id="pilih_jenis_barang_input">
+                                    <label for="pilih_jenis_barang" class="col-lg-5 col-md-12 col-form-label labelket">Jenis Barang</label>
+                                    <div class="col-lg-3 col-md-8 d-flex justify-content-between">
+                                        <div class="form-check form-check-inline col-form-label">
+                                            <input class="form-check-input" type="checkbox" name="pilih_jenis_barang" id="pilih_jenis_barang1" value="peminjaman" />
+                                            <label class="form-check-label" for="pilih_jenis_barang1">Produk</label>
+                                        </div>
+                                        <div class="form-check form-check-inline col-form-label">
+                                            <input class="form-check-input" type="checkbox" name="pilih_jenis_barang" id="pilih_jenis_barang2" value="komplain" />
+                                            <label class="form-check-label" for="pilih_jenis_barang2">Part</label>
+                                        </div>
+                                        <div class="form-check form-check-inline col-form-label">
+                                            <input class="form-check-input" type="checkbox" name="pilih_jenis_barang" id="pilih_jenis_barang3" value="service" />
+                                            <label class="form-check-label" for="pilih_jenis_barang3">Jasa</label>
+                                        </div>
+                                        <div class="invalid-feedback" id="msgpilih_jenis_barang"></div>
                                     </div>
                                 </div>
                                 <div class="form-group row" id="keterangan_input">

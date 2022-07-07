@@ -367,7 +367,7 @@ class AfterSalesController extends Controller
 
     public function get_data_so_belum_kirim()
     {
-        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['8', '9', '11', '12'])->orderBy('tgl_po', 'desc')->get();
+        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['8', '9', '11', '12'])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->orderBy('tgl_po', 'desc')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -458,7 +458,7 @@ class AfterSalesController extends Controller
 
     public function get_data_so_selesai_kirim()
     {
-        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['10'])->orderBy('tgl_po', 'desc')->get();
+        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['10'])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->orderBy('tgl_po', 'desc')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()

@@ -134,13 +134,13 @@ class QcController extends Controller
                 if (count($check) > 0) {
                     foreach ($check as $c) {
                         if ($c->status == 'ok') {
-                            return '<i class="fas fa-check-circle ok"></i>';
+                            return '<i class="fas fa-check-circle ok has-text-success"></i>';
                         } else {
-                            return '<i class="fas fa-times-circle nok"></i>';
+                            return '<i class="fas fa-times-circle nok has-text-danger"></i>';
                         }
                     }
                 } else {
-                    return '<i class="fas fa-question-circle warning"></i>';
+                    return '<i class="fas fa-question-circle warning has-text-warning"></i>';
                 }
             })
             ->addColumn('button', function () {
