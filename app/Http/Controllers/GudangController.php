@@ -2429,39 +2429,40 @@ class GudangController extends Controller
 
     function finalDraftRakit(Request $request)
     {
-        try {
-            foreach ($request->seri as $k => $v) {
-                foreach ($v['data'] as $kk => $vv) {
-                    NoseriTGbj::where('id', $vv['noseri'])->update(['layout_id' => $vv['layout'], 'status_id' => 2]);
-                    $a = NoseriTGbj::where('id', $vv['noseri'])->get();
-                    foreach ($a as $a) {
-                        NoseriBarangJadi::where('id', $a->noseri_id)->update(['is_aktif' => 1, 'layout_id' => $vv['layout']]);
-                        $b =  NoseriBarangJadi::where('id', $a->noseri_id)->get();
-                        foreach ($b as $b) {
-                            $c =  GudangBarangJadi::where('id', $b->gdg_barang_jadi_id)->first();
-                            foreach ($c as $c) {
-                                $stok = $c->stok +  $v['jumlah'];
-                                // echo $stok;
-                                GudangBarangJadi::where('id', $c['id'])->update(['stok' => $stok]);
-                            }
-                        }
-                    }
-                }
-            }
+        dd($request->all());
+        // try {
+        //     foreach ($request->seri as $k => $v) {
+        //         foreach ($v['data'] as $kk => $vv) {
+        //             NoseriTGbj::where('id', $vv['noseri'])->update(['layout_id' => $vv['layout'], 'status_id' => 2]);
+        //             $a = NoseriTGbj::where('id', $vv['noseri'])->get();
+        //             foreach ($a as $a) {
+        //                 NoseriBarangJadi::where('id', $a->noseri_id)->update(['is_aktif' => 1, 'layout_id' => $vv['layout']]);
+        //                 $b =  NoseriBarangJadi::where('id', $a->noseri_id)->get();
+        //                 foreach ($b as $b) {
+        //                     $c =  GudangBarangJadi::where('id', $b->gdg_barang_jadi_id)->first();
+        //                     foreach ($c as $c) {
+        //                         $stok = $c->stok +  $v['jumlah'];
+        //                         // echo $stok;
+        //                         GudangBarangJadi::where('id', $c['id'])->update(['stok' => $stok]);
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //     }
 
-            $header = TFProduksi::find($request->id);
+        //     $header = TFProduksi::find($request->id);
 
-            $header->status_id = 2;
-            $header->updated_at = Carbon::now();
-            $header->save();
+        //     $header->status_id = 2;
+        //     $header->updated_at = Carbon::now();
+        //     $header->save();
 
-            return response()->json(['msg' => 'Data Berhasil Diterima']);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => true,
-                'msg' => $e->getMessage(),
-            ]);
-        }
+        //     return response()->json(['msg' => 'Data Berhasil Diterima']);
+        // } catch (\Exception $e) {
+        //     return response()->json([
+        //         'error' => true,
+        //         'msg' => $e->getMessage(),
+        //     ]);
+        // }
     }
 
     function storeCekSO(Request $request)

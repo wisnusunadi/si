@@ -82,6 +82,7 @@
                                                                     <input type="date"
                                                                         class="form-control tgl_masuk"
                                                                         id="tgl_masuk" name="tgl_masuk">
+                                                                        <div class="invalid-feedback">Form Tanggal Masuk harus diisi.</div>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row top-min ">
@@ -92,6 +93,7 @@
                                                                         class="custom-select division"
                                                                         id="divisi" name="dari">
                                                                     </select>
+                                                                    <div class="invalid-feedback">Form Dari harus diisi.</div>
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row top-min">
@@ -101,6 +103,7 @@
                                                                     <textarea name="deskripsi"
                                                                         id="deskripsi"
                                                                         class="form-control tujuan"></textarea>
+                                                                    <div class="invalid-feedback">Form Keterangan harus diisi.</div>
                                                                 </div>
                                                             </div>
                                                         </form>
@@ -113,6 +116,7 @@
                                                                 class="col-12 font-weight-bold col-form-label">Produk</label>
                                                             <div class="col-12">
                                                                 <select name="" id="gdg_brg_jadi_id" class="form-control product"></select>
+                                                                <div class="invalid-feedback">Form Produk harus diisi.</div>
                                                             </div>
                                                         </div>
                                                         <div class="form-group row top-min">
@@ -120,6 +124,7 @@
                                                                 class="col-12 font-weight-bold col-form-label">Jumlah</label>
                                                             <div class="col-12">
                                                                 <input type="text" class="form-control" id="jumlah">
+                                                                <div class="invalid-feedback">Form Jumlah harus diisi.</div>
                                                             </div>
                                                         </div>
                                                         <div class="row">
@@ -288,49 +293,31 @@
         let prd = $('#gdg_brg_jadi_id').val();
         let namaprd = $('#gdg_brg_jadi_id option:selected').text();
         let jml = $('#jumlah').val();
-        if(prd == '' || jml == ''){
-            Swal.fire({
+        if (prd == '') return $('#gdg_brg_jadi_id').addClass('is-invalid');
+        if (jml == '') return $('#jumlah').addClass('is-invalid');
+        if (produk.length > 0) return produk.find(function(value) {
+            if (value.prd == prd) return Swal.fire({
                 icon: 'error',
-                title: 'Oops...',
-                text: 'Produk dan Jumlah tidak boleh kosong!',
+                title: 'Gagal',
+                text: 'Produk sudah ada',
+                type: 'error',
+                confirmButtonText: 'Ok'
             });
-        }else{
-            if(produk.length > 0) {
-                let cek = produk.find(function(value) {
-                    return value.prd == prd;
-                });
-                if(cek) {
-                    Swal.fire({
-                        icon: 'error',
-                        title: 'Gagal',
-                        text: 'Produk sudah ada',
-                        type: 'error',
-                        confirmButtonText: 'Ok'
-                    });
-                    return false;
-                }else{
-                    produk.push({
-                    prd: prd,
-                    namaprd: namaprd,
-                    jml: jml,
-                    noseri: [],
-                    layout: []
-                });
-                addData(prd, namaprd, jml);
-                }
-            }else{
-                produk.push({
-                    prd: prd,
-                    namaprd: namaprd,
-                    jml: jml,
-                    noseri: [],
-                    layout: []
-                });
-                addData(prd, namaprd, jml);
-            }
-        $('.btn-simpan').attr('hidden', false);
-        }
-        // Button Simpan
+            if(value.prd != prd) return produk.push({
+                prd: prd,
+                namaprd: namaprd,
+                jml: jml,
+                noseri: [],
+                layout: []
+            }) && addData(prd, namaprd, jml);
+        });
+        if(produk.length == 0) return produk.push({
+            prd: prd,
+            namaprd: namaprd,
+            jml: jml,
+            noseri: [],
+            layout: []
+        }) && addData(prd, namaprd, jml);
     });
 
     $(document).on('click', '.btn-add-seri', function() {
@@ -346,7 +333,8 @@
                                 '<input type="checkbox" class="cb-child">'+
                             '</td>'+
                             '<td>'+
-                                '<input type="text" class="form-control" id="noseri">'+
+                                '<input type="text" class="form-control" id="noseri" style="text-transform:uppercase">'+
+                                '<div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div>'+
                             '</td>'+
                             '<td>'+
                                 '<select class="form-control layout"></select>'+
@@ -371,20 +359,16 @@
             },
         });
         $('.checkboxremove').removeClass('sorting_asc');
-        $('#btnSeri').removeData('prd');
+        $('#btnSeri').removeData('prd', 'jml');
         $('#btnSeri').attr('data-prd', prd);
+        $('#btnSeri').attr('data-jml', jml);
         // Data Isi
         produk.forEach(function(element) {
-            if(element.prd == prd) {
-                element.noseri.map(function(item, index) {
-                        $('.scan-produk1 tbody tr').each(function(i, v) {
-                            if(i == index) {
-                                $(this).find('td:nth-child(2) input').val(item);
-                                $(this).find('td:nth-child(3) select').val(element.layout[index]);
-                            }
-                    });
+            if(element.prd == prd) return element.noseri.forEach(function(item, index) {
+                $('.scan-produk1 tbody tr').each(function(i, v) {
+                    if(i == index) return $(this).find('td:nth-child(2) input').val(item) && $(this).find('td:nth-child(3) select').val(element.layout[index]);
                 });
-            }   
+            });
         });
         $('.tambahan-perakitan').modal('show');
     });
@@ -394,9 +378,7 @@
         let index = produk.findIndex(x => x.prd == prd);
         produk.splice(index, 1);
         $(this).parents('tr').remove();
-        if (produk.length == 0) {
-            $('.btn-simpan').attr('hidden', true);        
-        }
+        if (produk.length == 0) return $('.btn-simpan').attr('hidden', true);
     })
 
     function addData(prd, namaprd, jml) {
@@ -406,28 +388,40 @@
                             '<td><button class="btn btn-primary btn-add-seri" data-prd="'+prd+'" data-namaprd="'+namaprd+'" data-jml="'+jml+'"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-hapus" data-prd="'+prd+'"><i class="fas fa-trash"></i> Hapus</button></td>'+
                         '</tr>';
         $('.tambah_data').append(tambah_data);
+        $('.btn-simpan').attr('hidden', false);
+        $('#gdg_brg_jadi_id').removeClass('is-invalid');
+        $('#jumlah').removeClass('is-invalid');
     }
     $(document).on('click', '#btnSeri', function () {
         let prd = $(this).data('prd');
+        let jml = $(this).data('jml');
         let noseri = [];
         let layout = [];
-        $('.scan-produk1 tbody tr').each(function(index, element) {
+        // Validasi Scanning
+        $('.scan-produk1 tbody tr').each(function(i, v) {
+            $(this).find('td:nth-child(2) input').removeClass('is-invalid');
+            if($(this).find('td:nth-child(2) input').val() == '') return $(this).find('td:nth-child(2) input').addClass('is-invalid') && Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Nomor seri tidak boleh kosong!',
+            });
+            if(noseri.includes($(this).find('td:nth-child(2) input').val())) return $(this).find('td:nth-child(2) input').addClass('is-invalid') && Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Nomor seri tidak boleh sama!',
+            });
             noseri.push($(this).find('td:nth-child(2) input').val());
             layout.push($(this).find('td:nth-child(3) select').val());
+
+            if(noseri.length == jml) return produk.find(function(element, index) {
+            if(element.prd == prd) return element.noseri = noseri, element.layout = layout, Swal.fire({
+                icon: 'success',
+                title: 'Berhasil',
+                text: 'Data berhasil disimpan!',
+            }).then(function() {
+                $('.tambahan-perakitan').modal('hide');
+            });
         });
-        produk.find(function(element, index) {
-            if(element.prd == prd) {
-                produk[index].noseri = noseri;
-                produk[index].layout = layout;
-            }
-        });
-        $('.tambahan-perakitan').modal('hide');
-        Swal.fire({
-            icon: 'success',
-            title: 'Berhasil',
-            text: 'Nomor Seri berhasil disimpan',
-            type: 'success',
-            confirmButtonText: 'Ok'
         });
     });
     $(document).on('click', '#head-cb', function() {
@@ -445,6 +439,9 @@
         $('#ubah-layout').modal('hide');
     })
     $(document).on('click', '.btn-simpan', function () {
+        $('#tgl_masuk').removeClass('is-invalid');
+        $('#divisi').removeClass('is-invalid');
+        $('#deskripsi').removeClass('is-invalid');
         let data = {
             tgl_masuk: $('#tgl_masuk').val(),
             divisi: $('#divisi').val(),
@@ -455,40 +452,37 @@
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Data ' + 
-                    (data.tgl_masuk == '' ? 'Tanggal Masuk, ' : '') + 
-                    (data.divisi == '' ? 'Divisi, ' : '') + 
-                    (data.deskripsi == '' ? 'Deskripsi, ' : '') + 
-                    (data.produk.length == 0 ? 'Produk' : '') + 
-                    ' tidak boleh kosong',
+                text: 'Data tidak boleh kosong!',
             });
+            $('#tgl_masuk').addClass('is-invalid');
+            $('#divisi').addClass('is-invalid');
+            $('#deskripsi').addClass('is-invalid');
         } else {
-            // $.ajax({
-            //     url: '/api/tfp/create-final',
-            //     type: 'POST',
-            //     dataType: 'json',
-            //     data: data,
-            //     success: function (res) {
-            //         if(res.status == 'success') {
-            //             Swal.fire({
-            //                 icon: 'success',
-            //                 title: 'Berhasil',
-            //                 text: 'Data berhasil disimpan!',
-            //                 showConfirmButton: false,
-            //                 timer: 1500
-            //             }).then(function() {
-            //                 location.reload();
-            //             });
-            //         } else {
-            //             Swal.fire({
-            //                 icon: 'error',
-            //                 title: 'Oops...',
-            //                 text: 'Data gagal disimpan!',
-            //             });
-            //         }
-            //     }
-            // });
-            console.log(data);
+            $.ajax({
+                url: '/api/tfp/create-final',
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (res) {
+                    if(res.status == 'success') {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Data berhasil disimpan!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function() {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Data gagal disimpan!',
+                        });
+                    }
+                }
+            });
         }
     })
 </script>
