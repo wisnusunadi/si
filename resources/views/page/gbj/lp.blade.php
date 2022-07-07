@@ -20,7 +20,7 @@
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
-    } 
+    }
 
     .nomor-po {
         background-color: #85D296;
@@ -412,16 +412,35 @@
             });
             noseri.push($(this).find('td:nth-child(2) input').val());
             layout.push($(this).find('td:nth-child(3) select').val());
+            // console.log(noseri);
+            $.ajax({
+                url: "/api/gbj/ceknoseri",
+                type: "post",
+                data: {
+                    noseri: noseri
+                },
+                success: function(res) {
+                    if (res.msg) {
+                        if(noseri.length == jml) return produk.find(function(element, index) {
+                            if(element.prd == prd ) return element.noseri = noseri, element.layout = layout,
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Data berhasil disimpan!',
+                            }).then(function() {
+                                $('.tambahan-perakitan').modal('hide');
+                            });
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: res.error,
+                        });
+                    }
+                }
+            })
 
-            if(noseri.length == jml) return produk.find(function(element, index) {
-            if(element.prd == prd) return element.noseri = noseri, element.layout = layout, Swal.fire({
-                icon: 'success',
-                title: 'Berhasil',
-                text: 'Data berhasil disimpan!',
-            }).then(function() {
-                $('.tambahan-perakitan').modal('hide');
-            });
-        });
         });
     });
     $(document).on('click', '#head-cb', function() {
@@ -446,7 +465,8 @@
             tgl_masuk: $('#tgl_masuk').val(),
             divisi: $('#divisi').val(),
             deskripsi: $('#deskripsi').val(),
-            produk: produk
+            produk: produk,
+            userid: $('#userid').val()
         }
         if(data.tgl_masuk == '' || data.divisi == '' || data.deskripsi == '' || data.produk.length == 0) {
             Swal.fire({
@@ -464,7 +484,8 @@
                 dataType: 'json',
                 data: data,
                 success: function (res) {
-                    if(res.status == 'success') {
+                    console.log(res);
+                    if(res.error == false) {
                         Swal.fire({
                             icon: 'success',
                             title: 'Berhasil',
