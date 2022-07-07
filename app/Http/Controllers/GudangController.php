@@ -27,12 +27,14 @@ use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
+use Illuminate\Filesystem\Filesystem;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
@@ -2429,8 +2431,52 @@ class GudangController extends Controller
 
     function finalDraftRakit(Request $request)
     {
-        dd($request->all());
-        // try {
+        try {
+            $header = TFProduksi::create([
+                'tgl_keluar' => Carbon::now(),
+                'ke' => Divisi::find($request->divisi)->id,
+                'deskripsi' => $request->deskripsi,
+                'jenis' => 'keluar',
+                'created_at' => Carbon::now(),
+                'created_by' => $request->userid
+            ]);
+
+            foreach($request->produk as $key => $value) {
+                $detail = TFProduksiDetail::create([
+                    't_gbj_id' => $header->id,
+                    'gdg_brg_jadi_id' => $value['prd'],
+                    'qty' => $value['jml'],
+                    'jenis' => 'masuk',
+                    'created_at' => Carbon::now(),
+                    'created_by' => $request->userid
+                ]);
+
+                foreach($value['noseri'] as $k => $v) {
+                    $seri = NoseriBarangJadi::create([
+                        'gdg_barang_jadi_id' =>  $value['prd'],
+                        'dari' => $request->divisi,
+                        'noseri' => strtoupper($v),
+                        'layout_id' => $value['layout'][$k],
+                        'jenis' => 'MASUK',
+                        'is_aktif' => 1,
+                        'created_by' => $request->userid,
+                    ]);
+
+                    NoseriTGbj::create([
+                        't_gbj_detail_id' => $detail->id,
+                        'noseri_id' => $seri->id,
+                        'layout_id' => $value['layout'][$k],
+                        'status_id' => 2,
+                        'jenis' => 'masuk',
+                        'created_at' => Carbon::now(),
+                        'created_by' => $request->userid
+                    ]);
+                }
+
+                $gdg = GudangBarangJadi::find($value['prd']);
+                $stok = $gdg->stok + $value['jml'];
+                $gdg->update(['stok' => $stok]);
+            }
         //     foreach ($request->seri as $k => $v) {
         //         foreach ($v['data'] as $kk => $vv) {
         //             NoseriTGbj::where('id', $vv['noseri'])->update(['layout_id' => $vv['layout'], 'status_id' => 2]);
@@ -2456,13 +2502,13 @@ class GudangController extends Controller
         //     $header->updated_at = Carbon::now();
         //     $header->save();
 
-        //     return response()->json(['msg' => 'Data Berhasil Diterima']);
-        // } catch (\Exception $e) {
-        //     return response()->json([
-        //         'error' => true,
-        //         'msg' => $e->getMessage(),
-        //     ]);
-        // }
+            return response()->json(['msg' => 'Data Berhasil Diterima', 'error' => false]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
     }
 
     function storeCekSO(Request $request)
