@@ -126,6 +126,11 @@
             margin-bottom: 15px;
         }
 
+        .overflowcard {
+                max-height:
+                480px;
+            }
+
         @media screen and (min-width: 992px) {
 
             body {

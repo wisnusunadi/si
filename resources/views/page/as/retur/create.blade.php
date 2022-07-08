@@ -6,11 +6,11 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0  text-dark">Retur</h1>
+                <h1 class="m-0  text-dark">Tambah Retur</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->divisi_id == '26')
+                    @if (Auth::user()->divisi_id == '8')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('as.retur.show') }}">Retur</a></li>
                         <li class="breadcrumb-item active">Tambah Retur</li>
@@ -125,134 +125,162 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                <div class="card">
-
-                    <div class="card-header bg-info">
+                <div class="card" style="box-shadow:none;">
+                    {{-- <div class="card-header bg-info">
                         <h5 class="card-title"><i class="fas fa-plus"></i> Tambah Retur</h5>
-                    </div>
+                    </div> --}}
                     <form method="POST" action="{{route('as.retur.store')}}" id="formtambahretur">
                         @csrf
                         <div class="card-body">
                             <div class="form-horizontal">
-                                <h5>Informasi Transaksi</h5>
-                                <div class="form-group row" id="no_retur_input">
-                                    <label for="no_retur" class="col-lg-5 col-md-12 col-form-label labelket">No Retur</label>
-                                    <div class="col-lg-2 col-md-8">
-                                        <input name="no_retur" id="no_retur" class="form-control col-form-label no_retur  @error('no_retur') is-invalid @enderror">
-                                        <div class="invalid-feedback" id="msgno_retur"></div>
+                                <div id="informasi_pelanggan" class="card card-outline card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Informasi Transaksi</h3>
+                                        <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                        </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group row" id="no_retur_input">
+                                            <label for="no_retur" class="col-lg-5 col-md-12 col-form-label labelket">No Retur</label>
+                                            <div class="col-lg-2 col-md-8">
+                                                <input name="no_retur" id="no_retur" class="form-control col-form-label no_retur  @error('no_retur') is-invalid @enderror">
+                                                <div class="invalid-feedback" id="msgno_retur"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" id="tgl_retur_input">
+                                            <label for="tgl_retur" class="col-lg-5 col-md-12 col-form-label labelket">Tanggal Retur</label>
+                                            <div class="col-lg-2 col-md-6">
+                                                <input type="date" name="tgl_retur" id="tgl_retur" class="form-control col-form-label tgl_retur  @error('tgl_retur') is-invalid @enderror">
+                                                <div class="invalid-feedback" id="msgtgl_retur"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" id="pilih_jenis_retur_input">
+                                            <label for="pilih_jenis_retur" class="col-lg-5 col-md-12 col-form-label labelket">Jenis Retur</label>
+                                            <div class="col-lg-3 col-md-8 d-flex justify-content-between">
+                                                <div class="form-check form-check-inline col-form-label">
+                                                    <input class="form-check-input" type="radio" name="pilih_jenis_retur" id="pilih_jenis_retur1" value="peminjaman" />
+                                                    <label class="form-check-label" for="pilih_jenis_retur1">Peminjaman</label>
+                                                </div>
+                                                <div class="form-check form-check-inline col-form-label">
+                                                    <input class="form-check-input" type="radio" name="pilih_jenis_retur" id="pilih_jenis_retur2" value="komplain" />
+                                                    <label class="form-check-label" for="pilih_jenis_retur2">Komplain</label>
+                                                </div>
+                                                <div class="form-check form-check-inline col-form-label">
+                                                    <input class="form-check-input" type="radio" name="pilih_jenis_retur" id="pilih_jenis_retur3" value="service" />
+                                                    <label class="form-check-label" for="pilih_jenis_retur3">Service</label>
+                                                </div>
+                                                <div class="invalid-feedback" id="msgpilih_jenis_retur"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" id="keterangan_input">
+                                            <label for="keterangan" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan Retur</label>
+                                            <div class="col-lg-4 col-md-12">
+                                                <textarea name="keterangan" id="keterangan" class="form-control col-form-label keterangan  @error('keterangan') is-invalid @enderror"></textarea>
+                                                <div class="invalid-feedback" id="msgketerangan"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group row" id="tgl_retur_input">
-                                    <label for="tgl_retur" class="col-lg-5 col-md-12 col-form-label labelket">Tanggal Retur</label>
-                                    <div class="col-lg-2 col-md-6">
-                                        <input type="date" name="tgl_retur" id="tgl_retur" class="form-control col-form-label tgl_retur  @error('tgl_retur') is-invalid @enderror">
-                                        <div class="invalid-feedback" id="msgtgl_retur"></div>
+                                <div id="informasi_pelanggan" class="card card-outline card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Informasi Pelanggan</h3>
+                                        <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                        </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        {{-- <hr class="my-4"/> --}}
+                                        <div class="form-group row" id="customer_id_input">
+                                            <label for="customer_id" class="col-lg-5 col-md-12 col-form-label labelket">Nama Customer</label>
+                                            <div class="col-lg-4 col-md-8">
+                                                <input name="customer_id" id="customer_id" class="form-control col-form-label customer_id  @error('customer_id') is-invalid @enderror"/>
+                                                <div class="invalid-feedback" id="msgcustomer_id"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" id="alamat_input">
+                                            <label for="alamat" class="col-lg-5 col-md-12 col-form-label labelket">Alamat</label>
+                                            <div class="col-lg-4 col-md-8">
+                                                <textarea name="alamat" id="alamat" class="form-control col-form-label alamat  @error('alamat') is-invalid @enderror"></textarea>
+                                                <div class="invalid-feedback" id="msgalamat"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row" id="tgl_retur_input">
+                                            <label for="tgl_retur" class="col-lg-5 col-md-12 col-form-label labelket">Telepon</label>
+                                            <div class="col-lg-2 col-md-6">
+                                                <input name="telepon" id="telepon" class="form-control col-form-label telepon  @error('telepon') is-invalid @enderror"/>
+                                                <div class="invalid-feedback" id="msgtelepon"></div>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                                <div class="form-group row" id="pilih_jenis_retur_input">
-                                    <label for="pilih_jenis_retur" class="col-lg-5 col-md-12 col-form-label labelket">Jenis Retur</label>
-                                    <div class="col-lg-4 col-md-8 d-flex justify-content-between">
-                                        <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="radio" name="pilih_jenis_retur" id="pilih_jenis_retur1" value="peminjaman" />
-                                            <label class="form-check-label" for="pilih_jenis_retur1">Peminjaman</label>
+                                <div id="ref_trans" class="hide">
+                                    <hr class="my-4"/>
+                                    <h5>Referensi Transaksi</h5>
+                                    <div class="form-group row">
+                                        <label for="ref_transaksi" class="col-lg-5 col-md-12 col-form-label labelket">Transaksi</label>
+                                        <div class="col-lg-2 col-md-6 d-flex justify-content-between">
+                                            <div class="form-check form-check-inline col-form-label">
+                                                <input class="form-check-input" type="radio" name="ref_transaksi" id="ref_transaksi1" value="tersedia" />
+                                                <label class="form-check-label" for="ref_transaksi1">Tersedia</label>
+                                            </div>
+                                            <div class="form-check form-check-inline col-form-label">
+                                                <input class="form-check-input" type="radio" name="ref_transaksi" id="ref_transaksi2" value="tidak_tersedia" />
+                                                <label class="form-check-label" for="ref_transaksi2">Tidak Tersedia</label>
+                                            </div>
+                                            <div class="invalid-feedback" id="msgref_transaksi"></div>
                                         </div>
-                                        <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="radio" name="pilih_jenis_retur" id="pilih_jenis_retur2" value="komplain" />
-                                            <label class="form-check-label" for="pilih_jenis_retur2">Komplain</label>
-                                        </div>
-                                        <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="radio" name="pilih_jenis_retur" id="pilih_jenis_retur3" value="service" />
-                                            <label class="form-check-label" for="pilih_jenis_retur3">Service</label>
-                                        </div>
-                                        <div class="invalid-feedback" id="msgpilih_jenis_retur"></div>
                                     </div>
-                                </div>
-                                <div class="form-group row" id="pilih_jenis_barang_input">
-                                    <label for="pilih_jenis_barang" class="col-lg-5 col-md-12 col-form-label labelket">Jenis Barang</label>
-                                    <div class="col-lg-3 col-md-8 d-flex justify-content-between">
-                                        <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="checkbox" name="pilih_jenis_barang" id="pilih_jenis_barang1" value="peminjaman" />
-                                            <label class="form-check-label" for="pilih_jenis_barang1">Produk</label>
+                                    <div class="form-group row hide" id="no_ref_tidak_tersedia_input">
+                                        <label for="no_ref_tidak_tersedia" class="col-lg-5 col-md-12 col-form-label labelket">No Referensi</label>
+                                        <div class="col-lg-3 col-md-12">
+                                            <input type="text" class="form-control  col-form-label" id="no_ref_tidak_tersedia" name="no_ref_tidak_tersedia">
+                                            <div class="invalid-feedback" id="msgno_ref_tidak_tersedia"></div>
                                         </div>
-                                        <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="checkbox" name="pilih_jenis_barang" id="pilih_jenis_barang2" value="komplain" />
-                                            <label class="form-check-label" for="pilih_jenis_barang2">Part</label>
-                                        </div>
-                                        <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="checkbox" name="pilih_jenis_barang" id="pilih_jenis_barang3" value="service" />
-                                            <label class="form-check-label" for="pilih_jenis_barang3">Jasa</label>
-                                        </div>
-                                        <div class="invalid-feedback" id="msgpilih_jenis_barang"></div>
                                     </div>
-                                </div>
-                                <div class="form-group row" id="keterangan_input">
-                                    <label for="keterangan" class="col-lg-5 col-md-12 col-form-label labelket">Keterangan Retur</label>
-                                    <div class="col-lg-4 col-md-12">
-                                        <textarea name="keterangan" id="keterangan" class="form-control col-form-label keterangan  @error('keterangan') is-invalid @enderror"></textarea>
-                                        <div class="invalid-feedback" id="msgketerangan"></div>
-                                    </div>
-                                </div>
-                                <hr class="my-4"/>
-                                <h5>Referensi Transaksi</h5>
-                                <div class="form-group row">
-                                    <label for="ref_transaksi" class="col-lg-5 col-md-12 col-form-label labelket">Transaksi</label>
-                                    <div class="col-lg-2 col-md-6 d-flex justify-content-between">
-                                        <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="radio" name="ref_transaksi" id="ref_transaksi1" value="tersedia" />
-                                            <label class="form-check-label" for="ref_transaksi1">Tersedia</label>
+                                    <div class="form-group row hide" id="customer_tidak_tersedia_input">
+                                        <label for="customer_tidak_tersedia" class="col-lg-5 col-md-12 col-form-label labelket">Nama Customer</label>
+                                        <div class="col-lg-3 col-md-12">
+                                            <input type="text" class="form-control  col-form-label" id="customer_tidak_tersedia" name="customer_tidak_tersedia">
+                                            <div class="invalid-feedback" id="msgcustomer_tidak_tersedia"></div>
                                         </div>
-                                        <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="radio" name="ref_transaksi" id="ref_transaksi2" value="tidak_tersedia" />
-                                            <label class="form-check-label" for="ref_transaksi2">Tidak Tersedia</label>
+                                    </div>
+                                    <div class="form-group row hide" id="alamat_tidak_tersedia_input">
+                                        <label for="alamat_tidak_tersedia" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Customer</label>
+                                        <div class="col-lg-3 col-md-12">
+                                            <textarea class="form-control col-form-label" id="alamat_tidak_tersedia" name="alamat_tidak_tersedia"></textarea>
+                                            <div class="invalid-feedback" id="msgalamat_tidak_tersedia"></div>
                                         </div>
-                                        <div class="invalid-feedback" id="msgref_transaksi"></div>
                                     </div>
-                                </div>
-                                <div class="form-group row hide" id="no_ref_tidak_tersedia_input">
-                                    <label for="no_ref_tidak_tersedia" class="col-lg-5 col-md-12 col-form-label labelket">No Referensi</label>
-                                    <div class="col-lg-3 col-md-12">
-                                        <input type="text" class="form-control  col-form-label" id="no_ref_tidak_tersedia" name="no_ref_tidak_tersedia">
-                                        <div class="invalid-feedback" id="msgno_ref_tidak_tersedia"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group row hide" id="customer_tidak_tersedia_input">
-                                    <label for="customer_tidak_tersedia" class="col-lg-5 col-md-12 col-form-label labelket">Nama Customer</label>
-                                    <div class="col-lg-3 col-md-12">
-                                        <input type="text" class="form-control  col-form-label" id="customer_tidak_tersedia" name="customer_tidak_tersedia">
-                                        <div class="invalid-feedback" id="msgcustomer_tidak_tersedia"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group row hide" id="alamat_tidak_tersedia_input">
-                                    <label for="alamat_tidak_tersedia" class="col-lg-5 col-md-12 col-form-label labelket">Alamat Customer</label>
-                                    <div class="col-lg-3 col-md-12">
-                                        <textarea class="form-control col-form-label" id="alamat_tidak_tersedia" name="alamat_tidak_tersedia"></textarea>
-                                        <div class="invalid-feedback" id="msgalamat_tidak_tersedia"></div>
-                                    </div>
-                                </div>
-                                <div class="form-group row hide" id="pilih_ref_penjualan_input">
-                                    <label for="pilih_ref_penjualan" class="col-lg-5 col-md-12 col-form-label labelket">Cari Berdasarkan</label>
-                                    <div class="col-lg-3 col-md-8 d-flex justify-content-between">
-                                        <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="radio" name="pilih_ref_penjualan" id="pilih_ref_penjualan1" value="so" />
-                                            <label class="form-check-label" for="pilih_ref_penjualan1">No SO</label>
+                                    <div class="form-group row hide" id="pilih_ref_penjualan_input">
+                                        <label for="pilih_ref_penjualan" class="col-lg-5 col-md-12 col-form-label labelket">Cari Berdasarkan</label>
+                                        <div class="col-lg-3 col-md-8 d-flex justify-content-between">
+                                            <div class="form-check form-check-inline col-form-label">
+                                                <input class="form-check-input" type="radio" name="pilih_ref_penjualan" id="pilih_ref_penjualan1" value="so" />
+                                                <label class="form-check-label" for="pilih_ref_penjualan1">No SO</label>
+                                            </div>
+                                            <div class="form-check form-check-inline col-form-label">
+                                                <input class="form-check-input" type="radio" name="pilih_ref_penjualan" id="pilih_ref_penjualan2" value="po" />
+                                                <label class="form-check-label" for="pilih_ref_penjualan2">No PO</label>
+                                            </div>
+                                            <div class="form-check form-check-inline col-form-label">
+                                                <input class="form-check-input" type="radio" name="pilih_ref_penjualan" id="pilih_ref_penjualan3" value="no_akn" />
+                                                <label class="form-check-label" for="pilih_ref_penjualan3">No Paket (Ekatalog)</label>
+                                            </div>
+                                            <div class="invalid-feedback" id="msgpilih_ref_penjualan"></div>
                                         </div>
-                                        <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="radio" name="pilih_ref_penjualan" id="pilih_ref_penjualan2" value="po" />
-                                            <label class="form-check-label" for="pilih_ref_penjualan2">No PO</label>
-                                        </div>
-                                        <div class="form-check form-check-inline col-form-label">
-                                            <input class="form-check-input" type="radio" name="pilih_ref_penjualan" id="pilih_ref_penjualan3" value="no_akn" />
-                                            <label class="form-check-label" for="pilih_ref_penjualan3">No Paket (Ekatalog)</label>
-                                        </div>
-                                        <div class="invalid-feedback" id="msgpilih_ref_penjualan"></div>
                                     </div>
-                                </div>
-                                <div class="form-group row hide" id="no_ref_penjualan_input">
-                                    <label for="no_ref_penjualan" class="col-lg-5 col-md-12 col-form-label labelket">No Ref Penjualan</label>
-                                    <div class="col-lg-3 col-md-12">
-                                        <select name="no_ref_penjualan" id="no_ref_penjualan" class="form-control custom-select no_ref_penjualan  @error('no_ref_penjualan') is-invalid @enderror">
-                                        </select>
-                                        <div class="invalid-feedback" id="msgno_ref_penjualan"></div>
+                                    <div class="form-group row hide" id="no_ref_penjualan_input">
+                                        <label for="no_ref_penjualan" class="col-lg-5 col-md-12 col-form-label labelket">No Ref Penjualan</label>
+                                        <div class="col-lg-3 col-md-12">
+                                            <select name="no_ref_penjualan" id="no_ref_penjualan" class="form-control custom-select no_ref_penjualan  @error('no_ref_penjualan') is-invalid @enderror">
+                                            </select>
+                                            <div class="invalid-feedback" id="msgno_ref_penjualan"></div>
+                                        </div>
                                     </div>
                                 </div>
                                 <div id="informasi_transaksi" class="hide">
@@ -369,32 +397,113 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="barang_penjualan">
-                                    <hr class="my-4">
-                                    <h5>Produk</h5>
-                                    <div class="form-group row">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover" id="produktable" style="text-align:center;">
-                                                <thead>
-                                                    <tr>
-                                                        <th width="7%">No</th>
-                                                        <th width="30%">Nama Paket</th>
-                                                        <th width="25%">Nama Produk</th>
-                                                        <th width="30%">No Seri</th>
-                                                        <th width="8%">Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td><select name="paket_produk_id[0]" id="paket_produk_id0" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td>
-                                                        <td><select name="produk_id[0]" id="produk_id0" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
-                                                        <td><select name="no_seri_select[0]" id="no_seri_select0" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true"></select>
-                                                            <input type="text" class="form-control no_seri_input hide" id="no_seri_input0" name="no_seri_input[0]"/></td>
-                                                        <td><a href="#" id="tambah_paket_produk"><i class="fas fa-plus text-success"></i></a></td>
-                                                    </tr>
-                                                </tbody>
-                                            </table>
+                                <div id="barang_penjualan" class="card card-outline card-primary">
+                                    <div class="card-header">
+                                        <h3 class="card-title">Permintaan Barang</h3>
+                                        <div class="card-tools">
+                                        <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                        <i class="fas fa-minus"></i>
+                                        </button>
+                                        </div>
+                                    </div>
+                                    <div class="card-body">
+                                        {{-- <hr class="my-4">
+                                        <h5></h5>
+                                        <div class="form-group row" id="pilih_jenis_barang_input">
+                                            <label for="pilih_jenis_barang" class="col-lg-5 col-md-12 col-form-label labelket">Jenis Barang</label>
+                                            <div class="col-lg-2 col-md-8 d-flex justify-content-between">
+                                                <div class="form-check form-check-inline col-form-label">
+                                                    <input class="form-check-input" type="checkbox" name="pilih_jenis_barang[]" id="pilih_jenis_barang1" value="produk" />
+                                                    <label class="form-check-label" for="pilih_jenis_barang1">Produk</label>
+                                                </div>
+                                                <div class="form-check form-check-inline col-form-label">
+                                                    <input class="form-check-input" type="checkbox" name="pilih_jenis_barang[]" id="pilih_jenis_barang2" value="komplain" />
+                                                    <label class="form-check-label" for="pilih_jenis_barang2">Part</label>
+                                                </div>
+                                                <div class="invalid-feedback" id="msgpilih_jenis_barang"></div>
+                                            </div>
+                                        </div> --}}
+                                        <div class="form-group row align-items-start">
+                                            <div id="card_produk" class="card card-outline card-success col mx-2 collapsed-card">
+                                                <div class="card-header">
+                                                    <div class="form-check form-check-inline col-form-label card-title">
+                                                        <input class="form-check-input" type="checkbox" name="pilih_jenis_barang[]" id="pilih_jenis_barang1" value="produk" />
+                                                        <h6 class="form-check-label" for="pilih_jenis_barang1">Produk</h6>
+                                                    </div>
+                                                    {{-- <h5 class="">Produk</h5> --}}
+                                                    <div class="card-tools col-form-label">
+                                                        <button type="button" class="btn btn-tool" disabled="true" data-card-widget="collapse" id="collapse-produk">
+                                                        <i class="fas fa-minus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover table-bordered table-striped" id="produktable" style="text-align:center;">
+                                                            <thead>
+                                                                <tr>
+                                                                    {{-- <th width="7%">No</th>
+                                                                    <th width="30%">Nama Paket</th>
+                                                                    <th width="25%">Nama Produk</th>
+                                                                    <th width="30%">No Seri</th>
+                                                                    <th width="8%">Aksi</th> --}}
+                                                                    <th width="7%">No</th>
+                                                                    <th width="62%">Nama Produk</th>
+                                                                    <th width="24%">Jumlah</th>
+                                                                    <th width="7%">Aksi</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>1</td>
+                                                                    {{-- <td><select name="paket_produk_id[0]" id="paket_produk_id0" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td> --}}
+                                                                    <td><select name="produk_id[0]" id="produk_id0" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
+                                                                    <td><input type="number" class="form-control" name="produk_jumlah[0]" id="produk_jumlah0"/></td>
+                                                                    {{-- <td><select name="no_seri_select[0]" id="no_seri_select0" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true"></select>
+                                                                        <input type="text" class="form-control no_seri_input hide" id="no_seri_input0" name="no_seri_input[0]"/>
+                                                                    </td> --}}
+                                                                    <td><a href="#" id="tambah_paket_produk"><i class="fas fa-plus text-success"></i></a></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div id="card_part" class="card card-outline card-success col mx-2 collapsed-card">
+                                                <div class="card-header">
+                                                    <div class="form-check form-check-inline col-form-label card-title">
+                                                        <input class="form-check-input" type="checkbox" name="pilih_jenis_barang[]" id="pilih_jenis_barang2" value="part" />
+                                                        <h6 class="form-check-label" for="pilih_jenis_barang2">Part</h6>
+                                                    </div>
+                                                    <div class="card-tools col-form-label">
+                                                        <button type="button" class="btn btn-tool" disabled="true" data-card-widget="collapse" id="collapse-part">
+                                                        <i class="fas fa-minus"></i>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                                <div class="card-body">
+                                                    <div class="table-responsive" id="part_table_input">
+                                                        <table class="table table-hover table-bordered table-striped" id="parttable" style="text-align:center;">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th width="7%">No</th>
+                                                                    <th width="62%">Nama Part</th>
+                                                                    <th width="24%">Jumlah</th>
+                                                                    <th width="7%">Aksi</th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                <tr>
+                                                                    <td>1</td>
+                                                                    <td><select name="part_id[0]" id="part_id0" class="form-control custom-select part_id  @error('part_id') is-invalid @enderror"></select></td>
+                                                                    <td><input type="number" class="form-control" name="part_jumlah[0]" id="part_jumlah0"/></td>
+                                                                    <td><a href="#" id="tambah_part"><i class="fas fa-plus text-success"></i></a></td>
+                                                                </tr>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -417,9 +526,66 @@
     $(function(){
         $('.no_ref_penjualan').select2();
         $('.paket_produk_id').select2();
-        $('.produk_id').select2();
-        $('.no_seri').select2();
+        function produk(){
+            $('.produk_id').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Produk",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/produk/select/',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            });
+        }
 
+        function part(){
+            $('.part_id').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Part",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'POST',
+                    url: '/api/gk/sel-m-spare',
+                    data: function(params) {
+                        return {
+                            term: params.term
+                        }
+                    },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
+                    },
+                }
+            });
+        }
+        $('.no_seri').select2();
+        produk();
+        part();
         $('input[type="radio"][name="ref_transaksi"]').on('change', function(){
             format_informasi_ref_penjualan();
             var value = $(this).val();
@@ -465,56 +631,124 @@
             no_ref_penjualan($(this).val());
         });
 
-        function numberRows($t) {
+        $('input[type="checkbox"][name="pilih_jenis_barang[]"]').on('change', function() {
+
+            var jenis_arry = [];
+            var x = $(this).val();
+
+            $('input[name="pilih_jenis_barang[]"]:checked').each(function() {
+                jenis_arry.push($(this).val());
+            });
+
+            if ($('input[name="pilih_jenis_barang[]"]:checkbox:checked').length == 0) {
+                jenis_arry.push(x);
+                $('input[name="pilih_jenis_barang[]"][value="'+x+'"]').prop("checked", true);
+            }
+            filter_jenis(jenis_arry);
+        });
+
+        function filter_jenis(x){
+            if( $.inArray("produk", x) !== -1 ) {
+                $("#card_produk").removeClass("collapsed-card");
+                $("#collapse-produk").attr('disabled', false);
+            } else {
+                $("#card_produk").addClass("collapsed-card");
+                $("#collapse-produk").attr('disabled', true);
+            }
+
+            if( $.inArray("part", x) !== -1 ) {
+                $("#card_part").removeClass("collapsed-card");
+                $("#collapse-part").attr('disabled', false);
+            }else{
+                $("#card_part").addClass("collapsed-card");
+                $("#collapse-part").attr('disabled', true);
+            }
+        }
+
+        function numberRowsProduk($t) {
             var c = 0 - 1;
             var referensi = $('input[name="ref_transaksi"]:checked').val();
             $t.find("tr").each(function(ind, el) {
                 $(el).find("td:eq(0)").html(++c);
                 var j = c - 1;
-                $(el).find('.paket_produk_id').attr('name', 'paket_produk_id[' + j + ']');
-                $(el).find('.paket_produk_id').attr('id', 'paket_produk_id' + j);
+                // $(el).find('.paket_produk_id').attr('name', 'paket_produk_id[' + j + ']');
+                // $(el).find('.paket_produk_id').attr('id', 'paket_produk_id' + j);
 
                 $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                 $(el).find('.produk_id').attr('id', 'produk_id' + j);
 
-                $(el).find('.no_seri').attr('name', 'no_seri_select[' + j + ']');
-                $(el).find('.no_seri').attr('id', 'no_seri_select' + j);
+                $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
+                $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
 
-                $(el).find('.no_seri_input').attr('name', 'no_seri_input[' + j + ']');
-                $(el).find('.no_seri_input').attr('id', 'no_seri_input' + j);
+                // $(el).find('.no_seri').attr('name', 'no_seri_select[' + j + ']');
+                // $(el).find('.no_seri').attr('id', 'no_seri_select' + j);
 
-                $('.paket_produk_id').select2();
-                $('.produk_id').select2();
-                $('.no_seri').select2();
+                // $(el).find('.no_seri_input').attr('name', 'no_seri_input[' + j + ']');
+                // $(el).find('.no_seri_input').attr('id', 'no_seri_input' + j);
 
-                if(referensi == "tersedia"){
-                    produk_penjualan_tersedia($(".no_ref_penjualan").val());
-                    $('.no_seri_input').addClass('hide');
-                    $('.no_seri').next(".select2-container").show();
+                // $('.paket_produk_id').select2();
+                produk();
+                // $('.no_seri').select2();
 
-                } else if(referensi == "tidak_tersedia"){
-                    produk_penjualan_tidak_tersedia();
-                    $('.no_seri_input').removeClass('hide');
-                    $('.no_seri').next(".select2-container").hide();
-                }
+                // if(referensi == "tersedia"){
+                //     produk_penjualan_tersedia($(".no_ref_penjualan").val());
+                //     $('.no_seri_input').addClass('hide');
+                //     $('.no_seri').next(".select2-container").show();
+
+                // } else if(referensi == "tidak_tersedia"){
+                //     produk_penjualan_tidak_tersedia();
+                //     $('.no_seri_input').removeClass('hide');
+                //     $('.no_seri').next(".select2-container").hide();
+                // }
             });
         }
 
         $(document).on('click', '#produktable #tambah_paket_produk', function(){
             $('#produktable tr:last').after(`<tr>
                     <td>1</td>
-                    <td><select name="paket_produk_id[0]" id="paket_produk_id0" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td>
+                    {{-- <td><select name="paket_produk_id[0]" id="paket_produk_id0" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td> --}}
                     <td><select name="produk_id[0]" id="produk_id0" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
-                    <td><select name="no_seri_select[0]" id="no_seri_select0" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true"></select>
-                        <input type="text" class="form-control no_seri_input hide" id="no_seri_input0" name="no_seri_input[0]"/></td>
+                    <td><input type="number" class="form-control" name="jumlah[0]" id="jumlah0"/></td>
+                    {{-- <td><select name="no_seri_select[0]" id="no_seri_select0" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true"></select>
+                        <input type="text" class="form-control no_seri_input hide" id="no_seri_input0" name="no_seri_input[0]"/></td> --}}
                     <td><a id="remove_paket_produk"><i class="fas fa-minus" style="color: red"></i></a></td>
                 </tr>`);
-                numberRows($("#produktable"));
+                numberRowsProduk($("#produktable"));
         });
 
         $('#produktable').on('click', '#remove_paket_produk', function(e) {
             $(this).closest('tr').remove();
-            numberRows($("#produktable"));
+            numberRowsProduk($("#produktable"));
+        });
+
+        function numberRowsPart($t) {
+            var c = 0 - 1;
+            var referensi = $('input[name="ref_transaksi"]:checked').val();
+            $t.find("tr").each(function(ind, el) {
+                $(el).find("td:eq(0)").html(++c);
+                var j = c - 1;
+                $(el).find('.part_id').attr('name', 'part_id[' + j + ']');
+                $(el).find('.part_id').attr('id', 'part_id' + j);
+
+                $(el).find('.part_jumlah').attr('name', 'part_jumlah[' + j + ']');
+                $(el).find('.part_jumlah').attr('id', 'part_jumlah' + j);
+                part();
+            });
+        }
+
+        $(document).on('click', '#parttable #tambah_part', function(){
+            $('#parttable tr:last').after(`<tr>
+                    <td>1</td>
+                    <td><select name="part_id[0]" id="part_id0" class="form-control custom-select part_id  @error('part_id') is-invalid @enderror"></select></td>
+                    <td><input type="number" class="form-control" name="part_jumlah[0]" id="part_jumlah0"/></td>
+                    <td><a id="remove_part"><i class="fas fa-minus" style="color: red"></i></a></td>
+                </tr>`);
+                numberRowsPart($("#parttable"));
+        });
+
+        $('#parttable').on('click', '#remove_part', function(e) {
+            $(this).closest('tr').remove();
+            numberRowsPart($("#parttable"));
         });
 
         function no_ref_penjualan(jenis) {
@@ -669,6 +903,8 @@
             })
         }
 
+
+
         function produk_penjualan_tidak_tersedia(){
             var prm;
             // $('.paket_produk_id').empty();
@@ -779,6 +1015,56 @@
                     produk_gudang_tersedia(column, val);
                 }
             }
+        });
+
+        $("#customer_id").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        url: '/api/customer/select',
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.nama,
+                                    value: el.id
+                                };
+                            });
+                            response(transformed.slice(0,10));
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                },
+                focus: function( event, ui ) {
+                    $(this).val(ui.item.label);
+                    return false;
+                },
+                select: function( event, ui ) {
+                    var id = ui.item.value;
+                    $(this).val(ui.item.label);
+
+                    if(id != ""){
+                        $.ajax({
+                            url: '/api/customer/select/' + id,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                $('#alamat').val(data[0].alamat);
+                                $('#telepon').val(data[0].telepon);
+                            }
+                        });
+                    }
+                    else{
+                        $('#alamat').val("");
+                        $('#telepon').val("");
+                    }
+                    return false;
+                }
         });
     })
 </script>

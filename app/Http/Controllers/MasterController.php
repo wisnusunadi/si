@@ -1332,11 +1332,11 @@ class MasterController extends Controller
         }
         else if($r->jenis == "part"){
             $data = DetailPesananPart::where('id', $r->id)->addSelect(['count_qc' => function($q){
-                $q->selectRaw('sum(outgoing_pesanan_part.jumlah_ok)')
+                $q->selectRaw('coalesce(sum(outgoing_pesanan_part.jumlah_ok),0)')
                     ->from('outgoing_pesanan_part')
                     ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id', 'detail_pesanan_part.id');
             }, 'count_log' => function($q){
-                $q->selectRaw('sum(detail_logistik_part.jumlah)')
+                $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
                     ->from('detail_logistik_part')
                     ->whereColumn('detail_logistik_part.detail_pesanan_part_id', 'detail_pesanan_part.id');
             }])->with('Sparepart')->first();
