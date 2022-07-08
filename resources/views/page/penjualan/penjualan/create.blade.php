@@ -1210,7 +1210,6 @@
                 $("input[id=jenis_pen][value='produk']").attr("disabled", false);
                 $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
                 $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
-
             }
         });
 

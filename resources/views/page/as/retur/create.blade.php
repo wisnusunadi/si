@@ -218,7 +218,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div id="ref_trans" class="hide">
+                                {{-- <div id="ref_trans" class="hide">
                                     <hr class="my-4"/>
                                     <h5>Referensi Transaksi</h5>
                                     <div class="form-group row">
@@ -396,7 +396,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
+                                </div> --}}
                                 <div id="barang_penjualan" class="card card-outline card-primary">
                                     <div class="card-header">
                                         <h3 class="card-title">Permintaan Barang</h3>
@@ -430,7 +430,6 @@
                                                         <input class="form-check-input" type="checkbox" name="pilih_jenis_barang[]" id="pilih_jenis_barang1" value="produk" />
                                                         <h6 class="form-check-label" for="pilih_jenis_barang1">Produk</h6>
                                                     </div>
-                                                    {{-- <h5 class="">Produk</h5> --}}
                                                     <div class="card-tools col-form-label">
                                                         <button type="button" class="btn btn-tool" disabled="true" data-card-widget="collapse" id="collapse-produk">
                                                         <i class="fas fa-minus"></i>
@@ -524,6 +523,47 @@
 @section('adminlte_js')
 <script>
     $(function(){
+        function trproduktable() {
+            var produktr = $('#produktable > tbody > tr').length;
+            var data = `<tr>
+                    <td>1</td>
+                    {{-- <td><select name="paket_produk_id[0]" id="paket_produk_id0" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td> --}}
+                    <td><select name="produk_id[0]" id="produk_id0" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
+                    <td><input type="number" class="form-control" name="jumlah[0]" id="jumlah0"/></td>
+                    {{-- <td><select name="no_seri_select[0]" id="no_seri_select0" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true"></select>
+                        <input type="text" class="form-control no_seri_input hide" id="no_seri_input0" name="no_seri_input[0]"/></td> --}}
+                        <td>`;
+            if(produktr > 0){
+                data += `<a id="remove_part"><i class="fas fa-minus" style="color: red"></i></a>`;
+            } else
+            {
+                data += `<a href="#" id="tambah_paket_produk"><i class="fas fa-plus text-success"></i></a>`;
+            }
+            data += `</td>
+                </tr>`;
+
+            return data;
+        }
+
+        function trparttable() {
+            var parttr = $('#parttable > tbody > tr').length;
+            var data = `<tr>
+                    <td>1</td>
+                    <td><select name="part_id[0]" id="part_id0" class="form-control custom-select part_id  @error('part_id') is-invalid @enderror"></select></td>
+                    <td><input type="number" class="form-control" name="part_jumlah[0]" id="part_jumlah0"/></td>
+                    <td>`;
+            if(parttr > 0){
+                data += `<a id="remove_part"><i class="fas fa-minus" style="color: red"></i></a>`;
+            }
+            else{
+                data += `<a href="#" id="tambah_part"><i class="fas fa-plus text-success"></i></a>`;
+            }
+            data += `</td>
+                </tr>`;
+
+            return data;
+        }
+
         $('.no_ref_penjualan').select2();
         $('.paket_produk_id').select2();
         function produk(){
@@ -632,7 +672,6 @@
         });
 
         $('input[type="checkbox"][name="pilih_jenis_barang[]"]').on('change', function() {
-
             var jenis_arry = [];
             var x = $(this).val();
 
@@ -652,6 +691,9 @@
                 $("#card_produk").removeClass("collapsed-card");
                 $("#collapse-produk").attr('disabled', false);
             } else {
+                $('#produktable tbody').empty();
+                $('#produktable tbody').append(trproduktable());
+                numberRowsProduk($("#produktable"));
                 $("#card_produk").addClass("collapsed-card");
                 $("#collapse-produk").attr('disabled', true);
             }
@@ -660,6 +702,9 @@
                 $("#card_part").removeClass("collapsed-card");
                 $("#collapse-part").attr('disabled', false);
             }else{
+                $('#parttable tbody').empty();
+                $('#parttable tbody').append(trparttable());
+                numberRowsPart($('#parttable'));
                 $("#card_part").addClass("collapsed-card");
                 $("#collapse-part").attr('disabled', true);
             }
@@ -704,15 +749,7 @@
         }
 
         $(document).on('click', '#produktable #tambah_paket_produk', function(){
-            $('#produktable tr:last').after(`<tr>
-                    <td>1</td>
-                    {{-- <td><select name="paket_produk_id[0]" id="paket_produk_id0" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td> --}}
-                    <td><select name="produk_id[0]" id="produk_id0" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
-                    <td><input type="number" class="form-control" name="jumlah[0]" id="jumlah0"/></td>
-                    {{-- <td><select name="no_seri_select[0]" id="no_seri_select0" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true"></select>
-                        <input type="text" class="form-control no_seri_input hide" id="no_seri_input0" name="no_seri_input[0]"/></td> --}}
-                    <td><a id="remove_paket_produk"><i class="fas fa-minus" style="color: red"></i></a></td>
-                </tr>`);
+            $('#produktable tr:last').after(trproduktable());
                 numberRowsProduk($("#produktable"));
         });
 
@@ -737,13 +774,8 @@
         }
 
         $(document).on('click', '#parttable #tambah_part', function(){
-            $('#parttable tr:last').after(`<tr>
-                    <td>1</td>
-                    <td><select name="part_id[0]" id="part_id0" class="form-control custom-select part_id  @error('part_id') is-invalid @enderror"></select></td>
-                    <td><input type="number" class="form-control" name="part_jumlah[0]" id="part_jumlah0"/></td>
-                    <td><a id="remove_part"><i class="fas fa-minus" style="color: red"></i></a></td>
-                </tr>`);
-                numberRowsPart($("#parttable"));
+            $('#parttable tr:last').after(trparttable());
+            numberRowsPart($("#parttable"));
         });
 
         $('#parttable').on('click', '#remove_part', function(e) {
@@ -767,14 +799,14 @@
                         }
                     },
                     processResults: function(data) {
-                            return {
-                                results: $.map(data, function(obj) {
-                                    return {
-                                        id: obj.id,
-                                        text: obj.nama
-                                    };
-                                })
-                            };
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama
+                                };
+                            })
+                        };
                     },
                 }
             });
@@ -903,8 +935,6 @@
             })
         }
 
-
-
         function produk_penjualan_tidak_tersedia(){
             var prm;
             // $('.paket_produk_id').empty();
@@ -998,7 +1028,6 @@
         $(document).on('keyup change', '.no_ref_penjualan', function(){
             var val = $(this).val();
             if(val != ""){
-
                 informasi_ref_penjualan(val);
                 produk_penjualan_tersedia(val);
             }
