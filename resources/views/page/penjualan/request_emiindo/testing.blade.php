@@ -16,12 +16,106 @@
     <div class="container-fluid">
         <ul class="nav nav-tabs" id="myTab" role="tablist">
             <li class="nav-item" role="presentation">
-                <a href="#emiindo" class="nav-link active" id="emiindo-tab" role="tab" aria-controls="emiindo"
-                    aria-selected="false">PT Emiindo</a>
+                <a href="#ekatalog" class="nav-link active" id="ekatalog-tab" role="tab" aria-controls="ekatalog"
+                    aria-selected="false">E-Katalog</a>
+            </li>
+            <li class="nav-item" role="presentation">
+                <a href="#spa" class="nav-link" id="spa-tab" role="tab" aria-controls="spa"
+                    aria-selected="false">SPA</a>
             </li>
         </ul>
         <div class="tab-content card" id="myTabContent">
-            <div class="tab-pane fade show active card-body" id="emiindo" role="tabpanel" aria-labelledby="emiindo-tab">
+            <div class="tab-pane fade show active card-body" id="ekatalog" role="tabpanel" aria-labelledby="ekatalog-tab">
+                <div class="card-body">
+                    <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link active" id="pills-proses_kirim-tab" data-toggle="pill"
+                                href="#pills-proses_kirim" role="tab" aria-controls="pills-proses_kirim"
+                                aria-selected="true">Sales Order</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill"
+                                href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim"
+                                aria-selected="false">Purchase Order</a>
+                        </li>
+                    </ul>
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-proses_kirim" role="tabpanel"
+                            aria-labelledby="pills-proses_kirim-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered salesorder" style="width: 100%"
+                                            id="belum-dicek">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nomor AKN</th>
+                                                    <th>Tanggal Buat</th>
+                                                    <th>Tanggal Edit</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>123456789</td>
+                                                    <td>12-12-2019</td>
+
+                                                    <td>12-12-2019</td>
+                                                    <td>
+                                                        <button
+                                                            class="btn btn-outline-success previewButtonSalesOrder"><i
+                                                                class="fas fa-eye"></i> Detail</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show" id="pills-selesai_kirim" role="tabpanel"
+                            aria-labelledby="pills-selesai_kirim-tab">
+                            <div class="row">
+                                <div class="col-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered purchaseorder" style="width: 100%"
+                                            id="sudah-dicek">
+                                            <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>Nomor PO</th>
+                                                    <th>Nomor AKN</th>
+                                                    <th>Nomor DO</th>
+                                                    <th>Tanggal PO</th>
+                                                    <th>Tanggal DO</th>
+                                                    <th>Aksi</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>123456789</td>
+                                                    <td>123456789</td>
+                                                    <td>123456789</td>
+                                                    <td>12-12-2019</td>
+                                                    <td>12-12-2019</td>
+                                                    <td>
+                                                        <button class="btn btn-outline-success previewButtonPurchaseOrder"><i
+                                                                class="fas fa-eye"></i> Detail</button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade show card-body" id="spa" role="tabpanel" aria-labelledby="spa-tab">
                 <div class="card-body">
                     <ul class="nav nav-pills mb-5" id="pills-tab" role="tablist">
                         <li class="nav-item">
@@ -424,60 +518,5 @@
 </section>
 @endsection
 @section('adminlte_js')
-<script>
-    // Sales Order Detail
-    $('.previewButtonSalesOrder').on('click', function () {
-        $('.salesorderModal').modal('show');
-    });
 
-    $('.salesorder').DataTable();
-
-    $('.btnso').on('click', function () {
-        Swal.fire({
-            title: 'Apakah anda yakin?',
-            text: "Anda tidak dapat mengubah data setelah menyimpan!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Simpan!'
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Terimakasih!',
-                    'Data berhasil disimpan!',
-                    'success'
-                )
-            }
-        })
-    });
-
-    // Purchase Order Detail
-    $('.purchaseorder').DataTable();
-
-    $(document).on('click', '.previewButtonPurchaseOrder', function () {
-        $('.purchaseorderModal').modal('show');
-    });
-
-    $('.btnpo').on('click', function () {
-        Swal.fire({
-            title: 'Apakah anda yakin?',
-            text: "Anda tidak dapat mengubah data setelah menyimpan!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Ya, Simpan!'
-        }).then((result) => {
-            if (result.value) {
-                Swal.fire(
-                    'Terimakasih!',
-                    'Data berhasil disimpan!',
-                    'success'
-                )
-            }
-        })
-    });
-
-</script>
 @endsection
