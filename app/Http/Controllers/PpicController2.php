@@ -945,7 +945,8 @@ class PpicController extends Controller
             $data->save();
         }
     }
-     public function get_master_stok_data()
+
+    public function get_master_stok_data()
     {
         $data = GudangBarangJadi::addSelect(['count_barang' => function ($query) {
             $query->selectRaw('count(noseri_barang_jadi.id)')
@@ -1144,6 +1145,7 @@ class PpicController extends Controller
             ->rawColumns(['gbj', 'aksi', 'penjualan', 'nama_produk'])
             ->make(true);
     }
+
     public function master_stok_detail_show($id)
     {
         $data = GudangBarangJadi::where('id', $id)->addSelect(['count_barang' => function ($query) {
@@ -1238,6 +1240,7 @@ class PpicController extends Controller
         $jumlah = ($jumlahdiminta - $jumlahtf);
         return view('spa.ppic.master_stok.detail', ['id' => $id, 'data' => $data, 'jumlah' => $jumlah]);
     }
+
     public function get_detail_master_stok($id)
     {
         $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
@@ -1357,6 +1360,7 @@ class PpicController extends Controller
             ->rawColumns(['tgl_delivery', 'status'])
             ->make(true);
     }
+
     public function get_master_pengiriman_data()
     {
         // $datass = GudangBarangJadi::has('DetailPesananProduk.NoseriDetailPesanan')->whereHas('DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
@@ -1472,6 +1476,7 @@ class PpicController extends Controller
             ->rawColumns(['nama_produk', 'aksi'])
             ->make(true);
     }
+
     public function master_pengiriman_detail_show($id)
     {
         $data = GudangBarangJadi::where('id', $id)
@@ -1504,6 +1509,7 @@ class PpicController extends Controller
         $jumlahproses = $data->count_pesanan;
         return view('spa.ppic.master_pengiriman.detail', ['id' => $id, 'data' => $data, 'jumlah' => $jumlah, 'jumlahselesai' => $jumlahselesai, 'jumlahproses' => $jumlahproses]);
     }
+
     public function get_detail_master_pengiriman($id)
     {
         // $datas = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
@@ -1648,18 +1654,6 @@ class PpicController extends Controller
             ->rawColumns(['tgl_delivery'])
             ->make(true);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     public function get_detail_pengiriman_for_ppic($id)
     {
@@ -1815,10 +1809,10 @@ class PpicController extends Controller
     public function get_count_selesai_pengiriman_produk($id)
     {
         $res = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
-            $q->where('gudang_barang_jadi_id', $id);
-        })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
-            $q->whereNotIn('log_id', ['7', '9', '10']);
-        })->count();
+                  $q->where('gudang_barang_jadi_id', $id);
+               })->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function ($q) {
+                  $q->whereNotIn('log_id', ['7', '9', '10']);
+            })->count();
         // $jumlah = 0;
         // foreach ($res as $a) {
         //     $a->jumlah;
@@ -1919,7 +1913,9 @@ class PpicController extends Controller
         } else {
             return $data->keterangan_transfer;
         }
-    }  //QC Outgoing
+    }
+
+    //QC Outgoing
     public function qc_outgoing_belum_uji(){
         $prd = Pesanan::whereIn('id', function($q) {
             $q->select('pesanan.id')

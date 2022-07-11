@@ -28,8 +28,8 @@ use App\Exports\EkspedisiData;
 use App\Exports\ProdukData;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
-use App\Models\DetailPesananPart;
 use App\Models\DetailPesananProduk;
+use App\Models\DetailPesananPart;
 use App\Models\Ekspedisi;
 use App\Models\Logistik;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -355,6 +355,14 @@ class MasterController extends Controller
                 //     $q->where('id', $id);
                 // })->first();
                 return $data->nama_alias;
+            })
+            ->addColumn('jenis_paket', function ($data) {
+                if($data->status == "ekat"){
+                    return '<span class="badge purple-text">Ekatalog</span>';
+                }
+                else{
+                    return '<span class="badge blue-text">Non Ekatalog</span>';
+                }
             })
             ->addColumn('no_akd', function ($data) {
                 $id = $data->id;
@@ -758,7 +766,6 @@ class MasterController extends Controller
         ]);
 
         if ($c) {
-            // Alert::success('Berhasil', 'Berhasil menambahkan data');
             return redirect()->back()->with('success', 'success');
         } else {
             return redirect()->back()->with('error', 'error');
@@ -782,18 +789,17 @@ class MasterController extends Controller
         //     ]
         // );
         $harga_convert =  str_replace('.', "", $request->harga);
-         $status = "";
+        $status = "";
         if($request->jenis_paket == "ekatalog"){
             $status = "ekat";
         }else{
-            $status = "non";
+            $status = NULL;
         }
-
         $PenjualanProduk = PenjualanProduk::create([
             'nama' => $request->nama_paket,
             'nama_alias' => $request->nama_alias,
             'harga' => $harga_convert,
-            'status' => $status
+            'status' => $request->jenis_paket
         ]);
         $bool = true;
         if ($PenjualanProduk) {
@@ -827,7 +833,7 @@ class MasterController extends Controller
         //     $q->where('id', $id);
         // })->with('PenjualanProduk')->get();
 
-        return view("page.penjualan.produk.edit", ['penjualanproduk' => $penjualanproduk,]);
+        return view("page.penjualan.produk.edit", ['penjualanproduk' => $penjualanproduk]);
     }
 
 
@@ -970,9 +976,16 @@ class MasterController extends Controller
     public function update_penjualan_produk(Request $request, $id)
     {
         $harga_convert =  str_replace(['.', ','], "", $request->harga);
+        $status = "";
+        if($request->jenis_paket == "ekatalog"){
+            $status = "ekat";
+        }else{
+            $status = NULL;
+        }
         $PenjualanProduk = PenjualanProduk::find($id);
         $PenjualanProduk->nama_alias = $request->nama_alias;
         $PenjualanProduk->nama = $request->nama_paket;
+        $PenjualanProduk->status = $status;
         $PenjualanProduk->harga = $harga_convert;
         $PenjualanProduk->status = $request->jenis_paket;
         $PenjualanProduk->save();
@@ -1060,9 +1073,7 @@ class MasterController extends Controller
         return view("page.logistik.ekspedisi.edit", ['ekspedisi' => $ekspedisi]);
     }
 
-
     //Show Detail
-
     public function detail_customer($id)
     {
         $customer = Customer::find($id);
@@ -1135,16 +1146,16 @@ class MasterController extends Controller
     public function select_penjualan_produk_param(Request $request, $value)
     {
         if($value == 'ekatalog')
-    {
-        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
-        ->where('status', 'ekat')
-        ->orderby('nama', 'ASC')
-        ->get();
-    }else{
-        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
-        ->orderby('nama', 'ASC')
-        ->get();
-    }
+        {
+            $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->where('status', 'ekat')
+            ->orderby('nama', 'ASC')
+            ->get();
+        } else {
+            $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->orderby('nama', 'ASC')
+            ->get();
+        }
         echo json_encode($data);
     }
     public function check_no_akd($id, $val)
@@ -1252,6 +1263,7 @@ class MasterController extends Controller
         $waktu = Carbon::now();
         return Excel::download(new ProdukData(), 'Daftar Produk ' . $waktu->toDateTimeString() . '.xlsx');
     }
+
     public function get_stok_pesanan(Request $r){
         if($r->jenis == "paket"){
             $data = DetailPesanan::where('id', $r->id)->addSelect(['count_gudang' => function($q){
