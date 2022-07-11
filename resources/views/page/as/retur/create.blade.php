@@ -523,6 +523,10 @@
 @section('adminlte_js')
 <script>
     $(function(){
+        function validasi(){
+            var 
+        }
+
         function trproduktable() {
             var produktr = $('#produktable > tbody > tr').length;
             var data = `<tr>
