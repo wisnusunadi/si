@@ -3676,18 +3676,8 @@ class PenjualanController extends Controller
         $data = GudangBarangJadi::addSelect(['count_barang' => function ($query) {
             $query->selectRaw('count(noseri_barang_jadi.id)')
             ->from('noseri_barang_jadi')
-            ->where('noseri_barang_jadi.is_ready', '0')
+            ->where(['noseri_barang_jadi.is_ready' => 0 ])
             ->whereColumn('noseri_barang_jadi.gdg_barang_jadi_id', 'gdg_barang_jadi.id')
-            ->limit(1);
-        },'count_ekat_sepakat' => function ($query) {
-            $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
-            ->from('detail_pesanan')
-            ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-            ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
-            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
-            ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
-            ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
-            ->whereRaw('pesanan.log_id in ("7") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status = "sepakat"')
             ->limit(1);
         },'count_ekat_nego' => function ($query) {
             $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
@@ -3698,6 +3688,16 @@ class PenjualanController extends Controller
             ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
             ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
             ->whereRaw('pesanan.log_id in ("7") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status = "negosiasi"')
+            ->limit(1);
+        },'count_ekat_draft' => function ($query) {
+            $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+            ->from('detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+            ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+            ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
+            ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+            ->whereRaw('pesanan.log_id in ("7")  AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status = "draft"')
             ->limit(1);
         },'count_ekat_po' => function ($query) {
             $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
@@ -3731,6 +3731,10 @@ class PenjualanController extends Controller
             ->limit(1);
         },])
         ->find($id);
+
+        $jumlahdiminta = intval($data->count_ekat_nego) + intval($data->count_ekat_draft) + intval($data->count_ekat_po) + intval($data->count_spa_po) + intval($data->count_spb_po);
+        $jumlahstok = intval($data->count_barang);
+        return $jumlahstok - $jumlahdiminta;
     }
 
     public function check_alamat(Request $request)
