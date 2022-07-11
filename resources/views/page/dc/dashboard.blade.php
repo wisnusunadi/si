@@ -146,7 +146,7 @@
                                 <h4>Penjualan 2021</h4>
                                 <div class="row">
 
-                                    <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 d-flex">
                                         <div class="small-box bg-success flex-fill">
                                             <div class="inner">
                                                 <h3>{{$daftar_so}}</h3>
@@ -158,7 +158,7 @@
                                             <a class="small-box-footer active" id="pengirimanso">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+                                    <div class="col-lg-6 col-md-6 col-sm-12 d-flex">
                                         <div class="small-box warning-bg flex-fill">
                                             <div class="inner">
                                                 <h3>{{$belum_coo}}</h3>
@@ -170,7 +170,7 @@
                                             <a class="small-box-footer" id="sotanpacoo">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
                                     </div>
-                                    <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
+                                    {{-- <div class="col-lg-4 col-md-6 col-sm-12 d-flex">
                                         <div class="small-box bg-danger flex-fill">
                                             <div class="inner">
                                                 <h3>{{$lewat_batas}}</h3>
@@ -181,7 +181,7 @@
                                             </div>
                                             <a class="small-box-footer" id="lewatbataskontrak">Detail <i class="fas fa-arrow-circle-right"></i></a>
                                         </div>
-                                    </div>
+                                    </div> --}}
 
                                 </div>
                                 <div class="row">
@@ -578,52 +578,52 @@
         }
 
         function lewatbataskontraktable() {
-            var lewatbataskontraktable = $('#lewatbataskontraktable').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/api/dc/dashboard/data/lewatbataskontraktable',
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
-                    }
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'so',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'batas_kontrak',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'status',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'button',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    },
-                ]
-            })
+            // var lewatbataskontraktable = $('#lewatbataskontraktable').DataTable({
+            //     destroy: true,
+            //     processing: true,
+            //     serverSide: true,
+            //     ajax: {
+            //         'url': '/api/dc/dashboard/data/lewatbataskontraktable',
+            //         'type': 'POST',
+            //         'headers': {
+            //             'X-CSRF-TOKEN': '{{csrf_token()}}'
+            //         }
+            //     },
+            //     language: {
+            //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            //     },
+            //     columns: [{
+            //             data: 'DT_RowIndex',
+            //             className: 'nowrap-text align-center',
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //         {
+            //             data: 'so',
+            //             className: 'nowrap-text align-center',
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //         {
+            //             data: 'batas_kontrak',
+            //             className: 'nowrap-text align-center',
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //         {
+            //             data: 'status',
+            //             className: 'nowrap-text align-center',
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //         {
+            //             data: 'button',
+            //             className: 'nowrap-text align-center',
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //     ]
+            // })
         }
 
         $('#sotable').DataTable().clear().destroy();
@@ -698,68 +698,4 @@
         });
     });
 </script>
-<script>
-    // var ctx = document.getElementById("areaChart");
-    // var tensi_sistolik_chart = new Chart(ctx, {
-    //     type: 'line',
-    //     data: {
-    //         labels: [],
-    //         datasets: [{
-    //             label: 'Sistolik',
-    //             data: [],
-    //             borderWidth: 2,
-    //             backgroundColor: 'transparent',
-    //             borderColor: 'red',
-    //         }]
-    //     },
-    //     options: {
-    //         scales: {
-    //             xAxes: [],
-    //             yAxes: [{
-    //                 ticks: {
-    //                     beginAtZero: true
-    //                 }
-    //             }]
-    //         }
-    //     }
-    // });
-    var ctx = document.getElementById("myChart");
-    var myChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["Red", "Blue", "Yellow", "Green", "Purple", "Orange"],
-            datasets: [{
-                label: '# of Votes',
-                data: [12, 19, 3, 5, 2, 3],
-                backgroundColor: [
-                    'rgba(255, 99, 132, 0.2)',
-                    'rgba(54, 162, 235, 0.2)',
-                    'rgba(255, 206, 86, 0.2)',
-                    'rgba(75, 192, 192, 0.2)',
-                    'rgba(153, 102, 255, 0.2)',
-                    'rgba(255, 159, 64, 0.2)'
-                ],
-                borderColor: [
-                    'rgba(255,99,132,1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            }
-        }
-    });
-</script>
-
 @stop
