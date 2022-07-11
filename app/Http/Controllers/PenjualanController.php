@@ -1044,8 +1044,28 @@ class PenjualanController extends Controller
     public function get_data_ekatalog_pengiriman()
     {
         $data  = Ekatalog::whereHas('Pesanan', function ($q) {
-            $q->whereNotNull('no_po')->whereNotIn('log_id', ['10']);
-        })->orderBy('tgl_kontrak', 'ASC')->limit(20)->get();
+            $q->whereNotNull('no_po')->whereNotIn('log_id', ['7', '10', '20']);
+        })->addSelect(['tgl_kontrak_custom' => function($q){
+            $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+              ->from('ekatalog as e')
+              ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+              ->whereColumn('e.id', 'ekatalog.id')
+              ->limit(1);
+            }, 'cjumlahprd' => function($q){
+                $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                ->from('detail_pesanan')
+                ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+            }, 'clogprd' => function($q){
+                $q->selectRaw('count(noseri_logistik.id)')
+                   ->from('noseri_logistik')
+                   ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                   ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                   ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                   ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id')
+                   ->limit(1);
+            }])->orderBy('tgl_kontrak_custom', 'ASC')->limit(20)->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
@@ -1071,87 +1091,45 @@ class PenjualanController extends Controller
             ->addColumn('status', function ($data) {
                 $datas = "";
                 if (!empty($data->Pesanan->log_id)) {
-                    if ($data->Pesanan->State->nama == "Penjualan") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->Pesanan->State->nama == "PO") {
-                        $datas .= '<span class="purple-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Gudang") {
-                        $datas .= '<span class="orange-text badge">';
-                    } else if ($data->Pesanan->State->nama == "QC") {
-                        $datas .= '<span class="yellow-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
-                        $datas .= '<span class="blue-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Kirim") {
-                        $datas .= '<span class="green-text badge">';
+                    $hitung = round(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    if ($data->Pesanan->log_id == "9") {
+                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
+                    } else {
+                        if($hitung > 0){
+                            $datas = '<div class="progress">
+                            <div class="progress-bar" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>';
+                        }else{
+                            $datas = '<span class="text-secondary">0%</span>';
+                        }
                     }
-                    $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
                 }
                 return $datas;
             })
             ->addColumn('batas_kontrak', function ($data) {
-                if (isset($data->tgl_kontrak)) {
-                    $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                    $tgl_parameter = $data->tgl_kontrak;
-
-                    if (isset($data->Pesanan->so)) {
-                        if ($data->Pesanan->getJumlahPesanan() == $data->Pesanan->getJumlahKirim()) {
-                            return Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
-                        } else {
-                            if ($tgl_sekarang < $tgl_parameter) {
-                                $to = Carbon::now();
-                                $from = $data->tgl_kontrak;
-                                $hari = $to->diffInDays($from);
-                                if ($hari > 7) {
-                                    return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                    <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
-                                } else if ($hari > 0 && $hari <= 7) {
-                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                    <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
-                                } else {
-                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                                }
-                            } else if ($tgl_sekarang == $tgl_parameter) {
-                                return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                            } else {
-                                $to = Carbon::now();
-                                $from = $data->tgl_kontrak;
-                                $hari = $to->diffInDays($from);
-                                return '<div id="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
-                            }
-                        }
-                    } else {
-                        if ($tgl_sekarang < $tgl_parameter) {
-                            $to = Carbon::now();
-                            $from = $data->tgl_kontrak;
-                            $hari = $to->diffInDays($from);
+                if($data->tgl_kontrak_custom != ""){
+                    if($data->Pesanan->log_id != "10"){
+                        $tgl_sekarang = Carbon::now();
+                        $tgl_parameter = $data->tgl_kontrak_custom;
+                        $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                        if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
                             if ($hari > 7) {
                                 return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                        <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
                             } else if ($hari > 0 && $hari <= 7) {
                                 return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                        <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
                             } else {
                                 return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                                        <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
                             }
-                        } else if ($tgl_sekarang == $tgl_parameter) {
-                            return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
                         } else {
-                            $to = Carbon::now();
-                            $from = $data->tgl_kontrak;
-                            $hari = $to->diffInDays($from);
-                            return '<div id="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
+                            return  '<div class="text-danger"><b>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih ' . $hari . ' Hari</small></div>';
                         }
+                    } else{
+                        return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
                     }
-                } else {
-                    return '';
                 }
             })
             ->addColumn('button', function ($data) {

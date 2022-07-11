@@ -140,7 +140,7 @@
         <div class="row">
             <div class="col-12">
                 <div class="row">
-                    <div class="col-lg-6 col-md-12">
+                    <div class="col-lg-5 col-md-12">
                         <div class="card">
                             <div class="card-body">
                                 <h4>Penjualan 2021</h4>
@@ -249,7 +249,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-lg-6 col-md-12">
+                    <div class="col-lg-7 col-md-12">
                         <div class="card">
                             <div class="card-body">
                                 <h4>Sales Order</h4>
@@ -295,6 +295,7 @@
                                                 <tr>
                                                     <th>No</th>
                                                     <th>No PO</th>
+                                                    <th>No AKN</th>
                                                     <th>Customer</th>
                                                     <th>Status</th>
                                                 </tr>
@@ -555,7 +556,14 @@
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: true
-                }, {
+                },
+                {
+                    data: 'no_paket',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: true
+                },
+                {
                     data: 'customer',
                     className: 'nowrap-text align-center',
                     orderable: false,

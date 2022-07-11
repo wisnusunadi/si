@@ -317,7 +317,6 @@
                 complete: function() {
                     $('#loader').hide();
                 },
-<<<<<<< HEAD
                 error: function(jqXHR, testStatus, error) {
                     console.log(error);
                     alert("Page cannot open. Error:" + error);
@@ -339,11 +338,6 @@
                     'headers': {
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     }
-=======
-                {
-                    data: 'tgl_awal',
-                    className: 'align-center nowrap-text',
->>>>>>> 053aeb9491118567e7b5048be699e177983f2422
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'

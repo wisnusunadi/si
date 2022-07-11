@@ -1352,7 +1352,7 @@ return [
                     'auth' => [2, 26],
                 ],
                 [
-                    'text' => 'Perencanaan',
+                    'text' => 'Jadwal Perakitan',
                     'url'  => '/ppic_direksi',
                     'icon' => 'far fa-circle',
                     'auth' => [2]

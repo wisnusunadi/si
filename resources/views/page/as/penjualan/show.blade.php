@@ -466,13 +466,13 @@
                             },
                             total: {
                                 show: true,
-                                label: 'Total',
+                                label: 'Progress',
                                 color: '#5F7A90',
-                                // formatter: function (val) {
-                                //     console.log(val);
-                                //     // By default this function returns the average of all series. The below is just an example to show the use of custom formatter function
-                                //     return val
-                                // }
+                                formatter: function (w) {
+                                    return Math.round(w.globals.seriesTotals.reduce((a, b) => {
+                                        return a + b
+                                    }, 0) / w.globals.series.length) + '%'
+                                }
                             }
                         }
                     }

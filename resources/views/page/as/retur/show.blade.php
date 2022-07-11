@@ -6,14 +6,14 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0  text-dark">Retur</h1>
+                <h1 class="m-0  text-dark">Memo Retur</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
                     @if (Auth::user()->divisi_id == '8')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('as.retur.show') }}">Retur</a></li>
-                        <li class="breadcrumb-item active">Tambah Retur</li>
+                        <li class="breadcrumb-item"><a href="{{ route('as.retur.show') }}">Memo Retur</a></li>
+                        <li class="breadcrumb-item active">Tambah Memo Retur</li>
                     @endif
                 </ol>
             </div><!-- /.col -->
@@ -135,7 +135,7 @@
                                         <th>No</th>
                                         <th>No Retur</th>
                                         <th>Tanggal Retur</th>
-                                        <th>No Ref PO / No Ref Retur</th>
+                                        <th>Jenis Retur</th>
                                         <th>Customer</th>
                                         <th>Status</th>
                                         <th>Aksi</th>
@@ -146,7 +146,7 @@
                                         <td>1</td>
                                         <td>RET/0012/02/1293</td>
                                         <td>20 Februari 2022</td>
-                                        <td>PO2022021009189</td>
+                                        <td><span class="badge blue-text">Komplain</span></td>
                                         <td>PT. Emiindo Jaya Bersama</td>
                                         <td><span class="badge red-text">Belum Diproses</span></td>
                                         <td><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></td>
@@ -155,7 +155,7 @@
                                         <td>2</td>
                                         <td>RET/0012/02/1293</td>
                                         <td>20 Februari 2022</td>
-                                        <td>PO2022021009189</td>
+                                        <td><span class="badge orange-text">Service</span></td>
                                         <td>PT. Emiindo Jaya Bersama</td>
                                         <td><span class="badge red-text">Belum Diproses</span></td>
                                         <td><a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" id="detailmodal"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a></td>

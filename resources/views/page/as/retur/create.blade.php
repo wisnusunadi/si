@@ -457,7 +457,7 @@
                                                                     <td>1</td>
                                                                     {{-- <td><select name="paket_produk_id[0]" id="paket_produk_id0" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td> --}}
                                                                     <td><select name="produk_id[0]" id="produk_id0" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
-                                                                    <td><input type="number" class="form-control" name="produk_jumlah[0]" id="produk_jumlah0"/></td>
+                                                                    <td><input type="number" class="form-control produk_jumlah" name="produk_jumlah[0]" id="produk_jumlah0"/></td>
                                                                     {{-- <td><select name="no_seri_select[0]" id="no_seri_select0" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true"></select>
                                                                         <input type="text" class="form-control no_seri_input hide" id="no_seri_input0" name="no_seri_input[0]"/>
                                                                     </td> --}}
@@ -495,7 +495,7 @@
                                                                 <tr>
                                                                     <td>1</td>
                                                                     <td><select name="part_id[0]" id="part_id0" class="form-control custom-select part_id  @error('part_id') is-invalid @enderror"></select></td>
-                                                                    <td><input type="number" class="form-control" name="part_jumlah[0]" id="part_jumlah0"/></td>
+                                                                    <td><input type="number" class="form-control part_jumlah" name="part_jumlah[0]" id="part_jumlah0"/></td>
                                                                     <td><a href="#" id="tambah_part"><i class="fas fa-plus text-success"></i></a></td>
                                                                 </tr>
                                                             </tbody>
@@ -510,7 +510,7 @@
                         </div>
                         <div class="card-footer">
                             <a href="{{route('as.retur.show')}}" type="button" class="btn btn-danger">Batal</a>
-                            <button type="submit" class="btn btn-info float-right" id="btnsubmit">Tambah</button>
+                            <button type="submit" class="btn btn-info float-right" id="btnsubmit" disabled="true">Tambah</button>
                         </div>
                     </form>
                 </div>
@@ -524,8 +524,36 @@
 <script>
     $(function(){
         function validasi(){
-            var 
+            if($('#no_retur').val() != "" && $('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $('#customer_id').val() != "" && $('#alamat').val() && $('input[name="pilih_jenis_barang[]"]:checked').length > 0 && (($('#pilih_jenis_barang1').is(':checked') && $("#produktable tbody input:empty").length <= 0) || ($('#pilih_jenis_barang2').is(':checked') && $("#parttable tbody input:empty").length <= 0)) ){
+                $('#btnsubmit').attr('disabled', false);
+            } else {
+                $('#btnsubmit').attr('disabled', true);
+            }
         }
+
+        $(document).on('change keyup', '#no_retur', function(){
+            validasi();
+        })
+
+        $(document).on('change keyup', '#tgl_retur', function(){
+            validasi();
+        })
+
+        $(document).on('change', 'input[name="pilih_jenis_retur"]', function(){
+            validasi();
+        })
+
+        $(document).on('change keyup', '#customer_id', function(){
+            validasi();
+        })
+
+        $(document).on('change keyup', '#alamat', function(){
+            validasi();
+        })
+
+        $(document).on('change keyup', 'input[name="pilih_jenis_barang[]"]', function(){
+            validasi();
+        })
 
         function trproduktable() {
             var produktr = $('#produktable > tbody > tr').length;
@@ -533,12 +561,12 @@
                     <td>1</td>
                     {{-- <td><select name="paket_produk_id[0]" id="paket_produk_id0" class="form-control custom-select paket_produk_id  @error('paket_produk_id') is-invalid @enderror"></select></td> --}}
                     <td><select name="produk_id[0]" id="produk_id0" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
-                    <td><input type="number" class="form-control" name="jumlah[0]" id="jumlah0"/></td>
+                    <td><input type="number" class="form-control produk_jumlah" name="produk_jumlah[0]" id="produk_jumlah0"/></td>
                     {{-- <td><select name="no_seri_select[0]" id="no_seri_select0" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true"></select>
                         <input type="text" class="form-control no_seri_input hide" id="no_seri_input0" name="no_seri_input[0]"/></td> --}}
                         <td>`;
             if(produktr > 0){
-                data += `<a id="remove_part"><i class="fas fa-minus" style="color: red"></i></a>`;
+                data += `<a id="remove_paket_produk"><i class="fas fa-minus" style="color: red"></i></a>`;
             } else
             {
                 data += `<a href="#" id="tambah_paket_produk"><i class="fas fa-plus text-success"></i></a>`;
@@ -554,7 +582,7 @@
             var data = `<tr>
                     <td>1</td>
                     <td><select name="part_id[0]" id="part_id0" class="form-control custom-select part_id  @error('part_id') is-invalid @enderror"></select></td>
-                    <td><input type="number" class="form-control" name="part_jumlah[0]" id="part_jumlah0"/></td>
+                    <td><input type="number" class="form-control part_jumlah" name="part_jumlah[0]" id="part_jumlah0"/></td>
                     <td>`;
             if(parttr > 0){
                 data += `<a id="remove_part"><i class="fas fa-minus" style="color: red"></i></a>`;
@@ -596,7 +624,7 @@
                         };
                     },
                 }
-            });
+            })
         }
 
         function part(){
@@ -625,8 +653,27 @@
                         };
                     },
                 }
-            });
+            })
         }
+
+        $(document).on('change', '#produktable .produk_id', function(){
+            console.log($('#produktable tbody > tr > td > input[type="number"][value=""]'));
+            validasi();
+        });
+
+        $(document).on('change keyup', '#produktable .produk_jumlah', function(){
+
+            validasi();
+        });
+
+        $(document).on('change', '#parttable .part_id', function(){
+            validasi();
+        });
+
+        $(document).on('change keyup', '#parttable .part_jumlah', function(){
+            validasi();
+        });
+
         $('.no_seri').select2();
         produk();
         part();
@@ -688,6 +735,7 @@
                 $('input[name="pilih_jenis_barang[]"][value="'+x+'"]').prop("checked", true);
             }
             filter_jenis(jenis_arry);
+            validasi();
         });
 
         function filter_jenis(x){
@@ -752,12 +800,14 @@
             });
         }
 
-        $(document).on('click', '#produktable #tambah_paket_produk', function(){
+        $(document).on('click', '#produktable #tambah_paket_produk', function(e){
+            e.preventDefault();
             $('#produktable tr:last').after(trproduktable());
                 numberRowsProduk($("#produktable"));
         });
 
         $('#produktable').on('click', '#remove_paket_produk', function(e) {
+            e.preventDefault();
             $(this).closest('tr').remove();
             numberRowsProduk($("#produktable"));
         });
@@ -777,12 +827,14 @@
             });
         }
 
-        $(document).on('click', '#parttable #tambah_part', function(){
+        $(document).on('click', '#parttable #tambah_part', function(e){
+            e.preventDefault();
             $('#parttable tr:last').after(trparttable());
             numberRowsPart($("#parttable"));
         });
 
         $('#parttable').on('click', '#remove_part', function(e) {
+            e.preventDefault();
             $(this).closest('tr').remove();
             numberRowsPart($("#parttable"));
         });
@@ -1096,6 +1148,7 @@
                         $('#alamat').val("");
                         $('#telepon').val("");
                     }
+                    validasi();
                     return false;
                 }
         });
