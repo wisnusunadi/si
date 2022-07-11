@@ -3667,11 +3667,70 @@ class PenjualanController extends Controller
 
     public function check_variasi_jumlah($id)
     {
-        $gbj = GudangBarangJadi::find($id);
-        $jumlah_ekatalog = $this->get_count_ekatalog($id, $gbj->produk_id, "sepakat") + $this->get_count_ekatalog($id, $gbj->produk_id, "negosiasi");
-        $jumlah_po = $this->get_count_spa_po($id, $gbj->produk_id);
-        $jumlah = $gbj->stok - ($jumlah_ekatalog + $jumlah_po);
-        return $jumlah;
+        // $gbj = GudangBarangJadi::find($id);
+        // $jumlah_ekatalog = $this->get_count_ekatalog($id, $gbj->produk_id, "sepakat") + $this->get_count_ekatalog($id, $gbj->produk_id, "negosiasi");
+        // $jumlah_po = $this->get_count_spa_po($id, $gbj->produk_id);
+        // $jumlah = $gbj->stok - ($jumlah_ekatalog + $jumlah_po);
+        // return $jumlah;
+
+        $data = GudangBarangJadi::addSelect(['count_barang' => function ($query) {
+            $query->selectRaw('count(noseri_barang_jadi.id)')
+            ->from('noseri_barang_jadi')
+            ->where('noseri_barang_jadi.is_ready', '0')
+            ->whereColumn('noseri_barang_jadi.gdg_barang_jadi_id', 'gdg_barang_jadi.id')
+            ->limit(1);
+        },'count_ekat_sepakat' => function ($query) {
+            $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+            ->from('detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+            ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+            ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
+            ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+            ->whereRaw('pesanan.log_id in ("7") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status = "sepakat"')
+            ->limit(1);
+        },'count_ekat_nego' => function ($query) {
+            $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+            ->from('detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+            ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+            ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
+            ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+            ->whereRaw('pesanan.log_id in ("7") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status = "negosiasi"')
+            ->limit(1);
+        },'count_ekat_po' => function ($query) {
+            $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+            ->from('detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+            ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+            ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
+            ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+            ->whereRaw('pesanan.log_id not in ("7", "10") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status != "batal"')
+            ->limit(1);
+        },'count_spa_po' => function ($query) {
+            $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+            ->from('detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+            ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+            ->join('spa', 'spa.pesanan_id', '=', 'pesanan.id')
+            ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+            ->whereRaw('pesanan.log_id not in ("7", "10") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id')
+            ->limit(1);
+        },'count_spb_po' => function ($query) {
+            $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+            ->from('detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+            ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+            ->join('spb', 'spb.pesanan_id', '=', 'pesanan.id')
+            ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+            ->whereRaw('pesanan.log_id not in ("7", "10") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id')
+            ->limit(1);
+        },])
+        ->find($id);
     }
 
     public function check_alamat(Request $request)

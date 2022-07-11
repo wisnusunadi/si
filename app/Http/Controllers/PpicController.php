@@ -1023,15 +1023,6 @@ class PpicController extends Controller
             ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
             ->whereRaw('pesanan.log_id not in ("7", "10") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id')
             ->limit(1);
-        }, 'count_transfer' => function($query){
-            $query->selectRaw('count(t_gbj_noseri.id)')
-            ->from('t_gbj_noseri')
-            ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-            ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->leftjoin('pesanan', 'pesanan.id', '=', 't_gbj.pesanan_id')
-            ->whereNotIn('pesanan.log_id', ["7", "10", "20"])
-            ->where([['t_gbj_noseri.jenis', '=', "keluar"], ['t_gbj_detail.gdg_brg_jadi_id', '=', 'gdg_barang_jadi.id']])
-            ->limit(1);
         }])
         ->whereIn('id', function($q){
                     $q->selectRaw('gdg_barang_jadi.id as id')

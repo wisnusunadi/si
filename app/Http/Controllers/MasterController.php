@@ -782,18 +782,13 @@ class MasterController extends Controller
         //     ]
         // );
         $harga_convert =  str_replace('.', "", $request->harga);
-         $status = "";
-        if($request->jenis_paket == "ekatalog"){
-            $status = "ekat";
-        }else{
-            $status = "non";
-        }
+
 
         $PenjualanProduk = PenjualanProduk::create([
             'nama' => $request->nama_paket,
             'nama_alias' => $request->nama_alias,
             'harga' => $harga_convert,
-            'status' => $status
+            'status' => $request->jenis_paket
         ]);
         $bool = true;
         if ($PenjualanProduk) {
