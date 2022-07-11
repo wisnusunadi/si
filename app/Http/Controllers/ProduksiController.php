@@ -312,7 +312,7 @@ class ProduksiController extends Controller
                 }
 
             }
-            $datax = Pesanan::whereIn('id', $x)->get();
+            $datax = Pesanan::with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'log'])->whereIn('id', $x)->get();
             // return $data;
             return datatables()->of($datax)
                 ->addIndexColumn()
@@ -519,7 +519,7 @@ class ProduksiController extends Controller
                     }
                 }
             }
-            $datax = Pesanan::whereIn('id', $x)->get();
+            $datax = Pesanan::with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'log'])->whereIn('id', $x)->get();
 
             return datatables()->of($datax)
                 ->addIndexColumn()
@@ -720,7 +720,7 @@ class ProduksiController extends Controller
                 }
             }
 
-            $datax = Pesanan::whereIn('id', $x)->get();
+            $datax = Pesanan::with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer', 'log'])->whereIn('id', $x)->get();
 
             return datatables()->of($datax)
                 ->addIndexColumn()
