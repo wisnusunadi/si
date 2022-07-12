@@ -1479,6 +1479,7 @@ class PpicController extends Controller
 
     public function master_pengiriman_detail_show($id)
     {
+
         $data = GudangBarangJadi::where('id', $id)
             ->addSelect(['count_pesanan' => function ($q){
                     $q->selectRaw('count(noseri_detail_pesanan.id)')
@@ -1502,11 +1503,12 @@ class PpicController extends Controller
                       ->limit(1);
                 }
             ])
+            ->havingRaw('count_pesanan > count_pengiriman')
             ->with('Produk')
             ->first();
-        $jumlah = $data->count_pesanan + $data->count_pengiriman;
+        $jumlah = $data->count_pesanan;
+        $jumlahproses = $data->count_pesanan - $data->count_pengiriman;
         $jumlahselesai = $data->count_pengiriman;
-        $jumlahproses = $data->count_pesanan;
         return view('spa.ppic.master_pengiriman.detail', ['id' => $id, 'data' => $data, 'jumlah' => $jumlah, 'jumlahselesai' => $jumlahselesai, 'jumlahproses' => $jumlahproses]);
     }
 

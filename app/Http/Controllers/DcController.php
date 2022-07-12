@@ -281,21 +281,20 @@ class DcController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                // if ($data->getJumlahPaketPesanan() == $data->getJumlahCoo()) {
-                //     return ' <span class="badge green-text">Sudah Diproses</span>';
-                // } else {
-                //     if ($data->getJumlahCoo() == 0) {
-                //         return  '<span class="badge red-text">Belum Diproses</span>';
-                //     } else {
-                //         return '<span class="badge yellow-text">Sebagian Diproses</span>';
-                //     }
-                // }
-                if($data->ccoo <= 0){
-                    return  '<span class="badge red-text">Belum Diproses</span>';
+                $datas = "";
+                $hitung = round((($data->ccoo / $data->cseri) * 100), 0);
+                if($hitung > 0){
+                    $datas = '<div class="progress">
+                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                    </div>
+                    <small class="text-muted">Selesai</small>';
+                }else{
+                    $datas = '<div class="progress">
+                        <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                    </div>
+                    <small class="text-muted">Selesai</small>';
                 }
-                else{
-                    return '<span class="badge yellow-text">Sebagian Diproses</span>';
-                }
+                return $datas;
             })
             ->addColumn('button', function ($data) {
                 $name = explode('/', $data->so);
@@ -1269,7 +1268,7 @@ class DcController extends Controller
                     ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
                     ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
                     ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                    // ->where('produk.coo', 1)
+                    ->where('produk.coo', 1)
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cjumlah' => function($q){
@@ -1277,7 +1276,7 @@ class DcController extends Controller
                     ->from('detail_pesanan')
                     ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
                     ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
-                    // ->where('produk.coo', 1)
+                    ->where('produk.coo', 1)
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 }
                 ])->whereIn('log_id', ['9'])->orderBy('tgl_kontrak', 'desc')->doesntHave('Spb')->count();
@@ -1337,7 +1336,7 @@ class DcController extends Controller
                     ->from('detail_pesanan')
                     ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
                     ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
-                    // ->where('produk.coo', 1)
+                    ->where('produk.coo', 1)
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 }
                 ])->whereIn('log_id', ['6'])->orderBy('tgl_kontrak', 'desc')->doesntHave('Spb')->count();
@@ -1389,7 +1388,7 @@ class DcController extends Controller
                     ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
                     ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
                     ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                    // ->where('produk.coo', 1)
+                    ->where('produk.coo', 1)
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cjumlah' => function($q){
@@ -1397,7 +1396,7 @@ class DcController extends Controller
                     ->from('detail_pesanan')
                     ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
                     ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
-                    // ->where('produk.coo', 1)
+                    ->where('produk.coo', 1)
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 }
                 ])->whereIn('log_id', ['8'])->orderBy('tgl_kontrak', 'desc')->doesntHave('Spb')->count();
@@ -1449,7 +1448,7 @@ class DcController extends Controller
                     ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
                     ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
                     ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                    // ->where('produk.coo', 1)
+                    ->where('produk.coo', 1)
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 },
                 'cjumlah' => function($q){
@@ -1457,7 +1456,7 @@ class DcController extends Controller
                     ->from('detail_pesanan')
                     ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
                     ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
-                    // ->where('produk.coo', 1)
+                    ->where('produk.coo', 1)
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 }
                 ])->whereIn('log_id', ['11', '13'])->orderBy('tgl_kontrak', 'desc')->doesntHave('Spb')->count();
@@ -2000,10 +1999,14 @@ class DcController extends Controller
                     } else {
                         if($hitung > 0){
                             $datas = '<div class="progress">
-                                <div class="progress-bar" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
-                            </div>';
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
                         }else{
-                            $datas = '<span class="text-secondary">0%</span>';
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
                         }
                     }
                     return $datas;

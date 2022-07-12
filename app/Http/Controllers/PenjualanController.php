@@ -56,9 +56,87 @@ class PenjualanController extends Controller
                   ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
                   ->whereColumn('e.id', 'ekatalog.id')
                   ->limit(1);
+                }, 'ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
                 }])->orderBy('id', 'DESC')->get());
-            $Spa = collect(Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
-            $Spb = collect(Spb::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+
+            $Spa = collect(Spa::addSelect(['ckirimprd' => function($q){
+                $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                ->from('noseri_logistik')
+                ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+            },
+            'cjumlahprd' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                ->from('detail_pesanan')
+                ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+            },
+            'ckirimpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                ->from('detail_logistik_part')
+                ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+            },
+            'cjumlahpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                ->from('detail_pesanan_part')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+            }])->with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+
+            $Spb = collect(Spb::addSelect(['ckirimprd' => function($q){
+                $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                ->from('noseri_logistik')
+                ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+            },
+            'cjumlahprd' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                ->from('detail_pesanan')
+                ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+            },
+            'ckirimpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                ->from('detail_logistik_part')
+                ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+            },
+            'cjumlahpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                ->from('detail_pesanan_part')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+            }])->with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+
             $data = $Ekatalog->merge($Spa)->merge($Spb);
         } else if ($jenis != "semua" && $status == "semua") {
             $Ekatalog = "";
@@ -71,13 +149,92 @@ class PenjualanController extends Controller
                       ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
                       ->whereColumn('e.id', 'ekatalog.id')
                       ->limit(1);
-                    }])->orderBy('id', 'DESC')->get());
+                    },'ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+                }])->orderBy('id', 'DESC')->get());
             }
             if (in_array('spa', $x)) {
-                $Spa = collect(Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+                $Spa = collect(Spa::addSelect([
+                    'ckirimprd' => function($q){
+                        $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                        ->from('noseri_logistik')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                    },
+                    'cjumlahprd' => function($q){
+                        $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                        ->from('detail_pesanan')
+                        ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                        ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                    },
+                    'ckirimpart' => function($q){
+                        $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                        ->from('detail_logistik_part')
+                        ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                    },
+                    'cjumlahpart' => function($q){
+                        $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                        ->from('detail_pesanan_part')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                    }
+                ])->with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             }
             if (in_array('spb', $x)) {
-                $Spb = collect(Spb::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
+                $Spb = collect(Spb::addSelect([
+                    'ckirimprd' => function($q){
+                        $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                        ->from('noseri_logistik')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                    },
+                    'cjumlahprd' => function($q){
+                        $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                        ->from('detail_pesanan')
+                        ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                        ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                    },
+                    'ckirimpart' => function($q){
+                        $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                        ->from('detail_logistik_part')
+                        ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                    },
+                    'cjumlahpart' => function($q){
+                        $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                        ->from('detail_pesanan_part')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                    }
+                ])->with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get());
             }
             if ($Ekatalog != "" && $Spa != "" && $Spb != "") {
                 $data = $Ekatalog->merge($Spa)->merge($Spb);
@@ -289,28 +446,101 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                $datas = "";
-                if (!empty($data->Pesanan->log_id)) {
-                    if ($data->Pesanan->State->nama == "Penjualan") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->Pesanan->State->nama == "PO") {
-                        $datas .= '<span class="purple-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Gudang") {
-                        $datas .= '<span class="orange-text badge">';
-                    } else if ($data->Pesanan->State->nama == "QC") {
-                        $datas .= '<span class="yellow-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
-                        $datas .= '<span class="blue-text badge">';
-                    } else if ($data->Pesanan->State->nama == "Kirim") {
-                        $datas .= '<span class="green-text badge">';
+                $name = $data->getTable();
+                $progress = "";
+                $tes = $data->cjumlahprd + $data->cjumlahpart;
+                if($tes > 0){
+                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    if($hitung > 0){
+                        $progress = '<div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                        </div>
+                        <small class="text-muted">Selesai</small>';
+                    }else{
+                        $progress = '<div class="progress">
+                            <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                        </div>
+                        <small class="text-muted">Selesai</small>';
                     }
-                    $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
-                } else {
-                    $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                 }
-                return $datas;
+
+                if($name == "ekatalog"){
+                    if($data->status == "batal" && ($data->Pesanan->log_id != "7")){
+                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
+                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                                <i class="fas fa-times"></i>
+                                Batal
+                            </button>
+                        </a>';
+                    }else{
+                        if ($data->Pesanan->log_id == "7") {
+                            return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
+                        } else if ($data->Pesanan->log_id == "9") {
+                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
+                        } else{
+                            return $progress;
+                        }
+                    }
+                }
+                else if($name == "spa"){
+                    if($data->log == "batal"){
+                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
+                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                                <i class="fas fa-times"></i>
+                                Batal
+                            </button>
+                        </a>';
+                    }else{
+                        if ($data->Pesanan->log_id == "7") {
+                            return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
+                        } else if ($data->Pesanan->log_id == "9") {
+                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
+                        } else{
+                            return $progress;
+                        }
+                    }
+                }
+                else if($name == "spb"){
+                    if($data->log == "batal"){
+                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
+                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                                <i class="fas fa-times"></i>
+                                Batal
+                            </button>
+                        </a>';
+                    }else{
+                        if ($data->Pesanan->log_id == "7") {
+                            return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
+                        } else if ($data->Pesanan->log_id == "9") {
+                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
+                        } else{
+                            return $progress;
+                        }
+                    }
+                }
+
+                // $datas = "";
+                // if (!empty($data->Pesanan->log_id)) {
+                //     if ($data->Pesanan->State->nama == "Penjualan") {
+                //         $datas .= '<span class="red-text badge">';
+                //     } else if ($data->Pesanan->State->nama == "PO") {
+                //         $datas .= '<span class="purple-text badge">';
+                //     } else if ($data->Pesanan->State->nama == "Gudang") {
+                //         $datas .= '<span class="orange-text badge">';
+                //     } else if ($data->Pesanan->State->nama == "QC") {
+                //         $datas .= '<span class="yellow-text badge">';
+                //     } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                //         $datas .= '<span class="red-text badge">';
+                //     } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
+                //         $datas .= '<span class="blue-text badge">';
+                //     } else if ($data->Pesanan->State->nama == "Kirim") {
+                //         $datas .= '<span class="green-text badge">';
+                //     }
+                //     $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                // } else {
+                //     $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                // }
+                // return $datas;
             })
             ->addColumn('button', function ($data) {
                 $name =  $data->getTable();
@@ -1097,10 +1327,14 @@ class PenjualanController extends Controller
                     } else {
                         if($hitung > 0){
                             $datas = '<div class="progress">
-                            <div class="progress-bar" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
-                            </div>';
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
                         }else{
-                            $datas = '<span class="text-secondary">0%</span>';
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
                         }
                     }
                 }
@@ -1157,6 +1391,23 @@ class PenjualanController extends Controller
                   ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
                   ->whereColumn('e.id', 'ekatalog.id')
                   ->limit(1);
+                },
+                'cseri' => function($q){
+                    $q->selectRaw('count(noseri_logistik.id)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                    ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'cjumlah' => function($q){
+                    $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
         } else {
             $data  = Ekatalog::with(['Pesanan.State','Customer'])->addSelect(['tgl_kontrak_custom' => function($q){
@@ -1165,6 +1416,23 @@ class PenjualanController extends Controller
                   ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
                   ->whereColumn('e.id', 'ekatalog.id')
                   ->limit(1);
+                },
+                'cseri' => function($q){
+                    $q->selectRaw('count(noseri_logistik.id)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                    ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'cjumlah' => function($q){
+                    $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
         }
 
@@ -1186,17 +1454,41 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if (!empty($data->status)) {
-                    if ($data->status == "batal") {
-                        $datas .= '<span class="red-text badge">';
-                    } else if ($data->status == "negosiasi") {
-                        $datas .= '<span class="yellow-text badge">';
-                    } else if ($data->status == "draft") {
-                        $datas .= '<span class="blue-text badge">';
-                    } else if ($data->status == "sepakat") {
-                        $datas .= '<span class="green-text badge">';
+                if($data->Pesanan->log_id == '7' || $data->Pesanan->log_id == '9'){
+                    if (!empty($data->status)) {
+                        if ($data->status == "batal") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->status == "negosiasi") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->status == "draft") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->status == "sepakat") {
+                            $datas .= '<span class="green-text badge">';
+                        }
+                        $datas .= ucfirst($data->status) . '</span>';
                     }
-                    $datas .= ucfirst($data->status) . '</span>';
+                } else {
+                    if ($data->status == "batal") {
+                        $datas = '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
+                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                                <i class="fas fa-times"></i>
+                                Batal
+                            </button>
+                        </a>';
+                    }else{
+                        $hitung = round((($data->cseri / $data->cjumlah) * 100), 0);
+                        if($hitung > 0){
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
+                        }else{
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
+                        }
+                    }
                 }
                 return $datas;
             })
@@ -1330,12 +1622,21 @@ class PenjualanController extends Controller
                                 ';
                         } else {
                             $return .= '<a data-toggle="modal" data-jenis="ekatalog" class="editmodal" data-id="' . $data->id . '">
-                                <button class="dropdown-item" type="button" >
+                                <button class="dropdown-item" type="button">
                                 <i class="fas fa-pencil-alt"></i>
                                 Edit No Urut & DO
                                 </button>
-                            </a>
-                            ';
+                            </a>';
+                            if($data->cseri <= 0){
+                                $return .= '<hr class="separator">
+                                <a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
+                                    <button class="dropdown-item" type="button">
+                                        <i class="fas fa-times"></i>
+                                        Batal
+                                    </button>
+                                </a>
+                                ';
+                            }
                         }
                     } else if (empty($data->Pesanan->log_id)) {
                         $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'ekatalog']) . '" data-id="' . $data->id . '">
@@ -1368,9 +1669,61 @@ class PenjualanController extends Controller
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
-            $data  = Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get();
+            $data  = Spa::with(['Pesanan.State','Customer'])->addSelect([
+                'ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                }])->orderBy('id', 'DESC')->get();
         } else {
-            $data  = Spa::with(['Pesanan.State','Customer'])->whereHas('pesanan', function ($q) use ($x) {
+            $data  = Spa::with(['Pesanan.State','Customer'])->addSelect([
+                'ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                }])->whereHas('pesanan', function ($q) use ($x) {
                 $q->whereIN('log_id', $x);
             })->orderBy('id', 'DESC')->get();
         }
@@ -1400,32 +1753,52 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                $datas = "";
-                if ($data->log != "batal") {
-                    if (!empty($data->Pesanan->log_id)) {
-                        if ($data->Pesanan->State->nama == "PO") {
-                            $datas .= '<span class="purple-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Penjualan") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Gudang") {
-                            $datas .= '<span class="orange-text badge">';
-                        } else if ($data->Pesanan->State->nama == "QC") {
-                            $datas .= '<span class="yellow-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
-                            $datas .= '<span class="blue-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Kirim") {
-                            $datas .= '<span class="green-text badge">';
+                // $datas = "";
+                // if ($data->log != "batal") {
+                //     if (!empty($data->Pesanan->log_id)) {
+                //         if ($data->Pesanan->State->nama == "PO") {
+                //             $datas .= '<span class="purple-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "Penjualan") {
+                //             $datas .= '<span class="red-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "Gudang") {
+                //             $datas .= '<span class="orange-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "QC") {
+                //             $datas .= '<span class="yellow-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                //             $datas .= '<span class="red-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
+                //             $datas .= '<span class="blue-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "Kirim") {
+                //             $datas .= '<span class="green-text badge">';
+                //         }
+                //         $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                //     } else {
+                //         $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                //     }
+                // } else {
+                //     $datas .= '<span class="red-text badge">Batal</span>';
+                // }
+                // return $datas;
+                    $datas = "";
+                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    if ($data->Pesanan->log_id == "9") {
+                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
+                    } else if($data->log == "batal") {
+                        $datas = '<span class="badge red-text">Batal</span>';
+                    } else{
+                        if($hitung > 0){
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
+                        }else{
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
                         }
-                        $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
-                    } else {
-                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                     }
-                } else {
-                    $datas .= '<span class="red-text badge">Batal</span>';
-                }
-                return $datas;
+                    return $datas;
             })
             ->addColumn('tglpo', function ($data) {
                 if ($data->Pesanan) {
@@ -1478,15 +1851,16 @@ class PenjualanController extends Controller
                                     </button>
                                 </a>
                                 ';
-                                if ($data->Pesanan->State->nama != "Terkirim Sebagian" && $data->Pesanan->State->nama != "Kirim") {
-                                    $return .= '<hr class="separator">
-                                    <a data-toggle="modal" data-jenis="spa" class="batalmodal" data-id="' . $data->id . '">
-                                        <button class="dropdown-item" type="button" >
-                                        <i class="fas fa-times"></i>
-                                        Batal
-                                        </button>
-                                    </a>';
-                                }
+                            }
+                            $jumkirim = ($data->ckirimprd + $data->ckirimpart);
+                            if ($jumkirim <= 0) {
+                                $return .= '<hr class="separator">
+                                <a data-toggle="modal" data-jenis="SPA" class="batalmodal" data-id="' . $data->id . '">
+                                    <button class="dropdown-item" type="button" >
+                                    <i class="fas fa-times"></i>
+                                    Batal
+                                    </button>
+                                </a>';
                             }
                         } else {
                             $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spa']) . '" data-id="' . $data->id . '">
@@ -1532,9 +1906,63 @@ class PenjualanController extends Controller
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
-            $data  = Spb::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get();
+            $data  = Spb::with(['Pesanan.State','Customer'])->addSelect([
+                'ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                }
+                ])->orderBy('id', 'DESC')->get();
         } else {
-            $data  = Spb::with(['Pesanan.State','Customer'])->whereHas('pesanan', function ($q) use ($x) {
+            $data  = Spb::with(['Pesanan.State','Customer'])->addSelect([
+                'ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                }
+                ])->whereHas('pesanan', function ($q) use ($x) {
                 $q->whereIN('log_id', $x);
             })->orderBy('id', 'DESC')->get();
         }
@@ -1552,33 +1980,53 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                $datas = "";
-                if ($data->log != "batal") {
-                    if (!empty($data->Pesanan->log_id)) {
-                        if ($data->Pesanan->State->nama == "Penjualan") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->Pesanan->State->nama == "PO") {
-                            $datas .= '<span class="purple-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Gudang") {
-                            $datas .= '<span class="orange-text badge">';
-                        } else if ($data->Pesanan->State->nama == "QC") {
-                            $datas .= '<span class="yellow-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
-                            $datas .= '<span class="blue-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Kirim") {
-                            $datas .= '<span class="green-text badge">';
-                        }
+                // $datas = "";
+                // if ($data->log != "batal") {
+                //     if (!empty($data->Pesanan->log_id)) {
+                //         if ($data->Pesanan->State->nama == "Penjualan") {
+                //             $datas .= '<span class="red-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "PO") {
+                //             $datas .= '<span class="purple-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "Gudang") {
+                //             $datas .= '<span class="orange-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "QC") {
+                //             $datas .= '<span class="yellow-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
+                //             $datas .= '<span class="red-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
+                //             $datas .= '<span class="blue-text badge">';
+                //         } else if ($data->Pesanan->State->nama == "Kirim") {
+                //             $datas .= '<span class="green-text badge">';
+                //         }
 
-                        $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
-                    } else {
-                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                //         $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                //     } else {
+                //         $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                //     }
+                // } else {
+                //     $datas .= '<span class="red-text badge">Batal</span>';
+                // }
+                // return $datas;
+                $datas = "";
+                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    if ($data->Pesanan->log_id == "9") {
+                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
+                    } else if($data->log == "batal") {
+                        $datas = '<span class="badge red-text">Batal</span>';
+                    } else{
+                        if($hitung > 0){
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
+                        }else{
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
+                        }
                     }
-                } else {
-                    $datas .= '<span class="red-text badge">Batal</span>';
-                }
-                return $datas;
+                    return $datas;
             })
             ->addColumn('nopo', function ($data) {
                 if ($data->Pesanan) {
@@ -1641,16 +2089,17 @@ class PenjualanController extends Controller
                                         </button>
                                     </a>
                                     ';
-                                    if ($data->Pesanan->State->nama != "Terkirim Sebagian" && $data->Pesanan->State->nama != "Kirim") {
-                                        $return .= '<hr class="separator">
-                                        <a data-toggle="modal" data-jenis="spb" class="batalmodal" data-id="' . $data->id . '">
-                                            <button class="dropdown-item" type="button" >
-                                            <i class="fas fa-times"></i>
-                                            Batal
-                                            </button>
-                                        </a>';
-                                    }
                                 }
+                            }
+                            $jumkirim = ($data->ckirimprd + $data->ckirimpart);
+                            if ($jumkirim <= 0) {
+                                $return .= '<hr class="separator">
+                                <a data-toggle="modal" data-jenis="SPA" class="batalmodal" data-id="' . $data->id . '">
+                                    <button class="dropdown-item" type="button" >
+                                    <i class="fas fa-times"></i>
+                                    Batal
+                                    </button>
+                                </a>';
                             }
                         } else {
                             $return .= '<a href="' . route('penjualan.penjualan.edit_ekatalog', [$data->id, 'jenis' => 'spb']) . '" data-id="' . $data->id . '">
@@ -1665,8 +2114,7 @@ class PenjualanController extends Controller
                                 <i class="far fa-trash-alt"></i>
                                 Hapus
                                 </button>
-                            </a>
-                            ';
+                            </a>';
                             }
                         }
                     }
@@ -2721,13 +3169,14 @@ class PenjualanController extends Controller
 
     public function cancel_penjualan($id, $jenis)
     {
-        $data = NULL;
-        if ($jenis == "spa") {
-            $data = Spa::find($id);
-        } else if ($jenis == "spb") {
-            $data = Spb::find($id);
+        $data = "";
+        if ($jenis == "EKAT") {
+            $data = Ekatalog::where('id', $id)->with('Pesanan')->first();
+        } else if ($jenis == "SPA") {
+            $data = Spa::where('id', $id)->with('Pesanan')->first();
+        } else if ($jenis == "SPB") {
+            $data = Spb::where('id', $id)->with('Pesanan')->first();
         }
-
         return view('page.penjualan.penjualan.cancel', ['id' => $id, 'data' => $data]);
     }
 
@@ -3756,6 +4205,23 @@ class PenjualanController extends Controller
                     ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
                     ->whereColumn('e.id', 'ekatalog.id')
                     ->limit(1);
+                    },
+                    'cseri' => function($q){
+                        $q->selectRaw('count(noseri_logistik.id)')
+                        ->from('noseri_logistik')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                        ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                    },
+                    'cjumlah' => function($q){
+                        $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                        ->from('detail_pesanan')
+                        ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                        ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                     }])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
             } else {
                 $data  = Ekatalog::with(['Pesanan.State','Customer'])->addSelect(['tgl_kontrak_custom' => function($q){
@@ -3764,6 +4230,23 @@ class PenjualanController extends Controller
                     ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
                     ->whereColumn('e.id', 'ekatalog.id')
                     ->limit(1);
+                    },
+                    'cseri' => function($q){
+                        $q->selectRaw('count(noseri_logistik.id)')
+                        ->from('noseri_logistik')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                        ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                    },
+                    'cjumlah' => function($q){
+                        $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                        ->from('detail_pesanan')
+                        ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                        ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                     }])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
             }
 
@@ -3785,17 +4268,41 @@ class PenjualanController extends Controller
                 })
                 ->addColumn('status', function ($data) {
                     $datas = "";
-                    if (!empty($data->status)) {
-                        if ($data->status == "batal") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->status == "negosiasi") {
-                            $datas .= '<span class="yellow-text badge">';
-                        } else if ($data->status == "draft") {
-                            $datas .= '<span class="blue-text badge">';
-                        } else if ($data->status == "sepakat") {
-                            $datas .= '<span class="green-text badge">';
+                    if($data->Pesanan->log_id == '7' || $data->Pesanan->log_id == '9'){
+                        if (!empty($data->status)) {
+                            if ($data->status == "batal") {
+                                $datas .= '<span class="red-text badge">';
+                            } else if ($data->status == "negosiasi") {
+                                $datas .= '<span class="yellow-text badge">';
+                            } else if ($data->status == "draft") {
+                                $datas .= '<span class="blue-text badge">';
+                            } else if ($data->status == "sepakat") {
+                                $datas .= '<span class="green-text badge">';
+                            }
+                            $datas .= ucfirst($data->status) . '</span>';
                         }
-                        $datas .= ucfirst($data->status) . '</span>';
+                    } else {
+                        if ($data->status == "batal") {
+                            $datas = '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
+                                <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                                    <i class="fas fa-times"></i>
+                                    Batal
+                                </button>
+                            </a>';
+                        }else{
+                            $hitung = round((($data->cseri / $data->cjumlah) * 100), 0);
+                            if($hitung > 0){
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }else{
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }
+                        }
                     }
                     return $datas;
                 })
@@ -3855,22 +4362,22 @@ class PenjualanController extends Controller
                 })
                 ->addColumn('button', function ($data) {
                     $return = "";
-                    if($data->Pesanan->log_id != "20"){
+                    // if($data->Pesanan->log_id != "20"){
                         $return = '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
                         <button class="btn btn-outline-primary btn-sm" type="button">
                             <i class="fas fa-eye"></i>
                             Detail
                             </button>
                         </a>';
-                    }
-                    else {
-                        $return = '<a data-toggle="modal" data-jenis="ekatalog" class="batalmodal" data-id="' . $data->id . '" >
-                            <button class="btn btn-outline-danger btn-sm" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                                </button>
-                            </a>';
-                    }
+                    // }
+                    // else {
+                    //     $return = '<a data-toggle="modal" data-jenis="ekatalog" class="batalmodal" data-id="' . $data->id . '" >
+                    //         <button class="btn btn-outline-danger btn-sm" type="button">
+                    //             <i class="fas fa-times"></i>
+                    //             Batal
+                    //             </button>
+                    //         </a>';
+                    // }
                     return $return;
                 })
                 ->rawColumns(['button', 'status', 'tgl_kontrak'])
@@ -3878,9 +4385,59 @@ class PenjualanController extends Controller
         }else if($jenis == "spa"){
             $x = explode(',', $value);
             if ($value == 'semua') {
-                $data  = Spa::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get();
+                $data  = Spa::with(['Pesanan.State','Customer'])->addSelect(['ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                }])->orderBy('id', 'DESC')->get();
             } else {
-                $data  = Spa::with(['Pesanan.State','Customer'])->whereHas('pesanan', function ($q) use ($x) {
+                $data  = Spa::with(['Pesanan.State','Customer'])->addSelect(['ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                }])->whereHas('pesanan', function ($q) use ($x) {
                     $q->whereIN('log_id', $x);
                 })->orderBy('id', 'DESC')->get();
             }
@@ -3910,31 +4467,32 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if ($data->log != "batal") {
-                    if (!empty($data->Pesanan->log_id)) {
-                        if ($data->Pesanan->State->nama == "PO") {
-                            $datas .= '<span class="purple-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Penjualan") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Gudang") {
-                            $datas .= '<span class="orange-text badge">';
-                        } else if ($data->Pesanan->State->nama == "QC") {
-                            $datas .= '<span class="yellow-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
-                            $datas .= '<span class="blue-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Kirim") {
-                            $datas .= '<span class="green-text badge">';
+                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    if ($data->Pesanan->log_id == "9") {
+                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
+                    } else{
+                        if($data->log == "batal") {
+                            $datas = '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
+                                    <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                                        <i class="fas fa-times"></i>
+                                        Batal
+                                    </button>
+                                </a>';
+                        } else{
+                            if($hitung > 0){
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }else{
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }
                         }
-                        $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
-                    } else {
-                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                     }
-                } else {
-                    $datas .= '<span class="red-text badge">Batal</span>';
-                }
-                return $datas;
+                    return $datas;
             })
             ->addColumn('tglpo', function ($data) {
                 if ($data->Pesanan) {
@@ -3952,22 +4510,22 @@ class PenjualanController extends Controller
             })
             ->addColumn('button', function ($data) {
                 $return = "";
-                if($data->Pesanan->log_id != "20"){
+                // if($data->Pesanan->log_id != "20"){
                     $return = '<a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
                         <button class="btn btn-outline-primary btn-sm" type="button">
                             <i class="fas fa-eye"></i>
                             Detail
                             </button>
                         </a>';
-                }
-                else{
-                    $return = '<a data-toggle="modal" data-jenis="spa" class="batalmodal" data-id="' . $data->id . '" >
-                        <button class="btn btn-outline-danger btn-sm" type="button">
-                            <i class="fas fa-times"></i>
-                            Batal
-                            </button>
-                        </a>';
-                }
+                // }
+                // else{
+                //     $return = '<a data-toggle="modal" data-jenis="spa" class="batalmodal" data-id="' . $data->id . '" >
+                //         <button class="btn btn-outline-danger btn-sm" type="button">
+                //             <i class="fas fa-times"></i>
+                //             Batal
+                //             </button>
+                //         </a>';
+                // }
                 return $return;
 
             })
@@ -3976,9 +4534,59 @@ class PenjualanController extends Controller
         }else if($jenis == "spb"){
             $x = explode(',', $value);
             if ($value == 'semua') {
-                $data  = Spb::with(['Pesanan.State','Customer'])->orderBy('id', 'DESC')->get();
+                $data  = Spb::with(['Pesanan.State','Customer'])->addSelect(['ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                }])->orderBy('id', 'DESC')->get();
             } else {
-                $data  = Spb::with(['Pesanan.State','Customer'])->whereHas('pesanan', function ($q) use ($x) {
+                $data  = Spb::with(['Pesanan.State','Customer'])->addSelect(['ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                }])->whereHas('pesanan', function ($q) use ($x) {
                     $q->whereIN('log_id', $x);
                 })->orderBy('id', 'DESC')->get();
             }
@@ -4008,31 +4616,32 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if ($data->log != "batal") {
-                    if (!empty($data->Pesanan->log_id)) {
-                        if ($data->Pesanan->State->nama == "PO") {
-                            $datas .= '<span class="purple-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Penjualan") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Gudang") {
-                            $datas .= '<span class="orange-text badge">';
-                        } else if ($data->Pesanan->State->nama == "QC") {
-                            $datas .= '<span class="yellow-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Belum Terkirim") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Terkirim Sebagian") {
-                            $datas .= '<span class="blue-text badge">';
-                        } else if ($data->Pesanan->State->nama == "Kirim") {
-                            $datas .= '<span class="green-text badge">';
-                        }
-                        $datas .= ucfirst($data->Pesanan->State->nama) . '</span>';
+                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    if ($data->Pesanan->log_id == "9") {
+                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                     } else {
-                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                        if($data->log == "batal") {
+                            $datas = '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
+                                    <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                                        <i class="fas fa-times"></i>
+                                        Batal
+                                    </button>
+                                </a>';
+                        } else {
+                            if($hitung > 0){
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }else{
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }
+                        }
                     }
-                } else {
-                    $datas .= '<span class="red-text badge">Batal</span>';
-                }
-                return $datas;
+                    return $datas;
             })
             ->addColumn('tglpo', function ($data) {
                 if ($data->Pesanan) {
@@ -4050,22 +4659,22 @@ class PenjualanController extends Controller
             })
             ->addColumn('button', function ($data) {
                 $return = "";
-                if($data->Pesanan->log_id != "20"){
+                // if($data->Pesanan->log_id != "20"){
                     $return = '<a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
                         <button class="btn btn-outline-primary btn-sm" type="button">
                             <i class="fas fa-eye"></i>
                             Detail
                             </button>
                         </a>';
-                }
-                else{
-                    $return = '<a data-toggle="modal" data-jenis="spb" class="batalmodal" data-id="' . $data->id . '" >
-                        <button class="btn btn-outline-danger btn-sm" type="button">
-                            <i class="fas fa-times"></i>
-                            Batal
-                            </button>
-                        </a>';
-                }
+                // }
+                // else{
+                //     $return = '<a data-toggle="modal" data-jenis="spb" class="batalmodal" data-id="' . $data->id . '" >
+                //         <button class="btn btn-outline-danger btn-sm" type="button">
+                //             <i class="fas fa-times"></i>
+                //             Batal
+                //             </button>
+                //         </a>';
+                // }
                 return $return;
             })
             ->rawColumns(['button', 'status'])

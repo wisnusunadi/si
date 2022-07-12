@@ -1158,7 +1158,7 @@ ul#status {
                 event.preventDefault();
                 var jenis = $(this).attr('data-jenis');
                 var id = $(this).attr("data-id");
-
+                console.log('/penjualan/penjualan/cancel/'+id+'/'+jenis);
                 $.ajax({
                     url: '/penjualan/penjualan/cancel/'+id+'/'+jenis,
                     beforeSend: function() {

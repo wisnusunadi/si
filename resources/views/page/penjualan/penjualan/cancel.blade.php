@@ -64,18 +64,18 @@
             </div>
         </div>
         <div class="card">
-            <form method="POST" action="{{}}">
+            <form method="POST">
                 <div class="card-body">
                     <div class="form-horizontal">
                         <div class="form-group row" for="keterangan">
                             <label for="tanggal" class="col-form-label col-12">Tanggal Batal</label>
                             <div class="col-lg-4 col-md-6 col-sm-6">
-                                <input type="date" class="form-control col-form-label" name="tanggal" id="tanggal">
+                                <input type="date" class="form-control col-form-label" name="tanggal" id="tanggal" @if(Auth::user()->divisi->id == "32") readonly @endif>
                             </div>
                         </div>
                         <div class="form-group" for="keterangan">
                             <label for="" class="col-form-label">Alasan Batal</label>
-                            <textarea class="form-control col-form-label" name="alasan" id="alasan"></textarea>
+                            <textarea class="form-control col-form-label" name="alasan" id="alasan" @if(Auth::user()->divisi->id == "32") readonly @endif></textarea>
                         </div>
                     </div>
                 </div>
