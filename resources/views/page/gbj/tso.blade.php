@@ -490,6 +490,12 @@
                 title: 'Oops...',
                 text: 'Batas Maksimal '+jml+' Barang!'
             })
+        } else if(checked.length < jml){
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Jumlah Nomor Seri Kurang!'
+            })
         } else {
             Swal.fire({
                 position: 'center',
@@ -521,33 +527,6 @@
     $(document).on('click', '.btn-simpan', function(e) {
         e.preventDefault();
 
-        // let a = $('#post_ke').val();
-        // let b = $('#post_deskripsi').val();
-        // let c = $('#post_produk').val();
-        // let d = parseInt($('#post_qty').val());
-        // let stok_gudang = parseInt($('.stok-gudang').val());
-
-        // let ke = [];
-        // let desk = [];
-        // let gdg = [];
-        // let stok_push = [];
-
-        // $('input[name^="ke"]').each(function() {
-        //     ke.push($(this).val());
-        // });
-
-        // $('input[name^="deskripsi"]').each(function() {
-        //     desk.push($(this).val());
-        // });
-
-        // $('input[name^="gdg_brg_jadi_id"]').each(function() {
-        //     gdg.push($(this).val());
-        // });
-
-        // $('input[name^="qty"]').each(function() {
-        //     // seri[id].qty = stok_push;
-        //     stok_push.push($(this).val());
-        // });
 
         Swal.fire({
             title: 'Are you sure?',
