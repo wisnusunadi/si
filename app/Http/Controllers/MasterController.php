@@ -28,8 +28,8 @@ use App\Exports\EkspedisiData;
 use App\Exports\ProdukData;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
-use App\Models\DetailPesananProduk;
 use App\Models\DetailPesananPart;
+use App\Models\DetailPesananProduk;
 use App\Models\Ekspedisi;
 use App\Models\Logistik;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
@@ -789,12 +789,8 @@ class MasterController extends Controller
         //     ]
         // );
         $harga_convert =  str_replace('.', "", $request->harga);
-        $status = "";
-        if($request->jenis_paket == "ekatalog"){
-            $status = "ekat";
-        }else{
-            $status = NULL;
-        }
+
+
         $PenjualanProduk = PenjualanProduk::create([
             'nama' => $request->nama_paket,
             'nama_alias' => $request->nama_alias,
@@ -1263,7 +1259,6 @@ class MasterController extends Controller
         $waktu = Carbon::now();
         return Excel::download(new ProdukData(), 'Daftar Produk ' . $waktu->toDateTimeString() . '.xlsx');
     }
-
     public function get_stok_pesanan(Request $r){
         if($r->jenis == "paket"){
             $data = DetailPesanan::where('id', $r->id)->addSelect(['count_gudang' => function($q){

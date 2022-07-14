@@ -84,16 +84,15 @@
                                     <table class="table table-striped nowraptext" style="text-align:center;" id="showtable">
                                         <thead>
                                             <th>No</th>
-                                            <th>No COO</th>
                                             <th>No Seri</th>
-                                            <th>No SO</th>
+                                            <th>No PO</th>
                                             <th>No AKN</th>
                                             <th>Nama Produk</th>
                                             <th>No AKD</th>
                                             <th>Bulan</th>
                                             <th>Tgl Surat Jalan</th>
                                             <th>Tgl Kirim</th>
-                                            <th>Ttd Terima</th>
+                                            <th>Catatan</th>
                                             <th>Laporan</th>
                                         </thead>
                                         <tbody>
@@ -206,11 +205,9 @@
                 orderable: false,
                 searchable: false
             }, {
-                data: 'id'
-            }, {
                 data: 'seri'
             }, {
-                data: 'so'
+                data: 'po'
             }, {
                 data: 'no_paket'
             }, {
@@ -222,7 +219,7 @@
             }, {
                 data: 'tgl_sj'
             }, {
-                data: 'tgl_kirim'
+                data: 'tglkirimcoo'
             }, {
                 data: 'catatan'
             }, {

@@ -1296,13 +1296,39 @@
             });
 
             $('#no_urut').on('keyup change', function() {
-                if ($(this).val() != "") {
-                    $("#msgno_urut").text("");
-                    $("#no_urut").removeClass('is-invalid');
-                } else if ($(this).val() == "") {
-                    $("#msgno_urut").text("No Urut harus diisi");
-                    $("#no_urut").addClass('is-invalid');
-                }
+                $('#no_urut').on('keyup change', function() {
+            if ($(this).val() != "") {
+                var values = $(this).val();
+                $.ajax({
+                    type: 'POST',
+                    dataType: 'JSON',
+                    url: '/api/penjualan/check_no_urut/' + '{{$e->id}}'+'/' + values,
+                    success: function(data) {
+                        if (data > 0) {
+                            $("#msgno_urut").text("No Urut tidak boleh sama");
+                            $("#no_urut").addClass('is-invalid');
+                            $('#btntambah').attr("disabled", true);
+                        } else {
+                            $("#msgno_urut").text("");
+                            $("#no_urut").removeClass('is-invalid');
+                            checkvalidasi();
+                        }
+                    },
+                    error: function(data) {
+                        $("#msgno_urut").text("No Urut tidak boleh sama");
+                        $("#no_urut").addClass('is-invalid');
+                        $('#btntambah').attr("disabled", true);
+                    }
+                });
+                // $("#msgno_urut").text("");
+                // $("#no_urut").removeClass('is-invalid');
+                checkvalidasi();
+            } else if ($(this).val() == "") {
+                $("#msgno_urut").text("No Urut Harus diisi");
+                $("#no_urut").addClass('is-invalid');
+                $('#btntambah').attr("disabled", true);
+            }
+        });
             });
 
             $('#no_po_akn').on('keyup change', function() {

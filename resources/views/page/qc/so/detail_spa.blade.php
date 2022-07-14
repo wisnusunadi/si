@@ -186,7 +186,7 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div id="status">{!!$status!!}</div>
+                                    <div id="status" class="align-center">{!!$status!!}</div>
                                 </div>
                             </div>
                             <div class="p-2">

@@ -141,17 +141,62 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="tabs-produk" role="tabpanel" aria-labelledby="tabs-produk-tab">
-                        <div class="card removeshadow">
-                            <div class="card-body">
+                        {{-- <div class="card removeshadow"> --}}
+                            {{-- <div class="card-body"> --}}
                                 <div class="row">
-                                    <div class="card-deck w-100">
-                                        <div class="card col-lg-4 col-md-12 mb-3 h-100">
+                                    {{-- <div class="card"> --}}
+                                        <div class="card col-lg-4 col-md-12 removeshadow">
                                             <div class="card-body">
-                                                <h6><b>Status Barang</b></h6>
+                                                <div class="row">
+                                                    <div class="col-lg-12 col-md-4">
+                                                        <canvas id="myChart" width="400" height="400" class="mb-5"></canvas>
+                                                        <div class="card card-secondary card-outline mt-3">
+                                                            <div class="card-body">
+                                                                <h3 class="profile-username text-center">BABY ONE</h3>
+                                                                <ul class="list-group list-group-unbordered mb-3">
+                                                                    <li class="list-group-item">
+                                                                        <span class="align-self-center"><span class="foo bg-chart-light mr-2"></span><span>Belum Proses</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                    </li>
+                                                                    <li class="list-group-item">
+                                                                        <span class="align-self-center"><span class="foo bg-chart-blue mr-2"></span><span>Kirim</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                    </li>
+                                                                </ul>
+
+                                                                {{-- <p class="card-text">FOX BABY BLUE</b></p>
+
+                                                                <p class="card-text d-flex align-items-center">
+                                                                     2<sub> dari 12</sub></span>
+                                                                </p>
+                                                                <p class="card-text d-flex align-items-center">
+
+                                                                </p>
+                                                                <p class="card-text d-flex align-items-center">
+
+                                                                </p>
+                                                                <p class="card-text d-flex align-items-center">
+                                                                    <
+                                                                </p>
+                                                                <p class="card-text d-flex align-items-center">
+                                                                    <span class="foo bg-chart-blue mr-2"></span><span>Kirim</span>
+                                                                </p> --}}
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                    {{-- <h6><b>Status Barang</b></h6>
                                                     <div id="chartproduk"></div>
                                                     <div class="row">
                                                         <div class="col-12">
-                                                            <div class="info-box bg-light removeshadow" {{--style="background-color:#5F7A90; color:white;" --}}>
+                                                            <div class="info-box bg-light removeshadow" style="background-color:#5F7A90; color:white;">
                                                                 <div class="info-box-content">
                                                                     <span class="info-box-text">Produk</span>
                                                                     <span class="info-box-number" id="nama_produk">-</span>
@@ -184,10 +229,10 @@
                                                                 </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div> --}}
                                             </div>
                                         </div>
-                                        <div class="card col-lg-8 col-md-12 h-100">
+                                        <div class="card col-lg-8 col-md-12">
                                             <div class="card-body">
                                                 <h6><b>Detail Produk</b></h6>
                                                 <div class="table-responsive overflowcard">
@@ -323,10 +368,10 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    {{-- </div> --}}
                                 </div>
-                            </div>
-                        </div>
+                            {{-- </div> --}}
+                        {{-- </div> --}}
                     </div>
                 </div>
             </div>

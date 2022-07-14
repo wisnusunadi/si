@@ -1367,7 +1367,60 @@ class QcController extends Controller
                 $q->where('id', $id);
             })->get();
 
-            $ds = Pesanan::find($id);
+            $ds = Pesanan::where('id', $id)->addSelect(['tgl_kontrak' => function($q){
+                $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
+                ->from('ekatalog')
+                ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
+                ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
+                ->limit(1);
+            },
+            'ctfprd' => function($q){
+                $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
+                ->from('t_gbj_noseri')
+                ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
+            },
+            'cqcprd' => function($q){
+                $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
+                    ->from('noseri_detail_pesanan')
+                    ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->where('noseri_detail_pesanan.status', 'ok')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+            },
+            'ctfpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah), 0)')
+                ->from('detail_pesanan_part')
+                ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+            },
+            'cqcpart' => function($q){
+                $q->selectRaw('coalesce(sum(outgoing_pesanan_part.jumlah_ok), 0)')
+                ->from('outgoing_pesanan_part')
+                ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                ->where('detail_pesanan_part.pesanan_id', 'pesanan.id');
+            },'clogprd' => function($q){
+                $q->selectRaw('coalesce(count(noseri_logistik.id), 0)')
+                   ->from('noseri_logistik')
+                   ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                   ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                   ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                   ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                   ->limit(1);
+            },
+            'clogpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                   ->from('detail_logistik_part')
+                   ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                   ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                   ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                   ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
+                   ->limit(1);
+            }])->first();
 
 
             $jumlah = 0;
@@ -1376,50 +1429,72 @@ class QcController extends Controller
             foreach ($detail_pesanan as $d) {
                 $detail_id[] = $d->id;
                 $z[] = $d->jumlah;
-                foreach ($d->penjualanproduk->produk as $l) {
-                    $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
-                }
+                // foreach ($d->penjualanproduk->produk as $l) {
+                //     $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                // }
             }
 
-            if (count($ds->DetailPesanan) > 0 && count($ds->DetailPesananPart) <= 0) {
-                if ($ds->getJumlahCek() == 0) {
-                    $status = '<span class="badge red-text">Belum diuji</span>';
-                } else {
-                    if ($ds->getJumlahCek() >= $ds->getJumlahPesanan()) {
-                        $status =  '<span class="badge green-text">Selesai</span>';
-                    } else {
-                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            // if (count($ds->DetailPesanan) > 0 && count($ds->DetailPesananPart) <= 0) {
+            //     if ($ds->getJumlahCek() == 0) {
+            //         $status = '<span class="badge red-text">Belum diuji</span>';
+            //     } else {
+            //         if ($ds->getJumlahCek() >= $ds->getJumlahPesanan()) {
+            //             $status =  '<span class="badge green-text">Selesai</span>';
+            //         } else {
+            //             $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            //         }
+            //     }
+            // } else if (count($ds->DetailPesanan) <= 0 && count($ds->DetailPesananPart) > 0) {
+            //     if ($ds->getJumlahCekPart('ok') == 0) {
+            //         $status = '<span class="badge red-text">Belum diuji</span>';
+            //     } else {
+            //         if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa()) {
+            //             $status =  '<span class="badge green-text">Selesai</span>';
+            //         } else {
+            //             $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            //         }
+            //     }
+            // } else if (count($ds->DetailPesanan) > 0 && count($ds->DetailPesananPart) > 0) {
+            //     if ($ds->getJumlahCek() == 0 && $ds->getJumlahCekPart('ok') == 0) {
+            //         $status = '<span class="badge red-text">Belum diuji</span>';
+            //     } else {
+            //         if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa())) {
+            //             $status =  '<span class="badge green-text">Selesai</span>';
+            //         } else {
+            //             $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            //         }
+            //     }
+            // }
+                $status = "";
+                $res = $ds->ctfprd + $ds->ctfpart;
+                if($res > 0){
+                    $hitung = round(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100), 0);
+                    if($hitung > 0){
+                    $status = '<div class="progress progresscust">
+                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                    </div>
+                    <small class="text-muted">Selesai</small>';
+                    }else{
+                        $status = '<div class="progress progresscust">
+                        <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                    </div>
+                    <small class="text-muted">Selesai</small>';
                     }
+                }else{
+                    $status = '<div class="progress progresscust">
+                        <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$res.'%</div>
+                    </div>
+                    <small class="text-muted">Selesai</small>';
                 }
-            } else if (count($ds->DetailPesanan) <= 0 && count($ds->DetailPesananPart) > 0) {
-                if ($ds->getJumlahCekPart('ok') == 0) {
-                    $status = '<span class="badge red-text">Belum diuji</span>';
-                } else {
-                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa()) {
-                        $status =  '<span class="badge green-text">Selesai</span>';
-                    } else {
-                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                    }
-                }
-            } else if (count($ds->DetailPesanan) > 0 && count($ds->DetailPesananPart) > 0) {
-                if ($ds->getJumlahCek() == 0 && $ds->getJumlahCekPart('ok') == 0) {
-                    $status = '<span class="badge red-text">Belum diuji</span>';
-                } else {
-                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa())) {
-                        $status =  '<span class="badge green-text">Selesai</span>';
-                    } else {
-                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                    }
-                }
-            }
 
-            foreach ($data as $d) {
+                $param = "";
+
                 $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                $tgl_parameter = $this->getHariBatasKontrak($d->tgl_kontrak, $d->provinsi->status)->format('Y-m-d');
+                $tgl_parameter = $ds->tgl_kontrak;
 
-                if ($tgl_sekarang < $tgl_parameter) {
+                if ($tgl_sekarang <= $tgl_parameter) {
                     $to = Carbon::now();
-                    $from = $this->getHariBatasKontrak($d->tgl_kontrak, $d->provinsi->status);
+                    $from = $tgl_parameter;
                     $hari = $to->diffInDays($from);
 
                     if ($hari > 7) {
@@ -1429,22 +1504,65 @@ class QcController extends Controller
                     } else {
                         $param = '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Batas Kontrak Habis</small>';
                     }
-                } elseif ($tgl_sekarang == $tgl_parameter) {
-                    $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas Pengujian</small>';
                 } else {
                     $to = Carbon::now();
-                    $from = $this->getHariBatasKontrak($d->tgl_kontrak, $d->provinsi->status);
+                    $from = $tgl_parameter;
                     $hari = $to->diffInDays($from);
                     $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
                 }
-            }
             return view('page.qc.so.detail_ekatalog', ['id' => $id, 'data' => $data, 'detail_id' => $detail_id, 'param' => $param, 'status' => $status]);
         } elseif ($value == 'spa') {
             $data = Spa::whereHas('Pesanan', function ($q) use ($id) {
                 $q->where('id', $id);
             })->get();
 
-            $ds = Pesanan::find($id);
+            $ds = Pesanan::where('id', $id)->addSelect(['ctfprd' => function($q){
+                $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
+                ->from('t_gbj_noseri')
+                ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
+            },
+            'cqcprd' => function($q){
+                $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
+                    ->from('noseri_detail_pesanan')
+                    ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->where('noseri_detail_pesanan.status', 'ok')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+            },
+            'ctfpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah), 0)')
+                ->from('detail_pesanan_part')
+                ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+            },
+            'cqcpart' => function($q){
+                $q->selectRaw('coalesce(sum(outgoing_pesanan_part.jumlah_ok), 0)')
+                ->from('outgoing_pesanan_part')
+                ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                ->where('detail_pesanan_part.pesanan_id', 'pesanan.id');
+            },'clogprd' => function($q){
+                $q->selectRaw('coalesce(count(noseri_logistik.id), 0)')
+                   ->from('noseri_logistik')
+                   ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                   ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                   ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                   ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                   ->limit(1);
+            },
+            'clogpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                   ->from('detail_logistik_part')
+                   ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                   ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                   ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                   ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
+                   ->limit(1);
+            }])->first();
             $detail_pesanan  = DetailPesanan::whereHas('Pesanan', function ($q) use ($id) {
                 $q->where('id', $id);
             })->get();
@@ -1455,42 +1573,64 @@ class QcController extends Controller
             foreach ($detail_pesanan as $d) {
                 $detail_id[] = $d->id;
                 $z[] = $d->jumlah;
-                foreach ($d->penjualanproduk->produk as $l) {
-                    $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
-                }
+                // foreach ($d->penjualanproduk->produk as $l) {
+                //     $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                // }
             }
 
-            if (isset($ds->DetailPesanan) && !isset($ds->DetailPesananPart)) {
-                if ($ds->getJumlahCek() == 0) {
-                    $status = '<span class="badge red-text">Belum diuji</span>';
-                } else {
-                    if ($ds->getJumlahCek() >= $ds->getJumlahPesanan()) {
-                        $status =  '<span class="badge green-text">Selesai</span>';
-                    } else {
-                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            // if (isset($ds->DetailPesanan) && !isset($ds->DetailPesananPart)) {
+            //     if ($ds->getJumlahCek() == 0) {
+            //         $status = '<span class="badge red-text">Belum diuji</span>';
+            //     } else {
+            //         if ($ds->getJumlahCek() >= $ds->getJumlahPesanan()) {
+            //             $status =  '<span class="badge green-text">Selesai</span>';
+            //         } else {
+            //             $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            //         }
+            //     }
+            // } else if (!isset($ds->DetailPesanan) && isset($ds->DetailPesananPart)) {
+            //     if ($ds->getJumlahCekPart('ok') == 0) {
+            //         $status = '<span class="badge red-text">Belum diuji</span>';
+            //     } else {
+            //         if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa()) {
+            //             $status =  '<span class="badge green-text">Selesai</span>';
+            //         } else {
+            //             $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            //         }
+            //     }
+            // } else if (isset($ds->DetailPesanan) > 0 && isset($ds->DetailPesananPart) > 0) {
+            //     if ($ds->getJumlahCek() == 0 && $ds->getJumlahCekPart('ok') == 0) {
+            //         $status = '<span class="badge red-text">Belum diuji</span>';
+            //     } else {
+            //         if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa())) {
+            //             $status =  '<span class="badge green-text">Selesai</span>';
+            //         } else {
+            //             $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            //         }
+            //     }
+            // }
+            $status = "";
+                $res = $ds->ctfprd + $ds->ctfpart;
+                if($res > 0){
+                    $hitung = round(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100), 0);
+                    if($hitung > 0){
+                    $status = '<div class="progress progresscust">
+                        <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                    </div>
+                    <small class="text-muted">Selesai</small>';
+                    }else{
+                        $status = '<div class="progress progresscust">
+                        <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                    </div>
+                    <small class="text-muted">Selesai</small>';
                     }
+                }else{
+                    $status = '<div class="progress progresscust">
+                        <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$res.'%</div>
+                    </div>
+                    <small class="text-muted">Selesai</small>';
                 }
-            } else if (!isset($ds->DetailPesanan) && isset($ds->DetailPesananPart)) {
-                if ($ds->getJumlahCekPart('ok') == 0) {
-                    $status = '<span class="badge red-text">Belum diuji</span>';
-                } else {
-                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa()) {
-                        $status =  '<span class="badge green-text">Selesai</span>';
-                    } else {
-                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                    }
-                }
-            } else if (isset($ds->DetailPesanan) > 0 && isset($ds->DetailPesananPart) > 0) {
-                if ($ds->getJumlahCek() == 0 && $ds->getJumlahCekPart('ok') == 0) {
-                    $status = '<span class="badge red-text">Belum diuji</span>';
-                } else {
-                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa())) {
-                        $status =  '<span class="badge green-text">Selesai</span>';
-                    } else {
-                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                    }
-                }
-            }
+
 
             return view('page.qc.so.detail_spa', ['id' => $id, 'data' => $data,  'detail_id' => $detail_id, 'status' => $status]);
         } else {
@@ -1498,7 +1638,56 @@ class QcController extends Controller
                 $q->where('id', $id);
             })->get();
 
-            $ds = Pesanan::find($id);
+            $ds = Pesanan::where('id', $id)->addSelect(['ctfprd' => function($q){
+                $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
+                ->from('t_gbj_noseri')
+                ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
+            },
+            'cqcprd' => function($q){
+                $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
+                    ->from('noseri_detail_pesanan')
+                    ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->where('noseri_detail_pesanan.status', 'ok')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+            },
+            'ctfpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah), 0)')
+                ->from('detail_pesanan_part')
+                ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+            },
+            'cqcpart' => function($q){
+                $q->selectRaw('coalesce(sum(outgoing_pesanan_part.jumlah_ok), 0)')
+                ->from('outgoing_pesanan_part')
+                ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                ->where('detail_pesanan_part.pesanan_id', 'pesanan.id');
+            },'clogprd' => function($q){
+                $q->selectRaw('coalesce(count(noseri_logistik.id), 0)')
+                   ->from('noseri_logistik')
+                   ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                   ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                   ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                   ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                   ->limit(1);
+            },
+            'clogpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                   ->from('detail_logistik_part')
+                   ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                   ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                   ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                   ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
+                   ->limit(1);
+            }])->first();
+            $detail_pesanan  = DetailPesanan::whereHas('Pesanan', function ($q) use ($id) {
+                $q->where('id', $id);
+            })->get();
 
             $detail_pesanan  = DetailPesanan::whereHas('Pesanan', function ($q) use ($id) {
                 $q->where('id', $id);
@@ -1510,43 +1699,32 @@ class QcController extends Controller
             foreach ($detail_pesanan as $d) {
                 $detail_id[] = $d->id;
                 $z[] = $d->jumlah;
-                foreach ($d->penjualanproduk->produk as $l) {
-                    $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
-                }
+                // foreach ($d->penjualanproduk->produk as $l) {
+                //     $jumlah = $jumlah + ($d->jumlah * $l->pivot->jumlah);
+                // }
             }
 
-            if (isset($ds->DetailPesanan) && !isset($ds->DetailPesananPart)) {
-                if ($ds->getJumlahCek() == 0) {
-                    $status = '<span class="badge red-text">Belum diuji</span>';
-                } else {
-                    if ($ds->getJumlahCek() >= $ds->getJumlahPesanan()) {
-                        $status =  '<span class="badge green-text">Selesai</span>';
-                    } else {
-                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
+            $status = "";
+                $res = $ds->ctfprd + $ds->ctfpart;
+                if($res > 0){
+                    $hitung = round(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100), 0);
+                    if($hitung > 0){
+                    $status = '<div class="progress progresscust">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                        </div>
+                        <small class="text-muted">Selesai</small>';
+                    }else{
+                        $status = '<div class="progress progresscust">
+                            <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                        </div>
+                        <small class="text-muted">Selesai</small>';
                     }
+                }else{
+                    $status = '<div class="progress progresscust">
+                        <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$res.'%</div>
+                    </div>
+                    <small class="text-muted">Selesai</small>';
                 }
-            } else if (!isset($ds->DetailPesanan) && isset($ds->DetailPesananPart)) {
-                if ($ds->getJumlahCekPart('ok') == 0) {
-                    $status = '<span class="badge red-text">Belum diuji</span>';
-                } else {
-                    if ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa()) {
-                        $status =  '<span class="badge green-text">Selesai</span>';
-                    } else {
-                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                    }
-                }
-            } else if (isset($ds->DetailPesanan) && isset($ds->DetailPesananPart)) {
-                if ($ds->getJumlahCek() == 0 && $ds->getJumlahCekPart('ok') == 0) {
-                    $status = '<span class="badge red-text">Belum diuji</span>';
-                } else {
-                    if (($ds->getJumlahCek() >= $ds->getJumlahPesanan()) && ($ds->getJumlahCekPart('ok') >= $ds->getJumlahPesananPartNonJasa())) {
-                        $status =  '<span class="badge green-text">Selesai</span>';
-                    } else {
-                        $status =  '<span class="badge yellow-text">Sedang Berlangsung</span>';
-                    }
-                }
-            }
-
             return view('page.qc.so.detail_spb', ['id' => $id, 'data' => $data, 'detail_id' => $detail_id, 'status' => $status]);
         }
     }

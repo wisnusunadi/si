@@ -1353,7 +1353,23 @@
                     $("#provinsi").attr('disabled', true);
                     $("#provinsi").empty().trigger('change')
                     $('#isi_produk_input').removeClass('hide');
-                } else {
+                }
+                else if ($(this).val() == "batal") {
+                    $('#checkbox_nopaket').addClass('hide');
+                    $('#isi_nopaket').prop("checked", false);
+                    $('#isi_nopaket').val("true");
+                    $('#no_paket').attr('readonly', false);
+                    $("#produktable tbody").empty();
+                    $('#produktable tbody').append(trproduktable());
+                    numberRowsProduk($("#produktable"));
+                    $("#totalhargaprd").text("Rp. 0");
+                    $("#dataproduk").addClass("hide");
+                    $("#batas_kontrak").attr('disabled', true);
+                    $("#provinsi").attr('disabled', true);
+                    $("#provinsi").empty().trigger('change')
+                    $('#isi_produk_input').removeClass('hide');
+                }
+                 else {
                     $('#checkbox_nopaket').addClass('hide');
                     $('#isi_nopaket').prop("checked", false);
                     $('#isi_nopaket').val("true");

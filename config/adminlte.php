@@ -237,7 +237,7 @@ return [
             'text'        => 'Beranda',
             'url'         => '/qc/dashboard',
             'icon'        => 'nav-icon fa fa-home',
-            'auth'        => [23]
+            'auth'        => [23, 34]
         ],
         // PPIC (24)
         [
@@ -952,41 +952,41 @@ return [
         // ],
         [
             'header' => 'DATA',
-            'auth' => [23]
+            'auth' => [23, 34]
         ],
         [
             'text' => 'Customer',
             'icon' => 'fas fa-users',
             'url' => '/penjualan/customer/show',
-            'auth' => [23],
+            'auth' => [23, 34],
         ],
         [
             'header' => 'OUTGOING',
-            'auth' => [23]
+            'auth' => [23, 34]
         ],
         [
             'text' => 'Sales Order',
             'icon' => 'fas fa-clipboard-check',
             'url' => '/qc/so/show',
-            'auth' => [23],
+            'auth' => [23, 34],
         ],
         [
             'text' => 'Riwayat Pengujian',
             'icon' => 'fas fa-history',
             'url' => '/qc/so/riwayat/show',
-            'auth' => [23],
+            'auth' => [23, 34],
         ],
         [
             'text' => 'Laporan',
             'icon' => 'fas fa-book-open',
             'url' => '/qc/so/laporan/show',
-            'auth' => [23],
+            'auth' => [23, 34],
         ],
         [
             'text' => 'Lacak',
             'url'  => '/penjualan/lacak/show',
             'icon' => 'fas fa-search',
-            'auth' => [23]
+            'auth' => [23, 34]
         ],
 
         [

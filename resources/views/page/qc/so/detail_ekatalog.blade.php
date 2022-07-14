@@ -25,6 +25,9 @@
 
 @section('adminlte_css')
 <style>
+    .progresscust{
+        width: 100px;
+    }
     .alert-danger{
         color: #a94442;
         background-color: #f2dede;
@@ -223,7 +226,7 @@
                             <div class="p-2">
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div>{!!$status!!}</div>
+                                    <div class="align-center">{!!$status!!}</div>
                                 </div>
                             </div>
                         </div>
