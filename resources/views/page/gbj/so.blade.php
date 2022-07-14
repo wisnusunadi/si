@@ -468,7 +468,8 @@
             $('.cb-child-so').prop('checked', isChecked)
         });
 
-        $('#belum-dicek').DataTable({
+        if (auth !== 31) {
+            $('#belum-dicek').DataTable({
             destroy: true,
             processing: true,
             serverSide: false,
@@ -531,6 +532,7 @@
                 { "width": "10%", "targets": 5 }
             ]
         });
+        }
 
         $('#batal-po').DataTable({
             destroy: true,
