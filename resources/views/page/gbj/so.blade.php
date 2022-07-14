@@ -443,7 +443,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fas fa-times"></i> Tutup</button>
                 @if(Auth::user()->divisi_id !== 31)
-                <button type="button" class="btn btn-dark btn-sm float-right"><i class="fas fa-check"></i> Terimas</button>
+                <button type="button" class="btn btn-dark btn-sm float-right"><i class="fas fa-check"></i> Terima</button>
                 @endif
             </div>
         </div>
