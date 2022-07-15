@@ -295,25 +295,34 @@ class ProduksiController extends Controller
     function getSOCek()
     {
         try {
-            $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10])->get());
-            $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
-            $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
+            $datax = DB::table(DB::raw('detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
+            'ms.nama as log_nama',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereNotIn('p.log_id',[7,10])
+            ->groupBy('p.id')
+            ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) = ?',[0])
+            ->get();
 
-            $data = $Ekatalog->merge($Spa)->merge($Spb);
-            $x = [];
-            foreach($data as $d) {
-                $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml');
-                $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml_prd');
-                if ($sumcek->sum() == $sumprd->sum()) {
-                    $a = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get();
-                    foreach ($a as $aa) {
-                        $x[] = $aa->pesananid;
-                    }
-                }
-
-            }
-            $datax = Pesanan::whereIn('id', $x)->get();
-            // return $data;
             return datatables()->of($datax)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {
@@ -324,72 +333,32 @@ class ProduksiController extends Controller
                 })
                 ->addColumn('logs', function($d) {
                     if ($d->log_id == 9) {
-                        $ax = "<span class='badge badge-pill badge-secondary'>".$d->log->nama."</span>";
+                        $ax = "<span class='badge badge-pill badge-secondary'>".$d->log_nama."</span>";
                     } else if ($d->log_id == 6) {
-                        $ax = "<span class='badge badge-pill badge-warning'>".$d->log->nama."</span>";
+                        $ax = "<span class='badge badge-pill badge-warning'>".$d->log_nama."</span>";
                     } elseif ($d->log_id == 8) {
-                        $ax = "<span class='badge badge-pill badge-info'>".$d->log->nama."</span>";
+                        $ax = "<span class='badge badge-pill badge-info'>".$d->log_nama."</span>";
                     } elseif ($d->log_id == 11) {
                         $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
                     } else {
-                        $ax = "<span class='badge badge-pill badge-danger'>".$d->log->nama."</span>";
+                        $ax = "<span class='badge badge-pill badge-danger'>".$d->log_nama."</span>";
                     }
 
                     return $ax;
                 })
                 ->addColumn('nama_customer', function ($data) {
-                    $name = explode('/', $data->so);
-                    for ($i = 1; $i < count($name); $i++) {
-                        if ($name[1] == 'EKAT') {
-                            return $data->Ekatalog->Customer->nama;
-                        } elseif ($name[1] == 'SPA') {
-                            return $data->Spa->Customer->nama;
-                        } elseif ($name[1] == 'SPB') {
-                            return $data->Spb->Customer->nama;
-                        }
-                    }
+                    return $data->divisi;
                 })
                 ->addColumn('batas_out', function ($d) {
-                    if (isset($d->Ekatalog->tgl_kontrak)) {
-                        if (isset($d->Ekatalog->provinsi_id)) {
-                            if ($d->Ekatalog->Provinsi->status == 1) {
-                                return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
-                            }
-
-                            if ($d->Ekatalog->Provinsi->status == 2) {
-                                return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
-                            }
-                        } else {
-                            return '-';
-                        }
-
+                    if ($d->batas) {
+                        return $d->batas;
                     } else {
                         return '-';
-                    }
-                })
-                ->addColumn('status_prd', function ($data) {
-                    if ($data->log_id) {
-                        return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('status1', function ($data) {
-                    $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
-                    $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
-                    if ($sumcek->sum() == $sumprd->sum()) {
-                        return '<span class="badge badge-primary">Sudah Dicek</span>';
-                    } elseif ($sumcek->sum() == 0) {
-                        return '<span class="badge badge-danger">Belum Dicek</span>';
-                    } elseif ($sumcek->sum() != $sumprd->sum()) {
-                        return '<span class="badge badge-warning">Pengecekan Berlangsung</span>';
                     }
                 })
                 ->addColumn('action', function ($data) {
                     $x = explode('/', $data->so);
-                    $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
-                    $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
-                    if ($sumcek->sum() == $sumprd->sum()) {
+                    if ($data->total_cek == $data->total_uncek) {
                         for ($i = 1; $i < count($x); $i++) {
                             if ($x[1] == 'EKAT') {
                                 return '
@@ -417,7 +386,19 @@ class ProduksiController extends Controller
                                 }
                             }
                         }
-                    } elseif ($sumcek->sum() != $sumprd->sum()) {
+                    } elseif ($data->total_cek != $data->total_uncek) {
+                        if($data->log_id == 20) {
+                            for ($i = 1; $i < count($x); $i++) {
+                                if ($x[1] == 'EKAT') {
+                                    return '';
+                                } elseif ($x[1] == 'SPA') {
+                                    return '';
+                                } elseif ($x[1] == 'SPB') {
+                                    return '';
+                                }
+                            }
+                        }
+
                         for ($i = 1; $i < count($x); $i++) {
                             if ($x[1] == 'EKAT') {
                                 return '
@@ -434,18 +415,6 @@ class ProduksiController extends Controller
                                         <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
                                         <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
                                         ';
-                            }
-                        }
-
-                        if($data->log_id == 20) {
-                            for ($i = 1; $i < count($x); $i++) {
-                                if ($x[1] == 'EKAT') {
-                                    return '';
-                                } elseif ($x[1] == 'SPA') {
-                                    return '';
-                                } elseif ($x[1] == 'SPB') {
-                                    return '';
-                                }
                             }
                         }
                     } else {
@@ -468,24 +437,6 @@ class ProduksiController extends Controller
                                             ';
                                 }
                             }
-                        }
-                    }
-                })
-                ->addColumn('button_prd', function ($d) {
-                    $x = explode('/', $d->so);
-                    for ($i = 1; $i < count($x); $i++) {
-                        if ($x[1] == 'EKAT') {
-                            return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
-                                <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-                            </a>';
-                        } elseif ($x[1] == 'SPA') {
-                            return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spa"  data-id="' . $d->id . '">
-                                <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-                            </a>';
-                        } elseif ($x[1] == 'SPB') {
-                            return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spb"  data-id="' . $d->id . '">
-                                <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-                            </a>';
                         }
                     }
                 })
@@ -503,23 +454,34 @@ class ProduksiController extends Controller
     function getSOCekBelum()
     {
         try {
-            $Ekatalog = collect(Pesanan::has('Ekatalog')->whereNotIn('log_id', [7, 10])->get());
-            $Spa = collect(Pesanan::has('Spa')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
-            $Spb = collect(Pesanan::has('Spb')->whereNotIn('log_id', [7, 10])->Has('DetailPesanan')->get());
-
-            $data = $Ekatalog->merge($Spa)->merge($Spb);
-            $x = [];
-            foreach($data as $d) {
-                $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml');
-                $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get()->pluck('jml_prd');
-                if ($sumcek->sum() == 0 || $sumcek->sum() != $sumprd->sum()) {
-                    $a = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $d->id)->get();
-                    foreach ($a as $aa) {
-                        $x[] = $aa->pesananid;
-                    }
-                }
-            }
-            $datax = Pesanan::whereIn('id', $x)->get();
+            $datax = DB::table(DB::raw('detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
+            'ms.nama as log_nama',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereNotIn('p.log_id',[7,10])
+            ->groupBy('p.id')
+            ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?',[0])
+            ->havingRaw('sum(case when dpp.status_cek is null then 1 else 0 end) != ?',['sum(case when dpp.status_cek = 4 then 1 else 0 end)'])
+            ->get();
             return datatables()->of($datax)
                 ->addIndexColumn()
                 ->addColumn('so', function ($data) {
@@ -530,72 +492,32 @@ class ProduksiController extends Controller
                 })
                 ->addColumn('logs', function($d) {
                     if ($d->log_id == 9) {
-                        $ax = "<span class='badge badge-pill badge-secondary'>".$d->log->nama."</span>";
+                        $ax = "<span class='badge badge-pill badge-secondary'>".$d->log_nama."</span>";
                     } else if ($d->log_id == 6) {
-                        $ax = "<span class='badge badge-pill badge-warning'>".$d->log->nama."</span>";
+                        $ax = "<span class='badge badge-pill badge-warning'>".$d->log_nama."</span>";
                     } elseif ($d->log_id == 8) {
-                        $ax = "<span class='badge badge-pill badge-info'>".$d->log->nama."</span>";
+                        $ax = "<span class='badge badge-pill badge-info'>".$d->log_nama."</span>";
                     } elseif ($d->log_id == 11) {
                         $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
                     } else {
-                        $ax = "<span class='badge badge-pill badge-danger'>".$d->log->nama."</span>";
+                        $ax = "<span class='badge badge-pill badge-danger'>".$d->log_nama."</span>";
                     }
 
                     return $ax;
                 })
                 ->addColumn('nama_customer', function ($data) {
-                    $name = explode('/', $data->so);
-                    for ($i = 1; $i < count($name); $i++) {
-                        if ($name[1] == 'EKAT') {
-                            return $data->Ekatalog->Customer->nama;
-                        } elseif ($name[1] == 'SPA') {
-                            return $data->Spa->Customer->nama;
-                        } elseif ($name[1] == 'SPB') {
-                            return $data->Spb->Customer->nama;
-                        }
-                    }
+                    return $data->divisi;
                 })
                 ->addColumn('batas_out', function ($d) {
-                    if (isset($d->Ekatalog->tgl_kontrak)) {
-                        if (isset($d->Ekatalog->provinsi_id)) {
-                            if ($d->Ekatalog->Provinsi->status == 1) {
-                                return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY');
-                            }
-
-                            if ($d->Ekatalog->Provinsi->status == 2) {
-                                return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY');
-                            }
-                        } else {
-                            return '-';
-                        }
-
+                    if ($d->batas) {
+                        return $d->batas;
                     } else {
                         return '-';
-                    }
-                })
-                ->addColumn('status_prd', function ($data) {
-                    if ($data->log_id) {
-                        return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('status1', function ($data) {
-                    $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
-                    $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
-                    if ($sumcek->sum() == $sumprd->sum()) {
-                        return '<span class="badge badge-primary">Sudah Dicek</span>';
-                    } elseif ($sumcek->sum() == 0) {
-                        return '<span class="badge badge-danger">Belum Dicek</span>';
-                    } elseif ($sumcek->sum() != $sumprd->sum()) {
-                        return '<span class="badge badge-warning">Pengecekan Berlangsung</span>';
                     }
                 })
                 ->addColumn('action', function ($data) {
                     $x = explode('/', $data->so);
-                    $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
-                    $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
-                    if ($sumcek->sum() == $sumprd->sum()) {
+                    if ($data->total_cek == $data->total_uncek) {
                         for ($i = 1; $i < count($x); $i++) {
                             if ($x[1] == 'EKAT') {
                                 return '
@@ -623,7 +545,7 @@ class ProduksiController extends Controller
                                 }
                             }
                         }
-                    } elseif ($sumcek->sum() != $sumprd->sum()) {
+                    } elseif ($data->total_cek != $data->total_uncek) {
                         if($data->log_id == 20) {
                             for ($i = 1; $i < count($x); $i++) {
                                 if ($x[1] == 'EKAT') {
@@ -677,28 +599,13 @@ class ProduksiController extends Controller
                         }
                     }
                 })
-                ->addColumn('button_prd', function ($d) {
-                    $x = explode('/', $d->so);
-                    for ($i = 1; $i < count($x); $i++) {
-                        if ($x[1] == 'EKAT') {
-                            return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="ekatalog"  data-id="' . $d->id . '">
-                                <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-                            </a>';
-                        } elseif ($x[1] == 'SPA') {
-                            return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spa"  data-id="' . $d->id . '">
-                                <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-                            </a>';
-                        } elseif ($x[1] == 'SPB') {
-                            return '<a data-toggle="modal" data-target="#detailproduk" class="detailproduk" data-attr="" data-value="spb"  data-id="' . $d->id . '">
-                                <button class="btn btn-outline-info viewProduk"><i class="far fa-eye"></i>&nbsp;Detail</button>
-                            </a>';
-                        }
-                    }
-                })
                 ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd', 'logs'])
                 ->make(true);
-        } catch (\Throwable $th) {
-            //throw $th;
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
         }
 
 
@@ -864,37 +771,39 @@ class ProduksiController extends Controller
     function getSOProduksi()
     {
         try {
-            $Ekatalog = collect(Pesanan::has('Ekatalog')->get());
-        $Spa = collect(Pesanan::has('Spa')->get());
-        $Spb = collect(Pesanan::has('Spb')->get());
-
-        $data = $Ekatalog->merge($Spa)->merge($Spb);
+            $data = Pesanan::
+                    select('pesanan.so', 'pesanan.no_po', 'pesanan.log_id', 'ms.nama as log_nama',
+                    DB::raw("case
+                    when substring_index(substring_index(pesanan.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+                    when substring_index(substring_index(pesanan.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+                    when substring_index(substring_index(pesanan.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+                    when pesanan.so is null then c_ekat.nama
+                end as divisi"), 'e.tgl_kontrak', 'pesanan.id', 'pesanan.tgl_po')
+                    ->leftJoin('m_state as ms', 'ms.id', '=', 'pesanan.log_id')
+                    ->leftJoin('ekatalog as e', 'e.pesanan_id', '=', 'pesanan.id')
+                    ->leftJoin('customer as c_ekat', 'c_ekat.id', '=', 'e.customer_id')
+                    ->leftJoin('spa', 'spa.pesanan_id', '=', 'pesanan.id')
+                    ->leftJoin('customer as c_spa', 'c_spa.id', '=', 'spa.customer_id')
+                    ->leftJoin('spb', 'spb.pesanan_id', '=', 'pesanan.id')
+                    ->leftJoin('customer as c_spb', 'c_spb.id', '=', 'spb.customer_id')
+                    ->leftJoin('provinsi as prov', 'prov.id', '=', 'e.provinsi_id')
+                    ->orderBy('pesanan.id')
+                    ->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
                 return $data->so;
             })
+            ->addColumn('tgl_po', function ($data) {
+                return $data->tgl_po;
+            })
             ->addColumn('nama_customer', function ($data) {
-                $name = explode('/', $data->so);
-                for ($i = 1; $i < count($name); $i++) {
-                    if ($name[1] == 'EKAT') {
-                        return $data->Ekatalog->Customer->nama;
-                    } elseif ($name[1] == 'SPA') {
-                        return $data->Spa->Customer->nama;
-                    } elseif ($name[1] == 'SPB') {
-                        return $data->Spb->Customer->nama;
-                    } else {
-                    }
-                }
-
-                if (empty($data->so)) {
-                    return $data->Ekatalog->Customer->nama;
-                }
+                return $data->divisi;
             })
             ->addColumn('batas_out', function ($d) {
-                if (isset($d->Ekatalog->tgl_kontrak)) {
-                    return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->isoFormat('D MMMM YYYY');
+                if (isset($d->tgl_kontrak)) {
+                    return Carbon::createFromFormat('Y-m-d', $d->tgl_kontrak)->isoFormat('D MMMM YYYY');
                 } else {
                     return '-';
                 }
@@ -902,59 +811,9 @@ class ProduksiController extends Controller
             ->addColumn('status_prd', function ($data) {
                 if ($data->log_id) {
                     # code...
-                    return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+                    return '<span class="badge badge-warning">' . $data->log_nama . '</span>';
                 } else {
                     return '-';
-                }
-            })
-            ->addColumn('status1', function ($data) {
-                $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
-                $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
-                if ($sumcek == $sumprd) {
-                    return '<span class="badge badge-primary">Sudah Dicek</span>';
-                } elseif ($sumcek != $sumprd) {
-                    return '<span class="badge badge-danger">Belum Dicek</span>';
-                }
-            })
-            ->addColumn('action', function ($data) {
-                $x = explode('/', $data->so);
-                $sumcek = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml');
-                $sumprd = DB::table('view_cek_produkso')->select('*', DB::raw('count(status_cek) as jml'), DB::raw('count(gbjid) as jml_prd'))->groupBy('pesananid')->where('pesananid', $data->id)->get()->pluck('jml_prd');
-                if ($sumcek == $sumprd) {
-                    for ($i = 1; $i < count($x); $i++) {
-                        if ($x[1] == 'EKAT') {
-                            return '
-                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-                                    ';
-                        } elseif ($x[1] == 'SPA') {
-                            return '
-                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-                                    ';
-                        } elseif ($x[1] == 'SPB') {
-                            return '
-                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-                                    ';
-                        }
-                    }
-                } else {
-                    for ($i = 1; $i < count($x); $i++) {
-                        if ($x[1] == 'EKAT') {
-                            return '
-                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="ekatalog" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
-                                    ';
-                        } elseif ($x[1] == 'SPA') {
-                            return '
-                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
-                                    ';
-                        } elseif ($x[1] == 'SPB') {
-                            return '
-                                    <button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '" class="btn btn-outline-success btn-sm detailmodal"><i class="far fa-eye"></i> Detail</button>
-                                    <button type="button" data-toggle="modal" data-target="#editmodal" data-attr="" data-value="spb" data-id="' . $data->id . '" class="btn btn-outline-primary btn-sm editmodal"><i class="fas fa-plus"></i> Siapkan Produk</button>
-                                    ';
-                        }
-                    }
                 }
             })
             ->addColumn('button_prd', function ($d) {

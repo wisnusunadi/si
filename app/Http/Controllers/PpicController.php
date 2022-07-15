@@ -1413,6 +1413,9 @@ class PpicController extends Controller
                     return $data->Produk->nama;
                 }
             })
+            ->addColumn('stok', function($d){
+                return $d->stok;
+            })
             ->addColumn('jumlah', function ($data) {
                 // $jumlah = $data->getJumlahCekPesanan() + $data->getJumlahKirimPesanan();
                 // $id = $data->id;

@@ -76,11 +76,11 @@
           <tbody>
             <tr v-for="item in data" :key="item.id">
               <td>{{ item.DT_RowIndex }}</td>
-              <td v-html="item.nama_produk"></td>
-              <td>{{ item.stok }}</td>
-              <td>{{ item.total }}</td>
-              <td><span :class="{ 'has-text-danger' : item.penjualan < 0 }">{{ item.penjualan }}</span></td>
-              <td v-text="item.jumlah_kirim"></td>
+                <td v-html="item.nama_produk"></td>
+                <td>{{ item.stok }}</td>
+                <td>{{ item.jumlah }}</td>
+                <td>{{ item.stok - item.jumlah }}</td>
+                <td>{{ item.jumlah_pengiriman }}</td>
               <td>
                 <button
                   class="button is-light"
@@ -201,7 +201,7 @@ export default {
       showModal: false,
       showModalSO: false,
       tabs: false
-    };  
+    };
   },
 
   methods: {
@@ -213,14 +213,14 @@ export default {
           pagingType: "simple_numbers_no_ellipses",
         })))
 
-        await axios.get("/api/ppic/data/so2").then((response) => {
+        await axios.post("/api/ppic/master_pengiriman/data").then((response) => {
         this.data = response.data.data;
         }).then(() => ($("#table_produk").DataTable({
           pagingType: "simple_numbers_no_ellipses",
         })));
 
       this.$store.commit("setIsLoading", false);
-      
+
     },
 
 
@@ -272,7 +272,7 @@ export default {
       });
       this.$store.commit("setIsLoading", false);
       this.showModalSO = true;
-      
+
     },
   },
 

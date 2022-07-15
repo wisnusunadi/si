@@ -117,7 +117,7 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/data/so").then((response) => {
+      await axios.post("/api/ppic/master_stok/data").then((response) => {
         this.data = response.data.data;
       });
       $("#table_so").DataTable();
