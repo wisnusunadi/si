@@ -290,27 +290,32 @@
         });
     });
     $(document).on('click', '.btn-tambah', function() {
+        console.log("produk", produk);
         let prd = $('#gdg_brg_jadi_id').val();
         let namaprd = $('#gdg_brg_jadi_id option:selected').text();
         let jml = $('#jumlah').val();
         if (prd == '') return $('#gdg_brg_jadi_id').addClass('is-invalid');
         if (jml == '') return $('#jumlah').addClass('is-invalid');
-        if (produk.length > 0) return produk.find(function(value) {
-            if (value.prd == prd) return Swal.fire({
-                icon: 'error',
-                title: 'Gagal',
-                text: 'Produk sudah ada',
-                type: 'error',
-                confirmButtonText: 'Ok'
+        if (produk.length > 0) {
+            let cek = produk.find(function(value) {
+                return value.prd == prd;
             });
-            if(value.prd != prd) return produk.push({
-                prd: prd,
-                namaprd: namaprd,
-                jml: jml,
-                noseri: [],
-                layout: []
-            }) && addData(prd, namaprd, jml);
-        });
+            if (cek) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Produk sudah ada!'
+                });
+            }else{
+                produk.push({
+                    prd: prd,
+                    namaprd: namaprd,
+                    jml: jml,
+                    noseri: [],
+                    layout: []
+                }) && addData(prd, namaprd, jml);
+            }
+        }
         if(produk.length == 0) return produk.push({
             prd: prd,
             namaprd: namaprd,

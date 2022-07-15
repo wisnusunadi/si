@@ -315,7 +315,7 @@
                                 <li class="nav-item">
                                     <a class="nav-link" id="custom-tabs-four-history-tab" data-toggle="pill"
                                         href="#custom-tabs-four-history" role="tab"
-                                        aria-controls="custom-tabs-four-history" aria-selected="false">Riwayat Hapus Nomor Seri</a>
+                                        aria-controls="custom-tabs-four-history" aria-selected="false">Riwayat Perubahan Nomor Seri</a>
                                 </li>
                             </ul>
                         </div>
@@ -349,7 +349,6 @@
                                                 <th>No. Seri</th>
                                                 <th>Nomor</th>
                                                 <th>Digunakan</th>
-                                                <th>Layout</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -1274,9 +1273,6 @@
                 {
                     data: 'used'
                 },
-                {
-                    data: 'Layout'
-                }
             ],
             "aoColumnDefs": [
                 { "bSearchable": true, "bVisible": false, "aTargets": [ 2 ] },

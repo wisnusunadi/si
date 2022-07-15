@@ -1275,32 +1275,6 @@ class LogistikController extends Controller
 
     public function get_data_selesai_so()
     {
-<<<<<<< HEAD
-        // $datas = Pesanan::orHas('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->orHas('DetailPesananPart')->get();
-        // $arr = array();
-        // foreach ($datas as $i) {
-        //     if (count($i->DetailPesanan) > 0 && count($i->DetailPesananPart) <= 0) {
-        //         if ($i->getJumlahPesanan() == $i->getJumlahKirim()) {
-        //             $arr[] = $i->id;
-        //         }
-        //     } else if (count($i->DetailPesanan) <= 0 && count($i->DetailPesananPart) > 0) {
-        //         if ($i->getJumlahPesananPart() == $i->getJumlahKirimPart()) {
-        //             $arr[] = $i->id;
-        //         }
-        //     } else {
-        //         if (($i->getJumlahPesanan() == $i->getJumlahKirim()) && ($i->getJumlahPesananPart() == $i->getJumlahKirimPart())) {
-        //             $arr[] = $i->id;
-        //         }
-        //     }
-        // }
-
-
-
-        // $data = Pesanan::whereIn('id', $arr)->orderBy('id', 'desc')->get();
-
-=======
-
->>>>>>> 053aeb9491118567e7b5048be699e177983f2422
         $prd = Pesanan::whereIn('id', function($q) {
             $q->select('pesanan.id')
             ->from('pesanan')
@@ -1315,9 +1289,6 @@ class LogistikController extends Controller
             left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
             where detail_pesanan.pesanan_id = pesanan.id
             having count(noseri_logistik.id) > 0)');
-<<<<<<< HEAD
-        })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
-=======
         })->addSelect(['tgl_kirim_min' => function($q){
             $q->selectRaw('MIN(logistik.tgl_kirim)')
               ->from('logistik')
@@ -1335,7 +1306,6 @@ class LogistikController extends Controller
               ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
               ->limit(1);
         }])->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi', 'DetailPesanan.DetailPesananProduk.DetailLogistik.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
->>>>>>> 053aeb9491118567e7b5048be699e177983f2422
 
         $part = Pesanan::whereIn('id', function($q) {
             $q->select('pesanan.id')
@@ -1349,9 +1319,6 @@ class LogistikController extends Controller
                     left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
                     where detail_pesanan_part.pesanan_id = pesanan.id)")
                 ->groupBy('pesanan.id');
-<<<<<<< HEAD
-            })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
-=======
             })->addSelect(['tgl_kirim_min' => function($q){
                 $q->selectRaw('MIN(logistik.tgl_kirim)')
                   ->from('logistik')
@@ -1367,7 +1334,6 @@ class LogistikController extends Controller
                   ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                   ->limit(1);
             }])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc');
->>>>>>> 053aeb9491118567e7b5048be699e177983f2422
 
 
         $partjasa = Pesanan::whereIn('id', function($q) {
@@ -1383,9 +1349,6 @@ class LogistikController extends Controller
                         left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode LIKE '%JASA%'
                         where detail_pesanan_part.pesanan_id = pesanan.id)")
                     ->groupBy('pesanan.id');
-<<<<<<< HEAD
-                })->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->union($prd)->union($part)->get();
-=======
                 })->addSelect(['tgl_kirim_min' => function($q){
                     $q->selectRaw('MIN(logistik.tgl_kirim)')
                       ->from('logistik')
@@ -1401,7 +1364,6 @@ class LogistikController extends Controller
                       ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                       ->limit(1);
                 }])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi', 'DetailPesananPart.DetailLogistikPart.Logistik'])->whereNotIn('log_id', ['7'])->orderBy('id', 'desc')->union($prd)->union($part)->get();
->>>>>>> 053aeb9491118567e7b5048be699e177983f2422
 
         $data = $partjasa;
         return datatables()->of($data)
@@ -1445,75 +1407,6 @@ class LogistikController extends Controller
             ->addColumn('ket', function ($data) {
                 return $data->ket;
             })
-<<<<<<< HEAD
-            ->addColumn('status', function ($data) {
-                // $name = explode('/', $data->so);
-                // $status = "";
-                // $pesanan_id = $data->id;
-                // $status = "";
-                // if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) <= 0) {
-                //     if ($data->getJumlahKirim() == $data->getJumlahPesanan()) {
-                //         $status = '<span class="badge green-text">Sudah Dikirim</span>';
-                //     } else {
-                //         if ($data->getJumlahKirim() == 0) {
-                //             $status = '<span class="badge red-text">Belum Dikirim</span>';
-                //         } else {
-                //             $status = '<span class="badge yellow-text">Sebagian Dikirim</span>';
-                //         }
-                //     }
-                // } else if (count($data->DetailPesanan) <= 0 && count($data->DetailPesananPart) > 0) {
-                //     if ($data->getJumlahKirimPart() == $data->getJumlahPesananPart()) {
-                //         $status = '<span class="badge green-text">Sudah Dikirim</span>';
-                //     } else {
-                //         if ($data->getJumlahKirimPart() == 0) {
-                //             $status =  ' <span class="badge red-text">Belum Dikirim</span>';
-                //         } else {
-                //             $status =   '<span class="badge yellow-text">Sebagian Dikirim</span>';
-                //         }
-                //     }
-                // } else if (count($data->DetailPesanan) > 0 && count($data->DetailPesananPart) > 0) {
-                //     if ($data->getJumlahKirim() == $data->getJumlahPesanan() && $data->getJumlahKirimPart() == $data->getJumlahPesananPart()) {
-                //         $status = '<span class="badge green-text">Sudah Dikirim</span>';
-                //     } else {
-                //         if ($data->getJumlahKirimPart() == 0 && $data->getJumlahKirim() == 0) {
-                //             $status = ' <span class="badge red-text">Belum Dikirim</span>';
-                //         } else {
-                //             $status = '<span class="badge yellow-text">Sebagian Dikirim</span>';
-                //         }
-                //     }
-                // }
-                // return $status;
-            })
-            ->addColumn('batas', function ($data) {
-                if (isset($data->Ekatalog) && !empty($data->Ekatalog)) {
-                    $tgl_parameter = $this->getHariBatasKontrak($data->ekatalog->tgl_kontrak, $data->ekatalog->provinsi->status)->format('Y-m-d');
-                    return Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('tgl_awal', function ($data) {
-                $id = $data->id;
-                $k = Logistik::orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
-                    $q->where('pesanan_id', $id);
-                })->orwhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
-                    $q->where('pesanan_id', $id);
-                })->select('tgl_kirim')->first();
-                if(!empty($k->tgl_kirim)){
-                    return Carbon::createFromFormat('Y-m-d', $k->tgl_kirim)->format('d-m-Y');
-                }
-            })
-            ->addColumn('tgl_akhir', function ($data) {
-                $id = $data->id;
-                $k = Logistik::orWhereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
-                    $q->where('pesanan_id', $id);
-                })->orwhereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
-                    $q->where('pesanan_id', $id);
-                })->select('tgl_kirim')->get()->last();
-                if(!empty($k->tgl_kirim)){
-                    return Carbon::createFromFormat('Y-m-d', $k->tgl_kirim)->format('d-m-Y');
-                }
-=======
             ->addColumn('tgl_awal', function ($data) {
                 $tgl = date('d-m-Y',strtotime($data->tgl_kirim_min));
                 return $tgl;
@@ -1521,7 +1414,6 @@ class LogistikController extends Controller
             ->addColumn('tgl_akhir', function ($data) {
                 $tgl = date('d-m-Y',strtotime($data->tgl_kirim_max));
                 return $tgl;
->>>>>>> 053aeb9491118567e7b5048be699e177983f2422
             })
             ->addColumn('button', function ($data) {
                 $name = explode('/', $data->so);

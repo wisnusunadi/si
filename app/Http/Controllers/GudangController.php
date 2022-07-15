@@ -228,19 +228,6 @@ class GudangController extends Controller
                 ->addColumn('nomor', function($d){
                     return $d->noseri;
                 })
-                ->addColumn('Layout', function ($d) use ($layout) {
-                    $opt = '';
-                    foreach ($layout as $l) {
-                        if ($d->layout_id == $l->id) {
-                            $opt .= '<option value="' . $l->id . '" selected>' . $l->ruang . '</option>';
-                        } else {
-                            $opt .= '<option value="' . $l->id . '">' . $l->ruang . '</option>';
-                        }
-                    }
-                    return '<select name="layout_id[]" id="layout_id[]" class="form-control">
-                            ' . $opt . '
-                            </select>';
-                })
                 ->addColumn('used', function ($d) {
                     return $d->pesanan->so;
                 })
