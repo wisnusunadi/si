@@ -129,7 +129,7 @@
                 <td>{{ item.akn }}</td>
                 <td v-html="item.tgl_order"></td>
                 <td v-html="item.tgl_delivery"></td>
-                <td v-html="item.jumlah"></td>
+                <td v-html="item.jumlah_pesanan"></td>
                 <td>{{ item.customer }}</td>
                 <td>{{ item.jenis }}</td>
                 <td>{{ item.status }}</td>
@@ -226,7 +226,7 @@ export default {
 
     async getDetail(id, nama) {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/data/so/detail/" + id).then((response) => {
+      await axios.post("/api/ppic/master_pengiriman/detail/" + id).then((response) => {
         this.detail = response.data.data;
       });
       $("#detailtable").DataTable();

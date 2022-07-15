@@ -11,7 +11,7 @@
                     <th rowspan="2">No</th>
                     <th rowspan="2">Nama Produk</th>
                     <th colspan="2">Stok</th>
-                    <th colspan="5">Penjualan</th>
+                    <th colspan="6">Penjualan</th>
                     <th rowspan="2">Aksi</th>
                 </tr>
                 <tr>
@@ -21,6 +21,7 @@
                     <th>Sepakat</th>
                     <th>Nego</th>
                     <th>Batal</th>
+                    <th>Draft</th>
                     <th>PO</th>
                 </tr>
             </thead>
@@ -34,6 +35,7 @@
               <td>{{ item.sepakat }}</td>
               <td>{{ item.nego }}</td>
               <td>{{ item.batal }}</td>
+              <td>{{ item.draft }}</td>
               <td>{{ item.po }}</td>
               <td>
                 <button
@@ -69,6 +71,7 @@
                 <th>Tanggal order</th>
                 <th>Tanggal pengiriman</th>
                 <th>Jumlah</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody>
@@ -77,6 +80,7 @@
                 <td v-html="item.tgl_order"></td>
                 <td v-html="item.tgl_delivery"></td>
                 <td v-html="item.jumlah"></td>
+                <td v-html="item.status"></td>
               </tr>
             </tbody>
           </table>
@@ -127,7 +131,7 @@ export default {
 
     async getDetail(id, nama) {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/data/so/detail/" + id).then((response) => {
+      await axios.post("/api/ppic/master_stok/detail/" + id).then((response) => {
         this.detail = response.data.data;
       });
       $("#detailtable").DataTable();
