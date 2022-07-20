@@ -195,6 +195,13 @@
                                     </div>
                                     <div class="card-body">
                                         {{-- <hr class="my-4"/> --}}
+                                        <div class="form-group row" id="no_transaksi_input">
+                                            <label for="no_transaksi" class="col-lg-5 col-md-12 col-form-label labelket">No PO / Paket / SJ</label>
+                                            <div class="col-lg-2 col-md-6">
+                                                <input name="no_transaksi" id="no_transaksi" class="form-control col-form-label no_transaksi  @error('no_transaksi') is-invalid @enderror"/>
+                                                <div class="invalid-feedback" id="msgno_transaksi"></div>
+                                            </div>
+                                        </div>
                                         <div class="form-group row" id="customer_id_input">
                                             <label for="customer_id" class="col-lg-5 col-md-12 col-form-label labelket">Nama Customer</label>
                                             <div class="col-lg-4 col-md-8">

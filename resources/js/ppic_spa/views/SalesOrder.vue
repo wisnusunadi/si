@@ -89,17 +89,9 @@
                                 <td>{{ item.DT_RowIndex }}</td>
                                 <td v-html="item.nama_produk"></td>
                                 <td>{{ item.stok }}</td>
-                                <td>{{ item.total }}</td>
-                                <td>
-                                    <span
-                                        :class="{
-                                            'has-text-danger':
-                                                item.penjualan < 0,
-                                        }"
-                                        >{{ item.penjualan }}</span
-                                    >
-                                </td>
-                                <td v-text="item.jumlah_kirim"></td>
+                                <td>{{ item.jumlah }}</td>
+                                <td>{{ item.stok - item.jumlah }}</td>
+                                <td>{{ item.jumlah_pengiriman }}</td>
                                 <td>
                                     <button
                                         class="button is-light"
@@ -150,7 +142,7 @@
                                 <td>{{ item.akn }}</td>
                                 <td v-html="item.tgl_order"></td>
                                 <td v-html="item.tgl_delivery"></td>
-                                <td v-html="item.jumlah"></td>
+                                <td v-html="item.jumlah_pesanan"></td>
                                 <td>{{ item.customer }}</td>
                                 <td>{{ item.jenis }}</td>
                                 <td>{{ item.status }}</td>
@@ -216,15 +208,8 @@ import axios from "axios";
 
 export default {
     name: "SalesOrder",
-
     data() {
         return {
-            data: [],
-            salesOrder: [],
-            detail: {},
-            nama_produk: "",
-            detailSO: {},
-
             showModal: false,
             showModalSO: false,
             tabs: false,
@@ -246,7 +231,7 @@ export default {
                 );
 
             await axios
-                .get("/api/ppic/data/so2")
+                .post("/api/ppic/master_pengiriman/data")
                 .then((response) => {
                     this.data = response.data.data;
                 })
@@ -256,6 +241,42 @@ export default {
                     })
                 );
 
+            this.$store.commit("setIsLoading", false);
+        },
+
+        // methods: {
+        //     async loadData() {
+        //         this.$store.commit("setIsLoading", true);
+        //         await axios
+        //             .post("/api/prd/so")
+        //             .then((response) => {
+        //                 this.salesOrder = response.data.data;
+        //             })
+        //             .then(() =>
+        //                 $("#table_so").DataTable({
+        //                     pagingType: "simple_numbers_no_ellipses",
+        //                 })
+        //             );
+
+        //         await axios
+        //             .get("/api/ppic/data/so2")
+        //             .then((response) => {
+        //                 this.data = response.data.data;
+        //             })
+        //             .then(() =>
+        //                 $("#table_produk").DataTable({
+        //                     pagingType: "simple_numbers_no_ellipses",
+        //                 })
+        //             );
+
+        async getDetail(id, nama) {
+            this.$store.commit("setIsLoading", true);
+            await axios
+                .post("/api/ppic/master_pengiriman/detail/" + id)
+                .then((response) => {
+                    this.detail = response.data.data;
+                });
+            $("#detailtable").DataTable();
             this.$store.commit("setIsLoading", false);
         },
 
@@ -315,6 +336,10 @@ export default {
             this.$store.commit("setIsLoading", false);
             this.showModalSO = true;
         },
+        //    "columnDefs":[
+        //         {"targets": [0], "visible": false},
+        //     ],
+        //   });
     },
 
     mounted() {
