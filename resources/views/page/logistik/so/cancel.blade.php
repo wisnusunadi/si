@@ -92,10 +92,10 @@
                 </div>
             </div>
             <div class="card-footer">
-                <button type="button" class="btn btn-danger btn-sm @if(Auth::user()->divisi_id == "32") float-right @endif" data-dismiss="modal"><i class="fas fa-times"></i> Tutup</button>
-                {{-- @if(Auth::user()->divisi_id == "23") --}}
+                <button type="button" class="btn btn-danger btn-sm @if(Auth::user()->divisi->nama != "Logistik") float-right @endif" data-dismiss="modal"><i class="fas fa-times"></i> Tutup</button>
+                @if(Auth::user()->divisi->nama == "Logistik")
                 <button type="button" class="btn btn-dark btn-sm float-right"><i class="fas fa-check"></i> Terima</button>
-                {{-- @endif --}}
+                @endif
             </div>
         </div>
     </div>

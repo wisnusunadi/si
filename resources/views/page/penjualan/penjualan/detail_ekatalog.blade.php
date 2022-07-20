@@ -315,8 +315,8 @@
                                                                                 <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
                                                                                     class="nowraptxt tabnum">@currency($e->ongkir)</td>
                                                                                 <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
-                                                                                    class="nowraptxt tabnum">@currency($e->harga * $e->jumlah + $e->ongkir)</td>
-                                                                                <?php $totalharga = $totalharga + ($e->harga * $e->jumlah + $e->ongkir); ?>
+                                                                                    class="nowraptxt tabnum">@currency(($e->harga * $e->jumlah) + $e->ongkir)</td>
+                                                                                <?php $totalharga = $totalharga + (($e->harga * $e->jumlah) + $e->ongkir); ?>
                                                                             </tr>
                                                                             @if (isset($e->DetailPesananProduk))
                                                                                 @foreach ($e->DetailPesananProduk as $l)
