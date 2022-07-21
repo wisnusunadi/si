@@ -1420,20 +1420,21 @@ class PpicController extends Controller
 
         // $data = GudangBarangJadi::whereIn('id', $arrayid)->get();
 
-        $data = GudangBarangJadi::whereIn('id', function($q){
-            $q->select('gdg_barang_jadi.id')
-              ->from('gdg_barang_jadi')
-              ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.gudang_barang_jadi_id', '=', 'gdg_barang_jadi.id')
-              ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-              ->groupBy('gdg_barang_jadi.id')
-              ->havingRaw('count(noseri_detail_pesanan.id) > (
-                SELECT count(noseri_logistik.id)
-                FROM noseri_logistik
-                left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
-                left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-                where detail_pesanan_produk.gudang_barang_jadi_id = gdg_barang_jadi.id)');
-            })
-            ->addSelect(['count_pesanan' => function ($q){
+        $data = GudangBarangJadi
+        // ::whereIn('id', function($q){
+        //     $q->select('gdg_barang_jadi.id')
+        //       ->from('gdg_barang_jadi')
+        //       ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.gudang_barang_jadi_id', '=', 'gdg_barang_jadi.id')
+        //       ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+        //       ->groupBy('gdg_barang_jadi.id')
+        //       ->havingRaw('count(noseri_detail_pesanan.id) > (
+        //         SELECT count(noseri_logistik.id)
+        //         FROM noseri_logistik
+        //         left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
+        //         left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+        //         where detail_pesanan_produk.gudang_barang_jadi_id = gdg_barang_jadi.id)');
+        //     })
+            ::addSelect(['count_pesanan' => function ($q){
                     $q->selectRaw('count(noseri_detail_pesanan.id)')
                     ->from('noseri_detail_pesanan')
                     ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
@@ -1520,7 +1521,7 @@ class PpicController extends Controller
             ->rawColumns(['nama_produk', 'aksi'])
             ->make(true);
     }
-    public function  _detail_show($id)
+    public function  master_pengiriman_detail_show($id)
     {
         $data = GudangBarangJadi::where('id', $id)
             ->addSelect(['count_pesanan' => function ($q){
@@ -1618,10 +1619,28 @@ class PpicController extends Controller
                 return $data->no_po;
             })
             ->addColumn('akn', function ($data) {
-                return $data->Ekatalog->no_paket;
+                if($data->Ekatalog){
+                    if($data->Ekatalog->no_paket != ""){
+                        return $data->Ekatalog->no_paket;
+                    }else{
+                        return '-';
+                    }
+                }else{
+                    return '-';
+                }
+
             })
             ->addColumn('pelanggan', function ($data) {
-                return $data->Ekatalog->instansi;
+                if($data->Ekatalog){
+                    if($data->Ekatalog->instansi != ""){
+                        return $data->Ekatalog->instansi;
+                    }else{
+                        return '-';
+                    }
+                }else{
+                    return '-';
+                }
+
             })
             ->addColumn('jenis', function($data){
                 $name = explode('/', $data->so);
@@ -1721,18 +1740,6 @@ class PpicController extends Controller
             ->rawColumns(['tgl_delivery'])
             ->make(true);
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
     public function get_detail_pengiriman_for_ppic($id)
     {

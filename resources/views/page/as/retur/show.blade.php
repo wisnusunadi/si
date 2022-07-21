@@ -12,8 +12,7 @@
                 <ol class="breadcrumb float-sm-right">
                     @if (Auth::user()->divisi_id == '8')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('as.retur.show') }}">Memo Retur</a></li>
-                        <li class="breadcrumb-item active">Tambah Memo Retur</li>
+                        <li class="breadcrumb-item active">Memo Retur</li>
                     @endif
                 </ol>
             </div><!-- /.col -->
@@ -134,6 +133,7 @@
                                     <tr>
                                         <th>No</th>
                                         <th>No Retur</th>
+                                        <th>No Ref Penjualan</th>
                                         <th>Tanggal Retur</th>
                                         <th>Jenis Retur</th>
                                         <th>Customer</th>
@@ -145,7 +145,8 @@
                                     <tr>
                                         <td>1</td>
                                         <td>RET/0012/02/1293</td>
-                                        <td>20 Februari 2022</td>
+                                        <td>AKN-P2207-102345</td>
+                                        <td>20-02-2022</td>
                                         <td><span class="badge blue-text">Komplain</span></td>
                                         <td>PT. Emiindo Jaya Bersama</td>
                                         <td><span class="badge red-text">Belum Diproses</span></td>
@@ -154,7 +155,8 @@
                                     <tr>
                                         <td>2</td>
                                         <td>RET/0012/02/1293</td>
-                                        <td>20 Februari 2022</td>
+                                        <td>AKN-P2207-102345</td>
+                                        <td>20-02-2022</td>
                                         <td><span class="badge orange-text">Service</span></td>
                                         <td>PT. Emiindo Jaya Bersama</td>
                                         <td><span class="badge red-text">Belum Diproses</span></td>
