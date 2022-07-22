@@ -129,9 +129,9 @@
                                                 <div class="card-body">
                                                     <h3 class="profile-username text-center">BABY ONE</h3>
                                                     <ul class="list-group list-group-unbordered mb-3">
-                                                        <li class="list-group-item">
+                                                        {{-- <li class="list-group-item">
                                                             <span class="align-self-center"><span class="foo bg-chart-light mr-2"></span><span>Belum Proses</span></span> <a class="float-right">2<sub> dari 12</sub></a>
-                                                        </li>
+                                                        </li> --}}
                                                         <li class="list-group-item">
                                                             <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right">2<sub> dari 12</sub></a>
                                                         </li>

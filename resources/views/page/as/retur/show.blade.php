@@ -171,8 +171,8 @@
             <div class="modal fade" id="detail_modal" role="dialog" aria-labelledby="detail_modal" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content" style="margin: 10px">
-                        <div class="modal-header bg-info">
-                            <h4 class="modal-title">Detail</h4>
+                        <div class="modal-header">
+                            <h4 class="modal-title">Detail Memo Retur</h4>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
@@ -192,6 +192,7 @@
 <script>
     $(function(){
         $('#showtable').DataTable();
+
         $(document).on('click', "#detailmodal", function(event){
             event.preventDefault();
             $.ajax({
@@ -199,10 +200,11 @@
                 beforeSend: function() {
                     $('#loader').show();
                 },
-                // return the result
                 success: function(result) {
+
                     $('#detail_modal').modal("show");
                     $('#detail').html(result).show();
+                    $('#barangtable').DataTable();
                 },
                 complete: function() {
                     $('#loader').hide();

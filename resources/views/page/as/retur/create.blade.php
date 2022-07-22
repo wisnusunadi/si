@@ -1289,6 +1289,7 @@
                             term: request.term
                         },
                         success: function(data) {
+                            console.log(data);
                             var transformed = $.map(data, function(el) {
                                 return {
                                     label: el.nama,
@@ -1308,6 +1309,7 @@
                 },
                 select: function( event, ui ) {
                     var id = ui.item.value;
+
                     $(this).val(ui.item.label);
                     if(id != ""){
                         $.ajax({

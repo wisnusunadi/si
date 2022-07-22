@@ -1051,196 +1051,6 @@
     </script>
     <script>
         $(function() {
-            // var options = {
-            //     series: [0, 0, 0],
-            //     chart: {
-            //         height: 300,
-            //         type: 'radialBar',
-            //     },
-            //     plotOptions: {
-            //         radialBar: {
-            //             dataLabels: {
-            //                 name: {
-            //                     fontSize: '20px',
-            //                 },
-            //                 value: {
-            //                     fontSize: '14px',
-            //                 },
-            //                 total: {
-            //                     show: true,
-            //                     label: 'Progress',
-            //                     color: '#5F7A90',
-            //                     formatter: function (w) {
-            //                         return Math.round(w.globals.seriesTotals.reduce((a, b) => {
-            //                             return a + b
-            //                         }, 0) / w.globals.series.length) + '%'
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     },
-            //     colors: ['#EA8B1B', '#FFC700', '#456600'],
-            //     labels: ['Gudang', 'QC', 'Logistik'],
-            // };
-
-            // var optionsgudang = {
-            //     chart: {
-            //         height: 250,
-            //         type: "radialBar",
-            //     },
-
-            //     series: [100],
-            //     colors: ["#FC575E"],
-            //     plotOptions: {
-            //         radialBar: {
-            //             hollow: {
-            //                 margin: 0,
-            //                 size: "70%",
-            //                 background: "#fff"
-            //             },
-            //             track: {
-            //                 dropShadow: {
-            //                     enabled: true,
-            //                     top: 2,
-            //                     left: 0,
-            //                     blur: 4,
-            //                     opacity: 0.15
-            //                 }
-            //             },
-            //             dataLabels: {
-            //                 name: {
-            //                     offsetY: -10,
-            //                     color: "#ef5734",
-            //                     fontSize: "13px"
-            //                 },
-            //                 value: {
-            //                     color: "#ef5734",
-            //                     fontSize: "30px",
-            //                     show: true
-            //                 }
-            //             }
-            //         }
-            //     },
-            //     fill: {
-            //         type: "gradient",
-            //         gradient: {
-            //         shade: "dark",
-            //         type: "vertical",
-            //         gradientToColors: ["#F7B42C"],
-            //         stops: [0, 100]
-            //         }
-            //     },
-            //     stroke: {
-            //         lineCap: "round"
-            //     },
-            //     labels: ["Gudang"]
-            // };
-
-            // var optionslogistik = {
-            //     chart: {
-            //         height: 250,
-            //         type: "radialBar",
-            //     },
-
-            //     series: [100],
-            //     colors: ["#20BF55"],
-            //     plotOptions: {
-            //         radialBar: {
-            //             hollow: {
-            //                 margin: 0,
-            //                 size: "70%",
-            //                 background: "#fff"
-            //             },
-            //             track: {
-            //                 dropShadow: {
-            //                 enabled: true,
-            //                 top: 2,
-            //                 left: 0,
-            //                 blur: 4,
-            //                 opacity: 0.15
-            //                 }
-            //             },
-            //             dataLabels: {
-            //                 name: {
-            //                 offsetY: -10,
-            //                 color: "#14557b",
-            //                 fontSize: "13px"
-            //                 },
-            //                 value: {
-            //                 color: "#14557b",
-            //                 fontSize: "30px",
-            //                 show: true
-            //                 }
-            //             }
-            //         }
-            //     },
-            //     fill: {
-            //         type: "gradient",
-            //         gradient: {
-            //         shade: "dark",
-            //         type: "vertical",
-            //         gradientToColors: ["#01BAEF"],
-            //         stops: [0, 100]
-            //         }
-            //     },
-            //     stroke: {
-            //         lineCap: "round"
-            //     },
-            //     labels: ["Logistik"]
-            // };
-
-            // var optionsqc = {
-            //     chart: {
-            //         height: 250,
-            //         type: "radialBar",
-            //     },
-
-            //     series: [100],
-            //     colors: ["#ffc907"],
-            //     plotOptions: {
-            //         radialBar: {
-            //             hollow: {
-            //                 margin: 0,
-            //                 size: "70%",
-            //                 background: "#fff"
-            //             },
-            //             track: {
-            //                 dropShadow: {
-            //                 enabled: true,
-            //                 top: 2,
-            //                 left: 0,
-            //                 blur: 4,
-            //                 opacity: 0.15
-            //                 }
-            //             },
-            //             dataLabels: {
-            //                 name: {
-            //                 offsetY: -10,
-            //                 color: "#9b870c",
-            //                 fontSize: "13px"
-            //                 },
-            //                 value: {
-            //                 color: "#9b870c",
-            //                 fontSize: "30px",
-            //                 show: true
-            //                 }
-            //             }
-            //         }
-            //     },
-            //     fill: {
-            //         type: "gradient",
-            //         gradient: {
-            //         shade: "dark",
-            //         type: "vertical",
-            //         gradientToColors: ["#b5c327"],
-            //         stops: [0, 100]
-            //         }
-            //     },
-            //     stroke: {
-            //         lineCap: "round"
-            //     },
-            //     labels: ["QC"]
-            // };
             var optionpie = {
                 type: 'pie',
                 data: {
@@ -1285,16 +1095,6 @@
                         if (label == 'ekatalog') {
                             const ctx = $('#myChart');
                             const myChart = new Chart(ctx, optionpie);
-                            // var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
-                            // chart.render();
-                            // var chartgudang = new ApexCharts(document.querySelector("#chartgudang"), optionsgudang);
-                            // chartgudang.render();
-                            // var chartqc = new ApexCharts(document.querySelector("#chartqc"), optionsqc);
-                            // chartqc.render();
-                            // var chartlogistik = new ApexCharts(document.querySelector("#chartlogistik"), optionslogistik);
-                            // chartlogistik.render();
-                            // var chartkirim = new ApexCharts(document.querySelector("#chartkirim"), optionslogistik);
-                            // chartkirim.render();
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-orange bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-purple');
@@ -1304,10 +1104,6 @@
                         } else if (label == 'spa') {
                             const ctx = $('#myChart');
                             const myChart = new Chart(ctx, optionpie);
-                            // var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
-                            // chart.render();
-                            // $('#detailmodal').find(".modal-header").attr('id', '');
-                            // $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-purple bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-orange');
@@ -1316,10 +1112,6 @@
                         } else {
                             const ctx = $('#myChart');
                             const myChart = new Chart(ctx, optionpie);
-                            // var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
-                            // chart.render();
-                            // $('#detailmodal').find(".modal-header").attr('id', '');
-                            // $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-orange bg-purple');
                             $('#detailmodal').find(".modal-header").addClass('bg-lightblue');

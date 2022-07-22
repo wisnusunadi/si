@@ -172,9 +172,9 @@
                                                                         <div class="card-body">
                                                                             <h3 class="profile-username text-center">BABY ONE</h3>
                                                                             <ul class="list-group list-group-unbordered mb-3">
-                                                                                <li class="list-group-item">
+                                                                                {{-- <li class="list-group-item">
                                                                                     <span class="align-self-center"><span class="foo bg-chart-light mr-2"></span><span>Belum Proses</span></span> <a class="float-right">2<sub> dari 12</sub></a>
-                                                                                </li>
+                                                                                </li> --}}
                                                                                 <li class="list-group-item">
                                                                                     <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right">2<sub> dari 12</sub></a>
                                                                                 </li>
@@ -206,48 +206,6 @@
                                                                             <p class="card-text d-flex align-items-center">
                                                                                 <span class="foo bg-chart-blue mr-2"></span><span>Kirim</span>
                                                                             </p> --}}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row hide">
-                                                                <div class="col-lg-3 col-md-4">
-                                                                    <div class="info-box removeshadow" {{--style="background-color:#EA8B1B; color:white;"--}}>
-                                                                        <div class="info-box-content">
-                                                                            <div id="chartgudang"></div>
-                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-danger" id="btn_progress_gdg">Lihat Progress Gudang</button></a>
-                                                                            {{-- <span class="info-box-text">Gudang</span>
-                                                                            <span class="info-box-number" id="count_gudang">0</span> --}}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-4">
-                                                                    <div class="info-box removeshadow" {{--style="background-color:#FFC700;"--}}>
-                                                                        <div class="info-box-content">
-                                                                            <div id="chartqc"></div>
-                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-warning" id="btn_progress_qc">Lihat Progress QC</button></a>
-                                                                            {{-- <span class="info-box-text">QC</span>
-                                                                            <span class="info-box-number" id="count_qc">0</span> --}}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-4">
-                                                                    <div class="info-box removeshadow" {{--style="background-color:#456600; color:white;"--}}>
-                                                                        <div class="info-box-content">
-                                                                            <div id="chartlogistik"></div>
-                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-success" id="btn_progress_log">Lihat Progress Logistik</button></a>
-                                                                            {{-- <span class="info-box-text">Logistik</span>
-                                                                            <span class="info-box-number" id="count_log">0</span> --}}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-4">
-                                                                    <div class="info-box removeshadow" {{--style="background-color:#456600; color:white;"--}}>
-                                                                        <div class="info-box-content">
-                                                                            <div id="chartkirim"></div>
-                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-success" id="btn_progress_log">Lihat Progress Logistik</button></a>
-                                                                            {{-- <span class="info-box-text">Logistik</span>
-                                                                            <span class="info-box-number" id="count_log">0</span> --}}
                                                                         </div>
                                                                     </div>
                                                                 </div>
