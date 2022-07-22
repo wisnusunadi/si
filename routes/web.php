@@ -85,6 +85,7 @@ Route::middleware('auth')->prefix('/produksi')->group(function () {
     Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');
     Route::view('/perencanaan_perakitan', 'page.produksi.perencanaan_perakitan');
     Route::get('/riwayat_perakitan', [ProduksiController::class, 'his_rakit']);
+    Route::get('/export_noseri', [ProduksiController::class, 'export_noseri_produksi'])->name('export.rakitseri');
     Route::view('/pengiriman', 'page.produksi.pengiriman');
     Route::view('/riwayat_transfer', 'page.produksi.riwayat_transfer');
 });

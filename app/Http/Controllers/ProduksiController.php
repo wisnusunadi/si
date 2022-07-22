@@ -2,31 +2,23 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\DetailEkatalog;
+use App\Exports\NoseriRakitExport;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
-use App\Models\Ekatalog;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\JadwalPerakitan;
-use App\Models\JadwalPerakitanLog;
 use App\Models\JadwalRakitNoseri;
 use App\Models\NoseriBarangJadi;
-use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriTGbj;
-use App\Models\PenjualanProduk;
 use App\Models\Pesanan;
-use App\Models\Produk;
-use App\Models\Spa;
-use App\Models\Spb;
 use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
-use App\Models\TFProduksiHis;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Validator;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProduksiController extends Controller
 {
@@ -3207,5 +3199,10 @@ class ProduksiController extends Controller
             ]);
         }
 
+    }
+
+    function export_noseri_produksi(Request $request)
+    {
+        return Excel::download(new NoseriRakitExport(), 'asdsa.xlsx');
     }
 }
