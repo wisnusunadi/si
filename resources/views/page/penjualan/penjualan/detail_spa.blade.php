@@ -152,22 +152,19 @@
                                                         <canvas id="myChart" width="400" height="400" class="mb-5"></canvas>
                                                         <div class="card card-secondary card-outline mt-3">
                                                             <div class="card-body">
-                                                                <h3 class="profile-username text-center">BABY ONE</h3>
+                                                                <h3 class="profile-username text-center"><span id="nama_prd">-</span></h3>
                                                                 <ul class="list-group list-group-unbordered mb-3">
-                                                                    <li class="list-group-item">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-light mr-2"></span><span>Belum Proses</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                    <li class="list-group-item " id="part_status">
+                                                                        <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right"><span id="c_gudang">0</span><sub id="tot_gudang"> dari 0</sub></a>
                                                                     </li>
                                                                     <li class="list-group-item">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                        <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right"><span id="c_qc">0</span><sub  id="tot_qc"> dari 0</sub></a>
                                                                     </li>
                                                                     <li class="list-group-item">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                        <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right"><span id="c_log">0</span><sub  id="tot_log"> dari 0</sub></a>
                                                                     </li>
                                                                     <li class="list-group-item">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right">2<sub> dari 12</sub></a>
-                                                                    </li>
-                                                                    <li class="list-group-item">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-blue mr-2"></span><span>Kirim</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                        <span class="align-self-center"><span class="foo bg-chart-blue mr-2"></span><span>Kirim</span></span> <a class="float-right"><span id="c_kirim">0</span><sub  id="tot_kirim"> dari 0</sub></a>
                                                                     </li>
                                                                 </ul>
 
@@ -318,7 +315,8 @@
                                                                                 <tr>
                                                                                     <td class="nowraptxt">{{ $no }}</td>
                                                                                     <td class="wb">
-                                                                                        <b>{{ $e->Sparepart->nama }}</b> <i class="fas fa-info-circle text-danger" data-toggle="tooltip" data-html="true" data-placement="bottom" role="button" title='Ini Adalah Tooltipnya' ></i>
+                                                                                        <b>{{ $e->Sparepart->nama }}</b>
+                                                                                         {{-- <i class="fas fa-info-circle text-danger" data-toggle="tooltip" data-html="true" data-placement="bottom" role="button" title='Ini Adalah Tooltipnya' ></i> --}}
                                                                                     </td>
                                                                                     <td class="nowraptxt">
                                                                                         @if(strpos($e->Sparepart->kode, 'JASA') === false)

@@ -225,23 +225,15 @@
                                                         <tr>
                                                             <th width="5%">No</th>
                                                             <th width="10%">No AKD</th>
-                                                            <th width="5%">Merk</th>
-                                                            <th width="5%">Jenis Paket</th>
-                                                            <th width="30%">Nama Alias</th>
-                                                            <th width="25%">Nama Produk</th>
-                                                            <th width="10%">Harga</th>
-                                                            <th width="5%">Aksi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-
                                                     </tbody>
                                                 </table>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -356,6 +348,7 @@
 @endsection
 
 @section('adminlte_js')
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         $(function() {
             $(document).on('submit', '#form-penjualan-produk-update', function(e) {
@@ -393,71 +386,145 @@
                 return false;
             });
 
-            var showtable = $('#showtable').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
-                    "dataType": "json",
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
-                    }
-                },
-                columns: [{
-                        data: 'DT_RowIndex',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'no_akd',
-                        className: 'nowrap-text align-center tabnum',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'merk',
-                        className: 'nowrap-text align-center',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'jenis_paket',
-                        className: 'nowrap-text align-center',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'nama_alias',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'nama',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'harga',
-                        className: 'nowrap-text align-right tabnum',
-                        render: $.fn.dataTable.render.number(',', '.', 2)
-                            // function(data) {
-                            //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
-                            // }
-                            ,
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'button',
-                        className: 'nowrap-text align-center',
-                        orderable: false,
-                        searchable: false
-                    }
-                ]
+            // var showtable = $('#showtable').DataTable({
+            //     destroy: true,
+            //     processing: true,
+            //     serverSide: true,
+            //     ajax: {
+            //         'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
+            //         "dataType": "json",
+            //         'type': 'POST',
+            //         'headers': {
+            //             'X-CSRF-TOKEN': '{{csrf_token()}}'
+            //         }
+            //     },
+            //     columns: [{
+            //             data: 'DT_RowIndex',
+            //             className: 'nowrap-text align-center',
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //         {
+            //             data: 'no_akd',
+            //             className: 'nowrap-text align-center tabnum',
+            //             orderable: true,
+            //             searchable: true
+            //         },
+            //         {
+            //             data: 'merk',
+            //             className: 'nowrap-text align-center',
+            //             orderable: true,
+            //             searchable: true
+            //         },
+            //         {
+            //             data: 'jenis_paket',
+            //             className: 'nowrap-text align-center',
+            //             orderable: true,
+            //             searchable: true
+            //         },
+            //         {
+            //             data: 'nama_alias',
+            //             orderable: true,
+            //             searchable: true
+            //         },
+            //         {
+            //             data: 'nama',
+            //             orderable: true,
+            //             searchable: true
+            //         },
+            //         {
+            //             data: 'harga',
+            //             className: 'nowrap-text align-right tabnum',
+            //             render: $.fn.dataTable.render.number(',', '.', 2)
+            //                 // function(data) {
+            //                 //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
+            //                 // }
+            //                 ,
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //         {
+            //             data: 'button',
+            //             className: 'nowrap-text align-center',
+            //              orderable: false,
+            //             searchable: false
+            //         }
+            //     ]
+            // });
+
+           login();
+           async function login (){
+                const formData = new FormData();
+                formData.append('username','norapenj01');
+                formData.append('password','12345678');
+
+                await axios.post('https://api.elitech.id/api/login',formData)
+                .then((response)=> {
+                  //  console.log(response.data.token)
+                  let token = response.data.token;
+                  localStorage.setItem("token", 'Bearer ' + token);
+                 // console.log(token);
+                })
+            }
+
+            axios.get('https://api.elitech.id/api/paket_produk',{
+                headers : { Authorization:localStorage.getItem('token')}
+            })
+            .then(function (response) {
+              table(response.data.data);
+            })
+             .catch(function (error) {
+                // handle error
+            console.log(error);
+             })
+            .then(function () {
+            // always executed
             });
+
+            function table (data){
+            var t = $('#showtable').DataTable();
+            $.each(data, function (key, value) {
+                t.row.add([value.nama_paket,value.nama_alias]).draw();
+            });
+            console.log(data);
+            }
+
+
+
+
+
+            // var username = 'norapenj01';
+            // var password = '12345678';
+            // axios.get('http://localhost:97/api/pengiriman')
+            // .then(function (response) {
+            //     // handle success
+            //  console.log(response);
+            // })
+            //  .catch(function (error) {
+            //     // handle error
+            // console.log(error);
+            //  })
+            // .then(function () {
+            // // always executed
+            // });
+            //    var showtable = $('#showtable').DataTable({
+            //     destroy: true,
+            //     processing: true,
+            //     serverSide: true,
+            //     ajax: {
+            //         'url': 'http://localhost:97/send',
+            //         "dataType": "json",
+            //         'type': 'GET',
+
+            //     },
+            //     columns: [{
+            //             data: data[0].id,
+            //             className: 'nowrap-text align-center',
+            //             orderable: false,
+            //             searchable: false
+            //         },
+            //     ]
+            //      });
 
             $('#showtable tbody').on('click', '#showmodal', function() {
                 var rows = showtable.rows($(this).parents('tr')).data();
