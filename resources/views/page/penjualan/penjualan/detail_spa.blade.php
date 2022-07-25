@@ -346,6 +346,9 @@
                                                                         <tr>
                                                                             <th class="align-center" colspan="5">Total Harga</th>
                                                                             <th class="tabnum nowraptxt">@currency($totalharga)</th>
+                                                                            @if(Auth::user()->divisi_id == "8")
+                                                                             <th></th>
+                                                                            @endif
                                                                         </tr>
                                                                     </tfoot>
 
