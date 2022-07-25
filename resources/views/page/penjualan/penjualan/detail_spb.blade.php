@@ -123,28 +123,32 @@
                             <div class="card-body"> --}}
                                 <div class="row">
                                     {{-- <div class="card"> --}}
-                                        <div class="card col-lg-4 col-md-12 mb-3">
-                                            <canvas id="myChart" width="400" height="400" class="mb-5"></canvas>
-                                            <div class="card card-secondary card-outline mt-3">
-                                                <div class="card-body">
-                                                    <h3 class="profile-username text-center">BABY ONE</h3>
-                                                    <ul class="list-group list-group-unbordered mb-3">
-                                                        {{-- <li class="list-group-item">
-                                                            <span class="align-self-center"><span class="foo bg-chart-light mr-2"></span><span>Belum Proses</span></span> <a class="float-right">2<sub> dari 12</sub></a>
-                                                        </li> --}}
-                                                        <li class="list-group-item">
-                                                            <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right">2<sub> dari 12</sub></a>
-                                                        </li>
-                                                        <li class="list-group-item">
-                                                            <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right">2<sub> dari 12</sub></a>
-                                                        </li>
-                                                        <li class="list-group-item">
-                                                            <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right">2<sub> dari 12</sub></a>
-                                                        </li>
-                                                        <li class="list-group-item">
-                                                            <span class="align-self-center"><span class="foo bg-chart-blue mr-2"></span><span>Kirim</span></span> <a class="float-right">2<sub> dari 12</sub></a>
-                                                        </li>
-                                                    </ul>
+                                        <div class="card col-lg-4 col-md-12 removeshadow">
+                                            <div class="row">
+                                                <div class="col-11">
+                                                    <canvas id="myChart" width="400" height="400" class="mb-5"></canvas>
+                                                    <div class="card card-secondary card-outline mt-3">
+                                                        <div class="card-body">
+                                                            <h3 class="profile-username text-center">BABY ONE</h3>
+                                                            <ul class="list-group list-group-unbordered mb-3">
+                                                                {{-- <li class="list-group-item">
+                                                                    <span class="align-self-center"><span class="foo bg-chart-light mr-2"></span><span>Belum Proses</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                </li> --}}
+                                                                <li class="list-group-item">
+                                                                    <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
+                                                                </li>
+                                                                <li class="list-group-item">
+                                                                    <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
+                                                                </li>
+                                                                <li class="list-group-item">
+                                                                    <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
+                                                                </li>
+                                                                <li class="list-group-item bg-chart-blue text-white">
+                                                                    <span class="align-self-center"><span class="foo mr-2"></span><span>Kirim</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
+                                                                </li>
+                                                            </ul>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                             {{-- <div class="card-body hide">
@@ -188,7 +192,7 @@
                                                     </div>
                                             </div> --}}
                                         </div>
-                                        <div class="card col-lg-8 col-md-12 mb-3">
+                                        <div class="card col-lg-8 col-md-12">
                                             <div class="card-body">
                                             <h6><b>Detail Produk</b></h6>
                                             <div class="table-responsive overflowcard">
@@ -196,21 +200,17 @@
                                                 <?php $no = 0; ?>
                                                 @if(isset($data->Pesanan))
                                                         <table class="table" style="max-width:100%; overflow-x: hidden; background-color:white;" id="tabledetailpesan">
-                                                            <thead>
+                                                            <thead class="bg-chart-light">
                                                                 <tr>
                                                                     <th rowspan="2">No</th>
                                                                     <th rowspan="2">Produk</th>
                                                                     <th rowspan="2"></th>
-                                                                    <th colspan="2">Qty</th>
+                                                                    <th rowspan="2">Qty</th>
                                                                     <th rowspan="2">Harga</th>
                                                                     <th rowspan="2">Subtotal</th>
                                                                     @if(Auth::user()->divisi_id == "8")
                                                                     <th rowspan="2">Aksi</th>
                                                                     @endif
-                                                                </tr>
-                                                                <tr>
-                                                                    <th><i class="fas fa-shopping-cart"></i></th>
-                                                                    <th><i class="fas fa-truck"></i></th>
                                                                 </tr>
                                                             </thead>
                                                             <tbody>
@@ -223,13 +223,13 @@
                                                                     <td class="nowraptxt">
                                                                         <button class="btn btn-sm btn-outline-primary" id="lihatstok" data-id="{{$e->id}}" data-produk="paket"><i class="fas fa-eye"></i></button>
                                                                     </td>
-                                                                    <td colspan="2" class="nowraptxt tabnum">{{$e->jumlah}}</td>
+                                                                    <td class="nowraptxt tabnum">{{$e->jumlah}}</td>
                                                                     <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->harga)</td>
                                                                     <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
                                                                     @if(Auth::user()->divisi_id == "8")
                                                                     <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">-</td>
                                                                     @endif
-                                                                    <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
+                                                                    <?php $totalharga = $totalharga + (($e->harga * $e->jumlah)); ?>
                                                                 </tr>
                                                                 @if(isset($e->DetailPesananProduk))
                                                                 @foreach($e->DetailPesananProduk as $l)
@@ -246,7 +246,6 @@
                                                                     <td>
                                                                         {{$l->getJumlahPesanan()}}
                                                                     </td>
-                                                                    <td>{{$l->getJumlahKirim()}}</td>
                                                                 </tr>
                                                                 @endforeach
                                                                 @endif
@@ -265,7 +264,6 @@
                                                                         @endif
                                                                     </td>
                                                                     <td class="nowraptxt tabnum"><span class="text-muted">{{$e->jumlah}}</span></td>
-                                                                    <td class="nowraptxt tabnum">@if(isset($e->detaillogistikpart)) {{$e->jumlah}} @else 0 @endif</td>
                                                                     <td class="nowraptxt tabnum">@currency($e->harga)</td>
                                                                     <td class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
                                                                         @if(Auth::user()->divisi_id == "8")
@@ -285,10 +283,10 @@
                                                                 @endforeach
                                                                 @endif
                                                             </tbody>
-                                                            <tfoot>
+                                                            <tfoot class="bg-chart-light">
                                                                 <tr>
-                                                                    <td colspan="6">Total Harga</td>
-                                                                    <td class="tabnum nowraptxt">@currency($totalharga)</td>
+                                                                    <th colspan="5" class="align-center">Total Harga</th>
+                                                                    <th class="tabnum nowraptxt">@currency($totalharga)</th>
                                                                 </tr>
                                                             </tfoot>
 

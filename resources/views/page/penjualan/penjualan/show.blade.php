@@ -213,7 +213,7 @@
 
             .overflowcard {
                 max-height:
-                680px;
+                550px;
                 width: auto;
                 overflow-y: scroll;
                 box-shadow: none;
@@ -242,7 +242,7 @@
             }
 
             .overflowcard {
-                max-height: 650px;
+                max-height: 500px;
                 width: auto;
                 overflow-y: scroll;
                 box-shadow: none;
@@ -1453,13 +1453,6 @@
                         $(api.column(5).footer()).html(num_for(total_pesanan));
                     },
                 });
-
-                // dt.on('draw', function() {
-                //     $.each(detailRows, function(i, id) {
-                //         console.log(id);
-                //         $('#' + id + ' td.details-control').trigger('click');
-                //     });
-                // });
             }
 
             function detailtabel_spa(id) {

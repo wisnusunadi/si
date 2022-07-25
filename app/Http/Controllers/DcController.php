@@ -2061,7 +2061,26 @@ class DcController extends Controller
                     }
                     return $datas;
                 })
-                ->rawColumns(['customer', 'status'])
+                ->addColumn('aksi', function($data){
+                    $id = "";
+                    $jenis = "";
+                    if($data->Ekatalog){
+                        $id = $data->Ekatalog->id;
+                        $jenis = "ekatalog";
+                    }
+                    else if($data->Spa){
+                        $id = $data->Spa->id;
+                        $jenis = "spa";
+                    }
+                    else if($data->Spb){
+                        $id = $data->Spb->id;
+                        $jenis = "spb";
+                    }
+                    return  '<a data-toggle="modal" data-target="'.$jenis.'" class="somodal" data-attr="' . route('penjualan.penjualan.detail.'.$jenis,  $id) . '"  data-id="' . $id . '">
+                            <button class="btn btn-outline-primary btn-xs" type="button"><i class="fas fa-eye"></i> Detail</button>
+                        </a>';
+                })
+                ->rawColumns(['customer', 'status', 'aksi'])
                 ->make(true);
     }
     //Another

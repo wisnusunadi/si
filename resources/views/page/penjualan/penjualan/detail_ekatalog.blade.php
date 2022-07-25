@@ -176,16 +176,16 @@
                                                                                     <span class="align-self-center"><span class="foo bg-chart-light mr-2"></span><span>Belum Proses</span></span> <a class="float-right">2<sub> dari 12</sub></a>
                                                                                 </li> --}}
                                                                                 <li class="list-group-item">
-                                                                                    <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                                    <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
                                                                                 </li>
                                                                                 <li class="list-group-item">
-                                                                                    <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                                    <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
                                                                                 </li>
                                                                                 <li class="list-group-item">
-                                                                                    <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                                    <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
                                                                                 </li>
-                                                                                <li class="list-group-item">
-                                                                                    <span class="align-self-center"><span class="foo bg-chart-blue mr-2"></span><span>Kirim</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                                                <li class="list-group-item bg-chart-blue text-white">
+                                                                                    <span class="align-self-center"><span class="foo mr-2"></span><b>Kirim</b></span> <b class="float-right mr-2">2<sub> dari 12</sub></b>
                                                                                 </li>
                                                                             </ul>
 
@@ -216,10 +216,10 @@
                                                     <div class="card-body">
                                                         <h6><b>Detail Produk</b></h6>
                                                         <div class="table-responsive overflowcard">
-                                                            <table class="table table-striped"
+                                                            <table class="table"
                                                                 style="max-width:100%; overflow-x: hidden;"
                                                                 id="tabledetailpesan">
-                                                                <thead>
+                                                                <thead class="bg-chart-light">
                                                                     <tr>
                                                                         <th rowspan="2">No</th>
                                                                         <th rowspan="2">Produk</th>
@@ -245,24 +245,6 @@
                                                                                         class="wb">{{ $e->PenjualanProduk->nama }}</b>
                                                                                 </td>
                                                                                 <td class="nowraptxt">
-                                                                                    {{-- <div id="progress_gdg" class="hide">
-                                                                                        <div class="progress">
-                                                                                            <div class="progress-bar bg-orange" role="progressbar" aria-valuenow="100"  style="width: {{round((($e->getJumlahProgress()->count_gudang / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%" aria-valuemin="0" aria-valuemax="100">{{round((($e->getJumlahProgress()->count_gudang / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%</div>
-                                                                                        </div>
-                                                                                        <small class="text-muted">Selesai Gudang</small>
-                                                                                    </div>
-                                                                                    <div id="progress_qc" class="hide">
-                                                                                        <div class="progress">
-                                                                                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="100"  style="width: {{round((($e->getJumlahProgress()->count_qc / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%" aria-valuemin="0" aria-valuemax="100">{{round((($e->getJumlahProgress()->count_qc / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%</div>
-                                                                                        </div>
-                                                                                        <small class="text-muted">Selesai QC</small>
-                                                                                    </div>
-                                                                                    <div id="progress_log" class="hide">
-                                                                                        <div class="progress">
-                                                                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"  style="width: {{round((($e->getJumlahProgress()->count_log / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%" aria-valuemin="0" aria-valuemax="100">{{round((($e->getJumlahProgress()->count_log / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%</div>
-                                                                                        </div>
-                                                                                        <small class="text-muted">Selesai Logistik</small>
-                                                                                    </div> --}}
                                                                                     <button class="btn btn-sm btn-outline-primary" id="lihatstok" data-id="{{$e->id}}" data-produk="paket"><i class="fas fa-eye"></i></button>
                                                                                 </td>
                                                                                 {{-- <td colspan="2" class="nowraptxt">{{ $e->jumlah }} --}}
@@ -321,10 +303,10 @@
                                                                         @endforeach
                                                                     @endif
                                                                 </tbody>
-                                                                <tfoot>
+                                                                <tfoot class="bg-chart-light">
                                                                     <tr>
-                                                                        <td colspan="6">Total Harga</td>
-                                                                        <td class="nowraptxt tabnum">@currency($totalharga)</td>
+                                                                        <th colspan="6" class="align-center">Total Harga</th>
+                                                                        <th class="nowraptxt tabnum">@currency($totalharga)</th>
                                                                     </tr>
                                                                 </tfoot>
                                                             </table>
