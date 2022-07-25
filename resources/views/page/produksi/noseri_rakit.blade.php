@@ -39,7 +39,15 @@
 <table>
     <thead>
         <tr>
-            <th> HASIL PERAKITAN PRODUKSI</th>
+            <th colspan="8"> HASIL PERAKITAN PRODUKSI</th>
+            <th style="background-color:#f2ee0a" rowspan="2"></th>
+            <th rowspan="2">
+                Waktu <br> Perakitan
+            </th>
+            <th style="background-color:#00FF00" rowspan="2"></th>
+            <th rowspan="2">
+                Waktu <br> Transfer
+            </th>
         </tr>
         <tr></tr>
         @foreach ($data as $d)
@@ -63,14 +71,14 @@
             @php
                 $no++;
             @endphp
-                <td>{{ $no }}</td>
+                <td style="width: 5ch">{{ $no }}</td>
                 @if (isset($dd->noseri))
-                    <td>{{ $dd->noseri }}</td>
+                    <td style="width: 16ch">{{ $dd->noseri }}</td>
                 @else
                     <td>-</td>
                 @endif
-                <td>{{ $dd->date_in }}</td>
-                <td>{{ $dd->waktu_tf == null ? '-' : $dd->waktu_tf }}</td>
+                <td style="background-color:#f2ee0a; width: 20ch">{{ $dd->date_in }}</td>
+                <td style="background-color:#00FF00; width: 20ch">{{ $dd->waktu_tf == null ? '-' : $dd->waktu_tf }}</td>
                 @if ($no % 5 == 0)
                     </tr><tr>
                 @endif
