@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\GBJExportSPB;
 use App\Exports\ImportNoseri;
+use App\Exports\NoseriGudangExport;
 use App\Exports\SpbExport;
 use App\Models\DetailEkatalog;
 use App\Models\DetailEkatalogProduk;
@@ -2464,7 +2465,7 @@ class GudangController extends Controller
                 $stok = $gdg->stok + $value['jml'];
                 $gdg->update(['stok' => $stok]);
             }
-        
+
             return response()->json(['msg' => 'Data Berhasil Diterima', 'error' => false]);
         } catch (\Exception $e) {
             return response()->json([
@@ -3823,5 +3824,10 @@ class GudangController extends Controller
                 'msg' => $e->getMessage(),
             ]);
         }
+    }
+
+    function export_noseri_gudang(Request $request)
+    {
+        return Excel::download(new NoseriGudangExport(), 'NoseriBarangJadi.xlsx');
     }
 }

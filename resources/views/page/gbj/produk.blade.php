@@ -35,6 +35,12 @@
                                             <i class="fas fa-file-import"></i>&nbsp;Import
                                         </button>
                                     </span>
+
+                                    <span class="float-left mr-1">
+                                        <a href="{{ route('gbj.noseri') }}" class="btn btn-outline-secondary" id="btnExportNoseri">
+                                            <i class="fas fa-download"></i>&nbsp;Noseri
+                                        </a>
+                                    </span>
                                 @endif
                                 </div>
                             </div>
@@ -65,7 +71,7 @@
                                                             value="Alat Kesehatan" />
                                                         <label class="form-check-label" for="sp_kelompok">
                                                             Alat Kesehatan
-                                                        </label> 
+                                                        </label>
                                                     </div>
                                                 </div>
                                                 <div class="form-group">
@@ -499,7 +505,7 @@
         </div>
     </div>
 </div>
- 
+
 <div class="modal fade import-seri importSeri" id="" role="dialog" aria-labelledby="modelTitleId">
     <div class="modal-dialog dialogModal modal-xl" role="document">
         <div class="modal-content">
@@ -582,7 +588,7 @@
                             <th style="min-width: 500px">No Seri</th>
                             <th style="min-width: 500px">Layout</th>
                         </tr>
-                    </thead>    
+                    </thead>
                     <tbody class="tambah_noseri_table">
                     </tbody>
                 </table>
