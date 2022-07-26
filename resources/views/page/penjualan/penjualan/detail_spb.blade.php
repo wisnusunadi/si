@@ -119,104 +119,192 @@
                         </div>
                     </div>
                     <div class="tab-pane fade" id="tabs-produk" role="tabpanel" aria-labelledby="tabs-produk-tab">
-                                <div class="table-responsive">
-                                    <?php $totalharga = 0; ?>
-                                    <?php $no = 0; ?>
-                                    @if(isset($data->Pesanan))
-                                    <div class="card removeshadow overflowy">
-                                        <div class="card-body">
-                                            <table class="table" style="max-width:100%; overflow-x: hidden; background-color:white;" id="tabledetailpesan">
-                                                <thead>
-                                                    <tr>
-                                                        <th rowspan="2">No</th>
-                                                        <th rowspan="2">Produk</th>
-                                                        <th colspan="2">Qty</th>
-                                                        <th rowspan="2">Harga</th>
-                                                        <th rowspan="2">Subtotal</th>
-                                                        @if(Auth::user()->divisi_id == "8")
-                                                        <th rowspan="2">Aksi</th>
-                                                        @endif
-                                                    </tr>
-                                                    <tr>
-                                                        <th><i class="fas fa-shopping-cart"></i></th>
-                                                        <th><i class="fas fa-truck"></i></th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @if(isset($data->Pesanan->detailpesanan))
-                                                    @foreach($data->pesanan->detailpesanan as $e)
-                                                    <?php $no = $no + 1; ?>
-                                                    <tr>
-                                                        <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">{{$no}}</td>
-                                                        <td><b class="wb">{{$e->PenjualanProduk->nama}}</b></td>
-                                                        <td colspan="2" class="nowraptxt tabnum">{{$e->jumlah}}</td>
-                                                        <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->harga)</td>
-                                                        <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
-                                                        @if(Auth::user()->divisi_id == "8")
-                                                        <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">-</td>
-                                                        @endif
-                                                        <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
-                                                    </tr>
-                                                    @if(isset($e->DetailPesananProduk))
-                                                    @foreach($e->DetailPesananProduk as $l)
-                                                    <tr>
-                                                        <td><span class="text-muted">@if(!empty($l->GudangBarangJadi->nama))
-                                                                {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
-                                                                @else
-                                                                {{$l->GudangBarangJadi->Produk->nama}}
-                                                                @endif</span>
-                                                        </td>
-                                                        <td>
-                                                            {{$l->getJumlahPesanan()}}
-                                                        </td>
-                                                        <td>{{$l->getJumlahKirim()}}</td>
-                                                    </tr>
-                                                    @endforeach
-                                                    @endif
-                                                    @endforeach
-                                                    @endif
-
-                                                    @if(isset($data->Pesanan->detailpesananpart))
-                                                    @foreach($data->pesanan->detailpesananpart as $e)
-                                                    <?php $no = $no + 1; ?>
-                                                    <tr>
-                                                        <td class="nowraptxt">{{$no}}</td>
-                                                        <td class="wb"><b>{{$e->Sparepart->nama}} <i class="fas fa-info-circle text-danger" data-toggle="tooltip" data-html="true" data-placement="bottom" role="button" title='Ini Adalah Tooltipnya'</b></td>
-                                                        <td class="nowraptxt tabnum"><span class="text-muted">{{$e->jumlah}}</span></td>
-                                                        <td class="nowraptxt tabnum">@if(isset($e->detaillogistikpart)) {{$e->jumlah}} @else 0 @endif</td>
-                                                        <td class="nowraptxt tabnum">@currency($e->harga)</td>
-                                                        <td class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
-                                                            @if(Auth::user()->divisi_id == "8")
-                                                            @if($data->Pesanan->log_id == "8" || $data->Pesanan->log_id == "9")
-                                                            <td><a data-toggle="komentar" class="komentarmodal" data-id="{{$e->id}}">
-                                                                <button type="button" class="btn btn-outline-warning btn-sm">
-                                                                    <i class="fas fa-pencil-alt"></i>
-                                                                        Komentar
-                                                                </button></a>
-                                                            </td>
-                                                            @else
-                                                            <td>-</td>
-                                                            @endif
-                                                            @endif
-                                                        <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
-                                                    </tr>
-                                                    @endforeach
-                                                    @endif
-                                                </tbody>
-                                                <tfoot>
-                                                    <tr>
-                                                        <td colspan="5">Total Harga</td>
-                                                        <td class="tabnum nowraptxt">@currency($totalharga)</td>
-                                                    </tr>
-                                                </tfoot>
-
-                                            </table>
+                        {{-- <div class="card removeshadow">
+                            <div class="card-body"> --}}
+                                <div class="row">
+                                    {{-- <div class="card"> --}}
+                                        <div class="card col-lg-4 col-md-12 mb-3">
+                                            <canvas id="myChart" width="400" height="400" class="mb-5"></canvas>
+                                            <div class="card card-secondary card-outline mt-3">
+                                                <div class="card-body">
+                                                    <h3 class="profile-username text-center"><span id="nama_prd">-</span></h3>
+                                                    <ul class="list-group list-group-unbordered mb-3">
+                                                        <li class="list-group-item " id="part_status">
+                                                            <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right"><span id="c_gudang">0</span><sub id="tot_gudang"> dari 0</sub></a>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right"><span id="c_qc">0</span><sub  id="tot_qc"> dari 0</sub></a>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right"><span id="c_log">0</span><sub  id="tot_log"> dari 0</sub></a>
+                                                        </li>
+                                                        <li class="list-group-item">
+                                                            <span class="align-self-center"><span class="foo bg-chart-blue mr-2"></span><span>Kirim</span></span> <a class="float-right"><span id="c_kirim">0</span><sub  id="tot_kirim"> dari 0</sub></a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                            {{-- <div class="card-body hide">
+                                                <h6><b>Status Barang</b></h6>
+                                                    <div id="chartproduk"></div>
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="info-box bg-light removeshadow" style="background-color:#5F7A90; color:white;">
+                                                                <div class="info-box-content">
+                                                                    <span class="info-box-text">Produk</span>
+                                                                    <span class="info-box-number" id="nama_produk">-</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="row">
+                                                        <div class="col-lg-4 col-md-4">
+                                                            <div class="info-box removeshadow" style="background-color:#EA8B1B; color:white;">
+                                                                <div class="info-box-content">
+                                                                    <span class="info-box-text">Gudang</span>
+                                                                    <span class="info-box-number" id="count_gudang">0</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-md-4">
+                                                            <div class="info-box removeshadow" style="background-color:#FFC700;">
+                                                                <div class="info-box-content">
+                                                                    <span class="info-box-text">QC</span>
+                                                                    <span class="info-box-number" id="count_qc">0</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-lg-4 col-md-4">
+                                                            <div class="info-box removeshadow" style="background-color:#456600; color:white;">
+                                                                <div class="info-box-content">
+                                                                    <span class="info-box-text">Logistik</span>
+                                                                    <span class="info-box-number" id="count_log">0</span>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            </div> --}}
                                         </div>
-                                    </div>
-                                    @else
-                                    <div class="align-center"><i>Detail Pesanan Belum Tersedia</i></div>
-                                    @endif
+                                        <div class="card col-lg-8 col-md-12 mb-3">
+                                            <div class="card-body">
+                                            <h6><b>Detail Produk</b></h6>
+                                            <div class="table-responsive overflowcard">
+                                                <?php $totalharga = 0; ?>
+                                                <?php $no = 0; ?>
+                                                @if(isset($data->Pesanan))
+                                                        <table class="table" style="max-width:100%; overflow-x: hidden; background-color:white;" id="tabledetailpesan">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th rowspan="2">No</th>
+                                                                    <th rowspan="2">Produk</th>
+                                                                    <th rowspan="2"></th>
+                                                                    <th colspan="2">Qty</th>
+                                                                    <th rowspan="2">Harga</th>
+                                                                    <th rowspan="2">Subtotal</th>
+                                                                    @if(Auth::user()->divisi_id == "8")
+                                                                    <th rowspan="2">Aksi</th>
+                                                                    @endif
+                                                                </tr>
+                                                                <tr>
+                                                                    <th><i class="fas fa-shopping-cart"></i></th>
+                                                                    <th><i class="fas fa-truck"></i></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                                @if(isset($data->Pesanan->detailpesanan))
+                                                                @foreach($data->pesanan->detailpesanan as $e)
+                                                                <?php $no = $no + 1; ?>
+                                                                <tr>
+                                                                    <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt">{{$no}}</td>
+                                                                    <td><b class="wb">{{$e->PenjualanProduk->nama}}</b></td>
+                                                                    <td class="nowraptxt">
+                                                                        <button class="btn btn-sm btn-outline-primary" id="lihatstok" data-id="{{$e->id}}" data-produk="paket"><i class="fas fa-eye"></i></button>
+                                                                    </td>
+                                                                    <td colspan="2" class="nowraptxt tabnum">{{$e->jumlah}}</td>
+                                                                    <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->harga)</td>
+                                                                    <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
+                                                                    @if(Auth::user()->divisi_id == "8")
+                                                                    <td rowspan="{{count($e->DetailPesananProduk) + 1}}" class="nowraptxt tabnum">-</td>
+                                                                    @endif
+                                                                    <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
+                                                                </tr>
+                                                                @if(isset($e->DetailPesananProduk))
+                                                                @foreach($e->DetailPesananProduk as $l)
+                                                                <tr>
+                                                                    <td><span class="text-muted">@if(!empty($l->GudangBarangJadi->nama))
+                                                                            {{$l->GudangBarangJadi->Produk->nama}} - <b>{{$l->GudangBarangJadi->nama}}</b>
+                                                                            @else
+                                                                            {{$l->GudangBarangJadi->Produk->nama}}
+                                                                            @endif</span>
+                                                                    </td>
+                                                                    <td class="nowraptxt">
+                                                                        <button class="btn btn-sm btn-outline-primary" id="lihatstok" data-id="{{$l->id}}" data-produk="variasi"><i class="fas fa-eye"></i></button>
+                                                                    </td>
+                                                                    <td>
+                                                                        {{$l->getJumlahPesanan()}}
+                                                                    </td>
+                                                                    <td>{{$l->getJumlahKirim()}}</td>
+                                                                </tr>
+                                                                @endforeach
+                                                                @endif
+                                                                @endforeach
+                                                                @endif
+
+                                                                @if(isset($data->Pesanan->detailpesananpart))
+                                                                @foreach($data->pesanan->detailpesananpart as $e)
+                                                                <?php $no = $no + 1; ?>
+                                                                <tr>
+                                                                    <td class="nowraptxt">{{$no}}</td>
+                                                                    <td class="wb"><b>{{$e->Sparepart->nama}}
+                                                                         {{-- <i class="fas fa-info-circle text-danger" data-toggle="tooltip" data-html="true" data-placement="bottom" role="button" title='Ini Adalah Tooltipnya'> --}}
+
+                                                                         </b>
+                                                                        </td>
+                                                                    <td class="nowraptxt">
+                                                                        @if(strpos($e->Sparepart->kode, 'JASA') === false)
+                                                                        <button class="btn btn-sm btn-outline-primary" id="lihatstok" data-id="{{$e->id}}" data-produk="part"><i class="fas fa-eye"></i></button>
+                                                                        @endif
+                                                                    </td>
+                                                                    <td class="nowraptxt tabnum"><span class="text-muted">{{$e->jumlah}}</span></td>
+                                                                    <td class="nowraptxt tabnum">@if(isset($e->detaillogistikpart)) {{$e->jumlah}} @else 0 @endif</td>
+                                                                    <td class="nowraptxt tabnum">@currency($e->harga)</td>
+                                                                    <td class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
+                                                                        @if(Auth::user()->divisi_id == "8")
+                                                                        @if($data->Pesanan->log_id == "8" || $data->Pesanan->log_id == "9")
+                                                                        <td><a data-toggle="komentar" class="komentarmodal" data-id="{{$e->id}}">
+                                                                            <button type="button" class="btn btn-outline-warning btn-sm">
+                                                                                <i class="fas fa-pencil-alt"></i>
+                                                                                    Komentar
+                                                                            </button></a>
+                                                                        </td>
+                                                                        @else
+                                                                        <td>-</td>
+                                                                        @endif
+                                                                        @endif
+                                                                    <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
+                                                                </tr>
+                                                                @endforeach
+                                                                @endif
+                                                            </tbody>
+                                                            <tfoot>
+                                                                <tr>
+                                                                    <td colspan="6">Total Harga</td>
+                                                                    <td class="tabnum nowraptxt">@currency($totalharga)</td>
+                                                                </tr>
+                                                            </tfoot>
+
+                                                        </table>
+                                                @else
+                                                <div class="align-center"><i>Detail Pesanan Belum Tersedia</i></div>
+                                                @endif
+                                            </div>
+                                            </div>
+                                        </div>
+                                    {{-- </div> --}}
                                 </div>
+                            {{-- </div>
+                        </div> --}}
+
                     </div>
                 </div>
             </div>

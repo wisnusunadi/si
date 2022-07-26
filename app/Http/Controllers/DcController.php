@@ -800,9 +800,16 @@ class DcController extends Controller
             ->rawColumns(['status', 'button'])
             ->make(true);
     }
-    public function get_data_detail_seri_so($id)
+    public function get_data_detail_seri_so($id, $jenis)
     {
-        $data = NoseriDetailLogistik::where('detail_logistik_id', $id)->get();
+        $data = "";
+        if($jenis == "belum"){
+            $data = NoseriDetailLogistik::where('detail_logistik_id', $id)->doesntHave('NoseriCoo')->get();
+        }
+        else{
+            $data = NoseriDetailLogistik::where('detail_logistik_id', $id)->has('NoseriCoo')->get();
+        }
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
