@@ -1033,9 +1033,9 @@ class ProduksiController extends Controller
                         $dt = GudangBarangJadi::whereIn('produk_id', [$data->gudangbarangjadi->produk->id])->get();
                         $opt = '';
                         foreach($dt as $dt) {
-                            $opt .= '<option value="' . $dt->id . '">' . $dt->produk->nama . ' <b>'. $dt->nama.'</b></option>';
+                            $opt .= '<option value="' . $dt->id . '" >' . $dt->produk->nama . ' <b>'. $dt->nama.'</b></option>';
                         }
-                        $a = '<select name="cars" id="cars" class="form-control">
+                        $a = '<select name="variasiid" id="variasiid" class="form-control">
                                 ' . $opt . '
                                 </select>';
 

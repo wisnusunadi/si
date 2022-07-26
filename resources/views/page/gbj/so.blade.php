@@ -562,6 +562,7 @@
 
     var id = '';
     $(document).on('click', '.editmodal', function(e) {
+        $('#variasiid').select2()
         var x = $(this).data('value');
         console.log(x);
         id = $(this).data('id');
@@ -652,7 +653,7 @@
             confirmButtonText: 'Yes, save it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    // $(this).prop('disabled', true);
+                    $(this).prop('disabled', true);
                     Swal.fire({
                         title: 'Please wait',
                         text: 'Data is transferring...',
@@ -673,7 +674,7 @@
                             data: ids,
                         },
                         success: function(res) {
-                            // location.reload();
+                            location.reload();
                             console.log(res);
                         }
                     })
