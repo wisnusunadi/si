@@ -24,232 +24,248 @@
 @stop
 
 @section('adminlte_css')
-    <style>
-        .foo {
-            border-radius: 50%;
-            float: left;
-            width: 10px;
-            height: 10px;
-            align-items: center !important;
+<style>
+
+    .foo {
+        border-radius: 50%;
+        float: left;
+        width: 10px;
+        height: 10px;
+        align-items: center !important;
+    }
+
+
+
+    .alert-danger {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+    .separator {
+        border-top: 1px solid #bbb;
+        width: 90%;
+    }
+
+    .wb {
+        word-break: break-all;
+        white-space: normal;
+    }
+
+    .nowraptxt {
+        white-space: nowrap;
+    }
+
+    .filter {
+        margin: 5px;
+    }
+
+    thead {
+        text-align: center;
+    }
+
+    td {
+        text-align: center;
+        white-space: nowrap;
+    }
+
+    #urgent {
+        color: #dc3545;
+        font-weight: 600;
+    }
+
+    #warning {
+        color: #FFC700;
+        font-weight: 600;
+    }
+
+    #info {
+        color: #3a7bb0;
+        font-weight: 600;
+    }
+
+    .minimizechar {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 13ch;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .dropdown-toggle:hover {
+        color: #4682B4;
+    }
+
+    .dropdown-toggle:active {
+        color: #C0C0C0;
+    }
+
+    td.details-control {
+        content: "\f055";
+        font-family: FontAwesome;
+        left: -5px;
+        position: absolute;
+        top: 0;
+    }
+
+    tr.details td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+
+    #detailekat {
+        background-color: #E9DDE5;
+
+    }
+
+    #detailspa {
+        background-color: #FFE6C9;
+    }
+
+    #detailspb {
+        background-color: #E1EBF2;
+        /* color: #7D6378; */
+
+    }
+
+    .tabnum {
+        font-variant-numeric: tabular-nums;
+    }
+
+    .removeshadow {
+        box-shadow: none;
+    }
+
+    .align-center {
+        text-align: center;
+    }
+
+    .bordertopnone {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        vertical-align: top;
+    }
+
+    .margin {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .card-detail {
+        align-items: center;
+        flex-direction: row;
+        shadow: none;
+        border: none;
+    }
+
+    .card-detail img {
+        width: 25%;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: calc(0.25rem - 1px);
+    }
+
+    /* .overflowcard {
+            max-height:
+            700px;
+        } */
+
+    .bg-chart-light{
+        background: rgba(192, 192, 192, 0.2);
+    }
+
+    .bg-chart-orange{
+        background: rgb(236, 159, 5);
+    }
+
+    .bg-chart-yellow{
+        background: rgb(255, 221, 0);
+    }
+
+    .bg-chart-green{
+        background: rgb(11, 171, 100);
+    }
+
+    .bg-chart-blue{
+        background: rgb(8, 126, 225);
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        body {
+            font-size: 14px;
         }
 
-        .bg-chart-light{
-            background: rgba(192, 192, 192, 0.2);
+        #detailmodal {
+            font-size: 14px;
         }
 
-        .bg-chart-orange{
-            background: rgb(236, 159, 5);
+        .btn {
+            font-size: 14px;
         }
 
-        .bg-chart-yellow{
-            background: rgb(255, 221, 0);
-        }
-
-        .bg-chart-green{
-            background: rgb(11, 171, 100);
-        }
-
-        .bg-chart-blue{
-            background: rgb(8, 126, 225);
-        }
-
-        .alert-danger {
-            color: #a94442;
-            background-color: #f2dede;
-            border-color: #ebccd1;
-        }
-
-        .separator {
-            border-top: 1px solid #bbb;
-            width: 90%;
-        }
-
-        .wb {
-            word-break: break-all;
-            white-space: normal;
-        }
-
-        .nowraptxt {
-            white-space: nowrap;
-        }
-
-        .filter {
-            margin: 5px;
-        }
-
-        thead {
-            text-align: center;
-        }
-
-        td {
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        #urgent {
-            color: #dc3545;
-            font-weight: 600;
-        }
-
-        #warning {
-            color: #FFC700;
-            font-weight: 600;
-        }
-
-        #info {
-            color: #3a7bb0;
-            font-weight: 600;
-        }
-
-        .minimizechar {
-            display: inline-block;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            max-width: 13ch;
-        }
-
-        .hide {
-            display: none;
-        }
-
-        .dropdown-toggle:hover {
-            color: #4682B4;
-        }
-
-        .dropdown-toggle:active {
-            color: #C0C0C0;
-        }
-
-        td.details-control {
-            content: "\f055";
-            font-family: FontAwesome;
-            left: -5px;
-            position: absolute;
-            top: 0;
-        }
-
-        tr.details td.details-control {
-            background: url('../resources/details_close.png') no-repeat center center;
-        }
-
-        #detailekat {
-            background-color: #E9DDE5;
-
-        }
-
-        #detailspa {
-            background-color: #FFE6C9;
-        }
-
-        #detailspb {
-            background-color: #E1EBF2;
-            /* color: #7D6378; */
-
-        }
-
-        .tabnum {
-            font-variant-numeric: tabular-nums;
-        }
-
-        .removeshadow {
+        .overflowcard {
+            max-height:
+            550px;
+            width: auto;
+            overflow-y: scroll;
             box-shadow: none;
         }
 
-        .align-center {
-            text-align: center;
+        .labelket {
+            text-align: right;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+        body {
+            font-size: 12px;
         }
 
-        .bordertopnone {
-            border-top: 0;
-            border-left: 0;
-            border-right: 0;
-            border-bottom: 0;
-            vertical-align: top;
+        h4 {
+            font-size: 20px;
         }
 
-        .margin {
-            margin-left: 10px;
-            margin-right: 10px;
-            margin-top: 15px;
-            margin-bottom: 15px;
+        #detailmodal {
+            font-size: 12px;
         }
 
-        .card-detail {
-            align-items: center;
-            flex-direction: row;
-            shadow: none;
-            border: none;
+        .btn {
+            font-size: 12px;
         }
 
-        .card-detail img {
-            width: 25%;
-            border-top-right-radius: 0;
-            border-bottom-left-radius: calc(0.25rem - 1px);
+        .overflowcard {
+            max-height: 500px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
         }
 
-        @media screen and (min-width: 1440px) {
+        .labelket {
+            text-align: right;
+        }
+    }
 
-            body {
-                font-size: 14px;
-            }
-
-            #detailmodal {
-                font-size: 14px;
-            }
-
-            .btn {
-                font-size: 14px;
-            }
-
-            .overflowy {
-                max-height: 550px;
-                width: auto;
-                overflow-y: scroll;
-                box-shadow: none;
-            }
-
-            .labelket {
-                text-align: right;
-            }
+    @media screen and (max-width: 991px) {
+        .labelket {
+            text-align: left;
         }
 
-        @media screen and (max-width: 1439px) {
-            body {
-                font-size: 12px;
-            }
-
-            h4 {
-                font-size: 20px;
-            }
-
-            #detailmodal {
-                font-size: 12px;
-            }
-
-            .btn {
-                font-size: 12px;
-            }
-
-            .overflowy {
-                max-height: 450px;
-                width: auto;
-                overflow-y: scroll;
-                box-shadow: none;
-            }
-
-            .labelket {
-                text-align: right;
-            }
+        .overflowcard {
+            max-height: 150px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
         }
+    }
 
-        @media screen and (max-width: 991px) {
-            .labelket {
-                text-align: left;
-            }
-        }
-
-    </style>
+</style>
 @stop
 
 @section('content')

@@ -268,10 +268,6 @@
                                                                         <th rowspan="2">Ongkir</th>
                                                                         <th rowspan="2">Subtotal</th>
                                                                     </tr>
-                                                                    {{-- <tr>
-                                                                        <th><i class="fas fa-shopping-cart"></i></th>
-                                                                        <th><i class="fas fa-truck"></i></th>
-                                                                    </tr> --}}
                                                                 </thead>
                                                                 <tbody>
                                                                     @if (isset($data->Pesanan->detailpesanan))
@@ -284,24 +280,6 @@
                                                                                         class="wb">{{ $e->PenjualanProduk->nama }}</b>
                                                                                 </td>
                                                                                 <td class="nowraptxt">
-                                                                                    {{-- <div id="progress_gdg" class="hide">
-                                                                                        <div class="progress">
-                                                                                            <div class="progress-bar bg-orange" role="progressbar" aria-valuenow="100"  style="width: {{round((($e->getJumlahProgress()->count_gudang / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%" aria-valuemin="0" aria-valuemax="100">{{round((($e->getJumlahProgress()->count_gudang / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%</div>
-                                                                                        </div>
-                                                                                        <small class="text-muted">Selesai Gudang</small>
-                                                                                    </div>
-                                                                                    <div id="progress_qc" class="hide">
-                                                                                        <div class="progress">
-                                                                                            <div class="progress-bar bg-warning" role="progressbar" aria-valuenow="100"  style="width: {{round((($e->getJumlahProgress()->count_qc / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%" aria-valuemin="0" aria-valuemax="100">{{round((($e->getJumlahProgress()->count_qc / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%</div>
-                                                                                        </div>
-                                                                                        <small class="text-muted">Selesai QC</small>
-                                                                                    </div>
-                                                                                    <div id="progress_log" class="hide">
-                                                                                        <div class="progress">
-                                                                                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="100"  style="width: {{round((($e->getJumlahProgress()->count_log / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%" aria-valuemin="0" aria-valuemax="100">{{round((($e->getJumlahProgress()->count_log / $e->getJumlahProgress()->count_jumlah) * 100), 0)}}%</div>
-                                                                                        </div>
-                                                                                        <small class="text-muted">Selesai Logistik</small>
-                                                                                    </div> --}}
                                                                                     <button class="btn btn-sm btn-outline-primary" id="lihatstok" data-id="{{$e->id}}" data-produk="paket"><i class="fas fa-eye"></i></button>
                                                                                 </td>
                                                                                 {{-- <td colspan="2" class="nowraptxt">{{ $e->jumlah }} --}}
@@ -313,7 +291,7 @@
                                                                                     class="nowraptxt tabnum">@currency($e->ongkir)</td>
                                                                                 <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
                                                                                     class="nowraptxt tabnum">@currency($e->harga * $e->jumlah + $e->ongkir)</td>
-                                                                                <?php $totalharga = $totalharga + ($e->harga * $e->jumlah + $e->ongkir); ?>
+                                                                                <?php $totalharga = $totalharga + (($e->harga * $e->jumlah) + $e->ongkir); ?>
                                                                             </tr>
                                                                             @if (isset($e->DetailPesananProduk))
                                                                                 @foreach ($e->DetailPesananProduk as $l)

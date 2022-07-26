@@ -1,41 +1,52 @@
 <div class="row">
-    <div class="col-lg-3 col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <h5>Detail</h5>
+    <div class="col-lg-12 col-md-12">
+        {{-- <div class="card">
+            <div class="card-body"> --}}
+                <h5>@if(!empty($data->nama))
+                    {{$data->Produk->nama}} - {{$data->nama}}
+                    @else
+                    {{$data->Produk->nama}}
+                    @endif</h5>
                 <div class="row">
-                    <div class="col-lg-12 col-md-6 col-sm-6">
-                        <div><small class="text-muted">Nama Produk</small></div>
-                        <div>
-                            <b>
-                                @if(!empty($data->nama))
-                                {{$data->Produk->nama}} - {{$data->nama}}
-                                @else
-                                {{$data->Produk->nama}}
-                                @endif
-                            </b>
+                    <div class="col-lg-4 col-md-6">
+                        <div class="info-box bg-warning">
+                            <span class="info-box-icon"><i class="fas fa-file-invoice"></i></span>
+                            <div class="info-box-content">
+                            <span class="info-box-text">Pesanan</span>
+                            <span class="info-box-number">{{$jumlah}} pcs</span>
+                            </div>
                         </div>
                     </div>
-                    <div class="col-lg-12 col-md-6 col-sm-6">
-                        <div><small class="text-muted">Jumlah Pesanan</small></div>
-                        <div><b>{{$jumlah}} pcs</b></div>
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="info-box bg-olive">
+                            <span class="info-box-icon"><i class="fas fa-shipping-fast"></i></span>
+                            <div class="info-box-content">
+                            <span class="info-box-text">Selesai Dikirim</span>
+                            <span class="info-box-number">{{$jumlahselesai}} pcs</span>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-lg-12 col-md-6 col-sm-6">
-                        <div><small class="text-muted">Jumlah Selesai Dikirim</small></div>
-                        <div><b>{{$jumlahselesai}} pcs</b></div>
-                    </div>
-                    <div class="col-lg-12 col-md-6 col-sm-6">
-                        <div><small class="text-muted">Jumlah Belum Dikirim</small></div>
-                        <div><b>{{$jumlahproses}} pcs</b></div>
+
+                    <div class="col-lg-4 col-md-6">
+                        <div class="info-box bg-maroon">
+                            <span class="info-box-icon"><i class="fas fa-truck-loading"></i>
+                            </span>
+                            <div class="info-box-content">
+                            <span class="info-box-text">Belum Dikirim</span>
+                            <span class="info-box-number">{{$jumlahproses}} pcs</span>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
+            {{-- </div>
+        </div> --}}
     </div>
-    <div class="col-lg-9 col-md-12">
-        <div class="card">
+    <div class="col-lg-12 col-md-12">
+        <hr>
+        <div class="card shadow-none">
             <div class="card-body">
-                <h5>Laporan</h5>
+                <h5 class="mb-2">Laporan</h5>
                 <div class="row">
                     <div class="col-12">
                         <div class="table-responsive">
@@ -44,6 +55,7 @@
                                     <tr>
                                         <th rowspan="2">No</th>
                                         <th rowspan="2">No SO</th>
+                                        <th rowspan="2">Customer</th>
                                         <th rowspan="2">Tanggal Delivery</th>
                                         <th rowspan="2">Jumlah</th>
                                         <th colspan="2">Pengiriman</th>

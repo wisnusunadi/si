@@ -239,21 +239,17 @@
                                                                 <table class="table"
                                                                     style="max-width:100%; overflow-x: hidden; background-color:white;"
                                                                     id="tabledetailpesan">
-                                                                    <thead>
+                                                                    <thead class="bg-chart-light">
                                                                         <tr>
                                                                             <th rowspan="2">No</th>
                                                                             <th rowspan="2">Produk</th>
                                                                             <th rowspan="2"></th>
-                                                                            <th colspan="2">Qty</th>
+                                                                            <th rowspan="2">Qty</th>
                                                                             <th rowspan="2">Harga</th>
                                                                             <th rowspan="2">Subtotal</th>
                                                                             @if(Auth::user()->divisi_id == "8")
                                                                             <th rowspan="2">Aksi</th>
                                                                             @endif
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th><i class="fas fa-shopping-cart"></i></th>
-                                                                            <th><i class="fas fa-truck"></i></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -267,10 +263,9 @@
                                                                                             class="wb">{{ $e->PenjualanProduk->nama }}</b>
                                                                                     </td>
                                                                                     <td class="nowraptxt">
-
                                                                                         <button class="btn btn-sm btn-outline-primary" id="lihatstok" data-id="{{$e->id}}" data-produk="paket"><i class="fas fa-eye"></i></button>
                                                                                     </td>
-                                                                                    <td colspan="2" class="nowraptxt tabnum">
+                                                                                    <td class="nowraptxt tabnum">
                                                                                         {{ $e->jumlah }}</td>
                                                                                     <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
                                                                                         class="nowraptxt tabnum">@currency($e->harga)</td>
@@ -281,7 +276,7 @@
                                                                                         -
                                                                                     </td>
                                                                                     @endif
-                                                                                    <?php $totalharga = $totalharga + $e->harga * $e->jumlah; ?>
+                                                                                    <?php $totalharga = $totalharga + (($e->harga * $e->jumlah) + $e->ongkir); ?>
                                                                                 </tr>
                                                                                 @if (isset($e->DetailPesananProduk))
                                                                                     @foreach ($e->DetailPesananProduk as $l)
@@ -302,7 +297,6 @@
                                                                                             <td>
                                                                                                 {{ $l->getJumlahPesanan() }}
                                                                                             </td>
-                                                                                            <td>{{ $l->getJumlahKirim() }}</td>
                                                                                         </tr>
                                                                                     @endforeach
                                                                                 @endif
@@ -326,13 +320,6 @@
                                                                                     <td class="nowraptxt tabnum"><span
                                                                                             class="text-muted">{{ $e->jumlah }}</span>
                                                                                     </td>
-                                                                                    <td class="nowraptxt tabnum">
-                                                                                        @if (isset($e->detaillogistikpart))
-                                                                                            {{ $e->jumlah }}
-                                                                                        @else
-                                                                                            0
-                                                                                        @endif
-                                                                                    </td>
                                                                                     <td class="nowraptxt tabnum">@currency($e->harga)</td>
                                                                                     <td class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
                                                                                     @if(Auth::user()->divisi_id == "8")
@@ -347,16 +334,19 @@
                                                                                     <td>-</td>
                                                                                     @endif
                                                                                     @endif
-                                                                                    <?php $totalharga = $totalharga + $e->harga * $e->jumlah; ?>
+                                                                                    <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
                                                                                 </tr>
                                                                             @endforeach
                                                                         @endif
                                                                     </tbody>
-                                                                    <tfoot>
-                                                                        <tr>
-                                                                            <td colspan="6">Total Harga</td>
-                                                                            <td class="tabnum nowraptxt">@currency($totalharga)</td>
-                                                                        </tr>
+                                                                    <tfoot class="bg-chart-light">
+                                                                    <tr>
+                                                                        <th colspan="5" class="align-center">Total Harga</th>
+                                                                        <th class="tabnum nowraptxt">@currency($totalharga)</th>
+                                                                        @if(Auth::user()->divisi_id == "8")
+                                                                        <th></th>
+                                                                        @endif
+                                                                    </tr>
                                                                     </tfoot>
 
                                                                 </table>
