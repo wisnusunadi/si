@@ -4169,7 +4169,6 @@ $Logistik = Logistik::find($request->sj_lama);
                 return $data->so;
             })
             ->addColumn('customer', function ($data) {
-                $name = explode('/', $data->so);
                 if ($data->Ekatalog) {
                     return '<div>' . $data->Ekatalog->Customer->nama . '</div><small>' . $data->Ekatalog->instansi . '</small>';
                 } else if ($data->Spa) {

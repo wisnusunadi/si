@@ -144,7 +144,7 @@
                                                                     <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
                                                                 </li>
                                                                 <li class="list-group-item bg-chart-blue text-white">
-                                                                    <span class="align-self-center"><span class="foo mr-2"></span><span>Kirim</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
+                                                                    <span class="align-self-center"><span class="foo mr-2"></span><b>Kirim</b></span> <b class="float-right mr-2">2<sub> dari 12</sub></b>
                                                                 </li>
                                                             </ul>
                                                         </div>

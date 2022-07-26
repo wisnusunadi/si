@@ -23,8 +23,20 @@
 @stop
 @section('adminlte_css')
 <style>
-    li.list-group-item {
-        border: 0 none;
+    .overflowtableekat{
+        max-height:
+        500px;
+        width: auto;
+        overflow-y: scroll;
+        box-shadow: none;
+    }
+
+    .overflowtablenonekat{
+        max-height:
+        300px;
+        width: auto;
+        overflow-y: scroll;
+        box-shadow: none;
     }
 
     .smtxt {
@@ -49,10 +61,6 @@
     .warning {
         color: #FFC700;
         font-weight: 600;
-    }
-
-    .list-group-item {
-        border: 0 none;
     }
 
     .align-right {
@@ -390,8 +398,8 @@
             <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                 <div class="modal-dialog modal-xl" role="document">
                     <div class="modal-content" style="margin: 10px">
-                        <div class="modal-header bg-warning">
-                            <h4 class="modal-title">Edit</h4>
+                        <div class="modal-header bg-warning-50">
+                            <h5 class="modal-title">Ubah Pengiriman</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
