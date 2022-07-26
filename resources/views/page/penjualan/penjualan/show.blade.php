@@ -25,6 +25,34 @@
 
 @section('adminlte_css')
     <style>
+        .foo {
+            border-radius: 50%;
+            float: left;
+            width: 10px;
+            height: 10px;
+            align-items: center !important;
+        }
+
+        .bg-chart-light{
+            background: rgba(192, 192, 192, 0.2);
+        }
+
+        .bg-chart-orange{
+            background: rgb(236, 159, 5);
+        }
+
+        .bg-chart-yellow{
+            background: rgb(255, 221, 0);
+        }
+
+        .bg-chart-green{
+            background: rgb(11, 171, 100);
+        }
+
+        .bg-chart-blue{
+            background: rgb(8, 126, 225);
+        }
+
         .alert-danger {
             color: #a94442;
             background-color: #f2dede;

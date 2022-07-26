@@ -580,6 +580,10 @@ Route::prefix('/dc')->group(function () {
 Route::prefix('/as')->group(function () {
     Route::post('/so/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so']);
     Route::post('/so/detail/{id}/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_pengiriman']);
+
+    Route::post('/penjualan/belum_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_belum_kirim']);
+    Route::post('/penjualan/selesai_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_selesai_kirim']);
+
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
