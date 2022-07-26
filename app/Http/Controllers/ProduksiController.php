@@ -1023,10 +1023,23 @@ class ProduksiController extends Controller
                     return $data->detailpesanan->penjualanproduk->nama.' '.'<span class="badge badge-light">Terkirim QC: '.round(($y / $x)*100,2).'%</span>';
                 })
                 ->addColumn('produk', function ($data) {
-                    if (empty($data->gudangbarangjadi->nama)) {
-                        return $data->gudangbarangjadi->produk->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->gudang_barang_jadi_id . '"><input type="hidden" name="detail_pesanan_produk_id[]" id="detail_pesanan_produk_id" value="' . $data->id . '">';
+                    if ($data->status_cek == 4) {
+                        if (empty($data->gudangbarangjadi->nama)) {
+                            return $data->gudangbarangjadi->produk->nama . '<input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->gudang_barang_jadi_id . '"><input type="hidden" name="detail_pesanan_produk_id[]" id="detail_pesanan_produk_id" value="' . $data->id . '">';
+                        } else {
+                            return $data->gudangbarangjadi->produk->nama . ' <b>' . $data->gudangbarangjadi->nama . '</b><input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->gudang_barang_jadi_id . '"><input type="hidden" name="detail_pesanan_produk_id[]" id="detail_pesanan_produk_id" value="' . $data->id . '">';
+                        }
                     } else {
-                        return $data->gudangbarangjadi->produk->nama . ' <b>' . $data->gudangbarangjadi->nama . '</b><input type="hidden" name="gdg_brg_jadi_id[]" id="gdg_brg_jadi_id" value="' . $data->gudang_barang_jadi_id . '"><input type="hidden" name="detail_pesanan_produk_id[]" id="detail_pesanan_produk_id" value="' . $data->id . '">';
+                        $dt = GudangBarangJadi::whereIn('produk_id', [$data->gudangbarangjadi->produk->id])->get();
+                        $opt = '';
+                        foreach($dt as $dt) {
+                            $opt .= '<option value="' . $dt->id . '">' . $dt->produk->nama . ' <b>'. $dt->nama.'</b></option>';
+                        }
+                        $a = '<select name="cars" id="cars" class="form-control">
+                                ' . $opt . '
+                                </select>';
+
+                        return $a;
                     }
                 })
                 ->addColumn('qty', function ($data) {
@@ -1103,9 +1116,9 @@ class ProduksiController extends Controller
                 })
                 ->addColumn('ids', function ($d) {
                     if ($d->status_cek == 4) {
-                        return '<input type="checkbox" class="cb-child-so" value="' . $d->gudang_barang_jadi_id . '" disabled>';
+                        return '<input type="checkbox" class="cb-child-so" value="' . $d->id . '" disabled>';
                     } else {
-                        return '<input type="checkbox" class="cb-child-so" value="' . $d->gudang_barang_jadi_id . '"><input type="hidden" name="detail_pesanan_produk_id[]" id="detail_pesanan_produk_id" value="' . $d->id . '">';
+                        return '<input type="checkbox" class="cb-child-so" value="' . $d->id . '">';
                     }
                 })
                 ->addColumn('action', function ($data) {

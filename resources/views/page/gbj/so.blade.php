@@ -501,7 +501,7 @@
             ]
         });
 
-        $('#sudah-dicek').DataTable({ 
+        $('#sudah-dicek').DataTable({
             destroy: true,
             processing: true,
             serverSide: false,
@@ -630,12 +630,13 @@
             $('.cb-child-so').each(function() {
                 if ($(this).is(":checked")) {
                     // so_dpp.gbj = ids;
+                    // ids = $(this).parent().next().children().val();
                     if (ids[$(this).val()] === undefined){
                         ids[$(this).val()] = [];
-                        ids[$(this).val()].push($(this).next().val())
+                        ids[$(this).val()].push($(this).parent().next().children().val())
                     }
                     else {
-                        ids[$(this).val()].push($(this).next().val())
+                        ids[$(this).val()].push($(this).parent().next().children().val())
                     }
                 }
             })
@@ -650,7 +651,7 @@
             confirmButtonText: 'Yes, save it!'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    $(this).prop('disabled', true);
+                    // $(this).prop('disabled', true);
                     Swal.fire({
                         title: 'Please wait',
                         text: 'Data is transferring...',
@@ -671,7 +672,7 @@
                             data: ids,
                         },
                         success: function(res) {
-                            location.reload();
+                            // location.reload();
                             console.log(res);
                         }
                     })
