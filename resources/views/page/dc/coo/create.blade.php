@@ -124,7 +124,7 @@
             <div class="card-body overflowy">
                 <div class="form-group">
                     <div class="table-responsive">
-                        <table class="table" style="width: 100%; text-align:center;" id="listnoseri">
+                        <table class="table" style="width: 100%; text-align:center;" id="listnoseribelum">
                             <thead>
                                 <tr>
                                     <th>No</th>

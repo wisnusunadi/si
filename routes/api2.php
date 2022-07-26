@@ -517,7 +517,7 @@ Route::prefix('/logistik')->group(function () {
         // Route::get('data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::post('noseri/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so']);
         Route::post('noseri/detail/belum_kirim/{id}/{array}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_belum_kirim']);
-         Route::get('noseri/detail/selesai_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_selesai_kirim']);
+        Route::get('noseri/detail/selesai_kirim/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_selesai_kirim']);
         Route::post('noseri/detail/selesai_kirim/data/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_selesai_kirim_data']);
         // Route::get('data/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_so']);
         Route::post('data/detail/belum_kirim/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_data_detail_belum_kirim_so']);
@@ -570,22 +570,42 @@ Route::prefix('/dc')->group(function () {
         Route::put('update_tgl_kirim_coo/{value}', [App\Http\Controllers\DcController::class, 'update_tgl_kirim_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);
         Route::post('selesai/{value}', [App\Http\Controllers\DcController::class, 'get_data_so_selesai']);
-
         Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
         Route::post('detail/seri/{id}/{jenis}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);
-         Route::post('detail/seri/select/{id}/{value}', [App\Http\Controllers\DcController::class, 'get_data_detail_select_seri_so']);
+        Route::post('detail/seri/select/{id}/{value}', [App\Http\Controllers\DcController::class, 'get_data_detail_select_seri_so']);
     });
 });
 
 Route::prefix('/as')->group(function () {
     Route::post('/so/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so']);
     Route::post('/so/detail/{id}/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_pengiriman']);
+
+    Route::post('/penjualan/belum_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_belum_kirim']);
+    Route::post('/penjualan/selesai_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_selesai_kirim']);
+
+    Route::get('/retur/detail', [App\Http\Controllers\AfterSalesController::class, 'detail_retur']);
+    Route::get('/list/so_selesai/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai']);
+
+    Route::get('/list/so_selesai_paket/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai_paket']);
+    Route::get('/list/so_selesai_paket_produk/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai_paket_produk']);
+
+    Route::get('/detail/so_retur/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_so_retur']);
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
     Route::get('dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard']);
 });
+
+Route::prefix('/manager')->group(function () {
+    Route::prefix('/qc')->group(function () {
+        Route::post('belum_uji', [App\Http\Controllers\PpicController::class, 'qc_outgoing_belum_uji']);
+        Route::post('selesai_uji', [App\Http\Controllers\PpicController::class, 'qc_outgoing_selesai_uji']);
+    });
+
+    Route::get('pesanan/{id}', [App\Http\Controllers\PpicController::class, 'pesanan']);
+});
 Route::get('/get_stok_pesanan', [MasterController::class, 'get_stok_pesanan']);
+
 Route::get('testingJson', [GudangController::class, 'dataTesting']);
 
 Route::namespace('v2')->group(__DIR__ . '/yogi/api.php');
