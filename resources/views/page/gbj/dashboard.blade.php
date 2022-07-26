@@ -38,27 +38,21 @@
         font-size: 17px;
         border-bottom: 3px solid transparent;
     }
-
     .topnav a:hover {
         border-bottom: 3px solid red;
     }
-
     .topnav a.active {
         border-bottom: 3px solid red;
     }
-
     .hidden {
         display: none !important;
     }
-
     .active {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
-
     .otg:hover {
         box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
-
     .nav-border {
         border-bottom: 2px solid black;
         content: "";
@@ -674,13 +668,11 @@
             terimadestroy();
             penjualan();
         })
-
         $('#nav-profile-tab').on('click', function(){
             console.log('produk');
             penjualandestroy();
             terimadestroy();
             produk();
-
             // Produk Stok
             $(document).on('click', '#jml-produk-20', function () {
                 $('#jml-produk-20').addClass('active');
@@ -747,7 +739,6 @@
                 $('.produk-masuk-6-bulan-table').addClass('hidden');
                 $('.produk-masuk-3-bulan-table').addClass('hidden');
             })
-
             $.ajax({
                 url: '/api/gbj/sel-layout',
                 type: 'GET',
@@ -766,7 +757,6 @@
                 }
             });
         })
-
         $('#nav-contact-tab').on('click', function(){
             console.log('terima');
             penjualandestroy();
@@ -798,7 +788,6 @@
                 $('.receiptonedaytable').addClass('hidden');
             });
         })
-
         $(document).on('click', '#transferoneday', function () {
             $('#transferoneday').addClass('active');
             $('.transferonedaytable').removeClass('hidden');
@@ -823,11 +812,8 @@
             $('.transfertwodaytable').addClass('hidden');
             $('.transferonedaytable').addClass('hidden');
         })
-
         $('.select2').select2({});
-
     });
-
         function filterFunction() {
             var input, filter, ul, li, a, i;
             input = document.getElementById("myInput");
@@ -849,7 +835,6 @@
         function modalSO() {
             $('#viewProdukModal').modal('show');
         }
-
         function penjualan() {
             $.ajax({
                 url: "/api/dashboard-gbj/list/h",
@@ -859,7 +844,6 @@
                     $('h4#he3').text(res);
                 }
             })
-
             $.ajax({
                 url: "/api/dashboard-gbj/list1/h",
                 type: "post",
@@ -868,7 +852,6 @@
                     $('h4#he1').text(res);
                 }
             })
-
             $.ajax({
                 url: "/api/dashboard-gbj/list2/h",
                 type: "post",
@@ -877,7 +860,6 @@
                     $('h4#he2').text(res);
                 }
             })
-
             // penjualan
             $('.table-produk-batas-transfer-one-day').DataTable({
                 processing: true,
@@ -936,7 +918,6 @@
                     {data: 'action'},
                 ]
             });
-
             $('.table-jml-stok').DataTable({
                 processing: true,
                 serverSide: true,
@@ -953,13 +934,11 @@
                     {data: 'current_stok'},
                 ]
             });
-
             $(document).on('click', '.salemodal', function() {
                 var id = $(this).data('id');
                 console.log(id);
                 var x = $(this).data('value');
                 console.log(x);
-
                 $.ajax({
                     url: "/api/tfp/header-so/" +id+"/"+x,
                     success: function(res) {
@@ -992,12 +971,9 @@
                         var api = this.api();
                         var rows = api.rows( {page:'current'} ).nodes();
                         var last=null;
-
                         api.column(0, {page:'current'} ).data().each( function ( group, i ) {
-
                             if (last !== group) {
                                 var rowData = api.row(i).data();
-
                                 $(rows).eq(i).before(
                                 '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="3">' + rowData.paket + '</td></tr>'
                             );
@@ -1016,16 +992,13 @@
                 modalSO();
             })
         }
-
         function penjualandestroy() {
             $('.table-produk-batas-transfer-one-day').DataTable().clear().destroy();
             $('.table-produk-batas-transfer-two-day').DataTable().clear().destroy();
             $('.table-produk-batas-transfer-three-day').DataTable().clear().destroy();
             $('.table-jml-stok').DataTable().clear().destroy();
         }
-
         function produk() {
-
             $.ajax({
                 url: "/api/dashboard-gbj/stok/1020/h",
                 success: function(res) {
@@ -1033,7 +1006,6 @@
                     $('h4#prd1').text(res);
                 }
             })
-
             $.ajax({
                 url: "/api/dashboard-gbj/stok/59/h",
                 success: function(res) {
@@ -1041,7 +1013,6 @@
                     $('h4#prd2').text(res);
                 }
             })
-
             $.ajax({
                 url: "/api/dashboard-gbj/stok/14/h",
                 success: function(res) {
@@ -1049,7 +1020,6 @@
                     $('h4#prd3').text(res);
                 }
             })
-
             $.ajax({
                 url: "/api/dashboard-gbj/in/36/h",
                 type: "post",
@@ -1058,7 +1028,6 @@
                     $('h4#prd4').text(res);
                 }
             })
-
             $.ajax({
                 url: "/api/dashboard-gbj/in/612/h",
                 type: "post",
@@ -1067,7 +1036,6 @@
                     $('h4#prd5').text(res);
                 }
             })
-
             $.ajax({
                 url: "/api/dashboard-gbj/in/1236/h",
                 type: "post",
@@ -1076,7 +1044,6 @@
                     $('h4#prd6').text(res);
                 }
             })
-
             $.ajax({
                 url: "/api/dashboard-gbj/in/36plus/h",
                 type: "post",
@@ -1085,7 +1052,6 @@
                     $('h4#prd7').text(res);
                 }
             })
-
             $('.jml-produk-20-tab').DataTable({
                 processing: true,
                 serverSide: true,
@@ -1145,7 +1111,6 @@
                     {data: 'jml'},
                     {data: 'layout'},
                 ],
-
                 initComplete: function () {
                     this.api().columns([3]).every( function () {
                         var column = this;
@@ -1155,12 +1120,10 @@
                                 var val = $.fn.dataTable.util.escapeRegex(
                                     $(this).val()
                                 );
-
                                 column
                                     .search( val ? '^'+val+'$' : '', true, false )
                                     .draw();
                             } );
-
                         column.data().unique().sort().each( function ( d, j ) {
                             select.append( '<option value="'+d+'">'+d+'</option>' )
                         } );
@@ -1168,14 +1131,11 @@
                     $("#layout").select2();
                 }
             });
-
             $('#layout').on('change', function(){
                 var search = [];
-
                 $.each($('#layout option:selected'), function(){
                         search.push($(this).val());
                 });
-
                 search = search.join('|');
                 console.log(search);
                 table.column(3).search(search, true, false).draw();
@@ -1252,7 +1212,6 @@
                 ]
             });
         }
-
         function produkdestroy() {
             $('.jml-produk-20-tab').DataTable().clear().destroy();
             $('.jml-produk-5-tab').DataTable().clear().destroy();
@@ -1263,7 +1222,6 @@
             $('.waktu-produk3').DataTable().clear().destroy();
             $('.waktu-produk4').DataTable().clear().destroy();
         }
-
         function terima() {
              $.ajax({
                 url: "/api/dashboard-gbj/terimaproduk1/h",
@@ -1273,7 +1231,6 @@
                     $('h4#r1').text(res);
                 }
             })
-
             $.ajax({
                 url: "/api/dashboard-gbj/terimaproduk2/h",
                 type: "post",
@@ -1282,7 +1239,6 @@
                     $('h4#r2').text(res);
                 }
             })
-
             $.ajax({
                 url: "/api/dashboard-gbj/terimaproduk3/h",
                 type: "post",
@@ -1291,7 +1247,6 @@
                     $('h4#r3').text(res);
                 }
             })
-
             $('.table-produk-batas-receipt-all').DataTable({
                 processing: true,
                 serverSide: true,
@@ -1309,7 +1264,6 @@
                     {data: 'action'},
                 ]
             });
-
             $('.table-produk-batas-receipt-one-day').DataTable({
                 processing: true,
                 serverSide: true,
@@ -1361,14 +1315,12 @@
                     {data: 'action'},
                 ]
             });
-
             $(document).on('click', '.editmodal', function() {
                 var id = $(this).data('id');
                 console.log(id);
                 var brg = $(this).data('brg');
                 var tipe = $(this).data('var')
                 $('span#prd').text(brg + tipe);
-
                 $('.table-seri').DataTable({
                     destroy: true,
                     processing: true,
@@ -1389,13 +1341,11 @@
                 modalPenerimaan();
             })
         }
-
         function terimadestroy() {
             $('.table-produk-batas-receipt-all').DataTable().clear().destroy();
             $('.table-produk-batas-receipt-three-day').DataTable().clear().destroy();
             $('.table-produk-batas-receipt-two-day').DataTable().clear().destroy();
             $('.table-produk-batas-receipt-one-day').DataTable().clear().destroy();
         }
-
 </script>
 @stop
