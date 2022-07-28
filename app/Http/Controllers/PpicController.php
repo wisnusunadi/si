@@ -1333,7 +1333,7 @@ class PpicController extends Controller
                         }
                         else{
                             return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i>Lebih dari ' . $hari . ' Hari</small></div>';
                         }
                     } else{
                         return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
@@ -1730,7 +1730,7 @@ class PpicController extends Controller
                         }
                         else{
                             return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                         }
                     } else{
                         return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
