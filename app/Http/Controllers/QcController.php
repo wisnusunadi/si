@@ -2200,7 +2200,6 @@ class QcController extends Controller
 
     public function dashboard_data($value)
     {
-
         if ($value == 'terbaru') {
             $terbaru_prd = Pesanan::addSelect(['tgl_kontrak' => function($q){
                                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
@@ -2645,7 +2644,6 @@ class QcController extends Controller
         ->whereNotIn('log_id', ['7', '20'])
         ->havingRaw('clogprd < cjumlahprd OR clogpart < cjumlahpart')
         ->get();
-
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {

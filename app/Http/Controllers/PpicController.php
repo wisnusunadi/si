@@ -945,7 +945,7 @@ class PpicController extends Controller
             $data->save();
         }
     }
-     public function get_master_stok_data()
+    public function get_master_stok_data()
     {
         $data = GudangBarangJadi::addSelect(['count_barang' => function ($query) {
             $query->selectRaw('count(noseri_barang_jadi.id)')

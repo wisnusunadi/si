@@ -170,19 +170,19 @@
                                                                     <canvas id="myChart" width="400" height="400" class="mb-5"></canvas>
                                                                     <div class="card card-secondary card-outline mt-3">
                                                                         <div class="card-body">
-                                                                            <h3 class="profile-username text-center">BABY ONE</h3>
+                                                                            <h3 class="profile-username text-center"><span id="nama_prd">-</span></h3>
                                                                             <ul class="list-group list-group-unbordered mb-3">
                                                                                 <li class="list-group-item">
-                                                                                    <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
+                                                                                    <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right mr-2"><span id="c_gudang">0</span><sub id="tot_gudang"> dari 0</sub></a>
                                                                                 </li>
                                                                                 <li class="list-group-item">
-                                                                                    <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
+                                                                                    <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right mr-2"><span id="c_qc">0</span><sub  id="tot_qc"> dari 0</sub></a>
                                                                                 </li>
                                                                                 <li class="list-group-item">
-                                                                                    <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right mr-2">2<sub> dari 12</sub></a>
+                                                                                    <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right mr-2"><span id="c_log">0</span><sub  id="tot_log"> dari 0</sub></a>
                                                                                 </li>
                                                                                 <li class="list-group-item bg-chart-blue text-white">
-                                                                                    <span class="align-self-center"><span class="foo mr-2"></span><b>Kirim</b></span> <b class="float-right mr-2">2<sub> dari 12</sub></b>
+                                                                                    <span class="align-self-center"><span class="foo mr-2"></span><b>Kirim</b></span> <b class="float-right mr-2"><span id="c_kirim">0</span><sub  id="tot_kirim"> dari 0</sub></b>
                                                                                 </li>
                                                                             </ul>
 
@@ -207,16 +207,58 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="row hide">
+                                                                <div class="col-lg-3 col-md-4">
+                                                                    <div class="info-box removeshadow" {{--style="background-color:#EA8B1B; color:white;"--}}>
+                                                                        <div class="info-box-content">
+                                                                            <div id="chartgudang"></div>
+                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-danger" id="btn_progress_gdg">Lihat Progress Gudang</button></a>
+                                                                            {{-- <span class="info-box-text">Gudang</span>
+                                                                            <span class="info-box-number" id="count_gudang">0</span> --}}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-3 col-md-4">
+                                                                    <div class="info-box removeshadow" {{--style="background-color:#FFC700;"--}}>
+                                                                        <div class="info-box-content">
+                                                                            <div id="chartqc"></div>
+                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-warning" id="btn_progress_qc">Lihat Progress QC</button></a>
+                                                                            {{-- <span class="info-box-text">QC</span>
+                                                                            <span class="info-box-number" id="count_qc">0</span> --}}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-3 col-md-4">
+                                                                    <div class="info-box removeshadow" {{--style="background-color:#456600; color:white;"--}}>
+                                                                        <div class="info-box-content">
+                                                                            <div id="chartlogistik"></div>
+                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-success" id="btn_progress_log">Lihat Progress Logistik</button></a>
+                                                                            {{-- <span class="info-box-text">Logistik</span>
+                                                                            <span class="info-box-number" id="count_log">0</span> --}}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="col-lg-3 col-md-4">
+                                                                    <div class="info-box removeshadow" {{--style="background-color:#456600; color:white;"--}}>
+                                                                        <div class="info-box-content">
+                                                                            <div id="chartkirim"></div>
+                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-success" id="btn_progress_log">Lihat Progress Logistik</button></a>
+                                                                            {{-- <span class="info-box-text">Logistik</span>
+                                                                            <span class="info-box-number" id="count_log">0</span> --}}
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                     </div>
                                                 </div>
                                                 <div class="card col-lg-8 col-md-12">
                                                     <div class="card-body">
                                                         <h6><b>Detail Produk</b></h6>
                                                         <div class="table-responsive overflowcard">
-                                                            <table class="table"
+                                                            <table class="table table-striped"
                                                                 style="max-width:100%; overflow-x: hidden;"
                                                                 id="tabledetailpesan">
-                                                                <thead class="bg-chart-light">
+                                                                <thead>
                                                                     <tr>
                                                                         <th rowspan="2">No</th>
                                                                         <th rowspan="2">Produk</th>
@@ -226,10 +268,6 @@
                                                                         <th rowspan="2">Ongkir</th>
                                                                         <th rowspan="2">Subtotal</th>
                                                                     </tr>
-                                                                    {{-- <tr>
-                                                                        <th><i class="fas fa-shopping-cart"></i></th>
-                                                                        <th><i class="fas fa-truck"></i></th>
-                                                                    </tr> --}}
                                                                 </thead>
                                                                 <tbody>
                                                                     @if (isset($data->Pesanan->detailpesanan))
@@ -252,7 +290,7 @@
                                                                                 <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
                                                                                     class="nowraptxt tabnum">@currency($e->ongkir)</td>
                                                                                 <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
-                                                                                    class="nowraptxt tabnum">@currency(($e->harga * $e->jumlah) + $e->ongkir)</td>
+                                                                                    class="nowraptxt tabnum">@currency($e->harga * $e->jumlah + $e->ongkir)</td>
                                                                                 <?php $totalharga = $totalharga + (($e->harga * $e->jumlah) + $e->ongkir); ?>
                                                                             </tr>
                                                                             @if (isset($e->DetailPesananProduk))
@@ -300,10 +338,10 @@
                                                                         @endforeach
                                                                     @endif
                                                                 </tbody>
-                                                                <tfoot class="bg-chart-light">
+                                                                <tfoot>
                                                                     <tr>
-                                                                        <th colspan="6" class="align-center">Total Harga</th>
-                                                                        <th class="nowraptxt tabnum">@currency($totalharga)</th>
+                                                                        <td colspan="6">Total Harga</td>
+                                                                        <td class="nowraptxt tabnum">@currency($totalharga)</td>
                                                                     </tr>
                                                                 </tfoot>
                                                             </table>

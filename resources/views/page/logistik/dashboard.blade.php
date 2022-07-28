@@ -8,9 +8,8 @@
 @stop
 
 @section('adminlte_css')
-<style>
-
-    .foo {
+<style lang="scss">
+   .foo {
         border-radius: 50%;
         float: left;
         width: 10px;
@@ -253,148 +252,6 @@
             box-shadow: none;
         }
     }
-
-</style>
-{{-- <style lang="scss">
-    table {
-        white-space: nowrap;
-        text-align: center;
-    }
-
-    #pengirimantable thead {
-        text-align: center;
-    }
-
-    #urgent {
-        color: red;
-    }
-
-    .warning-bg {
-        background-color: #FFC700;
-        color: #FFFFFF;
-    }
-
-
-    .urgent {
-        color: #dc3545;
-        font-weight: 600;
-    }
-
-    .warning {
-        color: #FFC700;
-        font-weight: 600;
-    }
-
-    .info {
-        color: #4682B4
-    }
-
-    .fa-search:hover {
-        color: #4682B4;
-    }
-
-    .fa-search:active {
-        color: #C0C0C0;
-    }
-
-    .hide {
-        display: none !important;
-    }
-
-    .active {
-        box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    .red-text {
-        background-color: #FFDADA;
-        color: #dc3545;
-    }
-
-    .yellow-text {
-        background-color: #FFF6D4;
-        color: #FFC700;
-    }
-
-    .green-text {
-        background-color: rgba(69, 102, 0, 0.2);
-        color: #456600;
-    }
-
-    .margin-custom {
-        margin: 5px;
-    }
-
-    .align-center {
-        text-align: center;
-    }
-
-    .otg:hover {
-        box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    @media screen and (max-width: 1440px) {
-        #pengirimanterbarutable {
-            font-size: 12px;
-        }
-
-        #belumdikirimtable {
-            font-size: 12px;
-        }
-
-        #lewatbataskirimtable {
-            font-size: 12px;
-        }
-
-        #sotable {
-            font-size: 12px;
-        }
-
-        h4 {
-            font-size: 20px;
-        }
-
-        #detailmodal {
-            font-size: 12px;
-        }
-
-        .so-title {
-            font-size: 12px;
-        }
-
-        section {
-            font-size: 12px;
-        }
-    }
-
-    @media screen and (min-width: 1440px) {
-        #pengirimanterbarutable {
-            font-size: 14px;
-        }
-
-        #belumdikirimtable {
-            font-size: 14px;
-        }
-
-        #lewatbataskirimtable {
-            font-size: 14px;
-        }
-
-        #sotable {
-            font-size: 14px;
-        }
-
-        h4 {
-            font-size: 20px;
-        }
-
-        #detailmodal {
-            font-size: 14px;
-        }
-
-        section {
-            font-size: 14px;
-        }
-    }
 </style> --}}
 @stop
 
@@ -612,33 +469,7 @@
 @section('adminlte_js')
 <script>
     $(function() {
-
-        var optionpie = {
-                type: 'pie',
-                data: {
-                    labels: [
-                        'Belum Diproses',
-                        'Gudang',
-                        'QC',
-                        'Logistik',
-                        'Kirim',
-                    ],
-                    datasets: [{
-                        label: 'STATUS PESANAN',
-                        data: [100, 0, 0, 0,0],
-                        backgroundColor: [
-                        'rgba(192, 192, 192, 0.2)',
-                        'rgb(236, 159, 5)',
-                        'rgb(255, 221, 0)',
-                        'rgb(11, 171, 100)',
-                        'rgb(8, 126, 225)'
-                        ],
-                        hoverOffset: 4
-                    }]
-                }
-            }
-
-            function detailtabel_ekatalog(id) {
+        function detailtabel_ekatalog(id) {
                 var dt = $('#detailtabel').DataTable({
                     destroy: true,
                     processing: true,
@@ -887,6 +718,105 @@
                     },
                 })
             }
+            function update_chart(produk,gudang ,qc, log, ki){
+                const ctx = $('#myChart');
+                if(produk == 'part'){
+                    const myChart = new Chart(ctx, {
+                    type: 'pie',
+                data: {
+                    labels: [
+                        'QC',
+                        'Logistik',
+                        'Kirim',
+                    ],
+                    datasets: [{
+                        label: 'STATUS PESANAN',
+                        data: [qc, log, ki],
+                        backgroundColor: [
+                        'rgb(255, 221, 0)',
+                        'rgb(11, 171, 100)',
+                        'rgb(8, 126, 225)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                }
+                });
+                }else{
+                    const myChart = new Chart(ctx, {
+                    type: 'pie',
+                data: {
+                    labels: [
+                        'Gudang',
+                        'QC',
+                        'Logistik',
+                        'Kirim',
+                    ],
+                    datasets: [{
+                        label: 'STATUS PESANAN',
+                        data: [gudang ,qc, log, ki],
+                        backgroundColor: [
+
+                        'rgb(236, 159, 5)',
+                        'rgb(255, 221, 0)',
+                        'rgb(11, 171, 100)',
+                        'rgb(8, 126, 225)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                }
+                });
+                }
+
+            }
+
+            $(document).on('click', '#tabledetailpesan #lihatstok', function(){
+                var id = $(this).attr('data-id');
+                var produk = $(this).attr('data-produk');
+                var update = 'update';
+                 var array = [];
+                $.ajax({
+                    url: '/api/get_stok_pesanan',
+                    data: {'id': id, 'jenis': produk},
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(result) {
+                        if (produk == 'part'){
+                    $("#part_status").addClass('d-none');
+                }else{
+                    $("#part_status").removeClass('d-none');
+                }
+
+                    var chartExist = Chart.getChart("myChart"); // <canvas> id
+                    if (chartExist != undefined)
+                    chartExist.destroy();
+                    update_chart(produk,result.gudang,result.qc,result.log,result.kir);
+
+
+                $('#nama_prd').text(result.detail.penjualan_produk.nama);
+                $('#tot_gudang').text(" dari " + result.detail.count_jumlah);
+                $('#tot_qc').text(" dari " + result.detail.count_gudang);
+                $('#tot_log').text(" dari " + result.detail.count_qc_ok);
+                $('#tot_kirim').text(" dari " + result.kir);
+
+                $('#c_gudang').text(result.gudang);
+                $('#c_qc').text(result.qc);
+                $('#c_log').text(result.log);
+                $('#c_kirim').text(result.kir);
+
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+
+            });
+
 
 
             $(document).on('click', '.somodal', function(event) {
@@ -905,8 +835,6 @@
                         $('#so').html(result).show();
 
                         if (label == 'ekatalog') {
-                            const ctx = $('#myChart');
-                            const myChart = new Chart(ctx, optionpie);
                             $('#somodal').find(".modal-header").removeClass(
                                 'bg-orange bg-lightblue');
                             $('#somodal').find(".modal-header").addClass('bg-purple');
@@ -914,16 +842,12 @@
 
                             detailtabel_ekatalog(id);
                         } else if (label == 'spa') {
-                            const ctx = $('#myChart');
-                            const myChart = new Chart(ctx, optionpie);
                             $('#somodal').find(".modal-header").removeClass(
                                 'bg-purple bg-lightblue');
                             $('#somodal').find(".modal-header").addClass('bg-orange');
                             $('#somodal').find(".modal-header > h4").text('SPA');
                             detailtabel_spa(id);
                         } else {
-                            const ctx = $('#myChart');
-                            const myChart = new Chart(ctx, optionpie);
                             $('#somodal').find(".modal-header").removeClass(
                                 'bg-orange bg-purple');
                             $('#somodal').find(".modal-header").addClass('bg-lightblue');
@@ -944,7 +868,6 @@
                     timeout: 8000
                 })
             });
-
 
         $('#sotable').DataTable().clear().destroy();
         $('#sotable').DataTable({
