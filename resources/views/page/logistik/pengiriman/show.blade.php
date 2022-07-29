@@ -38,6 +38,9 @@
         overflow-y: scroll;
         box-shadow: none;
     }
+    li.list-group-item {
+        border: 0 none;
+    }
 
     .smtxt {
         font-size: 13px;
