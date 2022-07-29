@@ -126,17 +126,8 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div id="status"><b>
-                                            @if ($data->status == 'sepakat')
-                                                <span class="badge green-text">{{ ucfirst($data->status) }}</span>
-                                            @elseif($data->status == 'negosiasi')
-                                                <span class="badge yellow-text">{{ ucfirst($data->status) }}</span>
-                                            @elseif($data->status == 'batal')
-                                                <span class="badge red-text">{{ ucfirst($data->status) }}</span>
-                                            @elseif($data->status == 'draft')
-                                                <span class="badge blue-text">{{ ucfirst($data->status) }}</span>
-                                            @endif
-                                        </b>
+                                    <div id="status">
+                                        {!! $status !!}
                                     </div>
                                 </div>
                             </div>
@@ -203,48 +194,6 @@
                                                                             <p class="card-text d-flex align-items-center">
                                                                                 <span class="foo bg-chart-blue mr-2"></span><span>Kirim</span>
                                                                             </p> --}}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                            <div class="row hide">
-                                                                <div class="col-lg-3 col-md-4">
-                                                                    <div class="info-box removeshadow" {{--style="background-color:#EA8B1B; color:white;"--}}>
-                                                                        <div class="info-box-content">
-                                                                            <div id="chartgudang"></div>
-                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-danger" id="btn_progress_gdg">Lihat Progress Gudang</button></a>
-                                                                            {{-- <span class="info-box-text">Gudang</span>
-                                                                            <span class="info-box-number" id="count_gudang">0</span> --}}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-4">
-                                                                    <div class="info-box removeshadow" {{--style="background-color:#FFC700;"--}}>
-                                                                        <div class="info-box-content">
-                                                                            <div id="chartqc"></div>
-                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-warning" id="btn_progress_qc">Lihat Progress QC</button></a>
-                                                                            {{-- <span class="info-box-text">QC</span>
-                                                                            <span class="info-box-number" id="count_qc">0</span> --}}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-4">
-                                                                    <div class="info-box removeshadow" {{--style="background-color:#456600; color:white;"--}}>
-                                                                        <div class="info-box-content">
-                                                                            <div id="chartlogistik"></div>
-                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-success" id="btn_progress_log">Lihat Progress Logistik</button></a>
-                                                                            {{-- <span class="info-box-text">Logistik</span>
-                                                                            <span class="info-box-number" id="count_log">0</span> --}}
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div class="col-lg-3 col-md-4">
-                                                                    <div class="info-box removeshadow" {{--style="background-color:#456600; color:white;"--}}>
-                                                                        <div class="info-box-content">
-                                                                            <div id="chartkirim"></div>
-                                                                            <a class="align-center"><button type="button" class="px-2 btn btn-xs btn-outline-success" id="btn_progress_log">Lihat Progress Logistik</button></a>
-                                                                            {{-- <span class="info-box-text">Logistik</span>
-                                                                            <span class="info-box-number" id="count_log">0</span> --}}
                                                                         </div>
                                                                     </div>
                                                                 </div>

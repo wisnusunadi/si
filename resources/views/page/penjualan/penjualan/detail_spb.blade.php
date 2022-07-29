@@ -66,28 +66,7 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div><b>
-                                            @if (!empty($data->Pesanan->log_id))
-                                                @if ($data->Pesanan->State->nama == 'Penjualan')
-                                                    <span class="red-text badge">
-                                                    @elseif ($data->Pesanan->State->nama == 'PO')
-                                                        <span class="purple-text badge">
-                                                        @elseif ($data->Pesanan->State->nama == 'Gudang')
-                                                            <span class="orange-text badge">
-                                                            @elseif ($data->Pesanan->State->nama == 'QC')
-                                                                <span class="yellow-text badge">
-                                                                @elseif ($data->Pesanan->State->nama == 'Belum Terkirim')
-                                                                    <span class="red-text badge">
-                                                                    @elseif ($data->Pesanan->State->nama == 'Terkirim Sebagian')
-                                                                        <span class="blue-text badge">
-                                                                        @elseif ($data->Pesanan->State->nama == 'Kirim')
-                                                                            <span class="green-text badge">
-                                                @endif
-                                                {{ ucfirst($data->Pesanan->State->nama) }}</span>
-                                            @else
-                                                -
-                                            @endif
-                                        </b></div>
+                                    <div>{!! $status !!}</div>
                                 </div>
                             </div>
                             <div class="p-2">
