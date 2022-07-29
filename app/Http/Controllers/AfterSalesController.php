@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 use App\Models\Pesanan;
 use App\Models\Logistik;
-use App\Models\Pesanan;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;

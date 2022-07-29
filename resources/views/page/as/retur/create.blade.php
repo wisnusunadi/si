@@ -186,7 +186,7 @@
                                 </div>
                                 <div id="informasi_pelanggan" class="card card-outline card-primary">
                                     <div class="card-header">
-                                        <h3 class="card-title">Informasi Pelanggan</h3>
+                                        <h3 class="card-title" id="title_info_cust">Informasi Pelanggan</h3>
                                         <div class="card-tools">
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                         <i class="fas fa-minus"></i>
@@ -211,7 +211,6 @@
                                                 </div>
                                                 <small class="text-success mt-1" id="infono_transaksi">* Pilih Nomor Referensi Penjualan yang akan dipakai</small>
                                                 <div class="invalid-feedback mt-1" id="msgno_transaksi"></div>
-
                                             </div>
                                         </div>
                                         <div class="form-group row" id="customer_id_input">
@@ -588,7 +587,15 @@
             });
 
             if($('#no_retur').val() != "" && $('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $('#customer_id').val() != "" && $('#alamat').val() && $('input[name="pilih_jenis_barang[]"]:checked').length > 0 && (($('#pilih_jenis_barang1').is(':checked') && inputproduk == true && inputjumproduk == true) || ($('#pilih_jenis_barang2').is(':checked') && inputpart == true && inputjumpart == true)) ){
-                $('#btnsubmit').attr('disabled', false);
+                if($('input[name="pilih_jenis_retur"]:checked').val() != "peminjaman" && $('input[name="no_transaksi"]').val() != ""){
+                    $('#btnsubmit').attr('disabled', false);
+                }
+                else if($('input[name="pilih_jenis_retur"]:checked').val() == "peminjaman" && $('input[name="no_transaksi"]').val() == ""){
+                    $('#btnsubmit').attr('disabled', false);
+                }
+                else{
+                    $('#btnsubmit').attr('disabled', true);
+                }
             } else {
                 $('#btnsubmit').attr('disabled', true);
             }
@@ -603,6 +610,18 @@
         })
 
         $(document).on('change', 'input[name="pilih_jenis_retur"]', function(){
+            $('#no_transaksi').val("");
+            $('#customer_id').val("");
+            $('#alamat').val("");
+            $('#telepon').val("");
+            var value = $('input[name="pilih_jenis_retur"]:checked').val();
+            if(value == "peminjaman"){
+                $('#title_info_cust').text('Info Peminjaman');
+                $('#no_transaksi_input').addClass('hide');
+            } else {
+                $('#title_info_cust').text('Info Penjualan');
+                $('#no_transaksi_input').removeClass('hide');
+            }
             validasi();
         })
 
@@ -727,7 +746,6 @@
         }
 
         $(document).on('change', '#produktable .produk_id', function(){
-            console.log($('#produktable tbody > tr > td > input[type="number"][value=""]'));
             validasi();
         });
 
@@ -1289,7 +1307,6 @@
                             term: request.term
                         },
                         success: function(data) {
-                            console.log(data);
                             var transformed = $.map(data, function(el) {
                                 return {
                                     label: el.nama,
