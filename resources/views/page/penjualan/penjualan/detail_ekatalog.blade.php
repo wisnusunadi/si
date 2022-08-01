@@ -100,6 +100,10 @@
                                      -
                                     @endif</b></div>
                                 </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Tgl Kontrak</small></div>
+                                    <div>{!! $tgl_kontrak !!}</div>
+                                </div>
                             </div>
                             <div class="p-2">
                                 <div class="margin">
