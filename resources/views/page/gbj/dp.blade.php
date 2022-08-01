@@ -126,8 +126,10 @@
 @section('adminlte_js')
 <script>
     $('.dalam-perakitan').DataTable({
-        processing: true,
-        serverSide: true,
+        // processing: true,
+        // serverSide: true,
+        destroy: true,
+        autoWidth: false,
         ajax: {
             url: '/api/tfp/rakit',
         },

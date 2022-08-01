@@ -593,14 +593,14 @@
                 processData: false,
                 success: function(data) {
                     console.log(data);
-                    // Swal.fire({
-                    //     icon: 'success',
-                    //     title: 'Berhasil',
-                    //     text: data.msg,
-                    // }).then((res) => {
-                    //     // console.log(res);
-                    //     location.reload()
-                    // })
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: data.msg,
+                    }).then((res) => {
+                        // console.log(res);
+                        location.reload()
+                    })
                 }
             })
         })

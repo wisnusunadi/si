@@ -13,11 +13,7 @@
                             <span class="info-box-icon"><i class="fas fa-warehouse"></i></span>
                             <div class="info-box-content">
                             <span class="info-box-text">Gudang</span>
-<<<<<<< HEAD
-                            <span class="info-box-number">{{$data->stok}} pcs</span>
-=======
                             <span class="info-box-number">{{$data->count_barang}} pcs</span>
->>>>>>> dd5efda814436747872ee76d76db76a605317de2
                             </div>
                         </div>
                     </div>
@@ -38,11 +34,7 @@
                             </span>
                             <div class="info-box-content">
                             <span class="info-box-text">Sisa</span>
-<<<<<<< HEAD
-                            <span class="info-box-number">{{$data->stok - $jumlah}} pcs</span>
-=======
                             <span class="info-box-number">{{$data->count_barang - $jumlah}} pcs</span>
->>>>>>> dd5efda814436747872ee76d76db76a605317de2
                             </div>
                         </div>
                     </div>
