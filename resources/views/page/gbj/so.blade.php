@@ -409,7 +409,7 @@
                                                 <div class="info-box bg-danger">
                                                     <span class="info-box-icon"><i class="fas fa-exclamation-triangle fa-fw"></i></span>
                                                     <div class="info-box-content">
-                                                    <span class="info-box-text">Alasan Batal</span>
+                                                    <span class="info-box-text" id="spanAlasan">Alasan Batal</span>
                                                     <span class="info-box-number"></span>
                                                     </div>
                                                 </div>
@@ -443,7 +443,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fas fa-times"></i> Tutup</button>
                 @if(Auth::user()->divisi_id !== 31)
-                <button type="button" class="btn btn-dark btn-sm float-right"><i class="fas fa-check"></i> Terima</button>
+                <button type="button" class="btn btn-dark btn-sm float-right" id="btnProsesBatal"><i class="fas fa-check"></i> Terima</button>
                 @endif
             </div>
         </div>
@@ -751,10 +751,15 @@
         let customer = $(this).parent().prev().prev().html();
         idd = $(this).data('id');
         let x = $(this).data('value');
+        let alasan = $(this).data('alasan')
+        let tgl = $(this).data('tgl')
+        // console.log(alasan);
 
         $('span#noso').text(so);
         $('span#nopo').text(po);
         $('span#cust').text(customer);
+        $('span#tglbatal').text(tgl);
+        $('span#spanAlasan').text(alasan);
 
         $('#produktable').DataTable({
             destroy: true,

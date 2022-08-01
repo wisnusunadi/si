@@ -3721,19 +3721,19 @@ class GudangController extends Controller
                 $name = explode('/', $data->pesanan->so);
                 for ($i = 1; $i < count($name); $i++) {
                     if ($name[1] == 'EKAT') {
-                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="ekatalog"  data-id="' . $data->pesanan->id . '">
+                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="ekatalog"  data-id="' . $data->pesanan->id . '" data-alasan="'.$data->pesanan->ket_batal.'" data-tgl="'.Carbon::createFromFormat('Y-m-d', $data->pesanan->tgl_batal)->isoFormat('D MMMM YYYY').'">
                                     <button class="btn btn-outline-info btn-sm" type="button">
                                         <i class="fas fa-eye"></i>&nbsp;Detail
                                     </button>
                                 </a>';
                     } elseif ($name[1] == 'SPA') {
-                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="spa"  data-id="' . $data->pesanan->id . '">
+                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="spa"  data-id="' . $data->pesanan->id . '" data-alasan="'.$data->pesanan->ket_batal.'" data-tgl="'.Carbon::createFromFormat('Y-m-d', $data->pesanan->tgl_batal)->isoFormat('D MMMM YYYY').'">
                                     <button class="btn btn-outline-info btn-sm" type="button">
                                         <i class="fas fa-eye"></i>&nbsp;Detail
                                     </button>
                                 </a>';
                     } elseif ($name[1] == 'SPB') {
-                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="spb"  data-id="' . $data->pesanan->id . '">
+                        $a = '<a data-toggle="modal" data-target="#btndetail" class="btndetail" data-attr="" data-value="spb"  data-id="' . $data->pesanan->id . '" data-alasan="'.$data->pesanan->ket_batal.'" data-tgl="'.Carbon::createFromFormat('Y-m-d', $data->pesanan->tgl_batal)->isoFormat('D MMMM YYYY').'">
                                     <button class="btn btn-outline-info btn-sm" type="button">
                                         <i class="fas fa-eye"></i>&nbsp;Detail
                                     </button>
