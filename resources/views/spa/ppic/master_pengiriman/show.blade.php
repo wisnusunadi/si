@@ -51,7 +51,7 @@
     }
 
     @media screen and (min-width: 1440px) {
-        body {
+        section {
             font-size: 14px;
         }
 
@@ -61,7 +61,7 @@
     }
 
     @media screen and (max-width: 1439px) {
-        body {
+        section {
             font-size: 12px;
         }
 
@@ -86,16 +86,16 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" style="text-align:center;" id="showtable">
+                                    <table class="table table-hover table-striped table-bordered" style="text-align:center;" id="showtable">
                                         <thead>
-                                            <tr>
+                                            <tr class="bg-navy">
                                                 <th class="nowrap" rowspan="2">No</th>
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th class="nowrap" rowspan="2">Jumlah Pesanan</th>
                                                 <th class="nowrap borderright" colspan="2">Pengiriman</th>
                                                 <th class="nowrap" rowspan="2">Aksi</th>
                                             </tr>
-                                            <tr>
+                                            <tr class="bg-secondary">
                                                 <th>Jumlah Selesai</th>
                                                 <th>Jumlah Sisa</th>
                                             </tr>
@@ -196,6 +196,8 @@
                 },
                 {
                     data: 'aksi',
+                    orderable: false,
+                    searchable: false
                 }
             ]
         });
@@ -224,6 +226,9 @@
                     },
                     {
                         data: 'so',
+                    },
+                    {
+                        data: 'customer',
                     },
                     {
                         data: 'tgl_delivery',

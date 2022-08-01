@@ -66,28 +66,7 @@
                                 </div>
                                 <div class="margin">
                                     <div><small class="text-muted">Status</small></div>
-                                    <div><b>
-                                            @if (!empty($data->Pesanan->log_id))
-                                                @if ($data->Pesanan->State->nama == 'Penjualan')
-                                                    <span class="red-text badge">
-                                                    @elseif ($data->Pesanan->State->nama == 'PO')
-                                                        <span class="purple-text badge">
-                                                        @elseif ($data->Pesanan->State->nama == 'Gudang')
-                                                            <span class="orange-text badge">
-                                                            @elseif ($data->Pesanan->State->nama == 'QC')
-                                                                <span class="yellow-text badge">
-                                                                @elseif ($data->Pesanan->State->nama == 'Belum Terkirim')
-                                                                    <span class="red-text badge">
-                                                                    @elseif ($data->Pesanan->State->nama == 'Terkirim Sebagian')
-                                                                        <span class="blue-text badge">
-                                                                        @elseif ($data->Pesanan->State->nama == 'Kirim')
-                                                                            <span class="green-text badge">
-                                                @endif
-                                                {{ ucfirst($data->Pesanan->State->nama) }}</span>
-                                            @else
-                                                -
-                                            @endif
-                                        </b></div>
+                                    <div>{!! $status !!}</div>
                                 </div>
                             </div>
                             <div class="p-2">
@@ -154,17 +133,17 @@
                                                             <div class="card-body">
                                                                 <h3 class="profile-username text-center"><span id="nama_prd">-</span></h3>
                                                                 <ul class="list-group list-group-unbordered mb-3">
-                                                                    <li class="list-group-item " id="part_status">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right"><span id="c_gudang">0</span><sub id="tot_gudang"> dari 0</sub></a>
+                                                                    <li class="list-group-item" id="part_status">
+                                                                        <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right mr-2"><span id="c_gudang">0</span><sub id="tot_gudang"> dari 0</sub></a>
                                                                     </li>
                                                                     <li class="list-group-item">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right"><span id="c_qc">0</span><sub  id="tot_qc"> dari 0</sub></a>
+                                                                        <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right mr-2"><span id="c_qc">0</span><sub  id="tot_qc"> dari 0</sub></a>
                                                                     </li>
                                                                     <li class="list-group-item">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right"><span id="c_log">0</span><sub  id="tot_log"> dari 0</sub></a>
+                                                                        <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right mr-2"><span id="c_log">0</span><sub  id="tot_log"> dari 0</sub></a>
                                                                     </li>
-                                                                    <li class="list-group-item">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-blue mr-2"></span><span>Kirim</span></span> <a class="float-right"><span id="c_kirim">0</span><sub  id="tot_kirim"> dari 0</sub></a>
+                                                                    <li class="list-group-item bg-chart-blue  text-white">
+                                                                        <span class="align-self-center"><span class="foo mr-2"></span><b>Kirim</b></span> <b class="float-right mr-2"><span id="c_kirim">0</span><sub  id="tot_kirim"> dari 0</sub></b>
                                                                     </li>
                                                                 </ul>
 
@@ -239,21 +218,17 @@
                                                                 <table class="table"
                                                                     style="max-width:100%; overflow-x: hidden; background-color:white;"
                                                                     id="tabledetailpesan">
-                                                                    <thead>
+                                                                    <thead class="bg-chart-light">
                                                                         <tr>
                                                                             <th rowspan="2">No</th>
                                                                             <th rowspan="2">Produk</th>
                                                                             <th rowspan="2"></th>
-                                                                            <th colspan="2">Qty</th>
+                                                                            <th rowspan="2">Qty</th>
                                                                             <th rowspan="2">Harga</th>
                                                                             <th rowspan="2">Subtotal</th>
                                                                             @if(Auth::user()->divisi_id == "8")
                                                                             <th rowspan="2">Aksi</th>
                                                                             @endif
-                                                                        </tr>
-                                                                        <tr>
-                                                                            <th><i class="fas fa-shopping-cart"></i></th>
-                                                                            <th><i class="fas fa-truck"></i></th>
                                                                         </tr>
                                                                     </thead>
                                                                     <tbody>
@@ -270,7 +245,7 @@
 
                                                                                         <button class="btn btn-sm btn-outline-primary" id="lihatstok" data-id="{{$e->id}}" data-produk="paket"><i class="fas fa-eye"></i></button>
                                                                                     </td>
-                                                                                    <td colspan="2" class="nowraptxt tabnum">
+                                                                                    <td class="nowraptxt tabnum">
                                                                                         {{ $e->jumlah }}</td>
                                                                                     <td rowspan="{{ count($e->DetailPesananProduk) + 1 }}"
                                                                                         class="nowraptxt tabnum">@currency($e->harga)</td>
@@ -281,7 +256,7 @@
                                                                                         -
                                                                                     </td>
                                                                                     @endif
-                                                                                    <?php $totalharga = $totalharga + $e->harga * $e->jumlah; ?>
+                                                                                    <?php $totalharga = $totalharga + (($e->harga * $e->jumlah) + $e->ongkir); ?>
                                                                                 </tr>
                                                                                 @if (isset($e->DetailPesananProduk))
                                                                                     @foreach ($e->DetailPesananProduk as $l)
@@ -302,7 +277,6 @@
                                                                                             <td>
                                                                                                 {{ $l->getJumlahPesanan() }}
                                                                                             </td>
-                                                                                            <td>{{ $l->getJumlahKirim() }}</td>
                                                                                         </tr>
                                                                                     @endforeach
                                                                                 @endif
@@ -326,13 +300,6 @@
                                                                                     <td class="nowraptxt tabnum"><span
                                                                                             class="text-muted">{{ $e->jumlah }}</span>
                                                                                     </td>
-                                                                                    <td class="nowraptxt tabnum">
-                                                                                        @if (isset($e->detaillogistikpart))
-                                                                                            {{ $e->jumlah }}
-                                                                                        @else
-                                                                                            0
-                                                                                        @endif
-                                                                                    </td>
                                                                                     <td class="nowraptxt tabnum">@currency($e->harga)</td>
                                                                                     <td class="nowraptxt tabnum">@currency($e->harga * $e->jumlah)</td>
                                                                                     @if(Auth::user()->divisi_id == "8")
@@ -347,15 +314,18 @@
                                                                                     <td>-</td>
                                                                                     @endif
                                                                                     @endif
-                                                                                    <?php $totalharga = $totalharga + $e->harga * $e->jumlah; ?>
+                                                                                    <?php $totalharga = $totalharga + ($e->harga * $e->jumlah); ?>
                                                                                 </tr>
                                                                             @endforeach
                                                                         @endif
                                                                     </tbody>
-                                                                    <tfoot>
+                                                                    <tfoot class="bg-chart-light">
                                                                         <tr>
-                                                                            <td colspan="6">Total Harga</td>
-                                                                            <td class="tabnum nowraptxt">@currency($totalharga)</td>
+                                                                            <th colspan="5" class="align-center">Total Harga</th>
+                                                                            <th class="tabnum nowraptxt">@currency($totalharga)</th>
+                                                                            @if(Auth::user()->divisi_id == "8")
+                                                                            <th></th>
+                                                                            @endif
                                                                         </tr>
                                                                     </tfoot>
 
