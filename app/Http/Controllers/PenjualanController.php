@@ -583,6 +583,7 @@ class PenjualanController extends Controller
     public function get_lacak_penjualan($parameter, $value)
     {
         if ($parameter == 'no_po') {
+           $val = str_replace("-","/",$value);
             // $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {
             //     $q->where('no_po', 'LIKE', '%' . $value . '%');
             // })->get());
@@ -610,7 +611,7 @@ class PenjualanController extends Controller
             ->leftJoin('spb','spb.pesanan_id','=','pesanan.id')
             ->leftJoin('customer as c_spb','c_spb.id','=','spb.customer_id')
             ->leftJoin('m_state','m_state.id','=','pesanan.log_id')
-            ->where('no_po', 'LIKE', '%' . $value . '%')
+            ->where('no_po', 'LIKE', '%' . $val . '%')
             ->get();
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -684,6 +685,7 @@ class PenjualanController extends Controller
                 ->rawColumns(['log','nama_customer'])
                 ->make(true);
         } else if ($parameter == 'no_akn') {
+            $val = str_replace("-","/",$value);
             // $data = Ekatalog::where('no_paket', 'LIKE', '%' . $value . '%')
             //     ->get();
                 $data = Ekatalog::with(['Pesanan.State','Customer'])->addSelect(['tgl_kontrak_custom' => function($q){
@@ -692,7 +694,7 @@ class PenjualanController extends Controller
                       ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
                       ->whereColumn('e.id', 'ekatalog.id')
                       ->limit(1);
-                    }])->where('no_paket', 'LIKE', '%' . $value . '%')
+                    }])->where('no_paket', 'LIKE', '%' . $val . '%')
                 ->get();
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -788,6 +790,7 @@ class PenjualanController extends Controller
                 ->rawColumns(['status', 'log', 'instansi','tgl_kontrak'])
                 ->make(true);
         } else if ($parameter == 'customer') {
+            $val = str_replace("-","/",$value);
             // $ekatalog = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($value) {
             //     $q->where('satuan', 'LIKE', '%' . $value . '%');
             // })->orwhereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($value) {
@@ -833,11 +836,11 @@ class PenjualanController extends Controller
              ->leftJoin('customer as c_spa','c_spa.id','=','spa.customer_id')
              ->leftJoin('spb','spb.pesanan_id','=','pesanan.id')
              ->leftJoin('customer as c_spb','c_spb.id','=','spb.customer_id')
-            ->where('c_spa.nama' ,'LIKE', '%' . $value . '%')
-            ->orwhere('c_spb.nama' ,'LIKE', '%' . $value . '%')
-            ->orwhere('c_ekat.nama' ,'LIKE', '%' . $value . '%')
-            ->orwhere('ekatalog.instansi' ,'LIKE', '%' . $value . '%')
-            ->orwhere('ekatalog.satuan' ,'LIKE', '%' . $value . '%')
+            ->where('c_spa.nama' ,'LIKE', '%' . $val . '%')
+            ->orwhere('c_spb.nama' ,'LIKE', '%' . $val . '%')
+            ->orwhere('c_ekat.nama' ,'LIKE', '%' . $val . '%')
+            ->orwhere('ekatalog.instansi' ,'LIKE', '%' . $val . '%')
+            ->orwhere('ekatalog.satuan' ,'LIKE', '%' . $val . '%')
             ->orderBy('noseri_barang_jadi.noseri','ASC')
             ->get();
 
