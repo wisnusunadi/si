@@ -25,8 +25,10 @@
 
 @section('adminlte_css')
 <style>
-    
 
+    .hide{
+        display: none !important;
+    }
     .urgent {
         color: #dc3545;
         font-weight: 600;
@@ -255,6 +257,7 @@
     <div class="modal fade" id="batalmodal" tabindex="-1" role="dialog" aria-labelledby="batalmodal" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="margin: 10px">
+                <div id="modal-overlay" class="overlay hide"></div>
                 <div class="modal-header bg-navy">
                     <h4 id="modal-title">Pesanan Batal</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -271,6 +274,7 @@
     <div class="modal fade" id="noserimodal" tabindex="-1" role="dialog" aria-labelledby="noserimodal" aria-hidden="true">
         <div class="modal-dialog modal-md" role="document">
             <div class="modal-content" style="margin: 10px">
+
                 <div class="modal-header bg-light">
                     <h4 id="modal-title">Noseri</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -403,9 +407,15 @@
             var id = $(this).attr('data-id');
             var pesan = $(this).attr('data-pesan');
             console.log(id+" "+pesan);
+            $('#batalmodal').find("#modal-overlay").removeClass('hide');
             $('#noserimodal').modal("show");
             noseritable(id, pesan);
         });
+
+        $(document).on('hidden.bs.modal', '#noserimodal', function(event) {
+            $('#batalmodal').find("#modal-overlay").addClass('hide');
+        });
+
 
         function produktable(id){
             $('#produktable').DataTable({

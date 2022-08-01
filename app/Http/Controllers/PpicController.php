@@ -1399,7 +1399,24 @@ class PpicController extends Controller
                 //     return '<span class="badge purple-text">PO</span>';
                 // }
             })
-            ->rawColumns(['tgl_delivery', 'status'])
+            ->addColumn('aksi', function ($data) {
+                if (isset($data->Ekatalog)) {
+                    if ($data->status != 'draft') {
+                        return  '<a data-toggle="modal" data-target="ekatalog" class="penjualanmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->Ekatalog->id) . '"  data-id="' . $data->Ekatalog->id . '">
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
+                    }
+                } else if (isset($data->Spa)) {
+                    return  '<a data-toggle="modal" data-target="spa" class="penjualanmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->Spa->id) . '"  data-id="' . $data->Spa->id . '">
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
+                } else {
+                    return  '<a data-toggle="modal" data-target="spb" class="penjualanmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '">
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
+                }
+            })
+            ->rawColumns(['tgl_delivery', 'status', 'aksi'])
             ->make(true);
     }
     public function get_master_pengiriman_data()
@@ -1737,7 +1754,24 @@ class PpicController extends Controller
                     }
                 }
             })
-            ->rawColumns(['tgl_delivery'])
+            ->addColumn('aksi', function ($data) {
+                if (isset($data->Ekatalog)) {
+                    if ($data->status != 'draft') {
+                        return  '<a data-toggle="modal" data-target="ekatalog" class="penjualanmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->Ekatalog->id) . '"  data-id="' . $data->Ekatalog->id . '">
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
+                    }
+                } else if (isset($data->Spa)) {
+                    return  '<a data-toggle="modal" data-target="spa" class="penjualanmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->Spa->id) . '"  data-id="' . $data->Spa->id . '">
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
+                } else {
+                    return  '<a data-toggle="modal" data-target="spb" class="penjualanmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '">
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
+                }
+            })
+            ->rawColumns(['tgl_delivery', 'aksi'])
             ->make(true);
     }
 

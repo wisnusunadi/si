@@ -4421,7 +4421,7 @@ $Logistik = Logistik::find($request->sj_lama);
             ->make(true);
     }
 
-    public function tgl_footer($value)
+    static function tgl_footer($value)
     {
         $footer = Carbon::createFromFormat('Y-m-d', $value)->isoFormat('D MMMM Y');
         return $footer;

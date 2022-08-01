@@ -59,6 +59,7 @@
                                         <th rowspan="2">Tanggal Delivery</th>
                                         <th rowspan="2">Jumlah</th>
                                         <th colspan="2">Pengiriman</th>
+                                        <th rowspan="2">Aksi</th>
                                     </tr>
                                     <tr>
                                         <th>Terkirim</th>

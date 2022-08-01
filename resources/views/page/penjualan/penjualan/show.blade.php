@@ -25,7 +25,6 @@
 
 @section('adminlte_css')
 <style>
-
     .foo {
         border-radius: 50%;
         float: left;
@@ -34,12 +33,22 @@
         align-items: center !important;
     }
 
-
-
     .alert-danger {
         color: #a94442;
         background-color: #f2dede;
         border-color: #ebccd1;
+    }
+
+    .alert-info {
+        color: #0c5460;
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+    }
+
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
     }
 
     .separator {
@@ -382,7 +391,7 @@
                                                         <th>Nomor PO</th>
                                                         <th>Tanggal Buat</th>
                                                         <th>Tanggal Edit</th>
-                                                        <th>Tanggal Kontrak</th>
+                                                        <th>Tanggal Delivery</th>
                                                         <th>Customer</th>
                                                         <th>Status</th>
                                                         <th>Aksi</th>
@@ -741,7 +750,7 @@
                                                         <th>Nomor AKN</th>
                                                         <th>Nomor PO</th>
                                                         <th>Tanggal PO</th>
-                                                        <th>Tanggal Kontrak</th>
+                                                        <th>Tanggal Delivery</th>
                                                         <th>Customer</th>
                                                         <th>Status</th>
                                                         <th>Aksi</th>

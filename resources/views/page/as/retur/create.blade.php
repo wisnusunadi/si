@@ -213,8 +213,15 @@
                                                 <div class="invalid-feedback mt-1" id="msgno_transaksi"></div>
                                             </div>
                                         </div>
+                                        <div class="form-group row hide" id="pic_peminjaman_input">
+                                            <label for="pic_peminjaman" class="col-lg-5 col-md-12 col-form-label labelket">Penanggung Jawab</label>
+                                            <div class="col-lg-4 col-md-8">
+                                                <input name="pic_peminjaman" id="pic_peminjaman" class="form-control col-form-label pic_peminjaman  @error('pic_peminjaman') is-invalid @enderror"/>
+                                                <div class="invalid-feedback" id="msgpic_peminjaman"></div>
+                                            </div>
+                                        </div>
                                         <div class="form-group row" id="customer_id_input">
-                                            <label for="customer_id" class="col-lg-5 col-md-12 col-form-label labelket">Nama Customer</label>
+                                            <label for="customer_id" class="col-lg-5 col-md-12 col-form-label labelket" id="label_cust">Nama Customer</label>
                                             <div class="col-lg-4 col-md-8">
                                                 <input name="customer_id" id="customer_id" class="form-control col-form-label customer_id  @error('customer_id') is-invalid @enderror"/>
                                                 <div class="invalid-feedback" id="msgcustomer_id"></div>
@@ -590,7 +597,7 @@
                 if($('input[name="pilih_jenis_retur"]:checked').val() != "peminjaman" && $('input[name="no_transaksi"]').val() != ""){
                     $('#btnsubmit').attr('disabled', false);
                 }
-                else if($('input[name="pilih_jenis_retur"]:checked').val() == "peminjaman" && $('input[name="no_transaksi"]').val() == ""){
+                else if($('input[name="pilih_jenis_retur"]:checked').val() == "peminjaman" && $('input[name="pic_peminjaman"]').val() != ""){
                     $('#btnsubmit').attr('disabled', false);
                 }
                 else{
@@ -616,9 +623,13 @@
             $('#telepon').val("");
             var value = $('input[name="pilih_jenis_retur"]:checked').val();
             if(value == "peminjaman"){
+                $('#pic_peminjaman_input').removeClass('hide');
+                $('#label_cust').text('Nama Peminjam');
                 $('#title_info_cust').text('Info Peminjaman');
                 $('#no_transaksi_input').addClass('hide');
             } else {
+                $('#pic_peminjaman_input').addClass('hide');
+                $('#label_cust').text('Nama Customer');
                 $('#title_info_cust').text('Info Penjualan');
                 $('#no_transaksi_input').removeClass('hide');
             }

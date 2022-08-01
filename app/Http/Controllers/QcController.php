@@ -913,7 +913,7 @@ class QcController extends Controller
                         return $data->ekatalog->ket;
                     } else if ($name[1] == 'SPA') {
                         return $data->spa->ket;
-                    } else if ($name[1] == 'SPA') {
+                    } else if ($name[1] == 'SPB') {
                         return $data->spb->ket;
                     }
                 }
@@ -922,7 +922,7 @@ class QcController extends Controller
                 $datas = "";
                 $res = $data->ctfprd + $data->ctfpart;
                 if($res > 0){
-                    $hitung = round(((($data->cqcprd + $data->cqcpart) / ($data->ctfprd + $data->ctfpart)) * 100), 0);
+                    $hitung = floor(((($data->cqcprd + $data->cqcpart) / ($data->ctfprd + $data->ctfpart)) * 100));
                     if($hitung > 0){
                     $datas = '<div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -982,7 +982,7 @@ class QcController extends Controller
                     $name = explode('/', $data->so);
                     if ($name[1] == 'EKAT') {
                         $x =  'ekatalog';
-                    } elseif ($name[1] == 'SPA') {
+                    } else if ($name[1] == 'SPA') {
                         $x =  'spa';
                     } else {
                         $x =  'spb';
