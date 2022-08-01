@@ -1311,6 +1311,8 @@
             if ($(this).val() != "") {
                 if ($(this).val() == "sudah") {
                     $("#customer_id").attr('disabled', false);
+                    var $newOption = $("<option selected='selected'></option>").val("213").text("PT. EMIINDO Jaya Bersama")
+                    $(".customer_id").append($newOption).trigger('change');
                 } else {
                     $("#customer_id").attr('disabled', true);
                     $("#customer_id").empty().trigger('change')
@@ -1337,6 +1339,8 @@
                     $("#dataproduk").removeClass("hide");
                     $("#batas_kontrak").attr('disabled', false);
                     $("#provinsi").attr('disabled', false);
+                    var $newOption = $("<option selected='selected'></option>").val("11").text("Jawa Timur")
+                    $(".provinsi").append($newOption).trigger('change');
                 } else if ($(this).val() == "draft") {
                     $('#checkbox_nopaket').removeClass('hide');
                     $('#isi_nopaket').prop("checked", false);

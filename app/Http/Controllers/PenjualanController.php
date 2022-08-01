@@ -253,32 +253,199 @@ class PenjualanController extends Controller
                 $data = $Spb;
             }
         } else if ($jenis == "semua" && $status != "semua") {
-            $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
+            $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->addSelect(['tgl_kontrak_custom' => function($q){
+                $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+                  ->from('ekatalog as e')
+                  ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                  ->whereColumn('e.id', 'ekatalog.id')
+                  ->limit(1);
+                }, 'ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+                }])->whereHas('Pesanan', function ($q) use ($y) {
+                    $q->whereIN('log_id', $y);
+                })->orderBy('id', 'DESC')->get());
+
+            $Spa = collect(Spa::addSelect(['ckirimprd' => function($q){
+                $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                ->from('noseri_logistik')
+                ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+            },
+            'cjumlahprd' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                ->from('detail_pesanan')
+                ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+            },
+            'ckirimpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                ->from('detail_logistik_part')
+                ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+            },
+            'cjumlahpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                ->from('detail_pesanan_part')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+            }])->with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                 $q->whereIN('log_id', $y);
             })->orderBy('id', 'DESC')->get());
-            $Spa = collect(Spa::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
+
+            $Spb = collect(Spb::addSelect(['ckirimprd' => function($q){
+                $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                ->from('noseri_logistik')
+                ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+            },
+            'cjumlahprd' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                ->from('detail_pesanan')
+                ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+            },
+            'ckirimpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                ->from('detail_logistik_part')
+                ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+            },
+            'cjumlahpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                ->from('detail_pesanan_part')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+            }])->with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                 $q->whereIN('log_id', $y);
             })->orderBy('id', 'DESC')->get());
-            $Spb = collect(Spb::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
-                $q->whereIN('log_id', $y);
-            })->orderBy('id', 'DESC')->get());
+
             $data = $Ekatalog->merge($Spa)->merge($Spb);
+
         } else {
             $Ekatalog = "";
             $Spa = "";
             $Spb = "";
             if (in_array('ekatalog', $x)) {
-                $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
-                    $q->whereIN('log_id', $y);
-                })->orderBy('id', 'DESC')->get());
+                $Ekatalog = collect(Ekatalog::with(['Pesanan.State','Customer'])->addSelect(['tgl_kontrak_custom' => function($q){
+                    $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+                      ->from('ekatalog as e')
+                      ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+                      ->whereColumn('e.id', 'ekatalog.id')
+                      ->limit(1);
+                    }, 'ckirimprd' => function($q){
+                        $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                        ->from('noseri_logistik')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                    },
+                    'cjumlahprd' => function($q){
+                        $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                        ->from('detail_pesanan')
+                        ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                        ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+                    },
+                    'ckirimpart' => function($q){
+                        $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                        ->from('detail_logistik_part')
+                        ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+                    },
+                    'cjumlahpart' => function($q){
+                        $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                        ->from('detail_pesanan_part')
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+                    }])->whereHas('Pesanan', function ($q) use ($y) {
+                        $q->whereIN('log_id', $y);
+                    })->orderBy('id', 'DESC')->get());
+
             }
             if (in_array('spa', $x)) {
-                $Spa = collect(Spa::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
+                $Spa = collect(Spa::addSelect(['ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spa.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
+                }])->with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                     $q->whereIN('log_id', $y);
                 })->orderBy('id', 'DESC')->get());
             }
             if (in_array('spb', $x)) {
-                $Spb = collect(Spb::with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
+                $Spb = collect(Spb::addSelect(['ckirimprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'cjumlahprd' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'spb.pesanan_id');
+                },
+                'ckirimpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                },
+                'cjumlahpart' => function($q){
+                    $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                    ->from('detail_pesanan_part')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
+                }])->with(['Pesanan.State','Customer'])->whereHas('Pesanan', function ($q) use ($y) {
                     $q->whereIN('log_id', $y);
                 })->orderBy('id', 'DESC')->get());
             }
