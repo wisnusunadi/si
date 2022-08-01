@@ -21,6 +21,9 @@
 @stop
 @section('adminlte_css')
 <style>
+    .va-middle {
+        vertical-align: middle;
+    }
     .urgent {
         color: #dc3545;
         font-weight: 600;
@@ -51,7 +54,7 @@
     }
 
     @media screen and (min-width: 1440px) {
-        body {
+        section {
             font-size: 14px;
         }
 
@@ -61,7 +64,7 @@
     }
 
     @media screen and (max-width: 1439px) {
-        body {
+        section {
             font-size: 12px;
         }
 
@@ -86,21 +89,22 @@
                         <div class="row">
                             <div class="col-12">
                                 <div class="table-responsive">
-                                    <table class="table table-hover" style="text-align:center;" id="showtable">
+                                    <table class="table table-hover table-striped table-bordered" style="text-align:center;" id="showtable">
                                         <thead>
-                                            <tr>
+                                            <tr class="bg-navy">
                                                 <th class="nowrap" rowspan="2">No</th>
                                                 <th rowspan="2">Nama Produk</th>
                                                 <th class="nowrap borderright" colspan="2">Stok</th>
-                                                <th class="nowrap borderright" colspan="5">Penjualan</th>
+                                                <th class="nowrap borderright" colspan="6">Penjualan</th>
                                                 <th rowspan="2">Aksi</th>
                                             </tr>
-                                            <tr>
+                                            <tr class="bg-secondary">
                                                 <th>GBJ</th>
                                                 <th>Sisa</th>
                                                 <th>Permintaan</th>
                                                 <th>Sepakat</th>
                                                 <th>Nego</th>
+                                                <th>Draft</th>
                                                 <th>Batal</th>
                                                 <th>PO</th>
                                             </tr>
@@ -181,20 +185,19 @@
             },
             columns: [{
                     data: 'DT_RowIndex',
-                    className: 'borderright',
+                    className: 'borderright align-middle',
                     orderable: false,
                     searchable: false
                 },
                 {
                     data: 'nama_produk',
-                    className: 'borderright',
+                    className: 'borderright align-middle',
                 },
                 {
                     data: 'gbj',
                 },
                 {
                     data: 'penjualan',
-                    className: 'borderright',
                 },
                 {
                     data: 'total',
@@ -206,6 +209,9 @@
                     data: 'nego',
                 },
                 {
+                    data: 'draft',
+                },
+                {
                     data: 'batal',
                 },
                 {
@@ -214,6 +220,7 @@
                 },
                 {
                     data: 'aksi',
+                    className: 'align-middle',
                     orderable: false,
                     searchable: false
                 },
@@ -245,6 +252,9 @@
                         data: 'so',
                     },
                     {
+                        data: 'customer',
+                    },
+                    {
                         data: 'tgl_order',
                     },
                     {
@@ -252,6 +262,9 @@
                     },
                     {
                         data: 'jumlah',
+                    },
+                    {
+                        data: 'status',
                     },
                 ]
             });

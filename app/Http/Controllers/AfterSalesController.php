@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
-
+use App\Models\Pesanan;
 use App\Models\Logistik;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
@@ -20,15 +20,52 @@ class AfterSalesController extends Controller
 {
     public function get_data_so()
     {
-        // $data = Logistik::all();
-
         $datas = DetailPesanan::whereHas('DetailPesananProduk.DetailLogistik.Logistik', function ($q) {
             $q->whereIn('status_id', ['10']);
-        })->orderBy('id', 'desc')->get();
+        })->with(['Pesanan.Ekatalog.Customer.Provinsi', 'Pesanan.Spa.Customer.Provinsi', 'Pesanan.Spb.Customer.Provinsi', 'PenjualanProduk'])->orderBy('id', 'desc')
+        ->addSelect(['tgl_kirim' => function($q){
+            $q->selectRaw('logistik.tgl_kirim')
+            ->from('logistik')
+            ->leftJoin('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
+            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+            ->limit(1);
+        }, 'count_qc' => function($q){
+            $q->selectRaw('count(noseri_detail_pesanan.id)')
+            ->from('noseri_detail_pesanan')
+            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+            ->where('noseri_detail_pesanan.status', '=', 'ok')
+            ->limit(1);
+        }, 'count_log' => function($q){
+            $q->selectRaw('count(noseri_logistik.id)')
+            ->from('noseri_logistik')
+            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+            ->limit(1);
+        }])->get();
 
         $datas1 = DetailPesananPart::whereHas('DetailLogistikPart.Logistik', function ($q) {
             $q->whereIn('status_id', ['10']);
-        })->orderBy('id', 'desc')->get();
+        })->with(['Pesanan.Ekatalog.Customer.Provinsi', 'Pesanan.Spa.Customer.Provinsi', 'Pesanan.Spb.Customer.Provinsi', 'Sparepart'])->orderBy('id', 'desc')
+        ->addSelect(['tgl_kirim' => function($q){
+            $q->selectRaw('logistik.tgl_kirim')
+            ->from('logistik')
+            ->leftJoin('detail_logistik_part', 'detail_logistik_part.logistik_id', '=', 'logistik.id')
+            ->whereColumn('detail_logistik_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
+            ->limit(1);
+        }, 'count_qc' => function($q){
+            $q->selectRaw('sum(outgoing_pesanan_part.jumlah_ok)')
+            ->from('outgoing_pesanan_part')
+            ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
+            ->limit(1);
+        }, 'count_log' => function($q){
+            $q->selectRaw('sum(detail_logistik_part.jumlah)')
+            ->from('detail_logistik_part')
+            ->whereColumn('detail_logistik_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
+            ->limit(1);
+        }])->get();
 
         $data = $datas->merge($datas1);
         return datatables()->of($data)
@@ -38,33 +75,35 @@ class AfterSalesController extends Controller
             })
             ->addColumn('nama_produk', function ($data) {
                 if (isset($data->DetailPesananProduk)) {
-                    $id = array();
-                    $detail_produk = DetailPesananProduk::where('detail_pesanan_id', $data->id)->get();
-                    foreach ($detail_produk as $d) {
-                        if ($d->gudangbarangjadi->nama == '') {
-                            $id[] = $d->gudangbarangjadi->produk->nama;
-                        } else {
-                            $id[] = $d->gudangbarangjadi->produk->nama.' '.$d->gudangbarangjadi->nama;
-                        }
-                    }
-                    return implode(', ', $id);
+                    // $id = array();
+                    // $detail_produk = DetailPesananProduk::where('detail_pesanan_id', $data->id)->get();
+                    // foreach ($detail_produk as $d) {
+                    //     if ($d->gudangbarangjadi->nama == '') {
+                    //         $id[] = $d->gudangbarangjadi->produk->nama;
+                    //     } else {
+                    //         $id[] = $d->gudangbarangjadi->produk->nama.' '.$d->gudangbarangjadi->nama;
+                    //     }
+                    // }
+                    // return implode(', ', $data->DetailPesananProduk->GudangBarangJadi->Produk->nama);
+                    return $data->PenjualanProduk->nama;
                 } else {
                     return $data->Sparepart->nama;
                 }
             })
             ->addColumn('tgl_kirim', function ($data) {
-                $id = $data->id;
-                if (isset($data->DetailPesananProduk)) {
-                    $l = Logistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
-                        $q->where('detail_pesanan_id', $id);
-                    })->selectRaw("min(tgl_kirim) as tgl_kirim")->first();
-                    return Carbon::createFromFormat('Y-m-d', $l->tgl_kirim)->format('d-m-Y');
-                } else {
-                    $l = Logistik::whereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
-                        $q->where('id', $id);
-                    })->selectRaw("min(tgl_kirim) as tgl_kirim")->first();
-                    return Carbon::createFromFormat('Y-m-d', $l->tgl_kirim)->format('d-m-Y');
-                }
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_kirim)->format('d-m-Y');
+                // $id = $data->id;
+                // if (isset($data->DetailPesananProduk)) {
+                //     $l = Logistik::whereHas('DetailLogistik.DetailPesananProduk', function ($q) use ($id) {
+                //         $q->where('detail_pesanan_id', $id);
+                //     })->selectRaw("min(tgl_kirim) as tgl_kirim")->first();
+                //     return Carbon::createFromFormat('Y-m-d', $l->tgl_kirim)->format('d-m-Y');
+                // } else {
+                //     $l = Logistik::whereHas('DetailLogistikPart.DetailPesananPart', function ($q) use ($id) {
+                //         $q->where('id', $id);
+                //     })->selectRaw("min(tgl_kirim) as tgl_kirim")->first();
+                //     return Carbon::createFromFormat('Y-m-d', $l->tgl_kirim)->format('d-m-Y');
+                // }
                 // $arr = array();
                 // foreach ($l as $k) {
                 //     $arr[] = Carbon::createFromFormat('Y-m-d', $k->tgl_kirim)->format('d-m-Y');
@@ -113,27 +152,10 @@ class AfterSalesController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                if (isset($data->DetailPesananProduk)) {
-                    $id = $data->id;
-                    $jumlahkirim = NoseriDetailLogistik::whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
-                        $q->where('id', $id);
-                    })->count();
-                    $jumlahseri = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($id) {
-                        $q->where('detail_pesanan_id', $id);
-                    })->count();
-
-                    if ($jumlahkirim == $jumlahseri) {
-                        return '<span class="badge green-text">Selesai</span>';
-                    } else if ($jumlahkirim < $jumlahseri) {
-                        return '<span class="badge yellow-text">Terkirim Sebagian</span>';
-                    }
-                } else {
-                    $jumlahkirim = DetailLogistikPart::where('detail_pesanan_part_id', $data->id)->first();
-                    if ($jumlahkirim->DetailPesananPart->jumlah >= $data->jumlah) {
-                        return '<span class="badge green-text">Selesai</span>';
-                    } else {
-                        return '<span class="badge yellow-text">Terkirim Sebagian</span>';
-                    }
+                if ($data->count_log >= $data->count_qc) {
+                    return '<span class="badge green-text">Selesai</span>';
+                } else if ($data->count_log < $data->count_qc) {
+                    return '<span class="badge yellow-text">Terkirim Sebagian</span>';
                 }
             })
             ->addColumn('keterangan', function ($data) {
@@ -147,7 +169,7 @@ class AfterSalesController extends Controller
                 } else {
                     $jenis = "part";
                 }
-                return '<a href="' . route('as.so.detail', ['id' => $data->id, 'jenis' => $jenis]) . '"><i class="fas fa-eye"></i></a>';
+                return '<a href="' . route('as.so.detail', ['id' => $data->id, 'jenis' => $jenis]) . '"><button type="button" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i></button></a>';
                 // $name = explode('/', $data->DetailLogistik->DetailPesananProduk->DetailPesanan->Pesanan->so);
                 // return '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 // <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -246,7 +268,6 @@ class AfterSalesController extends Controller
         //     ->rawColumns(['status', 'button'])
         //     ->make(true);
     }
-
     public function get_detail_so($id, $jenis)
     {
         $d = "";
@@ -351,6 +372,188 @@ class AfterSalesController extends Controller
             </a>';
             })
             ->rawColumns(['checkbox', 'button', 'status'])
+            ->make(true);
+    }
+
+    public function get_data_so_belum_kirim()
+    {
+        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['8', '9', '11', '12'])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->orderBy('tgl_po', 'desc')->get();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jenis', function ($data) {
+                if (isset($data->Spa)) {
+                    return '<span class="orange-text badge">SPA</span>';
+                }
+                else if (isset($data->Spb)) {
+                    return '<span class="blue-text badge">SPB</span>';
+                }
+            })
+            ->addColumn('so', function ($data) {
+                if (!empty($data->so)) {
+                        return $data->so;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('nopo', function ($data) {
+                    if (!empty($data->no_po)) {
+                        return $data->no_po;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('status', function ($data) {
+                $datas = "";
+                if ($data->log != "batal") {
+                    if (!empty($data->log_id)) {
+                        if ($data->State->nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->State->nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->State->nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        }
+                        $datas .= ucfirst($data->State->nama) . '</span>';
+                    } else {
+                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                    }
+                } else {
+                    $datas .= '<span class="red-text badge">Batal</span>';
+                }
+                return $datas;
+            })
+            ->addColumn('tglpo', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+            })
+            ->addColumn('nama_customer', function ($data) {
+                if (isset($data->Spa)) {
+                    return $data->Spa->Customer->nama;
+                }
+                else if (isset($data->Spb)) {
+                    return $data->Spb->Customer->nama;
+                }
+            })
+            ->addColumn('button', function ($data) {
+                $return = "";
+                if (isset($data->Spa)) {
+                    $return .= '<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->Spa->id) . '"  data-id="' . $data->Spa->id . '" >
+                        <button class="btn btn-outline-primary btn-sm" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                else if (isset($data->Spb)) {
+                    $return .= '<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '" >
+                    <button class="btn btn-outline-primary btn-sm" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                return $return;
+            })
+            ->rawColumns(['button', 'status', 'jenis'])
+            ->make(true);
+    }
+
+    public function get_data_so_selesai_kirim()
+    {
+        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['10'])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->orderBy('tgl_po', 'desc')->get();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jenis', function ($data) {
+                if (isset($data->Spa)) {
+                    return '<span class="orange-text badge">SPA</span>';
+                }
+                else if (isset($data->Spb)) {
+                    return '<span class="blue-text badge">SPB</span>';
+                }
+            })
+            ->addColumn('so', function ($data) {
+                if (!empty($data->so)) {
+                        return $data->so;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('nopo', function ($data) {
+                    if (!empty($data->no_po)) {
+                        return $data->no_po;
+                    } else {
+                        return '-';
+                    }
+            })
+            ->addColumn('status', function ($data) {
+                $datas = "";
+                if ($data->log != "batal") {
+                    if (!empty($data->log_id)) {
+                        if ($data->State->nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->State->nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->State->nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->State->nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->State->nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->State->nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        }
+                        $datas .= ucfirst($data->State->nama) . '</span>';
+                    } else {
+                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
+                    }
+                } else {
+                    $datas .= '<span class="red-text badge">Batal</span>';
+                }
+                return $datas;
+            })
+            ->addColumn('tglpo', function ($data) {
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+            })
+            ->addColumn('nama_customer', function ($data) {
+                if (isset($data->Spa)) {
+                    return $data->Spa->Customer->nama;
+                }
+                else if (isset($data->Spb)) {
+                    return $data->Spb->Customer->nama;
+                }
+            })
+            ->addColumn('button', function ($data) {
+                $return = "";
+                if (isset($data->Spa)) {
+                    $return .= '<a data-toggle="modal" data-target="spa" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spa',  $data->Spa->id) . '"  data-id="' . $data->Spa->id . '" >
+                    <button class="btn btn-outline-primary btn-sm" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                else if (isset($data->Spb)) {
+                    $return .= '<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '" >
+                    <button class="btn btn-outline-primary btn-sm" type="button">
+                        <i class="fas fa-eye"></i>
+                        Detail
+                        </button>
+                    </a>';
+                }
+                return $return;
+            })
+            ->rawColumns(['button', 'status', 'jenis'])
             ->make(true);
     }
 }
