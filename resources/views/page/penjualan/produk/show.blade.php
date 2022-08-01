@@ -225,12 +225,12 @@
                                                 <thead style="text-align: center;">
                                                     <tr>
                                                         <th width="5%">No</th>
-                                                        <th width="16%">No AKD</th>
-                                                        <th width="12%">Merk</th>
-                                                        <th width="10%">Jenis Paket</th>
-                                                        <th width="50%">Nama Alias</th>
-                                                        <th width="50%">Nama Produk</th>
-                                                        <th width="12%">Harga</th>
+                                                        <th width="10%">No AKD</th>
+                                                        <th width="5%">Merk</th>
+                                                        <th width="5%">Jenis Paket</th>
+                                                        <th width="35%">Nama Alias</th>
+                                                        <th width="20%">Nama Produk</th>
+                                                        <th width="10%">Harga</th>
                                                         <th width="5%">Aksi</th>
                                                     </tr>
                                                 </thead>
