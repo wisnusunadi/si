@@ -382,7 +382,7 @@
                                                         <th>Nomor PO</th>
                                                         <th>Tanggal Buat</th>
                                                         <th>Tanggal Edit</th>
-                                                        <th>Tanggal Kontrak</th>
+                                                        <th>Tanggal Delivery</th>
                                                         <th>Customer</th>
                                                         <th>Status</th>
                                                         <th>Aksi</th>
@@ -741,7 +741,7 @@
                                                         <th>Nomor AKN</th>
                                                         <th>Nomor PO</th>
                                                         <th>Tanggal PO</th>
-                                                        <th>Tanggal Kontrak</th>
+                                                        <th>Tanggal Delivery</th>
                                                         <th>Customer</th>
                                                         <th>Status</th>
                                                         <th>Aksi</th>

@@ -1494,8 +1494,33 @@ class PenjualanController extends Controller
                         <small class="text-muted align-center">Selesai</small></div>';
                     }
                 }
-
-        return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data, 'status' => $status]);
+                $tgl_kontrak = "";
+                if($data->tgl_kontrak_custom != ""){
+                    if($data->Pesanan->log_id != '10'){
+                        $tgl_sekarang = Carbon::now();
+                        $tgl_parameter = $data->tgl_kontrak_custom;
+                        $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                        if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                            if ($hari > 7) {
+                                $tgl_kontrak =  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else {
+                                $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                            }
+                        }
+                        else{
+                            $tgl_kontrak =  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                        }
+                    } else{
+                        $tgl_kontrak = Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
+                    }
+                }
+        return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data, 'status' => $status, 'tgl_kontrak' => $tgl_kontrak]);
     }
 
     public function get_data_detail_spb($value)

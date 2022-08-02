@@ -100,6 +100,10 @@
                                      -
                                     @endif</b></div>
                                 </div>
+                                <div class="margin">
+                                    <div><small class="text-muted">Tgl Kontrak</small></div>
+                                    <div><b>@if ($tgl_kontrak){!! $tgl_kontrak !!}@else - @endif</b></div>
+                                </div>
                             </div>
                             <div class="p-2">
                                 <div class="margin">
@@ -176,6 +180,9 @@
                                                                                     <span class="align-self-center"><span class="foo mr-2"></span><b>Kirim</b></span> <b class="float-right mr-2"><span id="c_kirim">0</span><sub  id="tot_kirim"> dari 0</sub></b>
                                                                                 </li>
                                                                             </ul>
+                                                                            <div class="alert alert-info" role="alert">
+                                                                                <i class="fas fa-exclamation-triangle"></i> <strong>Catatan: </strong>{{ $data->ket }}
+                                                                            </div>
 
                                                                             {{-- <p class="card-text">FOX BABY BLUE</b></p>
 
