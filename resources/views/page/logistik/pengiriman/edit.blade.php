@@ -6,13 +6,14 @@
             <div class="col-lg-4 col-md-12">
                 <div class="row">
                     <div class="col-12">
-                        <div class="card">
+                        {{-- <div class="card">
                             <div class="card-header">Customer</div>
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-12 align-center">
                                         <!-- <div id="profileImage" class="center margin-all"></div> -->
                                         @if(isset($data->DetailLogistik[0]))
+
                                         @if(isset($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog))
                                         <div>
                                             <h6><b>{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->instansi}}</b></h6>
@@ -72,15 +73,169 @@
                                     </div>
                                 </div>
                             </div>
+                        </div> --}}
+
+                        <div class="card card-outline card-secondary">
+                            <div class="card-header">
+                                <h6 class="card-title">Customer</h6>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                @if($jenis == "EKAT")
+                                    <strong>Distributor</strong>
+                                    <p class="text-muted">{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Customer->nama}}</p>
+                                    <hr>
+                                @endif
+
+                                <strong>{{--<i class="fas fa-book mr-1 fa-fw"></i>--}} Nama Customer</strong>
+                                <p class="text-muted">
+                                    @if($jenis == "EKAT")
+                                    {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->satuan}}
+                                    @else
+                                        @if(isset($data->DetailLogistik[0]))
+                                            @if(isset($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa))
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}
+                                            @else
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}
+                                            @endif
+                                        @elseif(isset($data->DetailLogistik[0]) && isset($data->DetailLogistikPart))
+                                            @if(isset($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa))
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->nama}}
+                                            @else
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->nama}}
+                                            @endif
+                                        @else
+                                            @if(isset($data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa))
+                                            {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->nama}}
+                                            @else
+                                            {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->nama}}
+                                            @endif
+                                        @endif
+                                    @endif
+                                </p>
+                                <hr>
+                                <strong>{{--<i class="fas fa-calendar-alt fa-fw"></i>--}} Alamat</strong>
+                                <p class="text-muted">
+                                    @if($jenis == "EKAT")
+                                    {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->alamat}}
+                                    @else
+                                        @if(isset($data->DetailLogistik[0]))
+                                            @if(isset($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa))
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}
+                                            @else
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}
+                                            @endif
+                                        @elseif(isset($data->DetailLogistik[0]) && isset($data->DetailLogistikPart))
+                                            @if(isset($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa))
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->alamat}}
+                                            @else
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->alamat}}
+                                            @endif
+                                        @else
+                                            @if(isset($data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa))
+                                            {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->alamat}}
+                                            @else
+                                            {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->alamat}}
+                                            @endif
+                                        @endif
+                                    @endif
+                                </p>
+                                <hr>
+                                <strong>{{--<i class="fas fa-asterisk fa-fw"></i>--}} Provinsi</strong>
+                                <p class="text-muted">
+                                    @if($jenis == "EKAT")
+                                    {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->Provinsi->nama}}
+                                    @else
+                                        @if(isset($data->DetailLogistik[0]))
+                                            @if(isset($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa))
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama}}
+                                            @else
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}
+                                            @endif
+                                        @elseif(isset($data->DetailLogistik[0]) && isset($data->DetailLogistikPart))
+                                            @if(isset($data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa))
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spa->Customer->Provinsi->nama}}
+                                            @else
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Spb->Customer->Provinsi->nama}}
+                                            @endif
+                                        @else
+                                            @if(isset($data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa))
+                                            {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spa->Customer->Provinsi->nama}}
+                                            @else
+                                            {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->Spb->Customer->Provinsi->nama}}
+                                            @endif
+                                        @endif
+                                    @endif</p>
+                            </div>
                         </div>
                     </div>
+
+
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <div class="card">
-                            <div class="card-header">Info Penjualan</div>
+                        <div class="card card-outline card-secondary">
+                            <div class="card-header">
+                                <h6 class="card-title">Info Penjualan</h6>
+                                <div class="card-tools">
+                                    <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                                    <i class="fas fa-minus"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            {{-- <div class="card-header">Info Penjualan</div> --}}
                             <div class="card-body">
-                                <div class="margin">
+                                <ul class="list-group list-group-unbordered mb-3">
+                                    @if($jenis == "EKAT")
+                                    <li class="list-group-item">
+                                        <b>No AKN</b> <a class="float-right">{{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->Ekatalog->no_paket}}</a>
+                                    </li>
+                                    @endif
+                                    <li class="list-group-item">
+                                        <b>No SO</b> <a class="float-right">@if($jenis == "EKAT")
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}
+                                            @else
+                                            @if(isset($data->DetailLogistik[0]))
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}
+                                            @elseif(isset($data->DetailLogistik[0]) && isset($data->DetailLogistikPart))
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}
+                                            @else
+                                            {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->so}}
+                                            @endif
+                                            @endif</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>No PO</b> <a class="float-right">@if($jenis == "EKAT")
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                                            @else
+                                            @if(isset($data->DetailLogistik[0]))
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                                            @elseif(isset($data->DetailLogistik[0]) && isset($data->DetailLogistikPart))
+                                            {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->no_po}}
+                                            @else
+                                            {{$data->DetailLogistikPart->first()->DetailPesananPart->Pesanan->no_po}}
+                                            @endif
+                                            @endif</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>No SJ</b> <a class="float-right">{{$data->nosurat}}</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Tanggal Kirim</b> <a class="float-right">{{ date('d-m-Y', strtotime($data->tgl_kirim)) }}</a>
+                                    </li>
+                                    <li class="list-group-item">
+                                        <b>Status</b> <a class="float-right">@if($data->status_id == "11")
+                                            <span class="badge red-text">Draft Pengiriman</span>
+                                            @else
+                                            <span class="badge blue-text">Dalam Pengiriman</span>
+                                            @endif</a>
+                                    </li>
+                                </ul>
+                                {{-- <div class="margin">
                                     <a class="text-muted">No SO</a>
                                     <b class="float-right">@if($jenis == "EKAT")
                                         {{$data->DetailLogistik[0]->DetailPesananProduk->DetailPesanan->Pesanan->so}}
@@ -126,7 +281,7 @@
                                         <span class="badge blue-text">Dalam Pengiriman</span>
                                         @endif
                                     </b>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
@@ -135,8 +290,8 @@
             <div class="col-lg-8 col-md-12">
 
                 <div class="col-12">
-                    <div class="card">
-                        <div class="card-header"><i class="fas fa-edit"></i> Ubah Data Pengiriman</div>
+                    <div class="card card-outline card-warning">
+                        <div class="card-header"><h6 class="card-title">@if($data->status_id == "11") Ubah Surat Jalan @else Tambah Penerima & Resi @endif</h6></div>
                         <div class="card-body">
                             <h5>Data Pengiriman</h5>
                             <div class="form-horizontal">
@@ -193,7 +348,7 @@
                             <h5>Data Barang</h5>
                             <div class="form-group row">
                                 <div class="col-12">
-                                    <div class="table-responsive">
+                                    <div class="table-responsive @if($jenis == "EKAT") overflowtableekat @else overflowtablenonekat @endif">
                                         <table class="table table-hover align-center" style="width:100%;" id="barangtable">
                                             <thead>
                                                 <tr>
@@ -209,16 +364,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="card-footer">
+                            <div class="row">
+                                <div class="col-6 float-left">
+                                    <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
+                                </div>
+                                <div class="col-6">
+                                    <button type="submit" class="btn btn-warning float-right" id="btnsimpan">Simpan</button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-6 float-left">
-                        <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
-                    </div>
-                    <div class="col-6">
-                        <button type="submit" class="btn btn-warning float-right" id="btnsimpan">Simpan</button>
-                    </div>
-                </div>
+
             </div>
         </div>
     </div>

@@ -23,6 +23,21 @@
 @stop
 @section('adminlte_css')
 <style>
+    .overflowtableekat{
+        max-height:
+        500px;
+        width: auto;
+        overflow-y: scroll;
+        box-shadow: none;
+    }
+
+    .overflowtablenonekat{
+        max-height:
+        300px;
+        width: auto;
+        overflow-y: scroll;
+        box-shadow: none;
+    }
     li.list-group-item {
         border: 0 none;
     }

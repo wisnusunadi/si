@@ -261,7 +261,7 @@ class ProduksiController extends Controller
     function getNoseri(Request $request)
     {
         try {
-            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gbj)->where('is_ready', 0)->get();
+            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gbj)->where('is_ready', 0)->where('is_aktif', 1)->get();
         $i = 0;
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) use ($i) {
@@ -1322,7 +1322,7 @@ class ProduksiController extends Controller
     function getNoseriSO(Request $request)
     {
         try {
-            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->get();
+            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gbj)->where('is_ready', 0)->where('is_aktif', 1)->get();
         $i = 0;
         return datatables()->of($data)
             ->addColumn('ids', function ($d) {
