@@ -332,7 +332,6 @@
             placeholder: "Pilih Data Lacak",
             allowClear: true
         });
-
         function po(data){
         $('#potable').DataTable({
             destroy: true,
@@ -752,7 +751,7 @@
 
             } else if ($('.pilih_data').val() == "no_po") {
                 var data = $('#data').val();
-                po(data);
+                po(data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-'));
               //  $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
                 $('#nopo').removeClass('hide');
                 $('#noseri').addClass('hide');

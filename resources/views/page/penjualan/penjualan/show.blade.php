@@ -464,15 +464,6 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="13"
-                                                                    id="status7" name="status_spa[]" />
-                                                                <label class="form-check-label" for="status7">
-                                                                    Terkirim Sebagian
-                                                                </label>
-                                                            </div>
-                                                        </div>
-                                                        <div class="form-group">
-                                                            <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox" value="11"
                                                                     id="status8" name="status_spa[]" />
                                                                 <label class="form-check-label" for="status8">
@@ -574,15 +565,7 @@
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="13"
-                                                                    id="status_spb5" name="status_spb[]" />
-                                                                <label class="form-check-label" for="status_spb5">
-                                                                    Terkirim Sebagian
-                                                                </label>
-                                                            </div>
-                                                        </div>
+
                                                         <div class="form-group">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox" value="11"
@@ -710,19 +693,12 @@
                                                                 </label>
                                                             </div>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="checkbox" value="13" name="status_penjualan[]" id="status7" />
-                                                                <label class="form-check-label" for="status7">
-                                                                    Terkirim Sebagian
-                                                                </label>
-                                                            </div>
-                                                        </div>
+
                                                         <div class="form-group">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="checkbox" value="11" name="status_penjualan[]" id="status8" />
                                                                 <label class="form-check-label" for="status8">
-                                                                    Kirim
+                                                                    Logistik
                                                                 </label>
                                                             </div>
                                                         </div>
