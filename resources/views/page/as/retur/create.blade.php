@@ -216,7 +216,15 @@
                                         <div class="form-group row hide" id="pic_peminjaman_input">
                                             <label for="pic_peminjaman" class="col-lg-5 col-md-12 col-form-label labelket">Penanggung Jawab</label>
                                             <div class="col-lg-4 col-md-8">
-                                                <input name="pic_peminjaman" id="pic_peminjaman" class="form-control col-form-label pic_peminjaman  @error('pic_peminjaman') is-invalid @enderror"/>
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <select class="form-control custom-select select2 divisi_id" id="divisi_id" name="divisi_id">
+
+                                                        </select>
+                                                    </div>
+                                                    <input type="text" name="pic_peminjaman" id="pic_peminjaman" class="form-control col-form-label pic_peminjaman  @error('pic_peminjaman') is-invalid @enderror"/>
+                                                </div>
+                                                <small class="text-success mt-1" id="infono_transaksi">* Pilih Divisi Penanggung Jawab</small>
                                                 <div class="invalid-feedback" id="msgpic_peminjaman"></div>
                                             </div>
                                         </div>
@@ -726,6 +734,36 @@
                 }
             })
         }
+
+        $('.divisi_id').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Divisi",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/gbj/sel-divisi',
+                    // data: function(params) {
+                    //     return {
+                    //         term: params.term
+                    //     }
+                    // },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama,
+                                };
+                            })
+                        };
+                    },
+                }
+            }).change(function(e){
+                e.preventDefault();
+                
+            })
 
         function part(){
             $('.part_id').select2({

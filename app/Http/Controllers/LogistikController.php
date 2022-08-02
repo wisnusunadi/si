@@ -1125,6 +1125,22 @@ class LogistikController extends Controller
                     </a>';
             })
             ->rawColumns(['status', 'button', 'batas'])
+            ->setRowClass(function ($data) {
+                if ($data->Ekatalog) {
+                    if ($data->Ekatalog->status == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else if ($data->Spa) {
+                    if ($data->Spa->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else {
+                    if ($data->Spb->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                }
+
+            })
             ->make(true);
     }
 
@@ -1288,6 +1304,22 @@ class LogistikController extends Controller
                     </a>';
             })
             ->rawColumns(['status', 'button', 'batas'])
+            ->setRowClass(function ($data) {
+                if ($data->Ekatalog) {
+                    if ($data->Ekatalog->status == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else if ($data->Spa) {
+                    if ($data->Spa->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else {
+                    if ($data->Spb->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                }
+
+            })
             ->make(true);
     }
 

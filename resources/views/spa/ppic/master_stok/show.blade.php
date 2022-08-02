@@ -802,23 +802,23 @@
                 if(produk == 'part'){
                     const myChart = new Chart(ctx, {
                     type: 'pie',
-                data: {
-                    labels: [
-                        'QC',
-                        'Logistik',
-                        'Kirim',
-                    ],
-                    datasets: [{
-                        label: 'STATUS PESANAN',
-                        data: [qc, log, ki],
-                        backgroundColor: [
-                        'rgb(255, 221, 0)',
-                        'rgb(11, 171, 100)',
-                        'rgb(8, 126, 225)'
+                    data: {
+                        labels: [
+                            'QC',
+                            'Logistik',
+                            'Kirim',
                         ],
-                        hoverOffset: 4
-                    }]
-                }
+                        datasets: [{
+                            label: 'STATUS PESANAN',
+                            data: [qc, log, ki],
+                            backgroundColor: [
+                            'rgb(255, 221, 0)',
+                            'rgb(11, 171, 100)',
+                            'rgb(8, 126, 225)'
+                            ],
+                            hoverOffset: 4
+                        }]
+                    }
                 });
                 }else{
                     const myChart = new Chart(ctx, {

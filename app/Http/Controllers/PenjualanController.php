@@ -578,6 +578,19 @@ class PenjualanController extends Controller
                 }
             })
             ->rawColumns(['button', 'status', 'tgl_order', 'tgl_kontrak', 'no_paket'])
+            ->setRowClass(function ($data) {
+                $name =  $data->getTable();
+                if ($name == 'ekatalog') {
+                    if ($data->status == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                }
+                else{
+                    if ($data->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                }
+            })
             ->make(true);
     }
     public function get_lacak_penjualan($parameter, $value)
@@ -2117,6 +2130,11 @@ class PenjualanController extends Controller
 
 
             ->rawColumns(['button', 'status', 'tgl_kontrak', 'no_paket'])
+            ->setRowClass(function ($data) {
+                if ($data->status == 'batal') {
+                    return 'text-danger font-weight-bold';
+                }
+            })
             ->make(true);
     }
     public function get_data_spa($value)
@@ -2354,6 +2372,11 @@ class PenjualanController extends Controller
                 return $return;
             })
             ->rawColumns(['button', 'status'])
+            ->setRowClass(function ($data) {
+                if ($data->log == 'batal') {
+                    return 'text-danger font-weight-bold';
+                }
+            })
             ->make(true);
     }
     public function get_data_spb($value)
@@ -2587,6 +2610,11 @@ class PenjualanController extends Controller
                 return $return;
             })
             ->rawColumns(['button', 'status'])
+            ->setRowClass(function ($data) {
+                if ($data->log == 'batal') {
+                    return 'text-danger font-weight-bold';
+                }
+            })
             ->make(true);
     }
     public function get_data_rencana_produk($customer_id, $instansi, $tahun)

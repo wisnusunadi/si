@@ -1030,7 +1030,7 @@ class PpicController extends Controller
             ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
             ->leftjoin('pesanan', 'pesanan.id', '=', 't_gbj.pesanan_id')
             ->whereNotIn('pesanan.log_id', ["7", "10", "20"])
-            ->where([['t_gbj_noseri.jenis', '=', "keluar"], ['t_gbj_detail.gdg_brg_jadi_id', '=', 'gdg_barang_jadi.id']])
+            ->whereColumn('t_gbj_detail.gdg_brg_jadi_id', 'gdg_barang_jadi.id')
             ->limit(1);
         }])
         // ->whereIn('id', function($q){
@@ -1068,7 +1068,7 @@ class PpicController extends Controller
         //             WHERE t_gbj_detail.gdg_brg_jadi_id = gdg_barang_jadi.id)');
         //         })
 
-        ->havingRaw('count_ekat_sepakat > 0 OR count_ekat_nego > 0 OR count_ekat_draft > 0 OR count_ekat_po > 0 OR count_spa_po > 0 OR count_spb_po > 0')
+        ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_ekat_nego, 0) + coalesce(count_ekat_draft, 0) + coalesce(count_ekat_po, 0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) > count_transfer')
         ->with('Produk')
         ->get();
 
@@ -1235,7 +1235,7 @@ class PpicController extends Controller
             ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
             ->leftjoin('pesanan', 'pesanan.id', '=', 't_gbj.pesanan_id')
             ->whereNotIn('pesanan.log_id', ["7", "10", "20"])
-            ->where([['t_gbj_noseri.jenis', '=', "keluar"], ['t_gbj_detail.gdg_brg_jadi_id', '=', 'gdg_barang_jadi.id']])
+            ->whereColumn('t_gbj_detail.gdg_brg_jadi_id', 'gdg_barang_jadi.id')
             ->limit(1);
         }])->with('Produk')->first();
 
@@ -1262,7 +1262,7 @@ class PpicController extends Controller
                     ->from('t_gbj_noseri')
                     ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                     ->leftjoin('t_gbj', 't_gbj.id', 't_gbj_detail.t_gbj_id')
-                    ->where('t_gbj_noseri.jenis', '"keluar"')
+                    // ->where('t_gbj_noseri.jenis', '"keluar"')
                     ->where('t_gbj_detail.gdg_brg_jadi_id', $id)
                     ->whereColumn('t_gbj.pesanan_id', 'pesanan.id')
                     ->limit(1);
@@ -1363,21 +1363,42 @@ class PpicController extends Controller
                 if($data->Ekatalog){
                     if($data->Ekatalog->status == "batal"){
                         return '<span class="badge red-text">Batal</span>';
-                    }else{
+                    }
+                    else if($data->log_id == "7"){
+                        return '<span class="badge red-text">'.$data->State->nama.'</span>';
+                    }
+                    else if($data->log_id == "9"){
+                        return '<span class="badge purple-text">'.$data->State->nama.'</span>';
+                    }
+                    else{
                         return $progress;
                     }
                 }
                 else if($data->Spa){
                     if($data->Spa->log == "batal"){
                         return '<span class="badge red-text">Batal</span>';
-                    }else{
+                    }
+                    else if($data->log_id == "7"){
+                        return '<span class="badge red-text">'.$data->State->nama.'</span>';
+                    }
+                    else if($data->log_id == "9"){
+                        return '<span class="badge purple-text">'.$data->State->nama.'</span>';
+                    }
+                    else{
                         return $progress;
                     }
                 }
                 else if($data->Spb){
                     if($data->Spb->log == "batal"){
                         return '<span class="badge red-text">Batal</span>';
-                    }else{
+                    }
+                    else if($data->log_id == "7"){
+                        return '<span class="badge red-text">'.$data->State->nama.'</span>';
+                    }
+                    else if($data->log_id == "9"){
+                        return '<span class="badge purple-text">'.$data->State->nama.'</span>';
+                    }
+                    else{
                         return $progress;
                     }
                 }

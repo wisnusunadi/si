@@ -134,18 +134,28 @@
                                                                 <h3 class="profile-username text-center"><span id="nama_prd">-</span></h3>
                                                                 <ul class="list-group list-group-unbordered mb-3">
                                                                     <li class="list-group-item" id="part_status">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right mr-2"><span id="c_gudang">0</span><sub id="tot_gudang"> dari 0</sub></a>
+                                                                        <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right mr-2"><b class="text-danger"><span id="c_gudang">0</span></b><sub id="tot_gudang"> dari 0</sub></a>
                                                                     </li>
                                                                     <li class="list-group-item">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right mr-2"><span id="c_qc">0</span><sub  id="tot_qc"> dari 0</sub></a>
+                                                                        <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right mr-2"><b class="text-danger"><span id="c_qc">0</span></b><sub  id="tot_qc"> dari 0</sub></a>
                                                                     </li>
                                                                     <li class="list-group-item">
-                                                                        <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right mr-2"><span id="c_log">0</span><sub  id="tot_log"> dari 0</sub></a>
+                                                                        <span class="align-self-center"><span class="foo bg-chart-green mr-2"></span><span>Logistik</span></span> <a class="float-right mr-2"><b class="text-danger"><span id="c_log">0</span></b><sub  id="tot_log"> dari 0</sub></a>
                                                                     </li>
                                                                     <li class="list-group-item bg-chart-blue  text-white">
-                                                                        <span class="align-self-center"><span class="foo mr-2"></span><b>Kirim</b></span> <b class="float-right mr-2"><span id="c_kirim">0</span><sub  id="tot_kirim"> dari 0</sub></b>
+                                                                        <span class="align-self-center"><span class="foo mr-2"></span><b>Kirim</b></span> <b class="float-right mr-2"><span id="c_kirim">0</span> <sub>unit</sub>{{--<sub  id="tot_kirim"> dari 0</sub>--}}</b>
                                                                     </li>
                                                                 </ul>
+                                                                <div class="alert alert-info" role="alert">
+                                                                    <small>
+                                                                    <i class="fas fa-info-circle"></i> <strong>Catatan: </strong>
+                                                                    <ol style="list-item-style:none; margin-left:0px;padding-left:15px;" >
+                                                                        <li>Angka warna <b class="text-danger">merah</b> menunjukkan jumlah produk yang <i>belum diproses</i> oleh divisi tersebut</li>
+                                                                        <li>Angka warna <b class="text-dark">hitam</b> menunjukkan jumlah produk yang <i>telah diberikan dan harus diproses</i> oleh divisi tersebut</li>
+                                                                        <li>Kirim untuk jumlah yang <i>telah dikirim</i></li>
+                                                                    </ol>
+                                                                    </small>
+                                                                </div>
 
                                                                 {{-- <p class="card-text">FOX BABY BLUE</b></p>
 

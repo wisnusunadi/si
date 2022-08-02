@@ -993,6 +993,22 @@ class QcController extends Controller
                 }
             })
             ->rawColumns(['button', 'status', 'batas_uji'])
+            ->setRowClass(function ($data) {
+                if ($data->Ekatalog) {
+                    if ($data->Ekatalog->status == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else if ($data->Spa) {
+                    if ($data->Spa->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else {
+                    if ($data->Spb->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                }
+
+            })
             ->make(true);
     }
     public function get_data_selesai_so($value)
@@ -1291,6 +1307,22 @@ class QcController extends Controller
                 }
             })
             ->rawColumns(['button', 'nama_produk'])
+            ->setRowClass(function ($data) {
+                if ($data->Pesanan->Ekatalog) {
+                    if ($data->Pesanan->Ekatalog->status == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else if ($data->Pesanan->Spa) {
+                    if ($data->Pesanan->Spa->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else {
+                    if ($data->Pesanan->Spb->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                }
+
+            })
             ->make(true);
     }
 
