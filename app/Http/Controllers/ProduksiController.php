@@ -424,6 +424,18 @@ class ProduksiController extends Controller
                                 }
                             }
                         }
+
+                        if($data->log_id == 20) {
+                            for ($i = 1; $i < count($x); $i++) {
+                                if ($x[1] == 'EKAT') {
+                                    return '';
+                                } elseif ($x[1] == 'SPA') {
+                                    return '';
+                                } elseif ($x[1] == 'SPB') {
+                                    return '';
+                                }
+                            }
+                        }
                     }
                 })
                 ->rawColumns(['button', 'status', 'action', 'status1', 'status_prd', 'button_prd', 'logs'])

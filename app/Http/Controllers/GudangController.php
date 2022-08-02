@@ -3040,39 +3040,96 @@ class GudangController extends Controller
     // penjualan
     function he1()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-            $q->whereDate('tgl_kontrak', '=', Carbon::now()->subDays(1));
-        })->get());
-        $Spa = collect(Pesanan::has('Spa')->get());
-        $Spb = collect(Pesanan::has('Spb')->get());
-
-        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $data = DB::table(DB::raw('dev_spa.detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
+            'ms.nama as log_nama',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereRaw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end = date_sub(now(), interval 1 day)')
+            ->groupBy('p.id')
+            ->get();
 
         return count($data);
     }
 
     function he2()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-            $q->whereDate('tgl_kontrak', '=', Carbon::now()->subDays(2));
-        })->get());
-        $Spa = collect(Pesanan::has('Spa')->get());
-        $Spb = collect(Pesanan::has('Spb')->get());
-
-        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $data = DB::table(DB::raw('dev_spa.detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
+            'ms.nama as log_nama',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereRaw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end = date_sub(now(), interval 2 day)')
+            ->groupBy('p.id')
+            ->get();
 
         return count($data);
     }
 
     function he3()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-            $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(3));
-        })->get());
-        $Spa = collect(Pesanan::has('Spa')->get());
-        $Spb = collect(Pesanan::has('Spb')->get());
-
-        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $data = DB::table(DB::raw('dev_spa.detail_pesanan_produk dpp'))
+        ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+        DB::raw('count(dpp.gudang_barang_jadi_id)'),
+        DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+        DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+        DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
+        'ms.nama as log_nama',
+        DB::raw("case
+        when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+        when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+        when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+        when p.so is null then c_ekat.nama
+        end as divisi"))
+        ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+        ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+        ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+        ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+        ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+        ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+        ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+        ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+        ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+        ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+        ->whereRaw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end <= date_sub(now(), interval 3 day)')
+        ->groupBy('p.id')
+        ->get();
 
         return count($data);
     }
@@ -3080,13 +3137,32 @@ class GudangController extends Controller
     function list_tf1()
     {
         try {
-            $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-                $q->whereDate('tgl_kontrak', '=', Carbon::now()->subDays(1));
-            })->get());
-            $Spa = collect(Pesanan::has('Spa')->get());
-            $Spb = collect(Pesanan::has('Spb')->get());
-
-            $data = $Ekatalog->merge($Spa)->merge($Spb);
+            $data = DB::table(DB::raw('dev_spa.detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
+            'ms.nama as log_nama',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereRaw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end = date_sub(now(), interval 1 day)')
+            ->groupBy('p.id')
+            ->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -3097,39 +3173,18 @@ class GudangController extends Controller
                     return $data->no_po;
                 })
                 ->addColumn('nama_customer', function ($data) {
-                    $name = explode('/', $data->so);
-                    for ($i = 1; $i < count($name); $i++) {
-                        if ($name[1] == 'EKAT') {
-                            return $data->Ekatalog->Customer->nama;
-                        } elseif ($name[1] == 'SPA') {
-                            return $data->Spa->Customer->nama;
-                        } elseif ($name[1] == 'SPB') {
-                            return $data->Spb->Customer->nama;
-                        } else {
-                        }
-                    }
-
-                    if (empty($data->so)) {
-                        return $data->Ekatalog->Customer->nama;
-                    }
+                    return $data->divisi;
                 })
                 ->addColumn('tgl_batas', function ($d) {
-                    if (isset($d->Ekatalog->tgl_kontrak)) {
-                        $a = Carbon::now()->diffInDays($d->Ekatalog->tgl_kontrak);
-                        if ($d->Ekatalog->Provinsi->status == 1) {
-                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY') . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
-                        }
-
-                        if ($d->Ekatalog->Provinsi->status == 2) {
-                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY') . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
-                        }
+                    if ($d->batas) {
+                        return $d->batas;
                     } else {
                         return '-';
                     }
                 })
                 ->addColumn('status_penjualan', function ($data) {
                     if ($data->log_id) {
-                        return '<span class="badge badge-light">' . $data->log->nama . '</span>';
+                        return '<span class="badge badge-light">' . $data->log_nama . '</span>';
                     } else {
                         return '-';
                     }
@@ -3172,13 +3227,32 @@ class GudangController extends Controller
     function list_tf2()
     {
         try {
-            $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-                $q->whereDate('tgl_kontrak', '=', Carbon::now()->subDays(2));
-            })->get());
-            $Spa = collect(Pesanan::has('Spa')->get());
-            $Spb = collect(Pesanan::has('Spb')->get());
-
-            $data = $Ekatalog->merge($Spa)->merge($Spb);
+            $data = DB::table(DB::raw('dev_spa.detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
+            'ms.nama as log_nama',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereRaw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end = date_sub(now(), interval 2 day)')
+            ->groupBy('p.id')
+            ->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -3189,39 +3263,18 @@ class GudangController extends Controller
                     return $data->no_po;
                 })
                 ->addColumn('nama_customer', function ($data) {
-                    $name = explode('/', $data->so);
-                    for ($i = 1; $i < count($name); $i++) {
-                        if ($name[1] == 'EKAT') {
-                            return $data->Ekatalog->Customer->nama;
-                        } elseif ($name[1] == 'SPA') {
-                            return $data->Spa->Customer->nama;
-                        } elseif ($name[1] == 'SPB') {
-                            return $data->Spb->Customer->nama;
-                        } else {
-                        }
-                    }
-
-                    if (empty($data->so)) {
-                        return $data->Ekatalog->Customer->nama;
-                    }
+                    return $data->divisi;
                 })
                 ->addColumn('tgl_batas', function ($d) {
-                    if (isset($d->Ekatalog->tgl_kontrak)) {
-                        $a = Carbon::now()->diffInDays($d->Ekatalog->tgl_kontrak);
-                        if ($d->Ekatalog->Provinsi->status == 1) {
-                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY') . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
-                        }
-
-                        if ($d->Ekatalog->Provinsi->status == 2) {
-                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY') . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
-                        }
+                    if ($d->batas) {
+                        return $d->batas;
                     } else {
                         return '-';
                     }
                 })
                 ->addColumn('status_penjualan', function ($data) {
                     if ($data->log_id) {
-                        return '<span class="badge badge-light">' . $data->log->nama . '</span>';
+                        return '<span class="badge badge-light">' . $data->log_nama . '</span>';
                     } else {
                         return '-';
                     }
@@ -3264,13 +3317,32 @@ class GudangController extends Controller
     function list_tf3()
     {
         try {
-            $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-                $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(3));
-            })->get());
-            $Spa = collect(Pesanan::has('Spa')->get());
-            $Spb = collect(Pesanan::has('Spb')->get());
-
-            $data = $Ekatalog->merge($Spa)->merge($Spb);
+            $data = DB::table(DB::raw('dev_spa.detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            DB::raw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end as batas'),
+            'ms.nama as log_nama',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereRaw('case when p2.status = 1 then DATE_SUB(e.tgl_kontrak, INTERVAL 35 DAY) else DATE_SUB(e.tgl_kontrak, INTERVAL 28 DAY) end <= date_sub(now(), interval 3 day)')
+            ->groupBy('p.id')
+            ->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -3281,39 +3353,18 @@ class GudangController extends Controller
                     return $data->no_po;
                 })
                 ->addColumn('nama_customer', function ($data) {
-                    $name = explode('/', $data->so);
-                    for ($i = 1; $i < count($name); $i++) {
-                        if ($name[1] == 'EKAT') {
-                            return $data->Ekatalog->Customer->nama;
-                        } elseif ($name[1] == 'SPA') {
-                            return $data->Spa->Customer->nama;
-                        } elseif ($name[1] == 'SPB') {
-                            return $data->Spb->Customer->nama;
-                        } else {
-                        }
-                    }
-
-                    if (empty($data->so)) {
-                        return $data->Ekatalog->Customer->nama;
-                    }
+                    return $data->divisi;
                 })
                 ->addColumn('tgl_batas', function ($d) {
-                    if (isset($d->Ekatalog->tgl_kontrak)) {
-                        $a = Carbon::now()->diffInDays($d->Ekatalog->tgl_kontrak);
-                        if ($d->Ekatalog->Provinsi->status == 1) {
-                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(5)->isoFormat('D MMMM YYYY') . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
-                        }
-
-                        if ($d->Ekatalog->Provinsi->status == 2) {
-                            return Carbon::createFromFormat('Y-m-d', $d->Ekatalog->tgl_kontrak)->subWeeks(4)->isoFormat('D MMMM YYYY') . '<br><span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
-                        }
+                    if ($d->batas) {
+                        return $d->batas;
                     } else {
                         return '-';
                     }
                 })
                 ->addColumn('status_penjualan', function ($data) {
                     if ($data->log_id) {
-                        return '<span class="badge badge-light">' . $data->log->nama . '</span>';
+                        return '<span class="badge badge-light">' . $data->log_nama . '</span>';
                     } else {
                         return '-';
                     }
@@ -3423,7 +3474,15 @@ class GudangController extends Controller
     function outSO()
     {
         try {
-            $data = DB::table('view_dashboard_produk_tdk_so')->get();
+            $data = DB::table('detail_pesanan_produk as dpp')
+                    ->select(DB::raw('concat(p.nama, " ", gbj.nama) as prd'), DB::raw('sum(dp.jumlah) as jumlah'),'gbj.stok')
+                    ->join('gdg_barang_jadi as gbj', 'gbj.id', '=', 'dpp.gudang_barang_jadi_id')
+                    ->join('detail_pesanan as dp', 'dp.id', '=', 'dpp.detail_pesanan_id')
+                    ->join('produk as p', 'p.id', '=', 'gbj.produk_id')
+                    ->where('jumlah', '>', 'gbj.stok')
+                    ->groupBy('dpp.gudang_barang_jadi_id')
+                    ->orderBy(DB::raw('concat(p.nama, " ", gbj.nama)'))
+                    ->get();
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('produk', function ($d) {

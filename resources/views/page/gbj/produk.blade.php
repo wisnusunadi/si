@@ -624,6 +624,27 @@
   </div>
 </div>
 
+<div class="modal fade modalComment" id="" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Alasan</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <label for="">Alasan</label>
+          <textarea class="form-control alasan" name="" id="" cols="30" rows="10"></textarea>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary simpanSeri" style="" id="simpanSeriBelumDigunakan">Simpan</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 <style>
     img {
         width: 100%;
