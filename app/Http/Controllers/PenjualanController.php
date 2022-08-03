@@ -634,7 +634,7 @@ class PenjualanController extends Controller
                 $progress = "";
                 $tes = $data->cjumlahprd + $data->cjumlahpart;
                 if($tes > 0){
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if($hitung > 0){
                         $progress = '<div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1595,7 +1595,7 @@ class PenjualanController extends Controller
         }
 
         $status = "";
-            $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+            $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
             if ($data->Pesanan->log_id == "9") {
                 $status = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
             } else if($data->log == "batal") {
@@ -1664,7 +1664,7 @@ class PenjualanController extends Controller
                 } else if($data->log == "batal") {
                     $status = '<div><span class="badge red-text">Batal</span></div>';
                 } else{
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if($hitung > 0){
                         $status = '<div class="align-center"><div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1739,7 +1739,7 @@ class PenjualanController extends Controller
             }])->where('id', $value)->first();
 
             $status = "";
-            $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+            $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
             if ($data->Pesanan->log_id == "7") {
                 $status = '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
             }
@@ -1934,7 +1934,7 @@ class PenjualanController extends Controller
             ->addColumn('status', function ($data) {
                 $datas = "";
                 if (!empty($data->Pesanan->log_id)) {
-                    $hitung = round(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if ($data->Pesanan->log_id == "9") {
                         $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                     } else {
@@ -2115,7 +2115,7 @@ class PenjualanController extends Controller
                         //     </button>
                         // </a>';
                     }else{
-                        $hitung = round((($data->cseri / $data->cjumlah) * 100), 0);
+                        $hitung = floor((($data->cseri / $data->cjumlah) * 100));
                         if($hitung > 0){
                             $datas = '<div class="progress">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -2424,7 +2424,7 @@ class PenjualanController extends Controller
                 // }
                 // return $datas;
                     $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if ($data->Pesanan->log_id == "9") {
                         $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                     } else if($data->log == "batal") {
@@ -2657,7 +2657,7 @@ class PenjualanController extends Controller
                 // }
                 // return $datas;
                 $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if ($data->Pesanan->log_id == "9") {
                         $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                     } else if($data->log == "batal") {
@@ -5038,7 +5038,7 @@ class PenjualanController extends Controller
                                 </button>
                             </a>';
                         }else{
-                            $hitung = round((($data->cseri / $data->cjumlah) * 100), 0);
+                            $hitung = floor((($data->cseri / $data->cjumlah) * 100));
                             if($hitung > 0){
                                 $datas = '<div class="progress">
                                     <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -5215,7 +5215,7 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if ($data->Pesanan->log_id == "9") {
                         $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                     } else{
@@ -5364,7 +5364,7 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if ($data->Pesanan->log_id == "9") {
                         $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                     } else {

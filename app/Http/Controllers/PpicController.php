@@ -1346,7 +1346,7 @@ class PpicController extends Controller
             })
             ->addColumn('status', function($data){
                 $progress = "";
-                $hitung = round(((($data->count_transfer) / ($data->count_pesanan)) * 100), 0);
+                $hitung = floor(((($data->count_transfer) / ($data->count_pesanan)) * 100));
                     if($hitung > 0){
                         $progress = '<div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
