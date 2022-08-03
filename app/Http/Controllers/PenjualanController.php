@@ -537,7 +537,7 @@ class PenjualanController extends Controller
                             }
                             else{
                                 return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                             }
                         } else{
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
@@ -749,12 +749,12 @@ class PenjualanController extends Controller
                 $name =  $data->getTable();
                 if ($name == 'ekatalog') {
                     if ($data->status == 'batal') {
-                        return 'text-danger font-weight-bold';
+                        return 'text-danger font-weight-bold line-through';
                     }
                 }
                 else{
                     if ($data->log == 'batal') {
-                        return 'text-danger font-weight-bold';
+                        return 'text-danger font-weight-bold line-through';
                     }
                 }
             })
@@ -930,7 +930,7 @@ class PenjualanController extends Controller
                             }
                             else{
                                 return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                             }
                         } else{
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
@@ -1596,9 +1596,7 @@ class PenjualanController extends Controller
 
         $status = "";
             $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-            if ($data->Pesanan->log_id == "9") {
-                $status = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-            } else if($data->log == "batal") {
+            if($data->log == "batal") {
                 $status = '<span class="badge red-text">Batal</span>';
             } else{
                 if($hitung > 0){
@@ -1658,9 +1656,6 @@ class PenjualanController extends Controller
 
                 if ($data->Pesanan->log_id == "7") {
                     $status = '<div><span class="badge red-text">'.$data->Pesanan->State->nama . '</span></div>';
-                }
-                else if ($data->Pesanan->log_id == "9") {
-                    $status = '<div><span class="badge purple-text">'.$data->Pesanan->State->nama . '</span></div>';
                 } else if($data->log == "batal") {
                     $status = '<div><span class="badge red-text">Batal</span></div>';
                 } else{
@@ -1698,7 +1693,7 @@ class PenjualanController extends Controller
                         }
                         else{
                             $tgl_kontrak =  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                         }
                     } else{
                         $tgl_kontrak = Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
@@ -1742,9 +1737,6 @@ class PenjualanController extends Controller
             $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
             if ($data->Pesanan->log_id == "7") {
                 $status = '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-            }
-            else if ($data->Pesanan->log_id == "9") {
-                $status = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
             } else if($data->log == "batal") {
                 $status = '<span class="badge red-text">Batal</span>';
             } else{
@@ -1935,9 +1927,7 @@ class PenjualanController extends Controller
                 $datas = "";
                 if (!empty($data->Pesanan->log_id)) {
                     $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else {
+
                         if($hitung > 0){
                             $datas = '<div class="progress">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1949,7 +1939,6 @@ class PenjualanController extends Controller
                             </div>
                             <small class="text-muted">Selesai</small>';
                         }
-                    }
                 }
                 return $datas;
             })
@@ -2085,13 +2074,8 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if($data->Pesanan->log_id == '7' || $data->Pesanan->log_id == '9'){
-                    if($data->Pesanan->log_id == "7"){
-                        $datas .= '<span class="red-text badge">Penjualan</span>';
-                    }
-                    else{
-                        $datas .= '<span class="purple-text badge">PO</span>';
-                    }
+                if($data->Pesanan->log_id == '7'){
+                    $datas .= '<span class="red-text badge">Penjualan</span>';
 
                     // if (!empty($data->status)) {
                     //     if ($data->status == "batal") {
@@ -2302,7 +2286,7 @@ class PenjualanController extends Controller
             ->rawColumns(['button', 'status', 'tgl_kontrak', 'no_paket'])
             ->setRowClass(function ($data) {
                 if ($data->status == 'batal') {
-                    return 'text-danger font-weight-bold';
+                    return 'text-danger font-weight-bold line-through';
                 }
             })
             ->make(true);
@@ -2425,9 +2409,7 @@ class PenjualanController extends Controller
                 // return $datas;
                     $datas = "";
                     $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else if($data->log == "batal") {
+                    if($data->log == "batal") {
                         $datas = '<span class="badge red-text">Batal</span>';
                     } else{
                         if($hitung > 0){
@@ -2544,7 +2526,7 @@ class PenjualanController extends Controller
             ->rawColumns(['button', 'status'])
             ->setRowClass(function ($data) {
                 if ($data->log == 'batal') {
-                    return 'text-danger font-weight-bold';
+                    return 'text-danger font-weight-bold line-through';
                 }
             })
             ->make(true);
@@ -2658,9 +2640,7 @@ class PenjualanController extends Controller
                 // return $datas;
                 $datas = "";
                     $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else if($data->log == "batal") {
+                    if($data->log == "batal") {
                         $datas = '<span class="badge red-text">Batal</span>';
                     } else{
                         if($hitung > 0){
@@ -2782,7 +2762,7 @@ class PenjualanController extends Controller
             ->rawColumns(['button', 'status'])
             ->setRowClass(function ($data) {
                 if ($data->log == 'batal') {
-                    return 'text-danger font-weight-bold';
+                    return 'text-danger font-weight-bold line-through';
                 }
             })
             ->make(true);
@@ -5216,9 +5196,7 @@ class PenjualanController extends Controller
             ->addColumn('status', function ($data) {
                 $datas = "";
                     $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else{
+
                         if($data->log == "batal") {
                             $datas = '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
                                     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
@@ -5239,7 +5217,6 @@ class PenjualanController extends Controller
                                 <small class="text-muted">Selesai</small>';
                             }
                         }
-                    }
                     return $datas;
             })
             ->addColumn('tglpo', function ($data) {
@@ -5365,9 +5342,7 @@ class PenjualanController extends Controller
             ->addColumn('status', function ($data) {
                 $datas = "";
                     $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else {
+
                         if($data->log == "batal") {
                             $datas = '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
                                     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
@@ -5388,7 +5363,6 @@ class PenjualanController extends Controller
                                 <small class="text-muted">Selesai</small>';
                             }
                         }
-                    }
                     return $datas;
             })
             ->addColumn('tglpo', function ($data) {

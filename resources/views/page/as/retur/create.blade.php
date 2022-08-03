@@ -217,12 +217,12 @@
                                             <label for="pic_peminjaman" class="col-lg-5 col-md-12 col-form-label labelket">Penanggung Jawab</label>
                                             <div class="col-lg-4 col-md-8">
                                                 <div class="input-group">
-                                                    <div class="input-group-prepend">
+                                                    <div class="input-group-prepend"  width="40%">
                                                         <select class="form-control custom-select select2 divisi_id" id="divisi_id" name="divisi_id">
 
                                                         </select>
                                                     </div>
-                                                    <input type="text" name="pic_peminjaman" id="pic_peminjaman" class="form-control col-form-label pic_peminjaman  @error('pic_peminjaman') is-invalid @enderror"/>
+                                                    <input type="text" name="pic_peminjaman" id="pic_peminjaman" class="form-control col-form-label pic_peminjaman  @error('pic_peminjaman') is-invalid @enderror" width="60%"/>
                                                 </div>
                                                 <small class="text-success mt-1" id="infono_transaksi">* Pilih Divisi Penanggung Jawab</small>
                                                 <div class="invalid-feedback" id="msgpic_peminjaman"></div>
@@ -762,7 +762,7 @@
                 }
             }).change(function(e){
                 e.preventDefault();
-                
+
             })
 
         function part(){

@@ -1023,7 +1023,7 @@ class LogistikController extends Controller
                 $res = $data->cqcprd + $data->cqcpart + $data->ctfjasa;
                 $tes = $data->clogprd + $data->clogpart + $data->clogjasa;
                 if($res > 0){
-                    $hitung = round(((($data->clogprd + $data->clogpart + $data->clogjasa) / ($data->cqcprd + $data->cqcpart + $data->ctfjasa)) * 100), 0);
+                    $hitung = floor(((($data->clogprd + $data->clogpart + $data->clogjasa) / ($data->cqcprd + $data->cqcpart + $data->ctfjasa)) * 100));
                     if($hitung > 0){
                     $datas = '<div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -2679,7 +2679,7 @@ class LogistikController extends Controller
                 $status = "";
                 $res = $ds->cqcprd + $ds->cqcpart + $ds->ctfjasa;
                 if($res > 0){
-                    $hitung = round(((($ds->clogprd + $ds->clogpart + $ds->clogjasa) / ($ds->cqcprd + $ds->cqcpart + $ds->ctfjasa)) * 100), 0);
+                    $hitung = floor(((($ds->clogprd + $ds->clogpart + $ds->clogjasa) / ($ds->cqcprd + $ds->cqcpart + $ds->ctfjasa)) * 100));
                     if($hitung > 0){
                     $status = '<div class="progress progresscust">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -2798,7 +2798,7 @@ class LogistikController extends Controller
             $status = "";
             $res = $ds->cqcprd + $ds->cqcpart + $ds->ctfjasa;
             if($res > 0){
-                $hitung = round(((($ds->clogprd + $ds->clogpart + $ds->clogjasa) / ($ds->cqcprd + $ds->cqcpart + $ds->ctfjasa)) * 100), 0);
+                $hitung = floor(((($ds->clogprd + $ds->clogpart + $ds->clogjasa) / ($ds->cqcprd + $ds->cqcpart + $ds->ctfjasa)) * 100));
                     if($hitung > 0){
                     $status = '<div class="progress progresscust">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -2910,7 +2910,7 @@ class LogistikController extends Controller
             $status = "";
             $res = $ds->cqcprd + $ds->cqcpart + $ds->ctfjasa;
             if($res > 0){
-                $hitung = round(((($ds->clogprd + $ds->clogpart + $ds->clogjasa) / ($ds->cqcprd + $ds->cqcpart + $ds->ctfjasa)) * 100), 0);
+                $hitung = floor(((($ds->clogprd + $ds->clogpart + $ds->clogjasa) / ($ds->cqcprd + $ds->cqcpart + $ds->ctfjasa)) * 100));
                     if($hitung > 0){
                     $status = '<div class="progress progresscust">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -4226,7 +4226,7 @@ $Logistik = Logistik::find($request->sj_lama);
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                $hitung = round(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                 if ($data->log_id == "9") {
                     $datas = '<span class="badge purple-text">'.$data->State->nama . '</span>';
                 } else {

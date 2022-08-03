@@ -1500,7 +1500,7 @@ class QcController extends Controller
                 $status = "";
                 $res = $ds->ctfprd + $ds->ctfpart;
                 if($res > 0){
-                    $hitung = round(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100), 0);
+                    $hitung = floor(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100));
                     if($hitung > 0){
                     $status = '<div class="progress progresscust">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1644,7 +1644,7 @@ class QcController extends Controller
             $status = "";
                 $res = $ds->ctfprd + $ds->ctfpart;
                 if($res > 0){
-                    $hitung = round(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100), 0);
+                    $hitung = floor(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100));
                     if($hitung > 0){
                     $status = '<div class="progress progresscust">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1739,7 +1739,7 @@ class QcController extends Controller
             $status = "";
                 $res = $ds->ctfprd + $ds->ctfpart;
                 if($res > 0){
-                    $hitung = round(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100), 0);
+                    $hitung = floor(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100));
                     if($hitung > 0){
                     $status = '<div class="progress progresscust">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -2757,10 +2757,8 @@ class QcController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                $hitung = round(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                if ($data->log_id == "9") {
-                    $datas = '<span class="badge purple-text">'.$data->State->nama . '</span>';
-                } else {
+                $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+
                     if($hitung > 0){
                         $datas = '<div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -2772,7 +2770,6 @@ class QcController extends Controller
                         </div>
                         <small class="text-muted">Terkirim</small>';
                     }
-                }
                 return $datas;
             })
             ->addColumn('aksi', function($data){

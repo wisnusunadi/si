@@ -25,12 +25,28 @@
 
 @section('adminlte_css')
 <style>
+    table { border-collapse: collapse; empty-cells: show; }
+
+td { position: relative; }
     .foo {
         border-radius: 50%;
         float: left;
         width: 10px;
         height: 10px;
         align-items: center !important;
+    }
+
+    /* .line-through{
+        text-decoration: line-through;
+    } */
+
+    tr.line-through td:before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
     }
 
     .alert-danger {

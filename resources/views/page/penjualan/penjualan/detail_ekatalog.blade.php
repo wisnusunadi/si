@@ -21,8 +21,7 @@
                             <em class="text-muted">Belum Tersedia</em>
                         @endif
                     </li>
-                    <li class="py-2"><span class="fa-li"><i
-                                class="fas fa-map-marker-alt fa-fw"></i></span>
+                    <li class="py-2"><span class="fa-li"><i class="fas fa-map-marker-alt fa-fw"></i></span>
                         @if (!empty($data->provinsi))
                             {{ $data->Provinsi->nama }}
                         @else
@@ -170,15 +169,19 @@
                                                                                     <span class="align-self-center"><span class="foo mr-2"></span><b>Kirim</b></span> <b class="float-right mr-2"><span id="c_kirim">0</span> <sub>unit</sub> {{--<sub  id="tot_kirim"> dari 0</sub>--}}</b>
                                                                                 </li>
                                                                             </ul>
-                                                                            <div class="alert alert-info" role="alert">
+
+                                                                            <div class="alert alert-info alert-dismissible fade show" role="alert">
                                                                                 <small>
                                                                                 <i class="fas fa-info-circle"></i> <strong>Catatan: </strong>
                                                                                 <ol style="list-item-style:none; margin-left:0px;padding-left:15px;" >
-                                                                                    <li>Angka warna <b class="text-danger">merah</b> menunjukkan jumlah produk yang <i>belum diproses</i> oleh divisi tersebut</li>
-                                                                                    <li>Angka warna <b class="text-dark">hitam</b> menunjukkan jumlah produk yang <i>telah diberikan dan harus diproses</i> oleh divisi tersebut</li>
-                                                                                    <li>Kirim untuk jumlah yang <i>telah dikirim</i></li>
+                                                                                    <li>Angka warna <b class="text-danger">merah</b> menunjukkan jumlah unit yang <i>belum diproses</i> oleh divisi tersebut</li>
+                                                                                    <li>Angka warna <b class="text-dark">hitam</b> menunjukkan total yang <i>telah diberikan dan harus diproses</i> oleh divisi tersebut</li>
+                                                                                    <li>Angka pada Kirim merupakan total unit yang <i>terkirim</i></li>
                                                                                 </ol>
                                                                                 </small>
+                                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                                                                    <span aria-hidden="true">&times;</span>
+                                                                                  </button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
@@ -193,7 +196,7 @@
                                                             <table class="table"
                                                                 style="max-width:100%; overflow-x: hidden;"
                                                                 id="tabledetailpesan">
-                                                                <thead>
+                                                                <thead class="bg-chart-light">
                                                                     <tr>
                                                                         <th rowspan="2">No</th>
                                                                         <th rowspan="2">Produk</th>
@@ -252,10 +255,10 @@
                                                                         @endforeach
                                                                     @endif
                                                                 </tbody>
-                                                                <tfoot>
+                                                                <tfoot class="bg-chart-light align-center">
                                                                     <tr>
-                                                                        <td colspan="6">Total Harga</td>
-                                                                        <td class="nowraptxt tabnum">@currency($totalharga)</td>
+                                                                        <th colspan="6">Total Harga</th>
+                                                                        <th class="nowraptxt tabnum">@currency($totalharga)</th>
                                                                     </tr>
                                                                 </tfoot>
                                                             </table>

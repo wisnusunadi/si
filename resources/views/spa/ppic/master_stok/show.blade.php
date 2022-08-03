@@ -21,8 +21,15 @@
 @stop
 @section('adminlte_css')
 <style>
-    #modal-overlay {
-        transition: opacity 0.5s linear;
+    .m-fadeOut {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s linear 300ms, opacity 300ms;
+    }
+    .m-fadeIn {
+        visibility: visible;
+        opacity: 0.6;
+        transition: visibility 0s linear 0s, opacity 300ms;
     }
     .va-middle {
         vertical-align: middle;
@@ -328,7 +335,7 @@
     <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="margin: 10px">
-                <div id="modal-overlay" class="overlay hide"></div>
+                <div id="modal-overlay" class="overlay m-fadeOut"></div>
                 <div class="modal-header">
                     <h4 class="modal-title">Info</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -744,10 +751,12 @@
                 })
             }
         $(document).on('hidden.bs.modal', '#penjualanmodal', function(event){
-            $('#detailmodal').find('#modal-overlay').addClass('hide');
+            $('#detailmodal').find('#modal-overlay').addClass('m-fadeOut');
+            $('#detailmodal').find('#modal-overlay').removeClass('m-fadeIn');
         });
         $(document).on('click', '.penjualanmodal', function(event) {
-            $('#detailmodal').find('#modal-overlay').removeClass('hide');
+            $('#detailmodal').find('#modal-overlay').removeClass('m-fadeOut');
+            $('#detailmodal').find('#modal-overlay').addClass('m-fadeIn');
             event.preventDefault();
                 var href = $(this).attr('data-attr');
                 var id = $(this).data("id");

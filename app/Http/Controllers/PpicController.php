@@ -1367,9 +1367,6 @@ class PpicController extends Controller
                     else if($data->log_id == "7"){
                         return '<span class="badge red-text">'.$data->State->nama.'</span>';
                     }
-                    else if($data->log_id == "9"){
-                        return '<span class="badge purple-text">'.$data->State->nama.'</span>';
-                    }
                     else{
                         return $progress;
                     }
@@ -1381,9 +1378,6 @@ class PpicController extends Controller
                     else if($data->log_id == "7"){
                         return '<span class="badge red-text">'.$data->State->nama.'</span>';
                     }
-                    else if($data->log_id == "9"){
-                        return '<span class="badge purple-text">'.$data->State->nama.'</span>';
-                    }
                     else{
                         return $progress;
                     }
@@ -1394,9 +1388,6 @@ class PpicController extends Controller
                     }
                     else if($data->log_id == "7"){
                         return '<span class="badge red-text">'.$data->State->nama.'</span>';
-                    }
-                    else if($data->log_id == "9"){
-                        return '<span class="badge purple-text">'.$data->State->nama.'</span>';
                     }
                     else{
                         return $progress;
@@ -1458,40 +1449,76 @@ class PpicController extends Controller
 
         // $data = GudangBarangJadi::whereIn('id', $arrayid)->get();
 
-        $data = GudangBarangJadi
-        // ::whereIn('id', function($q){
-        //     $q->select('gdg_barang_jadi.id')
-        //       ->from('gdg_barang_jadi')
-        //       ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.gudang_barang_jadi_id', '=', 'gdg_barang_jadi.id')
-        //       ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-        //       ->groupBy('gdg_barang_jadi.id')
-        //       ->havingRaw('count(noseri_detail_pesanan.id) > (
-        //         SELECT count(noseri_logistik.id)
-        //         FROM noseri_logistik
-        //         left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
-        //         left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-        //         where detail_pesanan_produk.gudang_barang_jadi_id = gdg_barang_jadi.id)');
-        //     })
-            ::addSelect(['count_pesanan' => function ($q){
+        // $data = GudangBarangJadi
+        // // ::whereIn('id', function($q){
+        // //     $q->select('gdg_barang_jadi.id')
+        // //       ->from('gdg_barang_jadi')
+        // //       ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.gudang_barang_jadi_id', '=', 'gdg_barang_jadi.id')
+        // //       ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+        // //       ->groupBy('gdg_barang_jadi.id')
+        // //       ->havingRaw('count(noseri_detail_pesanan.id) > (
+        // //         SELECT count(noseri_logistik.id)
+        // //         FROM noseri_logistik
+        // //         left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
+        // //         left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+        // //         where detail_pesanan_produk.gudang_barang_jadi_id = gdg_barang_jadi.id)');
+        // //     })
+        //     ::addSelect(['count_pesanan' => function ($q){
+        //             $q->selectRaw('count(noseri_detail_pesanan.id)')
+        //             ->from('noseri_detail_pesanan')
+        //             ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+        //             ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+        //             ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+        //             ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+        //             ->whereNotIn('pesanan.log_id', ['10', '20'])
+        //             ->limit(1);
+        //         },
+        //         'count_pengiriman' => function($q){
+        //             $q->selectRaw('count(noseri_logistik.id)')
+        //               ->from('noseri_logistik')
+        //               ->leftJoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+        //               ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+        //               ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+        //               ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+        //               ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+        //               ->whereNotIn('pesanan.log_id', ['10', '20'])
+        //               ->limit(1);
+        //         }
+        //     ])
+        //     ->havingRaw('count_pesanan > count_pengiriman')
+        //     ->with('Produk')
+        //     ->get();
+        // $q->selectRaw('count(noseri_detail_pesanan.id)')
+        // ->from('pesanan')
+        // ->join('detail_pesanan', 'detail_pesanan.pesanan_id', '=', 'pesanan.id')
+        // ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.pesanan_id')
+        // ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+        // ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+        // ->whereNotIn('pesanan.log_id', ['10', '20'])
+
+        $data = GudangBarangJadi::addSelect(['count_pesanan' => function ($q){
                     $q->selectRaw('count(noseri_detail_pesanan.id)')
-                    ->from('noseri_detail_pesanan')
-                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                    ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                    ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                    ->from('detail_pesanan_produk')
+                    ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
                     ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
-                    ->whereNotIn('pesanan.log_id', ['10', '20'])
-                    ->limit(1);
+                    ->havingRaw('count(noseri_detail_pesanan.id) > (select count(noseri_logistik.id)
+                    from noseri_logistik
+                    inner join detail_logistik on detail_logistik.id = noseri_logistik.detail_logistik_id
+                    inner join logistik on logistik.id = detail_logistik.logistik_id
+                    inner join detail_pesanan_produk on detail_pesanan_produk.id = detail_logistik.detail_pesanan_produk_id
+                    where detail_pesanan_produk.gudang_barang_jadi_id = gdg_barang_jadi.id)');
                 },
                 'count_pengiriman' => function($q){
                     $q->selectRaw('count(noseri_logistik.id)')
-                      ->from('noseri_logistik')
-                      ->leftJoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
-                      ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
-                      ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                      ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                      ->from('detail_pesanan_produk')
+                      ->join('detail_logistik', 'detail_logistik.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                      ->join('noseri_logistik', 'noseri_logistik.detail_logistik_id', '=', 'detail_logistik.id')
+                      ->join('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
                       ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
-                      ->whereNotIn('pesanan.log_id', ['10', '20'])
-                      ->limit(1);
+                      ->havingRaw('count(noseri_logistik.id) < (select count(noseri_detail_pesanan.id)
+                        from noseri_detail_pesanan
+                        inner join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+                        where detail_pesanan_produk.gudang_barang_jadi_id = gdg_barang_jadi.id)');
                 }
             ])
             ->havingRaw('count_pesanan > count_pengiriman')
@@ -1540,6 +1567,7 @@ class PpicController extends Controller
                 // })->whereNotIn('log_id', ['10'])->has('DetailPesanan.DetailPesananProduk.DetailLogistik')->first();
                 // return $data->getJumlahKirimPesanan();
                 // return $data;
+
                 return $data->count_pengiriman;
             })
 
@@ -1549,6 +1577,7 @@ class PpicController extends Controller
                 // $jumlahproses = $jumlah - $jumlahselesai;
                 // return $jumlahproses;
                 // return $data->getJumlahCekPesanan();
+
                 return $data->count_pesanan - $data->count_pengiriman;
             })
             ->addColumn('aksi', function ($data) {
@@ -1569,7 +1598,7 @@ class PpicController extends Controller
                     ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                     ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
                     ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
-                    ->whereNotIn('pesanan.log_id', ['10', '20'])
+                    // ->whereNotIn('pesanan.log_id', ['10', '20'])
                     ->limit(1);
                 },
                 'count_pengiriman' => function($q){
@@ -1580,7 +1609,7 @@ class PpicController extends Controller
                       ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
                       ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
                       ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
-                      ->whereNotIn('pesanan.log_id', ['10', '20'])
+                    //   ->whereNotIn('pesanan.log_id', ['10', '20'])
                       ->limit(1);
                 }
             ])
@@ -1611,41 +1640,77 @@ class PpicController extends Controller
 
         // $data = Pesanan::whereIn('id', $arrayid)->get();
 
-        $data = Pesanan::whereIn('id', function($q) use($id){
-            $q->select('pesanan.id')
-              ->from('pesanan')
-              ->leftJoin('detail_pesanan', 'detail_pesanan.pesanan_id', '=', 'pesanan.id')
-              ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-              ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-              ->whereNotIn('pesanan.log_id', ['7','10'])
-              ->where('detail_pesanan_produk.gudang_barang_jadi_id', '=', $id)
-              ->groupBy('pesanan.id')
-              ->havingRaw('count(noseri_detail_pesanan.id) > 0');
-        })->addSelect(['count_pesanan' => function($q) use($id){
+        // $data = Pesanan::whereIn('id', function($q) use($id){
+        //     $q->select('pesanan.id')
+        //       ->from('pesanan')
+        //       ->leftJoin('detail_pesanan', 'detail_pesanan.pesanan_id', '=', 'pesanan.id')
+        //       ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+        //       ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+        //       ->whereNotIn('pesanan.log_id', ['7','10'])
+        //       ->where('detail_pesanan_produk.gudang_barang_jadi_id', '=', $id)
+        //       ->groupBy('pesanan.id')
+        //       ->havingRaw('count(noseri_detail_pesanan.id) > 0');
+        // })
+        // ->addSelect(['count_pesanan' => function($q) use($id){
+        //     $q->selectRaw('count(noseri_detail_pesanan.id)')
+        //     ->from('noseri_detail_pesanan')
+        //     ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+        //     ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+        //     ->where('detail_pesanan_produk.gudang_barang_jadi_id', $id)
+        //     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+        //     ->limit(1);
+        // }, 'count_pengiriman' => function($q) use($id){
+        //     $q->selectRaw('count(noseri_logistik.id)')
+        //     ->from('noseri_logistik')
+        //     ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+        //     ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+        //     ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+        //     ->where('detail_pesanan_produk.gudang_barang_jadi_id', $id)
+        //     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+        //     ->limit(1);
+        // },
+        // 'tgl_kontrak_custom' => function($q){
+        //     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
+        //     ->from('ekatalog')
+        //     ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
+        //     ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
+        //     ->limit(1);
+        // }
+        // ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])->havingRaw('count_pesanan > count_pengiriman')->get();
+
+        $data = Pesanan::addSelect(['count_pesanan' => function ($q) use($id){
             $q->selectRaw('count(noseri_detail_pesanan.id)')
-            ->from('noseri_detail_pesanan')
-            ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->from('detail_pesanan_produk')
+            ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
             ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
             ->where('detail_pesanan_produk.gudang_barang_jadi_id', $id)
             ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-            ->limit(1);
-        }, 'count_pengiriman' => function($q) use($id){
+            ->havingRaw('count(noseri_detail_pesanan.id) > (select count(noseri_logistik.id)
+            from noseri_logistik
+            inner join detail_logistik on detail_logistik.id = noseri_logistik.detail_logistik_id
+            inner join logistik on logistik.id = detail_logistik.logistik_id
+            inner join detail_pesanan_produk on detail_pesanan_produk.id = detail_logistik.detail_pesanan_produk_id
+            inner join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
+            where detail_pesanan_produk.gudang_barang_jadi_id = '.$id.' AND detail_pesanan.pesanan_id = pesanan.id)');
+        },
+        'count_pengiriman' => function($q) use($id){
             $q->selectRaw('count(noseri_logistik.id)')
-            ->from('noseri_logistik')
-            ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-            ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-            ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-            ->where('detail_pesanan_produk.gudang_barang_jadi_id', $id)
-            ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-            ->limit(1);
-        }, 'tgl_kontrak_custom' => function($q){
-            $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
-            ->from('ekatalog')
-            ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
-            ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
-            ->limit(1);
+              ->from('detail_pesanan_produk')
+              ->join('detail_logistik', 'detail_logistik.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+              ->join('noseri_logistik', 'noseri_logistik.detail_logistik_id', '=', 'detail_logistik.id')
+              ->join('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+              ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+              ->where('detail_pesanan_produk.gudang_barang_jadi_id', $id)
+              ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+              ->havingRaw('count(noseri_logistik.id) < (select count(noseri_detail_pesanan.id)
+                from noseri_detail_pesanan
+                inner join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+                inner join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
+                where detail_pesanan_produk.gudang_barang_jadi_id = '.$id.' AND detail_pesanan.pesanan_id = pesanan.id)');
         }
-        ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])->get();
+    ])
+    ->havingRaw('count_pesanan > count_pengiriman')
+    ->get();
 
 
         return datatables()->of($data)
