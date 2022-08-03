@@ -1608,7 +1608,7 @@ class GudangController extends Controller
                     ->join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
                     ->first()->id,
                     'dari' => 13,
-                    'noseri' => $nn,
+                    'noseri' => strtoupper($nn),
                     'jenis' => 'MASUK',
                     'is_ready' => 0,
                     'is_aktif' => 1,
