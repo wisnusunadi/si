@@ -125,7 +125,7 @@ Route::prefix('/penjualan')->group(function () {
         Route::post('produk/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_pesanan_detail']);
     });
     Route::prefix('/lacak')->group(function () {
-        Route::post('data/{parameter}/{value}', [App\Http\Controllers\PenjualanController::class, 'get_lacak_penjualan']);
+        Route::post('/data/{parameter}/{value}', [App\Http\Controllers\PenjualanController::class, 'get_lacak_penjualan']);
     });
 
     Route::group(['prefix' => '/rencana'], function () {

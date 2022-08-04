@@ -718,7 +718,7 @@
                 var data = $('#data').val();
                // $('#noseritable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
                 noseri(data);
-               $('#noseri').removeClass('hide');
+                $('#noseri').removeClass('hide');
                 $('#customer').addClass('hide');
                 $('#nopo').addClass('hide');
                 $('#noakn').addClass('hide');

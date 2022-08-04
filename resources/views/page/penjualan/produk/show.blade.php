@@ -22,6 +22,16 @@
 
 @section('adminlte_css')
     <style>
+        table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
+            height: 100% !important;
+        }
+
+        table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
+            word-wrap: break-word !important;
+            text-overflow: inherit !important;
+            white-space: normal !important;
+        }
+
         .nowrap-text {
             white-space: nowrap;
         }
@@ -217,31 +227,30 @@
                                             </span>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-12">
-                                        <div class="table-responsive">
-                                            <table class="table table-hover" id="showtable">
-                                                <thead style="text-align: center;">
-                                                    <tr>
-                                                        <th width="5%">No</th>
-                                                        <th width="10%">No AKD</th>
-                                                        <th width="5%">Merk</th>
-                                                        <th width="5%">Jenis Paket</th>
-                                                        <th width="35%">Nama Alias</th>
-                                                        <th width="20%">Nama Produk</th>
-                                                        <th width="10%">Harga</th>
-                                                        <th width="5%">Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="table-responsive">
+                                                <table class="table table-hover" id="showtable">
+                                                    <thead style="text-align: center;">
+                                                        <tr>
+                                                            <th width="5%">No</th>
+                                                            <th width="10%">No AKD</th>
+                                                            <th width="5%">Merk</th>
+                                                            <th width="5%">Jenis Paket</th>
+                                                            <th width="35%">Nama Alias</th>
+                                                            <th width="20%">Nama Produk</th>
+                                                            <th width="10%">Harga</th>
+                                                            <th width="5%">Aksi</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
 
-                                                </tbody>
-                                            </table>
+                                                    </tbody>
+                                                </table>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                         </div>
                     </div>
@@ -358,6 +367,33 @@
 @section('adminlte_js')
     <script>
         $(function() {
+            var inputproduk = false;
+            var inputjumlah = false;
+            function validasi(){
+                $('#createtable').find('.produk_id').each(function() {
+                    if ($(this).val() != "") {
+                        inputproduk = true;
+                    } else {
+                        inputproduk = false;
+                        return false;
+                    }
+                });
+
+                $('#createtable').find('.jumlah').each(function() {
+                    if ($(this).val() != "") {
+                        inputjumlah = true;
+                    } else {
+                        inputjumlah = false;
+                        return false;
+                    }
+                });
+                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" ){
+                    $("#btnsimpan").attr('disabled', false);
+                } else {
+                    $("#btnsimpan").attr('disabled', true);
+                }
+            }
+
             $(document).on('submit', '#form-penjualan-produk-update', function(e) {
                 console.log("tes");
                 e.preventDefault();
@@ -598,10 +634,11 @@
                             $('#editmodal').modal("show");
                             $('#edit').html(result).show();
                             $("#editform").attr("action", href);
-                            var x = 3;
-                            for (i = 0; i < 10; i++) {
-                                select_data(i);
-                            }
+                            $('.produk_id').select2();
+                            // var x = 3;
+                            // for (i = 0; i < 10; i++) {
+                                select_data();
+                            // }
 
                         },
                         complete: function() {
@@ -677,7 +714,8 @@
                         $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                         $(el).find('.produk_id').attr('id', j);
                         $(el).find('.kelompok_produk').attr('id', 'kelompok_produk' + j);
-                        select_data(j);
+                        select_data();
+                        // $('.produk_id')
                     });
                 }
                 $(document).on('click', '#addrow', function() {
@@ -685,14 +723,14 @@
                 <td></td>
                 <td>
                     <div class="form-group">
-                        <select class="select-info form-control  produk_id" name="produk_id[]" id="0" style="width:100%" >
+                        <select class="select-info form-control produk_id" name="produk_id[]" id="0" style="width:100%" >
                         </select>
                     </div>
                 </td>
                 <td><span class="badge kelompok_produk" id="kelompok_produk0"></span></td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
+                        <input type="number" class="form-control jumlah" name="jumlah[]" id="jumlah" style="width: 50%" />
                     </div>
                 </td>
                 <td>
@@ -700,40 +738,34 @@
                 </td>
                 </tr>`);
                     numberRows($("#createtable"));
+                    validasi();
                 });
 
                 $(document).on('click', '#createtable #removerow', function(e) {
                     $(this).closest('tr').remove();
                     numberRows($("#createtable"));
+                    validasi();
                 });
 
                 $(document).on('keyup change', '#harga', function() {
                     var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     $(this).val(result);
-                    console.log(result);
 
                     if ($(this).val() != "") {
                         $('#msgharga').text("");
                         $('#harga').removeClass("is-invalid");
-                        console.log($("#createtable tbody").length);
-                        if (($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $(
-                                "#createtable tbody").length > 0) {
-                            $('#btnsimpan').removeClass('disabled');
-                        } else {
-                            $('#btnsimpan').addClass('disabled');
-                        }
                     } else if ($(this).val() == "") {
                         $('#msgharga').text("Harga Harus diisi");
                         $('#harga').addClass("is-invalid");
-                        $('#btnsimpan').addClass('disabled');
                     }
                 });
 
-                function select_data(x) {
-                    $('#' + x).select2({
+                function select_data() {
+                    $('.produk_id').select2({
+                        placeholder: "Pilih Produk",
+                        dropdownParent: $("#editmodal"),
                         ajax: {
                             minimumResultsForSearch: 20,
-                            placeholder: "Pilih Produk",
                             dataType: 'json',
                             theme: "bootstrap",
                             delay: 250,
@@ -769,7 +801,10 @@
                                 $('#kelompok_produk' + index).text(data[0].kelompok_produk.nama);
                             }
                         });
+                        validasi();
                     });
+
+
                 }
                 $(document).on('keyup change', '#nama_paket', function() {
                     var id = $('#form-penjualan-produk-update').attr('data-id');
@@ -782,27 +817,27 @@
                                 if (data.jumlah >= 1) {
                                     $("#msgnama_paket").text("Nama sudah terpakai");
                                     $('#nama_paket').addClass('is-invalid');
-                                    $('#btnsimpan').addClass('disabled');
                                 } else {
                                     $('#msgnama_paket').text("");
                                     $('#nama_paket').removeClass("is-invalid");
-                                    console.log($("#createtable tbody").length);
-                                    if ($('#harga').val() != "" && $("#createtable tbody").length >
-                                        0) {
-                                        $('#btnsimpan').removeClass('disabled');
-                                    } else {
-                                        $('#btnsimpan').addClass('disabled');
-                                    }
                                 }
                             }
                         });
                     } else if ($(this).val() == "") {
                         $('#msgnama_paket').text("Nama Paket Harus diisi");
                         $('#nama_paket').addClass("is-invalid");
-                        $('#btnsimpan').addClass('disabled');
                     }
+
+                    validasi();
                 });
 
+                $(document).on('keyup change', '#nama_alias', function() {
+                    validasi();
+                });
+
+                $(document).on('keyup change', '#createtable .jumlah', function(){
+                    validasi();
+                })
 
                 $('#harga_min').on('keyup change', function() {
 

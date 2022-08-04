@@ -40,7 +40,7 @@ td { position: relative; }
         text-decoration: line-through;
     } */
 
-    tr.line-through td:before {
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
         content: " ";
         position: absolute;
         left: 0;

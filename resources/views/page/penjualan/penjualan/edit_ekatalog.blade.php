@@ -25,6 +25,15 @@
 
 @section('adminlte_css')
 <style>
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
+    height: 100% !important;
+    }
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
+    word-wrap: break-word !important;
+    text-overflow: inherit !important;
+    white-space: normal !important;
+    }
+
     .hide {
         display: none !important;
     }
@@ -1165,13 +1174,13 @@
                                 $("#produktable tbody").empty();
                                 $('#produktable tbody').append(trproduktable());
                                 $("#totalhargaprd").text("Rp. 0");
+                                numberRowsProduk($("#produktable"));
                             }
                         }
                     } else {
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
                         $('#no_paket').attr('readonly', false);
-                        numberRowsProduk($("#produktable"));
                         $("#batas_kontrak").val("");
                         $("#batas_kontrak").attr('disabled', true);
                         $("#dataproduk").removeClass("hide");
@@ -1184,6 +1193,7 @@
                             $("#produktable tbody").empty();
                             $('#produktable tbody').append(trproduktable());
                         }
+                        numberRowsProduk($("#produktable"));
                     }
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
@@ -1588,6 +1598,7 @@
 
             function select_data(i) {
                 $('#' + i).select2({
+                    placeholder: "Pilih Produk",
                     ajax: {
                         minimumResultsForSearch: 20,
                         dataType: 'json',

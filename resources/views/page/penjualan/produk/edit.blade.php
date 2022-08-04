@@ -104,14 +104,12 @@
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>
                                                         <div class="form-group row">
-                                                            <div class="col-12">
-                                                                <select class="select-info select2 form-control "
+                                                                <select class="select-info select2 form-control produk_id"
                                                                     name="produk_id[]" id="{{ $loop->iteration - 1 }}"
                                                                     style="width:100%">
                                                                     <option value="{{ $s->id }}" selected>
                                                                         {{ $s->nama }}</option>
                                                                 </select>
-                                                            </div>
                                                         </div>
                                                     </td>
                                                     <td><span class="badge kelompok_produk"
@@ -119,7 +117,7 @@
                                                     </td>
                                                     <td>
                                                         <div class="form-group d-flex justify-content-center">
-                                                            <input type="text" class="form-control" name="jumlah[]"
+                                                            <input type="text" class="form-control jumlah" name="jumlah[]"
                                                                 id="jumlah" style="width: 50%"
                                                                 value="{{ $s->pivot->jumlah }}" />
                                                         </div>

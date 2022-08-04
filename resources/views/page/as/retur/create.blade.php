@@ -584,7 +584,7 @@
             });
 
             $('#parttable').find('.part_jumlah').each(function() {
-                if ($(this).val() != "" || $(this).val() != "") {
+                if ($(this).val() != "" ) {
                     inputjumpart = true;
                 } else {
                     inputjumpart = false;

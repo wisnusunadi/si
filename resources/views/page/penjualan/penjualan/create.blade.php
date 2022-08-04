@@ -25,6 +25,15 @@
 
 @section('adminlte_css')
 <style>
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
+    height: 100% !important;
+    }
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
+    word-wrap: break-word !important;
+    text-overflow: inherit !important;
+    white-space: normal !important;
+    }
+
     .hide {
         display: none !important
     }
@@ -384,7 +393,7 @@
                                                                             </select>
                                                                             {{-- <span class="input-group-text" id="ket_no_paket">AK1-</span> --}}
                                                                         </div>
-                                                                        <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" />
+                                                                        <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" height="100%"/>
                                                                         <div class="input-group-append hide" id="checkbox_nopaket">
                                                                             <span class="input-group-text">
                                                                                 <div class="form-check form-check-inline">
@@ -689,7 +698,7 @@
                                                                 <tr>
                                                                     <td>1</td>
                                                                     <td>
-                                                                        <div class="form-group">
+                                                                        <div class="form-group select_produk">
                                                                             <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                                 <option value=""></option>
                                                                             </select>
@@ -773,7 +782,7 @@
                                                                 <tr>
                                                                     <td>1</td>
                                                                     <td>
-                                                                        <div class="form-group">
+                                                                        <div class="form-group ">
                                                                             <select class="select2 form-control select-info custom-select part_id" name="part_id[]" id="part_id0" width="100%">
                                                                             </select>
                                                                         </div>
@@ -907,7 +916,9 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        $('#jenis_paket').select2();
+        $('#jenis_paket').select2({
+            placeholder: "Pilih Paket"
+        });
         function perencanaan(customer_id, instansi) {
             $('#perencanaantable').DataTable({
                 searching: false,
@@ -1617,9 +1628,10 @@
         });
         $("#customer_id").attr('disabled', true);
         $('.customer_id').select2({
+            placeholder: "Pilih Customer",
             ajax: {
                 minimumResultsForSearch: 20,
-                placeholder: "Pilih Produk",
+
                 dataType: 'json',
                 theme: "bootstrap",
                 delay: 250,
@@ -2104,7 +2116,7 @@
             var data = `<tr>
                     <td></td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group select_produk">
                             <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                 <option value="` + produk_id + `">` + nama_produk + `</option>
                             </select>
