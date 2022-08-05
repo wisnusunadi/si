@@ -716,6 +716,7 @@
         $('#btncari').on('click', function() {
             if ($('.pilih_data').val() == "no_seri") {
                 var data = $('#data').val();
+                console.log(data);
                // $('#noseritable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
                 noseri(data);
                 $('#noseri').removeClass('hide');
@@ -751,7 +752,7 @@
 
             } else if ($('.pilih_data').val() == "no_po") {
                 var data = $('#data').val();
-                po(data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-'));
+                po(data.replace('/', '_'));
               //  $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
                 $('#nopo').removeClass('hide');
                 $('#noseri').addClass('hide');
@@ -773,9 +774,9 @@
                 $('#produk').addClass('hide');
             } else if ($('.pilih_data').val() == "no_so") {
                 var data = $('#data').val();
-                var p = 'O';
-                var xxx = data.replace('/' + p + '/g', ':');
-                so(data);
+                // var p = 'O';
+                // var xxx = data.replace('/' + p + '/g', ':');
+                so(data.replace('/', '_'));
                // $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_so/' + data).load();
                 $('#customer').addClass('hide');
                 $('#noakn').addClass('hide');

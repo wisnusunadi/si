@@ -220,9 +220,8 @@
             var inputjumlah = false;
             function validasi(){
 
-                $.each('#createtable .produk_id', function() {
-                    alert("test" + $(this).attr('id'));
-                    if ($(this).is(':selected')) {
+                $('#createtable').find('.produk_id').each(function() {
+                    if ($(this).val() != "") {
                         inputproduk = true;
                     } else {
                         inputproduk = false;

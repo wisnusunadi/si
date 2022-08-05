@@ -135,11 +135,10 @@
                                     </div>
                                 </div>
                             </div>
-
                         </div>
-                            <div class="alert alert-success" role="alert">
-                                <strong>Deskripsi: </strong><p>{{ $data->deskripsi }}</p>
-                            </div>
+                        <div class="alert alert-success" role="alert">
+                            <strong>Deskripsi: </strong><p>{{ $data->deskripsi }}</p>
+                        </div>
                     </div>
                     <div class="tab-pane fade" id="tabs-produk" role="tabpanel" aria-labelledby="tabs-produk-tab">
 
@@ -169,19 +168,15 @@
                                                                                     <span class="align-self-center"><span class="foo mr-2"></span><b>Kirim</b></span> <b class="float-right mr-2"><span id="c_kirim">0</span> <sub>unit</sub> {{--<sub  id="tot_kirim"> dari 0</sub>--}}</b>
                                                                                 </li>
                                                                             </ul>
-
-                                                                            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                                                                            <div class="alert alert-info show" role="alert">
                                                                                 <small>
                                                                                 <i class="fas fa-info-circle"></i> <strong>Catatan: </strong>
                                                                                 <ol style="list-item-style:none; margin-left:0px;padding-left:15px;" >
                                                                                     <li>Angka warna <b class="text-danger">merah</b> menunjukkan jumlah unit yang <i>belum diproses</i> oleh divisi tersebut</li>
                                                                                     <li>Angka warna <b class="text-dark">hitam</b> menunjukkan total yang <i>telah diberikan dan harus diproses</i> oleh divisi tersebut</li>
-                                                                                    <li>Angka pada Kirim merupakan total unit yang <i>terkirim</i></li>
+                                                                                    <li>Angka pada Kirim merupakan total unit yang <i>telah terkirim</i></li>
                                                                                 </ol>
                                                                                 </small>
-                                                                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                                                                    <span aria-hidden="true">&times;</span>
-                                                                                  </button>
                                                                             </div>
                                                                         </div>
                                                                     </div>
