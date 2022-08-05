@@ -1337,16 +1337,6 @@
                         if (label == 'ekatalog') {
                              const ctx = $('#myChart');
                             const myChart = new Chart(ctx, optionpie);
-                            // var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
-                            // chart.render();
-                            // var chartgudang = new ApexCharts(document.querySelector("#chartgudang"), optionsgudang);
-                            // chartgudang.render();
-                            // var chartqc = new ApexCharts(document.querySelector("#chartqc"), optionsqc);
-                            // chartqc.render();
-                            // var chartlogistik = new ApexCharts(document.querySelector("#chartlogistik"), optionslogistik);
-                            // chartlogistik.render();
-                            // var chartkirim = new ApexCharts(document.querySelector("#chartkirim"), optionslogistik);
-                            // chartkirim.render();
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-orange bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-purple');
@@ -1356,17 +1346,21 @@
                         } else if (label == 'spa') {
                             const ctx = $('#myChart');
                             const myChart = new Chart(ctx, optionpie);
+<<<<<<< HEAD
 
                             // var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
                             // chart.render();
                             // $('#detailmodal').find(".modal-header").attr('id', '');
                             // $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
+=======
+>>>>>>> f205bde261de71cc6b2cae74581c9c5ebc4e7beb
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-purple bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-orange');
                             $('#detailmodal').find(".modal-header > h4").text('SPA');
                             detailtabel_spa(id);
                         } else {
+<<<<<<< HEAD
                             // const ctx = $('#myChart');
                             // const myChart = new Chart(ctx, optionpie);
 
@@ -1374,6 +1368,10 @@
                             // chart.render();
                             // $('#detailmodal').find(".modal-header").attr('id', '');
                             // $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
+=======
+                            const ctx = $('#myChart');
+                            const myChart = new Chart(ctx, optionpie);
+>>>>>>> f205bde261de71cc6b2cae74581c9c5ebc4e7beb
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-orange bg-purple');
                             $('#detailmodal').find(".modal-header").addClass('bg-lightblue');

@@ -129,8 +129,16 @@
                                                 <div class="card-body">
                                                     <h3 class="profile-username text-center"><span id="nama_prd">-</span></h3>
                                                     <ul class="list-group list-group-unbordered mb-3">
+<<<<<<< HEAD
                                                         <li class="list-group-item " id="part_status">
                                                             <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right"><span id="c_gudang">0</span><sub id="tot_gudang"> dari 0</sub></a>
+=======
+                                                        {{-- <li class="list-group-item">
+                                                            <span class="align-self-center"><span class="foo bg-chart-light mr-2"></span><span>Belum Proses</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+                                                        </li> --}}
+                                                        <li class="list-group-item">
+                                                            <span class="align-self-center"><span class="foo bg-chart-orange mr-2"></span><span>Gudang</span></span> <a class="float-right">2<sub> dari 12</sub></a>
+>>>>>>> f205bde261de71cc6b2cae74581c9c5ebc4e7beb
                                                         </li>
                                                         <li class="list-group-item">
                                                             <span class="align-self-center"><span class="foo bg-chart-yellow mr-2"></span><span>QC</span></span> <a class="float-right"><span id="c_qc">0</span><sub  id="tot_qc"> dari 0</sub></a>

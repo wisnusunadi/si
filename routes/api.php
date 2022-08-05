@@ -571,7 +571,7 @@ Route::prefix('/dc')->group(function () {
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);
         Route::post('selesai/{value}', [App\Http\Controllers\DcController::class, 'get_data_so_selesai']);
         Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
-        Route::post('detail/seri/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);
+        Route::post('detail/seri/{id}/{jenis}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);
         Route::post('detail/seri/select/{id}/{value}', [App\Http\Controllers\DcController::class, 'get_data_detail_select_seri_so']);
     });
 });

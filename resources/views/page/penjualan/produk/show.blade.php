@@ -453,19 +453,38 @@
             // });
 
            login();
-           async function login (){
-                const formData = new FormData();
-                formData.append('username','norapenj01');
-                formData.append('password','12345678');
 
-                await axios.post('https://api.elitech.id/api/login',formData)
+        //    url: "https://sinko.api.hyperdatasystem.com/api/login",
+
+        //         username: "superuser.api",
+        //         password: "password"
+
+        async function login (){
+                const formData = new FormData();
+                formData.append('username','superuser.api');
+                formData.append('password','password');
+
+                await axios.post('https://sinko.api.hyperdatasystem.com/api/login',formData)
                 .then((response)=> {
                   //  console.log(response.data.token)
                   let token = response.data.token;
                   localStorage.setItem("token", 'Bearer ' + token);
-                 // console.log(token);
+                 console.log(token);
                 })
             }
+        // async function login (){
+        //         const formData = new FormData();
+        //         formData.append('username','norapenj01');
+        //         formData.append('password','12345678');
+
+        //         await axios.post('https://api.elitech.id/api/login',formData)
+        //         .then((response)=> {
+        //           //  console.log(response.data.token)
+        //           let token = response.data.token;
+        //           localStorage.setItem("token", 'Bearer ' + token);
+        //          console.log(token);
+        //         })
+        //     }
 
             axios.get('https://api.elitech.id/api/paket_produk',{
                 headers : { Authorization:localStorage.getItem('token')}

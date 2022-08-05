@@ -21,10 +21,37 @@
 @section('adminlte_css')
     <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
     <style>
+        .foo {
+            border-radius: 50%;
+            float: left;
+            width: 10px;
+            height: 10px;
+            align-items: center !important;
+        }
 
-ul#status {
-    padding: 0;
-}
+        .bg-chart-light{
+            background: rgba(192, 192, 192, 0.2);
+        }
+
+        .bg-chart-orange{
+            background: rgb(236, 159, 5);
+        }
+
+        .bg-chart-yellow{
+            background: rgb(255, 221, 0);
+        }
+
+        .bg-chart-green{
+            background: rgb(11, 171, 100);
+        }
+
+        .bg-chart-blue{
+            background: rgb(8, 126, 225);
+        }
+
+        ul#status {
+            padding: 0;
+        }
         ul#status li {
             /* float: left; */
             display:inline;
@@ -998,38 +1025,31 @@ ul#status {
     </script>
     <script>
         $(function() {
+            var optionpie = {
+                type: 'pie',
+                data: {
+                    labels: [
+                        'Belum Diproses',
+                        'Gudang',
+                        'QC',
+                        'Logistik',
+                        'Kirim',
+                    ],
+                    datasets: [{
+                        label: 'STATUS PESANAN',
+                        data: [100, 0, 0, 0,0],
+                        backgroundColor: [
+                        'rgba(192, 192, 192, 0.2)',
+                        'rgb(236, 159, 5)',
+                        'rgb(255, 221, 0)',
+                        'rgb(11, 171, 100)',
+                        'rgb(8, 126, 225)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                }
+            }
 
-            var options = {
-                    series: [0, 0, 0],
-                    chart: {
-                        height: 300,
-                        type: 'radialBar',
-                    },
-                    plotOptions: {
-                        radialBar: {
-                            dataLabels: {
-                                name: {
-                                    fontSize: '20px',
-                                },
-                                value: {
-                                    fontSize: '14px',
-                                },
-                                total: {
-                                    show: true,
-                                    label: 'Progress',
-                                    color: '#5F7A90',
-                                    formatter: function (w) {
-                                        return Math.round(w.globals.seriesTotals.reduce((a, b) => {
-                                            return a + b
-                                        }, 0) / w.globals.series.length) + '%'
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    colors: ['#EA8B1B', '#FFC700', '#456600'],
-                    labels: ['Gudang', 'QC', 'Logistik'],
-                };
 
             $(document).on('click', '.detailmodal', function(event) {
                 event.preventDefault();
@@ -1047,25 +1067,25 @@ ul#status {
 
                         $('#detailmodal').modal("show");
                         $('#detail').html(result).show();
-                        var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
-                        chart.render();
                         if (label == 'ekatalog') {
+                            const ctx = $('#myChart');
+                            const myChart = new Chart(ctx, optionpie);
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-orange bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-purple');
                             $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
                             detailtabel_ekatalog(id);
                         } else if (label == 'spa') {
-                            // $('#detailmodal').find(".modal-header").attr('id', '');
-                            // $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
+                            const ctx = $('#myChart');
+                            const myChart = new Chart(ctx, optionpie);
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-purple bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-orange');
                             $('#detailmodal').find(".modal-header > h4").text('SPA');
                             detailtabel_spa(id);
                         } else {
-                            // $('#detailmodal').find(".modal-header").attr('id', '');
-                            // $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
+                            const ctx = $('#myChart');
+                            const myChart = new Chart(ctx, optionpie);
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-orange bg-purple');
                             $('#detailmodal').find(".modal-header").addClass('bg-lightblue');

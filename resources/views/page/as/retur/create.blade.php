@@ -12,8 +12,8 @@
                 <ol class="breadcrumb float-sm-right">
                     @if (Auth::user()->divisi_id == '8')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
-                        <li class="breadcrumb-item"><a href="{{ route('as.retur.show') }}">Retur</a></li>
-                        <li class="breadcrumb-item active">Tambah Retur</li>
+                        <li class="breadcrumb-item"><a href="{{ route('as.retur.show') }}">Memo Retur</a></li>
+                        <li class="breadcrumb-item active">Tambah Memo Retur</li>
                     @endif
                 </ol>
             </div><!-- /.col -->
@@ -195,6 +195,25 @@
                                     </div>
                                     <div class="card-body">
                                         {{-- <hr class="my-4"/> --}}
+                                        <div class="form-group row" id="no_transaksi_input">
+                                            <label for="no_transaksi" class="col-lg-5 col-md-12 col-form-label labelket">No Transaksi Penjualan</label>
+                                            <div class="col-lg-3 col-md-6">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend">
+                                                        <select class="form-control custom-select select2 no_transaksi_ref" id="no_transaksi_ref" name="no_transaksi_ref">
+                                                            <option value="po">No PO</option>
+                                                            <option value="so">No SO</option>
+                                                            <option value="no_akn">No AKN</option>
+                                                            <option value="no_sj">No SJ</option>
+                                                        </select>
+                                                    </div>
+                                                    <input type="text" name="no_transaksi" id="no_transaksi" class="form-control col-form-label no_transaksi  @error('no_transaksi') is-invalid @enderror"/>
+                                                </div>
+                                                <small class="text-success mt-1" id="infono_transaksi">* Pilih Nomor Referensi Penjualan yang akan dipakai</small>
+                                                <div class="invalid-feedback mt-1" id="msgno_transaksi"></div>
+
+                                            </div>
+                                        </div>
                                         <div class="form-group row" id="customer_id_input">
                                             <label for="customer_id" class="col-lg-5 col-md-12 col-form-label labelket">Nama Customer</label>
                                             <div class="col-lg-4 col-md-8">
@@ -523,8 +542,52 @@
 @section('adminlte_js')
 <script>
     $(function(){
+        var inputjumpart = false;
+        var inputjumproduk = false;
+
+        var inputpart = false;
+        var inputproduk = false;
+
+        $('#no_transaksi_ref').select2();
         function validasi(){
-            if($('#no_retur').val() != "" && $('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $('#customer_id').val() != "" && $('#alamat').val() && $('input[name="pilih_jenis_barang[]"]:checked').length > 0 && (($('#pilih_jenis_barang1').is(':checked') && $("#produktable tbody input:empty").length <= 0) || ($('#pilih_jenis_barang2').is(':checked') && $("#parttable tbody input:empty").length <= 0)) ){
+
+            $('#produktable').find('.produk_id').each(function() {
+                if ($(this).val() != "") {
+                    inputproduk = true;
+                } else {
+                    inputproduk = false;
+                    return false;
+                }
+            });
+
+            $('#produktable').find('.produk_jumlah').each(function() {
+                if ($(this).val() != "") {
+                    inputjumproduk = true;
+                } else {
+                    inputjumproduk = false;
+                    return false;
+                }
+            });
+
+            $('#parttable').find('.part_jumlah').each(function() {
+                if ($(this).val() != "" || $(this).val() != "") {
+                    inputjumpart = true;
+                } else {
+                    inputjumpart = false;
+                    return false;
+                }
+            });
+
+            $('#parttable').find('.part_id').each(function() {
+                if ($(this).val() != "") {
+                    inputpart = true;
+                } else {
+                    inputpart = false;
+                    return false;
+                }
+            });
+
+            if($('#no_retur').val() != "" && $('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $('#customer_id').val() != "" && $('#alamat').val() && $('input[name="pilih_jenis_barang[]"]:checked').length > 0 && (($('#pilih_jenis_barang1').is(':checked') && inputproduk == true && inputjumproduk == true) || ($('#pilih_jenis_barang2').is(':checked') && inputpart == true && inputjumpart == true)) ){
                 $('#btnsubmit').attr('disabled', false);
             } else {
                 $('#btnsubmit').attr('disabled', true);
@@ -553,6 +616,13 @@
 
         $(document).on('change keyup', 'input[name="pilih_jenis_barang[]"]', function(){
             validasi();
+        })
+
+        $(document).on('change', '#no_transaksi_ref', function(){
+            $('#no_transaksi').val("");
+            $('#customer_id').val("");
+            $('#alamat').val("");
+            $('#telepon').val("");
         })
 
         function trproduktable() {
@@ -803,13 +873,15 @@
         $(document).on('click', '#produktable #tambah_paket_produk', function(e){
             e.preventDefault();
             $('#produktable tr:last').after(trproduktable());
-                numberRowsProduk($("#produktable"));
+            numberRowsProduk($("#produktable"));
+            validasi();
         });
 
         $('#produktable').on('click', '#remove_paket_produk', function(e) {
             e.preventDefault();
             $(this).closest('tr').remove();
             numberRowsProduk($("#produktable"));
+            validasi();
         });
 
         function numberRowsPart($t) {
@@ -831,12 +903,14 @@
             e.preventDefault();
             $('#parttable tr:last').after(trparttable());
             numberRowsPart($("#parttable"));
+            validasi();
         });
 
         $('#parttable').on('click', '#remove_part', function(e) {
             e.preventDefault();
             $(this).closest('tr').remove();
             numberRowsPart($("#parttable"));
+            validasi();
         });
 
         function no_ref_penjualan(jenis) {
@@ -1152,6 +1226,117 @@
                     return false;
                 }
         });
+
+        $("#customer_id").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        url: '/api/customer/select',
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.nama,
+                                    value: el.id
+                                };
+                            });
+                            response(transformed.slice(0,10));
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                },
+                focus: function( event, ui ) {
+                    $(this).val(ui.item.label);
+                    return false;
+                },
+                select: function( event, ui ) {
+                    var id = ui.item.value;
+                    $(this).val(ui.item.label);
+
+                    if(id != ""){
+                        $.ajax({
+                            url: '/api/customer/select/' + id,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                $('#alamat').val(data[0].alamat);
+                                $('#telepon').val(data[0].telepon);
+                            }
+                        });
+                    }
+                    else{
+                        $('#alamat').val("");
+                        $('#telepon').val("");
+                    }
+                    validasi();
+                    return false;
+                }
+        });
+
+            $("#no_transaksi").autocomplete({
+                source: function(request, response) {
+                    var jenis = $('#no_transaksi_ref').val();
+                    $.ajax({
+                        dataType: 'json',
+                        type: 'GET',
+                        url: '/api/as/list/so_selesai/'+jenis,
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+                            console.log(data);
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.nama,
+                                    value: el.id
+                                };
+                            });
+                            response(transformed.slice(0,10));
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                },
+                focus: function( event, ui ) {
+                    $(this).val(ui.item.label);
+                    return false;
+                },
+                select: function( event, ui ) {
+                    var id = ui.item.value;
+
+                    $(this).val(ui.item.label);
+                    if(id != ""){
+                        $.ajax({
+                            url: '/api/as/detail/so_retur/' + id,
+                            type: 'GET',
+                            dataType: 'json',
+                            success: function(data) {
+                                $('#customer_id').val(data.customer.nama);
+                                $('#alamat').val(data.customer.alamat);
+                                $('#telepon').val(data.customer.telepon);
+                            }
+                        });
+                    }
+                    else{
+                        $('#customer_id').val("");
+                        $('#alamat').val("");
+                        $('#telepon').val("");
+                    }
+                    validasi();
+                    return false;
+                },
+                keyup: function (event, ui) {
+                    $('#customer_id').val("");
+                    $('#alamat').val("");
+                    $('#telepon').val("");
+                }
+            });
     })
 </script>
 @stop

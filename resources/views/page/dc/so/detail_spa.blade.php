@@ -214,44 +214,87 @@
         <div class="col-lg-5 col-md-6 hide" id="noseri">
             <div class="card">
                 <div class="card-body">
-                    <div>
-                        <h5 style="display: inline;" class="filter">No Seri</h5>
-                        @if(Auth::user()->divisi->kode == "dc")
-                        <span class="float-right filter">
-                            <a data-toggle="modal" data-target="#createmodal" class="createmodal hide" data-attr="" data-id="">
-                                <button class="btn btn-info btn-sm" id="cekbrg" disabled="true">
-                                    <i class="fas fa-plus"></i> Tambah COO
-                                </button>
-                            </a>
-                            <a data-toggle="modal" data-target="#editmodal" class="editmodal hide" data-attr="" data-id="">
-                                <button class="btn btn-warning btn-sm" id="cekbrgedit" disabled="true">
-                                    <i class="fas fa-pencil-alt"></i> Edit COO
-                                </button>
-                            </a>
-                        </span>
-                        @endif
+
+
+                    <div class="row">
+                        <div class="col-12">
+                        <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="pills-belum-proses-tab" data-toggle="pill" href="#pills-belum-proses" role="tab" aria-controls="pills-belum-proses" aria-selected="true">Belum Tersedia</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="pills-selesai-proses-tab" data-toggle="pill" href="#pills-selesai-proses" role="tab" aria-controls="pills-selesai-proses" aria-selected="false">Sudah Tersedia</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="pills-tabContent">
+                            <div class="tab-pane fade show active" id="pills-belum-proses" role="tabpanel" aria-labelledby="pills-belum-proses-tab">
+                                @if(Auth::user()->divisi->kode == "dc")
+                                <span class="float-right filter">
+                                    <a data-toggle="modal" data-target="#createmodal" class="createmodal" data-attr="" data-id="">
+                                        <button class="btn btn-info btn-sm" id="cekbrg" disabled="true">
+                                            <i class="fas fa-plus"></i> Tambah COO
+                                        </button>
+                                    </a>
+                                </span>
+                                @endif
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped" style="text-align: center; width:100%;" id="noseri_belum_proses_table">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
+                                                        <label class="form-check-label" for="check_all">
+                                                        </label>
+                                                    </div>
+                                                </th>
+                                                <th>No Seri</th>
+                                                <th>Tgl Kirim</th>
+                                                <th>Ttd Terima</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <div class="tab-pane fade show" id="pills-selesai-proses" role="tabpanel" aria-labelledby="pills-selesai-proses-tab">
+                                @if(Auth::user()->divisi->kode == "dc")
+                                <span class="float-right filter">
+                                    <a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-id="">
+                                        <button class="btn btn-warning btn-sm" id="cekbrgedit" disabled="true">
+                                            <i class="fas fa-pencil-alt"></i> Edit COO
+                                        </button>
+                                    </a>
+                                </span>
+                                @endif
+                                <div class="table-responsive">
+                                    <table class="table table-hover table-striped" style="text-align: center; width:100%;" id="noseri_selesai_proses_table">
+                                        <thead>
+                                            <tr>
+                                                <th>
+                                                    <div class="form-check">
+                                                        <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
+                                                        <label class="form-check-label" for="check_all">
+                                                        </label>
+                                                    </div>
+                                                </th>
+                                                <th>No Seri</th>
+                                                <th>Tgl Kirim</th>
+                                                <th>Ttd Terima</th>
+                                                <th></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
                     </div>
-                    <div class="table-responsive">
-                        <table class="table table-hover table-striped" style="text-align: center; width:100%;" id="noseritable">
-                            <thead>
-                                <tr>
-                                    <th>
-                                        <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" value="check_all" id="check_all" name="check_all" />
-                                            <label class="form-check-label" for="check_all">
-                                            </label>
-                                        </div>
-                                    </th>
-                                    <th>No Seri</th>
-                                    <th>Tgl Kirim</th>
-                                    <th>Ttd Terima</th>
-                                    <th></th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                    </div>
+
                 </div>
             </div>
         </div>
@@ -351,18 +394,17 @@
         });
 
 
-        $('#noseritable').DataTable({
+        $('#noseri_belum_proses_table').DataTable({
             destroy: true,
             processing: true,
             serverSide: false,
             ajax: {
                 'type': 'POST',
                 'datatype': 'JSON',
-                'url': '/api/dc/so/detail/seri/' + 0,
+                'url': '/api/dc/so/detail/seri/' + 0+'/belum',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
                 }
-
             },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -372,29 +414,75 @@
                 className: 'nowrap-text align-center',
                 orderable: false,
                 searchable: false,
-                visible: divisi == "dc" ? true : false,
-            }, {
+                visible: divisi == "dc" ? true : false
+            },
+            {
                 data: 'noseri',
 
-            }, {
+            },
+            {
                 data: 'tgl',
-                className: 'nowrap-text align-center collapsable',
-            }, {
+                className: 'collapsable',
+            },
+            {
                 data: 'ket',
-                className: 'nowrap-text align-center collapsable',
-            }, {
+                className: 'collapsable',
+            },
+            {
                 data: 'laporan',
                 orderable: false,
                 searchable: false
-
             }]
         });
 
-        function listnoseri(seri_id, data) {
-            $('#listnoseri').DataTable({
+        $('#noseri_selesai_proses_table').DataTable({
+            destroy: true,
+            processing: true,
+            serverSide: false,
+            ajax: {
+                'type': 'POST',
+                'datatype': 'JSON',
+                'url': '/api/dc/so/detail/seri/' + 0+'/belum',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            columns: [{
+                data: 'checkbox',
+                className: 'nowrap-text align-center',
+                orderable: false,
+                searchable: false,
+                visible: divisi == "dc" ? true : false
+            },
+            {
+                data: 'noseri',
+
+            },
+            {
+                data: 'tgl',
+                className: 'collapsable',
+            },
+            {
+                data: 'ket',
+                className: 'collapsable',
+            },
+            {
+                data: 'laporan',
+                orderable: false,
+                searchable: false
+            }]
+        });
+
+        function listnoseri(seri_id, data, table) {
+            $('#'+table).DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: false,
+                searching: false,
+                info: false,
                 ajax: {
                     'type': 'POST',
                     'datatype': 'JSON',
@@ -417,35 +505,68 @@
             });
         }
 
-        var checkedAry = [];
-        $('#noseritable').on('click', 'input[name="check_all"]', function() {
-            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
-            if ($('input[name="check_all"]:checked').length > 0) {
+        var checkedAryBelumProses = [];
+        $('#noseri_belum_proses_table').on('click', 'input[name="check_all"]', function() {
+            var rows = $('#noseri_belum_proses_table').DataTable().rows({ 'search': 'applied' }).nodes();
+            if ($('#noseri_belum_proses_table').find('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
-                $('#cekbrgedit').prop('disabled', false);
+                // $('#cekbrgedit').prop('disabled', false);
                 $('.nosericheck', rows).prop('checked', true);
-                checkedAry = [];
+                checkedAryBelumProses = [];
                 $.each($(".nosericheck:checked", rows), function() {
-                    checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                    checkedAryBelumProses.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
                 });
-            } else if ($('input[name="check_all"]:checked').length <= 0) {
+            } else if ($('#noseri_belum_proses_table').find('input[name="check_all"]:checked').length <= 0) {
                 $('.nosericheck', rows).prop('checked', false);
                 $('#cekbrg').prop('disabled', true);
+                // $('#cekbrgedit').prop('disabled', true);
+            }
+        });
+
+        $('#noseri_belum_proses_table').on('click', '.nosericheck', function() {
+            $('#noseri_belum_proses_table').find('#check_all').prop('checked', false);
+            if ($('#noseri_belum_proses_table').find('.nosericheck:checked').length > 0) {
+                $('#cekbrg').prop('disabled', false);
+                // $('#cekbrgedit').prop('disabled', false);
+                checkedAryBelumProses = [];
+                $.each($('#noseri_belum_proses_table').find(".nosericheck:checked"), function() {
+                    checkedAryBelumProses.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                });
+            } else if ($('#noseri_belum_proses_table').find('.nosericheck:checked').length <= 0) {
+                $('#cekbrg').prop('disabled', true);
+                // $('#cekbrgedit').prop('disabled', true);
+            }
+        });
+
+        checkedArySelesaiProses = [];
+        $('#noseri_selesai_proses_table').on('click', 'input[name="check_all"]', function() {
+            var rows = $('#noseri_selesai_proses_table').DataTable().rows({ 'search': 'applied' }).nodes();
+            if ($('#noseri_selesai_proses_table').find('input[name="check_all"]:checked').length > 0) {
+                // $('#cekbrg').prop('disabled', false);
+                $('#cekbrgedit').prop('disabled', false);
+                $('.nosericheck', rows).prop('checked', true);
+                checkedArySelesaiProses = [];
+                $.each($(".nosericheck:checked", rows), function() {
+                    checkedArySelesaiProses.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                });
+            } else if ($('#noseri_selesai_proses_table').find('input[name="check_all"]:checked').length <= 0) {
+                $('.nosericheck', rows).prop('checked', false);
+                // $('#cekbrg').prop('disabled', true);
                 $('#cekbrgedit').prop('disabled', true);
             }
         });
 
-        $('#noseritable ').on('click', '.nosericheck', function() {
+        $('#noseri_selesai_proses_table').on('click', '.nosericheck', function() {
             $('#check_all').prop('checked', false);
-            if ($('.nosericheck:checked').length > 0) {
-                $('#cekbrg').prop('disabled', false);
+            if ($('#noseri_selesai_proses_table').find('.nosericheck:checked').length > 0) {
+                // $('#cekbrg').prop('disabled', false);
                 $('#cekbrgedit').prop('disabled', false);
-                checkedAry = [];
-                $.each($(".nosericheck:checked"), function() {
-                    checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
+                checkedArySelesaiProses = [];
+                $.each($('#noseri_selesai_proses_table').find(".nosericheck:checked"), function() {
+                    checkedArySelesaiProses.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
                 });
-            } else if ($('.nosericheck:checked').length <= 0) {
-                $('#cekbrg').prop('disabled', true);
+            } else if ($('#noseri_selesai_proses_table').find('.nosericheck:checked').length <= 0) {
+                // $('#cekbrg').prop('disabled', true);
                 $('#cekbrgedit').prop('disabled', true);
             }
         });
@@ -453,22 +574,21 @@
         $('#showtable').on('click', '.noserishow', function() {
             var data = $(this).attr('data-id');
             var datacount = $(this).attr('data-count');
-            console.log(datacount);
             if (datacount == 0) {
                 // $('.sericheckbox').addClass("hide");
-                // $('#noseritable').DataTable().column(0).visible(false);
-                $('.createmodal').addClass("hide");
-                $('.editmodal').removeClass("hide");
+                // $('.createmodal').addClass("hide");
+                // $('.editmodal').removeClass("hide");
+                // $('#noseri_belum_proses_table').DataTable().column(0).visible(false);
             } else {
-                // $('.sericheckbox').removeClass("hide");
-                // $('#noseritable').DataTable().column(0).visible(true);
-                $('.createmodal').removeClass("hide");
-                $('.editmodal').addClass("hide");
+                // $('.createmodal').removeClass("hide");
+                // $('.editmodal').addClass("hide");
+                // $('#noseri_belum_proses_table').DataTable().column(0).visible(true);
             }
             $('#showtable').find('tr').removeClass('bgcolor');
             $(this).closest('tr').addClass('bgcolor');
             $('#noseri').removeClass('hide');
-            $('#noseritable').DataTable().ajax.url('/api/dc/so/detail/seri/' + data).load();
+            $('#noseri_belum_proses_table').DataTable().ajax.url('/api/dc/so/detail/seri/' + data+'/belum').load();
+            $('#noseri_selesai_proses_table').DataTable().ajax.url('/api/dc/so/detail/seri/' + data+'/selesai').load();
             //  console.log(data);
         });
 
@@ -482,6 +602,10 @@
                 type: "POST",
                 url: action,
                 data: $('#form-create-coo').serialize(),
+                beforeSend: function() {
+                    $('#btnsimpan').attr('disabled', true);
+                    $('#loader').show();
+                },
                 success: function(response) {
                     if (response['data'] == "success") {
                         swal.fire(
@@ -503,6 +627,10 @@
                         );
                     }
                 },
+                complete: function() {
+                    $('#btnsimpan').attr('disabled', false);
+                    $('#loader').hide();
+                },
                 error: function(xhr, status, error) {
                     alert($('#form-create-coo').serialize());
                 }
@@ -519,11 +647,15 @@
                 type: "POST",
                 url: action,
                 data: $('#form-update-coo').serialize(),
+                beforeSend: function() {
+                    $('#btnsimpan').attr('disabled', true);
+                    $('#loader').show();
+                },
                 success: function(response) {
                     if (response['data'] == "success") {
                         swal.fire(
                             'Berhasil',
-                            'Berhasil melakukan Penambahan Data Pengujian',
+                            'Berhasil melakukan Perubahan Data COO',
                             'success'
                         ).then(function() {
                             location.reload();
@@ -535,10 +667,14 @@
                     } else if (response['data'] == "error") {
                         swal.fire(
                             'Gagal',
-                            'Gagal melakukan Penambahan Data Pengujian',
+                            'Gagal melakukan Perubahan Data COO',
                             'error'
                         );
                     }
+                },
+                complete: function() {
+                    $('#btnsimpan').attr('disabled', false);
+                    $('#loader').hide();
                 },
                 error: function(xhr, status, error) {
                     alert($('#form-update-coo').serialize());
@@ -580,11 +716,10 @@
 
         $(document).on('click', '.createmodal', function(event) {
             event.preventDefault();
-            console.log(checkedAry);
             data = $(".nosericheck").data().value;
             var id = $(this).data('id');
             $.ajax({
-                url: "/dc/coo/create/" + checkedAry + "/" + data,
+                url: "/dc/coo/create/" + checkedAryBelumProses + "/" + data,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -596,7 +731,7 @@
                         placeholder: 'Pilih Bulan',
                         allowClear: true
                     });
-                    listnoseri(checkedAry, data);
+                    listnoseri(checkedAryBelumProses, data, 'listnoseribelum');
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {
@@ -613,11 +748,10 @@
 
         $(document).on('click', '.editmodal', function(event) {
             event.preventDefault();
-            console.log(checkedAry);
             data = $(".nosericheck").data().value;
             var id = $(this).data('id');
             $.ajax({
-                url: "/dc/coo/edit/" + checkedAry + "/" + data,
+                url: "/dc/coo/edit/" + checkedArySelesaiProses + "/" + data,
                 beforeSend: function() {
                     $('#loader').show();
                 },
@@ -629,7 +763,7 @@
                         placeholder: 'Pilih Bulan',
                         allowClear: true
                     });
-                    listnoseri(checkedAry, data);
+                    listnoseri(checkedArySelesaiProses, data, 'listnoseriselesai');
                     // $("#editform").attr("action", href);
                 },
                 complete: function() {
