@@ -9,54 +9,57 @@
 
 @section('adminlte_css')
 <style lang="scss">
-    table {
+    .foo {
+        border-radius: 50%;
+        float: left;
+        width: 10px;
+        height: 10px;
+        align-items: center !important;
+    }
+
+
+
+    .alert-danger {
+        color: #a94442;
+        background-color: #f2dede;
+        border-color: #ebccd1;
+    }
+
+    .separator {
+        border-top: 1px solid #bbb;
+        width: 90%;
+    }
+
+    .wb {
+        word-break: break-all;
+        white-space: normal;
+    }
+
+    .nowraptxt {
         white-space: nowrap;
+    }
+
+    .filter {
+        margin: 5px;
+    }
+
+    thead {
         text-align: center;
     }
 
-    #pengirimantable thead {
+    td {
         text-align: center;
+        white-space: nowrap;
     }
 
-    .urgent {
+    #urgent {
         color: #dc3545;
         font-weight: 600;
     }
 
-    .warning {
+    #warning {
         color: #FFC700;
         font-weight: 600;
-    }
-
-    .info {
-        color: #3a7bb0;
-        font-weight: 600;
-    }
-
-    .fa-search:hover {
-        color: #4682B4;
-    }
-
-    .fa-search:active {
-        color: #C0C0C0;
-    }
-
-    .hide {
-        display: none !important;
-    }
-
-    .active {
-        box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
-    }
-
-    .red-text {
-        background-color: #FFDADA;
-        color: #dc3545;
-    }
-
-    .yellow-text {
-        background-color: #FFF6D4;
-        color: #FFC700;
     }
 
     .warning-bg {
@@ -64,60 +67,153 @@
         color: white;
     }
 
-    .green-text {
-        background-color: rgba(69, 102, 0, 0.2);
-        color: #456600;
+    #info {
+        color: #3a7bb0;
+        font-weight: 600;
     }
 
-    .margin-custom {
-        margin: 5px;
+    .minimizechar {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 13ch;
+    }
+
+    .hide {
+        display: none;
+    }
+
+    .dropdown-toggle:hover {
+        color: #4682B4;
+    }
+
+    .dropdown-toggle:active {
+        color: #C0C0C0;
+    }
+
+    td.details-control {
+        content: "\f055";
+        font-family: FontAwesome;
+        left: -5px;
+        position: absolute;
+        top: 0;
+    }
+
+    tr.details td.details-control {
+        background: url('../resources/details_close.png') no-repeat center center;
+    }
+
+    #detailekat {
+        background-color: #E9DDE5;
+
+    }
+
+    #detailspa {
+        background-color: #FFE6C9;
+    }
+
+    #detailspb {
+        background-color: #E1EBF2;
+        /* color: #7D6378; */
+
+    }
+
+    .tabnum {
+        font-variant-numeric: tabular-nums;
+    }
+
+    .removeshadow {
+        box-shadow: none;
     }
 
     .align-center {
         text-align: center;
     }
 
-    .otg:hover {
-        box-shadow: 12px 4px 8px 0 rgba(0, 0, 0, 0.2), 12px 6px 20px 0 rgba(0, 0, 0, 0.19);
+    .bordertopnone {
+        border-top: 0;
+        border-left: 0;
+        border-right: 0;
+        border-bottom: 0;
+        vertical-align: top;
     }
 
-    @media screen and (max-width: 1439px) {
-        #pengirimansotable {
-            font-size: 12px;
-        }
+    .margin {
+        margin-left: 10px;
+        margin-right: 10px;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
 
-        #sotanpacootable {
-            font-size: 12px;
-        }
+    .card-detail {
+        align-items: center;
+        flex-direction: row;
+        shadow: none;
+        border: none;
+    }
 
-        #lewatbataskontraktable {
-            font-size: 12px;
-        }
+    .card-detail img {
+        width: 25%;
+        border-top-right-radius: 0;
+        border-bottom-left-radius: calc(0.25rem - 1px);
+    }
 
-        h4 {
-            font-size: 18px;
-        }
+    /* .overflowcard {
+            max-height:
+            700px;
+        } */
 
-        #detailmodal {
-            font-size: 12px;
-        }
+    .bg-chart-light{
+        background: rgba(192, 192, 192, 0.2);
+    }
 
-        .so-title {
-            font-size: 12px;
-        }
+    .bg-chart-orange{
+        background: rgb(236, 159, 5);
+    }
+
+    .bg-chart-yellow{
+        background: rgb(255, 221, 0);
+    }
+
+    .bg-chart-green{
+        background: rgb(11, 171, 100);
+    }
+
+    .bg-chart-blue{
+        background: rgb(8, 126, 225);
     }
 
     @media screen and (min-width: 1440px) {
-        #pengirimansotable {
+
+        body {
             font-size: 14px;
         }
 
-        #sotanpacootable {
+        #detailmodal {
             font-size: 14px;
         }
 
-        #lewatbataskontraktable {
+        .btn {
             font-size: 14px;
+        }
+
+        .overflowcard {
+            max-height:
+            680px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
+        }
+
+        .labelket {
+            text-align: right;
+        }
+    }
+
+    @media screen and (max-width: 1439px) {
+        body {
+            font-size: 12px;
         }
 
         h4 {
@@ -125,14 +221,38 @@
         }
 
         #detailmodal {
-            font-size: 14px;
+            font-size: 12px;
         }
 
-        section {
-            font-size: 14px;
+        .btn {
+            font-size: 12px;
+        }
+
+        .overflowcard {
+            max-height: 650px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
+        }
+
+        .labelket {
+            text-align: right;
         }
     }
-</style>
+
+    @media screen and (max-width: 991px) {
+        .labelket {
+            text-align: left;
+        }
+
+        .overflowcard {
+            max-height: 150px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
+        }
+    }
+</style> --}}
 @stop
 @section('content')
 <section class="content">
@@ -292,13 +412,14 @@
                                         <div class="table-responsive">
                                             <table class="table table-hover" id="sotable">
                                                 <thead>
-                                                <tr>
-                                                    <th>No</th>
-                                                    <th>No PO</th>
-                                                    <th>No AKN</th>
-                                                    <th>Customer</th>
-                                                    <th>Status</th>
-                                                </tr>
+                                                    <tr>
+                                                        <th>No</th>
+                                                        <th>No PO</th>
+                                                        <th>No AKN</th>
+                                                        <th>Customer</th>
+                                                        <th>Status</th>
+                                                        <th>Aksi</th>
+                                                    </tr>
                                                 </thead>
                                                 <tbody></tbody>
                                             </table>
@@ -323,6 +444,21 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="somodal" tabindex="-1" role="dialog" aria-labelledby="somodal" aria-hidden="true">
+            <div class="modal-dialog modal-xl" role="document">
+                <div class="modal-content" style="margin: 10px">
+                    <div class="modal-header">
+                        <h4 id="modal-title">Penjualan</h4>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body" id="so">
+
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </section>
 @stop
@@ -330,7 +466,430 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var optionpie = {
+            type: 'pie',
+            data: {
+                labels: [
+                    'Belum Diproses',
+                    'Gudang',
+                    'QC',
+                    'Logistik',
+                    'Kirim',
+                ],
+                datasets: [{
+                    label: 'STATUS PESANAN',
+                    data: [100, 0, 0, 0,0],
+                    backgroundColor: [
+                    'rgba(192, 192, 192, 0.2)',
+                    'rgb(236, 159, 5)',
+                    'rgb(255, 221, 0)',
+                    'rgb(11, 171, 100)',
+                    'rgb(8, 126, 225)'
+                    ],
+                    hoverOffset: 4
+                }]
+            }
+        }
 
+        function detailtabel_ekatalog(id) {
+                var dt = $('#detailtabel').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        'url': '/api/ekatalog/paket/detail/' + id,
+                        "dataType": "json",
+                        'type': 'POST',
+                        'headers': {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    },
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                            "class": "details-control",
+                            "orderable": false,
+                            "data": null,
+                            "defaultContent": ""
+                        },
+                        {
+                            data: 'nama_produk',
+                        },
+                        {
+                            data: 'nama_produk',
+                        },
+                        {
+                            data: 'harga',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'jumlah',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'total',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'button',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ],
+                    footerCallback: function(row, data, start, end, display) {
+                        var api = this.api(),
+                            data;
+                        // converting to interger to find total
+                        var intVal = function(i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                i : 0;
+                        };
+                        // computing column Total of the complete result
+                        var jumlah_pesanan = api
+                            .column(4)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+                        // computing column Total of the complete result
+                        var total_pesanan = api
+                            .column(5)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                        $(api.column(0).footer()).html('Total');
+                        $(api.column(4).footer()).html('Total');
+                        $(api.column(5).footer()).html(num_for(total_pesanan));
+                    },
+                });
+            }
+
+            function detailtabel_spa(id) {
+                $('#detailtabel_spa').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        'url': '/api/spa/paket/detail/' + id,
+                        "dataType": "json",
+                        'type': 'POST',
+                        'headers': {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    },
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'nama_produk',
+                        },
+                        {
+                            data: 'harga',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'jumlah',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'total',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'button',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ],
+                    footerCallback: function(row, data, start, end, display) {
+                        var api = this.api(),
+                            data;
+                        // converting to interger to find total
+                        var intVal = function(i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                i : 0;
+                        };
+                        // computing column Total of the complete result
+                        var jumlah_pesanan = api
+                            .column(3)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+                        // computing column Total of the complete result
+                        var total_pesanan = api
+                            .column(4)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                        $(api.column(0).footer()).html('Total');
+                        $(api.column(3).footer()).html('Total');
+                        $(api.column(4).footer()).html(num_for(total_pesanan));
+                    },
+                })
+            }
+
+            function detailtabel_spb(id) {
+                $('#detailtabel_spb').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        'url': '/api/spb/paket/detail/' + id,
+                        "dataType": "json",
+                        'type': 'POST',
+                        'headers': {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    },
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'nama_produk',
+                        },
+                        {
+                            data: 'harga',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'jumlah',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'total',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'button',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ],
+                    footerCallback: function(row, data, start, end, display) {
+                        var api = this.api(),
+                            data;
+                        // converting to interger to find total
+                        var intVal = function(i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                i : 0;
+                        };
+                        // computing column Total of the complete result
+                        var jumlah_pesanan = api
+                            .column(3)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+                        // computing column Total of the complete result
+                        var total_pesanan = api
+                            .column(4)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                        $(api.column(0).footer()).html('Total');
+                        $(api.column(3).footer()).html('Total');
+                        $(api.column(4).footer()).html(num_for(total_pesanan));
+                    },
+                })
+            }
+
+
+            $(document).on('click', '.somodal', function(event) {
+                event.preventDefault();
+                var href = $(this).attr('data-attr');
+                var id = $(this).data("id");
+                var label = $(this).data("target");
+                $.ajax({
+                    url: href,
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    // return the result
+                    success: function(result) {
+                        $('#somodal').modal("show");
+                        $('#so').html(result).show();
+
+                        if (label == 'ekatalog') {
+                            $('#somodal').find(".modal-header").removeClass(
+                                'bg-orange bg-lightblue');
+                            $('#somodal').find(".modal-header").addClass('bg-purple');
+                            $('#somodal').find(".modal-header > h4").text('E-Catalogue');
+
+                            detailtabel_ekatalog(id);
+                        } else if (label == 'spa') {
+                            $('#somodal').find(".modal-header").removeClass(
+                                'bg-purple bg-lightblue');
+                            $('#somodal').find(".modal-header").addClass('bg-orange');
+                            $('#somodal').find(".modal-header > h4").text('SPA');
+                            detailtabel_spa(id);
+                        } else {
+                            $('#somodal').find(".modal-header").removeClass(
+                                'bg-orange bg-purple');
+                            $('#somodal').find(".modal-header").addClass('bg-lightblue');
+                            $('#somodal').find(".modal-header > h4").text('SPB');
+                            detailtabel_spb(id);
+                        }
+
+                        $('#somodal').find('[data-toggle="tooltip"]').tooltip();
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page " + href + " cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+            });
+
+            function update_chart(produk,gudang ,qc, log, ki){
+                const ctx = $('#myChart');
+                if(produk == 'part'){
+                    const myChart = new Chart(ctx, {
+                    type: 'pie',
+                data: {
+                    labels: [
+                        'QC',
+                        'Logistik',
+                        'Kirim',
+                    ],
+                    datasets: [{
+                        label: 'STATUS PESANAN',
+                        data: [qc, log, ki],
+                        backgroundColor: [
+                        'rgb(255, 221, 0)',
+                        'rgb(11, 171, 100)',
+                        'rgb(8, 126, 225)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                }
+                });
+                }else{
+                    const myChart = new Chart(ctx, {
+                    type: 'pie',
+                data: {
+                    labels: [
+                        'Gudang',
+                        'QC',
+                        'Logistik',
+                        'Kirim',
+                    ],
+                    datasets: [{
+                        label: 'STATUS PESANAN',
+                        data: [gudang ,qc, log, ki],
+                        backgroundColor: [
+
+                        'rgb(236, 159, 5)',
+                        'rgb(255, 221, 0)',
+                        'rgb(11, 171, 100)',
+                        'rgb(8, 126, 225)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                }
+                });
+                }
+
+            }
+
+            $(document).on('click', '#tabledetailpesan #lihatstok', function(){
+                var id = $(this).attr('data-id');
+                var produk = $(this).attr('data-produk');
+                var update = 'update';
+                 var array = [];
+                $.ajax({
+                    url: '/api/get_stok_pesanan',
+                    data: {'id': id, 'jenis': produk},
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(result) {
+                        if (produk == 'part'){
+                    $("#part_status").addClass('d-none');
+                }else{
+                    $("#part_status").removeClass('d-none');
+                }
+
+                    var chartExist = Chart.getChart("myChart"); // <canvas> id
+                    if (chartExist != undefined)
+                    chartExist.destroy();
+                    update_chart(produk,result.gudang,result.qc,result.log,result.kir);
+
+
+                $('#nama_prd').text(result.detail.penjualan_produk.nama);
+                $('#tot_gudang').text(" dari " + result.detail.count_jumlah);
+                $('#tot_qc').text(" dari " + result.detail.count_gudang);
+                $('#tot_log').text(" dari " + result.detail.count_qc_ok);
+                $('#tot_kirim').text(" dari " + result.kir);
+
+                $('#c_gudang').text(result.gudang);
+                $('#c_qc').text(result.qc);
+                $('#c_log').text(result.log);
+                $('#c_kirim').text(result.kir);
+
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+
+            });
 
         pengirimansotable();
         $('#pengirimanso').on('click', function() {
@@ -481,52 +1040,52 @@
         }
 
         function lewatbataskontraktable() {
-            // var lewatbataskontraktable = $('#lewatbataskontraktable').DataTable({
-            //     destroy: true,
-            //     processing: true,
-            //     serverSide: true,
-            //     ajax: {
-            //         'url': '/api/dc/dashboard/data/lewatbataskontraktable',
-            //         'type': 'POST',
-            //         'headers': {
-            //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-            //         }
-            //     },
-            //     language: {
-            //         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            //     },
-            //     columns: [{
-            //             data: 'DT_RowIndex',
-            //             className: 'nowrap-text align-center',
-            //             orderable: false,
-            //             searchable: false
-            //         },
-            //         {
-            //             data: 'so',
-            //             className: 'nowrap-text align-center',
-            //             orderable: false,
-            //             searchable: false
-            //         },
-            //         {
-            //             data: 'batas_kontrak',
-            //             className: 'nowrap-text align-center',
-            //             orderable: false,
-            //             searchable: false
-            //         },
-            //         {
-            //             data: 'status',
-            //             className: 'nowrap-text align-center',
-            //             orderable: false,
-            //             searchable: false
-            //         },
-            //         {
-            //             data: 'button',
-            //             className: 'nowrap-text align-center',
-            //             orderable: false,
-            //             searchable: false
-            //         },
-            //     ]
-            // })
+            var lewatbataskontraktable = $('#lewatbataskontraktable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/dc/dashboard/data/lewatbataskontraktable',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'so',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'batas_kontrak',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'status',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                ]
+            })
         }
 
         $('#sotable').DataTable().clear().destroy();
@@ -554,23 +1113,23 @@
                 {
                     data: 'no_po',
                     className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: true
                 },
                 {
                     data: 'no_paket',
                     className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: true
                 },
                 {
                     data: 'customer',
                     className: 'nowrap-text align-center',
-                    orderable: false,
-                    searchable: true
                 },
                 {
                     data: 'status',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'aksi',
                     className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false

@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-
-use App\Models\Logistik;
 use App\Models\Pesanan;
+use App\Models\Logistik;
 use App\Models\DetailLogistik;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
@@ -273,7 +272,6 @@ class AfterSalesController extends Controller
         //     ->rawColumns(['status', 'button'])
         //     ->make(true);
     }
-
     public function get_detail_so($id, $jenis)
     {
         $d = "";

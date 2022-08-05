@@ -25,6 +25,15 @@
 
 @section('adminlte_css')
 <style>
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
+    height: 100% !important;
+    }
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
+    word-wrap: break-word !important;
+    text-overflow: inherit !important;
+    white-space: normal !important;
+    }
+
     .hide {
         display: none !important
     }
@@ -384,7 +393,7 @@
                                                                             </select>
                                                                             {{-- <span class="input-group-text" id="ket_no_paket">AK1-</span> --}}
                                                                         </div>
-                                                                        <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" />
+                                                                        <input type="text" class="form-control col-form-label @error('no_paket') is-invalid @enderror" name="no_paket" id="no_paket" aria-label="ket_no_paket" height="100%"/>
                                                                         <div class="input-group-append hide" id="checkbox_nopaket">
                                                                             <span class="input-group-text">
                                                                                 <div class="form-check form-check-inline">
@@ -689,7 +698,7 @@
                                                                 <tr>
                                                                     <td>1</td>
                                                                     <td>
-                                                                        <div class="form-group">
+                                                                        <div class="form-group select_produk">
                                                                             <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                                 <option value=""></option>
                                                                             </select>
@@ -763,7 +772,7 @@
                                                                 <tr>
                                                                     <th width="5%">No</th>
                                                                     <th width="35%">Nama Part</th>
-                                                                    <th width="18%">Jumlah</th>
+                                                                    <th width="15%">Jumlah</th>
                                                                     <th width="20%">Harga</th>
                                                                     <th width="20%">Subtotal</th>
                                                                     <th width="5%">Aksi</th>
@@ -773,7 +782,7 @@
                                                                 <tr>
                                                                     <td>1</td>
                                                                     <td>
-                                                                        <div class="form-group">
+                                                                        <div class="form-group ">
                                                                             <select class="select2 form-control select-info custom-select part_id" name="part_id[]" id="part_id0" width="100%">
                                                                             </select>
                                                                         </div>
@@ -907,7 +916,9 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        $('#jenis_paket').select2();
+        $('#jenis_paket').select2({
+            placeholder: "Pilih Paket"
+        });
         function perencanaan(customer_id, instansi) {
             $('#perencanaantable').DataTable({
                 searching: false,
@@ -1005,6 +1016,17 @@
             $('#btntambah').attr("disabled", true);
         }
 
+        var penjualan_produk_id = false;
+        var variasi = false;
+        var produk_jumlah = false;
+        var produk_harga = false;
+
+        var part_id = false;
+        var part_jumlah = false;
+        var part_harga = false;
+
+        var jasa_id = false;
+        var jasa_harga = false;
 
         function checkpenjualanform() {
             if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
@@ -1051,28 +1073,154 @@
 
 
         function checkvalidasi() {
+            var jenis_array = [];
+            $("input[id=jenis_pen]:checked").each(function() {
+                jenis_array.push($(this).val());
+            });
 
+            if($.inArray("produk", jenis_array) !== -1 ) {
+                $('#produktable').find('.penjualan_produk_id').each(function() {
+                    if ($(this).val() != "") {
+                        penjualan_produk_id = true;
+                    }
+                    else {
+                        penjualan_produk_id = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.variasi').each(function() {
+                    if ($(this).val() != "") {
+                        variasi = true;
+                    }
+                    else {
+                        variasi = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.produk_jumlah').each(function() {
+                    if ($(this).val() != "" || $(this).val() != "0") {
+                        produk_jumlah = true;
+                    }
+                    else {
+                        produk_jumlah = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.produk_harga').each(function() {
+                    if ($(this).val() != "") {
+                        produk_harga = true;
+                    }
+                    else {
+                        produk_harga = false;
+                        return false;
+                    }
+                });
+            }else{
+                penjualan_produk_id = true;
+                variasi = true;
+                produk_jumlah = true;
+                produk_harga = true;
+            }
+
+            if($.inArray("sparepart", jenis_array) !== -1 ) {
+                $('#parttable').find('.part_id').each(function() {
+                    if ($(this).val() != "") {
+                        part_id = true;
+                    }
+                    else {
+                        part_id = false;
+                        return false;
+                    }
+                });
+
+                $('#parttable').find('.part_jumlah').each(function() {
+                    if ($(this).val() != "") {
+                        part_jumlah = true;
+                    }
+                    else {
+                        part_jumlah = false;
+                        return false;
+                    }
+                });
+
+                $('#parttable').find('.part_harga').each(function() {
+                    if ($(this).val() != "" || $(this).val() != "0") {
+                        part_harga = true;
+                    }
+                    else {
+                        part_harga = false;
+                        return false;
+                    }
+                });
+            }else{
+                part_id = true;
+                part_jumlah = true;
+                part_harga = true;
+            }
+
+            if($.inArray("jasa", jenis_array) !== -1 ) {
+                $('#jasatable').find('.jasa_id').each(function() {
+                    if ($(this).val() != "") {
+                        jasa_id = true;
+                    }
+                    else {
+                        jasa_id = false;
+                        return false;
+                    }
+                });
+
+                $('#jasatable').find('.jasa_harga').each(function() {
+                    if ($(this).val() != "" || $(this).val() != "0") {
+                        jasa_harga = true;
+                    }
+                    else {
+                        jasa_harga = false;
+                        return false;
+                    }
+                });
+            }else{
+                jasa_id = true;
+                jasa_harga = true;
+            }
+
+            // alert(penjualan_produk_id +", "+
+            //     variasi +", "+
+            //     produk_jumlah +", "+
+            //     produk_harga +", "+part_id+", "+
+            //     part_jumlah+", "+
+            //     part_harga);
             if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
-                if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid'))) {
+                if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid')) && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
-            } else if ($('input[type="radio"][name="status"]:checked').val() == "draft") {
+            } else if ($('input[type="radio"][name="status"]:checked').val() == "draft" || $('input[type="radio"][name="status"]:checked').val() == "batal") {
+                alert("hai");
                 if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#status").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid'))) {
-
                     if (($('#no_paket').val() != "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length > 0 ) || ($('#no_paket').val() == "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length <= 0) &&  !$("#no_paket").hasClass('is-invalid') ) {
-                        $('#btntambah').removeAttr("disabled");
-                        }else{
-                    $('#btntambah').attr("disabled", true);
-                         }
+                        if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
+                            if(penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true){
+                                $('#btntambah').removeAttr("disabled");
+                            }else{
+                                $('#btntambah').attr("disabled", true);
+                            }
+                        } else {
+                            $('#btntambah').removeAttr("disabled");
+                        }
+                    }else{
+                        $('#btntambah').attr("disabled", true);
+                    }
 
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
             }
             else {
-                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid'))) {
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid')) && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
 
                     $('#btntambah').removeAttr("disabled");
                 } else {
@@ -1083,14 +1231,131 @@
         }
 
         function checkvalidasinonakn() {
+            var jenis_array = [];
+            $("input[id=jenis_pen]:checked").each(function() {
+                jenis_array.push($(this).val());
+            });
+
+            if($.inArray("produk", jenis_array) !== -1 ) {
+                $('#produktable').find('.penjualan_produk_id').each(function() {
+                    if ($(this).val() != "") {
+                        penjualan_produk_id = true;
+                    }
+                    else {
+                        penjualan_produk_id = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.variasi').each(function() {
+                    if ($(this).val() != "") {
+                        variasi = true;
+                    }
+                    else {
+                        variasi = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.produk_jumlah').each(function() {
+                    if ($(this).val() != "" || $(this).val() != "0") {
+                        produk_jumlah = true;
+                    }
+                    else {
+                        produk_jumlah = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.produk_harga').each(function() {
+                    if ($(this).val() != "") {
+                        produk_harga = true;
+                    }
+                    else {
+                        produk_harga = false;
+                        return false;
+                    }
+                });
+            }else if($.inArray("produk", jenis_array) === -1 ){
+                penjualan_produk_id = true;
+                variasi = true;
+                produk_jumlah = true;
+                produk_harga = true;
+            }
+
+            if($.inArray("sparepart", jenis_array) !== -1 ) {
+                $('#parttable').find('.part_id').each(function() {
+                    if ($(this).val() != "") {
+                        part_id = true;
+                    }
+                    else {
+                        part_id = false;
+                        return false;
+                    }
+                });
+
+                $('#parttable').find('.part_jumlah').each(function() {
+                    if ($(this).val() != "") {
+                        part_jumlah = true;
+                    }
+                    else {
+                        part_jumlah = false;
+                        return false;
+                    }
+                });
+
+                $('#parttable').find('.part_harga').each(function() {
+                    if ($(this).val() != "" || $(this).val() != "0") {
+                        part_harga = true;
+                    }
+                    else {
+                        part_harga = false;
+                        return false;
+                    }
+
+                    console.log($(this).val());
+                });
+            }else if($.inArray("sparepart", jenis_array) !== -1 ){
+                part_id = true;
+                part_jumlah = true;
+                part_harga = true;
+            }
+
+            if($.inArray("jasa", jenis_array) !== -1 ) {
+                $('#jasatable').find('.jasa_id').each(function() {
+                    if ($(this).val() != "") {
+                        jasa_id = true;
+                    }
+                    else {
+                        jasa_id = false;
+                        return false;
+                    }
+                });
+
+                $('#jasatable').find('.jasa_harga').each(function() {
+                    if ($(this).val() != "" || $(this).val() != "0") {
+                        jasa_harga = true;
+                    }
+                    else {
+                        jasa_harga = false;
+                        return false;
+                    }
+                });
+            }else if($.inArray("jasa", jenis_array) !== -1 ){
+                jasa_id = true;
+                jasa_harga = true;
+            }
+
+            console.log(penjualan_produk_id+", "+variasi+", "+produk_jumlah+", "+produk_harga+", "+part_id+", "+part_jumlah+", "+part_harga+", "+jasa_id+", "+jasa_harga);
+
             if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
-                if ($('#customer_id').val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "") {
+                if ($('#customer_id').val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "" && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
             } else if ($('input[type="radio"][name="do"]:checked').val() == "no") {
-                if ($('#customer_id').val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "") {
+                if ($('#customer_id').val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "" && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
@@ -1228,6 +1493,12 @@
                 $("input[id=jenis_pen][value="+x+"]").prop("checked", true);
                 }
                 filter_jenis(jenis_arry);
+
+                if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                    checkvalidasi();
+                }else{
+                    checkvalidasinonakn();
+                }
             });
 
             function filter_jenis(x){
@@ -1267,12 +1538,14 @@
             if ($(this).val() != "") {
                 $("#msgbatas_kontrak").text("");
                 $("#batas_kontrak").removeClass('is-invalid');
-                checkvalidasi();
+
             } else if ($(this).val() == "") {
                 $("#msgbatas_kontrak").text("Tanggal Delivery Harus diisi");
                 $("#batas_kontrak").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
+
             }
+            checkvalidasi();
         });
         $('#instansi').on('keyup change select', function() {
             if ($(this).val() != "") {
@@ -1280,12 +1553,13 @@
                 $("#msginstansi").text("");
                 $("#instansi").removeClass('is-invalid');
                 perencanaan(cust, $(this).val());
-                checkvalidasi();
+
             } else if ($(this).val() == "") {
                 $("#msginstansi").text("Instansi Harus diisi");
                 $("#instansi").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
+            checkvalidasi();
         });
 
         $('#pills-produk-tab').on('click', function() {
@@ -1299,35 +1573,40 @@
             if ($(this).val() != "") {
                 $("#msgalamatinstansi").text("");
                 $("#alamatinstansi").removeClass('is-invalid');
-                checkvalidasi();
+
             } else if ($(this).val() == "") {
                 $("#msgalamatinstansi").text("Alamat Instansi Harus diisi");
                 $("#alamatinstansi").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
+            checkvalidasi();
         });
         $('input[type="radio"][name="namadistributor"]').on('change', function() {
             if ($(this).val() != "") {
                 if ($(this).val() == "sudah") {
                     $("#customer_id").attr('disabled', false);
+                    var $newOption = $("<option selected='selected'></option>").val("213").text("PT. EMIINDO Jaya Bersama")
+                    $(".customer_id").append($newOption).trigger('change');
                 } else {
                     $("#customer_id").attr('disabled', true);
                     $("#customer_id").empty().trigger('change')
                     $("#alamat").val("");
                     $("#telepon").val("");
                 }
-                checkvalidasi();
+
             } else {
                 $("#msgstatus").text("Status Harus dipilih");
                 $("#status").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
+
+            checkvalidasi();
         });
 
         $('input[type="radio"][name="status"]').on('change', function() {
             $('#isi_produk_input').addClass('hide');
             if ($(this).val() != "") {
-                checkvalidasi();
+
                 if ($(this).val() == "sepakat") {
                     $('#checkbox_nopaket').addClass('hide');
                     $('#isi_nopaket').prop("checked", false);
@@ -1336,6 +1615,8 @@
                     $("#dataproduk").removeClass("hide");
                     $("#batas_kontrak").attr('disabled', false);
                     $("#provinsi").attr('disabled', false);
+                    var $newOption = $("<option selected='selected'></option>").val("11").text("Jawa Timur")
+                    $(".provinsi").append($newOption).trigger('change');
                 } else if ($(this).val() == "draft") {
                     $('#checkbox_nopaket').removeClass('hide');
                     $('#isi_nopaket').prop("checked", false);
@@ -1389,6 +1670,7 @@
                 $("#status").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
+            checkvalidasi();
         });
 
         $(document).ready(function() {
@@ -1400,8 +1682,9 @@
                     $('#no_paket').attr('readonly', true);
                     $("#no_paket").removeClass('is-invalid');
                 }
-                checkvalidasi();
+
             });
+            checkvalidasi();
         });
         $('input[type="checkbox"][name="isi_produk"]').change(function() {
             $("#produktable tbody").empty();
@@ -1435,12 +1718,14 @@
             if ($(this).val() != "") {
                 $("#msgsatuan_kerja").text("");
                 $("#satuan_kerja").removeClass('is-invalid');
-                checkvalidasi();
+
             } else if ($(this).val() == "") {
                 $("#msgsatuan_kerja").text("Satuan Kerja Harus diisi");
                 $("#satuan_kerja").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
+
+            checkvalidasi();
         });
 
         $('#deskripsi').on('keyup', function() {
@@ -1613,9 +1898,10 @@
         });
         $("#customer_id").attr('disabled', true);
         $('.customer_id').select2({
+            placeholder: "Pilih Customer",
             ajax: {
                 minimumResultsForSearch: 20,
-                placeholder: "Pilih Produk",
+
                 dataType: 'json',
                 theme: "bootstrap",
                 delay: 250,
@@ -2003,6 +2289,11 @@
                     // tes.html(datas);
                 }
             });
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
 
         });
         $("#produktable").on('keyup change', '.produk_jumlah', function() {
@@ -2046,6 +2337,11 @@
                 variasi.removeClass('is-invalid');
                 ketstok.text('');
             }
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
         });
         $("#produktable").on('keyup change', '.produk_harga', function() {
             var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -2067,6 +2363,11 @@
                 subtotal.val(formatmoney("0"));
                 totalhargaprd();
             }
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
         });
         $("#produktable").on('keyup change', '.produk_ongkir', function() {
             var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
@@ -2084,6 +2385,11 @@
                 subtotal.val(formatmoney("0"));
                 totalhargaprd();
             }
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
         });
 
 
@@ -2100,7 +2406,7 @@
             var data = `<tr>
                     <td></td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group select_produk">
                             <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                 <option value="` + produk_id + `">` + nama_produk + `</option>
                             </select>
@@ -2299,6 +2605,11 @@
                 $('#produktable tbody tr:last').after(trproduktable());
                 numberRowsProduk($("#produktable"));
             }
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
         });
 
         $('#produktable').on('click', '#removerowproduk', function(e) {
@@ -2307,6 +2618,11 @@
             totalhargaprd();
             if ($('#produktable > tbody > tr').length <= 0) {
                 $("#totalhargaprd").text("0");
+            }
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
             }
         });
 
@@ -2361,6 +2677,11 @@
                 </td>
             </tr>`);
             numberRowsPart($("#parttable"));
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
         });
 
         function numberRowsJasa($t) {
@@ -2407,6 +2728,19 @@
                 </td>
             </tr>`);
             numberRowsJasa($("#jasatable"));
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
+        });
+
+        $("#parttable").on('keyup change', '.part_id', function() {
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
         });
 
         $("#parttable").on('keyup change', '.part_jumlah', function() {
@@ -2420,6 +2754,12 @@
             } else {
                 subtotal.val(formatmoney("0"));
                 totalhargapart();
+            }
+
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
             }
         });
 
@@ -2438,6 +2778,20 @@
                 subtotal.val(formatmoney("0"));
                 totalhargapart();
             }
+
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
+        });
+
+        $("#jasatable").on('keyup change', '.jasa_id', function() {
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
         });
 
         $("#jasatable").on('keyup change', '.jasa_harga', function() {
@@ -2454,18 +2808,33 @@
                 subtotal.val(formatmoney("0"));
                 totalhargajasa();
             }
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
         });
 
         $('#parttable').on('click', '#removerowpart', function(e) {
             $(this).closest('tr').remove();
             numberRowsPart($("#parttable"));
             totalhargapart();
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
         });
 
         $('#jasatable').on('click', '#removerowjasa', function(e) {
             $(this).closest('tr').remove();
             numberRowsJasa($("#jasatable"));
             totalhargajasa();
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
         });
 
         $('.provinsi').select2({

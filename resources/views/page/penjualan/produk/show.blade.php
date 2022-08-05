@@ -22,6 +22,16 @@
 
 @section('adminlte_css')
     <style>
+        table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
+            height: 100% !important;
+        }
+
+        table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
+            word-wrap: break-word !important;
+            text-overflow: inherit !important;
+            white-space: normal !important;
+        }
+
         .nowrap-text {
             white-space: nowrap;
         }
@@ -225,6 +235,12 @@
                                                         <tr>
                                                             <th width="5%">No</th>
                                                             <th width="10%">No AKD</th>
+                                                            <th width="5%">Merk</th>
+                                                            <th width="5%">Jenis Paket</th>
+                                                            <th width="35%">Nama Alias</th>
+                                                            <th width="20%">Nama Produk</th>
+                                                            <th width="10%">Harga</th>
+                                                            <th width="5%">Aksi</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
@@ -351,6 +367,33 @@
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
         $(function() {
+            var inputproduk = false;
+            var inputjumlah = false;
+            function validasi(){
+                $('#createtable').find('.produk_id').each(function() {
+                    if ($(this).val() != "") {
+                        inputproduk = true;
+                    } else {
+                        inputproduk = false;
+                        return false;
+                    }
+                });
+
+                $('#createtable').find('.jumlah').each(function() {
+                    if ($(this).val() != "") {
+                        inputjumlah = true;
+                    } else {
+                        inputjumlah = false;
+                        return false;
+                    }
+                });
+                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" ){
+                    $("#btnsimpan").attr('disabled', false);
+                } else {
+                    $("#btnsimpan").attr('disabled', true);
+                }
+            }
+
             $(document).on('submit', '#form-penjualan-produk-update', function(e) {
                 console.log("tes");
                 e.preventDefault();
@@ -386,92 +429,92 @@
                 return false;
             });
 
-            // var showtable = $('#showtable').DataTable({
-            //     destroy: true,
-            //     processing: true,
-            //     serverSide: true,
-            //     ajax: {
-            //         'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
-            //         "dataType": "json",
-            //         'type': 'POST',
-            //         'headers': {
-            //             'X-CSRF-TOKEN': '{{csrf_token()}}'
-            //         }
-            //     },
-            //     columns: [{
-            //             data: 'DT_RowIndex',
-            //             className: 'nowrap-text align-center',
-            //             orderable: false,
-            //             searchable: false
-            //         },
-            //         {
-            //             data: 'no_akd',
-            //             className: 'nowrap-text align-center tabnum',
-            //             orderable: true,
-            //             searchable: true
-            //         },
-            //         {
-            //             data: 'merk',
-            //             className: 'nowrap-text align-center',
-            //             orderable: true,
-            //             searchable: true
-            //         },
-            //         {
-            //             data: 'jenis_paket',
-            //             className: 'nowrap-text align-center',
-            //             orderable: true,
-            //             searchable: true
-            //         },
-            //         {
-            //             data: 'nama_alias',
-            //             orderable: true,
-            //             searchable: true
-            //         },
-            //         {
-            //             data: 'nama',
-            //             orderable: true,
-            //             searchable: true
-            //         },
-            //         {
-            //             data: 'harga',
-            //             className: 'nowrap-text align-right tabnum',
-            //             render: $.fn.dataTable.render.number(',', '.', 2)
-            //                 // function(data) {
-            //                 //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
-            //                 // }
-            //                 ,
-            //             orderable: false,
-            //             searchable: false
-            //         },
-            //         {
-            //             data: 'button',
-            //             className: 'nowrap-text align-center',
-            //              orderable: false,
-            //             searchable: false
-            //         }
-            //     ]
-            // });
+            var showtable = $('#showtable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'no_akd',
+                        className: 'nowrap-text align-center tabnum',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'merk',
+                        className: 'nowrap-text align-center',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'jenis_paket',
+                        className: 'nowrap-text align-center',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'nama_alias',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'nama',
+                        orderable: true,
+                        searchable: true
+                    },
+                    {
+                        data: 'harga',
+                        className: 'nowrap-text align-right tabnum',
+                        render: $.fn.dataTable.render.number(',', '.', 2)
+                            // function(data) {
+                            //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
+                            // }
+                            ,
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'button',
+                        className: 'nowrap-text align-center',
+                         orderable: false,
+                        searchable: false
+                    }
+                ]
+            });
 
-           login();
+        //    login();
 
         //    url: "https://sinko.api.hyperdatasystem.com/api/login",
 
         //         username: "superuser.api",
         //         password: "password"
 
-        async function login (){
-                const formData = new FormData();
-                formData.append('username','superuser.api');
-                formData.append('password','password');
+            // async function login (){
+            //     const formData = new FormData();
+            //     formData.append('username','superuser.api');
+            //     formData.append('password','password');
 
-                await axios.post('https://sinko.api.hyperdatasystem.com/api/login',formData)
-                .then((response)=> {
-                  //  console.log(response.data.token)
-                  let token = response.data.token;
-                  localStorage.setItem("token", 'Bearer ' + token);
-                 console.log(token);
-                })
-            }
+            //     await axios.post('https://sinko.api.hyperdatasystem.com/api/login',formData)
+            //     .then((response)=> {
+            //       //  console.log(response.data.token)
+            //       let token = response.data.token;
+            //       localStorage.setItem("token", 'Bearer ' + token);
+            //      console.log(token);
+            //     })
+            // }
         // async function login (){
         //         const formData = new FormData();
         //         formData.append('username','norapenj01');
@@ -486,27 +529,27 @@
         //         })
         //     }
 
-            axios.get('https://api.elitech.id/api/paket_produk',{
-                headers : { Authorization:localStorage.getItem('token')}
-            })
-            .then(function (response) {
-              table(response.data.data);
-            })
-             .catch(function (error) {
-                // handle error
-            console.log(error);
-             })
-            .then(function () {
-            // always executed
-            });
+            // axios.get('https://api.elitech.id/api/paket_produk',{
+            //     headers : { Authorization:localStorage.getItem('token')}
+            // })
+            // .then(function (response) {
+            //   table(response.data.data);
+            // })
+            //  .catch(function (error) {
+            //     // handle error
+            // console.log(error);
+            //  })
+            // .then(function () {
+            // // always executed
+            // });
 
-            function table (data){
-            var t = $('#showtable').DataTable();
-            $.each(data, function (key, value) {
-                t.row.add([value.nama_paket,value.nama_alias]).draw();
-            });
-            console.log(data);
-            }
+            // function table (data){
+            // var t = $('#showtable').DataTable();
+            // $.each(data, function (key, value) {
+            //     t.row.add([value.nama_paket,value.nama_alias]).draw();
+            // });
+            // console.log(data);
+            // }
 
 
 
@@ -545,78 +588,78 @@
             //     ]
             //      });
 
-            $('#showtable tbody').on('click', '#showmodal', function() {
-                var rows = showtable.rows($(this).parents('tr')).data();
-                $('#nama_produk').text(rows[0].nama);
-                var x = (rows[0].harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
-                $('#harga_produk').text('Rp ' + x);
+            // $('#showtable tbody').on('click', '#showmodal', function() {
+            //     var rows = showtable.rows($(this).parents('tr')).data();
+            //     $('#nama_produk').text(rows[0].nama);
+            //     var x = (rows[0].harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
+            //     $('#harga_produk').text('Rp ' + x);
 
-                var showdetailtable = $('#showdetailtable').DataTable({
-                    processing: true,
-                    destroy: true,
-                    processing: true,
-                    serverSide: true,
-                    ajax: {
-                        'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
-                        "dataType": "json",
-                        'type': 'POST',
-                        'headers': {
-                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                        }
-                    },
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            className: 'nowrap-text align-center',
-                            orderable: false,
-                            searchable: false
-                        },
-                        {
-                            data: 'no_akd',
-                            className: 'nowrap-text align-center tabnum',
-                            orderable: true,
-                            searchable: true
-                        },
-                        {
-                            data: 'merk',
-                            className: 'nowrap-text align-center',
-                            orderable: true,
-                            searchable: true
-                        },
-                        {
-                            data: 'jenis_paket',
-                            className: 'nowrap-text align-center',
-                            orderable: true
-                        },
-                        {
-                            data: 'nama_alias',
-                            orderable: true,
-                            searchable: true
-                        },
-                        {
-                            data: 'nama',
-                            orderable: true,
-                            searchable: true
-                        },
-                        {
-                            data: 'harga',
-                            className: 'nowrap-text align-right tabnum',
-                            render: $.fn.dataTable.render.number(',', '.', 2)
-                                // function(data) {
-                                //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
-                                // }
-                                ,
-                            orderable: false,
-                            searchable: false
-                        },
-                        {
-                            data: 'button',
-                            className: 'nowrap-text align-center',
-                            orderable: false,
-                            searchable: false
-                        }
-                    ]
-                });
-            });
+            //     var showdetailtable = $('#showdetailtable').DataTable({
+            //         processing: true,
+            //         destroy: true,
+            //         processing: true,
+            //         serverSide: true,
+            //         ajax: {
+            //             'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
+            //             "dataType": "json",
+            //             'type': 'POST',
+            //             'headers': {
+            //                 'X-CSRF-TOKEN': '{{ csrf_token() }}'
+            //             }
+            //         },
+            //         columns: [{
+            //                 data: 'DT_RowIndex',
+            //                 className: 'nowrap-text align-center',
+            //                 orderable: false,
+            //                 searchable: false
+            //             },
+            //             {
+            //                 data: 'no_akd',
+            //                 className: 'nowrap-text align-center tabnum',
+            //                 orderable: true,
+            //                 searchable: true
+            //             },
+            //             {
+            //                 data: 'merk',
+            //                 className: 'nowrap-text align-center',
+            //                 orderable: true,
+            //                 searchable: true
+            //             },
+            //             {
+            //                 data: 'jenis_paket',
+            //                 className: 'nowrap-text align-center',
+            //                 orderable: true
+            //             },
+            //             {
+            //                 data: 'nama_alias',
+            //                 orderable: true,
+            //                 searchable: true
+            //             },
+            //             {
+            //                 data: 'nama',
+            //                 orderable: true,
+            //                 searchable: true
+            //             },
+            //             {
+            //                 data: 'harga',
+            //                 className: 'nowrap-text align-right tabnum',
+            //                 render: $.fn.dataTable.render.number(',', '.', 2)
+            //                     // function(data) {
+            //                     //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
+            //                     // }
+            //                     ,
+            //                 orderable: false,
+            //                 searchable: false
+            //             },
+            //             {
+            //                 data: 'button',
+            //                 className: 'nowrap-text align-center',
+            //                 orderable: false,
+            //                 searchable: false
+            //             }
+            //         ]
+            //     });
+            // });
 
                 $('#showtable tbody').on('click', '#showmodal', function() {
                     var rows = showtable.rows($(this).parents('tr')).data();
@@ -684,10 +727,11 @@
                             $('#editmodal').modal("show");
                             $('#edit').html(result).show();
                             $("#editform").attr("action", href);
-                            var x = 3;
-                            for (i = 0; i < 10; i++) {
-                                select_data(i);
-                            }
+                            $('.produk_id').select2();
+                            // var x = 3;
+                            // for (i = 0; i < 10; i++) {
+                                select_data();
+                            // }
 
                         },
                         complete: function() {
@@ -763,7 +807,8 @@
                         $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                         $(el).find('.produk_id').attr('id', j);
                         $(el).find('.kelompok_produk').attr('id', 'kelompok_produk' + j);
-                        select_data(j);
+                        select_data();
+                        // $('.produk_id')
                     });
                 }
                 $(document).on('click', '#addrow', function() {
@@ -771,14 +816,14 @@
                 <td></td>
                 <td>
                     <div class="form-group">
-                        <select class="select-info form-control  produk_id" name="produk_id[]" id="0" style="width:100%" >
+                        <select class="select-info form-control produk_id" name="produk_id[]" id="0" style="width:100%" >
                         </select>
                     </div>
                 </td>
                 <td><span class="badge kelompok_produk" id="kelompok_produk0"></span></td>
                 <td>
                     <div class="form-group d-flex justify-content-center">
-                        <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
+                        <input type="number" class="form-control jumlah" name="jumlah[]" id="jumlah" style="width: 50%" />
                     </div>
                 </td>
                 <td>
@@ -786,40 +831,34 @@
                 </td>
                 </tr>`);
                     numberRows($("#createtable"));
+                    validasi();
                 });
 
                 $(document).on('click', '#createtable #removerow', function(e) {
                     $(this).closest('tr').remove();
                     numberRows($("#createtable"));
+                    validasi();
                 });
 
                 $(document).on('keyup change', '#harga', function() {
                     var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
                     $(this).val(result);
-                    console.log(result);
 
                     if ($(this).val() != "") {
                         $('#msgharga').text("");
                         $('#harga').removeClass("is-invalid");
-                        console.log($("#createtable tbody").length);
-                        if (($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $(
-                                "#createtable tbody").length > 0) {
-                            $('#btnsimpan').removeClass('disabled');
-                        } else {
-                            $('#btnsimpan').addClass('disabled');
-                        }
                     } else if ($(this).val() == "") {
                         $('#msgharga').text("Harga Harus diisi");
                         $('#harga').addClass("is-invalid");
-                        $('#btnsimpan').addClass('disabled');
                     }
                 });
 
-                function select_data(x) {
-                    $('#' + x).select2({
+                function select_data() {
+                    $('.produk_id').select2({
+                        placeholder: "Pilih Produk",
+                        dropdownParent: $("#editmodal"),
                         ajax: {
                             minimumResultsForSearch: 20,
-                            placeholder: "Pilih Produk",
                             dataType: 'json',
                             theme: "bootstrap",
                             delay: 250,
@@ -855,7 +894,10 @@
                                 $('#kelompok_produk' + index).text(data[0].kelompok_produk.nama);
                             }
                         });
+                        validasi();
                     });
+
+
                 }
                 $(document).on('keyup change', '#nama_paket', function() {
                     var id = $('#form-penjualan-produk-update').attr('data-id');
@@ -868,27 +910,27 @@
                                 if (data.jumlah >= 1) {
                                     $("#msgnama_paket").text("Nama sudah terpakai");
                                     $('#nama_paket').addClass('is-invalid');
-                                    $('#btnsimpan').addClass('disabled');
                                 } else {
                                     $('#msgnama_paket').text("");
                                     $('#nama_paket').removeClass("is-invalid");
-                                    console.log($("#createtable tbody").length);
-                                    if ($('#harga').val() != "" && $("#createtable tbody").length >
-                                        0) {
-                                        $('#btnsimpan').removeClass('disabled');
-                                    } else {
-                                        $('#btnsimpan').addClass('disabled');
-                                    }
                                 }
                             }
                         });
                     } else if ($(this).val() == "") {
                         $('#msgnama_paket').text("Nama Paket Harus diisi");
                         $('#nama_paket').addClass("is-invalid");
-                        $('#btnsimpan').addClass('disabled');
                     }
+
+                    validasi();
                 });
 
+                $(document).on('keyup change', '#nama_alias', function() {
+                    validasi();
+                });
+
+                $(document).on('keyup change', '#createtable .jumlah', function(){
+                    validasi();
+                })
 
                 $('#harga_min').on('keyup change', function() {
 

@@ -1292,6 +1292,18 @@ class MasterController extends Controller
                 ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
                 ->limit(1);
             },
+            'count_belum_kirim' => function($q){
+                $q->selectRaw('count(noseri_logistik.id)')
+                    ->from('noseri_logistik')
+                    // ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+
+                    ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+                    ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                    ->where('logistik.status_id','11')
+                    ->limit(1);
+            },
            'count_kirim' => function($q){
                 $q->selectRaw('count(noseri_logistik.id)')
                     ->from('noseri_logistik')
@@ -1324,7 +1336,7 @@ class MasterController extends Controller
             $data['detail'] = $detail_pesanan;
             $data['gudang'] = $detail_pesanan->count_jumlah - $detail_pesanan->count_gudang + $detail_pesanan->count_qc_nok;
             $data['qc'] =  $detail_pesanan->count_gudang - $detail_pesanan->count_qc_ok ;
-            $data['log'] =  $detail_pesanan->count_qc_ok -  $detail_pesanan->count_log;
+            $data['log'] =  $detail_pesanan->count_qc_ok -  $detail_pesanan->count_log + $detail_pesanan->count_belum_kirim;
             $data['kir'] =  $detail_pesanan->count_kirim;
 
 
@@ -1370,6 +1382,15 @@ class MasterController extends Controller
                             ->whereColumn('noseri_detail_pesanan.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
                             ->limit(1);
                 },
+                'count_belum_kirim' => function($q){
+                    $q->selectRaw('count(noseri_logistik.id)')
+                    ->from('noseri_logistik')
+                    ->leftjoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+                    ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+                    ->whereColumn('detail_logistik.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
+                    ->where('logistik.status_id','11')
+                    ->limit(1);
+        },
                 'count_kirim' => function($q){
                     $q->selectRaw('count(noseri_logistik.id)')
                     ->from('noseri_logistik')
@@ -1388,7 +1409,7 @@ class MasterController extends Controller
             $data['detail']['count_qc_ok'] = $detail_pesanan_produk->count_qc_ok;
             $data['gudang'] = $detail_pesanan_produk->count_jumlah - $detail_pesanan_produk->count_gudang ;
             $data['qc'] =  $detail_pesanan_produk->count_gudang - $detail_pesanan_produk->count_qc_ok;
-            $data['log'] =  $detail_pesanan_produk->count_qc_ok -  $detail_pesanan_produk->count_log;
+            $data['log'] =  $detail_pesanan_produk->count_qc_ok -  $detail_pesanan_produk->count_log + $detail_pesanan_produk->count_belum_kirim;
             $data['kir'] =  $detail_pesanan_produk->count_kirim;
             echo json_encode($data);
         }
@@ -1407,6 +1428,14 @@ class MasterController extends Controller
                 $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
                     ->from('detail_logistik_part')
                     ->whereColumn('detail_logistik_part.detail_pesanan_part_id', 'detail_pesanan_part.id');
+            },
+            'count_belum_kirim' => function($q){
+                $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->leftjoin('logistik', 'logistik.id', '=', 'detail_logistik_part.logistik_id')
+                    ->whereColumn('detail_logistik_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
+                    ->where('logistik.status_id','11')
+                    ->limit(1);
             },
             'count_kirim' => function($q){
                 $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
@@ -1427,9 +1456,12 @@ class MasterController extends Controller
             $data['detail']['count_qc_ok'] =  $detail_pesanan_part->count_qc_ok;
             $data['gudang'] = 0 ;
             $data['qc'] =   $detail_pesanan_part->jumlah - $detail_pesanan_part->count_qc_ok;
-            $data['log'] = $detail_pesanan_part->count_qc_ok - $detail_pesanan_part->count_log;
+            $data['log'] = $detail_pesanan_part->count_qc_ok - $detail_pesanan_part->count_log + $detail_pesanan_part->count_belum_kirim ;
             $data['kir'] =   $detail_pesanan_part->count_kirim ;
             echo json_encode($data);
         }
     }
+
+
+
 }

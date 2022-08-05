@@ -186,7 +186,7 @@
                                 </div>
                                 <div id="informasi_pelanggan" class="card card-outline card-primary">
                                     <div class="card-header">
-                                        <h3 class="card-title">Informasi Pelanggan</h3>
+                                        <h3 class="card-title" id="title_info_cust">Informasi Pelanggan</h3>
                                         <div class="card-tools">
                                         <button type="button" class="btn btn-tool" data-card-widget="collapse">
                                         <i class="fas fa-minus"></i>
@@ -211,11 +211,25 @@
                                                 </div>
                                                 <small class="text-success mt-1" id="infono_transaksi">* Pilih Nomor Referensi Penjualan yang akan dipakai</small>
                                                 <div class="invalid-feedback mt-1" id="msgno_transaksi"></div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row hide" id="pic_peminjaman_input">
+                                            <label for="pic_peminjaman" class="col-lg-5 col-md-12 col-form-label labelket">Penanggung Jawab</label>
+                                            <div class="col-lg-4 col-md-8">
+                                                <div class="input-group">
+                                                    <div class="input-group-prepend"  width="40%">
+                                                        <select class="form-control custom-select select2 divisi_id" id="divisi_id" name="divisi_id">
 
+                                                        </select>
+                                                    </div>
+                                                    <input type="text" name="pic_peminjaman" id="pic_peminjaman" class="form-control col-form-label pic_peminjaman  @error('pic_peminjaman') is-invalid @enderror" width="60%"/>
+                                                </div>
+                                                <small class="text-success mt-1" id="infono_transaksi">* Pilih Divisi Penanggung Jawab</small>
+                                                <div class="invalid-feedback" id="msgpic_peminjaman"></div>
                                             </div>
                                         </div>
                                         <div class="form-group row" id="customer_id_input">
-                                            <label for="customer_id" class="col-lg-5 col-md-12 col-form-label labelket">Nama Customer</label>
+                                            <label for="customer_id" class="col-lg-5 col-md-12 col-form-label labelket" id="label_cust">Nama Customer</label>
                                             <div class="col-lg-4 col-md-8">
                                                 <input name="customer_id" id="customer_id" class="form-control col-form-label customer_id  @error('customer_id') is-invalid @enderror"/>
                                                 <div class="invalid-feedback" id="msgcustomer_id"></div>
@@ -570,7 +584,7 @@
             });
 
             $('#parttable').find('.part_jumlah').each(function() {
-                if ($(this).val() != "" || $(this).val() != "") {
+                if ($(this).val() != "" ) {
                     inputjumpart = true;
                 } else {
                     inputjumpart = false;
@@ -588,7 +602,15 @@
             });
 
             if($('#no_retur').val() != "" && $('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $('#customer_id').val() != "" && $('#alamat').val() && $('input[name="pilih_jenis_barang[]"]:checked').length > 0 && (($('#pilih_jenis_barang1').is(':checked') && inputproduk == true && inputjumproduk == true) || ($('#pilih_jenis_barang2').is(':checked') && inputpart == true && inputjumpart == true)) ){
-                $('#btnsubmit').attr('disabled', false);
+                if($('input[name="pilih_jenis_retur"]:checked').val() != "peminjaman" && $('input[name="no_transaksi"]').val() != ""){
+                    $('#btnsubmit').attr('disabled', false);
+                }
+                else if($('input[name="pilih_jenis_retur"]:checked').val() == "peminjaman" && $('input[name="pic_peminjaman"]').val() != ""){
+                    $('#btnsubmit').attr('disabled', false);
+                }
+                else{
+                    $('#btnsubmit').attr('disabled', true);
+                }
             } else {
                 $('#btnsubmit').attr('disabled', true);
             }
@@ -603,6 +625,22 @@
         })
 
         $(document).on('change', 'input[name="pilih_jenis_retur"]', function(){
+            $('#no_transaksi').val("");
+            $('#customer_id').val("");
+            $('#alamat').val("");
+            $('#telepon').val("");
+            var value = $('input[name="pilih_jenis_retur"]:checked').val();
+            if(value == "peminjaman"){
+                $('#pic_peminjaman_input').removeClass('hide');
+                $('#label_cust').text('Nama Peminjam');
+                $('#title_info_cust').text('Info Peminjaman');
+                $('#no_transaksi_input').addClass('hide');
+            } else {
+                $('#pic_peminjaman_input').addClass('hide');
+                $('#label_cust').text('Nama Customer');
+                $('#title_info_cust').text('Info Penjualan');
+                $('#no_transaksi_input').removeClass('hide');
+            }
             validasi();
         })
 
@@ -697,6 +735,36 @@
             })
         }
 
+        $('.divisi_id').select2({
+                ajax: {
+                    minimumResultsForSearch: 20,
+                    placeholder: "Pilih Divisi",
+                    dataType: 'json',
+                    theme: "bootstrap",
+                    delay: 250,
+                    type: 'GET',
+                    url: '/api/gbj/sel-divisi',
+                    // data: function(params) {
+                    //     return {
+                    //         term: params.term
+                    //     }
+                    // },
+                    processResults: function(data) {
+                        return {
+                            results: $.map(data, function(obj) {
+                                return {
+                                    id: obj.id,
+                                    text: obj.nama,
+                                };
+                            })
+                        };
+                    },
+                }
+            }).change(function(e){
+                e.preventDefault();
+
+            })
+
         function part(){
             $('.part_id').select2({
                 ajax: {
@@ -727,7 +795,6 @@
         }
 
         $(document).on('change', '#produktable .produk_id', function(){
-            console.log($('#produktable tbody > tr > td > input[type="number"][value=""]'));
             validasi();
         });
 
@@ -1289,7 +1356,6 @@
                             term: request.term
                         },
                         success: function(data) {
-                            console.log(data);
                             var transformed = $.map(data, function(el) {
                                 return {
                                     label: el.nama,
