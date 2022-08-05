@@ -130,6 +130,17 @@
             text-align: left;
         }
     }
+
+    .select_item .select2-selection--single {
+  height: 100% !important;
+}
+.select_item .select2-selection__rendered{
+  word-wrap: break-word !important;
+  text-overflow: inherit !important;
+  white-space: normal !important;
+}
+
+
 </style>
 @stop
 
@@ -446,7 +457,7 @@
                                                                     <tr>
                                                                         <td>{{$loop->iteration}}</td>
                                                                         <td>
-                                                                            <div class="form-group">
+                                                                            <div class="form-group select_item">
                                                                                 <select name="penjualan_produk_id[]" id="{{$loop->iteration-1}}" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                                     <option value="{{$f->penjualan_produk_id}}" selected>{{$f->penjualanproduk->nama}}</option>
                                                                                 </select>
@@ -619,7 +630,7 @@
                                                                     <tr>
                                                                         <td>{{$loop->iteration}}</td>
                                                                         <td>
-                                                                            <div class="form-group">
+                                                                            <div class="form-group select_item">
                                                                                 <select class="select2 form-control select-info custom-select part_id" name="part_id[]" id="part_id{{$loop->iteration-1}}" width="100%">
                                                                                     <option value="{{$f->sparepart->id}}" selected>{{$f->sparepart->nama}}</option>
                                                                                 </select>
@@ -952,9 +963,10 @@
         });
 
         $('#customer_id').select2({
+            placeholder: "Pilih Customer",
             ajax: {
                 minimumResultsForSearch: 20,
-                placeholder: "Pilih Customer",
+
                 dataType: 'json',
                 theme: "bootstrap",
                 delay: 250,
@@ -992,6 +1004,7 @@
         });
 
         $('.provinsi').select2({
+            placeholder: 'Pilih Provinsi',
             ajax: {
                 minimumResultsForSearch: 20,
                 placeholder: "Pilih Produk",
@@ -1168,7 +1181,7 @@
             var data = `<tr>
                 <td></td>
                 <td>
-                    <div class="form-group">
+                    <div class="form-group select_item">
                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                             <option value=""></option>
                         </select>
@@ -1236,6 +1249,7 @@
 
         function select_data(i) {
             $('#' + i).select2({
+                placeholder: 'Pilih Produk',
                 ajax: {
                     minimumResultsForSearch: 20,
                     dataType: 'json',
@@ -1474,7 +1488,7 @@
             var data = `<tr>
                 <td>1</td>
                 <td>
-                    <div class="form-group">
+                    <div class="form-group select_item" >
                         <select class="select2 form-control select-info custom-select part_id" name="part_id[]" id="part_id0" width="100%">
                         </select>
                     </div>

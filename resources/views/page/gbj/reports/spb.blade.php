@@ -103,7 +103,7 @@
             <td colspan="2">{{ $hh->pesanan->so }}</td>
             <td><b>Tanggal Terbit</b></td>
             <td>:</td>
-            <td colspan="2">{{ Carbon\Carbon::createFromFormat('Y-m-d H:i:s', Carbon\Carbon::now())->isoFormat('D MMMM Y') }}</td>
+            <td colspan="2">{{ Carbon\Carbon::createFromFormat('Y-m-d', $hh->tgl_keluar)->isoFormat('D MMMM Y') }}</td>
         </tr>
         @endforeach
     </table>
