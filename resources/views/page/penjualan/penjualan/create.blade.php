@@ -783,7 +783,7 @@
                                                                     <td>1</td>
                                                                     <td>
                                                                         <div class="form-group ">
-                                                                            <select class="select2 form-control select-info custom-select part_id" name="part_id[]" id="part_id0" width="100%">
+                                                                            <select class="select form-control custom-select part_id" name="part_id[]" id="part_id0" width="100%">
                                                                             </select>
                                                                         </div>
                                                                     </td>
@@ -1082,6 +1082,7 @@
                 $('#produktable').find('.penjualan_produk_id').each(function() {
                     if ($(this).val() != "") {
                         penjualan_produk_id = true;
+                        console.log($(this).val());
                     }
                     else {
                         penjualan_produk_id = false;
@@ -1092,6 +1093,7 @@
                 $('#produktable').find('.variasi').each(function() {
                     if ($(this).val() != "") {
                         variasi = true;
+                        console.log($(this).val());
                     }
                     else {
                         variasi = false;
@@ -1100,8 +1102,9 @@
                 });
 
                 $('#produktable').find('.produk_jumlah').each(function() {
-                    if ($(this).val() != "" || $(this).val() != "0") {
+                    if ($(this).val() != "") {
                         produk_jumlah = true;
+                        console.log($(this).val());
                     }
                     else {
                         produk_jumlah = false;
@@ -1112,13 +1115,14 @@
                 $('#produktable').find('.produk_harga').each(function() {
                     if ($(this).val() != "") {
                         produk_harga = true;
+                        console.log($(this).val());
                     }
                     else {
                         produk_harga = false;
                         return false;
                     }
                 });
-            }else{
+            }else if($.inArray("produk", jenis_array) === -1 ){
                 penjualan_produk_id = true;
                 variasi = true;
                 produk_jumlah = true;
@@ -1127,8 +1131,9 @@
 
             if($.inArray("sparepart", jenis_array) !== -1 ) {
                 $('#parttable').find('.part_id').each(function() {
-                    if ($(this).val() != "") {
+                    if ($(this).val() != null) {
                         part_id = true;
+                        console.log("part_id: "+$(this).val());
                     }
                     else {
                         part_id = false;
@@ -1139,6 +1144,7 @@
                 $('#parttable').find('.part_jumlah').each(function() {
                     if ($(this).val() != "") {
                         part_jumlah = true;
+                        console.log("part_jumlah: "+$(this).val());
                     }
                     else {
                         part_jumlah = false;
@@ -1147,15 +1153,16 @@
                 });
 
                 $('#parttable').find('.part_harga').each(function() {
-                    if ($(this).val() != "" || $(this).val() != "0") {
+                    if ($(this).val() != "") {
                         part_harga = true;
+                        console.log("part_harga: "+$(this).val());
                     }
                     else {
                         part_harga = false;
                         return false;
                     }
                 });
-            }else{
+            }else if($.inArray("sparepart", jenis_array) === -1 ){
                 part_id = true;
                 part_jumlah = true;
                 part_harga = true;
@@ -1163,7 +1170,7 @@
 
             if($.inArray("jasa", jenis_array) !== -1 ) {
                 $('#jasatable').find('.jasa_id').each(function() {
-                    if ($(this).val() != "") {
+                    if ($(this).val() != null) {
                         jasa_id = true;
                     }
                     else {
@@ -1173,7 +1180,7 @@
                 });
 
                 $('#jasatable').find('.jasa_harga').each(function() {
-                    if ($(this).val() != "" || $(this).val() != "0") {
+                    if ($(this).val() != "") {
                         jasa_harga = true;
                     }
                     else {
@@ -1181,7 +1188,7 @@
                         return false;
                     }
                 });
-            }else{
+            }else if($.inArray("jasa", jenis_array) === -1 ){
                 jasa_id = true;
                 jasa_harga = true;
             }
@@ -1240,6 +1247,7 @@
                 $('#produktable').find('.penjualan_produk_id').each(function() {
                     if ($(this).val() != "") {
                         penjualan_produk_id = true;
+                        console.log($(this).val());
                     }
                     else {
                         penjualan_produk_id = false;
@@ -1250,6 +1258,7 @@
                 $('#produktable').find('.variasi').each(function() {
                     if ($(this).val() != "") {
                         variasi = true;
+                        console.log($(this).val());
                     }
                     else {
                         variasi = false;
@@ -1258,8 +1267,9 @@
                 });
 
                 $('#produktable').find('.produk_jumlah').each(function() {
-                    if ($(this).val() != "" || $(this).val() != "0") {
+                    if ($(this).val() != "") {
                         produk_jumlah = true;
+                        console.log($(this).val());
                     }
                     else {
                         produk_jumlah = false;
@@ -1270,6 +1280,7 @@
                 $('#produktable').find('.produk_harga').each(function() {
                     if ($(this).val() != "") {
                         produk_harga = true;
+                        console.log($(this).val());
                     }
                     else {
                         produk_harga = false;
@@ -1285,8 +1296,9 @@
 
             if($.inArray("sparepart", jenis_array) !== -1 ) {
                 $('#parttable').find('.part_id').each(function() {
-                    if ($(this).val() != "") {
+                    if ($(this).val() != null) {
                         part_id = true;
+                        console.log("part_id: "+$(this).val());
                     }
                     else {
                         part_id = false;
@@ -1297,6 +1309,7 @@
                 $('#parttable').find('.part_jumlah').each(function() {
                     if ($(this).val() != "") {
                         part_jumlah = true;
+                        console.log("part_jumlah: "+$(this).val());
                     }
                     else {
                         part_jumlah = false;
@@ -1305,17 +1318,16 @@
                 });
 
                 $('#parttable').find('.part_harga').each(function() {
-                    if ($(this).val() != "" || $(this).val() != "0") {
+                    if ($(this).val() != "") {
                         part_harga = true;
+                        console.log("part_harga: "+$(this).val());
                     }
                     else {
                         part_harga = false;
                         return false;
                     }
-
-                    console.log($(this).val());
                 });
-            }else if($.inArray("sparepart", jenis_array) !== -1 ){
+            }else if($.inArray("sparepart", jenis_array) === -1 ){
                 part_id = true;
                 part_jumlah = true;
                 part_harga = true;
@@ -1323,7 +1335,7 @@
 
             if($.inArray("jasa", jenis_array) !== -1 ) {
                 $('#jasatable').find('.jasa_id').each(function() {
-                    if ($(this).val() != "") {
+                    if ($(this).val() != null) {
                         jasa_id = true;
                     }
                     else {
@@ -1333,7 +1345,7 @@
                 });
 
                 $('#jasatable').find('.jasa_harga').each(function() {
-                    if ($(this).val() != "" || $(this).val() != "0") {
+                    if ($(this).val() != "") {
                         jasa_harga = true;
                     }
                     else {
@@ -1341,12 +1353,10 @@
                         return false;
                     }
                 });
-            }else if($.inArray("jasa", jenis_array) !== -1 ){
+            }else if($.inArray("jasa", jenis_array) === -1 ){
                 jasa_id = true;
                 jasa_harga = true;
             }
-
-            console.log(penjualan_produk_id+", "+variasi+", "+produk_jumlah+", "+produk_harga+", "+part_id+", "+part_jumlah+", "+part_harga+", "+jasa_id+", "+jasa_harga);
 
             if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
                 if ($('#customer_id').val() != "" && $("#no_po").val() != "" && $("#tanggal_po").val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "" && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {

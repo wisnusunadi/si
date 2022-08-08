@@ -371,7 +371,7 @@
             var inputjumlah = false;
             function validasi(){
                 $('#createtable').find('.produk_id').each(function() {
-                    if ($(this).val() != "") {
+                    if ($(this).val() != null) {
                         inputproduk = true;
                     } else {
                         inputproduk = false;
