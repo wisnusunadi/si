@@ -916,6 +916,10 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var produk_obj = {};
+        var part_obj = {};
+        var jasa_obj = {};
+
         $('#jenis_paket').select2({
             placeholder: "Pilih Paket"
         });
@@ -1425,6 +1429,9 @@
                 $("input[id=jenis_pen][value='sparepart']").attr("disabled", true);
                 $("input[id=jenis_pen][value='jasa']").attr("disabled", true);
 
+
+                console.log(produk_obj);
+
             } else if ($(this).val() == "spa") {
                 $("#datajasa").addClass("hide");
                 $("#datapart").addClass("hide");
@@ -1456,6 +1463,7 @@
                 $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
                 $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
 
+
             } else if ($(this).val() == "spb") {
                 $("#datapart").removeClass("hide");
                 $("#dataproduk").addClass("hide");
@@ -1481,7 +1489,6 @@
 
                 //++
                 $("input[id=jenis_pen][value='sparepart']").prop("checked", true);
-
                 $("input[id=jenis_pen][value='produk']").attr("disabled", false);
                 $("input[id=jenis_pen][value='sparepart']").attr("disabled", false);
                 $("input[id=jenis_pen][value='jasa']").attr("disabled", false);
@@ -1513,6 +1520,7 @@
 
             function filter_jenis(x){
               if( $.inArray("produk", x) !== -1 ) {
+                alert("Test Produk");
                 $("#dataproduk").removeClass("hide");
                 }else{
                 $("#dataproduk").addClass("hide");
