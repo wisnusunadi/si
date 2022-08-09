@@ -173,7 +173,14 @@
     .autocomplete-active {
         background-color: #e6c300 !important;
     }
-
+    .select_item .select2-selection--single {
+  height: 100% !important;
+}
+.select_item .select2-selection__rendered{
+  word-wrap: break-word !important;
+  text-overflow: inherit !important;
+  white-space: normal !important;
+}
 </style>
 @stop
 
@@ -664,7 +671,7 @@
                                                                     <tr>
                                                                         <td>{{$loop->iteration}}</td>
                                                                         <td>
-                                                                            <div class="form-group">
+                                                                            <div class="form-group select_item">
                                                                                 <select name="penjualan_produk_id[]" id="{{$loop->iteration-1}}" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                                     <option value="{{$f->penjualan_produk_id}}" selected>{{$f->penjualanproduk->nama}}</option>
                                                                                 </select>
@@ -734,7 +741,7 @@
                                                                     <tr>
                                                                         <td>1</td>
                                                                         <td>
-                                                                            <div class="form-group">
+                                                                            <div class="form-group select_item">
                                                                                 <select name="penjualan_produk_id[0]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                                 </select>
                                                                             </div>
@@ -780,7 +787,7 @@
                                                                     <tr>
                                                                         <td>1</td>
                                                                         <td>
-                                                                            <div class="form-group">
+                                                                            <div class="form-group select_item">
                                                                                 <select name="penjualan_produk_id[0]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                                 </select>
                                                                             </div>
@@ -1199,6 +1206,8 @@
                         $("#dataproduk").removeClass("hide");
                         $("#batas_kontrak").attr('disabled', false);
                         $("#provinsi").attr('disabled', false);
+                        var $newOption = $("<option selected='selected'></option>").val("11").text("Jawa Timur")
+                    $(".provinsi").append($newOption).trigger('change');
                         if(nopaketubah == false){
                             $('#no_paket').val(nopaketdb);
                         }
@@ -1395,7 +1404,6 @@
             });
 
             $('#no_urut').on('keyup change', function() {
-                $('#no_urut').on('keyup change', function() {
                     if ($(this).val() != "") {
                         var values = $(this).val();
                         $.ajax({
@@ -1423,7 +1431,6 @@
                         $("#no_urut").addClass('is-invalid');
                         $('#btntambah').attr("disabled", true);
                     }
-                });
                 checkvalidasi();
             });
 
@@ -1642,7 +1649,7 @@
                 var data = `<tr>
                     <td></td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group select_item">
                             <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                 <option value=""></option>
                             </select>
@@ -1712,6 +1719,7 @@
                     ajax: {
                         minimumResultsForSearch: 20,
                         dataType: 'json',
+
                         delay: 250,
                         type: 'GET',
                         url: '/api/penjualan_produk/select_param/ekatalog',
@@ -1974,7 +1982,7 @@
                 var data = `<tr>
                         <td></td>
                         <td>
-                            <div class="form-group">
+                            <div class="form-group select_item">
                                 <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                     <option value="`+produk_id+`">`+nama_produk+`</option>
                                 </select>

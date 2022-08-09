@@ -54,6 +54,15 @@
         width: 98%;
     }
 
+    .select_item .select2-selection--single {
+  height: 100% !important;
+}
+.select_item .select2-selection__rendered{
+  word-wrap: break-word !important;
+  text-overflow: inherit !important;
+  white-space: normal !important;
+}
+
     legend {
         font-size: 14px;
     }
@@ -326,7 +335,7 @@
                                                 <div class="form-group row">
                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket"></label>
                                                     <div class="col-lg-5 col-md-12">
-                                                        <select name="customer_id" id="customer_id" class="form-control custom-select customer_id  @error('customer_id') is-invalid @enderror">
+                                                        <select name="customer_id" id="customer_id"  class="form-control custom-select customer_id   @error('customer_id') is-invalid @enderror">
                                                         </select>
                                                     </div>
                                                 </div>
@@ -698,11 +707,9 @@
                                                                 <tr>
                                                                     <td>1</td>
                                                                     <td>
-                                                                        <div class="form-group select_produk">
+                                                                        <div class="form-group">
                                                                             <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
-                                                                                <option value=""></option>
                                                                             </select>
-
                                                                         </div>
                                                                         <div class="detail_produk" id="detail_produk0">
                                                                         </div>
@@ -782,7 +789,7 @@
                                                                 <tr>
                                                                     <td>1</td>
                                                                     <td>
-                                                                        <div class="form-group ">
+                                                                        <div class="form-group">
                                                                             <select class="select form-control custom-select part_id" name="part_id[]" id="part_id0" width="100%">
                                                                             </select>
                                                                         </div>
@@ -854,7 +861,7 @@
                                                                 <tr>
                                                                     <td>1</td>
                                                                     <td>
-                                                                        <div class="form-group">
+                                                                        <div class="form-group select_item">
                                                                             <select class="select2 form-control select-info custom-select jasa_id" name="jasa_id[]" id="jasa_id0" width="100%">
                                                                             </select>
                                                                         </div>
@@ -2384,8 +2391,6 @@
                 checkvalidasinonakn();
             }
         });
-
-
         $('#perencanaantable').on('click', '#btntransfer', function() {
             var id = $(this).closest('tr').find('#btntransfer').attr('data-id');
             var nama_produk = $(this).closest('tr').find('#btntransfer').attr('data-nama_produk');
@@ -2399,7 +2404,11 @@
             var data = `<tr>
                     <td></td>
                     <td>
+<<<<<<< HEAD
                         <div class="form-group select_produk">
+=======
+                        <div class="form-group select_item">
+>>>>>>> 0eb0edf1762c06fac21c5f0f8eb34f9a8136c06e
                             <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                 <option value="` + produk_id + `">` + nama_produk + `</option>
                             </select>
@@ -2546,7 +2555,7 @@
             var data = `<tr>
                 <td></td>
                 <td>
-                    <div class="form-group">
+                    <div class="form-group select_item">
                         <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                             <option value=""></option>
                         </select>
@@ -2643,7 +2652,7 @@
             <tr>
                 <td>1</td>
                 <td>
-                    <div class="form-group">
+                    <div class="form-group select_item">
                         <select class="select2 form-control select-info custom-select part_id" name="part_id[]" id="part_id0" width="100%">
                         </select>
                     </div>
@@ -2712,7 +2721,7 @@
             <tr>
                 <td>1</td>
                 <td>
-                    <div class="form-group">
+                    <div class="form-group select_item">
                         <select class="select2 form-control select-info custom-select jasa_id" name="jasa_id[]" id="jasa_id0" width="100%">
                         </select>
                     </div>

@@ -1846,7 +1846,7 @@ class DcController extends Controller
                 ->leftjoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
                 ->where('produk.coo', '=', '1')
                 ->groupBy('pesanan.id')
-                ->havingRaw('NOT EXISTS(select *
+                ->havingRaw('NOT (select *
                     from noseri_coo
                     left join noseri_logistik on noseri_logistik.id = noseri_coo.noseri_logistik_id
                     left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
