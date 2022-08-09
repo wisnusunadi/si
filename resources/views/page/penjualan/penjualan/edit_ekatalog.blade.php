@@ -59,7 +59,7 @@
     }
 
     .blue-bg {
-        background-color: #c8daea;
+        background-color: #ffeab8;
     }
 
     #produktable{
@@ -1698,8 +1698,11 @@
                 numberRowsProduk($("#produktable"));
                 totalhargaprd();
                 if ($('#produktable > tbody > tr').length <= 0) {
-                    $("#totalhargaprd").text("0");
+                    $('#produktable tbody').append(trproduktable());
+                    numberRowsProduk($("#produktable"));
+                    $("#totalhargaprd").text("Rp. 0");
                 }
+
                 checkvalidasi();
             });
 

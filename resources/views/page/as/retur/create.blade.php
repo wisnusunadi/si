@@ -23,6 +23,14 @@
 
 @section('adminlte_css')
     <style>
+        table > tbody > tr > td > .select2 > .selection > .select2-selection--single {
+            height: 100% !important;
+        }
+        table > tbody > tr > td > .select2 > .selection > .select2-selection > .select2-selection__rendered {
+            word-wrap: break-word !important;
+            text-overflow: inherit !important;
+            white-space: normal !important;
+        }
         .hide {
             display: none !important;
         }
@@ -564,44 +572,61 @@
 
         $('#no_transaksi_ref').select2();
         function validasi(){
-
-            $('#produktable').find('.produk_id').each(function() {
-                if ($(this).val() != "") {
-                    inputproduk = true;
-                } else {
-                    inputproduk = false;
-                    return false;
-                }
+            var jenis_array = [];
+            $('input[name="pilih_jenis_barang[]"]:checked').each(function() {
+                jenis_array.push($(this).val());
             });
+            if($.inArray("produk", jenis_array) !== -1){
+                $('#produktable').find('.produk_id').each(function() {
+                    if ($(this).val() != null) {
+                        inputproduk = true;
+                    } else {
+                        inputproduk = false;
+                        return false;
+                    }
+                });
 
-            $('#produktable').find('.produk_jumlah').each(function() {
-                if ($(this).val() != "") {
-                    inputjumproduk = true;
-                } else {
-                    inputjumproduk = false;
-                    return false;
-                }
-            });
+                $('#produktable').find('.produk_jumlah').each(function() {
+                    if ($(this).val() != "") {
+                        inputjumproduk = true;
+                    } else {
+                        inputjumproduk = false;
+                        return false;
+                    }
+                });
+            } else if($.inArray("produk", jenis_array) === -1){
+                inputproduk = true;
+                inputjumproduk = true;
+            }
 
-            $('#parttable').find('.part_jumlah').each(function() {
-                if ($(this).val() != "" ) {
-                    inputjumpart = true;
-                } else {
-                    inputjumpart = false;
-                    return false;
-                }
-            });
+            if($.inArray("part", jenis_array) !== -1){
 
-            $('#parttable').find('.part_id').each(function() {
-                if ($(this).val() != "") {
-                    inputpart = true;
-                } else {
-                    inputpart = false;
-                    return false;
-                }
-            });
+                $('#parttable').find('.part_id').each(function() {
+                    if ($(this).val() != null) {
+                        inputpart = true;
+                    } else {
+                        inputpart = false;
+                        return false;
+                    }
+                });
 
-            if($('#no_retur').val() != "" && $('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $('#customer_id').val() != "" && $('#alamat').val() && $('input[name="pilih_jenis_barang[]"]:checked').length > 0 && (($('#pilih_jenis_barang1').is(':checked') && inputproduk == true && inputjumproduk == true) || ($('#pilih_jenis_barang2').is(':checked') && inputpart == true && inputjumpart == true)) ){
+                $('#parttable').find('.part_jumlah').each(function() {
+                    if ($(this).val() != "") {
+                        inputjumpart = true;
+                    } else {
+                        inputjumpart = false;
+                        return false;
+                    }
+                });
+
+            } else if($.inArray("part", jenis_array) === -1){
+                inputpart = true;
+                inputjumpart = true;
+            }
+
+            console.log(inputjumproduk+", "+inputproduk+", "+inputjumpart+", "+inputpart);
+
+            if($('#no_retur').val() != "" && $('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $('#customer_id').val() != "" && $('#alamat').val() && $('input[name="pilih_jenis_barang[]"]:checked').length > 0 && inputproduk == true && inputjumproduk == true && inputpart == true && inputjumpart == true){
                 if($('input[name="pilih_jenis_retur"]:checked').val() != "peminjaman" && $('input[name="no_transaksi"]').val() != ""){
                     $('#btnsubmit').attr('disabled', false);
                 }
@@ -652,9 +677,9 @@
             validasi();
         })
 
-        $(document).on('change keyup', 'input[name="pilih_jenis_barang[]"]', function(){
-            validasi();
-        })
+        // $(document).on('change keyup', 'input[name="pilih_jenis_barang[]"]', function(){
+        //     validasi();
+        // })
 
         $(document).on('change', '#no_transaksi_ref', function(){
             $('#no_transaksi').val("");
@@ -708,9 +733,9 @@
         $('.paket_produk_id').select2();
         function produk(){
             $('.produk_id').select2({
+                placeholder: "Pilih Produk",
                 ajax: {
                     minimumResultsForSearch: 20,
-                    placeholder: "Pilih Produk",
                     dataType: 'json',
                     theme: "bootstrap",
                     delay: 250,
@@ -736,9 +761,10 @@
         }
 
         $('.divisi_id').select2({
+                placeholder: "Pilih Divisi",
                 ajax: {
                     minimumResultsForSearch: 20,
-                    placeholder: "Pilih Divisi",
+
                     dataType: 'json',
                     theme: "bootstrap",
                     delay: 250,
@@ -767,9 +793,10 @@
 
         function part(){
             $('.part_id').select2({
+                placeholder: "Pilih Part",
                 ajax: {
                     minimumResultsForSearch: 20,
-                    placeholder: "Pilih Part",
+
                     dataType: 'json',
                     theme: "bootstrap",
                     delay: 250,
@@ -859,13 +886,15 @@
             no_ref_penjualan($(this).val());
         });
 
-        $('input[type="checkbox"][name="pilih_jenis_barang[]"]').on('change', function() {
+        $(document).on('change', 'input[name="pilih_jenis_barang[]"]', function() {
             var jenis_arry = [];
             var x = $(this).val();
 
             $('input[name="pilih_jenis_barang[]"]:checked').each(function() {
                 jenis_arry.push($(this).val());
             });
+
+            console.log(x);
 
             if ($('input[name="pilih_jenis_barang[]"]:checkbox:checked').length == 0) {
                 jenis_arry.push(x);

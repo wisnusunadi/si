@@ -1397,11 +1397,9 @@
             numberRowsProduk($("#produktable"));
             totalhargaprd();
             if ($('#produktable > tbody > tr').length <= 0) {
-                $('#totalhargaprd').text("Rp. 0");
-                ($("#c_produk").val(0))
-                $('#produktable tbody').empty();
-                $("#dataproduk").addClass("hide");
-                $("input[id=jenis_pen][value='produk']").prop("checked", false);
+                $('#produktable tbody').append(trproduktable());
+                numberRowsProduk($("#produktable"));
+                $("#totalhargaprd").text("Rp. 0");
             }
             checkvalidasi();
         });
@@ -1723,11 +1721,15 @@
             numberRowsPart($("#parttable"));
             totalhargapart();
             if ($('#parttable > tbody > tr').length <= 0) {
-                $('#totalhargapart').text("Rp. 0");
-                ($("#c_part").val(0))
-                $('#parttable tbody').empty();
-                $("#datapart").addClass("hide");
-                $("input[id=jenis_pen][value='sparepart']").prop("checked", false);
+                // $('#totalhargapart').text("Rp. 0");
+                // ($("#c_part").val(0))
+                // $('#parttable tbody').empty();
+                // $("#datapart").addClass("hide");
+                // $("input[id=jenis_pen][value='sparepart']").prop("checked", false);
+
+                $('#parttable tbody').append(trparttable());
+                numberRowsPart($("#parttable"));
+                $("#totalhargapart").text("Rp. 0");
             }
             checkvalidasi();
         });

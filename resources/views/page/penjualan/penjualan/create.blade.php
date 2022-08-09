@@ -63,7 +63,7 @@
     }
 
     .blue-bg {
-        background-color: #c8daea;
+        background-color: #e0eff3;
     }
 
     #penjualanform {
@@ -1086,7 +1086,6 @@
                 $('#produktable').find('.penjualan_produk_id').each(function() {
                     if ($(this).val() != "") {
                         penjualan_produk_id = true;
-                        console.log($(this).val());
                     }
                     else {
                         penjualan_produk_id = false;
@@ -1097,7 +1096,6 @@
                 $('#produktable').find('.variasi').each(function() {
                     if ($(this).val() != "") {
                         variasi = true;
-                        console.log($(this).val());
                     }
                     else {
                         variasi = false;
@@ -1108,7 +1106,6 @@
                 $('#produktable').find('.produk_jumlah').each(function() {
                     if ($(this).val() != "") {
                         produk_jumlah = true;
-                        console.log($(this).val());
                     }
                     else {
                         produk_jumlah = false;
@@ -1119,7 +1116,6 @@
                 $('#produktable').find('.produk_harga').each(function() {
                     if ($(this).val() != "") {
                         produk_harga = true;
-                        console.log($(this).val());
                     }
                     else {
                         produk_harga = false;
@@ -1137,7 +1133,6 @@
                 $('#parttable').find('.part_id').each(function() {
                     if ($(this).val() != null) {
                         part_id = true;
-                        console.log("part_id: "+$(this).val());
                     }
                     else {
                         part_id = false;
@@ -1148,7 +1143,6 @@
                 $('#parttable').find('.part_jumlah').each(function() {
                     if ($(this).val() != "") {
                         part_jumlah = true;
-                        console.log("part_jumlah: "+$(this).val());
                     }
                     else {
                         part_jumlah = false;
@@ -1159,7 +1153,6 @@
                 $('#parttable').find('.part_harga').each(function() {
                     if ($(this).val() != "") {
                         part_harga = true;
-                        console.log("part_harga: "+$(this).val());
                     }
                     else {
                         part_harga = false;
@@ -1196,13 +1189,6 @@
                 jasa_id = true;
                 jasa_harga = true;
             }
-
-            // alert(penjualan_produk_id +", "+
-            //     variasi +", "+
-            //     produk_jumlah +", "+
-            //     produk_harga +", "+part_id+", "+
-            //     part_jumlah+", "+
-            //     part_harga);
             if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
                 if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid')) && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
                     $('#btntambah').removeAttr("disabled");
@@ -1210,7 +1196,6 @@
                     $('#btntambah').attr("disabled", true);
                 }
             } else if ($('input[type="radio"][name="status"]:checked').val() == "draft" || $('input[type="radio"][name="status"]:checked').val() == "batal") {
-                alert("hai");
                 if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#status").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid'))) {
                     if (($('#no_paket').val() != "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length > 0 ) || ($('#no_paket').val() == "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length <= 0) &&  !$("#no_paket").hasClass('is-invalid') ) {
                         if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
@@ -1251,7 +1236,6 @@
                 $('#produktable').find('.penjualan_produk_id').each(function() {
                     if ($(this).val() != "") {
                         penjualan_produk_id = true;
-                        console.log($(this).val());
                     }
                     else {
                         penjualan_produk_id = false;
@@ -1262,7 +1246,6 @@
                 $('#produktable').find('.variasi').each(function() {
                     if ($(this).val() != "") {
                         variasi = true;
-                        console.log($(this).val());
                     }
                     else {
                         variasi = false;
@@ -1273,7 +1256,6 @@
                 $('#produktable').find('.produk_jumlah').each(function() {
                     if ($(this).val() != "") {
                         produk_jumlah = true;
-                        console.log($(this).val());
                     }
                     else {
                         produk_jumlah = false;
@@ -1284,7 +1266,6 @@
                 $('#produktable').find('.produk_harga').each(function() {
                     if ($(this).val() != "") {
                         produk_harga = true;
-                        console.log($(this).val());
                     }
                     else {
                         produk_harga = false;
@@ -1302,7 +1283,6 @@
                 $('#parttable').find('.part_id').each(function() {
                     if ($(this).val() != null) {
                         part_id = true;
-                        console.log("part_id: "+$(this).val());
                     }
                     else {
                         part_id = false;
@@ -1313,7 +1293,6 @@
                 $('#parttable').find('.part_jumlah').each(function() {
                     if ($(this).val() != "") {
                         part_jumlah = true;
-                        console.log("part_jumlah: "+$(this).val());
                     }
                     else {
                         part_jumlah = false;
@@ -1324,7 +1303,6 @@
                 $('#parttable').find('.part_harga').each(function() {
                     if ($(this).val() != "") {
                         part_harga = true;
-                        console.log("part_harga: "+$(this).val());
                     }
                     else {
                         part_harga = false;
@@ -1430,8 +1408,6 @@
                 $("input[id=jenis_pen][value='jasa']").attr("disabled", true);
 
 
-                console.log(produk_obj);
-
             } else if ($(this).val() == "spa") {
                 $("#datajasa").addClass("hide");
                 $("#datapart").addClass("hide");
@@ -1520,7 +1496,6 @@
 
             function filter_jenis(x){
               if( $.inArray("produk", x) !== -1 ) {
-                alert("Test Produk");
                 $("#dataproduk").removeClass("hide");
                 }else{
                 $("#dataproduk").addClass("hide");
@@ -1584,7 +1559,6 @@
             var cust = $('#customer_id').val();
             var instansi = $('#instansi').val();
             perencanaan(cust, instansi);
-            console.log($('.penjualan_produk_id > option:selected').length);
         })
 
         $('#alamatinstansi').on('keyup change', function() {
@@ -1949,8 +1923,9 @@
                 type: 'GET',
                 dataType: 'json',
                 success: function(data) {
+                    if(data[0] != undefined){
                     $('#alamat').val(data[0].alamat);
-                    $('#telepon').val(data[0].telp);
+                    $('#telepon').val(data[0].telp);}
                 }
             });
 
@@ -2635,6 +2610,8 @@
             numberRowsProduk($("#produktable"));
             totalhargaprd();
             if ($('#produktable > tbody > tr').length <= 0) {
+                $('#produktable tbody').append(trproduktable());
+                numberRowsProduk($("#produktable"));
                 $("#totalhargaprd").text("0");
             }
             if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
@@ -2661,8 +2638,8 @@
             });
         }
 
-        $('#addrowpart').on('click', function() {
-            $('#parttable tbody tr:last').after(`
+        function trparttable() {
+            var data = `
             <tr>
                 <td>1</td>
                 <td>
@@ -2693,8 +2670,19 @@
                 <td>
                     <a id="removerowpart"><i class="fas fa-minus" style="color: red"></i></a>
                 </td>
-            </tr>`);
-            numberRowsPart($("#parttable"));
+            </tr>`;
+            return data;
+        }
+
+        $('#addrowpart').on('click', function() {
+            if ($('#parttable > tbody > tr').length <= 0) {
+                $('#parttable tbody').append(trparttable());
+                numberRowsPart($("#parttable"));
+            } else {
+                $('#parttable tbody tr:last').after(trparttable());
+                numberRowsPart($("#parttable"));
+            }
+
             if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
                 checkvalidasi();
             }else{
@@ -2719,8 +2707,8 @@
             });
         }
 
-        $('#addrowjasa').on('click', function() {
-            $('#jasatable tbody tr:last').after(`
+        function trjasatable() {
+            var data = `
             <tr>
                 <td>1</td>
                 <td>
@@ -2744,8 +2732,27 @@
                 <td>
                     <a id="removerowjasa"><i class="fas fa-minus" style="color: red"></i></a>
                 </td>
-            </tr>`);
-            numberRowsJasa($("#jasatable"));
+            </tr>`;
+            return data;
+        }
+
+        $('#addrowjasa').on('click', function() {
+            if ($('#jasatable > tbody > tr').length <= 0) {
+                $('#jasatable tbody').append(trjasatable());
+                numberRowsPart($("#jasatable"));
+            } else {
+                $('#jasatable tbody tr:last').after(trjasatable());
+                numberRowsJasa($("#jasatable"));
+            }
+
+            if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
+                checkvalidasi();
+            }else{
+                checkvalidasinonakn();
+            }
+
+
+
             if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
                 checkvalidasi();
             }else{
@@ -2837,6 +2844,12 @@
             $(this).closest('tr').remove();
             numberRowsPart($("#parttable"));
             totalhargapart();
+            if ($('#parttable > tbody > tr').length <= 0) {
+                $('#parttable tbody').append(trparttable());
+                numberRowsPart($("#parttable"));
+                $("#totalhargapart").text("Rp. 0");
+            }
+
             if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
                 checkvalidasi();
             }else{
@@ -2848,6 +2861,11 @@
             $(this).closest('tr').remove();
             numberRowsJasa($("#jasatable"));
             totalhargajasa();
+            if ($('#jasatable > tbody > tr').length <= 0) {
+                $('#jasatable tbody').append(trjasatable());
+                numberRowsJasa($("#jasatable"));
+                $("#totalhargajasa").text("Rp. 0");
+            }
             if($('input[name="jenis_penjualan"]:checked').val() == "ekatalog"){
                 checkvalidasi();
             }else{
@@ -2856,9 +2874,9 @@
         });
 
         $('.provinsi').select2({
+            placeholder: "Pilih Provinsi",
             ajax: {
                 minimumResultsForSearch: 20,
-                placeholder: "Pilih Produk",
                 dataType: 'json',
                 theme: "bootstrap",
                 delay: 250,
