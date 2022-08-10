@@ -327,7 +327,7 @@ class DcController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                $hitung = round((($data->ccoo / $data->cseri) * 100), 0);
+                $hitung = floor((($data->ccoo / $data->cseri) * 100));
                 if($hitung > 0){
                     $datas = '<div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>

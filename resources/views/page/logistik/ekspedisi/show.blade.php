@@ -251,7 +251,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header bg-warning">
-                            <h4>Edit</h4>
+                            <h4>Ubah Ekspedisi</h4>
                         </div>
                         <div class="modal-body" id="edit">
 
