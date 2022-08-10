@@ -27,7 +27,8 @@
 <style>
     table { border-collapse: collapse; empty-cells: show; }
 
-td { position: relative; }
+    td { position: relative; }
+
     .foo {
         border-radius: 50%;
         float: left;
@@ -35,10 +36,6 @@ td { position: relative; }
         height: 10px;
         align-items: center !important;
     }
-
-    /* .line-through{
-        text-decoration: line-through;
-    } */
 
     tr.line-through td:not(:nth-last-child(-n+2)):before {
         content: " ";
@@ -1413,11 +1410,6 @@ td { position: relative; }
                         } else if (label == 'spa') {
                             const ctx = $('#myChart');
                             const myChart = new Chart(ctx, optionpie);
-
-                            // var chart = new ApexCharts(document.querySelector("#chartproduk"), options);
-                            // chart.render();
-                            // $('#detailmodal').find(".modal-header").attr('id', '');
-                            // $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-purple bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-orange');

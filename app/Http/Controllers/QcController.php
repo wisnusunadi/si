@@ -2171,7 +2171,6 @@ class QcController extends Controller
             ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
         }])->whereNotIn('log_id', ['7'])->havingRaw('jumlah_produk > jumlah_gudang')->count();
 
-
         $clogistik = Pesanan::addSelect(['cqcprd' => function($q){
             $q->selectRaw('count(noseri_detail_pesanan.id)')
                 ->from('noseri_detail_pesanan')

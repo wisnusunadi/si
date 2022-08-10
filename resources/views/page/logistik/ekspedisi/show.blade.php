@@ -251,7 +251,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header bg-warning">
-                            <h4>Edit</h4>
+                            <h4>Ubah Ekspedisi</h4>
                         </div>
                         <div class="modal-body" id="edit">
 
@@ -263,7 +263,7 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header yellow-bg">
-                            <h4 class="modal-title"><b>Hapus</b></h4>
+                            <h4 class="modal-title"><b>Hapus Ekspedisi</b></h4>
                         </div>
                         <div class="modal-body" id="hapus">
                             <div class="row">

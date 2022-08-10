@@ -21,6 +21,18 @@
 @stop
 @section('adminlte_css')
 <style>
+    .m-fadeOut {
+        visibility: hidden;
+        opacity: 0;
+        transition: visibility 0s linear 300ms, opacity 300ms;
+    }
+
+    .m-fadeIn {
+        visibility: visible;
+        opacity: 0.6;
+        transition: visibility 0s linear 0s, opacity 300ms;
+    }
+
     .urgent {
         color: #dc3545;
         font-weight: 600;

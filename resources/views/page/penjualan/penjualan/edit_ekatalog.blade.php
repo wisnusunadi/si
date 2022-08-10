@@ -1181,6 +1181,7 @@
                     $("#status").addClass('is-invalid');
                     $('#btntambah').attr("disabled", true);
                 }
+                checkvalidasi();
             });
 
             $('input[name="status_akn"][value={{$e->status}}]').attr('checked', 'checked');
@@ -1477,11 +1478,9 @@
                 var totalharga = 0;
                 $('#produktable').find('tr .produk_subtotal').each(function() {
                     var subtotal = replaceAll($(this).val(), '.', '');
-                    console.log(totalharga);
                     totalharga = parseInt(totalharga) + parseInt(subtotal);
                     $("#totalhargaprd").text("Rp. " + totalharga.toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1."));
                 })
-
             }
 
             function numberRowsProduk($t) {

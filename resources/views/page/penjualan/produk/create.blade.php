@@ -18,7 +18,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0  text-dark">Produk</h1>
+                <h1 class="m-0  text-dark">Tambah Produk</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -59,12 +59,11 @@
                         {{ csrf_field() }}
                         <div class="row d-flex justify-content-center">
                             <div class="col-11">
-                                <div class="card">
-                                    <div class="card-header bg-info">
-                                        <h5 class="card-title"><i class="fas fa-plus"></i> Tambah Paket</h5>
+                                <div class="card card-outline card-info">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Info Umum Paket</h5>
                                     </div>
                                     <div class="card-body">
-                                        <h5>Info Umum Paket</h5>
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group row">
@@ -134,8 +133,16 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <hr />
-                                        <h5 class="pt-5">Detail Produk Paket</h5>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="card card-outline card-info">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Detail Produk Paket</h5>
+                                    </div>
+                                    <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="table-responsive">
@@ -291,14 +298,12 @@
                 </tr>`);
                 validasi();
                 numberRows($("#createtable"));
-
             });
 
             $('#createtable').on('click', '#removerow', function(e) {
                 $(this).closest('tr').remove();
                 validasi();
                 numberRows($("#createtable"));
-
             });
 
             $('#harga').on('keyup change', function() {
@@ -337,7 +342,6 @@
                     $('#msgnama_paket').text("Nama Paket Harus diisi");
                     $('#nama_paket').addClass("is-invalid");
                 }
-
                 validasi();
             });
 
@@ -346,10 +350,8 @@
             });
 
             $(document).on('keyup change', '#createtable .jumlah', function(){
-                validasi()
-                console.log("test");
-
-            })
+                validasi();
+            });
 
             function select_data() {
                 $('.produk_id').select2({

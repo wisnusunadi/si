@@ -151,7 +151,7 @@
         }
 
         h4 {
-            font-size: 20px;e
+            font-size: 20px;
         } */
         section {
             font-size: 12px;
@@ -1414,7 +1414,6 @@
                 $("input[id=jenis_pen][value='sparepart']").attr("disabled", true);
                 $("input[id=jenis_pen][value='jasa']").attr("disabled", true);
 
-
             } else if ($(this).val() == "spa") {
                 $("#datajasa").addClass("hide");
                 $("#datapart").addClass("hide");
@@ -1543,7 +1542,6 @@
                 $("#msgbatas_kontrak").text("Tanggal Delivery Harus diisi");
                 $("#batas_kontrak").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
-
             }
             checkvalidasi();
         });
@@ -1631,7 +1629,7 @@
                     $("#dataproduk").addClass("hide");
                     $("#batas_kontrak").attr('disabled', true);
                     $("#provinsi").attr('disabled', true);
-                    $("#provinsi").empty().trigger('change')
+                    $("#provinsi").empty().trigger('change');
                     $('#isi_produk_input').removeClass('hide');
                 }
                 else if ($(this).val() == "batal") {
@@ -1787,7 +1785,6 @@
                         } else {
                             $("#msgno_urut").text("");
                             $("#no_urut").removeClass('is-invalid');
-                            checkvalidasi();
                         }
                     },
                     error: function(data) {
@@ -1796,14 +1793,12 @@
                         $('#btntambah').attr("disabled", true);
                     }
                 });
-                // $("#msgno_urut").text("");
-                // $("#no_urut").removeClass('is-invalid');
-                checkvalidasi();
             } else if ($(this).val() == "") {
                 $("#msgno_urut").text("No Urut Harus diisi");
                 $("#no_urut").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
+            checkvalidasi();
         });
 
         $('#no_po').on('keyup change', function() {
@@ -1900,7 +1895,6 @@
             placeholder: "Pilih Customer",
             ajax: {
                 minimumResultsForSearch: 20,
-
                 dataType: 'json',
                 theme: "bootstrap",
                 delay: 250,
@@ -1931,8 +1925,9 @@
                 dataType: 'json',
                 success: function(data) {
                     if(data[0] != undefined){
-                    $('#alamat').val(data[0].alamat);
-                    $('#telepon').val(data[0].telp);}
+                        $('#alamat').val(data[0].alamat);
+                        $('#telepon').val(data[0].telp);
+                    }
                 }
             });
 
@@ -2039,7 +2034,6 @@
             //         $("#produktable ").append('<tr><td>Detail Paket</td></tr>');
             //     }
             // });
-
 
             $('.penjualan_produk_id').select2({
                 placeholder: "Pilih Produk",
@@ -2404,11 +2398,7 @@
             var data = `<tr>
                     <td></td>
                     <td>
-<<<<<<< HEAD
-                        <div class="form-group select_produk">
-=======
-                        <div class="form-group select_item">
->>>>>>> 0eb0edf1762c06fac21c5f0f8eb34f9a8136c06e
+                        <div class="form-group">
                             <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                 <option value="` + produk_id + `">` + nama_produk + `</option>
                             </select>

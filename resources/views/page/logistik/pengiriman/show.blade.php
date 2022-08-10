@@ -420,58 +420,64 @@
 @section('adminlte_js')
 <script>
     $(function() {
-        $('#riwayattable').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '/api/logistik/pengiriman/riwayat/data/semua/semua/semua',
-                'dataType': 'json',
-                'type': 'POST',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-            },
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'so'
-                },
-                {
-                    data: 'sj',
-
-                },
-                {
-                    data: 'ekspedisi',
-
-                },
-                {
-                    data: 'no_resi',
-
-                }, {
-                    data: 'tgl_kirim',
-
-                }, {
-                    data: 'nama_customer',
-
-                }, {
-                    data: 'provinsi',
-
-                }, {
-                    data: 'status',
-
-                }, {
-                    data: 'button',
-
-                }
-            ]
+        $(document).on('click', '#pills-selesai_kirim-tab', function(){
+            selesai_kirim();
         });
+
+        function selesai_kirim(){
+            $('#riwayattable').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/api/logistik/pengiriman/riwayat/data/semua/semua/semua',
+                    'dataType': 'json',
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    }
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                        data: 'DT_RowIndex',
+                        orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'so'
+                    },
+                    {
+                        data: 'sj',
+
+                    },
+                    {
+                        data: 'ekspedisi',
+
+                    },
+                    {
+                        data: 'no_resi',
+
+                    }, {
+                        data: 'tgl_kirim',
+
+                    }, {
+                        data: 'nama_customer',
+
+                    }, {
+                        data: 'provinsi',
+
+                    }, {
+                        data: 'status',
+
+                    }, {
+                        data: 'button',
+
+                    }
+                ]
+            });
+        }
 
         $('#filter_riwayat').submit(function() {
             var values_pengiriman = [];

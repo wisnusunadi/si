@@ -395,7 +395,6 @@
         });
 
 
-
         var showtable = $('#showtable').DataTable({
             destroy: true,
             processing: true,

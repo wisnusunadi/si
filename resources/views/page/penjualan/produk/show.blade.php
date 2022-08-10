@@ -31,7 +31,6 @@
             text-overflow: inherit !important;
             white-space: normal !important;
         }
-
         .nowrap-text {
             white-space: nowrap;
         }
@@ -70,7 +69,7 @@
             color: #997a00;
         }
 
-        .tabnum {
+        .tabnum{
             font-variant-numeric: tabular-nums;
         }
 
@@ -83,11 +82,11 @@
                 font-size: 14px;
             }
 
-            .btn {
-                font-size: 14px;
+            .btn{
+                font-size:14px;
             }
 
-            .labelket {
+            .labelket{
                 text-align: right;
             }
         }
@@ -101,15 +100,14 @@
                 font-size: 12px;
             }
 
-            .btn {
-                font-size: 12px;
+            .btn{
+                font-size:12px;
             }
 
-            .labelket {
+            .labelket{
                 text-align: right;
             }
         }
-
     </style>
 @stop
 @section('content')
@@ -117,7 +115,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div class="col-12">
-                    @if (Session::has('error') || count($errors) > 0)
+                    @if(Session::has('error') || count($errors) > 0)
                         <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
                             <strong>Gagal menambahkan!</strong> Periksa
                             kembali data yang diinput
@@ -141,22 +139,20 @@
                                     <div class="row" style="margin-bottom: 5px">
                                         <div class="col-12">
                                             <span class="float-left filter">
-                                                <a id="exportbutton" href="{{ route('master.produk.export') }}"><button
-                                                        class="btn btn-success">
+                                                <a id="exportbutton" href="{{route('master.produk.export')}}"><button class="btn btn-success">
                                                         <i class="far fa-file-excel" id="load"></i> Export
                                                     </button>
                                                 </a>
                                             </span>
                                             <span class="float-right">
-                                                <a href="{{ route('penjualan.produk.create') }}">
+                                                <a href="{{route('penjualan.produk.create')}}">
                                                     <button class="btn btn-info">
                                                         <i class="fas fa-plus"></i> Tambah
                                                     </button>
                                                 </a>
                                             </span>
                                             <span class="float-right" style="margin-right: 5px">
-                                                <button class="btn btn-outline-secondary dropdown-toggle"
-                                                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                <button class="btn btn-outline-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <i class="fas fa-filter"></i> Filter
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-right">
@@ -166,40 +162,32 @@
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input type="checkbox" class="form-check-input"
-                                                                    id="dropdownkelompokproduk" value="1" name="produk" />
-                                                                <label class="form-check-label"
-                                                                    for="dropdownkelompokproduk">
+                                                                <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="1" name="produk" />
+                                                                <label class="form-check-label" for="dropdownkelompokproduk">
                                                                     Alat Kesehatan
                                                                 </label>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input type="checkbox" class="form-check-input"
-                                                                    id="dropdownkelompokproduk" value="2" name="produk" />
-                                                                <label class="form-check-label"
-                                                                    for="dropdownkelompokproduk">
+                                                                <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="2" name="produk" />
+                                                                <label class="form-check-label" for="dropdownkelompokproduk">
                                                                     Sarana Kesehatan
                                                                 </label>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input type="checkbox" class="form-check-input"
-                                                                    id="dropdownkelompokproduk" value="3" name="produk" />
-                                                                <label class="form-check-label"
-                                                                    for="dropdownkelompokproduk">
+                                                                <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="3" name="produk" />
+                                                                <label class="form-check-label" for="dropdownkelompokproduk">
                                                                     Aksesoris
                                                                 </label>
                                                             </div>
                                                         </div>
                                                         <div class="form-group">
                                                             <div class="form-check">
-                                                                <input type="checkbox" class="form-check-input"
-                                                                    id="dropdownkelompokproduk" value="4" name="produk" />
-                                                                <label class="form-check-label"
-                                                                    for="dropdownkelompokproduk">
+                                                                <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="4" name="produk" />
+                                                                <label class="form-check-label" for="dropdownkelompokproduk">
                                                                     Lain - lain
                                                                 </label>
                                                             </div>
@@ -208,15 +196,13 @@
                                                             Harga Minimum
                                                         </div>
                                                         <div class="form-group">
-                                                            <input type="text" style="width:200px;" class="form-control"
-                                                                id="harga_min" name="stok" value="0" />
+                                                            <input type="text" style="width:200px;" class="form-control" id="harga_min" name="stok" value="0" />
                                                         </div>
                                                         <div class="dropdown-header">
                                                             Harga Maksimum
                                                         </div>
                                                         <div class="form-group">
-                                                            <input type="text" style="width:200px;" class="form-control"
-                                                                id="harga_maks" name="stok" value="0" disabled />
+                                                            <input type="text" style="width:200px;" class="form-control" id="harga_maks" name="stok" value="0" disabled />
                                                         </div>
 
                                                         <button class="btn btn-primary float-right">
@@ -253,8 +239,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="modaldetail" role="dialog" aria-labelledby="modaldetail"
-                        aria-hidden="true">
+                    <div class="modal fade" id="modaldetail" role="dialog" aria-labelledby="modaldetail" aria-hidden="true">
                         <div class="modal-dialog modal-xl" role="document">
                             <div class="modal-content" style="margin: 10px">
                                 <div class="modal-header borderless blue-bg">
@@ -310,8 +295,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal"
-                        aria-hidden="true">
+                    <div class="modal fade" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                         <div class="modal-dialog modal-xl" role="document">
                             <div class="modal-content" style="margin: 10px">
                                 <div class="modal-header yellow-bg">
@@ -323,8 +307,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal"
-                        aria-hidden="true">
+                    <div class="modal fade" id="hapusmodal" role="dialog" aria-labelledby="hapusmodal" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content" style="margin: 10px">
                                 <div class="modal-header bg-danger">
@@ -337,16 +320,13 @@
                                                 @method('delete')
                                                 @csrf
                                                 <div class="card">
-                                                    <div class="card-body">Apakah Anda yakin ingin menghapus data ini?
-                                                    </div>
+                                                    <div class="card-body">Apakah Anda yakin ingin menghapus data ini?</div>
                                                     <div class="card-footer">
                                                         <span class="float-left">
-                                                            <button type="button" class="btn btn-secondary"
-                                                                data-dismiss="modal">Batal</button>
+                                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
                                                         </span>
                                                         <span class="float-right">
-                                                            <button type="submit" class="btn btn-danger "
-                                                                id="btnhapus">Hapus</button>
+                                                            <button type="submit" class="btn btn-danger " id="btnhapus">Hapus</button>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -686,7 +666,7 @@
                             "dataType": "json",
                             'type': 'POST',
                             'headers': {
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                                'X-CSRF-TOKEN': '{{csrf_token()}}'
                             }
                         },
                         columns: [{
@@ -728,10 +708,7 @@
                             $('#edit').html(result).show();
                             $("#editform").attr("action", href);
                             $('.produk_id').select2();
-                            // var x = 3;
-                            // for (i = 0; i < 10; i++) {
-                                select_data();
-                            // }
+                            select_data();
 
                         },
                         complete: function() {
@@ -745,7 +722,6 @@
                         timeout: 8000
                     })
                 });
-
                 $(document).on('click', '.hapusmodal', function(event) {
                     event.preventDefault();
                     var href = $(this).attr('data-attr');
@@ -851,6 +827,7 @@
                         $('#msgharga').text("Harga Harus diisi");
                         $('#harga').addClass("is-invalid");
                     }
+                    validasi();
                 });
 
                 function select_data() {
@@ -920,7 +897,6 @@
                         $('#msgnama_paket').text("Nama Paket Harus diisi");
                         $('#nama_paket').addClass("is-invalid");
                     }
-
                     validasi();
                 });
 
@@ -992,8 +968,7 @@
                     console.log(z);
                     console.log(x);
 
-                    $('#showtable').DataTable().ajax.url('/api/penjualan_produk/data/' + x + '/' + y + '/' + z +
-                        '').load();
+                    $('#showtable').DataTable().ajax.url('/api/penjualan_produk/data/' + x + '/' + y + '/' + z + '').load();
                     return false;
                 });
             });

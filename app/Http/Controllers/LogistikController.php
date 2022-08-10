@@ -277,7 +277,6 @@ class LogistikController extends Controller
 
         return datatables()->of($data)
             ->addIndexColumn()
-
             ->addColumn('no_seri', function ($data) {
                 return $data->NoseriTGbj->NoseriBarangJadi->noseri;
             })
@@ -756,7 +755,6 @@ class LogistikController extends Controller
 
         return datatables()->of($data)
             ->addIndexColumn()
-
             ->addColumn('no_seri', function ($data) {
                 return $data->NoseriTGbj->NoseriBarangJadi->noseri;
             })
@@ -4309,8 +4307,6 @@ $Logistik = Logistik::find($request->sj_lama);
         echo json_encode($data);
     }
 
-
-
     public function get_data_laporan_logistik($pengiriman, $ekspedisi, $tgl_awal, $tgl_akhir)
     {
         $s = "";
@@ -4453,7 +4449,7 @@ $Logistik = Logistik::find($request->sj_lama);
             ->make(true);
     }
 
-    static function tgl_footer($value)
+    public function tgl_footer($value)
     {
         $footer = Carbon::createFromFormat('Y-m-d', $value)->isoFormat('D MMMM Y');
         return $footer;
