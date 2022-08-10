@@ -4,7 +4,7 @@
             <div class="col-lg-4 col-md-12">
                 <div class="card card-outline card-secondary">
                     <div class="card-header">
-                        <h6 class="card-title">Customer</h6>
+                        <h6 class="card-title">Info Produk</h6>
                         <div class="card-tools">
                             <button type="button" class="btn btn-tool" data-card-widget="collapse">
                             <i class="fas fa-minus"></i>

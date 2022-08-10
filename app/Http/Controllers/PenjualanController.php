@@ -1452,67 +1452,67 @@ class PenjualanController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_customer', function ($data) {
-                    $name = explode('/', $data->so);
-                    if ($name[1] == 'EKAT') {
-                     $datas = $data->c_ekat_nama;
-                      if ($data->satuan) {
-                        $datas .= "<div><small>" . $data->satuan . "</small></div>";
-                    }
-                          } else if ($name[1] == 'SPA') {
-                    $datas = $data->c_spa_nama;
-                      } else if ($name[1] == 'SPB') {
-                    $datas = $data->c_spb_nama;
-                      }
+                    // $name = explode('/', $data->so);
+                    // if ($name[1] == 'EKAT') {
+                    //  $datas = $data->c_ekat_nama;
+                    //   if ($data->satuan) {
+                    //     $datas .= "<div><small>" . $data->satuan . "</small></div>";
+                    // }
+                    //       } else if ($name[1] == 'SPA') {
+                    // $datas = $data->c_spa_nama;
+                    //   } else if ($name[1] == 'SPB') {
+                    // $datas = $data->c_spb_nama;
+                    //   }
 
-                     return $datas;
+                    //  return $datas;
                 })
                 ->addColumn('so', function ($data) {
-                    if ($data->so) {
-                        return $data->so;
-                    } else {
-                        return '';
-                    }
+                    // if ($data->so) {
+                    //     return $data->so;
+                    // } else {
+                    //     return '';
+                    // }
                 })
                 ->addColumn('no_po', function ($data) {
-                    if ($data->no_po) {
-                        return $data->no_po;
-                    } else {
-                        return '';
-                    }
+                    // if ($data->no_po) {
+                    //     return $data->no_po;
+                    // } else {
+                    //     return '';
+                    // }
                 })
                 ->addColumn('tgl_po', function ($data) {
-                    if ($data->tgl_po) {
-                        if ($data->tgl_po != "0000-00-00" && !empty($data->tgl_po)) {
-                            return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
-                        } else {
-                            return '-';
-                        }
-                    } else {
-                        return '-';
-                    }
+                    // if ($data->tgl_po) {
+                    //     if ($data->tgl_po != "0000-00-00" && !empty($data->tgl_po)) {
+                    //         return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+                    //     } else {
+                    //         return '-';
+                    //     }
+                    // } else {
+                    //     return '-';
+                    // }
                 })
 
                 ->addColumn('log', function ($data) {
-                    $datas = "";
-                    if (!empty($data->state_nama)) {
-                        if ($data->state_nama == "Penjualan") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->state_nama == "PO") {
-                            $datas .= '<span class="purple-text badge">';
-                        } else if ($data->state_nama == "Gudang") {
-                            $datas .= '<span class="orange-text badge">';
-                        } else if ($data->state_nama == "QC") {
-                            $datas .= '<span class="yellow-text badge">';
-                        } else if ($data->state_nama == "Belum Terkirim") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->state_nama == "Terkirim Sebagian") {
-                            $datas .= '<span class="blue-text badge">';
-                        } else if ($data->state_nama == "Kirim") {
-                            $datas .= '<span class="green-text badge">';
-                        }
-                        $datas .= ucfirst($data->state_nama) . '</span>';
-                    }
-                    return $datas;
+                    // $datas = "";
+                    // if (!empty($data->state_nama)) {
+                    //     if ($data->state_nama == "Penjualan") {
+                    //         $datas .= '<span class="red-text badge">';
+                    //     } else if ($data->state_nama == "PO") {
+                    //         $datas .= '<span class="purple-text badge">';
+                    //     } else if ($data->state_nama == "Gudang") {
+                    //         $datas .= '<span class="orange-text badge">';
+                    //     } else if ($data->state_nama == "QC") {
+                    //         $datas .= '<span class="yellow-text badge">';
+                    //     } else if ($data->state_nama == "Belum Terkirim") {
+                    //         $datas .= '<span class="red-text badge">';
+                    //     } else if ($data->state_nama == "Terkirim Sebagian") {
+                    //         $datas .= '<span class="blue-text badge">';
+                    //     } else if ($data->state_nama == "Kirim") {
+                    //         $datas .= '<span class="green-text badge">';
+                    //     }
+                    //     $datas .= ucfirst($data->state_nama) . '</span>';
+                    // }
+                    // return $datas;
                 })
                 ->rawColumns(['log', 'nama_customer'])
                 ->make(true);
@@ -1734,7 +1734,6 @@ class PenjualanController extends Controller
                         <small class="text-muted align-center">Selesai</small></div>';
                     }
                 }
-
                 $tgl_kontrak = "";
                 if($data->tgl_kontrak_custom != ""){
                     if($data->Pesanan->log_id != '10'){
@@ -1761,7 +1760,6 @@ class PenjualanController extends Controller
                         $tgl_kontrak = Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
                     }
                 }
-
         return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data, 'status' => $status, 'tgl_kontrak' => $tgl_kontrak]);
     }
 

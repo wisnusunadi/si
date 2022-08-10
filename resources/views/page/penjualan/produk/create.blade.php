@@ -353,6 +353,9 @@
                 validasi();
             });
 
+            $(document).on('keyup change', '#createtable .jumlah', function(){
+                validasi();
+            });
             function select_data() {
                 $('.produk_id').select2({
                     placeholder: "Pilih Produk",

@@ -33,7 +33,6 @@
     text-overflow: inherit !important;
     white-space: normal !important;
     }
-
     .hide {
         display: none !important
     }

@@ -24,6 +24,7 @@
     <style>
         table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
             height: 100% !important;
+
         }
 
         table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
@@ -233,6 +234,7 @@
                                                     </tbody>
                                                 </table>
                                             </div>
+
                                         </div>
                                     </div>
                                 </div>
@@ -266,6 +268,10 @@
                                                         <div><small class="text-muted">Jenis Produk</small></div>
                                                         <div><b id="jenis_produk"></b></div>
                                                     </div>
+                                                </div>
+                                                <div class="filter">
+                                                    <div><small class="text-muted">Jenis Produk</small></div>
+                                                    <div><b id="jenis_produk"></b></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -769,6 +775,7 @@
                                 'Data telah digunakan dalam Transaksi Lain',
                                 'warning'
                             );
+
                         }
                     });
                     return false;
@@ -856,6 +863,7 @@
                                     })
                                 };
                             },
+
                         }
                     }).change(function() {
                         var value = $(this).val();
@@ -903,6 +911,7 @@
                 $(document).on('keyup change', '#nama_alias', function() {
                     validasi();
                 });
+
 
                 $(document).on('keyup change', '#createtable .jumlah', function(){
                     validasi();
