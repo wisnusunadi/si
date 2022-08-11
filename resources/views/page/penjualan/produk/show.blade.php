@@ -24,7 +24,6 @@
     <style>
         table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
             height: 100% !important;
-
         }
 
         table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
@@ -32,6 +31,12 @@
             text-overflow: inherit !important;
             white-space: normal !important;
         }
+
+        .modal-body{
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
         .nowrap-text {
             white-space: nowrap;
         }
@@ -61,13 +66,13 @@
         }
 
         .blue-bg {
-            background-color: #dae6f0;
-            color: #4682B4;
+            background-color: #e0eff3;
+            color: #17a2b8;
         }
 
         .yellow-bg {
-            background-color: #ffe680;
-            color: #997a00;
+            background-color: #fff4dc;
+            color: #ffc107;
         }
 
         .tabnum{
@@ -245,7 +250,7 @@
                         <div class="modal-dialog modal-xl" role="document">
                             <div class="modal-content" style="margin: 10px">
                                 <div class="modal-header borderless blue-bg">
-                                    <h4 class="modal-title"><b>Detail</b></h4>
+                                    <h4 class="modal-title"><b>Detail Paket Produk</b></h4>
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                         <span aria-hidden="true">&times;</span>
                                     </button>
@@ -268,10 +273,6 @@
                                                         <div><small class="text-muted">Jenis Produk</small></div>
                                                         <div><b id="jenis_produk"></b></div>
                                                     </div>
-                                                </div>
-                                                <div class="filter">
-                                                    <div><small class="text-muted">Jenis Produk</small></div>
-                                                    <div><b id="jenis_produk"></b></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -305,7 +306,10 @@
                         <div class="modal-dialog modal-xl" role="document">
                             <div class="modal-content" style="margin: 10px">
                                 <div class="modal-header yellow-bg">
-                                    <h4 class="modal-title"><b>Ubah</b></h4>
+                                    <h4 class="modal-title"><b>Ubah Paket Produk</b></h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                                 <div class="modal-body" id="edit">
 
@@ -317,7 +321,7 @@
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content" style="margin: 10px">
                                 <div class="modal-header bg-danger">
-                                    <h4 class="modal-title"><b>Hapus</b></h4>
+                                    <h4 class="modal-title"><b>Hapus Paket Produk</b></h4>
                                 </div>
                                 <div class="modal-body" id="hapus">
                                     <div class="row">
@@ -818,7 +822,10 @@
                 });
 
                 $(document).on('click', '#createtable #removerow', function(e) {
-                    $(this).closest('tr').remove();
+                    if ($('#createtable > tbody > tr').length > 1) {
+                        $(this).closest('tr').remove();
+
+                    }
                     numberRows($("#createtable"));
                     validasi();
                 });

@@ -25,6 +25,10 @@
 
 @section('adminlte_css')
 <style>
+    .modal-body{
+        max-height: 80vh;
+        overflow-y: auto;
+    }
     .hide{
         display: none !important
     }
@@ -228,7 +232,7 @@
                                 <div class="modal-header bg-warning">
                                     <h4 class="modal-title"><b>Ubah</b></h4>
                                 </div>
-                                <div class="modal-body bg-color" id="edit">
+                                <div class="modal-body" id="edit">
 
                                 </div>
                             </div>

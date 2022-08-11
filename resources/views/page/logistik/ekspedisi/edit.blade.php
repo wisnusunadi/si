@@ -21,9 +21,9 @@
                     </div>
             @endif
             <div class="card card-outline card-warning">
-                {{-- <div class="card-header">
-                    <h6 class="card-title">Identitas</h6>
-                </div> --}}
+                <div class="card-header">
+                    <h6 class="card-title">Informasi Umum</h6>
+                </div>
                 <div class="card-body">
                     <div class="form-group row">
                         <label for="nama_ekspedisi" class="col-lg-4 col-md-12 col-form-label labelket">Nama Ekspedisi</label>
@@ -61,9 +61,9 @@
             </div>
 
             <div class="card card-outline card-warning">
-                {{-- <div class="card-header">
-                    <h6 class="card-title">Identitas</h6>
-                </div> --}}
+                <div class="card-header">
+                    <h6 class="card-title">Detail Ekspedisi</h6>
+                </div>
                 <div class="card-body">
                     <div class="form-group row">
                         <label for="" class="col-lg-4 col-md-12 col-form-label labelket">Jalur</label>

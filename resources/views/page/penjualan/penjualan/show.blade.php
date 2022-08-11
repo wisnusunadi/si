@@ -25,6 +25,10 @@
 
 @section('adminlte_css')
 <style>
+    .modal-body{
+        max-height: 80vh;
+        overflow-y: auto;
+    }
     table { border-collapse: collapse; empty-cells: show; }
 
     td { position: relative; }
@@ -1048,232 +1052,15 @@
     </script>
     <script>
         $(function() {
-            // var options = {
-            //     series: [0, 0, 0],
-            //     chart: {
-            //         height: 300,
-            //         type: 'radialBar',
-            //     },
-            //     plotOptions: {
-            //         radialBar: {
-            //             dataLabels: {
-            //                 name: {
-            //                     fontSize: '20px',
-            //                 },
-            //                 value: {
-            //                     fontSize: '14px',
-            //                 },
-            //                 total: {
-            //                     show: true,
-            //                     label: 'Progress',
-            //                     color: '#5F7A90',
-            //                     formatter: function (w) {
-            //                         return Math.round(w.globals.seriesTotals.reduce((a, b) => {
-            //                             return a + b
-            //                         }, 0) / w.globals.series.length) + '%'
-            //                     }
-            //                 }
-            //             }
-            //         }
-            //     },
-            //     colors: ['#EA8B1B', '#FFC700', '#456600'],
-            //     labels: ['Gudang', 'QC', 'Logistik'],
-            // };
-
-            // var optionsgudang = {
-            //     chart: {
-            //         height: 250,
-            //         type: "radialBar",
-            //     },
-
-            //     series: [100],
-            //     colors: ["#FC575E"],
-            //     plotOptions: {
-            //         radialBar: {
-            //             hollow: {
-            //                 margin: 0,
-            //                 size: "70%",
-            //                 background: "#fff"
-            //             },
-            //             track: {
-            //                 dropShadow: {
-            //                     enabled: true,
-            //                     top: 2,
-            //                     left: 0,
-            //                     blur: 4,
-            //                     opacity: 0.15
-            //                 }
-            //             },
-            //             dataLabels: {
-            //                 name: {
-            //                     offsetY: -10,
-            //                     color: "#ef5734",
-            //                     fontSize: "13px"
-            //                 },
-            //                 value: {
-            //                     color: "#ef5734",
-            //                     fontSize: "30px",
-            //                     show: true
-            //                 }
-            //             }
-            //         }
-            //     },
-            //     fill: {
-            //         type: "gradient",
-            //         gradient: {
-            //         shade: "dark",
-            //         type: "vertical",
-            //         gradientToColors: ["#F7B42C"],
-            //         stops: [0, 100]
-            //         }
-            //     },
-            //     stroke: {
-            //         lineCap: "round"
-            //     },
-            //     labels: ["Gudang"]
-            // };
-
-            // var optionslogistik = {
-            //     chart: {
-            //         height: 250,
-            //         type: "radialBar",
-            //     },
-
-            //     series: [100],
-            //     colors: ["#20BF55"],
-            //     plotOptions: {
-            //         radialBar: {
-            //             hollow: {
-            //                 margin: 0,
-            //                 size: "70%",
-            //                 background: "#fff"
-            //             },
-            //             track: {
-            //                 dropShadow: {
-            //                 enabled: true,
-            //                 top: 2,
-            //                 left: 0,
-            //                 blur: 4,
-            //                 opacity: 0.15
-            //                 }
-            //             },
-            //             dataLabels: {
-            //                 name: {
-            //                 offsetY: -10,
-            //                 color: "#14557b",
-            //                 fontSize: "13px"
-            //                 },
-            //                 value: {
-            //                 color: "#14557b",
-            //                 fontSize: "30px",
-            //                 show: true
-            //                 }
-            //             }
-            //         }
-            //     },
-            //     fill: {
-            //         type: "gradient",
-            //         gradient: {
-            //         shade: "dark",
-            //         type: "vertical",
-            //         gradientToColors: ["#01BAEF"],
-            //         stops: [0, 100]
-            //         }
-            //     },
-            //     stroke: {
-            //         lineCap: "round"
-            //     },
-            //     labels: ["Logistik"]
-            // };
-
-            // var optionsqc = {
-            //     chart: {
-            //         height: 250,
-            //         type: "radialBar",
-            //     },
-
-            //     series: [100],
-            //     colors: ["#ffc907"],
-            //     plotOptions: {
-            //         radialBar: {
-            //             hollow: {
-            //                 margin: 0,
-            //                 size: "70%",
-            //                 background: "#fff"
-            //             },
-            //             track: {
-            //                 dropShadow: {
-            //                 enabled: true,
-            //                 top: 2,
-            //                 left: 0,
-            //                 blur: 4,
-            //                 opacity: 0.15
-            //                 }
-            //             },
-            //             dataLabels: {
-            //                 name: {
-            //                 offsetY: -10,
-            //                 color: "#9b870c",
-            //                 fontSize: "13px"
-            //                 },
-            //                 value: {
-            //                 color: "#9b870c",
-            //                 fontSize: "30px",
-            //                 show: true
-            //                 }
-            //             }
-            //         }
-            //     },
-            //     fill: {
-            //         type: "gradient",
-            //         gradient: {
-            //         shade: "dark",
-            //         type: "vertical",
-            //         gradientToColors: ["#b5c327"],
-            //         stops: [0, 100]
-            //         }
-            //     },
-            //     stroke: {
-            //         lineCap: "round"
-            //     },
-            //     labels: ["QC"]
-            // };
-
-        //    var optionpie =  {
-        //         type: 'pie',
-        //         data: {
-        //             labels: [
-        //                 'Gudang',
-        //                 'QC',
-        //                 'Logistik',
-        //                 'Kirim',
-        //             ],
-        //             datasets: [{
-        //                 label: 'STATUS PESANAN',
-        //                 data: [10 ,0, 0,0],
-        //                 backgroundColor: [
-
-        //                 'rgb(236, 159, 5)',
-        //                 'rgb(255, 221, 0)',
-        //                 'rgb(11, 171, 100)',
-        //                 'rgb(8, 126, 225)'
-        //                 ],
-        //                 hoverOffset: 4
-        //             }]
-        //         }
-        //         }
-
-
-
-                    var optionpie = {
-                        type: 'pie',
+            var optionpie = {
+                type: 'pie',
                 data: {
                     labels: [
                         '-',
                     ],
                     datasets: [{
                         label: 'STATUS PESANAN',
-                        data: [0],
+                        data: [1],
                         backgroundColor: [
                             'rgba(192, 192, 192, 0.2)',
                         ],
@@ -1330,25 +1117,25 @@
                 const ctx = $('#myChart');
                 if(produk == 'part'){
                     const myChart = new Chart(ctx, {
-                    type: 'pie',
-                data: {
-                    labels: [
-                        'QC',
-                        'Logistik',
-                        'Kirim',
-                    ],
-                    datasets: [{
-                        label: 'STATUS PESANAN',
-                        data: [qc, log, ki],
-                        backgroundColor: [
-                        'rgb(255, 221, 0)',
-                        'rgb(11, 171, 100)',
-                        'rgb(8, 126, 225)'
-                        ],
-                        hoverOffset: 4
-                    }]
-                }
-                });
+                        type: 'pie',
+                        data: {
+                            labels: [
+                                'QC',
+                                'Logistik',
+                                'Kirim',
+                            ],
+                            datasets: [{
+                                label: 'STATUS PESANAN',
+                                data: [qc, log, ki],
+                                backgroundColor: [
+                                'rgb(255, 221, 0)',
+                                'rgb(11, 171, 100)',
+                                'rgb(8, 126, 225)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        }
+                    });
                 }else{
                     const myChart = new Chart(ctx, {
                     type: 'pie',

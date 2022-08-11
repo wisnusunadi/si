@@ -21,12 +21,16 @@
 @stop
 @section('adminlte_css')
 <style>
+    .modal-body{
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
     .m-fadeOut {
         visibility: hidden;
         opacity: 0;
         transition: visibility 0s linear 300ms, opacity 300ms;
     }
-
     .m-fadeIn {
         visibility: visible;
         opacity: 0.6;
@@ -80,6 +84,12 @@
         color: #0c5460;
         background-color: #d1ecf1;
         border-color: #bee5eb;
+    }
+
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
     }
 
     .separator {
@@ -320,6 +330,7 @@
     <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
         <div class="modal-dialog modal-xl" role="document">
             <div class="modal-content" style="margin: 10px">
+                <div id="modal-overlay" class="overlay m-fadeOut"></div>
                 <div class="modal-header">
                     <h4 class="modal-title">Info</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -722,8 +733,14 @@
                 })
             }
 
+        $(document).on('hidden.bs.modal', '#penjualanmodal', function(event){
+            $('#detailmodal').find('#modal-overlay').addClass('m-fadeOut');
+            $('#detailmodal').find('#modal-overlay').removeClass('m-fadeIn');
+        });
         $(document).on('click', '.penjualanmodal', function(event) {
-            event.preventDefault();
+            $('#detailmodal').find('#modal-overlay').removeClass('m-fadeOut');
+            $('#detailmodal').find('#modal-overlay').addClass('m-fadeIn');
+
                 var href = $(this).attr('data-attr');
                 var id = $(this).data("id");
                 var label = $(this).data("target");

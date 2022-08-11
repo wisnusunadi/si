@@ -301,9 +301,12 @@
             });
 
             $('#createtable').on('click', '#removerow', function(e) {
-                $(this).closest('tr').remove();
-                validasi();
+                if ($('#createtable > tbody > tr').length > 1) {
+                    $(this).closest('tr').remove();
+
+                }
                 numberRows($("#createtable"));
+                validasi();
             });
 
             $('#harga').on('keyup change', function() {

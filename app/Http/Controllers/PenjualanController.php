@@ -659,8 +659,6 @@ class PenjualanController extends Controller
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -677,8 +675,6 @@ class PenjualanController extends Controller
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -695,8 +691,6 @@ class PenjualanController extends Controller
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -1452,67 +1446,67 @@ class PenjualanController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('nama_customer', function ($data) {
-                    // $name = explode('/', $data->so);
-                    // if ($name[1] == 'EKAT') {
-                    //  $datas = $data->c_ekat_nama;
-                    //   if ($data->satuan) {
-                    //     $datas .= "<div><small>" . $data->satuan . "</small></div>";
-                    // }
-                    //       } else if ($name[1] == 'SPA') {
-                    // $datas = $data->c_spa_nama;
-                    //   } else if ($name[1] == 'SPB') {
-                    // $datas = $data->c_spb_nama;
-                    //   }
+                    $name = explode('/', $data->so);
+                    if ($name[1] == 'EKAT') {
+                     $datas = $data->c_ekat_nama;
+                      if ($data->satuan) {
+                        $datas .= "<div><small>" . $data->satuan . "</small></div>";
+                    }
+                          } else if ($name[1] == 'SPA') {
+                    $datas = $data->c_spa_nama;
+                      } else if ($name[1] == 'SPB') {
+                    $datas = $data->c_spb_nama;
+                      }
 
-                    //  return $datas;
+                     return $datas;
                 })
                 ->addColumn('so', function ($data) {
-                    // if ($data->so) {
-                    //     return $data->so;
-                    // } else {
-                    //     return '';
-                    // }
+                    if ($data->so) {
+                        return $data->so;
+                    } else {
+                        return '';
+                    }
                 })
                 ->addColumn('no_po', function ($data) {
-                    // if ($data->no_po) {
-                    //     return $data->no_po;
-                    // } else {
-                    //     return '';
-                    // }
+                    if ($data->no_po) {
+                        return $data->no_po;
+                    } else {
+                        return '';
+                    }
                 })
                 ->addColumn('tgl_po', function ($data) {
-                    // if ($data->tgl_po) {
-                    //     if ($data->tgl_po != "0000-00-00" && !empty($data->tgl_po)) {
-                    //         return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
-                    //     } else {
-                    //         return '-';
-                    //     }
-                    // } else {
-                    //     return '-';
-                    // }
+                    if ($data->tgl_po) {
+                        if ($data->tgl_po != "0000-00-00" && !empty($data->tgl_po)) {
+                            return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+                        } else {
+                            return '-';
+                        }
+                    } else {
+                        return '-';
+                    }
                 })
 
                 ->addColumn('log', function ($data) {
-                    // $datas = "";
-                    // if (!empty($data->state_nama)) {
-                    //     if ($data->state_nama == "Penjualan") {
-                    //         $datas .= '<span class="red-text badge">';
-                    //     } else if ($data->state_nama == "PO") {
-                    //         $datas .= '<span class="purple-text badge">';
-                    //     } else if ($data->state_nama == "Gudang") {
-                    //         $datas .= '<span class="orange-text badge">';
-                    //     } else if ($data->state_nama == "QC") {
-                    //         $datas .= '<span class="yellow-text badge">';
-                    //     } else if ($data->state_nama == "Belum Terkirim") {
-                    //         $datas .= '<span class="red-text badge">';
-                    //     } else if ($data->state_nama == "Terkirim Sebagian") {
-                    //         $datas .= '<span class="blue-text badge">';
-                    //     } else if ($data->state_nama == "Kirim") {
-                    //         $datas .= '<span class="green-text badge">';
-                    //     }
-                    //     $datas .= ucfirst($data->state_nama) . '</span>';
-                    // }
-                    // return $datas;
+                    $datas = "";
+                    if (!empty($data->state_nama)) {
+                        if ($data->state_nama == "Penjualan") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->state_nama == "PO") {
+                            $datas .= '<span class="purple-text badge">';
+                        } else if ($data->state_nama == "Gudang") {
+                            $datas .= '<span class="orange-text badge">';
+                        } else if ($data->state_nama == "QC") {
+                            $datas .= '<span class="yellow-text badge">';
+                        } else if ($data->state_nama == "Belum Terkirim") {
+                            $datas .= '<span class="red-text badge">';
+                        } else if ($data->state_nama == "Terkirim Sebagian") {
+                            $datas .= '<span class="blue-text badge">';
+                        } else if ($data->state_nama == "Kirim") {
+                            $datas .= '<span class="green-text badge">';
+                        }
+                        $datas .= ucfirst($data->state_nama) . '</span>';
+                    }
+                    return $datas;
                 })
                 ->rawColumns(['log', 'nama_customer'])
                 ->make(true);
@@ -4117,6 +4111,9 @@ class PenjualanController extends Controller
                     return '';
                 }
             })
+            ->addColumn('no_so', function ($data) {
+                return $data->Pesanan->so;
+            })
             ->addColumn('no_po', function ($data) {
                 return $data->Pesanan->no_po;
             })
@@ -4953,25 +4950,25 @@ class PenjualanController extends Controller
     }
 
 
-    public function export_laporan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan)
+    public function export_laporan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan)
     {
         $x = explode(',', $jenis);
         $waktu = Carbon::now();
 
         if ($x == ['ekatalog', 'spa', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan Semua ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Semua ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['ekatalog', 'spa']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan Ekatalog dan SPA ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Ekatalog dan SPA ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['ekatalog', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan Ekatalog dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Ekatalog dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($x == ['spa', 'spb']) {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan SPA dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan SPA dan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'ekatalog') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan Ekatalog ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan Ekatalog ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'spa') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan SPA ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan SPA ' . $waktu->toDateTimeString() . '.xlsx');
         } else if ($jenis == 'spb') {
-            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $jenis_laporan), 'Laporan Penjualan SPB ' . $waktu->toDateTimeString() . '.xlsx');
+            return Excel::download(new LaporanPenjualan($jenis, $dsb, $tgl_awal, $tgl_akhir, $seri, $tampilan), 'Laporan Penjualan SPB ' . $waktu->toDateTimeString() . '.xlsx');
         }
     }
 
@@ -5463,8 +5460,4 @@ class PenjualanController extends Controller
             ->make(true);
         }
     }
-
 }
-
-
-
