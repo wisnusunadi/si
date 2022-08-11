@@ -3,10 +3,11 @@
         method="post" id="form-penjualan-produk-update">
         @method('PUT')
         <div class="row d-flex justify-content-center">
-
             <div class="col-11">
-                <h6>Info Umum Paket</h6>
-                <div class="card">
+                <div class="card card-outline card-warning">
+                    <div class="card-header">
+                        <h6 class="card-title">Info Umum Paket</h6>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
@@ -73,8 +74,10 @@
         </div>
         <div class="row d-flex justify-content-center">
             <div class="col-11">
-                <h6>Detail Produk Paket</h6>
-                <div class="card">
+                <div class="card card-outline card-warning">
+                    <div class="card-header">
+                        <h6 class="card-title">Detail Produk Paket</h6>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
@@ -128,7 +131,7 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-@endforeach
+
 </tbody>
 </table>
 </div>
@@ -149,3 +152,4 @@
     </div>
 </div>
 </form>
+@endforeach

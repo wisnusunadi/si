@@ -659,8 +659,6 @@ class PenjualanController extends Controller
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -677,8 +675,6 @@ class PenjualanController extends Controller
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -695,8 +691,6 @@ class PenjualanController extends Controller
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -1235,11 +1229,10 @@ class PenjualanController extends Controller
              ->rawColumns(['divisi_id', 'status', 'nama_customer'])
                 ->make(true);
         } else if ($parameter == 'no_seri') {
-            $data = NoseriTGbj::whereHas('NoseriBarangJadi', function ($q) use ($value) {
-                $q->where('noseri', 'LIKE', '%' . $value . '%');
-            })->Has('NoseriDetailPesanan')->orderBy('id', 'desc')->get();
-            $data =  NoseriBarangJadi::
-            select('noseri_barang_jadi.noseri',
+            // $data = NoseriTGbj::whereHas('NoseriBarangJadi', function ($q) use ($value) {
+            //     $q->where('noseri', 'LIKE', '%' . $value . '%');
+            // })->Has('NoseriDetailPesanan')->orderBy('id', 'desc')->get();
+            $data =  NoseriBarangJadi::select('noseri_barang_jadi.noseri',
                      'pesanan.no_po',
                      'pesanan.so',
                      'noseri_detail_pesanan.tgl_uji',
@@ -3795,6 +3788,7 @@ class PenjualanController extends Controller
         $detail_spb = DetailSpb::findOrFail($id);
         $detail_spb->delete();
     }
+
     public function cancel_penjualan($id, $jenis)
     {
         $data = "";
@@ -4051,6 +4045,9 @@ class PenjualanController extends Controller
                 } else {
                     return '';
                 }
+            })
+            ->addColumn('no_so', function ($data) {
+                return $data->Pesanan->so;
             })
             ->addColumn('no_po', function ($data) {
                 return $data->Pesanan->no_po;
@@ -4914,6 +4911,7 @@ class PenjualanController extends Controller
     {
         return view('manager.penjualan.so.show');
     }
+
     public function manager_penjualan_show_data($jenis, $value)
     {
         if($jenis == "ekatalog"){

@@ -31,6 +31,12 @@
         text-overflow: inherit !important;
         white-space: normal !important;
     }
+
+    .modal-body{
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
     .nowrap-text {
         white-space: nowrap;
     }
@@ -59,14 +65,14 @@
         margin: 10px;
     }
 
-    .blue-bg {
-        background-color: #dae6f0;
-        color: #4682B4;
+     .blue-bg {
+        background-color: #e0eff3;
+        color: #17a2b8;
     }
 
     .yellow-bg {
-        background-color: #ffe680;
-        color: #997a00;
+        background-color: #fff4dc;
+        color: #ffc107;
     }
 
     .tabnum{
@@ -243,7 +249,7 @@
                     <div class="modal-dialog modal-xl" role="document">
                         <div class="modal-content" style="margin: 10px">
                             <div class="modal-header borderless blue-bg">
-                                <h4 class="modal-title"><b>Detail</b></h4>
+                                <h4 class="modal-title"><b>Detail Paket Produk</b></h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -643,7 +649,10 @@
         });
 
         $(document).on('click', '#createtable #removerow', function(e) {
-            $(this).closest('tr').remove();
+            if ($('#createtable > tbody > tr').length > 1) {
+                $(this).closest('tr').remove();
+
+            }
             numberRows($("#createtable"));
             validasi();
         });
@@ -703,6 +712,7 @@
                         $('#kelompok_produk' + index).text(data[0].kelompok_produk.nama);
                     }
                 });
+                validasi();
             });
         }
         $(document).on('keyup change', '#nama_paket', function() {

@@ -23,10 +23,86 @@
 
 @section('adminlte_css')
 <style>
-    .alert-danger{
+    .modal-body{
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+
+    .bg-chart-light{
+        background: rgba(192, 192, 192, 0.2);
+    }
+
+    .bg-chart-orange{
+        background: rgb(236, 159, 5);
+    }
+
+    .bg-chart-yellow{
+        background: rgb(255, 221, 0);
+    }
+
+    .bg-chart-green{
+        background: rgb(11, 171, 100);
+    }
+
+    .bg-chart-blue{
+        background: rgb(8, 126, 225);
+    }
+
+    #urgent {
+        color: #dc3545;
+        font-weight: 600;
+    }
+
+    #warning {
+        color: #FFC700;
+        font-weight: 600;
+    }
+
+    #info {
+        color: #3a7bb0;
+        font-weight: 600;
+    }
+
+    .hide{
+        display: none !important
+    }
+    table { border-collapse: collapse; empty-cells: show; }
+
+    td { position: relative; }
+
+    .foo {
+        border-radius: 50%;
+        float: left;
+        width: 10px;
+        height: 10px;
+        align-items: center !important;
+    }
+
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
+    }
+
+    .alert-danger {
         color: #a94442;
         background-color: #f2dede;
         border-color: #ebccd1;
+    }
+
+    .alert-info {
+        color: #0c5460;
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+    }
+
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
     }
     li.list-group-item {
         border: 0 none;
@@ -69,20 +145,6 @@
         width: 50%;
     }
 
-    #detailekat {
-        background-color: #E9DDE5;
-
-    }
-
-    #detailspa {
-        background-color: #FFE6C9;
-    }
-
-    #detailspb {
-        background-color: #E1EBF2;
-        /* color: #7D6378; */
-
-    }
 
     .overflowy {
         max-height: 550px;
@@ -139,6 +201,12 @@
 
         .labelinfo{
             text-align: center;
+        }
+        .overflowcard {
+            max-height: 500px;
+            width: auto;
+            overflow-y: scroll;
+            box-shadow: none;
         }
     }
 
@@ -327,13 +395,61 @@
 </script>
 <script>
     $(function() {
-        $(document).on('click', '.detailmodal', function(event) {
+        function update_chart(produk,gudang ,qc, log, ki){
+                const ctx = $('#myChart');
+                if(produk == 'part'){
+                    const myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: [
+                                'QC',
+                                'Logistik',
+                                'Kirim',
+                            ],
+                            datasets: [{
+                                label: 'STATUS PESANAN',
+                                data: [qc, log, ki],
+                                backgroundColor: [
+                                'rgb(255, 221, 0)',
+                                'rgb(11, 171, 100)',
+                                'rgb(8, 126, 225)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        }
+                    });
+                }else{
+                    const myChart = new Chart(ctx, {
+                    type: 'pie',
+                data: {
+                    labels: [
+                        'Gudang',
+                        'QC',
+                        'Logistik',
+                        'Kirim',
+                    ],
+                    datasets: [{
+                        label: 'STATUS PESANAN',
+                        data: [gudang ,qc, log, ki],
+                        backgroundColor: [
 
+                        'rgb(236, 159, 5)',
+                        'rgb(255, 221, 0)',
+                        'rgb(11, 171, 100)',
+                        'rgb(8, 126, 225)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                }
+                });
+                }
+
+            }
+        $(document).on('click', '.detailmodal', function(event) {
             event.preventDefault();
             var href = $(this).attr('data-attr');
             var id = $(this).data("id");
             var label = $(this).data("target");
-
             $.ajax({
                 url: href,
                 beforeSend: function() {
@@ -344,22 +460,25 @@
                     $('#detailmodal').modal("show");
                     $('#detail').html(result).show();
                     if (label == 'ekatalog') {
-                        $('#detailmodal').find(".modal-header").attr('id', '');
-                        $('#detailmodal').find(".modal-header").attr('id', 'detailekat');
-                        $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
+                        $('#detailmodal').find(".modal-header").removeClass(
+                                'bg-orange bg-lightblue');
+                            $('#detailmodal').find(".modal-header").addClass('bg-purple');
+                            $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
                         detailtabel_ekatalog(id);
                     } else if (label == 'spa') {
-                        $('#detailmodal').find(".modal-header").attr('id', '');
-                        $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
+                        $('#detailmodal').find(".modal-header").removeClass(
+                                'bg-purple bg-lightblue');
+                        $('#detailmodal').find(".modal-header").addClass('bg-orange');
                         $('#detailmodal').find(".modal-header > h4").text('SPA');
                         detailtabel_spa(id);
                     } else {
-                        $('#detailmodal').find(".modal-header").attr('id', '');
-                        $('#detailmodal').find(".modal-header").attr('id', 'detailspb');
-                        $('#detailmodal').find(".modal-header > h4").text('SPB');
+                        $('#detailmodal').find(".modal-header").removeClass(
+                                'bg-orange bg-purple');
+                            $('#detailmodal').find(".modal-header").addClass('bg-lightblue');
+                            $('#detailmodal').find(".modal-header > h4").text('SPB');
                         detailtabel_spb(id);
                     }
-
+                    $('#detailmodal').find('[data-toggle="tooltip"]').tooltip();
                 },
                 complete: function() {
                     $('#loader').hide();

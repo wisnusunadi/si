@@ -1,26 +1,20 @@
 <div class="row">
     <div class="col-lg-4 col-md-12">
-        <div class="card">
+        <div class="card card-outline card-secondary">
+            <div class="card-header"><h5 class="card-title">Informasi</h5></div>
             <div class="card-body">
-                <h5>Info</h5>
-                <div class="row d-flex align-items-between">
-                    <div class="p-2">
-                        <div><small class="text-muted">Nama Produk</small></div>
-                        <div><b>
-                                {{$data->PenjualanProduk->nama}}
-                            </b></div>
-                    </div>
-                    <div class="p-2">
-                        <div><small class="text-muted">Nama Customer</small></div>
-                        <div><b>{{$data->RencanaPenjualan->Customer->nama}}</b></div>
-                    </div>
-                    <div class="p-2">
-                        <div><small class="text-muted">Instansi</small></div>
-                        <div><b>
-                                {{$data->RencanaPenjualan->instansi}}
-                            </b></div>
-                    </div>
-                </div>
+                <strong> Nama Produk</strong>
+                <p class="text-muted">
+                    {{$data->PenjualanProduk->nama}}
+                </p>
+                <strong> Nama Customer</strong>
+                <p class="text-muted">
+                    {{$data->RencanaPenjualan->Customer->nama}}
+                </p>
+                <strong> Instansi</strong>
+                <p class="text-muted">
+                    {{$data->RencanaPenjualan->instansi}}
+                </p>
             </div>
         </div>
     </div>

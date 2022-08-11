@@ -21,6 +21,10 @@
 @stop
 @section('adminlte_css')
 <style>
+    .modal-body{
+        max-height: 80vh;
+        overflow-y: auto;
+    }
      .m-fadeOut {
         visibility: hidden;
         opacity: 0;
