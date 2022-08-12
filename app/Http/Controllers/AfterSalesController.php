@@ -24,9 +24,7 @@ class AfterSalesController extends Controller
 {
     public function get_data_so()
     {
-        $datas = DetailPesanan::whereHas('DetailPesananProduk.DetailLogistik.Logistik', function ($q) {
-            $q->whereIn('status_id', ['10']);
-        })->with(['Pesanan.Ekatalog.Customer.Provinsi', 'Pesanan.Spa.Customer.Provinsi', 'Pesanan.Spb.Customer.Provinsi', 'PenjualanProduk'])->orderBy('id', 'desc')
+        $datas = DetailPesanan::with(['Pesanan.Ekatalog.Customer.Provinsi', 'Pesanan.Spa.Customer.Provinsi', 'Pesanan.Spb.Customer.Provinsi', 'PenjualanProduk'])->orderBy('id', 'desc')
         ->addSelect(['tgl_kirim' => function($q){
             $q->selectRaw('logistik.tgl_kirim')
             ->from('logistik')
@@ -42,17 +40,15 @@ class AfterSalesController extends Controller
             ->where('noseri_detail_pesanan.status', '=', 'ok')
             ->limit(1);
         }, 'count_log' => function($q){
-            $q->selectRaw('count(noseri_logistik.id)')
+            $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
             ->from('noseri_logistik')
             ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
             ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
             ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
             ->limit(1);
-        }])->get();
+        }])->havingRaw('count_log > 0')->get();
 
-        $datas1 = DetailPesananPart::whereHas('DetailLogistikPart.Logistik', function ($q) {
-            $q->whereIn('status_id', ['10']);
-        })->with(['Pesanan.Ekatalog.Customer.Provinsi', 'Pesanan.Spa.Customer.Provinsi', 'Pesanan.Spb.Customer.Provinsi', 'Sparepart'])->orderBy('id', 'desc')
+        $datas1 = DetailPesananPart::with(['Pesanan.Ekatalog.Customer.Provinsi', 'Pesanan.Spa.Customer.Provinsi', 'Pesanan.Spb.Customer.Provinsi', 'Sparepart'])->orderBy('id', 'desc')
         ->addSelect(['tgl_kirim' => function($q){
             $q->selectRaw('logistik.tgl_kirim')
             ->from('logistik')
@@ -65,11 +61,11 @@ class AfterSalesController extends Controller
             ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
             ->limit(1);
         }, 'count_log' => function($q){
-            $q->selectRaw('sum(detail_logistik_part.jumlah)')
+            $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
             ->from('detail_logistik_part')
             ->whereColumn('detail_logistik_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
             ->limit(1);
-        }])->get();
+        }])->havingRaw('count_log > 0')->get();
 
         $data = $datas->merge($datas1);
         return datatables()->of($data)
@@ -156,11 +152,20 @@ class AfterSalesController extends Controller
                 }
             })
             ->addColumn('status', function ($data) {
-                if ($data->count_log >= $data->count_qc) {
-                    return '<span class="badge green-text">Selesai</span>';
-                } else if ($data->count_log < $data->count_qc) {
-                    return '<span class="badge yellow-text">Terkirim Sebagian</span>';
-                }
+                $datas = "";
+                $hitung = floor((($data->count_log / $data->count_qc) * 100));
+                            if($hitung > 0){
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            } else {
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }
+                return $datas;
             })
             ->addColumn('keterangan', function ($data) {
                 return "-";
@@ -387,7 +392,16 @@ class AfterSalesController extends Controller
 
     public function get_data_so_belum_kirim()
     {
-        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['8', '9', '11', '12'])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->orderBy('tgl_po', 'desc')->get();
+        $data = Pesanan::addSelect(['cjumlahpart' => function($q){
+            $q->selectRaw('sum(detail_pesanan_part.jumlah)')
+            ->from('detail_pesanan_part')
+            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+        }, 'cjumlahkirim' => function($q){
+            $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+            ->from('detail_logistik_part')
+            ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+        }])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->orderBy('tgl_po', 'desc')->havingRaw('cjumlahpart > 0 AND cjumlahkirim <= 0')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -400,6 +414,7 @@ class AfterSalesController extends Controller
                 }
             })
             ->addColumn('so', function ($data) {
+
                 if (!empty($data->so)) {
                         return $data->so;
                     } else {
@@ -415,31 +430,20 @@ class AfterSalesController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if ($data->log != "batal") {
-                    if (!empty($data->log_id)) {
-                        if ($data->State->nama == "PO") {
-                            $datas .= '<span class="purple-text badge">';
-                        } else if ($data->State->nama == "Penjualan") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->State->nama == "Gudang") {
-                            $datas .= '<span class="orange-text badge">';
-                        } else if ($data->State->nama == "QC") {
-                            $datas .= '<span class="yellow-text badge">';
-                        } else if ($data->State->nama == "Belum Terkirim") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->State->nama == "Terkirim Sebagian") {
-                            $datas .= '<span class="blue-text badge">';
-                        } else if ($data->State->nama == "Kirim") {
-                            $datas .= '<span class="green-text badge">';
-                        }
-                        $datas .= ucfirst($data->State->nama) . '</span>';
-                    } else {
-                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
-                    }
-                } else {
-                    $datas .= '<span class="red-text badge">Batal</span>';
-                }
+                $hitung = floor((($data->cjumlahkirim / $data->cjumlahpart) * 100));
+                            if($hitung > 0){
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }else{
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }
                 return $datas;
+
             })
             ->addColumn('tglpo', function ($data) {
                 return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
@@ -478,7 +482,16 @@ class AfterSalesController extends Controller
 
     public function get_data_so_selesai_kirim()
     {
-        $data = Pesanan::has('DetailPesananPart')->whereIn('log_id', ['10'])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->orderBy('tgl_po', 'desc')->get();
+        $data = Pesanan::addSelect(['cjumlahpart' => function($q){
+            $q->selectRaw('sum(detail_pesanan_part.jumlah)')
+            ->from('detail_pesanan_part')
+            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+        }, 'cjumlahkirim' => function($q){
+            $q->selectRaw('sum(detail_logistik_part.jumlah)')
+            ->from('detail_logistik_part')
+            ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+        }])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->havingRaw('cjumlahkirim > 0')->orderBy('tgl_po', 'desc')->get();
 
         return datatables()->of($data)
             ->addIndexColumn()
@@ -506,30 +519,18 @@ class AfterSalesController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if ($data->log != "batal") {
-                    if (!empty($data->log_id)) {
-                        if ($data->State->nama == "PO") {
-                            $datas .= '<span class="purple-text badge">';
-                        } else if ($data->State->nama == "Penjualan") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->State->nama == "Gudang") {
-                            $datas .= '<span class="orange-text badge">';
-                        } else if ($data->State->nama == "QC") {
-                            $datas .= '<span class="yellow-text badge">';
-                        } else if ($data->State->nama == "Belum Terkirim") {
-                            $datas .= '<span class="red-text badge">';
-                        } else if ($data->State->nama == "Terkirim Sebagian") {
-                            $datas .= '<span class="blue-text badge">';
-                        } else if ($data->State->nama == "Kirim") {
-                            $datas .= '<span class="green-text badge">';
-                        }
-                        $datas .= ucfirst($data->State->nama) . '</span>';
-                    } else {
-                        $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
-                    }
-                } else {
-                    $datas .= '<span class="red-text badge">Batal</span>';
-                }
+                $hitung = floor((($data->cjumlahkirim / $data->cjumlahpart) * 100));
+                            if($hitung > 0){
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }else{
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }
                 return $datas;
             })
             ->addColumn('tglpo', function ($data) {

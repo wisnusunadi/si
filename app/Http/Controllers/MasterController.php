@@ -1459,9 +1459,9 @@ class MasterController extends Controller
                     ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                     ->whereColumn('t_gbj_detail.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
                     ->limit(1);
-                    },
-                    'count_jumlah' => function($q){
-                        $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                },
+                'count_jumlah' => function($q){
+                    $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
                      ->from('detail_pesanan')
                      ->join('detail_penjualan_produk', 'detail_pesanan.penjualan_produk_id', '=', 'detail_penjualan_produk.penjualan_produk_id')
                      ->join('gdg_barang_jadi', 'gdg_barang_jadi.produk_id', '=', 'detail_penjualan_produk.produk_id')
@@ -1498,7 +1498,7 @@ class MasterController extends Controller
                     ->whereColumn('detail_logistik.detail_pesanan_produk_id', 'detail_pesanan_produk.id')
                     ->where('logistik.status_id','11')
                     ->limit(1);
-        },
+                },
                 'count_kirim' => function($q){
                     $q->selectRaw('count(noseri_logistik.id)')
                     ->from('noseri_logistik')

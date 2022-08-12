@@ -353,8 +353,8 @@
                                                                                             <th rowspan="2" width="14%">Aksi</th>
                                                                                         </tr>
                                                                                         <tr>
-                                                                                            <th width="15%">Diterima</th>
-                                                                                            <th width="15%">Dikirim</th>
+                                                                                            <th width="10%">Diterima</th>
+                                                                                            <th width="20%">Dikirim</th>
                                                                                         </tr>
                                                                                     </thead>
                                                                                     <tbody>

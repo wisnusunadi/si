@@ -650,12 +650,13 @@ class PenjualanController extends Controller
 
                 if($name == "ekatalog"){
                     if($data->status == "batal" && ($data->Pesanan->log_id != "7")){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
@@ -666,12 +667,13 @@ class PenjualanController extends Controller
                 }
                 else if($name == "spa"){
                     if($data->log == "batal"){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
@@ -682,12 +684,13 @@ class PenjualanController extends Controller
                 }
                 else if($name == "spb"){
                     if($data->log == "batal"){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
@@ -2462,20 +2465,24 @@ class PenjualanController extends Controller
                 // }
                 // return $datas;
                     $datas = "";
-                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                    if($data->log == "batal") {
-                        $datas = '<span class="badge red-text">Batal</span>';
-                    } else{
-                        if($hitung > 0){
-                            $datas = '<div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
-                            </div>
-                            <small class="text-muted">Selesai</small>';
-                        }else{
-                            $datas = '<div class="progress">
-                                <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
-                            </div>
-                            <small class="text-muted">Selesai</small>';
+
+                    $tes = $data->cjumlahprd + $data->cjumlahpart;
+                    if($tes > 0){
+                        $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                        if($data->log == "batal") {
+                            $datas = '<span class="badge red-text">Batal</span>';
+                        } else{
+                            if($hitung > 0){
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }else{
+                                $datas = '<div class="progress">
+                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                                </div>
+                                <small class="text-muted">Selesai</small>';
+                            }
                         }
                     }
                     return $datas;

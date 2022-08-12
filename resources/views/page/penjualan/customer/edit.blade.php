@@ -202,7 +202,7 @@
                     <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
                 </span>
                 <span class="col-6">
-                    <button type="submit" class="btn btn-warning float-right" id="btnsimpan">Simpan</button>
+                    <button type="submit" class="btn btn-warning float-right" id="btnsimpan" disabled="true">Simpan</button>
                 </span>
             </div>
         </div>

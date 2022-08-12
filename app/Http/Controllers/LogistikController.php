@@ -1460,9 +1460,17 @@ class LogistikController extends Controller
         $z = explode(',', $jenis_penjualan);
         $data = "";
         if ($pengiriman == "semua" && $provinsi == "semua" && $jenis_penjualan == "semua") {
-            $dataeks = Logistik::whereNull('noresi')->whereNotNull('ekspedisi_id')->get();
-            $datanoneks = Logistik::where('status_id', '11')->whereNotNull('nama_pengirim')->get();
-            $data = $dataeks->merge($datanoneks);
+            $dataeks = Logistik::whereNull('noresi')->whereNotNull('ekspedisi_id');
+            $data = Logistik::where('status_id', '11')->whereNotNull('nama_pengirim')->union($dataeks)
+                    ->with(['DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Customer.Provinsi',
+                            'DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer.Provinsi',
+                            'DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer.Provinsi',
+                            'DetailLogistikPart.DetailPesananPart.Pesanan.Ekatalog.Customer.Provinsi',
+                            'DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi',
+                            'DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi',
+                            'Ekspedisi'])
+                    ->get();
+            // $data = $dataeks->merge($datanoneks);
         } else if ($pengiriman != "semua" && $provinsi == "semua" && $jenis_penjualan == "semua") {
             $dataeks = "";
             $datanoneks = "";
