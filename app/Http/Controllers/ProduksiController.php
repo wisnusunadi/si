@@ -2569,11 +2569,11 @@ class ProduksiController extends Controller
     {
         try {
             foreach($request->data as $key => $value) {
-                $nid = NoseriTGbj::find($key);
+                $nid = NoseriTGbj::find($key)->noseri_id;
                 NoseriBarangJadi::whereIn('id',[$nid])->update(['is_aktif' => 1]);
                 NoseriTGbj::whereIn('id', [$key])->update(['status_id' => 3, 'state_id' => 16, 'layout_id' => $value]);
             }
-            
+
             return response()->json(['msg' => 'Successfully']);
         } catch (\Exception $e) {
             return response()->json([
