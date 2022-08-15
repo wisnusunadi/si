@@ -226,13 +226,14 @@
                                                 <thead style="text-align: center;">
                                                     <tr>
                                                         <th width="5%">No</th>
-                                                        <th width="10%">No AKD</th>
-                                                        <th width="5%">Merk</th>
-                                                        <th width="5%">Jenis Paket</th>
-                                                        <th width="35%">Nama Alias</th>
-                                                        <th width="20%">Nama Produk</th>
-                                                        <th width="10%">Harga</th>
-                                                        <th width="5%">Aksi</th>
+                                                            <th width="10%">No AKD</th>
+                                                            <th width="5%">Merk</th>
+                                                            <th width="5%">Jenis Paket</th>
+                                                            <th width="30%">Nama Alias</th>
+                                                            <th width="20%">Nama Produk</th>
+                                                            <th width="8%">Harga</th>
+                                                            <th width="7%">Aktif</th>
+                                                            <th width="5%">Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
@@ -305,7 +306,10 @@
                     <div class="modal-dialog modal-xl" role="document">
                         <div class="modal-content" style="margin: 10px">
                             <div class="modal-header yellow-bg">
-                                <h4 class="modal-title"><b>Ubah</b></h4>
+                                <h4 class="modal-title"><b>Ubah Paket Produk</b></h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                             </div>
                             <div class="modal-body" id="edit">
 
@@ -317,7 +321,7 @@
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content" style="margin: 10px">
                             <div class="modal-header bg-danger">
-                                <h4 class="modal-title"><b>Hapus</b></h4>
+                                <h4 class="modal-title"><b>Hapus Paket Produk</b></h4>
                             </div>
                             <div class="modal-body" id="hapus">
                                 <div class="row">
@@ -373,7 +377,7 @@
                         return false;
                     }
                 });
-                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" ){
+                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" && $('input[name="is_aktif"]:checked').val() != ""){
                     $("#btnsimpan").attr('disabled', false);
                 } else {
                     $("#btnsimpan").attr('disabled', true);
@@ -469,6 +473,12 @@
                         //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
                         // }
                         ,
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'is_aktif',
+                    className: 'nowrap-text align-center',
                     orderable: false,
                     searchable: false
                 },

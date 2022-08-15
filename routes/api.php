@@ -564,6 +564,9 @@ Route::prefix('/dc')->group(function () {
     Route::post('data', [App\Http\Controllers\DcController::class, 'get_data_coo']);
     Route::post('dashboard/data/{value}', [App\Http\Controllers\DcController::class, 'dashboard_data']);
     Route::post('dashboard/so', [App\Http\Controllers\DcController::class, 'dashboard_so']);
+    Route::prefix('/so_in_process')->group(function () {
+        Route::post('data', [App\Http\Controllers\DcController::class, 'get_data_so_in_process']);
+    });
     Route::prefix('/so')->group(function () {
         Route::post('store/{value}', [App\Http\Controllers\DcController::class, 'store_coo']);
         Route::post('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);
@@ -584,6 +587,13 @@ Route::prefix('/as')->group(function () {
     Route::post('/penjualan/belum_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_belum_kirim']);
     Route::post('/penjualan/selesai_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_selesai_kirim']);
 
+    Route::get('/retur/detail', [App\Http\Controllers\AfterSalesController::class, 'detail_retur']);
+    Route::get('/list/so_selesai/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai']);
+
+    Route::get('/list/so_selesai_paket/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai_paket']);
+    Route::get('/list/so_selesai_paket_produk/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai_paket_produk']);
+
+    Route::get('/detail/so_retur/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_so_retur']);
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {

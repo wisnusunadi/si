@@ -650,12 +650,13 @@ class PenjualanController extends Controller
 
                 if($name == "ekatalog"){
                     if($data->status == "batal" && ($data->Pesanan->log_id != "7")){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
@@ -666,12 +667,13 @@ class PenjualanController extends Controller
                 }
                 else if($name == "spa"){
                     if($data->log == "batal"){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
@@ -682,12 +684,13 @@ class PenjualanController extends Controller
                 }
                 else if($name == "spb"){
                     if($data->log == "batal"){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
