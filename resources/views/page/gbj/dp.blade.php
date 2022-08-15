@@ -126,8 +126,9 @@
 @section('adminlte_js')
 <script>
     $('.dalam-perakitan').DataTable({
-        processing: true,
-        serverSide: true,
+        processing: false,
+        serverSide: false,
+        destroy: true,
         ajax: {
             url: '/api/tfp/rakit',
         },
@@ -289,6 +290,7 @@
     $('#form-terima').on('submit', function(e) {
         console.log('test');
     })
+    let prd = {};
     $(document).on('click', '#simpanseri', function () {
         let no_seri = [];
         let layout = [];
@@ -297,7 +299,9 @@
         $(a).each(function (index, elm) {
             no_seri.push($(elm).val());
             layout.push($(elm).parent().next().next().children().val());
+            prd[$(elm).val()] = $(elm).parent().next().next().children().val();
         });
+        // prd[no_seri] = layout;
 
         if (no_seri == '') {
             Swal.fire({
@@ -335,8 +339,7 @@
                     data: {
                         "_token": "{{ csrf_token() }}",
                         userid: $('#userid').val(),
-                        seri: no_seri,
-                        layout: layout,
+                        data: prd,
                     },
                     success: function (res) {
                         console.log(res);
