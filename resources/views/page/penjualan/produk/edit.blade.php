@@ -66,6 +66,22 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label for="is_aktif" class="col-4 col-form-label"
+                                        style="text-align: right">Status</label>
+                                    <div class="col-6 col-form-label">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="is_aktif"
+                                                id="is_aktif1" value="1" {{ ($p->is_aktif == "1")? "checked" : "" }}/>
+                                            <label class="form-check-label" for="is_aktif1">Aktif</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="is_aktif"
+                                                id="is_aktif2" value="0" {{ ($p->is_aktif == "0")? "checked" : "" }} />
+                                            <label class="form-check-label" for="is_aktif2" >Tidak Aktif</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

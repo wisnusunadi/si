@@ -229,9 +229,10 @@
                                                             <th width="10%">No AKD</th>
                                                             <th width="5%">Merk</th>
                                                             <th width="5%">Jenis Paket</th>
-                                                            <th width="35%">Nama Alias</th>
+                                                            <th width="30%">Nama Alias</th>
                                                             <th width="20%">Nama Produk</th>
-                                                            <th width="10%">Harga</th>
+                                                            <th width="8%">Harga</th>
+                                                            <th width="7%">Aktif</th>
                                                             <th width="5%">Aksi</th>
                                                         </tr>
                                                     </thead>
@@ -377,7 +378,7 @@
                         return false;
                     }
                 });
-                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" ){
+                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" && $('input[name="is_aktif"]:checked').val() != ""){
                     $("#btnsimpan").attr('disabled', false);
                 } else {
                     $("#btnsimpan").attr('disabled', true);
@@ -474,6 +475,12 @@
                             // }
                             ,
                         orderable: false,
+                        searchable: false
+                    },
+                    {
+                        data: 'is_aktif',
+                        className: 'nowrap-text align-center',
+                         orderable: false,
                         searchable: false
                     },
                     {
@@ -827,6 +834,10 @@
 
                     }
                     numberRows($("#createtable"));
+                    validasi();
+                });
+
+                $(document).on('change', 'input[name="is_aktif"]', function(){
                     validasi();
                 });
 

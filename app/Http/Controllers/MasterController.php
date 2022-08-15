@@ -356,14 +356,6 @@ class MasterController extends Controller
                 // })->first();
                 return $data->nama_alias;
             })
-            ->addColumn('jenis_paket', function ($data) {
-                if($data->status == "ekat"){
-                    return '<span class="badge purple-text">Ekatalog</span>';
-                }
-                else{
-                    return '<span class="badge blue-text">Non Ekatalog</span>';
-                }
-            })
             ->addColumn('no_akd', function ($data) {
                 $id = $data->id;
                 $s = Produk::where('coo', '1')->whereHas('PenjualanProduk', function ($q) use ($id) {
@@ -391,6 +383,14 @@ class MasterController extends Controller
 
 
             })
+            ->addColumn('is_aktif', function ($data) {
+                if($data->is_aktif == "1"){
+                    return '<span class="badge green-text">Aktif</span>';
+                }
+                else{
+                    return '<span class="badge red-text">Tidak Aktif</span>';
+                }
+            })
             ->addColumn('button', function ($data) {
                 return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -412,7 +412,7 @@ class MasterController extends Controller
                     </a>
                 </div>';
             })
-            ->rawColumns(['nama', 'button','jenis_paket'])
+            ->rawColumns(['nama', 'button','jenis_paket', 'is_aktif'])
             ->make(true);
     }
     public function get_nama_customer($id, $val)
@@ -903,7 +903,8 @@ class MasterController extends Controller
             'nama' => $request->nama_paket,
             'nama_alias' => $request->nama_alias,
             'harga' => $harga_convert,
-            'status' => $request->jenis_paket
+            'status' => $request->jenis_paket,
+            'is_aktif' => $request->is_aktif
         ]);
         $bool = true;
         if ($PenjualanProduk) {
@@ -1092,13 +1093,14 @@ class MasterController extends Controller
         $PenjualanProduk->status = $status;
         $PenjualanProduk->harga = $harga_convert;
         $PenjualanProduk->status = $request->jenis_paket;
+        $PenjualanProduk->is_aktif = $request->is_aktif;
         $PenjualanProduk->save();
 
         $produk_array = [];
         for ($i = 0; $i < count($request->produk_id); $i++) {
             $produk_array[$request->produk_id[$i]] = ['jumlah' => $request->jumlah[$i]];
         }
-        $p = $PenjualanProduk->produk()->sync($produk_array);
+        $p = $PenjualanProduk->Produk()->sync($produk_array);
         if ($p) {
             return response()->json(['data' => 'success']);
         } else if (!$p) {
@@ -1236,6 +1238,7 @@ class MasterController extends Controller
     public function select_penjualan_produk(Request $request)
     {
         $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->where('is_aktif', '1')
             ->orderby('nama', 'ASC')
             ->get();
         return response()->json($data);
@@ -1252,11 +1255,13 @@ class MasterController extends Controller
         if($value == 'ekatalog')
         {
             $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->where('is_aktif', '1')
             ->where('status', 'ekat')
             ->orderby('nama', 'ASC')
             ->get();
         } else {
             $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+            ->where('is_aktif', '1')
             ->orderby('nama', 'ASC')
             ->get();
         }

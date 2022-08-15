@@ -282,6 +282,10 @@ Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
 Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
     Route::get('/dashboard',   [App\Http\Controllers\DcController::class, 'dashboard'])->name('dc.dashboard');
 
+    Route::group(['prefix' => '/so_in_process'], function () {
+        Route::view('/show', 'page.dc.so.in_proses.show')->name('dc.so.in_proses.show');
+    });
+
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.dc.so.show')->name('dc.so.show');
         Route::get('/detail/{id}/{value}',  [App\Http\Controllers\DcController::class, 'detail_coo'])->name('dc.so.detail');
