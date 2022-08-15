@@ -147,7 +147,7 @@
             <button class="btn btn-danger float-left" data-dismiss="modal">Batal</button>
         </span>
         <span class="float-right">
-            <button type="submit" class="btn btn-warning float-right" id="btnsimpan">Simpan</button>
+            <button type="submit" class="btn btn-warning float-right" id="btnsimpan" disabled="true">Simpan</button>
         </span>
     </div>
 </div>

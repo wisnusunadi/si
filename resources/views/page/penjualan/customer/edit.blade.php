@@ -192,7 +192,7 @@
                     </div>
                     <div class="col-12">
                         <span class="float-right filter">
-                            <button type="submit" class="btn btn-warning" id="btnsimpan">Simpan</button>
+                            <button type="submit" class="btn btn-warning" id="btnsimpan" disabled="true">Simpan</button>
                         </span>
                         <span class="float-left filter">
                             <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
