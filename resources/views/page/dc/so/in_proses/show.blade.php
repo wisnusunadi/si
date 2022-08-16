@@ -325,6 +325,22 @@
                 </div>
             </div>
         </div>
+        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content" style="margin: 10px">
+                        <div class="modal-header">
+                            <h4 id="modal-title">Detail</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="detail">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
     </section>
 @endsection
 @section('adminlte_js')
@@ -370,6 +386,403 @@
                         searchable: false
                     },
                 ]
+            });
+            function update_chart(produk,gudang ,qc, log, ki){
+                const ctx = $('#myChart');
+                if(produk == 'part'){
+                    const myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: [
+                                'QC',
+                                'Logistik',
+                                'Kirim',
+                            ],
+                            datasets: [{
+                                label: 'STATUS PESANAN',
+                                data: [qc, log, ki],
+                                backgroundColor: [
+                                'rgb(255, 221, 0)',
+                                'rgb(11, 171, 100)',
+                                'rgb(8, 126, 225)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        }
+                    });
+                }else{
+                    const myChart = new Chart(ctx, {
+                    type: 'pie',
+                data: {
+                    labels: [
+                        'Gudang',
+                        'QC',
+                        'Logistik',
+                        'Kirim',
+                    ],
+                    datasets: [{
+                        label: 'STATUS PESANAN',
+                        data: [gudang ,qc, log, ki],
+                        backgroundColor: [
+
+                        'rgb(236, 159, 5)',
+                        'rgb(255, 221, 0)',
+                        'rgb(11, 171, 100)',
+                        'rgb(8, 126, 225)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                }
+                });
+                }
+
+            }
+
+            $(document).on('click', '.detailmodal', function(event) {
+                event.preventDefault();
+                var href = $(this).attr('data-attr');
+                var id = $(this).data("id");
+                var label = $(this).data("target");
+                $.ajax({
+                    url: href,
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    // return the result
+                    success: function(result) {
+                        $('#detailmodal').modal("show");
+                        $('#detail').html(result).show();
+
+                        if (label == 'ekatalog') {
+                            $('#detailmodal').find(".modal-header").removeClass(
+                                'bg-orange bg-lightblue');
+                            $('#detailmodal').find(".modal-header").addClass('bg-purple');
+                            $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
+
+                            detailtabel_ekatalog(id);
+                        } else if (label == 'spa') {
+                            $('#detailmodal').find(".modal-header").removeClass(
+                                'bg-purple bg-lightblue');
+                            $('#detailmodal').find(".modal-header").addClass('bg-orange');
+                            $('#detailmodal').find(".modal-header > h4").text('SPA');
+                            detailtabel_spa(id);
+                        } else {
+                            $('#detailmodal').find(".modal-header").removeClass(
+                                'bg-orange bg-purple');
+                            $('#detailmodal').find(".modal-header").addClass('bg-lightblue');
+                            $('#detailmodal').find(".modal-header > h4").text('SPB');
+                            detailtabel_spb(id);
+                        }
+
+                        $('#detailmodal').find('[data-toggle="tooltip"]').tooltip();
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page " + href + " cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+            });
+            function detailtabel_ekatalog(id) {
+                var dt = $('#detailtabel').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        'url': '/api/ekatalog/paket/detail/' + id,
+                        "dataType": "json",
+                        'type': 'POST',
+                        'headers': {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    },
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                            "class": "details-control",
+                            "orderable": false,
+                            "data": null,
+                            "defaultContent": ""
+                        },
+                        {
+                            data: 'nama_produk',
+                        },
+                        {
+                            data: 'nama_produk',
+                        },
+                        {
+                            data: 'harga',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'jumlah',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'total',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'button',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ],
+                    footerCallback: function(row, data, start, end, display) {
+                        var api = this.api(),
+                            data;
+                        // converting to interger to find total
+                        var intVal = function(i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                i : 0;
+                        };
+                        // computing column Total of the complete result
+                        var jumlah_pesanan = api
+                            .column(4)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+                        // computing column Total of the complete result
+                        var total_pesanan = api
+                            .column(5)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                        $(api.column(0).footer()).html('Total');
+                        $(api.column(4).footer()).html('Total');
+                        $(api.column(5).footer()).html(num_for(total_pesanan));
+                    },
+                });
+            }
+
+            function detailtabel_spa(id) {
+                $('#detailtabel_spa').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        'url': '/api/spa/paket/detail/' + id,
+                        "dataType": "json",
+                        'type': 'POST',
+                        'headers': {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    },
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'nama_produk',
+                        },
+                        {
+                            data: 'harga',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'jumlah',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'total',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'button',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ],
+                    footerCallback: function(row, data, start, end, display) {
+                        var api = this.api(),
+                            data;
+                        // converting to interger to find total
+                        var intVal = function(i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                i : 0;
+                        };
+                        // computing column Total of the complete result
+                        var jumlah_pesanan = api
+                            .column(3)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+                        // computing column Total of the complete result
+                        var total_pesanan = api
+                            .column(4)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                        $(api.column(0).footer()).html('Total');
+                        $(api.column(3).footer()).html('Total');
+                        $(api.column(4).footer()).html(num_for(total_pesanan));
+                    },
+                })
+            }
+
+            function detailtabel_spb(id) {
+                $('#detailtabel_spb').DataTable({
+                    destroy: true,
+                    processing: true,
+                    serverSide: true,
+                    ajax: {
+                        'url': '/api/spb/paket/detail/' + id,
+                        "dataType": "json",
+                        'type': 'POST',
+                        'headers': {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    },
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                            data: 'DT_RowIndex',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'nama_produk',
+                        },
+                        {
+                            data: 'harga',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'jumlah',
+                            className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'total',
+                            render: $.fn.dataTable.render.number(',', '.', 2),
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'button',
+                            orderable: false,
+                            searchable: false
+                        },
+                    ],
+                    footerCallback: function(row, data, start, end, display) {
+                        var api = this.api(),
+                            data;
+                        // converting to interger to find total
+                        var intVal = function(i) {
+                            return typeof i === 'string' ?
+                                i.replace(/[\$,]/g, '') * 1 :
+                                typeof i === 'number' ?
+                                i : 0;
+                        };
+                        // computing column Total of the complete result
+                        var jumlah_pesanan = api
+                            .column(3)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+                        // computing column Total of the complete result
+                        var total_pesanan = api
+                            .column(4)
+                            .data()
+                            .reduce(function(a, b) {
+                                return intVal(a) + intVal(b);
+                            }, 0);
+
+                        var num_for = $.fn.dataTable.render.number(',', '.', 2).display;
+                        $(api.column(0).footer()).html('Total');
+                        $(api.column(3).footer()).html('Total');
+                        $(api.column(4).footer()).html(num_for(total_pesanan));
+                    },
+                })
+            }
+
+            $(document).on('click', '#tabledetailpesan #lihatstok', function(){
+                var id = $(this).attr('data-id');
+                var produk = $(this).attr('data-produk');
+                var update = 'update';
+                 var array = [];
+                $.ajax({
+                    url: '/api/get_stok_pesanan',
+                    data: {'id': id, 'jenis': produk},
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function(result) {
+                        if (produk == 'part'){
+                    $("#part_status").addClass('d-none');
+                }else{
+                    $("#part_status").removeClass('d-none');
+                }
+
+                    var chartExist = Chart.getChart("myChart"); // <canvas> id
+                    if (chartExist != undefined)
+                    chartExist.destroy();
+                    update_chart(produk,result.gudang,result.qc,result.log,result.kir);
+
+
+                $('#nama_prd').text(result.detail.penjualan_produk.nama);
+                $('#tot_gudang').text(" dari " + result.detail.count_jumlah);
+                $('#tot_qc').text(" dari " + result.detail.count_gudang);
+                $('#tot_log').text(" dari " + result.detail.count_qc_ok);
+                $('#tot_kirim').text(" dari " + result.kir);
+
+                $('#c_gudang').text(result.gudang);
+                $('#c_qc').text(result.qc);
+                $('#c_log').text(result.log);
+                $('#c_kirim').text(result.kir);
+
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+
             });
         });
     </script>

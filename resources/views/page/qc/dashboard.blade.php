@@ -9,18 +9,32 @@
 
 @section('adminlte_css')
     <style>
+.modal-body{
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    table { border-collapse: collapse; empty-cells: show; }
 
-.foo {
-    border-radius: 50%;
-    float: left;
-    width: 10px;
-    height: 10px;
-    align-items: center !important;
-}
+    td { position: relative; }
 
+    .foo {
+        border-radius: 50%;
+        float: left;
+        width: 10px;
+        height: 10px;
+        align-items: center !important;
+    }
 
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
+    }
 
-.alert-danger {
+    .alert-danger {
         color: #a94442;
         background-color: #f2dede;
         border-color: #ebccd1;

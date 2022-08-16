@@ -2,7 +2,7 @@
 <form action="" method="post" data-attr="{{route('logistik.ekspedisi.update', ['id' => $e->id])}}" data-id="{{$e->id}}" id="form-ekspedisi-update">
     @method('PUT')
     <div class="row d-flex justify-content-center">
-        <div class="col-12">
+        <div class="col-10">
             @if(session()->has('error'))
                     <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
                         <strong>Gagal menambahkan!</strong> Periksa

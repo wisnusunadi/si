@@ -4085,6 +4085,7 @@ $Logistik = Logistik::find($request->sj_lama);
                 ->rawColumns(['batas', 'button'])
                 ->make(true);
         } else {
+
             $data = Pesanan::Has('DetailPesanan.DetailPesananProduk.NoseriDetailPesanan')->whereIn('id', function($q){
                         $q->select('pesanan.id')
                           ->from('pesanan')
@@ -4099,9 +4100,7 @@ $Logistik = Logistik::find($request->sj_lama);
                             left join detail_pesanan_produk on noseri_detail_pesanan.detail_pesanan_produk_id = detail_pesanan_produk.id
                             left join detail_pesanan on detail_pesanan_produk.detail_pesanan_id = detail_pesanan.id
                             where detail_pesanan.pesanan_id = pesanan.id)');
-                    })->whereHas('Ekatalog.Provinsi', function($q){
-                        $q->havingRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY) < CURDATE(), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY) < CURDATE())');
-                    })->addSelect(['tgl_kontrak' => function($q){
+                        })->addSelect(['tgl_kontrak' => function($q){
                         $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
                         ->from('ekatalog')
                         ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
@@ -4122,7 +4121,7 @@ $Logistik = Logistik::find($request->sj_lama);
                            ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                            ->limit(1);
-                    }])->with('Ekatalog.Customer.Provinsi')->orderBy('tgl_kontrak', 'asc')->get();
+                    }])->havingRaw('tgl_kontrak < CURDATE()')->with('Ekatalog.Customer.Provinsi')->orderBy('tgl_kontrak', 'asc')->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()

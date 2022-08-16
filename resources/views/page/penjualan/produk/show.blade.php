@@ -323,6 +323,9 @@
                             <div class="modal-content" style="margin: 10px">
                                 <div class="modal-header bg-danger">
                                     <h4 class="modal-title"><b>Hapus Paket Produk</b></h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                                 <div class="modal-body" id="hapus">
                                     <div class="row">
@@ -378,7 +381,7 @@
                         return false;
                     }
                 });
-                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" && $('input[name="is_aktif"]:checked').val() != ""){
+                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" && $('input[name="is_aktif"]:checked').val() != "" &&  $('input[name="jenis_paket"]:checked').val() != ""){
                     $("#btnsimpan").attr('disabled', false);
                 } else {
                     $("#btnsimpan").attr('disabled', true);
@@ -840,6 +843,11 @@
                 $(document).on('change', 'input[name="is_aktif"]', function(){
                     validasi();
                 });
+
+                $(document).on('change', 'input[name="jenis_paket"]', function(){
+                    validasi();
+                });
+
 
                 $(document).on('keyup change', '#harga', function() {
                     var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");

@@ -59,9 +59,11 @@
         color: #C0C0C0;
     }
 
-    .bg-color {
-        background-color: #fff2cc;
+    .yellow-bg {
+        background-color: #fff4dc;
+        color: #ffc107;
     }
+
 
     .removeboxshadow {
         box-shadow: none;
@@ -229,8 +231,11 @@
                     <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                         <div class="modal-dialog modal-lg" role="document">
                             <div class="modal-content" style="margin: 10px">
-                                <div class="modal-header bg-warning">
-                                    <h4 class="modal-title"><b>Ubah</b></h4>
+                                <div class="modal-header yellow-bg">
+                                    <h4 class="modal-title"><b>Ubah Customer</b></h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                                 <div class="modal-body" id="edit">
 
@@ -243,6 +248,9 @@
                             <div class="modal-content" style="margin: 10px">
                                 <div class="modal-header bg-danger">
                                     <h4 class="modal-title"><b>Hapus</b></h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                                 </div>
                                 <div class="modal-body" id="hapus">
                                     <div class="row">

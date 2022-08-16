@@ -9,6 +9,10 @@
 @section('adminlte_css')
 <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
 <style lang="scss">
+    .modal-body{
+        max-height: 80vh;
+        overflow-y: auto;
+    }
 
 .foo {
             border-radius: 50%;

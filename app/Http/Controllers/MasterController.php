@@ -240,11 +240,11 @@ class MasterController extends Controller
                 </a>';
                 }
                 $return .= ' <a data-toggle="modal" class="hapusmodal" data-id="' . $data->id . '" data-target="#hapusmodal">
-                <button class="dropdown-item" type="button">
-                <i class="far fa-trash-alt"></i>
-                    Hapus
-                </button>
-            </a></div>';
+                    <button class="dropdown-item" type="button">
+                    <i class="far fa-trash-alt"></i>
+                        Hapus
+                    </button>
+                </a></div>';
                 return $return;
             })
             ->rawColumns(['button', 'jurusan', 'via'])
@@ -908,9 +908,11 @@ class MasterController extends Controller
         ]);
         $bool = true;
         if ($PenjualanProduk) {
+            $sync_data = [];
             for ($i = 0; $i < count($request->produk_id); $i++) {
-                $PenjualanProduk->produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
+                array_push($sync_data, ['produk_id' => $request->produk_id[$i], 'jumlah' => $request->jumlah[$i]]);
             }
+            $PenjualanProduk->produk()->sync($sync_data);
         } else {
             $bool = false;
         }
@@ -1082,11 +1084,7 @@ class MasterController extends Controller
     {
         $harga_convert =  str_replace(['.', ','], "", $request->harga);
         $status = "";
-        if($request->jenis_paket == "ekatalog"){
-            $status = "ekat";
-        }else{
-            $status = NULL;
-        }
+
         $PenjualanProduk = PenjualanProduk::find($id);
         $PenjualanProduk->nama_alias = $request->nama_alias;
         $PenjualanProduk->nama = $request->nama_paket;
@@ -1098,9 +1096,9 @@ class MasterController extends Controller
 
         $produk_array = [];
         for ($i = 0; $i < count($request->produk_id); $i++) {
-            $produk_array[$request->produk_id[$i]] = ['jumlah' => $request->jumlah[$i]];
+            array_push($produk_array, ['produk_id' => $request->produk_id[$i], 'jumlah' => $request->jumlah[$i]]);
         }
-        $p = $PenjualanProduk->Produk()->sync($produk_array);
+        $p = $PenjualanProduk->produk()->sync($produk_array);
         if ($p) {
             return response()->json(['data' => 'success']);
         } else if (!$p) {

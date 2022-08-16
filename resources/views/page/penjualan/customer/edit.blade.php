@@ -1,7 +1,7 @@
 <form data-attr="{{ route('penjualan.customer.update', $customer->id) }}" data-id="{{$customer->id}}" method="POST" id="form-customer-update">
     @method('PUT')
     <div class="row d-flex justify-content-center">
-        <div class="col-12 justify-content-center">
+        <div class="col-10 justify-content-center">
             @if(session()->has('error'))
             <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
                 <strong>Gagal menambahkan!</strong> Periksa
@@ -36,7 +36,7 @@
                             </div>
                             <div class="form-group row">
                                 <label for="alamat" class="col-lg-4 col-md-12 col-form-label labelket">Alamat</label>
-                                <div class="col-lg-8 col-md-12">
+                                <div class="col-lg-7 col-md-12">
                                     <textarea  class="form-control col-form-label" placeholder="Masukkan Alamat" id="alamat" name="alamat">{{old('alamat', $customer->alamat)}}</textarea>
                                     <div class="invalid-feedback" id="msgalamat">
                                     </div>
@@ -44,7 +44,7 @@
                             </div>
                             <div class="form-group row">
                                 <label for="provinsi" class="col-4 col-form-label labelket">Provinsi</label>
-                                <div class="col-lg-8 col-md-12">
+                                <div class="col-lg-6 col-md-12">
                                     <select class="select2 select-info form-control custom-select provinsi col-form-label" name="provinsi" id="provinsi" style="width:100%">
                                         <option value="{{$customer->id_provinsi}}" selected>{{$customer->provinsi->nama}}</option>
                                     </select>
@@ -89,7 +89,7 @@
                         <div class="card-body">
                             <div class="form-group row">
                                 <label for="telepon" class="col-lg-4 col-md-12 col-form-label labelket">PIC</label>
-                                <div class="col-lg-5 col-md-12">
+                                <div class="col-lg-6 col-md-12">
                                     <input type="text" class="form-control col-form-label" placeholder="Masukkan Nama PIC" id="pic" name="pic" value="{{old('pic', $customer->pic)}}" />
                                     <div class="invalid-feedback" id="msgpic">
                                     </div>
@@ -97,7 +97,7 @@
                             </div>
                             <div class="form-group row">
                                 <label for="ktp" class="col-lg-4 col-md-12 col-form-label labelket">KTP</label>
-                                <div class="col-lg-8 col-md-12">
+                                <div class="col-lg-5 col-md-12">
                                     <input type="text" class="form-control col-form-label" placeholder="Masukkan KTP" id="ktp" name="ktp" value="{{old('ktp', $customer->ktp)}}" />
                                     <div class="invalid-feedback" id="msgktp">
                                     </div>
