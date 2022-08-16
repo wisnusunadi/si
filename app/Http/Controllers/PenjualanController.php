@@ -1961,12 +1961,9 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('button', function ($data) {
-                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                        <button class="dropdown-item" type="button"><i class="fas fa-eye"></i> Detail</button>
-                    </a>
-                </div>';
+                return  '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                        <button class="btn btn-outline-primary btn-sm" type="button"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
             })
             ->rawColumns(['batas_kontrak', 'button', 'status'])
             ->make(true);
@@ -2400,6 +2397,8 @@ class PenjualanController extends Controller
                 // }
                 // return $datas;
                     $datas = "";
+                    $tes = $data->cjumlahprd + $data->cjumlahpart;
+                    if($tes > 0){
                     $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if($data->log == "batal") {
                         $datas = '<span class="badge red-text">Batal</span>';
@@ -2414,6 +2413,7 @@ class PenjualanController extends Controller
                                 <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
                             </div>
                             <small class="text-muted">Selesai</small>';
+                        }
                         }
                     }
                     return $datas;
@@ -2631,6 +2631,8 @@ class PenjualanController extends Controller
                 // }
                 // return $datas;
                 $datas = "";
+                $tes = $data->cjumlahprd + $data->cjumlahpart;
+                    if($tes > 0){
                     $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if($data->log == "batal") {
                         $datas = '<span class="badge red-text">Batal</span>';
@@ -2647,6 +2649,7 @@ class PenjualanController extends Controller
                             <small class="text-muted">Selesai</small>';
                         }
                     }
+                }
                     return $datas;
             })
             ->addColumn('nopo', function ($data) {

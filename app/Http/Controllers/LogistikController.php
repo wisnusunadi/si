@@ -1125,6 +1125,22 @@ class LogistikController extends Controller
                     </a>';
             })
             ->rawColumns(['status', 'button', 'batas'])
+            ->setRowClass(function ($data) {
+                if ($data->Ekatalog) {
+                    if ($data->Ekatalog->status == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else if ($data->Spa) {
+                    if ($data->Spa->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else {
+                    if ($data->Spb->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                }
+
+            })
             ->make(true);
     }
 
@@ -1288,6 +1304,22 @@ class LogistikController extends Controller
                     </a>';
             })
             ->rawColumns(['status', 'button', 'batas'])
+            ->setRowClass(function ($data) {
+                if ($data->Ekatalog) {
+                    if ($data->Ekatalog->status == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else if ($data->Spa) {
+                    if ($data->Spa->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else {
+                    if ($data->Spb->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                }
+
+            })
             ->make(true);
     }
 
@@ -1430,9 +1462,16 @@ class LogistikController extends Controller
         $z = explode(',', $jenis_penjualan);
         $data = "";
         if ($pengiriman == "semua" && $provinsi == "semua" && $jenis_penjualan == "semua") {
-            $dataeks = Logistik::whereNull('noresi')->whereNotNull('ekspedisi_id')->get();
-            $datanoneks = Logistik::where('status_id', '11')->whereNotNull('nama_pengirim')->get();
-            $data = $dataeks->merge($datanoneks);
+            $dataeks = Logistik::whereNull('noresi')->whereNotNull('ekspedisi_id');
+            $data = Logistik::where('status_id', '11')->whereNotNull('nama_pengirim')->union($dataeks)
+                    ->with(['DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Customer.Provinsi',
+                            'DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer.Provinsi',
+                            'DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer.Provinsi',
+                            'DetailLogistikPart.DetailPesananPart.Pesanan.Ekatalog.Customer.Provinsi',
+                            'DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi',
+                            'DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi',
+                            'Ekspedisi'])
+                    ->get();
         } else if ($pengiriman != "semua" && $provinsi == "semua" && $jenis_penjualan == "semua") {
             $dataeks = "";
             $datanoneks = "";
@@ -4092,8 +4131,6 @@ $Logistik = Logistik::find($request->sj_lama);
                             left join detail_pesanan_produk on noseri_detail_pesanan.detail_pesanan_produk_id = detail_pesanan_produk.id
                             left join detail_pesanan on detail_pesanan_produk.detail_pesanan_id = detail_pesanan.id
                             where detail_pesanan.pesanan_id = pesanan.id)');
-                    })->whereHas('Ekatalog.Provinsi', function($q){
-                        $q->havingRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY) < CURDATE(), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY) < CURDATE())');
                     })->addSelect(['tgl_kontrak' => function($q){
                         $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
                         ->from('ekatalog')
@@ -4115,7 +4152,7 @@ $Logistik = Logistik::find($request->sj_lama);
                            ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                            ->limit(1);
-                    }])->with('Ekatalog.Customer.Provinsi')->orderBy('tgl_kontrak', 'asc')->get();
+                    }])->havingRaw('tgl_kontrak < CURDATE()')->with('Ekatalog.Customer.Provinsi')->orderBy('tgl_kontrak', 'asc')->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -4225,7 +4262,7 @@ $Logistik = Logistik::find($request->sj_lama);
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                $hitung = round(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                 if ($data->log_id == "9") {
                     $datas = '<span class="badge purple-text">'.$data->State->nama . '</span>';
                 } else {
@@ -4734,12 +4771,6 @@ $Logistik = Logistik::find($request->sj_lama);
         if ($id != "0") {
             $e = Logistik::where([['id', '!=', $id], ['nosurat', '=', $val]])->count();
         } else {
-            // $vjenis = "";
-            // if ($jenis == "SPB") {
-            //     $vjenis = "B.";
-            // } else {
-            //     $vjenis = "SPA-";
-            // }
             $e = Logistik::where('nosurat', $val)->count();
         }
         return $e;
