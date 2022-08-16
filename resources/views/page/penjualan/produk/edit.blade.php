@@ -3,10 +3,11 @@
         method="post" id="form-penjualan-produk-update">
         @method('PUT')
         <div class="row d-flex justify-content-center">
-
             <div class="col-11">
-                <h6>Info Umum Paket</h6>
-                <div class="card">
+                <div class="card card-outline card-warning">
+                    <div class="card-header">
+                        <h6 class="card-title">Info Umum Paket</h6>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
@@ -65,6 +66,22 @@
                                         </div>
                                     </div>
                                 </div>
+                                <div class="form-group row">
+                                    <label for="is_aktif" class="col-4 col-form-label"
+                                        style="text-align: right">Status</label>
+                                    <div class="col-6 col-form-label">
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="is_aktif"
+                                                id="is_aktif1" value="1" {{ ($p->is_aktif == "1")? "checked" : "" }}/>
+                                            <label class="form-check-label" for="is_aktif1">Aktif</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" name="is_aktif"
+                                                id="is_aktif2" value="0" {{ ($p->is_aktif == "0")? "checked" : "" }} />
+                                            <label class="form-check-label" for="is_aktif2" >Tidak Aktif</label>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -73,8 +90,10 @@
         </div>
         <div class="row d-flex justify-content-center">
             <div class="col-11">
-                <h6>Detail Produk Paket</h6>
-                <div class="card">
+                <div class="card card-outline card-warning">
+                    <div class="card-header">
+                        <h6 class="card-title">Detail Produk Paket</h6>
+                    </div>
                     <div class="card-body">
                         <div class="row">
                             <div class="col-12">
@@ -128,7 +147,7 @@
                                                     </td>
                                                 </tr>
                                             @endforeach
-@endforeach
+
 </tbody>
 </table>
 </div>
@@ -144,8 +163,9 @@
             <button class="btn btn-danger float-left" data-dismiss="modal">Batal</button>
         </span>
         <span class="float-right">
-            <button type="submit" class="btn btn-warning float-right" id="btnsimpan">Simpan</button>
+            <button type="submit" class="btn btn-warning float-right" id="btnsimpan" disabled="true">Simpan</button>
         </span>
     </div>
 </div>
 </form>
+@endforeach

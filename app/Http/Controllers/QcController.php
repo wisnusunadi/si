@@ -161,13 +161,13 @@ class QcController extends Controller
                 if (count($check) > 0) {
                     foreach ($check as $c) {
                         if ($c->status == 'ok') {
-                            return '<i class="fas fa-check-circle ok"></i>';
+                            return '<i class="fas fa-check-circle ok has-text-success"></i>';
                         } else {
-                            return '<i class="fas fa-times-circle nok"></i>';
+                            return '<i class="fas fa-times-circle nok has-text-danger"></i>';
                         }
                     }
                 } else {
-                    return '<i class="fas fa-question-circle warning"></i>';
+                    return '<i class="fas fa-question-circle warning has-text-warning"></i>';
                 }
             })
             ->addColumn('button', function () {
@@ -329,16 +329,16 @@ class QcController extends Controller
                     $bool = "0";
                     if ($jumlahditrf > 0) {
                         if ($jumlahditrf == $countok) {
-                            return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><i class="fas fa-eye"></i></a>';
+                            return '<a class="noserishow" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                         } else {
-                            return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><i class="fas fa-eye"></i></a>';
+                            return '<a class="noserishow" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '" data-jenis="produk"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                         }
                     }
                 } else {
                     if ($data->jumlah == $data->getJumlahCekPart('ok')) {
-                        return '<a type="button" class="noserishow" data-count="0" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-eye"></i></a>';
+                        return '<a class="noserishow" data-count="0" data-id="' . $data->id . '" data-jenis="part"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                     } else {
-                        return '<a type="button" class="noserishow" data-count="1" data-id="' . $data->id . '" data-jenis="part"><i class="fas fa-eye"></i></a>';
+                        return '<a class="noserishow" data-count="1" data-id="' . $data->id . '" data-jenis="part"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
                     }
                 }
 
@@ -373,7 +373,44 @@ class QcController extends Controller
                 //     }
                 // }
             })
-            ->rawColumns(['nama_produk', 'button'])
+            ->addColumn('aksi', function($data) use ($id){
+                if (isset($data->gudang_barang_jadi_id)) {
+                    $ids = $data->gudang_barang_jadi_id;
+                    $countok = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($ids) {
+                        $q->where([
+                            ['gudang_barang_jadi_id', '=', $ids],
+                            ['status', '=', 'ok']
+                        ]);
+                    })->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                        $q->where('pesanan_id', $id);
+                    })->get()->count();
+
+                    $countnok = NoseriDetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($ids) {
+                        $q->where([
+                            ['gudang_barang_jadi_id', '=', $ids],
+                            ['status', '=', 'ok']
+                        ]);
+                    })->whereHas('DetailPesananProduk.DetailPesanan', function ($q) use ($id) {
+                        $q->where('pesanan_id', $id);
+                    })->get()->count();
+
+                    $jumlahditrf = NoseriTGbj::whereHas('detail', function ($q) use ($ids) {
+                        $q->where('gdg_brg_jadi_id', $ids);
+                    })->whereHas('detail.header', function ($q) use ($id) {
+                        $q->where('pesanan_id', $id);
+                    })->count();
+
+                    $bool = "0";
+                    if ($jumlahditrf > 0) {
+                        if ($jumlahditrf == $countok) {
+                            return '<a data-toggle="modal" data-target="#noserimodal" class="noseri" data-count="0" data-id="' . $data->gudang_barang_jadi_id . '" data-pesan="'.$id.'" data-jenis="produk"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
+                        } else {
+                            return '<a data-toggle="modal" data-target="#noserimodal" class="noseri" data-count="1" data-id="' . $data->gudang_barang_jadi_id . '" data-pesan="'.$id.'" data-jenis="produk"><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></a>';
+                        }
+                    }
+                }
+            })
+            ->rawColumns(['nama_produk', 'button', 'aksi'])
             ->make(true);
         //echo json_encode($data);
     }
@@ -921,7 +958,7 @@ class QcController extends Controller
                         return $data->ekatalog->ket;
                     } else if ($name[1] == 'SPA') {
                         return $data->spa->ket;
-                    } else if ($name[1] == 'SPA') {
+                    } else if ($name[1] == 'SPB') {
                         return $data->spb->ket;
                     }
                 }
@@ -930,7 +967,7 @@ class QcController extends Controller
                 $datas = "";
                 $res = $data->ctfprd + $data->ctfpart;
                 if($res > 0){
-                    $hitung = round(((($data->cqcprd + $data->cqcpart) / ($data->ctfprd + $data->ctfpart)) * 100), 0);
+                    $hitung = floor(((($data->cqcprd + $data->cqcpart) / ($data->ctfprd + $data->ctfpart)) * 100));
                     if($hitung > 0){
                     $datas = '<div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -990,7 +1027,7 @@ class QcController extends Controller
                     $name = explode('/', $data->so);
                     if ($name[1] == 'EKAT') {
                         $x =  'ekatalog';
-                    } elseif ($name[1] == 'SPA') {
+                    } else if ($name[1] == 'SPA') {
                         $x =  'spa';
                     } else {
                         $x =  'spb';
@@ -1001,6 +1038,22 @@ class QcController extends Controller
                 }
             })
             ->rawColumns(['button', 'status', 'batas_uji'])
+            ->setRowClass(function ($data) {
+                if ($data->Ekatalog) {
+                    if ($data->Ekatalog->status == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else if ($data->Spa) {
+                    if ($data->Spa->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else {
+                    if ($data->Spb->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                }
+
+            })
             ->make(true);
     }
     public function get_data_selesai_so($value)
@@ -1299,6 +1352,22 @@ class QcController extends Controller
                 }
             })
             ->rawColumns(['button', 'nama_produk'])
+            ->setRowClass(function ($data) {
+                if ($data->Pesanan->Ekatalog) {
+                    if ($data->Pesanan->Ekatalog->status == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else if ($data->Pesanan->Spa) {
+                    if ($data->Pesanan->Spa->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                } else {
+                    if ($data->Pesanan->Spb->log == 'batal') {
+                        return 'text-danger font-weight-bold';
+                    }
+                }
+
+            })
             ->make(true);
     }
 
@@ -1476,7 +1545,7 @@ class QcController extends Controller
                 $status = "";
                 $res = $ds->ctfprd + $ds->ctfpart;
                 if($res > 0){
-                    $hitung = round(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100), 0);
+                    $hitung = floor(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100));
                     if($hitung > 0){
                     $status = '<div class="progress progresscust">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1620,7 +1689,7 @@ class QcController extends Controller
             $status = "";
                 $res = $ds->ctfprd + $ds->ctfpart;
                 if($res > 0){
-                    $hitung = round(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100), 0);
+                    $hitung = floor(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100));
                     if($hitung > 0){
                     $status = '<div class="progress progresscust">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1715,7 +1784,7 @@ class QcController extends Controller
             $status = "";
                 $res = $ds->ctfprd + $ds->ctfpart;
                 if($res > 0){
-                    $hitung = round(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100), 0);
+                    $hitung = floor(((($ds->cqcprd + $ds->cqcpart) / ($ds->ctfprd + $ds->ctfpart)) * 100));
                     if($hitung > 0){
                     $status = '<div class="progress progresscust">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1736,6 +1805,13 @@ class QcController extends Controller
             return view('page.qc.so.detail_spb', ['id' => $id, 'data' => $data, 'detail_id' => $detail_id, 'status' => $status]);
         }
     }
+
+    public function cancel_so($id){
+        $p = Pesanan::where('id', $id)->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->first();
+
+        return view('page.qc.so.cancel', ['id' => $id, 'p' => $p]);
+    }
+
     public function detail_modal_riwayat_so($id, $jenis)
     {
         $result = "";
@@ -2077,69 +2153,50 @@ class QcController extends Controller
                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-               ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-               ->limit(1);
-        },
-        'clogpart' => function($q){
+               ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+        }, 'clogpart' => function($q){
             $q->selectRaw('sum(detail_logistik_part.jumlah)')
                ->from('detail_logistik_part')
                ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
                ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-               ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
-               ->limit(1);
+               ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
         }])
         ->whereIn('log_id', ['9'])
         ->havingRaw('clogprd < cjumlahprd OR clogpart < cjumlahpart')
         ->count();
 
-        $cgudang = Pesanan::addSelect(['cjumlahprd' => function($q){
+        $cgudang = Pesanan::addSelect(['jumlah_produk' => function($q){
             $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
             ->from('detail_pesanan')
             ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
             ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
             ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-        }, 'cjumlahpart' => function($q){
-            $q->selectRaw('sum(detail_pesanan_part.jumlah)')
-            ->from('detail_pesanan_part')
-            ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-            ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
-        },'clogprd' => function($q){
-            $q->selectRaw('count(noseri_logistik.id)')
-               ->from('noseri_logistik')
-               ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-               ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-               ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-               ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-               ->limit(1);
-        },
-        'clogpart' => function($q){
-            $q->selectRaw('sum(detail_logistik_part.jumlah)')
-               ->from('detail_logistik_part')
-               ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-               ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-               ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-               ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
-               ->limit(1);
-        }])
-        ->whereIn('log_id', ['6'])
-        ->havingRaw('clogprd < cjumlahprd OR clogpart < cjumlahpart')
-        ->count();
+        }, 'jumlah_gudang' => function($q){
+            $q->selectRaw('count(t_gbj_noseri.id)')
+            ->from('t_gbj_noseri')
+            ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+            ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+            ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
+        }])->whereNotIn('log_id', ['7'])->havingRaw('jumlah_produk > jumlah_gudang')->count();
 
-        $clogistik = Pesanan::addSelect(['cjumlahprd' => function($q){
-            $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
-            ->from('detail_pesanan')
-            ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
-            ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
-            ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-        }, 'cjumlahpart' => function($q){
-            $q->selectRaw('sum(detail_pesanan_part.jumlah)')
-            ->from('detail_pesanan_part')
-            ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+        $clogistik = Pesanan::addSelect(['cqcprd' => function($q){
+            $q->selectRaw('count(noseri_detail_pesanan.id)')
+                ->from('noseri_detail_pesanan')
+                ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->where('noseri_detail_pesanan.status', 'ok')
+                ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+        },
+        'cqcpart' => function($q){
+            $q->selectRaw('coalesce(sum(outgoing_pesanan_part.jumlah_ok), 0)')
+            ->from('outgoing_pesanan_part')
+            ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+            ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
             ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
             ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
-        },'clogprd' => function($q){
+        },
+        'clogprd' => function($q){
             $q->selectRaw('count(noseri_logistik.id)')
                ->from('noseri_logistik')
                ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
@@ -2154,11 +2211,9 @@ class QcController extends Controller
                ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
                ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
                ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-               ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
-               ->limit(1);
+               ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
         }])
-        ->whereIn('log_id', ['11', '13'])
-        ->havingRaw('clogprd < cjumlahprd OR clogpart < cjumlahpart')
+        ->havingRaw('cqcprd > clogprd OR clogprd > clogpart')
         ->count();
         return view('page.qc.dashboard', ['terbaru' => $terbaru, 'hasil' => $hasil, 'lewat_batas' => $lewat_batas, 'po' => $cpo, 'gudang' => $cgudang, 'logistik' => $clogistik]);
     }
@@ -2626,10 +2681,8 @@ class QcController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                $hitung = round(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                if ($data->log_id == "9") {
-                    $datas = '<span class="badge purple-text">'.$data->State->nama . '</span>';
-                } else {
+                $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+
                     if($hitung > 0){
                         $datas = '<div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -2641,7 +2694,6 @@ class QcController extends Controller
                         </div>
                         <small class="text-muted">Terkirim</small>';
                     }
-                }
                 return $datas;
             })
             ->addColumn('aksi', function($data){

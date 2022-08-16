@@ -3,68 +3,35 @@
 @section('title', 'ERP')
 
 @section('content_header')
-<div class="container-fluid">
-    <div class="row mb-2">
-        <div class="col-sm-6">
-            <h1 class="m-0  text-dark">Permintaan Pengiriman</h1>
-        </div><!-- /.col -->
-        <div class="col-sm-6">
-            <ol class="breadcrumb float-sm-right">
-                @if(Auth::user()->divisi_id == "2")
-                <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
-                <li class="breadcrumb-item active">Permintaan Pengiriman</li>
-                @endif
-            </ol>
-        </div><!-- /.col -->
-    </div><!-- /.row -->
-</div><!-- /.container-fluid -->
+    <div class="container-fluid">
+        <div class="row mb-2">
+            <div class="col-sm-6">
+                <h1 class="m-0  text-dark">Penjualan</h1>
+            </div><!-- /.col -->
+            <div class="col-sm-6">
+                <ol class="breadcrumb float-sm-right">
+                    @if (Auth::user()->divisi_id == '26')
+                        <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
+                        <li class="breadcrumb-item active">Penjualan</li>
+                    @elseif(Auth::user()->divisi_id == '2')
+                        <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
+                        <li class="breadcrumb-item active">Penjualan</li>
+                    @endif
+                </ol>
+            </div><!-- /.col -->
+        </div><!-- /.row -->
+    </div><!-- /.container-fluid -->
 @stop
+
 @section('adminlte_css')
 <style>
     .modal-body{
         max-height: 80vh;
         overflow-y: auto;
     }
+    table { border-collapse: collapse; empty-cells: show; }
 
-    .m-fadeOut {
-        visibility: hidden;
-        opacity: 0;
-        transition: visibility 0s linear 300ms, opacity 300ms;
-    }
-    .m-fadeIn {
-        visibility: visible;
-        opacity: 0.6;
-        transition: visibility 0s linear 0s, opacity 300ms;
-    }
-
-    .urgent {
-        color: #dc3545;
-        font-weight: 600;
-    }
-
-    .warning {
-        color: #FFC700;
-        font-weight: 600;
-    }
-
-    .info {
-        color: #3a7bb0;
-    }
-
-    .filter {
-        margin: 5px;
-    }
-
-    .minimizechar {
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        max-width: 25ch;
-    }
-
-    .align-center {
-        text-align: center;
-    }
+    td { position: relative; }
 
     .foo {
         border-radius: 50%;
@@ -72,6 +39,15 @@
         width: 10px;
         height: 10px;
         align-items: center !important;
+    }
+
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
     }
 
     .alert-danger {
@@ -86,6 +62,12 @@
         border-color: #bee5eb;
     }
 
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+    }
+
     .separator {
         border-top: 1px solid #bbb;
         width: 90%;
@@ -98,6 +80,10 @@
 
     .nowraptxt {
         white-space: nowrap;
+    }
+
+    .filter {
+        margin: 5px;
     }
 
     thead {
@@ -124,8 +110,24 @@
         font-weight: 600;
     }
 
+    .minimizechar {
+        display: inline-block;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 13ch;
+    }
+
     .hide {
         display: none;
+    }
+
+    .dropdown-toggle:hover {
+        color: #4682B4;
+    }
+
+    .dropdown-toggle:active {
+        color: #C0C0C0;
     }
 
     td.details-control {
@@ -163,6 +165,10 @@
         box-shadow: none;
     }
 
+    .align-center {
+        text-align: center;
+    }
+
     .bordertopnone {
         border-top: 0;
         border-left: 0;
@@ -190,6 +196,11 @@
         border-top-right-radius: 0;
         border-bottom-left-radius: calc(0.25rem - 1px);
     }
+
+    /* .overflowcard {
+            max-height:
+            700px;
+        } */
 
     .bg-chart-light{
         background: rgba(192, 192, 192, 0.2);
@@ -280,165 +291,71 @@
         }
     }
 
-    .borderright {
-        border-right: 1px solid #F0ECE3;
-    }
 </style>
 @stop
 
 @section('content')
-<section class="content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="table-responsive">
-                                    <table class="table table-hover table-striped table-bordered" style="text-align:center;" id="showtable">
-                                        <thead>
-                                            <tr class="bg-navy">
-                                                <th class="nowrap" rowspan="2">No</th>
-                                                <th rowspan="2">Nama Produk</th>
-                                                <th class="nowrap" rowspan="2">Jumlah Pesanan</th>
-                                                <th class="nowrap borderright" colspan="2">Pengiriman</th>
-                                                <th class="nowrap" rowspan="2">Aksi</th>
-                                            </tr>
-                                            <tr class="bg-secondary">
-                                                <th>Jumlah Selesai</th>
-                                                <th>Jumlah Sisa</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                        </tbody>
-                                    </table>
-                                </div>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="penjualantable" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Nomor SO</th>
+                                            <th>Nomor AKN</th>
+                                            <th>Nomor PO</th>
+                                            <th>Tanggal PO</th>
+                                            <th>Tanggal Delivery</th>
+                                            <th>Customer</th>
+                                            <th>Status</th>
+                                            <th>Aksi</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="modal fade" id="detailmodal" role="dialog" aria-labelledby="detailmodal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content" style="margin: 10px">
-                <div class="modal-header">
-                    <h4 class="modal-title">Info</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="detail">
+        <div class="modal fade" id="detailmodal" tabindex="-1" role="dialog" aria-labelledby="detailmodal"
+                aria-hidden="true">
+                <div class="modal-dialog modal-xl" role="document">
+                    <div class="modal-content" style="margin: 10px">
+                        <div class="modal-header">
+                            <h4 id="modal-title">Detail</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body" id="detail">
 
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </div>
-    <div class="modal fade" id="penjualanmodal" role="dialog" aria-labelledby="penjualanmodal" aria-hidden="true">
-        <div class="modal-dialog modal-xl" role="document">
-            <div class="modal-content" style="margin: 10px">
-                <div class="modal-header">
-                    <h4 class="modal-title">Info</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="penjualan">
-
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
+    </section>
 @endsection
-
 @section('adminlte_js')
-<script>
-    $(function() {
-        $(document).on('click', '.detailmodal', function(event) {
-            event.preventDefault();
-            var id = $(this).data('id');
-            $.ajax({
-                url: "/ppic/master_pengiriman/detail/" + id,
-                beforeSend: function() {
-                    $('#loader').show();
-                },
-                success: function(result) {
-                    $('#detailmodal').modal("show");
-                    $('#detail').html(result).show();
-                    detailtable(id);
-                },
-                complete: function() {
-                    $('#loader').hide();
-                },
-                error: function(jqXHR, testStatus, error) {
-                    console.log(error);
-                    alert("Page " + href + " cannot open. Error:" + error);
-                    $('#loader').hide();
-                },
-                timeout: 8000
-            })
-        });
-
-
-        var showtable = $('#showtable').DataTable({
-            destroy: true,
-            processing: true,
-            serverSide: true,
-            ajax: {
-                'url': '/api/ppic/master_pengiriman/data',
-                'type': 'POST',
-                'dataType': 'JSON',
-                'headers': {
-                    'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
-            },
-            language: {
-                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-            },
-            columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'borderright',
-                    orderable: false,
-                    searchable: false
-                },
-                {
-                    data: 'nama_produk',
-                    className: 'borderright',
-                },
-                {
-                    data: 'jumlah',
-                    className: 'borderright',
-                },
-                {
-                    data: 'jumlah_pengiriman',
-                },
-                {
-                    data: 'belum_pengiriman',
-                    className: 'borderright',
-                },
-                {
-                    data: 'aksi',
-                    orderable: false,
-                    searchable: false
-                }
-            ]
-        });
-
-
-        function detailtable(id) {
-            $('#detailtable').DataTable({
+    <script>
+        $(function() {
+            var penjualantable = $('#penjualantable').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
                 ajax: {
-                    'url': '/api/ppic/master_pengiriman/detail/' + id,
+                    'url': "/api/dc/so_in_process/data",
+                    "dataType": "json",
                     'type': 'POST',
-                    'dataType': 'JSON',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    "headers": {
+                        'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     }
                 },
                 language: {
@@ -446,37 +363,131 @@
                 },
                 columns: [{
                         data: 'DT_RowIndex',
+                        className: 'nowrap-text align-center',
                         orderable: false,
                         searchable: false
-                    },
-                    {
+                    }, {
                         data: 'so',
-                    },
-                    {
-                        data: 'customer',
-                    },
-                    {
-                        data: 'tgl_delivery',
-                    },
-                    {
-                        data: 'jumlah_pesanan',
-                    },
-                    {
-                        data: 'jumlah_selesai_kirim',
-                    },
-                    {
-                        data: 'jumlah_belum_kirim',
-                    },
-                    {
-                        data: 'aksi',
+                    }, {
+                        data: 'no_paket',
+                    }, {
+                        data: 'nopo',
+                    }, {
+                        data: 'tgl_order',
+                    }, {
+                        data: 'tgl_kontrak',
+                    }, {
+                        data: 'nama_customer',
+                    }, {
+                        data: 'status',
+                    }, {
+                        data: 'button',
                         orderable: false,
                         searchable: false
-                    }
+                    },
                 ]
             });
-        }
+            function update_chart(produk,gudang ,qc, log, ki){
+                const ctx = $('#myChart');
+                if(produk == 'part'){
+                    const myChart = new Chart(ctx, {
+                        type: 'pie',
+                        data: {
+                            labels: [
+                                'QC',
+                                'Logistik',
+                                'Kirim',
+                            ],
+                            datasets: [{
+                                label: 'STATUS PESANAN',
+                                data: [qc, log, ki],
+                                backgroundColor: [
+                                'rgb(255, 221, 0)',
+                                'rgb(11, 171, 100)',
+                                'rgb(8, 126, 225)'
+                                ],
+                                hoverOffset: 4
+                            }]
+                        }
+                    });
+                }else{
+                    const myChart = new Chart(ctx, {
+                    type: 'pie',
+                data: {
+                    labels: [
+                        'Gudang',
+                        'QC',
+                        'Logistik',
+                        'Kirim',
+                    ],
+                    datasets: [{
+                        label: 'STATUS PESANAN',
+                        data: [gudang ,qc, log, ki],
+                        backgroundColor: [
 
-        function detailtabel_ekatalog(id) {
+                        'rgb(236, 159, 5)',
+                        'rgb(255, 221, 0)',
+                        'rgb(11, 171, 100)',
+                        'rgb(8, 126, 225)'
+                        ],
+                        hoverOffset: 4
+                    }]
+                }
+                });
+                }
+
+            }
+
+            $(document).on('click', '.detailmodal', function(event) {
+                event.preventDefault();
+                var href = $(this).attr('data-attr');
+                var id = $(this).data("id");
+                var label = $(this).data("target");
+                $.ajax({
+                    url: href,
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    // return the result
+                    success: function(result) {
+                        $('#detailmodal').modal("show");
+                        $('#detail').html(result).show();
+
+                        if (label == 'ekatalog') {
+                            $('#detailmodal').find(".modal-header").removeClass(
+                                'bg-orange bg-lightblue');
+                            $('#detailmodal').find(".modal-header").addClass('bg-purple');
+                            $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
+
+                            detailtabel_ekatalog(id);
+                        } else if (label == 'spa') {
+                            $('#detailmodal').find(".modal-header").removeClass(
+                                'bg-purple bg-lightblue');
+                            $('#detailmodal').find(".modal-header").addClass('bg-orange');
+                            $('#detailmodal').find(".modal-header > h4").text('SPA');
+                            detailtabel_spa(id);
+                        } else {
+                            $('#detailmodal').find(".modal-header").removeClass(
+                                'bg-orange bg-purple');
+                            $('#detailmodal').find(".modal-header").addClass('bg-lightblue');
+                            $('#detailmodal').find(".modal-header > h4").text('SPB');
+                            detailtabel_spb(id);
+                        }
+
+                        $('#detailmodal').find('[data-toggle="tooltip"]').tooltip();
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page " + href + " cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+            });
+            function detailtabel_ekatalog(id) {
                 var dt = $('#detailtabel').DataTable({
                     destroy: true,
                     processing: true,
@@ -726,113 +737,6 @@
                 })
             }
 
-            $(document).on('hidden.bs.modal', '#penjualanmodal', function(event){
-            $('#detailmodal').find('#modal-overlay').addClass('m-fadeOut');
-            $('#detailmodal').find('#modal-overlay').removeClass('m-fadeIn');
-        });
-        $(document).on('click', '.penjualanmodal', function(event) {
-            $('#detailmodal').find('#modal-overlay').removeClass('m-fadeOut');
-            $('#detailmodal').find('#modal-overlay').addClass('m-fadeIn');
-
-                var href = $(this).attr('data-attr');
-                var id = $(this).data("id");
-                var label = $(this).data("target");
-                $.ajax({
-                    url: href,
-                    beforeSend: function() {
-                        $('#loader').show();
-                    },
-                    // return the result
-                    success: function(result) {
-                        $('#penjualanmodal').modal("show");
-                        $('#penjualan').html(result).show();
-
-                        if (label == 'ekatalog') {
-                            $('#penjualanmodal').find(".modal-header").removeClass(
-                                'bg-orange bg-lightblue');
-                            $('#penjualanmodal').find(".modal-header").addClass('bg-purple');
-                            $('#penjualanmodal').find(".modal-header > h4").text('E-Catalogue');
-
-                            detailtabel_ekatalog(id);
-                        } else if (label == 'spa') {
-                            $('#penjualanmodal').find(".modal-header").removeClass(
-                                'bg-purple bg-lightblue');
-                            $('#penjualanmodal').find(".modal-header").addClass('bg-orange');
-                            $('#penjualanmodal').find(".modal-header > h4").text('SPA');
-                            detailtabel_spa(id);
-                        } else {
-                            $('#penjualanmodal').find(".modal-header").removeClass(
-                                'bg-orange bg-purple');
-                            $('#penjualanmodal').find(".modal-header").addClass('bg-lightblue');
-                            $('#penjualanmodal').find(".modal-header > h4").text('SPB');
-                            detailtabel_spb(id);
-                        }
-
-                        $('#penjualanmodal').find('[data-toggle="tooltip"]').tooltip();
-                    },
-                    complete: function() {
-                        $('#loader').hide();
-                    },
-                    error: function(jqXHR, testStatus, error) {
-                        console.log(error);
-                        alert("Page " + href + " cannot open. Error:" + error);
-                        $('#loader').hide();
-                    },
-                    timeout: 8000
-                })
-        });
-
-        function update_chart(produk,gudang ,qc, log, ki){
-                const ctx = $('#myChart');
-                if(produk == 'part'){
-                    const myChart = new Chart(ctx, {
-                    type: 'pie',
-                data: {
-                    labels: [
-                        'QC',
-                        'Logistik',
-                        'Kirim',
-                    ],
-                    datasets: [{
-                        label: 'STATUS PESANAN',
-                        data: [qc, log, ki],
-                        backgroundColor: [
-                        'rgb(255, 221, 0)',
-                        'rgb(11, 171, 100)',
-                        'rgb(8, 126, 225)'
-                        ],
-                        hoverOffset: 4
-                    }]
-                }
-                });
-                }else{
-                    const myChart = new Chart(ctx, {
-                    type: 'pie',
-                data: {
-                    labels: [
-                        'Gudang',
-                        'QC',
-                        'Logistik',
-                        'Kirim',
-                    ],
-                    datasets: [{
-                        label: 'STATUS PESANAN',
-                        data: [gudang ,qc, log, ki],
-                        backgroundColor: [
-
-                        'rgb(236, 159, 5)',
-                        'rgb(255, 221, 0)',
-                        'rgb(11, 171, 100)',
-                        'rgb(8, 126, 225)'
-                        ],
-                        hoverOffset: 4
-                    }]
-                }
-                });
-                }
-
-        }
-
             $(document).on('click', '#tabledetailpesan #lihatstok', function(){
                 var id = $(this).attr('data-id');
                 var produk = $(this).attr('data-produk');
@@ -880,6 +784,6 @@
                 })
 
             });
-    });
-</script>
-@stop
+        });
+    </script>
+@endsection

@@ -1145,8 +1145,20 @@ return [
             'auth' => [9],
         ],
         [
+            'text' => 'Lacak',
+            'icon' => 'fas fa-search fa-fw',
+            'url' => '/penjualan/lacak/show',
+            'auth' => [9],
+        ],
+        [
             'header' => 'PENJUALAN',
             'auth' => [9]
+        ],
+        [
+            'text' => 'Dalam Proses',
+            'icon' => 'fas fa-spinner',
+            'url' => '/dc/so_in_process/show',
+            'auth' => [9],
         ],
         [
             'text' => 'Sales Order',
@@ -1325,7 +1337,7 @@ return [
                     'auth' => [2, 26],
                 ],
                 [
-                    'text' => 'Perencanaan',
+                    'text' => 'Jadwal Perakitan',
                     'url'  => '/ppic_direksi',
                     'icon' => 'far fa-circle',
                     'auth' => [2]

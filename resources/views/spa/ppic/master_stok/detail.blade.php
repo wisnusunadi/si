@@ -61,6 +61,7 @@
                                         <th>Tanggal Delivery</th>
                                         <th>Jumlah</th>
                                         <th>Status</th>
+                                        <th>Aksi</th>
                                     </tr>
                                 </thead>
                                 <tbody>

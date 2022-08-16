@@ -102,6 +102,7 @@ Route::group(['prefix' => 'master', 'middleware' => 'auth'], function () {
         Route::get('/edit_coo/{id}', [App\Http\Controllers\MasterController::class, 'edit_coo_data_produk'])->name('master.produk.edit_coo');
 
         Route::get('/export', [App\Http\Controllers\MasterController::class, 'export_produk'])->name('master.produk.export');
+        Route::get('/cancel_po', [App\Http\Controllers\MasterController::class, 'cancel_po'])->name('master.cancel_po');
     });
 });
 
@@ -204,6 +205,7 @@ Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
             Route::view('/show', 'page.qc.laporan.show')->name('qc.so.laporan.show');
             Route::get('/export/{jenis}/{produk}/{no_so}/{hasil}/{tgl_awal}/{tgl_akhir}', [App\Http\Controllers\QcController::class, 'get_cetak_laporan_qc']);
         });
+        Route::get('/cancel/{id}', [App\Http\Controllers\QcController::class, 'cancel_so'])->name('qc.so.cancel_po');
     });
 });
 
@@ -222,6 +224,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::group(['prefix' => '/laporan'], function () {
             Route::view('/show', 'page.logistik.laporan.show')->name('logistik.so.laporan.show');
         });
+        Route::get('/cancel/{id}', [App\Http\Controllers\logistikController::class, 'cancel_so'])->name('logistik.so.cancel_po');
     });
 
     Route::group(['prefix' => '/ekspedisi'], function () {
@@ -273,6 +276,10 @@ Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
 Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
     Route::get('/dashboard',   [App\Http\Controllers\DcController::class, 'dashboard'])->name('dc.dashboard');
 
+    Route::group(['prefix' => '/so_in_process'], function () {
+        Route::view('/show', 'page.dc.so.in_proses.show')->name('dc.so.in_proses.show');
+    });
+
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.dc.so.show')->name('dc.so.show');
         Route::get('/detail/{id}/{value}',  [App\Http\Controllers\DcController::class, 'detail_coo'])->name('dc.so.detail');
@@ -303,6 +310,15 @@ Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
 
     Route::group(['prefix' => '/penjualan'], function () {
         Route::view('/show', 'page.as.penjualan.show')->name('as.penjualan.show');
+    });
+
+    Route::group(['prefix' => '/retur'], function () {
+        Route::view('/show', 'page.as.retur.show')->name('as.retur.show');
+        Route::get('/create', [App\Http\Controllers\AfterSalesController::class, 'create_retur'])->name('as.retur.create');
+        Route::post('/store', [App\Http\Controllers\AfterSalesController::class, 'store_retur'])->name('as.retur.store');
+        Route::get('/edit/{id}', [App\Http\Controllers\AfterSalesController::class, 'edit_retur'])->name('as.retur.edit');
+        Route::put('/update/{id}', [App\Http\Controllers\AfterSalesController::class, 'update_retur'])->name('as.retur.update');
+        Route::delete('/delete', [App\Http\Controllers\AfterSalesController::class, 'delete_retur'])->name('as.retur.delete');
     });
 
     Route::group(['prefix' => '/so'], function () {

@@ -18,7 +18,7 @@
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0  text-dark">Produk</h1>
+                <h1 class="m-0  text-dark">Tambah Produk</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -59,12 +59,11 @@
                         {{ csrf_field() }}
                         <div class="row d-flex justify-content-center">
                             <div class="col-11">
-                                <div class="card">
-                                    <div class="card-header bg-info">
-                                        <h5 class="card-title"><i class="fas fa-plus"></i> Tambah Paket</h5>
+                                <div class="card card-outline card-info">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Info Umum Paket</h5>
                                     </div>
                                     <div class="card-body">
-                                        <h5>Info Umum Paket</h5>
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group row">
@@ -132,10 +131,34 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <label for="is_aktif" class="col-5 col-form-label"
+                                                        style="text-align: right">Status</label>
+                                                    <div class="col-6 col-form-label">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="is_aktif"
+                                                                id="is_aktif1" value="1" checked="true" />
+                                                            <label class="form-check-label" for="is_aktif1">Aktif</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="is_aktif"
+                                                                id="is_aktif2" value="0" />
+                                                            <label class="form-check-label" for="is_aktif2">Tidak Aktif</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <hr />
-                                        <h5 class="pt-5">Detail Produk Paket</h5>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="card card-outline card-info">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Detail Produk Paket</h5>
+                                    </div>
+                                    <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="table-responsive">
@@ -248,7 +271,7 @@
                 //     return false;
                 // }
 
-                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" ){
+                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" && $('input[name="is_aktif"]:checked').val() != ""){
                     $("#btntambah").attr('disabled', false);
                 } else {
                     $("#btntambah").attr('disabled', true);
@@ -294,9 +317,12 @@
             });
 
             $('#createtable').on('click', '#removerow', function(e) {
-                $(this).closest('tr').remove();
-                validasi();
+                if ($('#createtable > tbody > tr').length > 1) {
+                    $(this).closest('tr').remove();
+
+                }
                 numberRows($("#createtable"));
+                validasi();
             });
 
             $('#harga').on('keyup change', function() {
@@ -339,6 +365,14 @@
             });
 
             $('#nama_alias').on('keyup change', function() {
+                validasi();
+            });
+
+            $(document).on('keyup change', '#createtable .jumlah', function(){
+                validasi();
+            });
+
+            $(document).on('change', 'input[name="is_aktif"]', function(){
                 validasi();
             });
 
