@@ -80,11 +80,11 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <button class="btn btn-outline-danger" data-dismiss="modal"><i class="fa fa-arrow-left"></i> Kembali</button>
+                    <button class="btn btn-outline-danger" data-dismiss="modal">Tutup</button>
                     @if(Auth::user()->divisi->id == "26")
-                    <button class="btn btn-danger float-right" id="btnkirimbatal" type="button"><i class="fas fa-times"></i> Ajukan Pembatalan</button>
+                    <button class="btn btn-danger float-right" id="btnkirimbatal" type="button" disabled="true"><i class="fas fa-times"></i> Ajukan Pembatalan</button>
                     @elseif(Auth::user()->divisi->id == "32")
-                    <button class="btn btn-danger float-right" id="btnkirimbatal" type="button"><i class="fas fa-check"></i> Terima Pembatalan</button>
+                    <button class="btn btn-danger float-right" id="btnaccbatal" type="button"><i class="fas fa-check"></i> Terima Pembatalan</button>
                     @endif
                 </div>
             </form>

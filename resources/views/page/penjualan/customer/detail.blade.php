@@ -104,7 +104,10 @@
         background-color: #d4edda;
         border-color: #c3e6cb;
     }
+<<<<<<< HEAD
 
+=======
+>>>>>>> dd058260e517c3328df4d9c0883f45f986a3133c
     li.list-group-item {
         border: 0 none;
     }
@@ -203,7 +206,10 @@
         .labelinfo{
             text-align: center;
         }
+<<<<<<< HEAD
 
+=======
+>>>>>>> dd058260e517c3328df4d9c0883f45f986a3133c
         .overflowcard {
             max-height: 500px;
             width: auto;
@@ -448,54 +454,54 @@
 
             }
         $(document).on('click', '.detailmodal', function(event) {
-                event.preventDefault();
-                var href = $(this).attr('data-attr');
-                var id = $(this).data("id");
-                var label = $(this).data("target");
-                $.ajax({
-                    url: href,
-                    beforeSend: function() {
-                        $('#loader').show();
-                    },
-                    // return the result
-                    success: function(result) {
-                        $('#detailmodal').modal("show");
-                        $('#detail').html(result).show();
+            event.preventDefault();
+            var href = $(this).attr('data-attr');
+            var id = $(this).data("id");
+            var label = $(this).data("target");
+            $.ajax({
+                url: href,
+                beforeSend: function() {
+                    $('#loader').show();
+                },
+                // return the result
+                success: function(result) {
+                    $('#detailmodal').modal("show");
+                    $('#detail').html(result).show();
 
-                        if (label == 'ekatalog') {
-                            $('#detailmodal').find(".modal-header").removeClass(
-                                'bg-orange bg-lightblue');
-                            $('#detailmodal').find(".modal-header").addClass('bg-purple');
-                            $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
+                    if (label == 'ekatalog') {
+                        $('#detailmodal').find(".modal-header").removeClass(
+                            'bg-orange bg-lightblue');
+                        $('#detailmodal').find(".modal-header").addClass('bg-purple');
+                        $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
 
-                            detailtabel_ekatalog(id);
-                        } else if (label == 'spa') {
-                            $('#detailmodal').find(".modal-header").removeClass(
-                                'bg-purple bg-lightblue');
-                            $('#detailmodal').find(".modal-header").addClass('bg-orange');
-                            $('#detailmodal').find(".modal-header > h4").text('SPA');
-                            detailtabel_spa(id);
-                        } else {
-                            $('#detailmodal').find(".modal-header").removeClass(
-                                'bg-orange bg-purple');
-                            $('#detailmodal').find(".modal-header").addClass('bg-lightblue');
-                            $('#detailmodal').find(".modal-header > h4").text('SPB');
-                            detailtabel_spb(id);
-                        }
+                        detailtabel_ekatalog(id);
+                    } else if (label == 'spa') {
+                        $('#detailmodal').find(".modal-header").removeClass(
+                            'bg-purple bg-lightblue');
+                        $('#detailmodal').find(".modal-header").addClass('bg-orange');
+                        $('#detailmodal').find(".modal-header > h4").text('SPA');
+                        detailtabel_spa(id);
+                    } else {
+                        $('#detailmodal').find(".modal-header").removeClass(
+                            'bg-orange bg-purple');
+                        $('#detailmodal').find(".modal-header").addClass('bg-lightblue');
+                        $('#detailmodal').find(".modal-header > h4").text('SPB');
+                        detailtabel_spb(id);
+                    }
 
-                        $('#detailmodal').find('[data-toggle="tooltip"]').tooltip();
-                    },
-                    complete: function() {
-                        $('#loader').hide();
-                    },
-                    error: function(jqXHR, testStatus, error) {
-                        console.log(error);
-                        alert("Page " + href + " cannot open. Error:" + error);
-                        $('#loader').hide();
-                    },
-                    timeout: 8000
-                })
-            });
+                    $('#detailmodal').find('[data-toggle="tooltip"]').tooltip();
+                },
+                complete: function() {
+                    $('#loader').hide();
+                },
+                error: function(jqXHR, testStatus, error) {
+                    console.log(error);
+                    alert("Page " + href + " cannot open. Error:" + error);
+                    $('#loader').hide();
+                },
+                timeout: 8000
+            })
+        });
 
         function detailtabel_ekatalog(id) {
             $('#detailtabel').DataTable({

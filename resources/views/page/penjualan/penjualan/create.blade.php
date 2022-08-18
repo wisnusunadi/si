@@ -499,7 +499,7 @@
                                                             <div class="card-body">
                                                                 <div class="form-group row">
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
-                                                                    <div class="col-lg-7 col-md-12 autocomplete">
+                                                                    <div class="col-lg-4 col-md-12 autocomplete">
                                                                         <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" autocomplete="off" />
                                                                         <div class="invalid-feedback" id="msginstansi">
                                                                             @if($errors->has('instansi'))
@@ -521,7 +521,7 @@
                                                                 </div>
                                                                 <div class="form-group row">
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat Instansi</label>
-                                                                    <div class="col-lg-7 col-md-12">
+                                                                    <div class="col-lg-6 col-md-12">
                                                                         <textarea class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi"></textarea>
                                                                         <div class="invalid-feedback" id="msgalamatinstansi">
                                                                             @if($errors->has('alamatinstansi'))
@@ -532,7 +532,7 @@
                                                                 </div>
                                                                 <div class="form-group row">
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Provinsi</label>
-                                                                    <div class="col-lg-7 col-md-12">
+                                                                    <div class="col-lg-3 col-md-6">
                                                                         <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
                                                                         </select>
                                                                         <div class="invalid-feedback" id="msgprovinsi">
@@ -1646,7 +1646,7 @@
                     $("#provinsi").empty().trigger('change')
                     $('#isi_produk_input').removeClass('hide');
                 }
-                 else {
+                 else if ($(this).val() == "negosiasi"){
                     $('#checkbox_nopaket').addClass('hide');
                     $('#isi_nopaket').prop("checked", false);
                     $('#isi_nopaket').val("true");

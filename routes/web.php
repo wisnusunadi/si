@@ -229,7 +229,6 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::group(['prefix' => '/laporan'], function () {
             Route::view('/show', 'page.logistik.laporan.show')->name('logistik.so.laporan.show');
         });
-
         Route::get('/cancel/{id}', [App\Http\Controllers\logistikController::class, 'cancel_so'])->name('logistik.so.cancel_po');
     });
 

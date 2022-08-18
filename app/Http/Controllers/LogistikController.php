@@ -1460,8 +1460,14 @@ class LogistikController extends Controller
         $z = explode(',', $jenis_penjualan);
         $data = "";
         if ($pengiriman == "semua" && $provinsi == "semua" && $jenis_penjualan == "semua") {
-            $dataeks = Logistik::whereNull('noresi')->whereNotNull('ekspedisi_id');
-            $data = Logistik::where('status_id', '11')->whereNotNull('nama_pengirim')->union($dataeks)
+            $dataeks = Logistik::whereNull('noresi')->whereNotNull('ekspedisi_id')->with(['DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Customer.Provinsi',
+            'DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer.Provinsi',
+            'DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer.Provinsi',
+            'DetailLogistikPart.DetailPesananPart.Pesanan.Ekatalog.Customer.Provinsi',
+            'DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi',
+            'DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi',
+            'Ekspedisi']);
+            $data = Logistik::where('status_id', '11')->whereNotNull('nama_pengirim')
                     ->with(['DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog.Customer.Provinsi',
                             'DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spa.Customer.Provinsi',
                             'DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Spb.Customer.Provinsi',
@@ -1469,8 +1475,8 @@ class LogistikController extends Controller
                             'DetailLogistikPart.DetailPesananPart.Pesanan.Spa.Customer.Provinsi',
                             'DetailLogistikPart.DetailPesananPart.Pesanan.Spb.Customer.Provinsi',
                             'Ekspedisi'])
+                    ->union($dataeks)
                     ->get();
-            // $data = $dataeks->merge($datanoneks);
         } else if ($pengiriman != "semua" && $provinsi == "semua" && $jenis_penjualan == "semua") {
             $dataeks = "";
             $datanoneks = "";
@@ -4100,7 +4106,7 @@ $Logistik = Logistik::find($request->sj_lama);
                             left join detail_pesanan_produk on noseri_detail_pesanan.detail_pesanan_produk_id = detail_pesanan_produk.id
                             left join detail_pesanan on detail_pesanan_produk.detail_pesanan_id = detail_pesanan.id
                             where detail_pesanan.pesanan_id = pesanan.id)');
-                        })->addSelect(['tgl_kontrak' => function($q){
+                    })->addSelect(['tgl_kontrak' => function($q){
                         $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
                         ->from('ekatalog')
                         ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')

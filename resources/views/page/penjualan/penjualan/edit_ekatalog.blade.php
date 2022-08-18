@@ -523,7 +523,7 @@
                                                                     <div class="form-group row">
                                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Delivery</label>
                                                                         <div class="col-lg-4 col-md-4">
-                                                                            <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" value="{{$e->tgl_kontrak}}" />
+                                                                            <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" value="{{$e->tgl_kontrak}}" @if($e->status != 'sepakat') disabled="true" @endif/>
                                                                             <div class="invalid-feedback" id="msgbatas_kontrak">
                                                                                 @if($errors->has('batas_kontrak'))
                                                                                 {{ $errors->first('batas_kontrak')}}
@@ -950,9 +950,21 @@
                     }
                 });
 
-                if($('input[type="radio"][name="status_akn"]:checked').val() == "sepakat" || $('input[type="radio"][name="status_akn"]:checked').val() == "negosiasi"){
+                if($('input[type="radio"][name="status_akn"]:checked').val() == "sepakat"){
                     if(penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true){
-                        if($('#no_paket').val() != "" && $('#provinsi').val() != null && $('#tgl_buat').val() != "" && $('#tgl_edit').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != ""){
+                        if($('#no_paket').val() != "" && $('#provinsi').val() != null && $('#tgl_buat').val() != "" && $('#tgl_edit').val() != "" && $('#batas_kontrak').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != ""){
+                            $("#btnsimpan").attr('disabled', false);
+                        } else {
+                            $("#btnsimpan").attr('disabled', true);
+                        }
+                    }
+                    else{
+                        $("#btnsimpan").attr('disabled', true);
+                    }
+                }
+                else if($('input[type="radio"][name="status_akn"]:checked').val() == "negosiasi"){
+                    if(penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true){
+                        if($('#no_paket').val() != "" && $('#tgl_buat').val() != "" && $('#tgl_edit').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != ""){
                             $("#btnsimpan").attr('disabled', false);
                         } else {
                             $("#btnsimpan").attr('disabled', true);
@@ -1208,7 +1220,7 @@
                         $("#batas_kontrak").attr('disabled', false);
                         $("#provinsi").attr('disabled', false);
                         var $newOption = $("<option selected='selected'></option>").val("11").text("Jawa Timur")
-                    $(".provinsi").append($newOption).trigger('change');
+                        $(".provinsi").append($newOption).trigger('change');
                         if(nopaketubah == false){
                             $('#no_paket').val(nopaketdb);
                         }
@@ -1268,7 +1280,7 @@
                                 numberRowsProduk($("#produktable"));
                             }
                         }
-                    } else {
+                    } else if($(this).val() == "negosiasi") {
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
                         $('#no_paket').attr('readonly', false);
@@ -1288,8 +1300,8 @@
                     }
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
-                        $('#isi_nopaket').prop("checked", false);
-                        $('#no_paket').attr('readonly', false);
+                    $('#isi_nopaket').prop("checked", false);
+                    $('#no_paket').attr('readonly', false);
                     $("#msgstatus").text("Status Harus dipilih");
                     $("#status").addClass('is-invalid');
                     if(nopaketubah == false){

@@ -1052,6 +1052,23 @@
     </script>
     <script>
         $(function() {
+            function validasi_batal(){
+                if($('#tanggal').val() != "" && $('#alasan').val() != ""){
+                    $('#btnkirimbatal').attr('disabled', false);
+                }
+                else{
+                    $('#btnkirimbatal').attr('disabled', true);
+                }
+            }
+
+            $(document).on('keyup change', '#tanggal', function(){
+                validasi_batal();
+            });
+
+            $(document).on('keyup change', '#alasan', function(){
+                validasi_batal();
+            });
+
             var optionpie = {
                 type: 'pie',
                 data: {
@@ -1186,8 +1203,6 @@
                         $('#detail').html(result).show();
 
                         if (label == 'ekatalog') {
-                             const ctx = $('#myChart');
-                            const myChart = new Chart(ctx, optionpie);
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-orange bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-purple');
@@ -1195,8 +1210,6 @@
 
                             detailtabel_ekatalog(id);
                         } else if (label == 'spa') {
-                            const ctx = $('#myChart');
-                            const myChart = new Chart(ctx, optionpie);
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-purple bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-orange');

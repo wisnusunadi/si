@@ -537,7 +537,7 @@ class PenjualanController extends Controller
                             }
                             else{
                                 return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                             }
                         } else{
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
@@ -865,7 +865,7 @@ class PenjualanController extends Controller
                             }
                             else{
                                 return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                             }
                         } else{
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
@@ -1354,7 +1354,7 @@ class PenjualanController extends Controller
                 ->rawColumns(['status','nama_customer'])
                 ->make(true);
         } else if ($parameter == 'no_so') {
-            $val = str_replace("_","/",$value);
+            // $val = str_replace("_","/",$value);
             // $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {
             //     $q->where('so', 'LIKE', '%' . $value . '%');
             // })->get());
@@ -1381,7 +1381,7 @@ class PenjualanController extends Controller
             ->leftJoin('spb','spb.pesanan_id','=','pesanan.id')
             ->leftJoin('customer as c_spb','c_spb.id','=','spb.customer_id')
             ->leftJoin('m_state','m_state.id','=','pesanan.log_id')
-            ->where('so', 'LIKE', '%' . $val . '%')
+            ->where('so', 'LIKE', '%' . $value . '%')
             ->get();
 
             return datatables()->of($data)
@@ -1689,7 +1689,7 @@ class PenjualanController extends Controller
                         }
                         else{
                             $tgl_kontrak =  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
+                            <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                         }
                     } else{
                         $tgl_kontrak = Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
@@ -2400,24 +2400,23 @@ class PenjualanController extends Controller
                 // }
                 // return $datas;
                     $datas = "";
-
                     $tes = $data->cjumlahprd + $data->cjumlahpart;
                     if($tes > 0){
-                        $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                        if($data->log == "batal") {
-                            $datas = '<span class="badge red-text">Batal</span>';
-                        } else{
-                            if($hitung > 0){
-                                $datas = '<div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
-                                </div>
-                                <small class="text-muted">Selesai</small>';
-                            }else{
-                                $datas = '<div class="progress">
-                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
-                                </div>
-                                <small class="text-muted">Selesai</small>';
-                            }
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                    if($data->log == "batal") {
+                        $datas = '<span class="badge red-text">Batal</span>';
+                    } else{
+                        if($hitung > 0){
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
+                        }else{
+                            $datas = '<div class="progress">
+                                <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                            </div>
+                            <small class="text-muted">Selesai</small>';
+                        }
                         }
                     }
                     return $datas;
@@ -3261,7 +3260,7 @@ class PenjualanController extends Controller
                                 }
                             }
                         } else{
-                                $bool = false;
+                            $bool = false;
                         }
                     }
                 }

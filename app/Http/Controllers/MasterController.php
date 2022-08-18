@@ -237,14 +237,15 @@ class MasterController extends Controller
                         <i class="fas fa-pencil-alt"></i>
                         Edit
                     </button>
-                </a>';
-                }
-                $return .= ' <a data-toggle="modal" class="hapusmodal" data-id="' . $data->id . '" data-target="#hapusmodal">
+                </a>
+                <a data-toggle="modal" class="hapusmodal" data-id="' . $data->id . '" data-target="#hapusmodal">
                     <button class="dropdown-item" type="button">
                     <i class="far fa-trash-alt"></i>
                         Hapus
                     </button>
-                </a></div>';
+                </a>';
+                }
+                $return .= ' </div>';
                 return $return;
             })
             ->rawColumns(['button', 'jurusan', 'via'])
@@ -381,7 +382,14 @@ class MasterController extends Controller
                    return '<span class="badge blue-text">Non Ekatalog</span>';
                 }
 
-
+            })
+            ->addColumn('is_aktif', function ($data) {
+                if($data->is_aktif == "1"){
+                    return '<span class="badge green-text">Aktif</span>';
+                }
+                else{
+                    return '<span class="badge red-text">Tidak Aktif</span>';
+                }
             })
             ->addColumn('is_aktif', function ($data) {
                 if($data->is_aktif == "1"){
@@ -704,16 +712,16 @@ class MasterController extends Controller
 
                     if ($name == 'ekatalog') {
                         return  '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                                  <button type="button" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i> Detail</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i> Detail</button>
                             </a>';
                     } else if ($name == 'spa') {
                         return  '<a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->id) . '"  data-id="' . $data->id . '">
-                                <button type="button" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i> Detail</button>
+                        <button type="button" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i> Detail</button>
                             </a>';
                     } else {
                         return  '
                             <a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->id) . '"  data-id="' . $data->id . '">
-                                <button type="button" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i> Detail</button>
+                            <button type="button" class="btn btn-sm btn-outline-primary"><i class="fas fa-eye"></i> Detail</button>
                             </a>';
                     }
                 })

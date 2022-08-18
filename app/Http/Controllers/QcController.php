@@ -1225,7 +1225,7 @@ class QcController extends Controller
     }
     public function get_data_riwayat_pengujian()
     {
-        $prd = DetailPesanan::addSelect(['tgl_mulai' => function($q){
+        $prd =  collect(DetailPesanan::addSelect(['tgl_mulai' => function($q){
                     $q->selectRaw('MIN(noseri_detail_pesanan.tgl_uji)')
                     ->from('noseri_detail_pesanan')
                     ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
@@ -1237,20 +1237,20 @@ class QcController extends Controller
                     ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
                     ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
                     ->limit(1);
-                }])->whereIn('id', function($q){
-                $q->select('detail_pesanan.id')
-                    ->from('detail_pesanan')
-                    ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                    ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                    ->groupBy('detail_pesanan.id')
-                    ->havingRaw('count(noseri_detail_pesanan.id) >= (
-                        select SUM(detail_penjualan_produk.jumlah) * detail_pesanan.jumlah
-                        from detail_penjualan_produk
-                        left join penjualan_produk on penjualan_produk.id = detail_penjualan_produk.penjualan_produk_id
-                        where penjualan_produk.id = detail_pesanan.penjualan_produk_id)');
-                })->with(['PenjualanProduk.Produk', 'DetailPesananProduk.NoseriDetailPesanan', 'Pesanan'])->get();
+                }, 'jumlah_pengujian' => function($q){
+                    $q->selectRaw('count(noseri_detail_pesanan.id)')
+                    ->from('noseri_detail_pesanan')
+                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
+                }, 'nama' => function($q){
+                    $q->selectRaw('penjualan_produk.nama')
+                    ->from('penjualan_produk')
+                    ->whereColumn('penjualan_produk.id', 'detail_pesanan.penjualan_produk_id')
+                    ->limit(1);
+                }
+                ])->havingRaw('jumlah_pengujian > 0')->with(['PenjualanProduk.Produk', 'DetailPesananProduk', 'Pesanan.Ekatalog', 'Pesanan.Spa', 'Pesanan.Spb'])->get());
 
-        $part = DetailPesananPart::addSelect(['tgl_mulai' => function($q){
+        $part = collect(DetailPesananPart::addSelect(['tgl_mulai' => function($q){
                     $q->selectRaw('MIN(outgoing_pesanan_part.tanggal_uji)')
                     ->from('outgoing_pesanan_part')
                     ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
@@ -1260,12 +1260,16 @@ class QcController extends Controller
                     ->from('outgoing_pesanan_part')
                     ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
                     ->limit(1);
-                }])->whereIn('id', function($q){
-                    $q->select('detail_pesanan_part.id')
-                      ->from('detail_pesanan_part')
-                      ->groupBy('detail_pesanan_part.id')
-                      ->havingRaw('detail_pesanan_part.jumlah >= (select SUM(outgoing_pesanan_part.jumlah_ok) from outgoing_pesanan_part where outgoing_pesanan_part.detail_pesanan_part_id = detail_pesanan_part.id)');
-                })->with(['Sparepart', 'OutgoingPesananPart', 'Pesanan'])->get();
+                }, 'jumlah_pengujian' => function($q){
+                    $q->selectRaw('SUM(outgoing_pesanan_part.jumlah_ok)')
+                    ->from('outgoing_pesanan_part')
+                    ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id','detail_pesanan_part.id');
+                }, 'nama' => function($q){
+                    $q->selectRaw('m_sparepart.nama')
+                    ->from('m_sparepart')
+                    ->whereColumn('m_sparepart.id', 'detail_pesanan_part.m_sparepart_id')
+                    ->limit(1);
+                }])->havingRaw('jumlah_pengujian > 0')->with(['Pesanan.Ekatalog', 'Pesanan.Spa', 'Pesanan.Spb'])->get());
 
         $s = $prd->merge($part);
 
@@ -1275,11 +1279,7 @@ class QcController extends Controller
                 return $data->Pesanan->so;
             })
             ->addColumn('nama_produk', function ($data) {
-                if (isset($data->penjualan_produk_id)) {
-                    return $data->PenjualanProduk->nama;
-                } else {
-                    return $data->Sparepart->nama;
-                }
+                return $data->nama;
             })
             ->addColumn('tgl_mulai', function ($data) {
                 return  Carbon::createFromFormat('Y-m-d', $data->tgl_mulai)->format('d-m-Y');
@@ -1288,7 +1288,7 @@ class QcController extends Controller
                 return  Carbon::createFromFormat('Y-m-d', $data->tgl_selesai)->format('d-m-Y');
             })
             ->addColumn('jumlah', function ($data) {
-                return $data->jumlah;
+                return $data->jumlah_pengujian;
             })
             ->addColumn('button', function ($data) {
                 if (isset($data->penjualan_produk_id)) {
@@ -1301,7 +1301,7 @@ class QcController extends Controller
                         <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
                     </a>';
                 } else {
-                    return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data->part_id . '" data-id="' . $data->id . '" data-count="1" data-produk="0" data-jenis="part" id="detmodal">
+                    return '<a data-toggle="detailmodal" data-target="#detailmodal" class="detailmodal" data-attr="' . $data->m_sparepart_id . '" data-id="' . $data->id . '" data-count="1" data-produk="0" data-jenis="part" id="detmodal">
                         <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
                     </a>';
                 }
