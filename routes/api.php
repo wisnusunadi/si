@@ -107,7 +107,11 @@ Route::prefix('/penjualan_produk')->group(function () {
 Route::prefix('/penjualan')->group(function () {
     // Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);
     Route::post('/penjualan/data/{jenis}/{status}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
-
+    Route::get('/ekatalog_data/{akn}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog_emindo']);
+    Route::get('/spa_data/{po}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa_emindo']);
+    Route::get('check_ekatalog/{akn}', [App\Http\Controllers\PenjualanController::class, 'cek_paket']);
+    Route::get('penjualan_emindo', [App\Http\Controllers\PenjualanController::class, 'penjualan_data_emindo']);
+    Route::get('check_po/{po}', [App\Http\Controllers\PenjualanController::class, 'cek_po']);
     Route::get('chart', [App\Http\Controllers\PenjualanController::class, 'chart_penjualan']);
     // Rout    Route::post('/penjualan/cancel/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'cancel_spa_spb']);
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
