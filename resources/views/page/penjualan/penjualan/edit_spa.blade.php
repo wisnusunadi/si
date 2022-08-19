@@ -25,6 +25,15 @@
 
 @section('adminlte_css')
 <style>
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
+    height: 100% !important;
+    }
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
+    word-wrap: break-word !important;
+    text-overflow: inherit !important;
+    white-space: normal !important;
+    }
+
     .hide {
         display: none !important;
     }
@@ -50,7 +59,7 @@
     }
 
     .blue-bg {
-        background-color: #c8daea;
+        background-color: #ffeab8;
     }
 
     #produktable {
@@ -602,7 +611,7 @@
                                                 <div class="row">
                                                     <div class="col-12">
                                                         <div class="table-responsive">
-                                                            <table class="table" style="text-align: center;" id="parttable">
+                                                            <table class="table" style="text-align: center;" id="parttable" width="100%">
                                                                 <thead>
                                                                     <tr>
                                                                         <th colspan="7">
@@ -798,6 +807,155 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var penjualan_produk_id = false;
+        var variasi = false;
+        var produk_jumlah = false;
+        var produk_harga = false;
+
+        var part_id = false;
+        var part_jumlah = false;
+        var part_harga = false;
+
+        var jasa_id = false;
+        var jasa_harga = false;
+        function checkvalidasi() {
+            var jenis_array = [];
+            $("input[id=jenis_pen]:checked").each(function() {
+                jenis_array.push($(this).val());
+            });
+
+            if($.inArray("produk", jenis_array) !== -1 ) {
+                $('#produktable').find('.penjualan_produk_id').each(function() {
+                    if ($(this).val() != "") {
+                        penjualan_produk_id = true;
+                    }
+                    else {
+                        penjualan_produk_id = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.variasi').each(function() {
+                    if ($(this).val() != "") {
+                        variasi = true;
+                    }
+                    else {
+                        variasi = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.produk_jumlah').each(function() {
+                    if ($(this).val() != "") {
+                        produk_jumlah = true;
+                    }
+                    else {
+                        produk_jumlah = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.produk_harga').each(function() {
+                    if ($(this).val() != "") {
+                        produk_harga = true;
+                    }
+                    else {
+                        produk_harga = false;
+                        return false;
+                    }
+                });
+            }else if($.inArray("produk", jenis_array) === -1 ){
+                penjualan_produk_id = true;
+                variasi = true;
+                produk_jumlah = true;
+                produk_harga = true;
+            }
+
+            if($.inArray("sparepart", jenis_array) !== -1 ) {
+                $('#parttable').find('.part_id').each(function() {
+                    if ($(this).val() != null) {
+                        part_id = true;
+                        console.log("part_id: "+$(this).val());
+                    }
+                    else {
+                        part_id = false;
+                        return false;
+                    }
+                });
+
+                $('#parttable').find('.part_jumlah').each(function() {
+                    if ($(this).val() != "") {
+                        part_jumlah = true;
+                        console.log("part_jumlah: "+$(this).val());
+                    }
+                    else {
+                        part_jumlah = false;
+                        return false;
+                    }
+                });
+
+                $('#parttable').find('.part_harga').each(function() {
+                    if ($(this).val() != "") {
+                        part_harga = true;
+                        console.log("part_harga: "+$(this).val());
+                    }
+                    else {
+                        part_harga = false;
+                        return false;
+                    }
+                });
+            }else if($.inArray("sparepart", jenis_array) === -1 ){
+                part_id = true;
+                part_jumlah = true;
+                part_harga = true;
+            }
+
+            if($.inArray("jasa", jenis_array) !== -1 ) {
+                $('#jasatable').find('.jasa_id').each(function() {
+                    if ($(this).val() != null) {
+                        jasa_id = true;
+                    }
+                    else {
+                        jasa_id = false;
+                        return false;
+                    }
+                });
+
+                $('#jasatable').find('.jasa_harga').each(function() {
+                    if ($(this).val() != "") {
+                        jasa_harga = true;
+                    }
+                    else {
+                        jasa_harga = false;
+                        return false;
+                    }
+                });
+            }else if($.inArray("jasa", jenis_array) === -1 ){
+                jasa_id = true;
+                jasa_harga = true;
+            }
+
+            console.log("produk :"+ penjualan_produk_id +', '+variasi+', '+produk_jumlah+', '+produk_harga);
+            console.log("part :"+ part_id +', '+part_jumlah+', '+part_harga);
+            console.log("jasa :"+ jasa_id +', '+jasa_harga);
+
+            if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
+                if ($('#customer_id').val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "" && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
+                    $('#btnsimpan').removeAttr("disabled");
+                } else {
+                    $('#btnsimpan').attr("disabled", true);
+                }
+            } else if ($('input[type="radio"][name="do"]:checked').val() == "no") {
+                if ($('#customer_id').val() != "" && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
+                    $('#btnsimpan').removeAttr("disabled");
+                } else {
+                    $('#btnsimpan').attr("disabled", true);
+                }
+            } else {
+                $('#btnsimpan').attr("disabled", true);
+            }
+        }
+
         $(".os-content-arrange").remove();
         loop();
         load_variasi();
@@ -837,6 +995,7 @@
                 $('#msgcustomer_id').text("Silahkan Pilih Customer");
                 $('#customer_id').addClass('is-invalid');
             }
+            checkvalidasi();
         });
 
         // $('input[type="radio"][name="jenis_penj"]').on('change', function() {
@@ -890,6 +1049,7 @@
                 $("input[id=jenis_pen][value="+x+"]").prop("checked", true);
                 }
             filter_jenis(jenis_arry);
+            checkvalidasi();
             });
 
 
@@ -941,6 +1101,7 @@
                 $("#do_detail_no").addClass("hide");
                 $("#do_detail_tgl").addClass("hide");
             }
+            checkvalidasi();
         });
 
         $('#no_po').on('keyup', function() {
@@ -964,9 +1125,9 @@
         });
 
         $('#customer_id').select2({
+            placeholder: "Pilih Customer",
             ajax: {
                 minimumResultsForSearch: 20,
-                placeholder: "Pilih Customer",
                 dataType: 'json',
                 theme: "bootstrap",
                 delay: 250,
@@ -1001,6 +1162,7 @@
                     $('#telepon_customer').val(data[0].telp);
                 }
             });
+            checkvalidasi();
         });
 
         $('.provinsi').select2({
@@ -1098,6 +1260,7 @@
                 subtotal.val(formatmoney("0"));
                 totalhargaprd();
             }
+            checkvalidasi();
         });
 
         $("#produktable").on('keyup change', '.produk_jumlah', function() {
@@ -1134,6 +1297,7 @@
                 variasi.removeClass('is-invalid');
                 ketstok.text('');
             }
+            checkvalidasi();
         });
 
         $('#produktable').on('keyup change', '.variasi', function() {
@@ -1158,6 +1322,7 @@
                 $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
                 $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
             }
+            checkvalidasi();
         })
 
         $("#produktable").on('keyup change', '.produk_harga', function() {
@@ -1174,6 +1339,7 @@
                 subtotal.val(formatmoney("0"));
                 totalhargaprd();
             }
+            checkvalidasi();
         });
 
         function trproduktable() {
@@ -1231,6 +1397,8 @@
                 $('#produktable tbody tr:last').after(trproduktable());
                 numberRowsProduk($("#produktable"));
             }
+
+            checkvalidasi();
         });
 
         $('#produktable').on('click', '#removerowproduk', function(e) {
@@ -1238,17 +1406,16 @@
             numberRowsProduk($("#produktable"));
             totalhargaprd();
             if ($('#produktable > tbody > tr').length <= 0) {
-                $('#totalhargaprd').text("Rp. 0");
-                ($("#c_produk").val(0))
-                $('#produktable tbody').empty();
-                $("#dataproduk").addClass("hide");
-                $("input[id=jenis_pen][value='produk']").prop("checked", false);
+                $('#produktable tbody').append(trproduktable());
+                numberRowsProduk($("#produktable"));
+                $("#totalhargaprd").text("Rp. 0");
             }
+            checkvalidasi();
         });
 
         function select_data(i) {
             $('#' + i).select2({
-                placeholder: 'Pilih Produk',
+                placeholder: "Pilih Produk",
                 ajax: {
                     minimumResultsForSearch: 20,
                     dataType: 'json',
@@ -1330,6 +1497,7 @@
                         tes.append(`</fieldset>`);
                     }
                 });
+                checkvalidasi();
             });
         }
 
@@ -1450,6 +1618,8 @@
                 subtotal.val(formatmoney("0"));
                 totalhargapart();
             }
+
+            checkvalidasi();
         });
 
         $("#parttable").on('keyup change', '.part_jumlah', function() {
@@ -1464,6 +1634,7 @@
                 subtotal.val(formatmoney("0"));
                 totalhargapart();
             }
+            checkvalidasi();
         });
 
         function numberRowsPart($t) {
@@ -1540,6 +1711,7 @@
                 subtotal.val(formatmoney("0"));
                 totalhargapart();
             }
+            checkvalidasi();
         });
 
         $('#addrowpart').on('click', function() {
@@ -1550,6 +1722,7 @@
                 $('#parttable tbody tr:last').after(trparttable());
                 numberRowsPart($("#parttable"));
             }
+            checkvalidasi();
         });
 
         $('#parttable').on('click', '#removerowpart', function(e) {
@@ -1557,12 +1730,17 @@
             numberRowsPart($("#parttable"));
             totalhargapart();
             if ($('#parttable > tbody > tr').length <= 0) {
-                $('#totalhargapart').text("Rp. 0");
-                ($("#c_part").val(0))
-                $('#parttable tbody').empty();
-                $("#datapart").addClass("hide");
-                $("input[id=jenis_pen][value='sparepart']").prop("checked", false);
+                // $('#totalhargapart').text("Rp. 0");
+                // ($("#c_part").val(0))
+                // $('#parttable tbody').empty();
+                // $("#datapart").addClass("hide");
+                // $("input[id=jenis_pen][value='sparepart']").prop("checked", false);
+
+                $('#parttable tbody').append(trparttable());
+                numberRowsPart($("#parttable"));
+                $("#totalhargapart").text("Rp. 0");
             }
+            checkvalidasi();
         });
     });
 </script>

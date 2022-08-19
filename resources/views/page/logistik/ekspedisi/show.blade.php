@@ -83,6 +83,13 @@
         padding: 6px;
         border-radius: 0.3rem;
     }
+
+    .yellow-bg {
+        background-color: #fff4dc;
+        color: #ffc107;
+    }
+
+
     .removeboxshadow {
         box-shadow: none;
         border: 1px;
@@ -134,7 +141,7 @@
                                     </button>
                                 </a>
                                 </span>
-                                @if(Auth::user()->divisi_id == "15")
+                                @if(Auth::user()->divisi->nama == "Logistik")
                                 <span class="float-right filter">
                                     <a href="{{route('logistik.ekspedisi.create')}}"><button class="btn btn-outline-info">
                                             <i class="fas fa-plus"></i> Tambah
@@ -250,8 +257,11 @@
             <div class="modal fade" id="editmodal" role="dialog" aria-labelledby="editmodal" aria-hidden="true">
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
-                        <div class="modal-header bg-warning">
-                            <h4>Edit</h4>
+                        <div class="modal-header yellow-bg">
+                            <h4>Ubah Ekspedisi</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         <div class="modal-body" id="edit">
 
@@ -263,7 +273,10 @@
                 <div class="modal-dialog modal-lg" role="document">
                     <div class="modal-content" style="margin: 10px">
                         <div class="modal-header yellow-bg">
-                            <h4 class="modal-title"><b>Hapus</b></h4>
+                            <h4 class="modal-title"><b>Hapus Ekspedisi</b></h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
                         </div>
                         <div class="modal-body" id="hapus">
                             <div class="row">

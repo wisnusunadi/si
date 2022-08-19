@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0  text-dark">Ekspedisi</h1>
+            <h1 class="m-0  text-dark">Tambah Ekspedisi</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
@@ -69,9 +69,6 @@
                         {{csrf_field()}}
                         <div class="row d-flex justify-content-center">
                             <div class="col-lg-10 co-md-12">
-                                <div class="card">
-                                    <div class="card-header bg-info"><h5 class="card-title">Tambah Ekspedisi</h5></div>
-                                    <div class="card-body">
                                         <div class="row">
                                             <div class="col-lg-12 col-md-12">
                                                 <div class="form-group row">
@@ -94,7 +91,10 @@
                                                     @endif
                                                 </div>
 
-                                                <div class="card removeboxshadow">
+                                                <div class="card card-outline card-info">
+                                                    <div class="card-header">
+                                                        <h6 class="card-title">Informasi Umum</h6>
+                                                    </div>
                                                     <div class="card-body">
                                                         <div class="form-group row">
                                                             <label for="nama_ekspedisi" class="col-lg-4 col-md-12 col-form-label labelket">Nama Ekspedisi</label>
@@ -143,8 +143,10 @@
                                                     </div>
                                                 </div>
 
-                                                <div class="card removeboxshadow">
-                                                    <div class="card-header"></div>
+                                                <div class="card card-outline card-info">
+                                                    <div class="card-header">
+                                                        <h6 class="card-title">Detail Ekspedisi</h6>
+                                                    </div>
                                                     <div class="card-body">
                                                         <div class="form-group row">
                                                             <label for="" class="col-lg-4 col-md-12 col-form-label labelket">Jalur</label>
@@ -229,23 +231,23 @@
                                                     </div>
 
                                                 </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="card-footer">
-                                        <span class="float-left">
+                                                <div class="form-group row">
+                                                    <span class="col-lg-6 col-md-6 float-left">
                                             <a type="button" class="btn btn-danger" href="{{route('logistik.ekspedisi.show')}}">
                                                 Batal
                                             </a>
                                         </span>
 
-                                        <span class="float-right">
-                                            <button type="submit" class="btn btn-info" id="btntambah" disabled>
+                                        <span class="col-lg-6 col-md-6">
+                                            <button type="submit" class="btn btn-info  float-right" id="btntambah" disabled>
                                                 Tambah
                                             </button>
                                         </span>
                                     </div>
                                 </div>
+
+                            </div>
+
                             </div>
                         </div>
                     </form>

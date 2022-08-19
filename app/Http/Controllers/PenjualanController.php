@@ -537,7 +537,7 @@ class PenjualanController extends Controller
                             }
                             else{
                                 return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                             }
                         } else{
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
@@ -634,7 +634,7 @@ class PenjualanController extends Controller
                 $progress = "";
                 $tes = $data->cjumlahprd + $data->cjumlahpart;
                 if($tes > 0){
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if($hitung > 0){
                         $progress = '<div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -650,17 +650,16 @@ class PenjualanController extends Controller
 
                 if($name == "ekatalog"){
                     if($data->status == "batal" && ($data->Pesanan->log_id != "7")){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -668,17 +667,16 @@ class PenjualanController extends Controller
                 }
                 else if($name == "spa"){
                     if($data->log == "batal"){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -686,17 +684,16 @@ class PenjualanController extends Controller
                 }
                 else if($name == "spb"){
                     if($data->log == "batal"){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -745,6 +742,19 @@ class PenjualanController extends Controller
                 }
             })
             ->rawColumns(['button', 'status', 'tgl_order', 'tgl_kontrak', 'no_paket'])
+            ->setRowClass(function ($data) {
+                $name =  $data->getTable();
+                if ($name == 'ekatalog') {
+                    if ($data->status == 'batal') {
+                        return 'text-danger font-weight-bold line-through';
+                    }
+                }
+                else{
+                    if ($data->log == 'batal') {
+                        return 'text-danger font-weight-bold line-through';
+                    }
+                }
+            })
             ->make(true);
     }
     public function get_lacak_penjualan($parameter, $value)
@@ -917,7 +927,7 @@ class PenjualanController extends Controller
                             }
                             else{
                                 return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                             }
                         } else{
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
@@ -1225,8 +1235,7 @@ class PenjualanController extends Controller
             // $data = NoseriTGbj::whereHas('NoseriBarangJadi', function ($q) use ($value) {
             //     $q->where('noseri', 'LIKE', '%' . $value . '%');
             // })->Has('NoseriDetailPesanan')->orderBy('id', 'desc')->get();
-            $data =  NoseriBarangJadi::
-            select('noseri_barang_jadi.noseri',
+            $data =  NoseriBarangJadi::select('noseri_barang_jadi.noseri',
                      'pesanan.no_po',
                      'pesanan.so',
                      'noseri_detail_pesanan.tgl_uji',
@@ -1343,9 +1352,10 @@ class PenjualanController extends Controller
                     }
                     return $datas;
                 })
-                ->rawColumns(['divisi_id', 'status','nama_customer'])
+                ->rawColumns(['status','nama_customer'])
                 ->make(true);
         } else if ($parameter == 'no_so') {
+            // $val = str_replace("_","/",$value);
             // $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {
             //     $q->where('so', 'LIKE', '%' . $value . '%');
             // })->get());
@@ -1582,10 +1592,8 @@ class PenjualanController extends Controller
         }
 
         $status = "";
-            $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-            if ($data->Pesanan->log_id == "9") {
-                $status = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-            } else if($data->log == "batal") {
+            $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+            if($data->log == "batal") {
                 $status = '<span class="badge red-text">Batal</span>';
             } else{
                 if($hitung > 0){
@@ -1645,13 +1653,10 @@ class PenjualanController extends Controller
 
                 if ($data->Pesanan->log_id == "7") {
                     $status = '<div><span class="badge red-text">'.$data->Pesanan->State->nama . '</span></div>';
-                }
-                else if ($data->Pesanan->log_id == "9") {
-                    $status = '<div><span class="badge purple-text">'.$data->Pesanan->State->nama . '</span></div>';
                 } else if($data->log == "batal") {
                     $status = '<div><span class="badge red-text">Batal</span></div>';
                 } else{
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if($hitung > 0){
                         $status = '<div class="align-center"><div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1664,8 +1669,33 @@ class PenjualanController extends Controller
                         <small class="text-muted align-center">Selesai</small></div>';
                     }
                 }
-
-        return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data, 'status' => $status]);
+                $tgl_kontrak = "";
+                if($data->tgl_kontrak_custom != ""){
+                    if($data->Pesanan->log_id != '10'){
+                        $tgl_sekarang = Carbon::now();
+                        $tgl_parameter = $data->tgl_kontrak_custom;
+                        $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                        if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                            if ($hari > 7) {
+                                $tgl_kontrak =  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else {
+                                $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                            }
+                        }
+                        else{
+                            $tgl_kontrak =  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                            <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
+                        }
+                    } else{
+                        $tgl_kontrak = Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
+                    }
+                }
+        return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data, 'status' => $status, 'tgl_kontrak' => $tgl_kontrak]);
     }
 
     public function get_data_detail_spb($value)
@@ -1699,12 +1729,9 @@ class PenjualanController extends Controller
             }])->where('id', $value)->first();
 
             $status = "";
-            $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+            $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
             if ($data->Pesanan->log_id == "7") {
                 $status = '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-            }
-            else if ($data->Pesanan->log_id == "9") {
-                $status = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
             } else if($data->log == "batal") {
                 $status = '<span class="badge red-text">Batal</span>';
             } else{
@@ -1891,10 +1918,8 @@ class PenjualanController extends Controller
             ->addColumn('status', function ($data) {
                 $datas = "";
                 if (!empty($data->Pesanan->log_id)) {
-                    $hitung = round(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else {
+                    $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+
                         if($hitung > 0){
                             $datas = '<div class="progress">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1907,7 +1932,6 @@ class PenjualanController extends Controller
                             <small class="text-muted">Selesai</small>';
                         }
                     }
-                }
                 return $datas;
             })
             ->addColumn('batas_kontrak', function ($data) {
@@ -1937,12 +1961,9 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('button', function ($data) {
-                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                        <button class="dropdown-item" type="button"><i class="fas fa-eye"></i> Detail</button>
-                    </a>
-                </div>';
+                return  '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                        <button class="btn btn-outline-primary btn-sm" type="button"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
             })
             ->rawColumns(['batas_kontrak', 'button', 'status'])
             ->make(true);
@@ -2042,13 +2063,8 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if($data->Pesanan->log_id == '7' || $data->Pesanan->log_id == '9'){
-                    if($data->Pesanan->log_id == "7"){
+                if($data->Pesanan->log_id == '7'){
                         $datas .= '<span class="red-text badge">Penjualan</span>';
-                    }
-                    else{
-                        $datas .= '<span class="purple-text badge">PO</span>';
-                    }
 
                     // if (!empty($data->status)) {
                     //     if ($data->status == "batal") {
@@ -2072,7 +2088,7 @@ class PenjualanController extends Controller
                         //     </button>
                         // </a>';
                     }else{
-                        $hitung = round((($data->cseri / $data->cjumlah) * 100), 0);
+                        $hitung = floor((($data->cseri / $data->cjumlah) * 100));
                         if($hitung > 0){
                             $datas = '<div class="progress">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -2257,6 +2273,11 @@ class PenjualanController extends Controller
 
 
             ->rawColumns(['button', 'status', 'tgl_kontrak', 'no_paket'])
+            ->setRowClass(function ($data) {
+                if ($data->status == 'batal') {
+                    return 'text-danger font-weight-bold line-through';
+                }
+            })
             ->make(true);
     }
     public function get_data_spa($value)
@@ -2376,10 +2397,10 @@ class PenjualanController extends Controller
                 // }
                 // return $datas;
                     $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else if($data->log == "batal") {
+                    $tes = $data->cjumlahprd + $data->cjumlahpart;
+                    if($tes > 0){
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                    if($data->log == "batal") {
                         $datas = '<span class="badge red-text">Batal</span>';
                     } else{
                         if($hitung > 0){
@@ -2392,6 +2413,7 @@ class PenjualanController extends Controller
                                 <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
                             </div>
                             <small class="text-muted">Selesai</small>';
+                        }
                         }
                     }
                     return $datas;
@@ -2494,6 +2516,11 @@ class PenjualanController extends Controller
                 return $return;
             })
             ->rawColumns(['button', 'status'])
+            ->setRowClass(function ($data) {
+                if ($data->log == 'batal') {
+                    return 'text-danger font-weight-bold line-through';
+                }
+            })
             ->make(true);
     }
     public function get_data_spb($value)
@@ -2604,10 +2631,10 @@ class PenjualanController extends Controller
                 // }
                 // return $datas;
                 $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else if($data->log == "batal") {
+                $tes = $data->cjumlahprd + $data->cjumlahpart;
+                    if($tes > 0){
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                    if($data->log == "batal") {
                         $datas = '<span class="badge red-text">Batal</span>';
                     } else{
                         if($hitung > 0){
@@ -2622,6 +2649,7 @@ class PenjualanController extends Controller
                             <small class="text-muted">Selesai</small>';
                         }
                     }
+                }
                     return $datas;
             })
             ->addColumn('nopo', function ($data) {
@@ -2727,6 +2755,11 @@ class PenjualanController extends Controller
                 return $return;
             })
             ->rawColumns(['button', 'status'])
+            ->setRowClass(function ($data) {
+                if ($data->log == 'batal') {
+                    return 'text-danger font-weight-bold line-through';
+                }
+            })
             ->make(true);
     }
     public function get_data_rencana_produk($customer_id, $instansi, $tahun)
@@ -3147,7 +3180,6 @@ class PenjualanController extends Controller
         $ekatalog = Ekatalog::find($id);
 
         if ($request->status_akn == 'draft') {
-
             if ($request->no_paket == '') {
                 $c_akn = NULL;
             } else {
@@ -3224,7 +3256,7 @@ class PenjualanController extends Controller
                                     $bool = false;
                                 }
                             }
-                        } else {
+                        } else{
                             $bool = false;
                         }
                     }
@@ -3762,6 +3794,20 @@ class PenjualanController extends Controller
         $detail_spb = DetailSpb::findOrFail($id);
         $detail_spb->delete();
     }
+
+    public function cancel_penjualan($id, $jenis)
+    {
+        $data = "";
+        if ($jenis == "EKAT") {
+            $data = Ekatalog::where('id', $id)->with('Pesanan')->first();
+        } else if ($jenis == "SPA") {
+            $data = Spa::where('id', $id)->with('Pesanan')->first();
+        } else if ($jenis == "SPB") {
+            $data = Spb::where('id', $id)->with('Pesanan')->first();
+        }
+        return view('page.penjualan.penjualan.cancel', ['id' => $id, 'data' => $data]);
+    }
+
     public function cancel_spa_spb($id, $jenis)
     {
         if ($jenis == "spa") {
@@ -4005,6 +4051,9 @@ class PenjualanController extends Controller
                 } else {
                     return '';
                 }
+            })
+            ->addColumn('no_so', function ($data) {
+                return $data->Pesanan->so;
             })
             ->addColumn('no_po', function ($data) {
                 return $data->Pesanan->no_po;
@@ -4868,6 +4917,7 @@ class PenjualanController extends Controller
     {
         return view('manager.penjualan.so.show');
     }
+
     public function manager_penjualan_show_data($jenis, $value)
     {
         if($jenis == "ekatalog"){
@@ -4966,7 +5016,7 @@ class PenjualanController extends Controller
                                 </button>
                             </a>';
                         }else{
-                            $hitung = round((($data->cseri / $data->cjumlah) * 100), 0);
+                            $hitung = floor((($data->cseri / $data->cjumlah) * 100));
                             if($hitung > 0){
                                 $datas = '<div class="progress">
                                     <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -5143,10 +5193,8 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else{
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+
                         if($data->log == "batal") {
                             $datas = '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
                                     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
@@ -5167,7 +5215,6 @@ class PenjualanController extends Controller
                                 <small class="text-muted">Selesai</small>';
                             }
                         }
-                    }
                     return $datas;
             })
             ->addColumn('tglpo', function ($data) {
@@ -5292,10 +5339,8 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else {
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+
                         if($data->log == "batal") {
                             $datas = '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
                                     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
@@ -5316,7 +5361,6 @@ class PenjualanController extends Controller
                                 <small class="text-muted">Selesai</small>';
                             }
                         }
-                    }
                     return $datas;
             })
             ->addColumn('tglpo', function ($data) {

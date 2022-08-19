@@ -25,6 +25,9 @@
 
 @section('adminlte_css')
 <style>
+    table { border-collapse: collapse; empty-cells: show; }
+
+    td { position: relative; }
 
     .foo {
         border-radius: 50%;
@@ -34,12 +37,31 @@
         align-items: center !important;
     }
 
-
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
+    }
 
     .alert-danger {
         color: #a94442;
         background-color: #f2dede;
         border-color: #ebccd1;
+    }
+
+    .alert-info {
+        color: #0c5460;
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+    }
+
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
     }
 
     .separator {
@@ -382,7 +404,7 @@
                                                         <th>Nomor PO</th>
                                                         <th>Tanggal Buat</th>
                                                         <th>Tanggal Edit</th>
-                                                        <th>Tanggal Kontrak</th>
+                                                        <th>Tanggal Delivery</th>
                                                         <th>Customer</th>
                                                         <th>Status</th>
                                                         <th>Aksi</th>
@@ -717,7 +739,7 @@
                                                         <th>Nomor AKN</th>
                                                         <th>Nomor PO</th>
                                                         <th>Tanggal PO</th>
-                                                        <th>Tanggal Kontrak</th>
+                                                        <th>Tanggal Delivery</th>
                                                         <th>Customer</th>
                                                         <th>Status</th>
                                                         <th>Aksi</th>
@@ -827,9 +849,6 @@
                     "headers": {
                         'X-CSRF-TOKEN': "{{ csrf_token() }}"
                     }
-                    // 'headers': {
-                    //     'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    // },
                 },
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
@@ -851,11 +870,7 @@
                         data: 'tgl_kontrak',
                     }, {
                         data: 'nama_customer',
-                    },
-                    // {
-                    //     data: 'jenis',
-                    // },
-                    {
+                    }, {
                         data: 'status',
                     }, {
                         data: 'button',
@@ -883,7 +898,6 @@
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 columns: [
-
                     {
                         data: 'DT_RowIndex',
                         className: 'nowrap-text align-center',
@@ -917,7 +931,6 @@
                         orderable: false,
                         searchable: false
                     },
-
                     {
                         data: 'nama_customer',
                     },
@@ -1126,8 +1139,6 @@
                             $('#detailmodal').find(".modal-header > h4").text('E-Catalogue');
                             detailtabel_ekatalog(id);
                         } else if (label == 'spa') {
-                            // $('#detailmodal').find(".modal-header").attr('id', '');
-                            // $('#detailmodal').find(".modal-header").attr('id', 'detailspa');
                             $('#detailmodal').find(".modal-header").removeClass(
                                 'bg-purple bg-lightblue');
                             $('#detailmodal').find(".modal-header").addClass('bg-orange');
@@ -1191,7 +1202,6 @@
                 },
                 buttonsStyling: false
             })
-
 
             $(document).on('click', '.batalmodal', function(event) {
                 event.preventDefault();
@@ -1300,7 +1310,6 @@
                 });
                 return false;
             });
-
 
             $(document).on('click', '.deletemodal', function(event) {
                 event.preventDefault();

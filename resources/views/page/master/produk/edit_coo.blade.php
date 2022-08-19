@@ -2,28 +2,30 @@
     <div class="col-lg-12">
         <div class="row">
             <div class="col-lg-4 col-md-12">
-                <div class="card">
+                <div class="card card-outline card-secondary">
                     <div class="card-header">
                         <h6 class="card-title">Info Produk</h6>
+                        <div class="card-tools">
+                            <button type="button" class="btn btn-tool" data-card-widget="collapse">
+                            <i class="fas fa-minus"></i>
+                            </button>
+                        </div>
                     </div>
                     <div class="card-body">
-                        <div class="row align-md">
-                            <div class="col-lg-12 col-md-4 margin-info">
-                                <div class="text-muted">Jenis Produk</div>
-                                <div class="margin-info">
-                                    <b>{{$data->product->nama}}</b>
-                                </div>
-                            </div>
-                            <div class="col-lg-12 col-md-4 margin-info">
-                                <div class="text-muted">Tipe</div>
-                                <div class="margin-info">
-                                    <b>{{$data->nama}}</b>
-                                </div>
-                            </div>
-                            <div class="col-lg-12 col-md-4 margin-info">
-                                <div class="text-muted">Kelompok Produk</div>
-                                <div class="margin-info">
-                                    @if($data->KelompokProduk->nama == 'Alat Kesehatan')
+
+                        <strong>{{--<i class="fas fa-book mr-1 fa-fw"></i>--}} Jenis Produk</strong>
+                        <p class="text-muted">
+                            {{$data->product->nama}}
+                        </p>
+                        <hr>
+                        <strong>{{--<i class="fas fa-calendar-alt fa-fw"></i>--}} Tipe</strong>
+                        <p class="text-muted">
+                            {{$data->nama}}
+                        </p>
+                        <hr>
+                        <strong>{{--<i class="fas fa-asterisk fa-fw"></i>--}} Kelompok Produk</strong>
+                        <p class="text-muted">
+                            @if($data->KelompokProduk->nama == 'Alat Kesehatan')
                                         <span class="badge blue-text">
                                     @elseif($data->KelompokProduk->nama == 'Water Treatment')
                                         <span class="badge orange-text">
@@ -35,9 +37,7 @@
                                         <span class="badge green-text">
                                     @endif
                                     {{$data->KelompokProduk->nama}}</span>
-                                </div>
-                            </div>
-                        </div>
+                        </p>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                 <form method="POST" action="/api/master/produk/update_coo/{{$data->id}}" id="form-update">
                     @method('PUT')
                     @csrf
-                    <div class="card">
+                    <div class="card card-outline card-warning">
                         <div class="card-header">
                             <h6 class="card-title">Ubah Data</h6>
                         </div>
