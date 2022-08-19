@@ -40,6 +40,7 @@ use App\Models\Sparepart;
 use App\Models\SparepartGudang;
 use App\Models\UserLog;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
 use function PHPUnit\Framework\returnValueMap;
@@ -898,21 +899,26 @@ class MasterController extends Controller
         // );
         $harga_convert =  str_replace('.', "", $request->harga);
 
-
-        $PenjualanProduk = PenjualanProduk::create([
-            'nama' => $request->nama_paket,
-            'nama_alias' => $request->nama_alias,
-            'harga' => $harga_convert,
-            'status' => $request->jenis_paket,
-            'is_aktif' => $request->is_aktif
+        $validator = Validator::make($request->all(),[
+            'produk_id' => 'required ',
+            'jumlah' => 'required'
         ]);
-        $bool = true;
-        if ($PenjualanProduk) {
+
+        if($validator->fails()){
+            $bool = false;
+        }else{
+            $PenjualanProduk = PenjualanProduk::create([
+                'nama' => $request->nama_paket,
+                'nama_alias' => $request->nama_alias,
+                'harga' => $harga_convert,
+                'status' => $request->jenis_paket
+            ]);
+
             for ($i = 0; $i < count($request->produk_id); $i++) {
                 $PenjualanProduk->produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
             }
-        } else {
-            $bool = false;
+
+            $bool = true;
         }
 
         if ($bool == true) {
@@ -1240,10 +1246,63 @@ class MasterController extends Controller
     }
     public function select_penjualan_produk_id($id)
     {
-        $data = PenjualanProduk::with('Produk.GudangBarangJadi')->where('id', $id)
-            ->get();
+        // $data = PenjualanProduk::with('Produk.GudangBarangJadi')->where('id', $id)
+        //     ->get();
 
-        echo json_encode($data);
+        $data = array();
+        $pp = PenjualanProduk::where('id', $id)->get();
+
+        foreach ($pp as $key_pp => $pp){
+            $data[$key_pp] = array(
+                'id' => $pp->id,
+                'nama' => $pp->nama,
+                'nama_alias' => $pp->nama_alias,
+                'harga' => $pp->harga,
+                'status' => $pp->status,
+                'created_at' => $pp->created_at,
+                'updated_at' => $pp->updated_at,
+            );
+
+            foreach ($pp->Produk as $key_p => $p){
+                $data[$key_pp]['produk'][$key_p] = array(
+                    'id' => $p->id,
+                    'produk_id' => $p->produk_id,
+                    'merk' => $p->merk,
+                    'nama' => $p->nama,
+                    'nama_coo' => $p->nama_coo,
+                    'coo' => $p->coo,
+                    'no_akd' => $p->no_akd,
+                    'ket' => $p->ket,
+                    'created_at' => $p->created_at,
+                    'updated_at' => $p->updated_at,
+                    'pivot' => $p->pivot,
+                    'status' => $p->status,
+                );
+
+                foreach($p->GudangBarangJadi as $key_v => $v){
+                    $data[$key_pp]['produk'][$key_p]['gudang_barang_jadi'][$key_v] = array(
+                        'id' => $v->id,
+                        'produk_id' => $v->produk_id,
+                        'nama' => $v->nama,
+                        'deskripsi' => $v->deskripsi,
+                        'stok' => $v->stok(),
+                        'stok_siap' => $v->stok_siap,
+                        'satuan_id' => $v->satuan_id,
+                        'gambar' => $v->gambar,
+                        'dim_p' => $v->dim_p,
+                        'dim_l' => $v->dim_l,
+                        'dim_t' => $v->dim_t,
+                        'status' => $v->status,
+                        'created_by' => $v->created_by,
+                        'updated_by' => $v->updated_by,
+                        'created_at' => $v->created_at,
+                        'updated_at' => $v->updated_at,
+                    );
+                }
+            }
+
+        }
+         echo json_encode($data);
     }
     public function select_penjualan_produk_param(Request $request, $value)
     {
