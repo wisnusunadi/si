@@ -40,6 +40,7 @@ use App\Models\Sparepart;
 use App\Models\SparepartGudang;
 use App\Models\UserLog;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Maatwebsite\Excel\Facades\Excel;
 
 use function PHPUnit\Framework\returnValueMap;
@@ -783,21 +784,32 @@ class MasterController extends Controller
         // );
         $harga_convert =  str_replace('.', "", $request->harga);
 
-
-        $PenjualanProduk = PenjualanProduk::create([
-            'nama' => $request->nama_paket,
-            'nama_alias' => $request->nama_alias,
-            'harga' => $harga_convert,
-            'status' => $request->jenis_paket
+        $validator = Validator::make($request->all(),[
+            'produk_id' => 'required ',
+            'jumlah' => 'required'
         ]);
-        $bool = true;
-        if ($PenjualanProduk) {
+
+        if($validator->fails()){
+            $bool = false;
+        }else{
+            $PenjualanProduk = PenjualanProduk::create([
+                'nama' => $request->nama_paket,
+                'nama_alias' => $request->nama_alias,
+                'harga' => $harga_convert,
+                'status' => $request->jenis_paket
+            ]);
+
             for ($i = 0; $i < count($request->produk_id); $i++) {
                 $PenjualanProduk->produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
             }
-        } else {
-            $bool = false;
+
+            $bool = true;
         }
+
+
+
+
+
 
         if ($bool == true) {
             return redirect()->back()->with('success', 'success');
