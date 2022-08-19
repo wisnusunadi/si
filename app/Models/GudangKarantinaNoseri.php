@@ -21,5 +21,10 @@ class GudangKarantinaNoseri extends Model
         return $this->belongsTo(Layout::class, 'layout_id');
     }
 
+    function unit()
+    {
+        return $this->belongsTo(GudangBarangJadi::class, 'hasil_jadi_id');
+    }
+
 
 }

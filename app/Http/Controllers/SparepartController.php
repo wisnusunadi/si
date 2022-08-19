@@ -351,6 +351,9 @@ class SparepartController extends Controller
                     }
 
                 })
+                ->addColumn('unit_baru', function($d){
+                    return $d->hasil_jadi_id == null ? '-' : $d->unit->produk->nama.' '.$d->unit->nama;
+                })
                 ->addColumn('perbaikan', function ($d) {
                     if($d->seri) {
                         return $d->seri->perbaikan;
@@ -2139,6 +2142,7 @@ class SparepartController extends Controller
             $data->updated_at = Carbon::now();
             $data->updated_by = $request->userid;
             $data->save();
+            // return $data;
 
             return response()->json(['msg' => 'Data Berhasil diubah']);
         } catch (\Exception $e) {
