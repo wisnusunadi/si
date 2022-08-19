@@ -25,6 +25,15 @@
 
 @section('adminlte_css')
 <style>
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
+    height: 100% !important;
+    }
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
+    word-wrap: break-word !important;
+    text-overflow: inherit !important;
+    white-space: normal !important;
+    }
+
     .hide {
         display: none !important;
     }
@@ -50,7 +59,7 @@
     }
 
     .blue-bg {
-        background-color: #c8daea;
+        background-color: #ffeab8;
     }
 
     #produktable{
@@ -164,7 +173,14 @@
     .autocomplete-active {
         background-color: #e6c300 !important;
     }
-
+    .select_item .select2-selection--single {
+  height: 100% !important;
+}
+.select_item .select2-selection__rendered{
+  word-wrap: break-word !important;
+  text-overflow: inherit !important;
+  white-space: normal !important;
+}
 </style>
 @stop
 
@@ -381,7 +397,6 @@
                                                             <input type="text" class="form-control col-form-label" name="telepon" id="telepon_customer" readonly value="{{$e->customer->telp}}" />
                                                         </div>
                                                     </div>
-
                                                 </div>
                                             </div>
                                         </div>
@@ -656,7 +671,7 @@
                                                                     <tr>
                                                                         <td>{{$loop->iteration}}</td>
                                                                         <td>
-                                                                            <div class="form-group">
+                                                                            <div class="form-group select_item">
                                                                                 <select name="penjualan_produk_id[]" id="{{$loop->iteration-1}}" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                                     <option value="{{$f->penjualan_produk_id}}" selected>{{$f->penjualanproduk->nama}}</option>
                                                                                 </select>
@@ -726,7 +741,7 @@
                                                                     <tr>
                                                                         <td>1</td>
                                                                         <td>
-                                                                            <div class="form-group">
+                                                                            <div class="form-group select_item">
                                                                                 <select name="penjualan_produk_id[0]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                                 </select>
                                                                             </div>
@@ -772,7 +787,7 @@
                                                                     <tr>
                                                                         <td>1</td>
                                                                         <td>
-                                                                            <div class="form-group">
+                                                                            <div class="form-group select_item">
                                                                                 <select name="penjualan_produk_id[0]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                                                                 </select>
                                                                             </div>
@@ -887,6 +902,88 @@
 
             loop();
             load_variasi();
+
+            var penjualan_produk_id = false;
+            var variasi = false;
+            var produk_jumlah = false;
+            var produk_harga = false;
+
+            function checkvalidasi(){
+
+                $('#produktable').find('.penjualan_produk_id').each(function() {
+                    if ($(this).val() != "") {
+                        penjualan_produk_id = true;
+                    }
+                    else {
+                        penjualan_produk_id = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.variasi').each(function() {
+                    if ($(this).val() != "") {
+                        variasi = true;
+                    }
+                    else {
+                        variasi = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.produk_jumlah').each(function() {
+                    if ($(this).val() != "") {
+                        produk_jumlah = true;
+                    }
+                    else {
+                        produk_jumlah = false;
+                        return false;
+                    }
+                });
+
+                $('#produktable').find('.produk_harga').each(function() {
+                    if ($(this).val() != "") {
+                        produk_harga = true;
+                    }
+                    else {
+                        produk_harga = false;
+                        return false;
+                    }
+                });
+
+                if($('input[type="radio"][name="status_akn"]:checked').val() == "sepakat" || $('input[type="radio"][name="status_akn"]:checked').val() == "negosiasi"){
+                    if(penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true){
+                        if($('#no_paket').val() != "" && $('#provinsi').val() != null && $('#tgl_buat').val() != "" && $('#tgl_edit').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != ""){
+                            $("#btnsimpan").attr('disabled', false);
+                        } else {
+                            $("#btnsimpan").attr('disabled', true);
+                        }
+                    }
+                    else{
+                        $("#btnsimpan").attr('disabled', true);
+                    }
+                }
+                else if($('input[type="radio"][name="status_akn"]:checked').val() == "batal" || $('input[type="radio"][name="status_akn"]:checked').val() == "draft"){
+                    if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
+                        if(penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true){
+                            if($('#tgl_buat').val() != "" && $('#tgl_edit').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != ""){
+                                $("#btnsimpan").attr('disabled', false);
+                            } else {
+                                $("#btnsimpan").attr('disabled', true);
+                            }
+                        }
+                        else{
+                            $("#btnsimpan").attr('disabled', true);
+                        }
+                    } else {
+                        if($('#tgl_buat').val() != "" && $('#tgl_edit').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != ""){
+                            $("#btnsimpan").attr('disabled', false);
+                        } else {
+                            $("#btnsimpan").attr('disabled', true);
+                        }
+                    }
+                }
+
+            }
 
             // function getinstansi(id){
             //     instansi_array = [];
@@ -1079,12 +1176,12 @@
                         $("#alamat").val("");
                         $("#telepon").val("");
                     }
-                    checkvalidasi();
                 } else {
                     $("#msgstatus").text("Status Harus dipilih");
                     $("#status").addClass('is-invalid');
                     $('#btntambah').attr("disabled", true);
                 }
+                checkvalidasi();
             });
 
             $('input[name="status_akn"][value={{$e->status}}]').attr('checked', 'checked');
@@ -1110,6 +1207,8 @@
                         $("#dataproduk").removeClass("hide");
                         $("#batas_kontrak").attr('disabled', false);
                         $("#provinsi").attr('disabled', false);
+                        var $newOption = $("<option selected='selected'></option>").val("11").text("Jawa Timur")
+                    $(".provinsi").append($newOption).trigger('change');
                         if(nopaketubah == false){
                             $('#no_paket').val(nopaketdb);
                         }
@@ -1137,7 +1236,6 @@
                         if($('input[type="checkbox"][name="isi_produk"]:checked').length <= 0){
                             $("#dataproduk").addClass("hide");
                         }
-
                     } else if($(this).val() == "batal"){
                         if(status_akn != "draft"){
                             $('#checkbox_nopaket').addClass('hide');
@@ -1152,6 +1250,7 @@
                             if(nopaketubah == false){
                                 $('#no_paket').val(nopaketdb);
                             }
+
                         }
                         else{
                             $('#checkbox_nopaket').removeClass('hide');
@@ -1166,13 +1265,13 @@
                                 $("#produktable tbody").empty();
                                 $('#produktable tbody').append(trproduktable());
                                 $("#totalhargaprd").text("Rp. 0");
+                                numberRowsProduk($("#produktable"));
                             }
                         }
                     } else {
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
                         $('#no_paket').attr('readonly', false);
-                        numberRowsProduk($("#produktable"));
                         $("#batas_kontrak").val("");
                         $("#batas_kontrak").attr('disabled', true);
                         $("#dataproduk").removeClass("hide");
@@ -1185,6 +1284,7 @@
                             $("#produktable tbody").empty();
                             $('#produktable tbody').append(trproduktable());
                         }
+                        numberRowsProduk($("#produktable"));
                     }
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
@@ -1196,6 +1296,7 @@
                         $('#no_paket').val(nopaketdb);
                     }
                 }
+                checkvalidasi();
             });
 
 
@@ -1236,6 +1337,7 @@
                     $("#msgtanggal_pemesanan").text("Isi Tanggal Pemesanan");
                     $("#tanggal_pemesanan").addClass('is-invalid');
                 }
+                checkvalidasi();
             });
 
             $('input[type="radio"][name="do_akn"]').on('change', function() {
@@ -1246,6 +1348,7 @@
                     $("#do_detail_no_akn").addClass("hide");
                     $("#do_detail_tgl_akn").addClass("hide");
                 }
+                checkvalidasi();
             });
 
             $('#batas_kontrak').on('keyup change', function() {
@@ -1256,6 +1359,7 @@
                     $("#msgbatas_kontrak").text("Batas Kontrak Harus diisi");
                     $("#batas_kontrak").addClass('is-invalid');
                 }
+                checkvalidasi();
             });
 
             $('#tgl_edit').on('keyup change', function() {
@@ -1266,12 +1370,14 @@
                     $("#msgtgl_edit").text("Tanggal Edit Harus diisi");
                     $("#tgl_edit").addClass('is-invalid');
                 }
+                checkvalidasi();
             });
 
             $('#pills-produk-tab').on('click', function(){
                 var cust = $('#customer_id').val();
                 var instansi = $('#instansi').val();
                 perencanaan(cust, instansi);
+                checkvalidasi();
             });
 
             $('input[name="instansi"]').on('keyup change', function() {
@@ -1284,6 +1390,7 @@
                     $("#msginstansi").text("Instansi Harus diisi");
                     $("#instansi").addClass('is-invalid');
                 }
+                checkvalidasi();
             });
 
             $('#deskripsi').on('keyup change', function() {
@@ -1294,16 +1401,38 @@
                     $("#msgdeskripsi").text("Deskripsi harus diisi");
                     $("#deskripsi").addClass('is-invalid');
                 }
+                checkvalidasi();
             });
 
             $('#no_urut').on('keyup change', function() {
                 if ($(this).val() != "") {
-                    $("#msgno_urut").text("");
-                    $("#no_urut").removeClass('is-invalid');
+                    var values = $(this).val();
+                    $.ajax({
+                        type: 'POST',
+                        dataType: 'JSON',
+                        url: '/api/penjualan/check_no_urut/' + '{{$e->id}}'+'/' + values,
+                        success: function(data) {
+                            if (data > 0) {
+                                $("#msgno_urut").text("No Urut tidak boleh sama");
+                                $("#no_urut").addClass('is-invalid');
+                                $('#btntambah').attr("disabled", true);
+                            } else {
+                                $("#msgno_urut").text("");
+                                $("#no_urut").removeClass('is-invalid');
+                            }
+                        },
+                        error: function(data) {
+                            $("#msgno_urut").text("No Urut tidak boleh sama");
+                            $("#no_urut").addClass('is-invalid');
+                            $('#btntambah').attr("disabled", true);
+                        }
+                    });
                 } else if ($(this).val() == "") {
-                    $("#msgno_urut").text("No Urut harus diisi");
+                    $("#msgno_urut").text("No Urut Harus diisi");
                     $("#no_urut").addClass('is-invalid');
+                    $('#btntambah').attr("disabled", true);
                 }
+                checkvalidasi();
             });
 
             $('#no_po_akn').on('keyup change', function() {
@@ -1314,6 +1443,7 @@
                     $("#msgno_po_akn").text("Nomor PO Harus diisi");
                     $("#no_po_akn").addClass('is-invalid');
                 }
+                checkvalidasi();
             });
 
             $('#tanggal_po_akn').on('keyup', function() {
@@ -1324,6 +1454,7 @@
                     $("#msgtanggal_po_akn").text("Tanggal PO Harus diisi");
                     $("#tanggal_po_akn").addClass('is-invalid');
                 }
+                checkvalidasi();
             });
 
             function formatmoney(bilangan) {
@@ -1398,6 +1529,7 @@
                     subtotal.val(formatmoney("0"));
                     totalhargaprd();
                 }
+                checkvalidasi();
             });
 
             $("#produktable").on('keyup change', '.produk_jumlah', function() {
@@ -1411,6 +1543,10 @@
                 if (jumlah != "" && harga != "") {
                     var hargacvrt = replaceAll(harga, '.', '');
                     var ongkircvrt = replaceAll(ongkir, '.', '');
+                    if (ongkircvrt == "") {
+                        ongkircvrt = "0";
+                        $(this).closest('tr').find('.produk_ongkir').val("0");
+                    }
                     subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
                     totalhargaprd();
                     for (var i = 0; i < variasi.length; i++) {
@@ -1436,6 +1572,8 @@
                     variasi.removeClass('is-invalid');
                     ketstok.text('');
                 }
+
+                checkvalidasi();
             });
 
             $('#produktable').on('keyup change', '.variasi', function() {
@@ -1460,6 +1598,7 @@
                     $('select[name="variasi[' + ppid + '][' + id + ']"]').removeClass('is-invalid');
                     $('span[name="ketstok[' + ppid + '][' + id + ']"]').text('');
                 }
+                checkvalidasi();
             });
 
             $("#produktable").on('keyup change', '.produk_harga', function() {
@@ -1472,12 +1611,18 @@
                 if (jumlah != "" && harga != "") {
                     var hargacvrt = replaceAll(harga, '.', '');
                     var ongkircvrt = replaceAll(ongkir, '.', '');
+                    if (ongkircvrt == "") {
+                        ongkircvrt = "0";
+                        $(this).closest('tr').find('.produk_ongkir').val("0");
+                    }
                     subtotal.val(formatmoney((jumlah * parseInt(hargacvrt)) + parseInt(ongkircvrt)));
                     totalhargaprd();
                 } else {
                     subtotal.val(formatmoney("0"));
                     totalhargaprd();
                 }
+
+                checkvalidasi();
             });
 
             $("#produktable").on('keyup change', '.produk_ongkir', function() {
@@ -1496,13 +1641,14 @@
                     subtotal.val(formatmoney("0"));
                     totalhargaprd();
                 }
+                checkvalidasi();
             });
 
             function trproduktable() {
                 var data = `<tr>
                     <td></td>
                     <td>
-                        <div class="form-group">
+                        <div class="form-group select_item">
                             <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                 <option value=""></option>
                             </select>
@@ -1550,6 +1696,7 @@
                     $('#produktable tbody tr:last').after(trproduktable());
                     numberRowsProduk($("#produktable"));
                 }
+                checkvalidasi();
             });
 
             $('#produktable').on('click', '#removerowproduk', function(e) {
@@ -1557,15 +1704,21 @@
                 numberRowsProduk($("#produktable"));
                 totalhargaprd();
                 if ($('#produktable > tbody > tr').length <= 0) {
-                    $("#totalhargaprd").text("0");
+                    $('#produktable tbody').append(trproduktable());
+                    numberRowsProduk($("#produktable"));
+                    $("#totalhargaprd").text("Rp. 0");
                 }
+
+                checkvalidasi();
             });
 
             function select_data(i) {
                 $('#' + i).select2({
+                    placeholder: "Pilih Produk",
                     ajax: {
                         minimumResultsForSearch: 20,
                         dataType: 'json',
+
                         delay: 250,
                         type: 'GET',
                         url: '/api/penjualan_produk/select_param/ekatalog',
@@ -1645,6 +1798,7 @@
                             tes.append(`</fieldset>`);
                         }
                     });
+                    checkvalidasi();
                 });
             }
 
@@ -1827,7 +1981,7 @@
                 var data = `<tr>
                         <td></td>
                         <td>
-                            <div class="form-group">
+                            <div class="form-group select_item">
                                 <select name="penjualan_produk_id[]" id="0" class="select2 form-control custom-select penjualan_produk_id @error('penjualan_produk_id') is-invalid @enderror" style="width:100%;">
                                     <option value="`+produk_id+`">`+nama_produk+`</option>
                                 </select>

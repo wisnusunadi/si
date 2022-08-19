@@ -6,7 +6,7 @@
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-lg-6 col-md-4 col-sm-4">
-            <h1 class="m-0  text-dark">Customer</h1>
+            <h1 class="m-0  text-dark">Tambah Customer</h1>
         </div><!-- /.col -->
         <div class="col-lg-6 col-md-8 col-sm-8">
             <ol class="breadcrumb float-sm-right">
@@ -75,12 +75,6 @@
             {{csrf_field()}}
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-10 co-md-12">
-
-                    <div class="card">
-                        <div class="card-header bg-info">
-                            <h5 class="card-title">Tambah Customer</h5>
-                        </div>
-                        <div class="card-body bg-color">
                             <div class="row">
                                 <div class="col-lg-12 col-md-12">
                                     <div class="form-group row">
@@ -104,7 +98,10 @@
                                     </div>
                                     <div class="row">
                                         <div class="col-lg-12 col-md-12" >
-                                            <div class="card removeboxshadow">
+                                            <div class="card card-outline card-info">
+                                                <div class="card-header">
+                                                    <h6 class="card-title">Informasi Umum</h6>
+                                                </div>
                                                 <div class="card-body">
                                                     <div class="form-group row">
                                                         <label for="nama_produk" class="col-lg-4 col-md-12 col-form-label labelket">Nama Customer</label>
@@ -113,6 +110,55 @@
                                                             <div class="invalid-feedback" id="msgnama_customer">
                                                                 @if($errors->has('nama_customer'))
                                                                 {{ $errors->first('nama_customer')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="alamat" class="col-lg-4 col-md-12 col-form-label labelket">Alamat</label>
+                                                        <div class="col-lg-6 col-md-12">
+                                                            <textarea class="form-control col-form-label @error('alamat') is-invalid @enderror" name="alamat" id="alamat" placeholder="Masukkan Alamat"></textarea>
+                                                            {{-- <input type="text" class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan Alamat" id="alamat" name="alamat" /> --}}
+                                                            <div class="invalid-feedback" id="msgalamat">
+                                                                @if($errors->has('alamat'))
+                                                                {{ $errors->first('alamat')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="email" class="col-lg-4 col-md-12 col-form-label labelket">Email</label>
+                                                        <div class="col-lg-6 col-md-12">
+                                                            <input type="text" class="form-control col-form-label @error('email') is-invalid @enderror" placeholder="Masukkan Email" id="email" name="email" />
+                                                            <div class="invalid-feedback" id="msgemail">
+                                                                @if($errors->has('email'))
+                                                                {{ $errors->first('email')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="provinsi" class="col-lg-4 col-md-12 col-form-label labelket">Provinsi</label>
+                                                        <div class="col-lg-5 col-md-12">
+                                                            <select class="select-info form-control col-form-label custom-select provinsi @error('alamat') is-invalid @enderror" name="provinsi" id="provinsi" width="100%">
+                                                            </select>
+                                                            <div class="invalid-feedback" id="msgprovinsi">
+                                                                @if($errors->has('provinsi'))
+                                                                {{ $errors->first('provinsi')}}
+                                                                @endif
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                                    <div class="form-group row">
+                                                        <label for="telepon" class="col-lg-4 col-md-12 col-form-label labelket">No Telp</label>
+                                                        <div class="col-lg-5 col-md-12">
+                                                            <input type="text" class="form-control col-form-label @error('telepon') is-invalid @enderror" value="" placeholder="Masukkan Telepon" id="telepon" name="telepon" />
+                                                            <div class="invalid-feedback" id="msgtelepon">
+                                                                @if($errors->has('telepon'))
+                                                                {{ $errors->first('telepon')}}
                                                                 @endif
                                                             </div>
                                                         </div>
@@ -128,63 +174,16 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group row">
-                                                        <label for="telepon" class="col-lg-4 col-md-12 col-form-label labelket">No Telp</label>
-                                                        <div class="col-lg-5 col-md-12">
-                                                            <input type="text" class="form-control col-form-label @error('telepon') is-invalid @enderror" value="" placeholder="Masukkan Telepon" id="telepon" name="telepon" />
-                                                            <div class="invalid-feedback" id="msgtelepon">
-                                                                @if($errors->has('telepon'))
-                                                                {{ $errors->first('telepon')}}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                    <div class="form-group row">
-                                                        <label for="email" class="col-lg-4 col-md-12 col-form-label labelket">Email</label>
-                                                        <div class="col-lg-6 col-md-12">
-                                                            <input type="text" class="form-control col-form-label @error('email') is-invalid @enderror" placeholder="Masukkan Email" id="email" name="email" />
-                                                            <div class="invalid-feedback" id="msgemail">
-                                                                @if($errors->has('email'))
-                                                                {{ $errors->first('email')}}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="col-lg-12 col-md-12">
-                                            <div class="card removeboxshadow">
+                                            <div class="card card-outline card-info">
+                                                <div class="card-header">
+                                                    <h6 class="card-title">Detail Customer</h6>
+                                                </div>
                                                 <div class="card-body">
-
-
-                                                    <div class="form-group row">
-                                                        <label for="alamat" class="col-lg-4 col-md-12 col-form-label labelket">Alamat</label>
-                                                        <div class="col-lg-6 col-md-12">
-                                                            <textarea class="form-control col-form-label @error('alamat') is-invalid @enderror" name="alamat" id="alamat" placeholder="Masukkan Alamat"></textarea>
-                                                            {{-- <input type="text" class="form-control @error('alamat') is-invalid @enderror" placeholder="Masukkan Alamat" id="alamat" name="alamat" /> --}}
-                                                            <div class="invalid-feedback" id="msgalamat">
-                                                                @if($errors->has('alamat'))
-                                                                {{ $errors->first('alamat')}}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
-                                                    <div class="form-group row">
-                                                        <label for="provinsi" class="col-lg-4 col-md-12 col-form-label labelket">Provinsi</label>
-                                                        <div class="col-lg-5 col-md-12">
-                                                            <select class="select-info form-control col-form-label custom-select provinsi @error('alamat') is-invalid @enderror" name="provinsi" id="provinsi" width="100%">
-                                                            </select>
-                                                            <div class="invalid-feedback" id="msgprovinsi">
-                                                                @if($errors->has('provinsi'))
-                                                                {{ $errors->first('provinsi')}}
-                                                                @endif
-                                                            </div>
-                                                        </div>
-                                                    </div>
-
                                                     <div class="form-group row">
                                                         <label for="pic" class="col-lg-4 col-md-12 col-form-label labelket">PIC</label>
                                                         <div class="col-lg-5 col-md-12">
@@ -220,6 +219,26 @@
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div class="form-group row">
+                                                        <label for="batas" class="col-form-label col-lg-4 col-md-12 labelket">Batas Pembayaran</label>
+                                                        <div class="col-lg-4 col-md-6 input-group">
+                                                            <input type="text" class="form-control col-form-label @error('batas') is-invalid @enderror" name="batas" id="batas" aria-label="batas" placeholder="Batas hari pembayaran" />
+                                                            <div class="input-group-prepend">
+                                                                <span class="input-group-text" id="ket_no_paket">Hari</span>
+                                                            </div>
+                                                            <div class="invalid-feedback" id="msgno_batas">
+                                                                @if($errors->has('batas'))
+                                                                {{ $errors->first('batas')}}
+                                                                @endif
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="form-group row">
+                                                        <label for="keterangan" class="col-lg-4 col-md-12 col-form-label labelket">Keterangan</label>
+                                                        <div class="col-lg-5 col-md-11">
+                                                            <textarea class="form-control" name="keterangan" id="keterangan" placeholder="Masukkan Keterangan"></textarea>
+                                                        </div>
+                                                    </div>
 
                                                     <div class="form-group row hide">
                                                         <label for="izin_usaha" class="col-lg-4 col-md-12 col-form-label labelket">Izin Usaha</label>
@@ -247,7 +266,7 @@
                                             </div>
                                         </div>
 
-                                        <div class="col-lg-12 col-md-12">
+                                        <div class="col-lg-12 col-md-12 hide">
                                             <div class="card removeboxshadow">
                                                 <div class="card-body">
 
@@ -295,48 +314,27 @@
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group row">
-                                                        <label for="batas" class="col-form-label col-lg-4 col-md-12 labelket">Batas Pembayaran</label>
-                                                        <div class="col-lg-4 col-md-6 input-group">
-                                                            <input type="text" class="form-control col-form-label @error('batas') is-invalid @enderror" name="batas" id="batas" aria-label="batas" placeholder="Batas hari pembayaran" />
-                                                            <div class="input-group-prepend">
-                                                                <span class="input-group-text" id="ket_no_paket">Hari</span>
-                                                            </div>
-                                                            <div class="invalid-feedback" id="msgno_batas">
-                                                                @if($errors->has('batas'))
-                                                                {{ $errors->first('batas')}}
-                                                                @endif
                                                             </div>
                                                         </div>
                                                     </div>
-                                                    <div class="form-group row">
-                                                        <label for="keterangan" class="col-lg-4 col-md-12 col-form-label labelket">Keterangan</label>
-                                                        <div class="col-lg-5 col-md-11">
-                                                            <textarea class="form-control" name="keterangan" id="keterangan" placeholder="Masukkan Keterangan"></textarea>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
+
 
                                     </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <span class="float-left">
+                                    <div class="form-group row">
+                                        <span class="float-left col-6">
                                 <a type="button" class="btn btn-danger" href="{{route('penjualan.customer.show')}}">
                                     Batal
                                 </a>
                             </span>
 
-                            <span class="float-right">
-                                <button type="submit" class="btn btn-info" id="btntambah" disabled>
+                            <span class="col-6">
+                                <button type="submit" class="btn btn-info float-right" id="btntambah" disabled>
                                     Tambah
                                 </button>
                             </span>
                         </div>
                     </div>
+                </div>
                 </div>
             </div>
         </form>

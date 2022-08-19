@@ -261,7 +261,7 @@ class ProduksiController extends Controller
     function getNoseri(Request $request)
     {
         try {
-            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gbj)->where('is_ready', 0)->get();
+            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gbj)->where('is_ready', 0)->where('is_aktif', 1)->get();
         $i = 0;
         return datatables()->of($data)
             ->addColumn('checkbox', function ($d) use ($i) {
@@ -1322,7 +1322,7 @@ class ProduksiController extends Controller
     function getNoseriSO(Request $request)
     {
         try {
-            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->get();
+            $data = NoseriBarangJadi::where('gdg_barang_jadi_id', $request->gdg_barang_jadi_id)->where('is_ready', 0)->where('is_aktif', 1)->get();
         $i = 0;
         return datatables()->of($data)
             ->addColumn('ids', function ($d) {
@@ -2568,27 +2568,12 @@ class ProduksiController extends Controller
     function terimaseri(Request $request)
     {
         try {
-            $seri = NoseriTGbj::whereIn('id', $request->seri)->get()->toArray();
-
-            $i = 0;
-            foreach ($seri as $s) {
-                $i++;
-                for ($k = 0; $k < count($request->layout); $k++) {
-                    NoseriTGbj::where('id', $request->seri[$k])->update(['status_id' => 3, 'state_id' => 16, 'layout_id' => json_decode($request->layout[$k], true)]);
-                }
-
-                NoseriBarangJadi::find($s['noseri_id'])->update(['is_aktif' => 1]);
-
-                $gid = NoseriBarangJadi::where('id', $s['noseri_id'])->get();
-                foreach ($gid as $g) {
-                    $gdg = GudangBarangJadi::where('id', $g->gdg_barang_jadi_id)->get()->toArray();
-                    foreach ($gdg as $vv) {
-                        $i++;
-                        $vv['stok'] = $vv['stok'] + count($gid);
-                        GudangBarangJadi::find($vv['id'])->update(['stok' => $vv['stok'], 'updated_by' => $request->userid]);
-                    }
-                }
+            foreach($request->data as $key => $value) {
+               $nid = NoseriTGbj::find($key)->noseri_id;
+                NoseriBarangJadi::whereIn('id',[$nid])->update(['is_aktif' => 1]);
+                NoseriTGbj::whereIn('id', [$key])->update(['status_id' => 3, 'state_id' => 16, 'layout_id' => $value]);
             }
+
             return response()->json(['msg' => 'Successfully']);
         } catch (\Exception $e) {
             return response()->json([

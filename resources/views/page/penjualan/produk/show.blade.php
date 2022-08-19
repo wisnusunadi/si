@@ -10,8 +10,8 @@
         </div><!-- /.col -->
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
-                @if(Auth::user()->divisi_id == "26")
-                <li class="breadcrumb-item"><a href="{{route('penjualan.dashboard')}}">Beranda</a></li>
+                @if (Auth::user()->divisi_id == '26')
+                <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                 <li class="breadcrumb-item active">Produk</li>
                 @endif
             </ol>
@@ -22,6 +22,21 @@
 
 @section('adminlte_css')
 <style>
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
+        height: 100% !important;
+    }
+
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
+        word-wrap: break-word !important;
+        text-overflow: inherit !important;
+        white-space: normal !important;
+    }
+
+    .modal-body{
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
     .nowrap-text {
         white-space: nowrap;
     }
@@ -50,14 +65,14 @@
         margin: 10px;
     }
 
-    .blue-bg {
-        background-color: #dae6f0;
-        color: #4682B4;
+     .blue-bg {
+        background-color: #e0eff3;
+        color: #17a2b8;
     }
 
     .yellow-bg {
-        background-color: #ffe680;
-        color: #997a00;
+        background-color: #fff4dc;
+        color: #ffc107;
     }
 
     .tabnum{
@@ -106,7 +121,7 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
-                @if(Session::has('error') || count($errors) > 0 )
+                @if(Session::has('error') || count($errors) > 0)
                 <div class="alert alert-danger alert-dismissible fade show col-12" role="alert">
                     <strong>Gagal menambahkan!</strong> Periksa
                     kembali data yang diinput
@@ -211,17 +226,17 @@
                                                 <thead style="text-align: center;">
                                                     <tr>
                                                         <th width="5%">No</th>
-                                                        <th width="16%">No AKD</th>
-                                                        <th width="12%">Merk</th>
-                                                        <th width="10%">Jenis Paket</th>
-                                                        <th width="50%">Nama Alias</th>
-                                                        <th width="50%">Nama Produk</th>
-                                                        <th width="12%">Harga</th>
-                                                        <th width="5%">Aksi</th>
+                                                            <th width="10%">No AKD</th>
+                                                            <th width="5%">Merk</th>
+                                                            <th width="5%">Jenis Paket</th>
+                                                            <th width="30%">Nama Alias</th>
+                                                            <th width="20%">Nama Produk</th>
+                                                            <th width="8%">Harga</th>
+                                                            <th width="7%">Aktif</th>
+                                                            <th width="5%">Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-
                                                 </tbody>
                                             </table>
                                         </div>
@@ -235,7 +250,7 @@
                     <div class="modal-dialog modal-xl" role="document">
                         <div class="modal-content" style="margin: 10px">
                             <div class="modal-header borderless blue-bg">
-                                <h4 class="modal-title"><b>Detail</b></h4>
+                                <h4 class="modal-title"><b>Detail Paket Produk</b></h4>
                                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                     <span aria-hidden="true">&times;</span>
                                 </button>
@@ -253,6 +268,10 @@
                                                 <div class="filter">
                                                     <div><small class="text-muted">Harga Produk</small></div>
                                                     <div><b id="harga_produk"></b></div>
+                                                </div>
+                                                <div class="filter">
+                                                    <div><small class="text-muted">Jenis Produk</small></div>
+                                                    <div><b id="jenis_produk"></b></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -287,7 +306,10 @@
                     <div class="modal-dialog modal-xl" role="document">
                         <div class="modal-content" style="margin: 10px">
                             <div class="modal-header yellow-bg">
-                                <h4 class="modal-title"><b>Ubah</b></h4>
+                                <h4 class="modal-title"><b>Ubah Paket Produk</b></h4>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
                             </div>
                             <div class="modal-body" id="edit">
 
@@ -299,7 +321,7 @@
                     <div class="modal-dialog modal-lg" role="document">
                         <div class="modal-content" style="margin: 10px">
                             <div class="modal-header bg-danger">
-                                <h4 class="modal-title"><b>Hapus</b></h4>
+                                <h4 class="modal-title"><b>Hapus Paket Produk</b></h4>
                             </div>
                             <div class="modal-body" id="hapus">
                                 <div class="row">
@@ -332,9 +354,37 @@
 @endsection
 
 @section('adminlte_js')
-<script>
-    $(function() {
-        $(document).on('submit', '#form-penjualan-produk-update', function(e) {
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        $(function() {
+            var inputproduk = false;
+            var inputjumlah = false;
+            function validasi(){
+                $('#createtable').find('.produk_id').each(function() {
+                    if ($(this).val() != null) {
+                        inputproduk = true;
+                    } else {
+                        inputproduk = false;
+                        return false;
+                    }
+                });
+
+                $('#createtable').find('.jumlah').each(function() {
+                    if ($(this).val() != "") {
+                        inputjumlah = true;
+                    } else {
+                        inputjumlah = false;
+                        return false;
+                    }
+                });
+                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" && $('input[name="is_aktif"]:checked').val() != ""){
+                    $("#btnsimpan").attr('disabled', false);
+                } else {
+                    $("#btnsimpan").attr('disabled', true);
+                }
+            }
+
+            $(document).on('submit', '#form-penjualan-produk-update', function(e) {
             console.log("tes");
             e.preventDefault();
             var action = $(this).attr('data-attr');
@@ -427,6 +477,12 @@
                     searchable: false
                 },
                 {
+                    data: 'is_aktif',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
                     data: 'button',
                     className: 'nowrap-text align-center',
                     orderable: false,
@@ -439,6 +495,13 @@
             $('#nama_produk').text(rows[0].nama);
             var x = (rows[0].harga).toString().replace(/(\d)(?=(\d{3})+(?!\d))/g, "$1.");
             $('#harga_produk').text('Rp ' + x);
+            var status = "";
+                    if(rows[0].status == "ekat"){
+                        status = '<span class="badge purple-text">Ekatalog</span>';
+                    }else{
+                        status = '<span class="badge blue-text">Non Ekatalog</span>';
+                    }
+                    $('#jenis_produk').html(status);
 
             var showdetailtable = $('#showdetailtable').DataTable({
                 processing: true,
@@ -492,12 +555,9 @@
                 success: function(result) {
                     $('#editmodal').modal("show");
                     $('#edit').html(result).show();
-                    console.log(result);
                     $("#editform").attr("action", href);
-                    var x = 3;
-                    for (i = 0; i < 10; i++) {
-                        select_data(i);
-                    }
+                    $('.produk_id').select2();
+                    select_data();
 
                 },
                 complete: function() {
@@ -518,8 +578,6 @@
             $('#hapusmodal').modal("show");
             $('#hapusmodal').find('form').attr('action', '/api/penjualan_produk/delete/' + id);
         });
-
-
 
         $(document).on('submit', '#form-hapus', function(e) {
             e.preventDefault();
@@ -574,7 +632,7 @@
                 $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                 $(el).find('.produk_id').attr('id', j);
                 $(el).find('.kelompok_produk').attr('id', 'kelompok_produk' + j);
-                select_data(j);
+                select_data();
             });
         }
         $(document).on('click', '#addrow', function() {
@@ -582,14 +640,14 @@
             <td></td>
             <td>
                 <div class="form-group">
-                    <select class="select-info form-control  produk_id" name="produk_id[]" id="0" style="width:100%" >
+                    <select class="select-info form-control produk_id" name="produk_id[]" id="0" style="width:100%" >
                     </select>
                 </div>
             </td>
             <td><span class="badge kelompok_produk" id="kelompok_produk0"></span></td>
             <td>
                 <div class="form-group d-flex justify-content-center">
-                    <input type="number" class="form-control" name="jumlah[]" id="jumlah" style="width: 50%" />
+                    <input type="number" class="form-control jumlah" name="jumlah[]" id="jumlah" style="width: 50%" />
                 </div>
             </td>
             <td>
@@ -597,39 +655,38 @@
             </td>
             </tr>`);
             numberRows($("#createtable"));
+            validasi();
         });
 
         $(document).on('click', '#createtable #removerow', function(e) {
-            $(this).closest('tr').remove();
+            if ($('#createtable > tbody > tr').length > 1) {
+                $(this).closest('tr').remove();
+
+            }
             numberRows($("#createtable"));
+            validasi();
         });
 
         $(document).on('keyup change', '#harga', function() {
             var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
             $(this).val(result);
-            console.log(result);
 
             if ($(this).val() != "") {
                 $('#msgharga').text("");
                 $('#harga').removeClass("is-invalid");
-                console.log($("#createtable tbody").length);
-                if (($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $("#createtable tbody").length > 0) {
-                    $('#btnsimpan').removeClass('disabled');
-                } else {
-                    $('#btnsimpan').addClass('disabled');
-                }
             } else if ($(this).val() == "") {
                 $('#msgharga').text("Harga Harus diisi");
                 $('#harga').addClass("is-invalid");
-                $('#btnsimpan').addClass('disabled');
             }
+            validasi();
         });
 
-        function select_data(x) {
-            $('#' + x).select2({
+        function select_data() {
+            $('.produk_id').select2({
+                placeholder: "Pilih Produk",
+                dropdownParent: $("#editmodal"),
                 ajax: {
                     minimumResultsForSearch: 20,
-                    placeholder: "Pilih Produk",
                     dataType: 'json',
                     theme: "bootstrap",
                     delay: 250,
@@ -665,6 +722,7 @@
                         $('#kelompok_produk' + index).text(data[0].kelompok_produk.nama);
                     }
                 });
+                validasi();
             });
         }
         $(document).on('keyup change', '#nama_paket', function() {
@@ -678,26 +736,26 @@
                         if (data.jumlah >= 1) {
                             $("#msgnama_paket").text("Nama sudah terpakai");
                             $('#nama_paket').addClass('is-invalid');
-                            $('#btnsimpan').addClass('disabled');
                         } else {
                             $('#msgnama_paket').text("");
                             $('#nama_paket').removeClass("is-invalid");
-                            console.log($("#createtable tbody").length);
-                            if ($('#harga').val() != "" && $("#createtable tbody").length > 0) {
-                                $('#btnsimpan').removeClass('disabled');
-                            } else {
-                                $('#btnsimpan').addClass('disabled');
-                            }
                         }
                     }
                 });
             } else if ($(this).val() == "") {
                 $('#msgnama_paket').text("Nama Paket Harus diisi");
                 $('#nama_paket').addClass("is-invalid");
-                $('#btnsimpan').addClass('disabled');
             }
+            validasi();
         });
 
+        $(document).on('keyup change', '#nama_alias', function() {
+            validasi();
+        });
+
+        $(document).on('keyup change', '#createtable .jumlah', function(){
+            validasi();
+        })
 
         $('#harga_min').on('keyup change', function() {
 
