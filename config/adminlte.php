@@ -447,6 +447,7 @@ return [
             'icon' => 'fas fa-search',
             'auth' => [26]
         ],
+        
         // [
         //     'text' => 'Nama & Alamat',
         //     'url'  => '/nama_alamat',
@@ -468,6 +469,25 @@ return [
             'url'  => '/penjualan/penjualan/show',
             'icon' => 'fas fa-mail-bulk',
             'auth' => [26]
+        ],
+        [
+            'text' => 'Request Emiindo',
+            'icon' => 'fas fa-mail-bulk',
+            'auth' => [26],
+            'submenu' => [
+                [
+                    'text' => 'Ekatalog - SPA',
+                    'url'  => '/penjualan/request_emiindo/akn_po',
+                ],
+                // [
+                //     'text' => 'Status Penjualan',
+                //     'url'  => '/penjualan/request_emiindo/status_penjualan',
+                // ],
+                [
+                    'text' => 'Terima Ekatalog - SPA',
+                    'url'  => '/penjualan/request_emiindo/daftar_penerimaan',
+                ]
+            ]
         ],
         // [
         //     'text' => 'Sales Order',
