@@ -98,7 +98,7 @@
         },
         success: function (response) {
             sessionStorage.setItem('token', response.token);
-            console.log(sessionStorage.getItem('token'))
+            //console.log(sessionStorage.getItem('token'))
         }
     });
         </script>

@@ -6372,14 +6372,15 @@ class PenjualanController extends Controller
     }
 
     public function penjualan_data_emindo(){
-        $saveresponse = SaveResponse::whereIN('tipe',['ekatalog','spa'])->get();
-        foreach($saveresponse as $s){
-       $json_array[] = json_decode($s->parameter);
-        }
+         $json_array = array();
+         $saveresponse = SaveResponse::whereIN('tipe',['ekatalog','spa'])->get();
+         foreach($saveresponse as $s){
+            $json_array[] = json_decode($s->parameter);
+         }
         return response()->json([
             'status' => 200,
             'message' =>'Berhasil',
-            'data'    => $json_array
+            'data'    =>  $json_array
         ], 200);
     }
 }
