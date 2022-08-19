@@ -124,6 +124,7 @@
                             <th rowspan="2">Kerusakan</th>
                             <th rowspan="2">Perbaikan</th>
                             <th rowspan="2">Tingkat Kerusakan</th>
+                            <th rowspan="2">Hasil Jadi</th>
                             <th rowspan="2">Status</th>
                             <th rowspan="2">Aksi</th>
                         </tr>
@@ -144,8 +145,7 @@
 </div>
 
 <!-- Modal -->
-<div class="modal fade changeStatus" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-    aria-hidden="true">
+<div class="modal fade changeStatus">
     <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
@@ -187,7 +187,7 @@
                             <input type="hidden" name="id" id="kode">
                             <input type="hidden" name="userid" id="user_id" value="{{ Auth::user()->id }}">
                         <div class="form-row">
-                            <div class="form-group col-md-6">
+                            <div class="form-group col">
                                 <label for="">Layout</label>
                                 <select name="layout_id" id="layout_id" class="form-control layout_edit">
                                    @foreach ($layout as $l)
@@ -195,12 +195,17 @@
                                    @endforeach
                                 </select>
                             </div>
-                            <div class="form-group col-md-6">
+                            <div class="form-group col">
                                 <label for="">Tingkat Kerusakan</label>
                                 <select name="tk_kerusakan" id="tk_kerusakan" class="form-control kerusakan_edit">
                                     <option value="1">Level 1</option>
                                     <option value="2">Level 2</option>
                                     <option value="3">Level 3</option>
+                                </select>
+                            </div>
+                            <div class="form-group col">
+                                <label for="">Hasil Jadi</label>
+                                <select name="hasil_jadi" id="varian" class="form-control varian">
                                 </select>
                             </div>
                         </div>
@@ -226,6 +231,23 @@
 @stop
 @section('adminlte_js')
 <script>
+    let varian = []
+    $(document).ready(function () {
+        $.ajax({
+        type: 'get',
+        url: '/api/gbj/sel-gbj',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data)
+            $.map(data, function (item) {
+                varian.push({
+                    id: item.id,
+                    text: item.produk.nama + ' ' + item.nama
+                })
+            });
+        }
+    });
+    });
     // disable button back browser
     window.history.pushState(null, "", window.location.href);
     window.onpopstate = function() {
@@ -233,6 +255,10 @@
     };
 
     function changeStatus() {
+        $('.varian').select2({
+            data: varian,
+            dropdownParent: $('.changeStatus')
+        });
         $('.changeStatus').modal('show');
     }
     $('.layout_edit').select2({
@@ -271,6 +297,7 @@
             {data: 'remarks'},
             {data: 'perbaikan'},
             {data: 'tingkat'},
+            {data: 'unit_baru'},
             {data: 'status'},
             {data: 'action'},
         ],
