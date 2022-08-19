@@ -107,7 +107,11 @@ Route::prefix('/penjualan_produk')->group(function () {
 Route::prefix('/penjualan')->group(function () {
     // Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);
     Route::post('/penjualan/data/{jenis}/{status}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
-
+    Route::get('/ekatalog_data/{akn}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog_emindo']);
+    Route::get('/spa_data/{po}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa_emindo']);
+    Route::get('check_ekatalog/{akn}', [App\Http\Controllers\PenjualanController::class, 'cek_paket']);
+    Route::get('penjualan_emindo', [App\Http\Controllers\PenjualanController::class, 'penjualan_data_emindo']);
+    Route::get('check_po/{po}', [App\Http\Controllers\PenjualanController::class, 'cek_po']);
     Route::get('chart', [App\Http\Controllers\PenjualanController::class, 'chart_penjualan']);
     // Rout    Route::post('/penjualan/cancel/{id}/{jenis}', [App\Http\Controllers\PenjualanController::class, 'cancel_spa_spb']);
     Route::post('data', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
@@ -564,6 +568,9 @@ Route::prefix('/dc')->group(function () {
     Route::post('data', [App\Http\Controllers\DcController::class, 'get_data_coo']);
     Route::post('dashboard/data/{value}', [App\Http\Controllers\DcController::class, 'dashboard_data']);
     Route::post('dashboard/so', [App\Http\Controllers\DcController::class, 'dashboard_so']);
+    Route::prefix('/so_in_process')->group(function () {
+        Route::post('data', [App\Http\Controllers\DcController::class, 'get_data_so_in_process']);
+    });
     Route::prefix('/so')->group(function () {
         Route::post('store/{value}', [App\Http\Controllers\DcController::class, 'store_coo']);
         Route::post('update/{value}', [App\Http\Controllers\DcController::class, 'update_coo']);
@@ -583,6 +590,14 @@ Route::prefix('/as')->group(function () {
 
     Route::post('/penjualan/belum_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_belum_kirim']);
     Route::post('/penjualan/selesai_proses', [App\Http\Controllers\AfterSalesController::class, 'get_data_so_selesai_kirim']);
+
+    Route::get('/retur/detail', [App\Http\Controllers\AfterSalesController::class, 'detail_retur']);
+    Route::get('/list/so_selesai/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai']);
+
+    Route::get('/list/so_selesai_paket/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai_paket']);
+    Route::get('/list/so_selesai_paket_produk/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_list_so_selesai_paket_produk']);
+
+    Route::get('/detail/so_retur/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_so_retur']);
 });
 
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {

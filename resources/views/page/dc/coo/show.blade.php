@@ -7,17 +7,16 @@
 <div class="container-fluid">
     <div class="row mb-2">
         <div class="col-sm-6">
-            <h1 class="m-0  text-dark">Sales Order</h1>
+            <h1 class="m-0  text-dark">COO</h1>
         </div>
         <div class="col-sm-6">
             <ol class="breadcrumb float-sm-right">
                 @if(Auth::user()->divisi_id == "9")
-                <li class="breadcrumb-item"><a href="{{route('logistik.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item"><a href="{{route('dc.dashboard')}}">Beranda</a></li>
                 @elseif(Auth::user()->divisi_id == "2")
                 <li class="breadcrumb-item"><a href="{{route('direksi.dashboard')}}">Beranda</a></li>
                 @endif
-                <li class="breadcrumb-item"><a href="{{route('logistik.ekspedisi.show')}}">Ekspedisi</a></li>
-                <li class="breadcrumb-item active">Tambah</li>
+                <li class="breadcrumb-item active">COO</li>
 
             </ol>
         </div><!-- /.col -->

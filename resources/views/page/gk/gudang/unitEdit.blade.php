@@ -117,9 +117,22 @@
                 <table class="table table-bordered table_edit_sparepart">
                     <thead class="thead-light">
                         <tr>
-                            <th>No Seri</th>
-                            <th>Status</th>
-                            <th>Aksi</th>
+                            <th colspan="2" class="text-center">Tanggal</th>
+                            <th colspan="2" class="text-center">Tujuan</th>
+                            <th rowspan="2">No Seri</th>
+                            <th rowspan="2">Posisi Barang</th>
+                            <th rowspan="2">Kerusakan</th>
+                            <th rowspan="2">Perbaikan</th>
+                            <th rowspan="2">Tingkat Kerusakan</th>
+                            <th rowspan="2">Hasil Jadi</th>
+                            <th rowspan="2">Status</th>
+                            <th rowspan="2">Aksi</th>
+                        </tr>
+                        <tr>
+                            <th>Tanggal Masuk</th>
+                            <th>Tanggal Keluar</th>
+                            <th>Dari</th>
+                            <th>Ke</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -135,10 +148,9 @@
     </div>
 </div>
 
-<!-- Modal Nomor Seri -->
-<div class="modal fade seeDetail" id="" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
+<!-- Modal -->
+<div class="modal fade changeStatus">
+    <div class="modal-dialog modal-lg" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -167,34 +179,40 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <table class="table table-bordered tableUnit">
-                            <thead>
-                                <tr>
-                                    <th colspan="2" class="text-center">Tanggal</th>
-                                    <th colspan="2" class="text-center">Tujuan</th>
-                                    <th rowspan="2">Kerusakan</th>
-                                    <th rowspan="2">Perbaikan</th>
-                                    <th rowspan="2">Aksi</th>
-                                </tr>
-                                <tr>
-                                    <th>Tanggal Masuk</th>
-                                    <th>Tanggal Keluar</th>
-                                    <th>Dari</th>
-                                    <th>Ke</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>22-05-2022</td>
-                                    <td>23-05-2022</td>
-                                    <td>Gudang Penjualan</td>
-                                    <td>After Sales</td>
-                                    <td>-</td>
-                                    <td>-</td>
-                                    <td><button class="btn btn-outline-info editData"><i class="fa fa-edit"></i></button></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                        <form action="" id="myForm" name="myForm">
+                            <input type="hidden" name="id" id="kode">
+                            <input type="hidden" name="userid" id="user_id" value="{{ Auth::user()->id }}">
+                        <div class="form-row">
+                            <div class="form-group col">
+                                <label for="">Layout</label>
+                                <select name="layout_id" id="layout_id" class="form-control layout_edit">
+                                   @foreach ($layout as $l)
+                                        <option value="{{ $l->id }}">{{ $l->ruang }}</option>
+                                   @endforeach
+                                </select>
+                            </div>
+                            <div class="form-group col">
+                                <label for="">Tingkat Kerusakan</label>
+                                <select name="tk_kerusakan" id="tk_kerusakan" class="form-control kerusakan_edit">
+                                    <option value="1">Level 1</option>
+                                    <option value="2">Level 2</option>
+                                    <option value="3">Level 3</option>
+                                </select>
+                            </div>
+                            <div class="form-group col">
+                                <label for="">Hasil Jadi</label>
+                                <select name="hasil_jadi" id="varian" class="form-control varian">
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                          <label for="">Kerusakan</label>
+                          <textarea name="remark" id="remark" cols="5" rows="5" class="form-control"></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label for="">Perbaikan</label>
+                            <textarea name="perbaikan" id="perbaikan" cols="5" rows="5" class="form-control"></textarea>
+                          </div>
                     </div>
                 </div>
             </div>
@@ -267,14 +285,120 @@
 @stop
 @section('adminlte_js')
 <script>
+    let varian = []
+    $(document).ready(function () {
+        $.ajax({
+        type: 'get',
+        url: '/api/gbj/sel-gbj',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data)
+            $.map(data, function (item) {
+                varian.push({
+                    id: item.id,
+                    text: item.produk.nama + ' ' + item.nama
+                })
+            });
+        }
+    });
+    });
     // disable button back browser
     window.history.pushState(null, "", window.location.href);
     window.onpopstate = function() {
         window.history.pushState(null, "", window.location.href);
     };
 
-    $(document).on('click', '.lihatData', function () {
-        $('.seeDetail').modal('show');
+    function changeStatus() {
+        $('.varian').select2({
+            data: varian,
+            dropdownParent: $('.changeStatus')
+        });
+        $('.changeStatus').modal('show');
+    }
+    $('.layout_edit').select2({
+        dropdownParent: $('.changeStatus')
+    });
+    $('.kerusakan_edit').select2({
+        dropdownParent: $('.changeStatus')
+    });
+
+    $('.btnBack').click(function() {
+        window.location.href = '{{ url('/gk/gudang')}}'
+    })
+    var id = $('#id').val();
+    console.log(id);
+    $('.table_edit_sparepart').dataTable({
+        destroy: true,
+        "paging": true,
+        "lengthChange": true,
+        "searching": true,
+        "ordering": true,
+        "info": true,
+        "autoWidth": false,
+        "responsive": true,
+        processing: true,
+        serverSide: true,
+        ajax: {
+            url: "/api/gk/his-unit/" +id,
+        },
+        columns: [
+            {data: 'inn'},
+            {data: 'out'},
+            {data: 'from'},
+            {data: 'to'},
+            {data: 'noser'},
+            {data: 'layout'},
+            {data: 'remarks'},
+            {data: 'perbaikan'},
+            {data: 'tingkat'},
+            {data: 'unit_baru'},
+            {data: 'status'},
+            {data: 'action'},
+        ],
+        "language": {
+        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+        },
+        "columnDefs": [
+            {
+                "targets": [9],
+                "visible": document.getElementById('auth').value == '2' ? false : true
+            }
+        ]
+    });
+    var id = '';
+    $(document).on('click', '.unitmodal', function() {
+        id = $(this).data('id');
+        console.log(id);
+
+        $.ajax({
+            url: "/api/gk/noseri/" + id,
+            type: "get",
+            dataType: "json",
+            success: function(res) {
+                $('div#nose').text(res.noser);
+                $('p#in').text(res.in);
+                $('p#out').text(res.out);
+            }
+        })
+
+        $.ajax({
+            url: "/api/gk/detailseri",
+            type: "post",
+            data: {id : id},
+            dataType: "json",
+            success: function(res) {
+                console.log(res);
+                $('#kode').val(res.id);
+                $('#layout_id').val(res.layout);
+                $('#layout_id').select2().trigger('change');
+                $('#tk_kerusakan').val(res.tingkat);
+                $('#tk_kerusakan').select2().trigger('change');
+                $('#remark').val(res.note);
+                $('#perbaikan').val(res.repair);
+            }
+        })
+
+        changeStatus();
     })
 
     $(document).on('click', '.editData', function () {

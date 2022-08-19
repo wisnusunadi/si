@@ -193,6 +193,216 @@ class DcController extends Controller
             ->rawColumns(['laporan'])
             ->make(true);
     }
+    public function get_data_so_in_process(){
+        $data = Pesanan::whereNotNull('no_po')
+        ->has('Ekatalog')
+        ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi'])
+        ->addSelect(['tgl_kontrak_custom' => function($q){
+            $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
+            ->from('ekatalog')
+            ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
+            ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
+            ->limit(1);
+        },
+        'ckirimprd' => function($q){
+            $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+            ->from('noseri_logistik')
+            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+            ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+            ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+        },
+        'cjumlahprd' => function($q){
+            $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+            ->from('detail_pesanan')
+            ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+            ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+            ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+        },
+        'ckirimpart' => function($q){
+            $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+            ->from('detail_logistik_part')
+            ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+        },
+        'cjumlahpart' => function($q){
+            $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+            ->from('detail_pesanan_part')
+            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+        }])->get();
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jenis', function ($data) {
+                if ($data->Ekatalog) {
+                    return "E-Catalogue";
+                } else if ($data->Spa) {
+                    return "SPA";
+                } else if ($data->Spb) {
+                    return "SPB";
+                }
+            })
+            ->addColumn('nama_customer', function ($data) {
+                if ($data->Ekatalog) {
+                    return $data->Ekatalog->Customer->nama;
+                } else if ($data->Spa) {
+                    return $data->Spa->Customer->nama;
+                } else if ($data->Spb) {
+                    return $data->Spb->Customer->nama;
+                }
+            })
+            ->addColumn('no_paket', function ($data) {
+                if ($data->Ekatalog) {
+                    $datas = '';
+                    $datas .= '<div>'.$data->Ekatalog->no_paket.'</div>';
+                    if (!empty($data->Ekatalog->status)) {
+                        if ($data->Ekatalog->status == "batal") {
+                            $datas .= '<small class="badge-danger badge">';
+                        } else if ($data->Ekatalog->status == "negosiasi") {
+                            $datas .= '<small class="badge-warning badge">';
+                        } else if ($data->Ekatalog->status == "draft") {
+                            $datas .= '<small class="badge-info badge">';
+                        } else if ($data->Ekatalog->status == "sepakat") {
+                            $datas .= '<small class="badge-success badge">';
+                        }
+                        $datas .= ucfirst($data->Ekatalog->status) . '</small>';
+                    }
+
+                    return $datas;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('tgl_order', function ($data) {
+
+                if (!empty($data->tgl_po)) {
+                    return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
+                } else {
+                    return "-";
+                }
+            })
+            ->addColumn('tgl_kontrak', function ($data) {
+                if($data->Ekatalog){
+                    if($data->tgl_kontrak_custom != ""){
+                        if($data->log_id != '10'){
+                            $tgl_sekarang = Carbon::now();
+                            $tgl_parameter = $data->tgl_kontrak_custom;
+                            $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                            if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                                if ($hari > 7) {
+                                    return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                } else if ($hari > 0 && $hari <= 7) {
+                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                } else {
+                                    return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                    <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                                }
+                            }
+                            else{
+                                return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
+                            }
+                        } else{
+                            return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
+                        }
+                    }
+                }
+            })
+            ->addColumn('so', function ($data) {
+                return $data->so;
+            })
+            ->addColumn('nopo', function ($data) {
+                return $data->no_po;
+            })
+            ->addColumn('status', function ($data) {
+                $progress = "";
+                $tes = $data->cjumlahprd + $data->cjumlahpart;
+                if($tes > 0){
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                    if($hitung > 0){
+                        $progress = '<div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                        </div>
+                        <small class="text-muted">Selesai</small>';
+                    }else{
+                        $progress = '<div class="progress">
+                            <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                        </div>
+                        <small class="text-muted">Selesai</small>';
+                    }
+                }
+
+                if($data->Ekatalog){
+                    if($data->Ekatalog->status == "batal" && ($data->log_id != "7")){
+                        return '<span class="badge red-text">Batal</span>';
+                    }else{
+                        if ($data->log_id == "7") {
+                            return '<span class="badge red-text">'.$data->State->nama . '</span>';
+                        } else{
+                            return $progress;
+                        }
+                    }
+                }
+                else if($data->Spa){
+                    if($data->Spa->log == "batal"){
+                        return '<span class="badge red-text">Batal</span>';
+                    }else{
+                        if ($data->Spa->log_id == "7") {
+                            return '<span class="badge red-text">'.$data->State->nama . '</span>';
+                        } else{
+                            return $progress;
+                        }
+                    }
+                }
+                else if($data->Spb){
+                    if($data->Spb->log == "batal"){
+                        return '<span class="badge red-text">Batal</span>';
+                    }else{
+                        if ($data->log_id == "7") {
+                            return '<span class="badge red-text">'.$data->State->nama . '</span>';
+                        } else{
+                            return $progress;
+                        }
+                    }
+                }
+            })
+            ->addColumn('button', function ($data) {
+                if ($data->Ekatalog) {
+                        return  '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->Ekatalog->id) . '"  data-id="' . $data->Ekatalog->id . '">
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
+                } else if ($data->Spa) {
+                    return  '<a data-toggle="modal" data-target="spa" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spa',  $data->Spa->id) . '"  data-id="' . $data->Spa->id . '">
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
+                } else {
+                    return  '<a data-toggle="modal" data-target="spb" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '">
+                          <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
+                }
+            })
+            ->rawColumns(['button', 'status', 'tgl_order', 'tgl_kontrak', 'no_paket'])
+            ->setRowClass(function ($data) {
+                if ($data->Ekatalog) {
+                    if ($data->Ekatalog->status == 'batal') {
+                        return 'text-danger font-weight-bold line-through';
+                    }
+                }
+                else if($data->Spa){
+                    if ($data->Spa->log == 'batal') {
+                        return 'text-danger font-weight-bold line-through';
+                    }
+                }
+                else if($data->Spb){
+                    if ($data->Spb->log == 'batal') {
+                        return 'text-danger font-weight-bold line-through';
+                    }
+                }
+            })
+            ->make(true);
+    }
     public function get_data_so($value)
     {
         // $array_id = array();
@@ -327,7 +537,7 @@ class DcController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                $hitung = round((($data->ccoo / $data->cseri) * 100), 0);
+                $hitung = floor((($data->ccoo / $data->cseri) * 100));
                 if($hitung > 0){
                     $datas = '<div class="progress">
                         <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1395,7 +1605,6 @@ class DcController extends Controller
                                 ->has('Ekatalog')
                                 ->count();
         return view('page.dc.dashboard', ['daftar_so' => $daftar_so, 'belum_coo' => $belum_coo, 'lewat_batas' => $lewat_batas, 'penjualan' => $penjualan, 'gudang' => $gudang, 'qc' => $qc, 'logistik' => $logistik]);
-
     }
     public function dashboard_data($value)
     {
@@ -1850,7 +2059,7 @@ class DcController extends Controller
                 ->leftjoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
                 ->where('produk.coo', '=', '1')
                 ->groupBy('pesanan.id')
-                ->havingRaw('NOT (select *
+                ->havingRaw('NOT EXISTS (select *
                     from noseri_coo
                     left join noseri_logistik on noseri_logistik.id = noseri_coo.noseri_logistik_id
                     left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
@@ -1926,7 +2135,7 @@ class DcController extends Controller
                 })
                 ->addColumn('status', function ($data) {
                     $datas = "";
-                    $hitung = round((($data->cseri / $data->cjumlah) * 100), 0);
+                    $hitung = floor((($data->cseri / $data->cjumlah) * 100));
                     if ($data->log_id == "9") {
                         $datas = '<span class="badge purple-text">'.$data->State->nama . '</span>';
                     } else {

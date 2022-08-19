@@ -77,7 +77,6 @@
     @yield('body')
 
     {{-- Configured Scripts --}}
-
     <script src="{{ asset('native/js/plugin.js') }}"></script>
     <script src="{{ asset('assets/adminlte/dist/js/adminlte.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('vendor/select2/checkbox/check.js') }}"></script>
@@ -86,8 +85,23 @@
     <script src="{{ asset('vendor/datepicker/moment.js') }}"></script>
     <script src="{{ asset('vendor/datepicker/datepicker.js') }}"></script>
     <script src="{{ asset('vendor/jquery-ui/jquery-ui.js') }}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {{-- <script src="{{ asset('vendor/x-editable/jquery-editable-poshytip.min.js') }}"></script> --}}
     {{-- Custom Scripts --}}
+    <script>
+        $.ajax({
+        type: "POST",
+        url: "https://sinko.api.hyperdatasystem.com/api/login",
+        data: {
+            username: "superuser.api",
+            password: "password"
+        },
+        success: function (response) {
+            sessionStorage.setItem('token', response.token);
+            //console.log(sessionStorage.getItem('token'))
+        }
+    });
+        </script>
     @yield('master_js')
 </body>
 

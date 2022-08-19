@@ -22,17 +22,20 @@ use App\Models\Pesanan;
 use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Provinsi;
+use App\Models\SaveResponse;
 use App\Models\TFProduksi;
 use Carbon\Doctrine\CarbonType;
 use Hamcrest\Core\IsNot;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Carbon;
-use Illuminate\Validation\Validator;
+
 use League\Fractal\Resource\Item;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\URL;
 use Maatwebsite\Excel\Excel as ExcelExcel;
 use Symfony\Component\Console\Input\Input;
 
@@ -537,7 +540,7 @@ class PenjualanController extends Controller
                             }
                             else{
                                 return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                             }
                         } else{
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
@@ -634,7 +637,7 @@ class PenjualanController extends Controller
                 $progress = "";
                 $tes = $data->cjumlahprd + $data->cjumlahpart;
                 if($tes > 0){
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if($hitung > 0){
                         $progress = '<div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -650,17 +653,16 @@ class PenjualanController extends Controller
 
                 if($name == "ekatalog"){
                     if($data->status == "batal" && ($data->Pesanan->log_id != "7")){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="EKAT" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -668,17 +670,16 @@ class PenjualanController extends Controller
                 }
                 else if($name == "spa"){
                     if($data->log == "batal"){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -686,17 +687,16 @@ class PenjualanController extends Controller
                 }
                 else if($name == "spb"){
                     if($data->log == "batal"){
-                        return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
-                            <button type="button" class="btn btn-sm btn-outline-danger" type="button">
-                                <i class="fas fa-times"></i>
-                                Batal
-                            </button>
-                        </a>';
+                        // return '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
+                        //     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
+                        //         <i class="fas fa-times"></i>
+                        //         Batal
+                        //     </button>
+                        // </a>';
+                        return '<span class="badge red-text">Batal</span>';
                     }else{
                         if ($data->Pesanan->log_id == "7") {
                             return '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-                        } else if ($data->Pesanan->log_id == "9") {
-                            return '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
                         } else{
                             return $progress;
                         }
@@ -745,6 +745,19 @@ class PenjualanController extends Controller
                 }
             })
             ->rawColumns(['button', 'status', 'tgl_order', 'tgl_kontrak', 'no_paket'])
+            ->setRowClass(function ($data) {
+                $name =  $data->getTable();
+                if ($name == 'ekatalog') {
+                    if ($data->status == 'batal') {
+                        return 'text-danger font-weight-bold line-through';
+                    }
+                }
+                else{
+                    if ($data->log == 'batal') {
+                        return 'text-danger font-weight-bold line-through';
+                    }
+                }
+            })
             ->make(true);
     }
     public function get_lacak_penjualan($parameter, $value)
@@ -917,7 +930,7 @@ class PenjualanController extends Controller
                             }
                             else{
                                 return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                    <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                             }
                         } else{
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
@@ -1225,8 +1238,7 @@ class PenjualanController extends Controller
             // $data = NoseriTGbj::whereHas('NoseriBarangJadi', function ($q) use ($value) {
             //     $q->where('noseri', 'LIKE', '%' . $value . '%');
             // })->Has('NoseriDetailPesanan')->orderBy('id', 'desc')->get();
-            $data =  NoseriBarangJadi::
-            select('noseri_barang_jadi.noseri',
+            $data =  NoseriBarangJadi::select('noseri_barang_jadi.noseri',
                      'pesanan.no_po',
                      'pesanan.so',
                      'noseri_detail_pesanan.tgl_uji',
@@ -1343,9 +1355,10 @@ class PenjualanController extends Controller
                     }
                     return $datas;
                 })
-                ->rawColumns(['divisi_id', 'status','nama_customer'])
+                ->rawColumns(['status','nama_customer'])
                 ->make(true);
         } else if ($parameter == 'no_so') {
+            // $val = str_replace("_","/",$value);
             // $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {
             //     $q->where('so', 'LIKE', '%' . $value . '%');
             // })->get());
@@ -1582,10 +1595,8 @@ class PenjualanController extends Controller
         }
 
         $status = "";
-            $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-            if ($data->Pesanan->log_id == "9") {
-                $status = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-            } else if($data->log == "batal") {
+            $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+            if($data->log == "batal") {
                 $status = '<span class="badge red-text">Batal</span>';
             } else{
                 if($hitung > 0){
@@ -1645,13 +1656,10 @@ class PenjualanController extends Controller
 
                 if ($data->Pesanan->log_id == "7") {
                     $status = '<div><span class="badge red-text">'.$data->Pesanan->State->nama . '</span></div>';
-                }
-                else if ($data->Pesanan->log_id == "9") {
-                    $status = '<div><span class="badge purple-text">'.$data->Pesanan->State->nama . '</span></div>';
                 } else if($data->log == "batal") {
                     $status = '<div><span class="badge red-text">Batal</span></div>';
                 } else{
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
                     if($hitung > 0){
                         $status = '<div class="align-center"><div class="progress">
                             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1664,8 +1672,33 @@ class PenjualanController extends Controller
                         <small class="text-muted align-center">Selesai</small></div>';
                     }
                 }
-
-        return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data, 'status' => $status]);
+                $tgl_kontrak = "";
+                if($data->tgl_kontrak_custom != ""){
+                    if($data->Pesanan->log_id != '10'){
+                        $tgl_sekarang = Carbon::now();
+                        $tgl_parameter = $data->tgl_kontrak_custom;
+                        $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                        if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                            if ($hari > 7) {
+                                $tgl_kontrak =  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else {
+                                $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                            }
+                        }
+                        else{
+                            $tgl_kontrak =  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                            <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
+                        }
+                    } else{
+                        $tgl_kontrak = Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
+                    }
+                }
+        return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data, 'status' => $status, 'tgl_kontrak' => $tgl_kontrak]);
     }
 
     public function get_data_detail_spb($value)
@@ -1699,12 +1732,9 @@ class PenjualanController extends Controller
             }])->where('id', $value)->first();
 
             $status = "";
-            $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
+            $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
             if ($data->Pesanan->log_id == "7") {
                 $status = '<span class="badge red-text">'.$data->Pesanan->State->nama . '</span>';
-            }
-            else if ($data->Pesanan->log_id == "9") {
-                $status = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
             } else if($data->log == "batal") {
                 $status = '<span class="badge red-text">Batal</span>';
             } else{
@@ -1891,10 +1921,8 @@ class PenjualanController extends Controller
             ->addColumn('status', function ($data) {
                 $datas = "";
                 if (!empty($data->Pesanan->log_id)) {
-                    $hitung = round(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else {
+                    $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+
                         if($hitung > 0){
                             $datas = '<div class="progress">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -1907,7 +1935,6 @@ class PenjualanController extends Controller
                             <small class="text-muted">Selesai</small>';
                         }
                     }
-                }
                 return $datas;
             })
             ->addColumn('batas_kontrak', function ($data) {
@@ -1937,12 +1964,9 @@ class PenjualanController extends Controller
                 }
             })
             ->addColumn('button', function ($data) {
-                return  '<div class="dropdown-toggle" data-toggle="dropdown" id="dropdownMenuButton" aria-haspopup="true" aria-expanded="false"><i class="fas fa-ellipsis-v"></i></div>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                    <a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
-                        <button class="dropdown-item" type="button"><i class="fas fa-eye"></i> Detail</button>
-                    </a>
-                </div>';
+                return  '<a data-toggle="modal" data-target="ekatalog" class="detailmodal" data-attr="' . route('penjualan.penjualan.detail.ekatalog',  $data->id) . '"  data-id="' . $data->id . '">
+                        <button class="btn btn-outline-primary btn-sm" type="button"><i class="fas fa-eye"></i> Detail</button>
+                    </a>';
             })
             ->rawColumns(['batas_kontrak', 'button', 'status'])
             ->make(true);
@@ -2042,13 +2066,8 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                if($data->Pesanan->log_id == '7' || $data->Pesanan->log_id == '9'){
-                    if($data->Pesanan->log_id == "7"){
+                if($data->Pesanan->log_id == '7'){
                         $datas .= '<span class="red-text badge">Penjualan</span>';
-                    }
-                    else{
-                        $datas .= '<span class="purple-text badge">PO</span>';
-                    }
 
                     // if (!empty($data->status)) {
                     //     if ($data->status == "batal") {
@@ -2072,7 +2091,7 @@ class PenjualanController extends Controller
                         //     </button>
                         // </a>';
                     }else{
-                        $hitung = round((($data->cseri / $data->cjumlah) * 100), 0);
+                        $hitung = floor((($data->cseri / $data->cjumlah) * 100));
                         if($hitung > 0){
                             $datas = '<div class="progress">
                                 <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -2257,6 +2276,11 @@ class PenjualanController extends Controller
 
 
             ->rawColumns(['button', 'status', 'tgl_kontrak', 'no_paket'])
+            ->setRowClass(function ($data) {
+                if ($data->status == 'batal') {
+                    return 'text-danger font-weight-bold line-through';
+                }
+            })
             ->make(true);
     }
     public function get_data_spa($value)
@@ -2376,10 +2400,10 @@ class PenjualanController extends Controller
                 // }
                 // return $datas;
                     $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else if($data->log == "batal") {
+                    $tes = $data->cjumlahprd + $data->cjumlahpart;
+                    if($tes > 0){
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                    if($data->log == "batal") {
                         $datas = '<span class="badge red-text">Batal</span>';
                     } else{
                         if($hitung > 0){
@@ -2392,6 +2416,7 @@ class PenjualanController extends Controller
                                 <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
                             </div>
                             <small class="text-muted">Selesai</small>';
+                        }
                         }
                     }
                     return $datas;
@@ -2494,6 +2519,11 @@ class PenjualanController extends Controller
                 return $return;
             })
             ->rawColumns(['button', 'status'])
+            ->setRowClass(function ($data) {
+                if ($data->log == 'batal') {
+                    return 'text-danger font-weight-bold line-through';
+                }
+            })
             ->make(true);
     }
     public function get_data_spb($value)
@@ -2604,10 +2634,10 @@ class PenjualanController extends Controller
                 // }
                 // return $datas;
                 $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else if($data->log == "batal") {
+                $tes = $data->cjumlahprd + $data->cjumlahpart;
+                    if($tes > 0){
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                    if($data->log == "batal") {
                         $datas = '<span class="badge red-text">Batal</span>';
                     } else{
                         if($hitung > 0){
@@ -2622,6 +2652,7 @@ class PenjualanController extends Controller
                             <small class="text-muted">Selesai</small>';
                         }
                     }
+                }
                     return $datas;
             })
             ->addColumn('nopo', function ($data) {
@@ -2727,6 +2758,11 @@ class PenjualanController extends Controller
                 return $return;
             })
             ->rawColumns(['button', 'status'])
+            ->setRowClass(function ($data) {
+                if ($data->log == 'batal') {
+                    return 'text-danger font-weight-bold line-through';
+                }
+            })
             ->make(true);
     }
     public function get_data_rencana_produk($customer_id, $instansi, $tahun)
@@ -3147,7 +3183,6 @@ class PenjualanController extends Controller
         $ekatalog = Ekatalog::find($id);
 
         if ($request->status_akn == 'draft') {
-
             if ($request->no_paket == '') {
                 $c_akn = NULL;
             } else {
@@ -3224,7 +3259,7 @@ class PenjualanController extends Controller
                                     $bool = false;
                                 }
                             }
-                        } else {
+                        } else{
                             $bool = false;
                         }
                     }
@@ -3762,6 +3797,20 @@ class PenjualanController extends Controller
         $detail_spb = DetailSpb::findOrFail($id);
         $detail_spb->delete();
     }
+
+    public function cancel_penjualan($id, $jenis)
+    {
+        $data = "";
+        if ($jenis == "EKAT") {
+            $data = Ekatalog::where('id', $id)->with('Pesanan')->first();
+        } else if ($jenis == "SPA") {
+            $data = Spa::where('id', $id)->with('Pesanan')->first();
+        } else if ($jenis == "SPB") {
+            $data = Spb::where('id', $id)->with('Pesanan')->first();
+        }
+        return view('page.penjualan.penjualan.cancel', ['id' => $id, 'data' => $data]);
+    }
+
     public function cancel_spa_spb($id, $jenis)
     {
         if ($jenis == "spa") {
@@ -4005,6 +4054,9 @@ class PenjualanController extends Controller
                 } else {
                     return '';
                 }
+            })
+            ->addColumn('no_so', function ($data) {
+                return $data->Pesanan->so;
             })
             ->addColumn('no_po', function ($data) {
                 return $data->Pesanan->no_po;
@@ -4868,6 +4920,7 @@ class PenjualanController extends Controller
     {
         return view('manager.penjualan.so.show');
     }
+
     public function manager_penjualan_show_data($jenis, $value)
     {
         if($jenis == "ekatalog"){
@@ -4966,7 +5019,7 @@ class PenjualanController extends Controller
                                 </button>
                             </a>';
                         }else{
-                            $hitung = round((($data->cseri / $data->cjumlah) * 100), 0);
+                            $hitung = floor((($data->cseri / $data->cjumlah) * 100));
                             if($hitung > 0){
                                 $datas = '<div class="progress">
                                     <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
@@ -5143,10 +5196,8 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else{
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+
                         if($data->log == "batal") {
                             $datas = '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPA" data-provinsi="">
                                     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
@@ -5167,7 +5218,6 @@ class PenjualanController extends Controller
                                 <small class="text-muted">Selesai</small>';
                             }
                         }
-                    }
                     return $datas;
             })
             ->addColumn('tglpo', function ($data) {
@@ -5292,10 +5342,8 @@ class PenjualanController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                    $hitung = round(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100), 0);
-                    if ($data->Pesanan->log_id == "9") {
-                        $datas = '<span class="badge purple-text">'.$data->Pesanan->State->nama . '</span>';
-                    } else {
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+
                         if($data->log == "batal") {
                             $datas = '<a data-toggle="modal" data-target="#batalmodal" class="batalmodal" data-href="" data-id="'.$data->id.'" data-jenis="SPB" data-provinsi="">
                                     <button type="button" class="btn btn-sm btn-outline-danger" type="button">
@@ -5316,7 +5364,6 @@ class PenjualanController extends Controller
                                 <small class="text-muted">Selesai</small>';
                             }
                         }
-                    }
                     return $datas;
             })
             ->addColumn('tglpo', function ($data) {
@@ -5356,5 +5403,984 @@ class PenjualanController extends Controller
             ->rawColumns(['button', 'status'])
             ->make(true);
         }
+    }
+
+    public function store_ekat_emindo(Request $request)
+    {
+        // dd($request->all());
+        $validator = Validator::make($request->all(),[
+            'no_paket' => 'unique:ekatalog,no_paket'
+        ]);
+        if($validator->fails()){
+            if($request->provinsi != ''){
+                $provinsi = Provinsi::where('nama', 'like', '%' . $request->provinsi . '%')->first();
+                $p = $provinsi->id;
+               }else{
+                $p = NULL;
+               }
+
+
+                $e = Ekatalog::where('no_paket', $request->no_paket)->first();
+                $data = Ekatalog::find($e->id);
+
+
+                if($data->customer_id != 213){
+                    $data->customer_id = 213;
+                    $data->save();
+                }
+
+                if($data->provinsi_id == NULL){
+                    $data->provinsi_id = $p;
+                    $data->save();
+                }
+
+                if($data->alamat == '-' || $data->alamat == NUll){
+                    $data->alamat = $request->alamat;
+                    $data->save();
+                }
+
+                if($data->deskripsi == '-' || $data->deskripsi == NUll){
+                    $data->deskripsi = $request->deskripsi;
+                    $data->save();
+                }
+                if($data->instansi == '-' || $data->instansi == NUll){
+                    $data->instansi = $request->instansi;
+                    $data->save();
+                }
+                if($data->satuan == '-' || $data->satuan == NUll){
+                    $data->satuan = $request->satuan;
+                    $data->save();
+                }
+
+                if($request->tglkontrak != ''){
+                if($data->tgl_kontrak == NUll){
+                    $data->tgl_kontrak = $request->tglkontrak;
+                    $data->save();
+                }
+                }
+
+                if($request->tgledit != ''){
+                    if($data->tgl_edit == NUll){
+                        $data->tgl_edit = $request->tgledit;
+                        $data->save();
+                    }
+                }
+
+                if($data->ket == NULL){
+                    $data->ket =  $request->ket;
+                    $data->save();
+                }
+
+                if($data->status !=  $request->status){
+                    $data->status = $request->status;
+                    $data->save();
+                }
+
+
+
+                $dekatp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($data) {
+                    $q->where('pesanan_id',  $data->pesanan_id);
+                })->get();
+
+                if (count($dekatp) > 0) {
+                    $deldekatp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($data) {
+                        $q->where('pesanan_id', $data->pesanan_id);
+                    })->delete();
+                }
+                $dekat = DetailPesanan::where('pesanan_id', $data->pesanan_id)->get();
+
+                if (count($dekat) > 0) {
+                    $deldekat = DetailPesanan::where('pesanan_id', $data->pesanan_id)->delete();
+                }
+
+                foreach($request->produk as $dp){
+                    $dekatpaket = DetailPesanan::create([
+                                'pesanan_id' => $e->pesanan_id,
+                                'penjualan_produk_id' => $dp['id'],
+                                'jumlah' => $dp['qty'],
+                                'harga' => $dp['price'],
+                                'ongkir' => $dp['shippingcharge'],
+                            ]);
+
+                            for ($j = 0; $j < count($dp['detailprodukvarian']); $j++) {
+                                $dekatprd = DetailPesananProduk::create([
+                                            'detail_pesanan_id' => $dekatpaket->id,
+                                            'gudang_barang_jadi_id' => $dp['detailprodukvarian'][$j]['id'],
+
+                                        ]);
+                            }
+                 }
+
+
+                 $id = array();
+                 $saveresponse = SaveResponse::where('tipe','ekatalog')->get();
+
+                 foreach($saveresponse as $s){
+                      $hasil = json_decode($s->parameter);
+                      if ($hasil->AKN == $request->no_paket){
+                         $id[] = $hasil->id;
+                      }
+                 }
+
+                     if($id > 0){
+                         SaveResponse::whereIn('id',$id)->delete();
+                     }
+
+                       $save =  SaveResponse::create([
+                         'tipe' => 'ekatalog',
+                         'url' =>  URL::current(),
+                         'parameter' =>  '-',
+                         'response' => 'ok',
+                         'method' => 'post',
+                         'created_at' => Carbon::now()]);
+
+                         $field = array(
+                           'id' => $save->id,
+                           'SO' => '-',
+                           'nourut' => $data->no_urut,
+                           'AKN'=> $data->no_paket,
+                           'PO'=> '-',
+                           'tgl_po' => '-',
+                           'DO'=> '-',
+                           'tgl_do' => '-',
+                           'Satuan'=> $data->satuan,
+                       );
+                        $data = json_encode($field);
+                           $get_response = SaveResponse::find($save->id);
+                           $get_response->parameter = $data;
+                           $get_response->save();
+
+        }
+        else{
+
+            $x = "";
+            $pesanan = Pesanan::create([
+                'log_id' => '7',
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ]);
+            $x = $pesanan->id;
+
+            if($request->provinsi != ''){
+             $provinsi = Provinsi::where('nama', 'like', '%' . $request->provinsi . '%')->first();
+             $p = $provinsi->id;
+            }else{
+             $p = $request->provinsi;
+            }
+
+            if($request->satuan != ''){
+                $sat = $request->satuan;
+            }else{
+                $sat = '-';
+            }
+
+
+            $Ekatalog = Ekatalog::create([
+                'customer_id' => 213,
+                'provinsi_id' => $p,
+                'no_paket' => $request->no_paket,
+                'no_urut' => $request->no_urut,
+                'deskripsi' => $request->deskripsi,
+                'instansi' => $request->instansi,
+                'alamat' => $request->alamat,
+                'satuan' => $request->satuan,
+                'tgl_kontrak' => $request->tglkontrak,
+                'tgl_buat' => $request->tglbuat,
+                'tgl_edit' => $request->tgledit,
+                'ket' => $request->ket,
+                'status' => $request->status,
+                'log' => 'penjualan',
+                'pesanan_id' => $x
+
+            ]);
+
+            foreach($request->produk as $dp){
+                $dekatpaket = DetailPesanan::create([
+                            'pesanan_id' => $x,
+                            'penjualan_produk_id' => $dp['id'],
+                            'jumlah' => $dp['qty'],
+                            'harga' => $dp['price'],
+                            'ongkir' => $dp['shippingcharge'],
+                        ]);
+
+                        for ($j = 0; $j < count($dp['detailprodukvarian']); $j++) {
+                            $dekatprd = DetailPesananProduk::create([
+                                        'detail_pesanan_id' => $dekatpaket->id,
+                                        'gudang_barang_jadi_id' => $dp['detailprodukvarian'][$j]['id'],
+
+                                    ]);
+                        }
+             }
+
+             $id = array();
+             $saveresponse = SaveResponse::where('tipe','ekatalog')->get();
+
+             foreach($saveresponse as $s){
+                  $hasil = json_decode($s->parameter);
+                  if ($hasil->AKN == $request->no_paket){
+                     $id[] = $hasil->id;
+                  }
+             }
+
+                 if($id > 0){
+                     SaveResponse::whereIn('id',$id)->delete();
+                 }
+
+                   $save =  SaveResponse::create([
+                     'tipe' => 'ekatalog',
+                     'url' =>  URL::current(),
+                     'parameter' =>  '-',
+                     'response' => 'ok',
+                     'method' => 'post',
+                     'created_at' => Carbon::now()]);
+
+                     $field = array(
+                       'id' => $save->id,
+                       'SO' => '-',
+                       'nourut' => $request->no_urut,
+                       'AKN'=> $request->no_paket,
+                       'PO'=> '-',
+                       'tgl_po' => '-',
+                       'DO'=> '-',
+                       'tgl_do' => '-',
+                       'Satuan'=> $sat,
+                   );
+                    $data = json_encode($field);
+                       $get_response = SaveResponse::find($save->id);
+                       $get_response->parameter = $data;
+                       $get_response->save();
+
+        }
+        return response()->json(['message'=> 'Berhasil']);
+    }
+
+    public function store_ekat_emindo_po(Request $request)
+    {
+        $validator = Validator::make($request->all(),[
+            'no_paket' => 'unique:ekatalog,no_paket'
+        ]);
+        if($validator->fails()){
+                $e = Ekatalog::where('no_paket', $request->no_paket)->first();
+                $ekat = Ekatalog::find($e->id);
+                $po = Pesanan::find($ekat->pesanan_id);
+
+                if($po->no_po == NULL){
+                    $po->so = $this->createSO('EKAT');
+                    $po->no_po = $request->no_po;
+                    $po->save();
+                }
+
+                if($po->tgl_po == NULL){
+                    $po->tgl_po = $request->tgl_po;
+                    $po->save();
+                }
+
+                if($po->no_do == NULL){
+                    $po->no_do = $request->no_do;
+                    $po->save();
+                }
+
+                if($po->tgl_do == NULL){
+                    $po->tgl_do = $request->tgl_do;
+                    $po->save();
+                }
+
+                if($po->ket == NULL){
+                    $po->ket = $request->ket;
+                    $po->save();
+                }
+
+
+
+                $dekatp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($ekat) {
+                    $q->where('pesanan_id',  $ekat->pesanan_id);
+                })->get();
+
+                if (count($dekatp) > 0) {
+                    $deldekatp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($ekat) {
+                        $q->where('pesanan_id', $ekat->pesanan_id);
+                    })->delete();
+                }
+                $dekat = DetailPesanan::where('pesanan_id', $ekat->pesanan_id)->get();
+
+                if (count($dekat) > 0) {
+                    $deldekat = DetailPesanan::where('pesanan_id', $ekat->pesanan_id)->delete();
+                }
+
+
+                foreach($request->produk as $dp){
+                    $dekatpaket = DetailPesanan::create([
+                                'pesanan_id' => $e->pesanan_id,
+                                'penjualan_produk_id' => $dp['id'],
+                                'jumlah' => $dp['qty'],
+                                'harga' => $dp['price'],
+                                'ongkir' => $dp['shippingcharge'],
+                            ]);
+
+                            for ($j = 0; $j < count($dp['detailprodukvarian']); $j++) {
+                                $dekatprd = DetailPesananProduk::create([
+                                            'detail_pesanan_id' => $dekatpaket->id,
+                                            'gudang_barang_jadi_id' => $dp['detailprodukvarian'][$j]['id'],
+                                        ]);
+                            }
+                 }
+
+
+                 $id = array();
+                 $saveresponse = SaveResponse::where('tipe','ekatalog')->get();
+
+                 foreach($saveresponse as $s){
+                      $hasil = json_decode($s->parameter);
+                      if ($hasil->AKN == $ekat->no_paket){
+                         $id[] = $hasil->id;
+                      }
+                 }
+
+                 if($request->no_do != ''){
+                    $do = $request->no_do;
+                }else{
+                    $do = '-';
+                }
+
+                if($request->tgl_do != ''){
+                    $tgldo = $request->tgl_do;
+                }else{
+                    $tgldo = '-';
+                }
+
+                     if($id > 0){
+                         SaveResponse::whereIn('id',$id)->delete();
+                     }
+
+                       $save =  SaveResponse::create([
+                         'tipe' => 'ekatalog',
+                         'url' =>  URL::current(),
+                         'parameter' =>  '-',
+                         'response' => 'ok',
+                         'method' => 'post',
+                         'created_at' => Carbon::now()]);
+
+                         $field = array(
+                           'id' => $save->id,
+                           'SO' => $po->so,
+                           'nourut' => $ekat->no_urut,
+                           'AKN'=> $ekat->no_paket,
+                           'PO'=>  $request->no_po,
+                           'tgl_po' => $request->tgl_po,
+                           'DO'=> $do,
+                           'tgl_do' => $tgldo,
+                           'Satuan'=>  $ekat->satuan,
+                       );
+                        $data = json_encode($field);
+                           $get_response = SaveResponse::find($save->id);
+                           $get_response->parameter = $data;
+                           $get_response->save();
+
+
+                 return response()->json([
+                    'status' => 200,
+                    'message' => 'OK',
+                ], 200);
+        }else{
+            return response()->json([
+                'status' => 404,
+                'message' => 'TIdak ditemukan',
+            ], 404);
+        }
+
+    }
+
+    public function store_spa_emindo(Request $request)
+    {
+       // dd($request->all());
+
+        $validator = Validator::make($request->all(), [
+            'no_po' => 'unique:pesanan,no_po'
+        ]);
+        if ($validator->fails()) {
+            return response()->json([
+                'status' => 200,
+                'message' => 'po',
+            ], 200);
+        } else {
+            $x = "";
+            $pesanan = Pesanan::create([
+                'so' => $this->createSO('SPA'),
+                'no_po' => $request->no_po,
+                'tgl_po' => $request->tgl_po,
+                'no_do' => $request->no_do,
+                'tgl_do' => $request->tgl_do,
+                'ket' =>  $request->ket,
+                'log_id' => '7',
+                'created_at' => Carbon::now()->toDateTimeString(),
+                'updated_at' => Carbon::now()->toDateTimeString(),
+            ]);
+            $x = $pesanan->id;
+
+            $Spa = Spa::create([
+                'customer_id' => 213,
+                'pesanan_id' => $x,
+                'ket' => $request->ket,
+                'log' => 'po'
+            ]);
+
+            if ($request->produk) {
+                foreach ($request->produk as $dp) {
+                    $dekatpaket = DetailPesanan::create([
+                        'pesanan_id' => $x,
+                        'penjualan_produk_id' => $dp['id'],
+                        'jumlah' => $dp['qty'],
+                        'harga' => $dp['price'],
+                        'ongkir' => $dp['shippingcharge'],
+                    ]);
+
+                    for ($j = 0; $j < count($dp['detailprodukvarian']); $j++) {
+                        $dekatprd = DetailPesananProduk::create([
+                            'detail_pesanan_id' => $dekatpaket->id,
+                            'gudang_barang_jadi_id' => $dp['detailprodukvarian'][$j]['id'],
+
+                        ]);
+                    }
+                }
+            }
+
+            if ($request->sparepart) {
+                foreach ($request->sparepart as $sp) {
+                    $depart = DetailPesananPart::create([
+                        'pesanan_id' => $x,
+                        'm_sparepart_id' => $sp['id'],
+                        'jumlah' => $sp['qty'],
+                        'harga' => $sp['price'],
+                        'ongkir' => 0,
+                    ]);
+                }
+            }
+
+            if ($request->jasa) {
+                foreach ($request->jasa as $js) {
+                    $dejasa = DetailPesananPart::create([
+                        'pesanan_id' => $x,
+                        'm_sparepart_id' => $js['id'],
+                        'jumlah' => 1,
+                        'harga' => $js['price'],
+                        'ongkir' => 0,
+                    ]);
+
+
+                    $qcspb = OutgoingPesananPart::create([
+                        'detail_pesanan_part_id' => $dejasa->id,
+                        'tanggal_uji' => $request->tgl_po,
+                        'jumlah_ok' => 1,
+                        'jumlah_nok' => 0
+                    ]);
+                }
+            }
+
+            $id = array();
+            $saveresponse = SaveResponse::where('tipe','spa')->get();
+
+            foreach($saveresponse as $s){
+                 $hasil = json_decode($s->parameter);
+                 if ($hasil->PO == $request->no_po){
+                    $id[] = $hasil->id;
+                 }
+            }
+            if($request->no_do != ''){
+                $do = $request->no_do;
+            }else{
+                $do = '-';
+            }
+
+            if($request->tgl_do != ''){
+                $tgldo = $request->tgl_do;
+            }else{
+                $tgldo = '-';
+            }
+
+
+                if($id > 0){
+                    SaveResponse::whereIn('id',$id)->delete();
+                }
+
+                  $save =  SaveResponse::create([
+                    'tipe' => 'spa',
+                    'url' =>  URL::current(),
+                    'parameter' =>  '-',
+                    'response' => 'ok',
+                    'method' => 'post',
+                    'created_at' => Carbon::now()]);
+
+                    $field = array(
+                      'id' => $save->id,
+                      'SO' => $pesanan->so,
+                      'nourut' => '-',
+                      'AKN'=> '-',
+                      'PO'=> $request->no_po,
+                      'tgl_po' => $request->tgl_po,
+                      'DO'=> $do,
+                      'tgl_do' => $tgldo,
+                      'Satuan'=> '-',
+                  );
+                   $data = json_encode($field);
+                      $get_response = SaveResponse::find($save->id);
+                      $get_response->parameter = $data;
+                      $get_response->save();
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'ok',
+            ], 200);
+        }
+    }
+
+    public function update_do(Request $request)
+    {
+        $get = Pesanan::where('no_po', $request->no_po)->first();
+      if($get){
+        if ($get->no_do != '') {
+            return response()->json(['message' => 'donotnull']);
+        } else {
+            $pesanan = Pesanan::find($get->id);
+            $pesanan->no_do = $request->no_do;
+            $pesanan->tgl_do = $request->tgl_do;
+            $update = $pesanan->save();
+
+            if($pesanan->Ekatalog){
+                $id = array();
+                $saveresponse = SaveResponse::where('tipe','ekatalog')->get();
+
+                foreach($saveresponse as $s){
+                     $hasil = json_decode($s->parameter);
+                     if ($hasil->AKN == $pesanan->Ekatalog->no_paket){
+                        $id[] = $hasil->id;
+                     }
+                }
+
+                if($request->no_do != ''){
+                   $do = $request->no_do;
+               }else{
+                   $do = '-';
+               }
+
+               if($request->tgl_do != ''){
+                   $tgldo = $request->tgl_do;
+               }else{
+                   $tgldo = '-';
+               }
+
+                    if($id > 0){
+                        SaveResponse::whereIn('id',$id)->delete();
+                    }
+
+                      $save =  SaveResponse::create([
+                        'tipe' => 'ekatalog',
+                        'url' =>  URL::current(),
+                        'parameter' =>  '-',
+                        'response' => 'ok',
+                        'method' => 'post',
+                        'created_at' => Carbon::now()]);
+
+                        $field = array(
+                          'id' => $save->id,
+                          'SO' => $pesanan->so,
+                          'nourut' => $pesanan->Ekatalog->no_urut,
+                          'AKN'=> $pesanan->Ekatalog->no_paket,
+                          'PO'=>  $pesanan->no_po,
+                          'tgl_po' => $pesanan->tgl_po,
+                          'DO'=> $do,
+                          'tgl_do' => $tgldo,
+                          'Satuan'=>  $pesanan->Ekatalog->satuan,
+                      );
+                       $data = json_encode($field);
+                          $get_response = SaveResponse::find($save->id);
+                          $get_response->parameter = $data;
+                          $get_response->save();
+            }
+
+            if($pesanan->Spa){
+                $id = array();
+                $saveresponse = SaveResponse::where('tipe','spa')->get();
+
+                foreach($saveresponse as $s){
+                     $hasil = json_decode($s->parameter);
+                     if ($hasil->PO == $pesanan->no_po){
+                        $id[] = $hasil->id;
+                     }
+                }
+                if($request->no_do != ''){
+                    $do = $request->no_do;
+                }else{
+                    $do = '-';
+                }
+
+                if($request->tgl_do != ''){
+                    $tgldo = $request->tgl_do;
+                }else{
+                    $tgldo = '-';
+                }
+
+
+                    if($id > 0){
+                        SaveResponse::whereIn('id',$id)->delete();
+                    }
+
+                      $save =  SaveResponse::create([
+                        'tipe' => 'spa',
+                        'url' =>  URL::current(),
+                        'parameter' =>  '-',
+                        'response' => 'ok',
+                        'method' => 'post',
+                        'created_at' => Carbon::now()]);
+
+                        $field = array(
+                          'id' => $save->id,
+                          'SO' => $pesanan->so,
+                          'nourut' => '-',
+                          'AKN'=> '-',
+                          'PO'=> $pesanan->no_po,
+                          'tgl_po' => $pesanan->tgl_po,
+                          'DO'=> $do,
+                          'tgl_do' => $tgldo,
+                          'Satuan'=> '-',
+                      );
+                       $data = json_encode($field);
+                          $get_response = SaveResponse::find($save->id);
+                          $get_response->parameter = $data;
+                          $get_response->save();
+
+            }
+
+            return response()->json(['message' => 'Berhasil']);
+        }
+      }else{
+        return response()->json(['message' => 'ponull']);
+      }
+    }
+
+    public function get_data_ekatalog_emindo($akn)
+    {
+
+        $e = Ekatalog::where('no_paket', $akn)->first();
+        if ($e) {
+            $data = array();
+            $detailpesanan = DetailPesanan::where('pesanan_id', $e->pesanan_id)->get();
+
+            if ($e->Provinsi) {
+                $provinsi =   $e->Provinsi->nama;
+            }else{
+                $provinsi = NULL;
+            }
+
+            $data = array(
+                'ekatalog_id' => $e->id,
+                'provinsi' => $provinsi,
+                'no_paket' => $e->no_paket,
+                'no_urut' => $e->no_urut,
+                'deskripsi' => $e->deskripsi,
+                'instansi' => $e->instansi,
+                'alamat' => $e->alamat,
+                'satuan' => $e->satuan,
+                'tglkontrak' => $e->tgl_kontrak,
+                'tglbuat' => $e->tgl_buat,
+                'tgledit' => $e->tgl_edit,
+                'ket' => $e->ket,
+                'status' => $e->status,
+            );
+
+            if (count($detailpesanan) > 0) {
+                foreach ($detailpesanan as $key_detailpesanan => $detailpesanan) {
+                    $data['produk'][$key_detailpesanan] = array(
+                        'id' => $detailpesanan->penjualan_produk_id,
+                        'produk' => $detailpesanan->PenjualanProduk->nama,
+                        'qty' => $detailpesanan->jumlah,
+                        'price' => $detailpesanan->harga,
+                        'shippingcharge' => $detailpesanan->ongkir,
+                        'subtotal' => ($detailpesanan->harga * $detailpesanan->jumlah) + $detailpesanan->ongkir,
+                        'detailproduk' => array(),
+                        'detailprodukvarian' => array()
+                    );
+
+                    for ($j = 0; $j < 1; $j++) {
+                        $data['produk'][$key_detailpesanan]['detailproduk'][0] = array(array(
+                            'nama' => $detailpesanan->PenjualanProduk->nama,
+                            'nama_alias' => $detailpesanan->PenjualanProduk->nama_alias,
+                            'harga' => $detailpesanan->PenjualanProduk->harga,
+                            'status' => $detailpesanan->PenjualanProduk->status,
+                            'created_at' => $detailpesanan->PenjualanProduk->created_at,
+                            'updated_at' => $detailpesanan->PenjualanProduk->updated_at,
+                        ));
+                    }
+
+                    foreach ($detailpesanan->PenjualanProduk->Produk as $key_produk => $produk) {
+
+                        $data['produk'][$key_detailpesanan]['detailproduk'][0]['produk'][$key_produk] = array(
+                            'id' => $produk->id,
+                            'produk_id' =>  $produk->produk_id,
+                            'kelompok_produk_id' => $produk->kelompok_produk_id,
+                            'merk' =>  $produk->merk,
+                            'nama' =>  $produk->nama,
+                            'nama_coo' =>  $produk->nama_coo,
+                            'coo' =>  $produk->coo,
+                            'no_akd' =>  $produk->no_akd,
+                            'ket' => $produk->ket,
+                            'status' => $produk->status,
+                            'created_at' => $produk->created_at,
+                            'updated_at' => $produk->updated_at,
+                            'pivot' => $produk->pivot,
+                        );
+
+                        foreach($produk->GudangBarangJadi as $key_v => $v){
+                            $data['produk'][$key_detailpesanan]['detailproduk'][0]['produk'][$key_produk]['gudang_barang_jadi'][$key_v] = array(
+                                'id' => $v->id,
+                                'produk_id' => $v->produk_id,
+                                'nama' => $v->nama,
+                                'deskripsi' => $v->deskripsi,
+                                'stok' => $v->stok(),
+                                'stok_siap' => $v->stok_siap,
+                                'satuan_id' => $v->satuan_id,
+                                'gambar' => $v->gambar,
+                                'dim_p' => $v->dim_p,
+                                'dim_l' => $v->dim_l,
+                                'dim_t' => $v->dim_t,
+                                'status' => $v->status,
+                                'created_by' => $v->created_by,
+                                'updated_by' => $v->updated_by,
+                                'created_at' => $v->created_at,
+                                'updated_at' => $v->updated_at,
+                            );
+                        }
+                    }
+
+                    foreach ($detailpesanan->DetailPesananProduk as $key_detailpesananproduk => $detailpesananproduk) {
+                        if ($detailpesananproduk->GudangBarangJadi->nama != '') {
+                            $variasi = $detailpesananproduk->GudangBarangJadi->nama;
+                        } else {
+                            $variasi = $detailpesananproduk->GudangBarangJadi->Produk->nama;
+                        }
+                        $data['produk'][$key_detailpesanan]['detailprodukvarian'][$key_detailpesananproduk] = array(
+                            'namaprd' => $detailpesananproduk->GudangBarangJadi->Produk->nama,
+                            'id' => $detailpesananproduk->GudangBarangJadi->id,
+                            'nama' => $variasi,
+                            'label' => $variasi . ' (' . $detailpesananproduk->GudangBarangJadi->stok() . ')',
+                            'value' => $detailpesananproduk->GudangBarangJadi->id,
+                            'stok' => $detailpesananproduk->GudangBarangJadi->stok(),
+                        );
+                    }
+                }
+            }
+
+            //  $field = array([
+            //         'AKN'=> $e->no_paket,
+            //         'PO'=> null,
+            //         'DO'=> 'DO123',
+            //         'Instansi'=> 'Instansi Ini',
+            // ]);
+            // $fields = json_encode($field);
+
+            //  SaveResponse::create([
+            //   'tipe' => 'ekatalog',
+            //   'url' =>  URL::current(),
+            //   'parameter' =>  $fields,
+            //   'response' => 'ok',
+            //   'method' => 'post',
+            //   'created_at' => Carbon::now()]);
+
+
+
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+                'data'    => $data
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Data tidak ditemukan',
+            ], 200);
+        }
+
+    }
+
+    public function get_data_spa_emindo($po){
+        $p = Pesanan::where('no_po', $po)->first();
+        if ($p) {
+            $data = array();
+            $detailpesanan = DetailPesanan::where('pesanan_id', $p->id)->get();
+            $detailpesananpart =  DetailPesananPart::whereHas('Sparepart', function ($q) {
+                $q->where('kode', 'not like', '%Jasa%');
+            })->where('pesanan_id', $p->id)->get();
+            $detailpesananjasa =  DetailPesananPart::whereHas('Sparepart', function ($q) {
+                $q->where('kode', 'like', '%Jasa%');
+            })->where('pesanan_id', $p->id)->get();
+
+            $data = array(
+                'no_po' => $p->no_po,
+                'tgl_po' => $p->tgl_po,
+                'no_do' => $p->no_do,
+                'tgl_do' => $p->tgl_do,
+                'ket' => $p->ket,
+            );
+
+
+            if (count($detailpesanan) > 0) {
+                foreach ($detailpesanan as $key_detailpesanan => $detailpesanan) {
+                    $data['produk'][$key_detailpesanan] = array(
+                        'id' => $detailpesanan->penjualan_produk_id,
+                        'produk' => $detailpesanan->PenjualanProduk->nama,
+                        'qty' => $detailpesanan->jumlah,
+                        'price' => $detailpesanan->harga,
+                        'shippingcharge' => $detailpesanan->ongkir,
+                        'subtotal' => ($detailpesanan->harga * $detailpesanan->jumlah) + $detailpesanan->ongkir,
+                        'detailproduk' => array(),
+                        'detailprodukvarian' => array()
+                    );
+
+                    for ($j = 0; $j < 1; $j++) {
+                        $data['produk'][$key_detailpesanan]['detailproduk'][0] = array(array(
+                            'nama' => $detailpesanan->PenjualanProduk->nama,
+                            'nama_alias' => $detailpesanan->PenjualanProduk->nama_alias,
+                            'harga' => $detailpesanan->PenjualanProduk->harga,
+                            'status' => $detailpesanan->PenjualanProduk->status,
+                            'created_at' => $detailpesanan->PenjualanProduk->created_at,
+                            'updated_at' => $detailpesanan->PenjualanProduk->updated_at,
+                        ));
+                    }
+
+                    foreach ($detailpesanan->PenjualanProduk->Produk as $key_produk => $produk) {
+
+                        $data['produk'][$key_detailpesanan]['detailproduk'][0]['produk'][$key_produk] = array(
+                            'id' => $produk->id,
+                            'produk_id' =>  $produk->produk_id,
+                            'kelompok_produk_id' => $produk->kelompok_produk_id,
+                            'merk' =>  $produk->merk,
+                            'nama' =>  $produk->nama,
+                            'nama_coo' =>  $produk->nama_coo,
+                            'coo' =>  $produk->coo,
+                            'no_akd' =>  $produk->no_akd,
+                            'ket' => $produk->ket,
+                            'status' => $produk->status,
+                            'created_at' => $produk->created_at,
+                            'updated_at' => $produk->updated_at,
+                            'pivot' => $produk->pivot,
+                        );
+
+                        foreach($produk->GudangBarangJadi as $key_v => $v){
+                            $data['produk'][$key_detailpesanan]['detailproduk'][0]['produk'][$key_produk]['gudang_barang_jadi'][$key_v] = array(
+                                'id' => $v->id,
+                                'produk_id' => $v->produk_id,
+                                'nama' => $v->nama,
+                                'deskripsi' => $v->deskripsi,
+                                'stok' => $v->stok(),
+                                'stok_siap' => $v->stok_siap,
+                                'satuan_id' => $v->satuan_id,
+                                'gambar' => $v->gambar,
+                                'dim_p' => $v->dim_p,
+                                'dim_l' => $v->dim_l,
+                                'dim_t' => $v->dim_t,
+                                'status' => $v->status,
+                                'created_by' => $v->created_by,
+                                'updated_by' => $v->updated_by,
+                                'created_at' => $v->created_at,
+                                'updated_at' => $v->updated_at,
+                            );
+                        }
+                    }
+
+                    foreach ($detailpesanan->DetailPesananProduk as $key_detailpesananproduk => $detailpesananproduk) {
+                        if ($detailpesananproduk->GudangBarangJadi->nama != '') {
+                            $variasi = $detailpesananproduk->GudangBarangJadi->nama;
+                        } else {
+                            $variasi = $detailpesananproduk->GudangBarangJadi->Produk->nama;
+                        }
+                        $data['produk'][$key_detailpesanan]['detailprodukvarian'][$key_detailpesananproduk] = array(
+                            'namaprd' => $detailpesananproduk->GudangBarangJadi->Produk->nama,
+                            'id' => $detailpesananproduk->GudangBarangJadi->id,
+                            'nama' => $variasi,
+                            'label' => $variasi . ' (' . $detailpesananproduk->GudangBarangJadi->stok() . ')',
+                            'value' => $detailpesananproduk->GudangBarangJadi->id,
+                            'stok' => $detailpesananproduk->GudangBarangJadi->stok(),
+                        );
+                    }
+                }
+            }
+
+            if (count($detailpesananpart) > 0) {
+                foreach ($detailpesananpart as $key_detailpesananpart => $detailpesananpart) {
+                    $data['sparepart'][$key_detailpesananpart] = array(
+                        'id' => $detailpesananpart->Sparepart->id,
+                        'sparepart' => $detailpesananpart->Sparepart->nama,
+                        'qty' => $detailpesananpart->jumlah,
+                        'price' => $detailpesananpart->harga,
+                        'subtotal' => $detailpesananpart->harga * $detailpesananpart->jumlah
+                    );
+                }
+            }
+
+            if (count($detailpesananjasa) > 0) {
+                foreach ($detailpesananjasa as $key_detailpesananjasa => $detailpesananjasa) {
+                    $data['jasa'][$key_detailpesananjasa] = array(
+                        'id' => $detailpesananjasa->Sparepart->id,
+                        'jasa' => $detailpesananjasa->Sparepart->nama,
+                        'qty' => $detailpesananjasa->jumlah,
+                        'price' => $detailpesananjasa->harga,
+                        'subtotal' => $detailpesananjasa->harga * $detailpesananjasa->jumlah
+                    );
+                }
+            }
+            return response()->json([
+                'status' => 200,
+                'message' => 'Berhasil',
+                'data'    => $data
+            ], 200);
+        } else {
+            return response()->json([
+                'status' => 404,
+                'message' => 'Data tidak ditemukan',
+            ], 200);
+        }
+
+    }
+
+    public function cek_paket($akn){
+        $e = Ekatalog::where('no_paket', $akn)->first();
+        if($e){
+                $dp = TFProduksi::where('pesanan_id',$e->pesanan_id)->count();
+
+            if($dp > 0){
+                return response()->json(['message'=> 'Sudah Proses']);
+            }else{
+                return response()->json(['message'=> 'Belum Proses']);
+            }
+        }else{
+            return response()->json(['message'=> 'Tidak Ditemukan']);
+        }
+    }
+
+    public function cek_po($po){
+        $e = Pesanan::where('no_po', $po)->first();
+        if($e){
+            $dp = TFProduksi::where('pesanan_id',$e->id)->count();
+
+            if($dp > 0){
+                return response()->json(['message'=> 'Sudah Proses']);
+            }else{
+                return response()->json(['message'=> 'Belum Proses']);
+            }
+        }else{
+            return response()->json(['message'=> 'Tidak Ditemukan']);
+        }
+    }
+
+    public function penjualan_data_emindo(){
+         $json_array = array();
+         $saveresponse = SaveResponse::whereIN('tipe',['ekatalog','spa'])->get();
+         foreach($saveresponse as $s){
+            $json_array[] = json_decode($s->parameter);
+         }
+        return response()->json([
+            'status' => 200,
+            'message' =>'Berhasil',
+            'data'    =>  $json_array
+        ], 200);
     }
 }

@@ -9,7 +9,15 @@
 
 @section('adminlte_css')
 <style lang="scss">
-   .foo {
+   .modal-body{
+        max-height: 80vh;
+        overflow-y: auto;
+    }
+    table { border-collapse: collapse; empty-cells: show; }
+
+    td { position: relative; }
+
+    .foo {
         border-radius: 50%;
         float: left;
         width: 10px;
@@ -17,12 +25,31 @@
         align-items: center !important;
     }
 
-
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
+    }
 
     .alert-danger {
         color: #a94442;
         background-color: #f2dede;
         border-color: #ebccd1;
+    }
+
+    .alert-info {
+        color: #0c5460;
+        background-color: #d1ecf1;
+        border-color: #bee5eb;
+    }
+
+    .alert-success {
+        color: #155724;
+        background-color: #d4edda;
+        border-color: #c3e6cb;
     }
 
     .separator {

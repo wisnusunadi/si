@@ -626,14 +626,15 @@
         });
 
         $('#noseritable').on('click', '.nosericheck', function() {
+            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
             $('#check_all').prop('checked', false);
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 checkedAry = [];
-                $.each($(".nosericheck:checked"), function() {
+                $.each($(".nosericheck:checked",rows), function() {
                     checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
                 });
-                console.log(checkedAry);
+            conaole.log('tes');
             } else if ($('.nosericheck:checked').length <= 0) {
                 $('#cekbrg').prop('disabled', true);
             }

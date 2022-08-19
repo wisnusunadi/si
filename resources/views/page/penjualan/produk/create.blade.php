@@ -2,11 +2,23 @@
 
 @section('title', 'ERP')
 
+@section('adminlte_css')
+<style>
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
+        height: 100% !important;
+    }
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
+        word-wrap: break-word !important;
+        text-overflow: inherit !important;
+        white-space: normal !important;
+    }
+</style>
+@endsection
 @section('content_header')
     <div class="container-fluid">
         <div class="row mb-2">
             <div class="col-sm-6">
-                <h1 class="m-0  text-dark">Produk</h1>
+                <h1 class="m-0  text-dark">Tambah Produk</h1>
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
@@ -47,12 +59,11 @@
                         {{ csrf_field() }}
                         <div class="row d-flex justify-content-center">
                             <div class="col-11">
-                                <div class="card">
-                                    <div class="card-header bg-info">
-                                        <h5 class="card-title"><i class="fas fa-plus"></i> Tambah Paket</h5>
+                                <div class="card card-outline card-info">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Info Umum Paket</h5>
                                     </div>
                                     <div class="card-body">
-                                        <h5>Info Umum Paket</h5>
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="form-group row">
@@ -120,10 +131,34 @@
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="form-group row">
+                                                    <label for="is_aktif" class="col-5 col-form-label"
+                                                        style="text-align: right">Status</label>
+                                                    <div class="col-6 col-form-label">
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="is_aktif"
+                                                                id="is_aktif1" value="1" checked="true" />
+                                                            <label class="form-check-label" for="is_aktif1">Aktif</label>
+                                                        </div>
+                                                        <div class="form-check form-check-inline">
+                                                            <input class="form-check-input" type="radio" name="is_aktif"
+                                                                id="is_aktif2" value="0" />
+                                                            <label class="form-check-label" for="is_aktif2">Tidak Aktif</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
-                                        <hr />
-                                        <h5 class="pt-5">Detail Produk Paket</h5>
+
+                                    </div>
+
+                                </div>
+
+                                <div class="card card-outline card-info">
+                                    <div class="card-header">
+                                        <h5 class="card-title">Detail Produk Paket</h5>
+                                    </div>
+                                    <div class="card-body">
                                         <div class="row">
                                             <div class="col-12">
                                                 <div class="table-responsive">
@@ -152,19 +187,17 @@
                                                                 <td>1</td>
                                                                 <td>
                                                                     <div class="form-group row">
-                                                                        <div class="col-12">
                                                                             <select
-                                                                                class="select-info form-control produk_id "
+                                                                                class="select-info form-control produk_id"
                                                                                 name="produk_id[]" id="0">
                                                                             </select>
                                                                         </div>
-                                                                    </div>
                                                                 </td>
                                                                 <td><span class="badge" name="kelompok_produk[]"
                                                                         id="kelompok_produk0"></span></td>
                                                                 <td>
                                                                     <div class="form-group d-flex justify-content-center">
-                                                                        <input type="number" class="form-control"
+                                                                        <input type="number" class="form-control jumlah"
                                                                             name="jumlah[]" id="jumlah0"
                                                                             style="width: 50%" />
                                                                     </div>
@@ -206,6 +239,44 @@
     <script>
         $(document).ready(function() {
             select_data();
+            var inputproduk = false;
+            var inputjumlah = false;
+            function validasi(){
+
+                $('#createtable').find('.produk_id').each(function() {
+                    if ($(this).val() != null) {
+                        inputproduk = true;
+                    } else {
+                        inputproduk = false;
+                        return false;
+                    }
+                });
+
+                $('#createtable').find('.jumlah').each(function() {
+                    if ($(this).val() != "") {
+                        inputjumlah = true;
+                    } else {
+                        inputjumlah = false;
+                        return false;
+                    }
+                });
+
+                // var jumprodukterisi = $('#createtable').find('.produk_id').has(':selected').length;
+                // var jumproduktdkterisi = $('#createtable').find('.produk_id').length;
+                // if (jumproduktdkterisi <= jumprodukterisi) {
+                //     console.log(jumproduktdkterisi +" "+ jumprodukterisi)
+                //     inputproduk = true;
+                // } else {
+                //     inputproduk = false;
+                //     return false;
+                // }
+
+                if(($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $('#nama_alias').val() != "" && inputproduk == true && inputjumlah == true && $("#createtable tbody").length > 0 && $("#harga").val() != "" && $('input[name="is_aktif"]:checked').val() != ""){
+                    $("#btntambah").attr('disabled', false);
+                } else {
+                    $("#btntambah").attr('disabled', true);
+                }
+            }
 
             function numberRows($t) {
                 var c = 0 - 2;
@@ -227,10 +298,8 @@
                 <td></td>
                 <td>
                     <div class="form-group row">
-                        <div class="col-12">
-                            <select class="select-info form-control produk_id " name="produk_id[]" id="0">
+                            <select class="select-info form-control produk_id" name="produk_id[]" id="0">
                             </select>
-                        </div>
                     </div>
                 </td>
                 <td><span class="badge kelompok_produk" name="kelompok_produk[]" id="kelompok_produk0"></span></td>
@@ -243,12 +312,17 @@
                     <a id="removerow"><i class="fas fa-minus" style="color: red"></i></a>
                 </td>
             </tr>`);
+                validasi();
                 numberRows($("#createtable"));
             });
 
             $('#createtable').on('click', '#removerow', function(e) {
-                $(this).closest('tr').remove();
+                if ($('#createtable > tbody > tr').length > 1) {
+                    $(this).closest('tr').remove();
+
+                }
                 numberRows($("#createtable"));
+                validasi();
             });
 
             $('#harga').on('keyup change', function() {
@@ -258,18 +332,12 @@
                 if ($(this).val() != "") {
                     $('#msgharga').text("");
                     $('#harga').removeClass("is-invalid");
-                    console.log($("#createtable tbody").length);
-                    if (($('#nama_paket').val() != "" && !$('#nama_paket').hasClass('is-invalid')) && $(
-                            "#createtable tbody").length > 0) {
-                        $("#btntambah").attr('disabled', false);
-                    } else {
-                        $("#btntambah").attr('disabled', true);
-                    }
                 } else if ($(this).val() == "") {
                     $('#msgharga').text("Harga Harus diisi");
                     $('#harga').addClass("is-invalid");
-                    $("#btntambah").attr('disabled', true);
                 }
+
+                validasi();
             });
 
             $('#nama_paket').on('keyup change', function() {
@@ -282,17 +350,9 @@
                             if (data.jumlah >= 1) {
                                 $("#msgnama_paket").text("Nama sudah terpakai");
                                 $('#nama_paket').addClass('is-invalid');
-                                $("#btntambah").attr('disabled', true);
                             } else {
                                 $('#msgnama_paket').text("");
                                 $('#nama_paket').removeClass("is-invalid");
-                                console.log($("#createtable tbody").length);
-                                if ($('#harga').val() != "" && $("#createtable tbody").length >
-                                    0) {
-                                    $("#btntambah").attr('disabled', false);
-                                } else {
-                                    $("#btntambah").attr('disabled', true);
-                                }
                             }
                         }
                     });
@@ -300,15 +360,30 @@
                 } else if ($(this).val() == "") {
                     $('#msgnama_paket').text("Nama Paket Harus diisi");
                     $('#nama_paket').addClass("is-invalid");
-                    $("#btntambah").attr('disabled', true);
                 }
+                validasi();
             });
 
+            $('#nama_alias').on('keyup change', function() {
+                validasi();
+            });
+
+            $(document).on('keyup change', '#createtable .jumlah', function(){
+                validasi();
+            });
+
+            $(document).on('change', 'input[name="is_aktif"]', function(){
+                validasi();
+            });
+
+            $(document).on('keyup change', '#createtable .jumlah', function(){
+                validasi();
+            });
             function select_data() {
                 $('.produk_id').select2({
+                    placeholder: "Pilih Produk",
                     ajax: {
                         minimumResultsForSearch: 20,
-                        placeholder: "Pilih Produk",
                         dataType: 'json',
                         theme: "bootstrap",
                         delay: 250,
@@ -320,7 +395,6 @@
                             }
                         },
                         processResults: function(data) {
-                            console.log(data);
                             return {
                                 results: $.map(data, function(obj) {
                                     return {
@@ -334,18 +408,16 @@
                 }).change(function() {
                     var value = $(this).val();
                     var index = $(this).attr('id');
-                    console.log(index);
-                    // var id = $(#produk_id).val();
                     $.ajax({
                         url: '/api/produk/select/' + value,
                         type: 'GET',
                         dataType: 'json',
                         success: function(data) {
-                            console.log(data);
                             $('#kelompok_produk' + index).text(data[0].kelompok_produk.nama);
-                            console.log(data[0].kelompok_produk.nama);
                         }
                     });
+
+                    validasi();
                 });
             }
         });

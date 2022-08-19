@@ -278,6 +278,7 @@
                                     <tr>
                                         <th>No PO</th>
                                         <th>No AKN</th>
+                                        <th>No SO</th>
                                         <th>Customer / Distributor</th>
                                         <th>Tanggal Pesan</th>
                                         <th>Batas Kontrak</th>
@@ -527,6 +528,11 @@
                 },
                 {
                     data: 'no_paket',
+                    className: 'nowraptext',
+                    searchable: true
+                },
+                {
+                    data: 'no_so',
                     className: 'nowraptext',
                     searchable: true
                 },

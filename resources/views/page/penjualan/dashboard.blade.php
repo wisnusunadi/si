@@ -8,6 +8,10 @@
 
 @section('adminlte_css')
 <style lang="scss">
+    .modal-body{
+        max-height: 80vh;
+        overflow-y: auto;
+    }
 
 .foo {
             border-radius: 50%;
@@ -15,6 +19,23 @@
             width: 10px;
             height: 10px;
             align-items: center !important;
+        }
+        .alert-danger {
+            color: #a94442;
+            background-color: #f2dede;
+            border-color: #ebccd1;
+        }
+
+        .alert-info {
+            color: #0c5460;
+            background-color: #d1ecf1;
+            border-color: #bee5eb;
+        }
+
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
         }
 
         .bg-chart-light{
@@ -589,7 +610,6 @@
                     $('#loader').hide();
                 },
                 error: function(jqXHR, testStatus, error) {
-
                     alert("Page " + href + " cannot open. Error:" + error);
                     $('#loader').hide();
                 },

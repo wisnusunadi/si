@@ -157,6 +157,10 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::post('/spb/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
 
         Route::post('/store', [App\Http\Controllers\PenjualanController::class, 'create_penjualan'])->name('penjualan.penjualan.store');
+        Route::post('/store_emindo', [App\Http\Controllers\PenjualanController::class, 'store_ekat_emindo'])->name('penjualan.penjualan.store_emindo');
+        Route::post('/store_emindo_po', [App\Http\Controllers\PenjualanController::class, 'store_ekat_emindo_po'])->name('penjualan.penjualan.store_emindo_po');
+        Route::post('/store_emindo_spa', [App\Http\Controllers\PenjualanController::class, 'store_spa_emindo'])->name('penjualan.penjualan.store_emindo_spa');
+        Route::post('/store_do', [App\Http\Controllers\PenjualanController::class, 'update_do'])->name('penjualan.penjualan.store_emindo_spa');
         Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
         Route::get('/detail/spa/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa'])->name('penjualan.penjualan.detail.spa');
         Route::get('/detail/spb/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spb'])->name('penjualan.penjualan.detail.spb');
@@ -228,7 +232,6 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::group(['prefix' => '/laporan'], function () {
             Route::view('/show', 'page.logistik.laporan.show')->name('logistik.so.laporan.show');
         });
-
         Route::get('/cancel/{id}', [App\Http\Controllers\logistikController::class, 'cancel_so'])->name('logistik.so.cancel_po');
     });
 
@@ -280,6 +283,10 @@ Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
 
 Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
     Route::get('/dashboard',   [App\Http\Controllers\DcController::class, 'dashboard'])->name('dc.dashboard');
+
+    Route::group(['prefix' => '/so_in_process'], function () {
+        Route::view('/show', 'page.dc.so.in_proses.show')->name('dc.so.in_proses.show');
+    });
 
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.dc.so.show')->name('dc.so.show');

@@ -447,6 +447,7 @@ return [
             'icon' => 'fas fa-search',
             'auth' => [26]
         ],
+        
         // [
         //     'text' => 'Nama & Alamat',
         //     'url'  => '/nama_alamat',
@@ -481,6 +482,25 @@ return [
                 [
                     'text' => 'Status Penjualan',
                     'url'  => '/penjualan/request_emiindo/status_penjualan',
+                ]
+            ]
+        ],
+        [
+            'text' => 'Request Emiindo',
+            'icon' => 'fas fa-mail-bulk',
+            'auth' => [26],
+            'submenu' => [
+                [
+                    'text' => 'Ekatalog - SPA',
+                    'url'  => '/penjualan/request_emiindo/akn_po',
+                ],
+                // [
+                //     'text' => 'Status Penjualan',
+                //     'url'  => '/penjualan/request_emiindo/status_penjualan',
+                // ],
+                [
+                    'text' => 'Terima Ekatalog - SPA',
+                    'url'  => '/penjualan/request_emiindo/daftar_penerimaan',
                 ]
             ]
         ],
@@ -1160,8 +1180,20 @@ return [
             'auth' => [9],
         ],
         [
+            'text' => 'Lacak',
+            'icon' => 'fas fa-search fa-fw',
+            'url' => '/penjualan/lacak/show',
+            'auth' => [9],
+        ],
+        [
             'header' => 'PENJUALAN',
             'auth' => [9]
+        ],
+        [
+            'text' => 'Dalam Proses',
+            'icon' => 'fas fa-spinner',
+            'url' => '/dc/so_in_process/show',
+            'auth' => [9],
         ],
         [
             'text' => 'Sales Order',
@@ -1346,7 +1378,7 @@ return [
                     'auth' => [2, 26],
                 ],
                 [
-                    'text' => 'Perencanaan',
+                    'text' => 'Jadwal Perakitan',
                     'url'  => '/ppic_direksi',
                     'icon' => 'far fa-circle',
                     'auth' => [2]
