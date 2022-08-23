@@ -25,8 +25,6 @@ use App\Models\Provinsi;
 use App\Models\SaveResponse;
 use App\Models\TFProduksi;
 use Carbon\Doctrine\CarbonType;
-use Hamcrest\Core\IsNot;
-use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Support\Carbon;
@@ -36,6 +34,8 @@ use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Validator as ValidationValidator;
 use Maatwebsite\Excel\Excel as ExcelExcel;
 use Symfony\Component\Console\Input\Input;
 
