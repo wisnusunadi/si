@@ -1308,7 +1308,7 @@ class MasterController extends Controller
     {
         if($value == 'ekatalog')
     {
-        $data = PenjualanProduk::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')
+        $data = PenjualanProduk::where('nama_alias', 'LIKE', '%' . $request->input('term', '') . '%')
         ->where('is_aktif', '1')
         ->where('status', 'ekat')
         ->orderby('nama', 'ASC')

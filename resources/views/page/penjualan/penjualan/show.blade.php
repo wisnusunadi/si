@@ -1311,6 +1311,68 @@
                 return false;
             });
 
+            $(document).on('submit', '#btnkirimbatal', function(event) {
+                event.preventDefault();
+                var alasan = $(this).find('#alasan').val();
+                var jenis = $(this).find('#jenis').val();
+                var id = $(this).find('#id').val();
+
+                swal({
+                    title: "Batalkan Pesanan",
+                    text: "Apakah anda yakin ingin membatalkan pesanan?",
+                    type: "warning",
+                    showCancelButton: true,
+                    confirmButtonClass: "btn-danger",
+                    confirmButtonText: "Batalkan",
+                    cancelButtonText: "Kembali",
+                    closeOnConfirm: false,
+                    closeOnCancel: false
+                },
+                function(isConfirm) {
+                    if (isConfirm) {
+                        $.ajax({
+                            headers: {
+                                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                            },
+                            url: '/api/penjualan/penjualan/cancel',
+                            type: 'POST',
+                            data: {'id': id, 'jenis': jenis, 'alasan': alasan},
+                            beforeSend: function() {
+                                $('#loader').show();
+                            },
+                            success: function(result) {
+                                if (response['data'] == "success") {
+                                    swal.fire(
+                                        'Berhasil',
+                                        'Berhasil melakukan Perubahan Pesanan',
+                                        'success'
+                                    );
+                                    $("#editmodal").modal('hide');
+                                    location.reload();
+                                } else if (response['data'] == "error") {
+                                    swal.fire(
+                                        'Gagal',
+                                        'Gagal melakukan Perubahan Pesanan',
+                                        'error'
+                                    );
+                                }
+                            },
+                            complete: function() {
+                                $('#loader').hide();
+                            },
+                            error: function(jqXHR, testStatus, error) {
+                                console.log(error);
+                                alert("Page " + href + " cannot open. Error:" + error);
+                                $('#loader').hide();
+                            },
+                            timeout: 8000
+                        })
+                    } else {
+                        swal("Cancelled", "Your imaginary file is safe :)", "error");
+                    }
+                });
+            });
+
             $(document).on('click', '.deletemodal', function(event) {
                 event.preventDefault();
                 var href = $(this).attr('data-attr');
