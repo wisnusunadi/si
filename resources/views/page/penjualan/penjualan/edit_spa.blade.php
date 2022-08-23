@@ -956,6 +956,14 @@
             }
         }
 
+        $(document).on('keyup change', '#no_do', function(){
+            checkvalidasi();
+        })
+
+        $(document).on('keyup change', '#tanggal_do', function(){
+            checkvalidasi();
+        })
+
         $(".os-content-arrange").remove();
         loop();
         load_variasi();
