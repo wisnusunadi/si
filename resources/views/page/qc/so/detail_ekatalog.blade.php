@@ -644,7 +644,6 @@
                 $.each($(".nosericheck:checked", rows), function() {
                     checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
                 });
-                console.log(checkedAry);
             } else if ($('.nosericheck:checked').length <= 0) {
                 $('#cekbrg').prop('disabled', true);
             }

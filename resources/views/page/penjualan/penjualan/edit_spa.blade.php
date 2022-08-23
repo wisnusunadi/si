@@ -935,10 +935,6 @@
                 jasa_harga = true;
             }
 
-            console.log("produk :"+ penjualan_produk_id +', '+variasi+', '+produk_jumlah+', '+produk_harga);
-            console.log("part :"+ part_id +', '+part_jumlah+', '+part_harga);
-            console.log("jasa :"+ jasa_id +', '+jasa_harga);
-
             if ($('input[type="radio"][name="do"]:checked').val() == "yes") {
                 if ($('#customer_id').val() != "" && $("#no_do").val() != "" && $("#tanggal_do").val() != "" && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
                     $('#btnsimpan').removeAttr("disabled");
@@ -956,7 +952,14 @@
             }
         }
 
-        
+        $(document).on('keyup change', '#no_do', function(){
+            checkvalidasi();
+        })
+
+        $(document).on('keyup change', '#tanggal_do', function(){
+            checkvalidasi();
+        })
+
         $(".os-content-arrange").remove();
         loop();
         load_variasi();
