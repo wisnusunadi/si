@@ -956,6 +956,7 @@
             }
         }
 
+        
         $(".os-content-arrange").remove();
         loop();
         load_variasi();

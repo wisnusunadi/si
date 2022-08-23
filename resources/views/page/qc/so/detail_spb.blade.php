@@ -706,7 +706,7 @@
             if ($('.nosericheck:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 checkedAry = [];
-                $.each($(".nosericheck:checked"), function() {
+                $.each($(".nosericheck:checked", rows), function() {
                     checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
                 });
             } else if ($('.nosericheck:checked').length <= 0) {
