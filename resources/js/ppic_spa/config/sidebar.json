@@ -37,9 +37,18 @@
                 "url": "/ppic/so"
             },
             {
-                "text": "Laporan Pesanan",
+                "text": "Laporan",
                 "icon": "fas fa-book-open",
-                "url": "/ppic/laporan_pesanan"
+                "submenu": [
+                    {
+                        "text": "Pesanan",
+                        "url": "/ppic/laporan_pesanan"
+                    },
+                    {
+                        "text": "Penjualan",
+                        "url": "/ppic/penjualan"
+                    }
+                ]
             },
             {
                 "text": "Proses Pesanan",
