@@ -2760,38 +2760,6 @@ class ProduksiController extends Controller
         return response()->json($produk);
     }
 
-    function getGrafikProduk(Request $request)
-    {
-        try {
-            $data = DB::table('prd_dashboard_view')
-                ->where([
-                    ['filter', '=', $request->filter],
-                    ['filter', '<>', null],
-                ])
-                ->get();
-            $arr = [];
-            foreach ($data as $d) {
-                $arr[] = [
-                    'tgl_rakit' => $d->tgl_rakit == null ? '-' : $d->tgl_rakit,
-                    'kode' => $d->produk_id == null ? '-' : $d->produk_id,
-                    'nama' => $d->prd_nm == null ? '-' : $d->prd_nm,
-                    'total' => $d->jml == 0 ? 0 : $d->jml,
-                    'filter' => $d->filter == null ? '-' : $d->filter,
-                ];
-            }
-
-            return response()->json([
-                'data' => $arr,
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'error' => true,
-                'msg' => $e->getMessage(),
-            ]);
-        }
-
-    }
-
     function ajax_perproduk()
     {
         try {
