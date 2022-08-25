@@ -1044,7 +1044,7 @@
                             } else {
                                 this.$swal({
                                     title: 'Gagal!',
-                                    text: response.data.message,
+                                    text: 'PO Belum Terisi',
                                     icon: 'error',
                                     timer: '2000'
                                 })
