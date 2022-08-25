@@ -1397,39 +1397,93 @@ class ProduksiController extends Controller
     // sale
     function h_minus10()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-            $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(10));
-        })->get());
-        $Spa = collect(Pesanan::has('Spa')->get());
-        $Spb = collect(Pesanan::has('Spb')->get());
-
-        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $data = DB::table(DB::raw('detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            'ms.nama as log_nama', 'e.tgl_kontrak',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereRaw('e.tgl_kontrak = date_sub(now(), interval 10 day)')
+            ->groupBy('p.id')
+            ->get();
 
         return count($data);
     }
 
     function h_minus5()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-            $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(5));
-        })->get());
-        $Spa = collect(Pesanan::has('Spa')->get());
-        $Spb = collect(Pesanan::has('Spb')->get());
-
-        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $data = DB::table(DB::raw('detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            'ms.nama as log_nama', 'e.tgl_kontrak',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereRaw('e.tgl_kontrak = date_sub(now(), interval 5 day)')
+            ->groupBy('p.id')
+            ->get();
 
         return count($data);
     }
 
     function h_exp()
     {
-        $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-            $q->whereDate('tgl_kontrak', '<', Carbon::now());
-        })->get());
-        $Spa = collect(Pesanan::has('Spa')->get());
-        $Spb = collect(Pesanan::has('Spb')->get());
-
-        $data = $Ekatalog->merge($Spa)->merge($Spb);
+        $data = DB::table(DB::raw('detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            'ms.nama as log_nama', 'e.tgl_kontrak',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereRaw('e.tgl_kontrak < now()')
+            ->groupBy('p.id')
+            ->get();
 
         return count($data);
     }
@@ -1437,13 +1491,31 @@ class ProduksiController extends Controller
     function minus5()
     {
         try {
-            $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-                $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(5));
-            })->get());
-            $Spa = collect(Pesanan::has('Spa')->get());
-            $Spb = collect(Pesanan::has('Spb')->get());
-
-            $data = $Ekatalog->merge($Spa)->merge($Spb);
+            $data = DB::table(DB::raw('detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            'ms.nama as log_nama', 'e.tgl_kontrak',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereRaw('e.tgl_kontrak = date_sub(now(), interval 5 day)')
+            ->groupBy('p.id')
+            ->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -1451,25 +1523,11 @@ class ProduksiController extends Controller
                     return $data->so;
                 })
                 ->addColumn('nama_customer', function ($data) {
-                    $name = explode('/', $data->so);
-                    for ($i = 1; $i < count($name); $i++) {
-                        if ($name[1] == 'EKAT') {
-                            return $data->Ekatalog->Customer->nama;
-                        } elseif ($name[1] == 'SPA') {
-                            return $data->Spa->Customer->nama;
-                        } elseif ($name[1] == 'SPB') {
-                            return $data->Spb->Customer->nama;
-                        } else {
-                        }
-                    }
-
-                    if (empty($data->so)) {
-                        return $data->Ekatalog->Customer->nama;
-                    }
+                    return $data->divisi;
                 })
                 ->addColumn('batas_out', function ($d) {
-                    if (isset($d->Ekatalog->tgl_kontrak)) {
-                        return Carbon::parse($d->Ekatalog->tgl_kontrak)->isoFormat('D MMM YYYY');
+                    if (isset($d->tgl_kontrak)) {
+                        return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY');
                     } else {
                         return '-';
                     }
@@ -1477,7 +1535,7 @@ class ProduksiController extends Controller
                 ->addColumn('status_prd', function ($data) {
                     if ($data->log_id) {
                         # code...
-                        return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+                        return '<span class="badge badge-warning">' . $data->log_nama . '</span>';
                     } else {
                         return '-';
                     }
@@ -1520,13 +1578,31 @@ class ProduksiController extends Controller
     function minus10()
     {
         try {
-            $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-                $q->whereDate('tgl_kontrak', '<=', Carbon::now()->subDays(10));
-            })->get());
-            $Spa = collect(Pesanan::has('Spa')->get());
-            $Spb = collect(Pesanan::has('Spb')->get());
-
-            $data = $Ekatalog->merge($Spa)->merge($Spb);
+            $data = DB::table(DB::raw('detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            'ms.nama as log_nama', 'e.tgl_kontrak',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereRaw('e.tgl_kontrak = date_sub(now(), interval 10 day)')
+            ->groupBy('p.id')
+            ->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -1534,25 +1610,11 @@ class ProduksiController extends Controller
                     return $data->so;
                 })
                 ->addColumn('nama_customer', function ($data) {
-                    $name = explode('/', $data->so);
-                    for ($i = 1; $i < count($name); $i++) {
-                        if ($name[1] == 'EKAT') {
-                            return $data->Ekatalog->Customer->nama;
-                        } elseif ($name[1] == 'SPA') {
-                            return $data->Spa->Customer->nama;
-                        } elseif ($name[1] == 'SPB') {
-                            return $data->Spb->Customer->nama;
-                        } else {
-                        }
-                    }
-
-                    if (empty($data->so)) {
-                        return $data->Ekatalog->Customer->nama;
-                    }
+                    return $data->divisi;
                 })
                 ->addColumn('batas_out', function ($d) {
-                    if (isset($d->Ekatalog->tgl_kontrak)) {
-                        return Carbon::parse($d->Ekatalog->tgl_kontrak)->isoFormat('D MMM YYYY');
+                    if (isset($d->tgl_kontrak)) {
+                        return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY');
                     } else {
                         return '-';
                     }
@@ -1560,7 +1622,7 @@ class ProduksiController extends Controller
                 ->addColumn('status_prd', function ($data) {
                     if ($data->log_id) {
                         # code...
-                        return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+                        return '<span class="badge badge-warning">' . $data->log_nama . '</span>';
                     } else {
                         return '-';
                     }
@@ -1603,13 +1665,31 @@ class ProduksiController extends Controller
     function expired()
     {
         try {
-            $Ekatalog = collect(Pesanan::whereHas('Ekatalog', function ($q) {
-                $q->whereDate('tgl_kontrak', '<', Carbon::now());
-            })->get());
-            $Spa = collect(Pesanan::has('Spa')->get());
-            $Spb = collect(Pesanan::has('Spb')->get());
-
-            $data = $Ekatalog->merge($Spa)->merge($Spb);
+            $data = DB::table(DB::raw('detail_pesanan_produk dpp'))
+            ->select('p.id','p.so', 'p.no_po', 'p.log_id',
+            DB::raw('count(dpp.gudang_barang_jadi_id)'),
+            DB::raw('sum(case when dpp.status_cek = 4 then 1 else 0 end) as total_cek'),
+            DB::raw('sum(case when dpp.status_cek is null then 1 else 0 end) as total_uncek'),
+            'ms.nama as log_nama', 'e.tgl_kontrak',
+            DB::raw("case
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPA' then c_spa.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'SPB' then c_spb.nama
+            when substring_index(substring_index(p.so, '/', 2), '/', -1) = 'EKAT' then c_ekat.nama
+            when p.so is null then c_ekat.nama
+            end as divisi"))
+            ->leftJoin(DB::raw('detail_pesanan dp'),'dpp.detail_pesanan_id','=','dp.id')
+            ->leftJoin(DB::raw('pesanan p'),'dp.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('ekatalog e'),'e.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('provinsi p2'),'p2.id','=','e.provinsi_id')
+            ->leftJoin(DB::raw('m_state ms'),'ms.id','=','p.log_id')
+            ->leftJoin(DB::raw('spa s'),'s.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('spb s2'),'s2.pesanan_id','=','p.id')
+            ->leftJoin(DB::raw('customer c_ekat'),'c_ekat.id','=','e.customer_id')
+            ->leftJoin(DB::raw('customer c_spa'),'c_spa.id','=','s.customer_id')
+            ->leftJoin(DB::raw('customer c_spb'),'c_spb.id','=','s2.customer_id')
+            ->whereRaw('e.tgl_kontrak < now()')
+            ->groupBy('p.id')
+            ->get();
 
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -1617,33 +1697,19 @@ class ProduksiController extends Controller
                     return $data->so;
                 })
                 ->addColumn('nama_customer', function ($data) {
-                    $name = explode('/', $data->so);
-                    for ($i = 1; $i < count($name); $i++) {
-                        if ($name[1] == 'EKAT') {
-                            return $data->Ekatalog->Customer->nama;
-                        } elseif ($name[1] == 'SPA') {
-                            return $data->Spa->Customer->nama;
-                        } elseif ($name[1] == 'SPB') {
-                            return $data->Spb->Customer->nama;
-                        } else {
-                        }
-                    }
-
-                    if (empty($data->so)) {
-                        return $data->Ekatalog->Customer->nama;
-                    }
+                    return $data->divisi;
                 })
                 ->addColumn('batas_out', function ($d) {
-                    if (isset($d->Ekatalog->tgl_kontrak)) {
-                        $a = Carbon::now()->diffInDays($d->Ekatalog->tgl_kontrak);
-                        return Carbon::parse($d->Ekatalog->tgl_kontrak)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
+                    if (isset($d->tgl_kontrak)) {
+                        $a = Carbon::now()->diffInDays($d->tgl_kontrak);
+                        return Carbon::parse($d->tgl_kontrak)->isoFormat('D MMM YYYY') . '<br> <span class="badge badge-danger">Lewat ' . $a . ' Hari</span>';
                     } else {
                         return '-';
                     }
                 })
                 ->addColumn('status_prd', function ($data) {
                     if ($data->log_id) {
-                        return '<span class="badge badge-warning">' . $data->log->nama . '</span>';
+                        return '<span class="badge badge-warning">' . $data->log_nama . '</span>';
                     } else {
                         return '-';
                     }
@@ -1681,7 +1747,7 @@ class ProduksiController extends Controller
                 'msg' => $e->getMessage(),
             ]);
         }
-            }
+    }
     // rakit
 
     function exp_rakit()
