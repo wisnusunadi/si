@@ -1058,7 +1058,7 @@
             if(this.dataSO.length > 0){
                 this.loading = true;
                 this.dataSO.forEach(item => {
-                    axios.get('/api/penjualan/check_ekatalog/'+ item.epurno).then(response => {
+                        axios.get('/api/penjualan/check_ekatalog/'+ item.epurno).then(response => {
                         if(response.data.message == "Sudah Proses"){
                             this.dataSO.splice(this.dataSO.indexOf(item), 1);
                             try {
@@ -1080,6 +1080,31 @@
                     })
                 });
             }
+            // if(this.dataPOEkat.length > 0){
+            //     this.loading = true;
+            //     this.dataPOEkat.forEach(item => {
+            //             axios.get('/api/penjualan/check_po/'+ item.pono).then(response => {
+            //             if(response.data.message == "Sudah Proses"){
+            //                 this.dataPOEkat.splice(this.dataPOEkat.indexOf(item), 1);
+            //                 try {
+            //                     let data = {
+            //                         refnumber: item.pono,
+            //                     }
+            //                     axios.post('https://sinko.api.hyperdatasystem.com/api/purchaseorder/save', data, {
+            //                         headers: {
+            //                             Authorization: 'Bearer ' + sessionStorage.getItem('token')
+            //                         },
+            //                     }).then(response => {
+            //                         // this.loadData()
+            //                         this.loading = false;
+            //                     })
+            //                 } catch (error) {
+            //                     console.log(error);
+            //                 }
+            //             }
+            //         })
+            //     });
+            // }
         },
         async getToken(){
             let data = {
