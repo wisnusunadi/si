@@ -1939,85 +1939,76 @@ class ProduksiController extends Controller
     function on_rakit()
     {
         try {
-            $data = JadwalPerakitan::whereNotIn('status', [6])->whereNotIn('status_tf', [14])->get();
-        $x = [];
-        foreach ($data as $k) {
-            if ($k->jumlah != $k->cekTotalRakit()) {
-                $x[] = $k->id;
-            }
-        }
-        $datax = JadwalPerakitan::whereIn('id', $x)->get();
-        $res = datatables()->of($datax)
-            ->addColumn('start', function ($d) {
-                if (isset($d->tanggal_mulai)) {
-                    return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('end', function ($d) {
-                $m = strtotime($d->tanggal_selesai);
-                $a = strtotime(Carbon::now());
-                $s = $a - $m;
-                $x = floor($s / (60 * 60 * 24));
+            $data = DB::select("select jp.id, jp.produk_id, jp.created_at, jp.tanggal_mulai, jp.tanggal_selesai,
+        jp.no_bppb, jp.jumlah, count(jrn.jadwal_id) as jml_rakit,
+        concat(p.nama,' ',gbj.nama) as produkk,
+        datediff(now(), jp.tanggal_selesai) as selisih
+        from jadwal_perakitan jp
+        left join jadwal_rakit_noseri jrn on jrn.jadwal_id = jp.id
+        left join gdg_barang_jadi gbj on gbj.id = jp.produk_id
+        left join produk p on p.id = gbj.produk_id
+        where jp.status not in (6) and jp.status_tf not in(14)
+        group by jp.id
+        having jp.jumlah != count(jrn.jadwal_id)");
 
-                if (isset($d->tanggal_selesai)) {
-                    if ($x >= -10 && $x < -5) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
-                    } elseif ($x >= -5 && $x <= -2) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
-                    } elseif ($x > -2 && $x <= 0) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Kurang ' . $x . ' Hari</span>';
-                    } elseif ($x > 0) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Lebih ' . $x . ' Hari</span>';
-                    } elseif ($x < -10) {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+        $res = datatables()->of($data)
+                ->addColumn('start', function ($d) {
+                    if (isset($d->tanggal_mulai)) {
+                        return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
                     } else {
-                        return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
+                        return '-';
                     }
-                    // return date('d-m-Y', strtotime($d->tanggal_selesai)).' '.$x;
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('produk', function ($d) {
-                if (isset($d->produk_id)) {
-                    return $d->produk->produk->nama . ' ' . $d->produk->nama;
-                }
-            })
-            ->addColumn('jml', function ($d) {
-                $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
-                $c = count($seri);
-                if ($c != $d->jumlah) {
-                    return $d->jumlah . ' ' . $d->produk->satuan->nama . '<br><span class="badge badge-dark">Kurang ' . intval($d->jumlah - $c) . ' Unit</span>';
-                } else {
-                    return $d->jumlah . ' ' . $d->produk->satuan->nama;
-                }
-            })
-            ->addColumn('action', function ($d) {
-                $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
-                $c = count($seri);
-                return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $c) . '">
-                                <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
-                            </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $c) . '" data-prd="' . $d->produk->produk->nama . ' ' . $d->produk->nama . '">
-                            <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
-                        </a>';
-            })
-            ->addColumn('created_at', function ($d) {
-                return $d->created_at;
-            })
-            ->addColumn('no_bppb', function ($d) {
-                return $d->no_bppb == null ? '-' : $d->no_bppb;
-            })
-            ->addColumn('periode', function ($d) {
-                if (isset($d->tanggal_mulai)) {
-                    return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
-                } else {
-                    return '-';
-                }
-            })
-            ->rawColumns(['action', 'jml', 'end'])
-            ->make(true);
+                })
+                ->addColumn('end', function ($d) {
+                    $x = $d->selisih;
+
+                    if (isset($d->tanggal_selesai)) {
+                        if ($x >= -10 && $x < -5) {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        } elseif ($x >= -5 && $x <= -2) {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        } elseif ($x > -2 && $x <= 0) {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Kurang ' . $x . ' Hari</span>';
+                        } elseif ($x > 0) {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-danger">Lebih ' . $x . ' Hari</span>';
+                        } elseif ($x < -10) {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span><br> <span class="badge badge-warning">Kurang ' . abs($x) . ' Hari</span>';
+                        } else {
+                            return '<span class="tanggal">' . Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY') . '</span> ' . $x;
+                        }
+                    } else {
+                        return '-';
+                    }
+                })
+                ->addColumn('produk', function ($d) {
+                    return $d->produkk;
+                })
+                ->addColumn('jml', function ($d) {
+                    return $d->jumlah . ' Unit'. '<br><span class="badge badge-dark">Kurang ' . intval($d->jumlah - $d->jml_rakit) . ' Unit</span>';
+                })
+                ->addColumn('action', function ($d) {
+                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="'.$d->produk_id.'">
+                                    <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
+                            </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'">
+                                <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
+                            </a>
+                            ';
+                })
+                ->addColumn('created_at', function ($d) {
+                    return $d->created_at;
+                })
+                ->addColumn('no_bppb', function ($d) {
+                    return $d->no_bppb == null ? '-' : $d->no_bppb;
+                })
+                ->addColumn('periode', function ($d) {
+                    if (isset($d->tanggal_mulai)) {
+                        return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
+                    } else {
+                        return '-';
+                    }
+                })
+                ->rawColumns(['action', 'jml', 'end'])
+                ->make(true);
         return $res;
         } catch (\Exception $e) {
             return response()->json([
@@ -2031,113 +2022,75 @@ class ProduksiController extends Controller
     function getSelesaiRakit()
     {
         try {
-            $data = JadwalPerakitan::whereNotIn('status', [6])->whereNotIn('status_tf', [14, 11])->get();
-            $x = [];
-            foreach ($data as $k) {
-                if ($k->jumlah != $k->cekTotalKirim()) {
-                    $x[] = $k->id;
-                }
-            }
-            $datax = JadwalPerakitan::whereIn('id', $x)->get();
+            $data = DB::select("select jp.id, jp.produk_id, jp.created_at, jp.tanggal_mulai, jp.tanggal_selesai,
+        jp.no_bppb, jp.jumlah,
+        concat(p.nama,' ',gbj.nama) as produkk,
+        datediff(now(), jp.tanggal_selesai) as selisih,
+        cast(sum(case when jrn.status = 14 then 1 else 0 end) as SIGNED) as jml_kirim,
+        cast(sum(case when jrn.status = 11 then 1 else 0 end) as SIGNED) as jml_rakit,
+        cast(sum(case when jrn.status in(11,14) then 1 else 0 end) as SIGNED) as jml_all,
+        round((cast(sum(case when jrn.status = 14 then 1 else 0 end) as SIGNED) /
+        cast(sum(case when jrn.status in(11,14) then 1 else 0 end) as SIGNED) * 100),2) as perc_kirim,
+        round((cast(sum(case when jrn.status in(11,14) then 1 else 0 end) as SIGNED) / jp.jumlah) * 100,2)  as perc_isi,
+        round((cast(sum(case when jrn.status = 11 then 1 else 0 end) as SIGNED) /
+        cast(sum(case when jrn.status in(11,14) then 1 else 0 end) as SIGNED) * 100),2) as perc_rakit
+        from jadwal_perakitan jp
+        left join jadwal_rakit_noseri jrn on jrn.jadwal_id = jp.id
+        left join gdg_barang_jadi gbj on gbj.id = jp.produk_id
+        left join produk p on p.id = gbj.produk_id
+        where jp.status not in (6) and jp.status_tf not in(14,11)
+        group by jp.id
+        having jp.jumlah != cast(sum(case when jrn.status = 14 then 1 else 0 end) as SIGNED)");
 
-            return datatables()->of($datax)
-                ->addColumn('periode', function ($d) {
-                    if (isset($d->tanggal_mulai)) {
-                        return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('start', function ($d) {
-                    if (isset($d->tanggal_mulai)) {
-                        return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('end', function ($d) {
-                    if (isset($d->tanggal_selesai)) {
-                        return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY');
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('produk', function ($d) {
-                    if (isset($d->produk_id)) {
-                        return $d->produk->produk->nama . ' ' . $d->produk->nama;
-                    }
-                })
-                ->addColumn('jml', function ($d) {
-                    $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
-                    $c = count($seri);
-                    if ($c != $d->jumlah) {
-                        return  $d->jumlah . ' ' . $d->produk->satuan->nama . '<br><span class="badge badge-dark">Terisi ' . intval($c) . ' Unit</span>';
-                    } else {
-                        return  $d->jumlah . ' ' . $d->produk->satuan->nama;
-                    }
-                })
-                ->addColumn('action', function ($d) {
-                    if ($d->status_tf == 12) {
-                        $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 14)->get();
-                        $c = count($seri);
-                        $seri_all = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
-                        $c_all = count($seri_all);
-                        $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
-                        if ($c == $c_all) {
-                        } else {
-                            return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
-                                <button class="btn btn-outline-success btn-sm"><i class="far fa-edit"></i> Transfer</button>
-                            </a>&nbsp;<a data-toggle="modal" data-target="#detailmodalTransfer" class="detailmodalTransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '">
-                            <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
-                        </a>';
-                        }
-                        // return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
-                        //     <button class="btn btn-outline-success"><i class="far fa-edit"></i> Transfer</button>
-                        // </a>';
-                    } elseif ($d->status_tf == 13) {
-                        $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 14)->get();
-                        $c = count($seri);
-                        $seri_all = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
-                        $c_all = count($seri_all);
-                        $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
-                        if ($c == $c_all) {
-                        } else {
-                            return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
-                                <button class="btn btn-outline-success btn-sm"><i class="far fa-edit"></i> Transfer</button>
-                            </a>&nbsp;<a data-toggle="modal" data-target="#detailmodalTransfer" class="detailmodalTransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '">
-                            <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
-                        </a>';
-                        }
-                    } else {
-                        $seri_belum = JadwalRakitNoseri::where('jadwal_id', $d->id)->where('status', 11)->get()->count();
-                        return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
-                            <button class="btn btn-outline-success btn-sm"><i class="far fa-edit"></i> Transfer</button>
-                        </a>&nbsp;<a data-toggle="modal" data-target="#detailmodalTransfer" class="detailmodalTransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . $seri_belum . '" data-prd="' . $d->produk_id . '">
-                        <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
-                    </a>';
-                    }
-                })
-                ->addColumn('status', function ($d) {
-                    $seri = JadwalRakitNoseri::where('jadwal_id', $d->id)->get();
-                    $c = count($seri);
-                    $jj = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
-                        $q->where('gdg_brg_jadi_id', $d->produk_id);
-                    })->get();
-                    $a = count($jj);
-                    if ($d->status_tf == 12) {
-                        return '<span class="belum_diterima">Sudah Terisi Sebagian</span>';
-                    } elseif ($d->status_tf == 13) {
-                        return '<span class="sebagian_diterima">Sudah Terkirim Sebagian</span>';
-                    } else {
-                        return '<span class="sudah_diterima">Sudah Terisi Semua</span>';
-                        // return 'xx';
-                    }
-                })
-                ->addColumn('no_bppb', function ($d) {
-                    return $d->no_bppb == null ? '-' : $d->no_bppb;
-                })
-                ->rawColumns(['action', 'status', 'jml'])
-                ->make(true);
+          return datatables()->of($data)
+              ->addColumn('periode', function ($d) {
+                  if (isset($d->tanggal_mulai)) {
+                      return Carbon::parse($d->tanggal_mulai)->isoFormat('MMMM');
+                  } else {
+                      return '-';
+                  }
+              })
+              ->addColumn('start', function ($d) {
+                  if (isset($d->tanggal_mulai)) {
+                      return Carbon::parse($d->tanggal_mulai)->isoFormat('D MMM YYYY');
+                  } else {
+                      return '-';
+                  }
+              })
+              ->addColumn('end', function ($d) {
+                  if (isset($d->tanggal_selesai)) {
+                      return Carbon::parse($d->tanggal_selesai)->isoFormat('D MMM YYYY');
+                  } else {
+                      return '-';
+                  }
+              })
+              ->addColumn('produk', function ($d) {
+                  return $d->produkk;
+              })
+              ->addColumn('jml', function ($d) {
+                  return  $d->jumlah . ' Unit<br><span class="badge badge-dark">Terisi: ' . $d->jml_all . ' Unit</span>';
+              })
+              ->addColumn('action', function ($d) {
+                  if ($d->jml_rakit != 0) {
+                      return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jumlah . '" data-prd="' . $d->produk_id . '">
+                                      <button class="btn btn-outline-success btn-sm"><i class="far fa-edit"></i> Transfer</button>
+                                  </a>&nbsp;
+                                  <a data-toggle="modal" data-target="#detailmodalTransfer" class="detailmodalTransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . $d->jml_rakit . '" data-prd="' . $d->produk_id . '">
+                                      <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
+                                  </a>';
+                  }
+              })
+              ->addColumn('progress', function($d){
+                  $a = $d->perc_kirim == null ? '0.00' : $d->perc_kirim;
+                  $b = $d->perc_rakit == null ? '0.00' : $d->perc_rakit;
+                  return '<span class="badge badge-success">Terkirim: '.$d->jml_kirim.' Unit ('.$a.'%)</span>
+                          <br><span class="badge badge-dark">Rakit: ' . $d->jml_rakit . ' Unit ('.$b.'%)</span>';
+              })
+              ->addColumn('no_bppb', function ($d) {
+                  return $d->no_bppb == null ? '-' : $d->no_bppb;
+              })
+              ->rawColumns(['action', 'status', 'jml', 'progress'])
+              ->make(true);
 
         } catch (\Exception $e) {
             return response()->json([

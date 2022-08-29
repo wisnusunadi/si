@@ -396,7 +396,6 @@
                     success: function (res) {
                         var events = [];
                         if (res != null) {
-                            console.log(res);
                             $.each(res, function (i, item) {
                                 events.push({
                                     start: item.tanggal_mulai,
@@ -409,7 +408,7 @@
                                 })
                             })
                         }
-                        console.log('events', events);
+                        // console.log('events', events);
                         successCallback(events);
                     }
                 })
@@ -428,6 +427,7 @@
         $('#table_produk_perakitan').DataTable({
             destroy: true,
             processing: true,
+            ordering: false,
             ajax: {
                 url: "/api/prd/ongoing",
                 type: "post",
