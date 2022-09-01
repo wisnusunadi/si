@@ -18,12 +18,17 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Auth::routes();
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/', function () {
+        return view('auth.login');
+    });
+    });
 
-Route::get('/', function () {
-    if (auth()->user()->divisi->id == 24) return redirect('/ppic');
-    else if (auth()->user()->divisi->id == 3) return redirect('/manager-teknik');
-    else return view('home');
-})->middleware('auth');
+// Route::get('/', function () {
+//     if (auth()->user()->divisi->id == 24) return redirect('/ppic');
+//     else if (auth()->user()->divisi->id == 3) return redirect('/manager-teknik');
+//     else return view('home');
+// })->middleware('auth');
 
 Route::get('/home', function () {
     return redirect('/');
