@@ -76,21 +76,21 @@
     <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>
     <script>
 
-        //  function get_api(username,password) {
-        //     $.ajax({
-        //     type: "POST",
-        //     url: "/api/login",
-        //     data: {
-        //         username: username,
-        //         password: password
-        //     },
-        //     success: function (response) {
-        //         localStorage.setItem('lokal_token', response.token);
-        //         //console.log(sessionStorage.getItem('token'))
-        //        // console.log(response.token);
-        //     }
-        //       });
-        //  }
+         function get_api(username,password) {
+            $.ajax({
+            type: "POST",
+            url: "/api/login",
+            data: {
+                username: username,
+                password: password
+            },
+            success: function (response) {
+                localStorage.setItem('lokal_token', response.token);
+                //console.log(sessionStorage.getItem('token'))
+               console.log(response.token);
+            }
+              });
+         }
          function login() {
       if ($("#username").val() == "" || $("#password").val() == "") {
                     swal.fire(
@@ -102,7 +102,7 @@
 
         var username = $("#username").val();
         var password = $("#password").val();
-       //  get_api(username,password);
+        get_api(username,password);
         $.ajax({
                         type: "POST",
                         url: '{{route("login")}}',
