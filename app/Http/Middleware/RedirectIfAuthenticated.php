@@ -23,10 +23,32 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-                return redirect(RouteServiceProvider::HOME);
+               // return redirect(RouteServiceProvider::HOME);
+                if ($request->user()->hasRole("24")) {
+                    return redirect('/ppic');
+                } else if ($request->user()->hasRole("15")) {
+                    return redirect('/logistik/dashboard');
+                } else if ($request->user()->hasRole("3")) {
+                    return redirect('/manager-teknik');
+                } else if ($request->user()->hasRole("23")) {
+                    return redirect('/qc/dashboard');
+                } else if ($request->user()->hasRole("26")) {
+                    return redirect('/penjualan/dashboard');
+                } else if ($request->user()->hasRole("13")) {
+                    return redirect('/gbj/dashboard');
+                } else if ($request->user()->hasRole("17")) {
+                    return redirect('/produksi/dashboard');
+                } else if ($request->user()->hasRole("12")) {
+                    return redirect('/gk/dashboard');
+                } else if ($request->user()->hasRole("9")) {
+                    return redirect('/dc/dashboard');
+                } else if ($request->user()->hasRole("2")) {
+                    return redirect('/direksi/dashboard');
+                } else if ($request->user()->hasRole("8")) {
+                    return redirect('/penjualan/dashboard');
+                }
             }
         }
-
         return $next($request);
     }
 }

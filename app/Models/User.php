@@ -48,4 +48,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Divisi::class);
     }
+    public function hasRole($role){
+        if($role == $this->divisi_id){
+            return true;
+        }
+        return false;
+    }
 }
