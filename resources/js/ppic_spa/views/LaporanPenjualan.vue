@@ -143,7 +143,7 @@
                         </div>
                         </section>
                         <footer class="modal-card-foot">
-                        <button class="button is-success" @click="exportLaporan" :disabled="checkExports">Export</button>
+                        <button class="button is-success" @click="exportLaporan" :disabled="checkExports" :class="{'is-loading': this.$store.state.isLoading }">Export</button>
                         <button class="button is-danger" @click="modalExports = false">Cancel</button>
                         </footer>
                     </div>
@@ -315,8 +315,19 @@
                     checkexport = 'seri';
                 }
                 try {
-                    await axios.get("/penjualan/penjualan/export/"+typeSales+"/"+customer+"/"+tanggalAwalPO+"/"+tanggalAkhirPO+"/"+checkexport+"/"+this.jenisExport).then((response) => {
+                    this.$store.state.isLoading = true;
+                    await axios.get("/penjualan/penjualan/export/"+typeSales+"/"+customer+"/"+tanggalAwalPO+"/"+tanggalAkhirPO+"/"+checkexport+"/"+this.jenisExport)
+                    .then((response) => {
                             document.location.href = "/penjualan/penjualan/export/"+typeSales+"/"+customer+"/"+tanggalAwalPO+"/"+tanggalAkhirPO+"/"+checkexport+"/"+this.jenisExport;
+                            this.$swal({
+                                title: 'Berhasil',
+                                icon: 'success',
+                                timer: 2000,
+                                timerProgressBar: true,
+                                showConfirmButton: false,
+                            });
+                            this.modalExports = false;
+                            this.$store.state.isLoading = false;
                         }).catch((error) => {
                             console.log(error);
                     });
