@@ -196,7 +196,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     // Route::get('/dep_doc/{id?}', 'digidocu\DocumentsController@dep_doc')->name('dc.dep_doc');
 });
 
-Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'qc', 'middleware' => ['auth','divisi:qc,jual']], function () {
     Route::get('/dashboard', [App\Http\Controllers\QcController::class, 'dashboard'])->name('qc.dashboard');
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.qc.so.show')->name('qc.so.show');
