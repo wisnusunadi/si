@@ -457,7 +457,7 @@ return [
             'icon' => 'fas fa-search',
             'auth' => [26]
         ],
-        
+
         // [
         //     'text' => 'Nama & Alamat',
         //     'url'  => '/nama_alamat',
@@ -1008,6 +1008,11 @@ return [
             'icon' => 'fas fa-search',
             'auth' => [23, 34]
         ],
+        [
+            'header' => 'ALAT UJI',
+            'auth' => [23, 34]
+        ],
+        
 
         [
             'text'    => 'Permintaan',
