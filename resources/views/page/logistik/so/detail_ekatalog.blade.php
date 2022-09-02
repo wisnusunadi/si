@@ -678,9 +678,7 @@
             }
 
             function validasi_checked_produk(){
-                var rows = $('#belumkirimtable').DataTable().rows({
-                    'search': 'applied'
-                }).nodes();
+                var rows = $('#belumkirimtable').DataTable().rows().nodes();
                 if($('.check_detail:checked', rows).length <= 0){
                     $('#check_all').prop('checked', false);
                     $('#kirim_produk').attr('disabled', true);
@@ -747,15 +745,66 @@
 
             $(document).on('submit', '#form-logistik-create', function(e) {
                 e.preventDefault();
+                var produk_no_seri = $('#detailpesanan').DataTable().$('tr').find('input[name="produk_noseri_id[]"]').serializeArray();
+                var data_produk_no_seri = [];
+
+                var produk_id = $('#detailpesanan').DataTable().$('tr').find('input[name="produk_id[]"]').serializeArray();
+                var data_produk_id = [];
+
+                var part_id = $('#detailpesanan').DataTable().$('tr').find('input[name="part_id[]"]').serializeArray();
+                var data_part_id = [];
+
+                var part_jumlah = $('#detailpesanan').DataTable().$('tr').find('input[name="part_jumlah[]"]').serializeArray();
+                var data_part_jumlah = [];
+
+                var no_sj_exist = $('input[name="no_sj_exist"]:checked').val();
+                var jenis_sj = $('#jenis_sj').val();
+                var no_invoice = $('#no_invoice').val();
+                var sj_lama = $('#sj_lama').val();
+                var tgl_kirim = $('#tgl_kirim').val();
+                var pengiriman = $('input[name="pengiriman"]:checked').val();
+                var ekspedisi_id = $('#ekspedisi_id').val();
+                var nama_pengirim = $('#nama_pengirim').val();
+
+                $.each(produk_no_seri, function() {
+                    data_produk_no_seri.push(this.value);
+                });
+
+                $.each(produk_id, function() {
+                    data_produk_id.push(this.value);
+                });
+
+                $.each(part_jumlah, function() {
+                    data_part_jumlah.push(this.value);
+                });
+
+
+                $.each(part_id, function() {
+                    data_part_id.push(this.value);
+                });
+
                 $('#btnsimpan').attr('disabled', true);
                 var action = $(this).attr('action');
                 $.ajax({
                     headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                    type: "POST",
+                    type: "PUT",
                     url: action,
-                    data: $('#form-logistik-create').serialize(),
+                    data: {
+                        no_sj_exist:no_sj_exist,
+                        jenis_sj:jenis_sj,
+                        no_invoice:no_invoice,
+                        sj_lama:sj_lama,
+                        tgl_kirim:tgl_kirim,
+                        pengiriman:pengiriman,
+                        ekspedisi_id:ekspedisi_id,
+                        nama_pengirim:nama_pengirim,
+                        produk_no_seri:data_produk_no_seri,
+                        produk_id:data_produk_id,
+                        part_id:data_part_id,
+                        part_jumlah:data_part_jumlah,
+                    },
                     beforeSend: function() {
                         swal.fire({
                             title: 'Sedang Proses',
@@ -790,8 +839,8 @@
                             );
                         }
                     },
-                    error: function(xhr, status, error) {
-                        alert("Page cannot open. Error:" + error);
+                    error: function(xhr, status, error, response) {
+                        alert(error);
                     }
                 });
                 return false;
@@ -828,6 +877,12 @@
                         {
                             data: 'jumlah',
                             className: 'nowrap-text align-center',
+                            orderable: false,
+                            searchable: false
+                        },
+                        {
+                            data: 'array',
+                            className: 'nowrap-text align-center hide',
                             orderable: false,
                             searchable: false
                         }
@@ -898,9 +953,7 @@
             part_id = [];
 
             $('#belumkirimtable').on('click', 'input[name="check_all"]', function() {
-                var rows = $('#belumkirimtable').DataTable().rows({
-                    'search': 'applied'
-                }).nodes();
+                var rows = $('#belumkirimtable').DataTable().rows().nodes();
 
                 produk_id = [];
                 part_id = [];
@@ -936,9 +989,7 @@
             });
 
             $(document).on('click change', '#noseritable input[name="check_all_noseri"]', function() {
-                var rows = $('#noseritable').DataTable().rows({
-                    'search': 'applied'
-                }).nodes();
+                var rows = $('#noseritable').DataTable().rows().nodes();
 
                 if ($('input[name="check_all_noseri"]:checked').length > 0) {
                     $('.check_noseri', rows).prop('checked', true);
@@ -988,9 +1039,7 @@
             $('#noseritable').on('change ', '.check_noseri', function() {
 
                 $('input[name="check_all_noseri"]:checked').prop('checked', false);
-                var rows = $('#noseritable').DataTable().rows({
-                    'search': 'applied'
-                }).nodes();
+                var rows = $('#noseritable').DataTable().rows().nodes();
                 var text = $('#belumkirimtable > tbody > tr.bgcolor').find('div[name="array_check[]"]')
                     .text();
                 var array_noseri_produk = [];
@@ -1163,12 +1212,14 @@
                         var part_id_arr = {};
                         part_id_arr.id = $(this).closest('tr').find('.detail_part_id').attr('data-id');
                         part_id_arr.jumlah_kirim = $(this).closest('tr').find('.jumlah_kirim').val();
+                        part_id_arr.array_no_seri = '0';
                         part_id.push(part_id_arr);
                     });
                 } else if ($('.detail_part_id:checked').length <= 0) {
                     var part_id_arr = {};
                     part_id_arr.id = '0';
                     part_id_arr.jumlah_kirim = '0';
+                    part_id_arr.array_no_seri = '0';
                     part_id.push(part_id_arr);
                 }
 
@@ -1184,10 +1235,11 @@
                     var part_id_arr = {}
                     part_id_arr.id = "0";
                     part_id_arr.jumlah_kirim = "0";
+                    part_id_arr.array_no_seri = '0';
                     part_id.push(part_id_arr);
                 }
                 $.ajax({
-                    url: "/logistik/so/create/" + pesanan_id + '/' + jenis_penjualan,
+                    url: "/logistik/so/create/" + jenis_penjualan,
                     data: {'produk_id':produk_id, 'part_id':part_id},
                     beforeSend: function() {
                         $('#loader').show();
