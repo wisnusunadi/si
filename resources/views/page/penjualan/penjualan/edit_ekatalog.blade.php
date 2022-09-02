@@ -965,7 +965,7 @@
                 else if($('input[type="radio"][name="status_akn"]:checked').val() == "batal" || $('input[type="radio"][name="status_akn"]:checked').val() == "draft"){
                     if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
                         if(penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true){
-                            if($('#tgl_buat').val() != "" && $('#tgl_edit').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != ""){
+                            if($('#tgl_buat').val() != ""  && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != ""){
                                 $("#btnsimpan").attr('disabled', false);
                             } else {
                                 $("#btnsimpan").attr('disabled', true);
