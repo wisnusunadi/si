@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-        <div class="card mt-6">
+        <div class="card mt-6" v-show="checkReports">
             <div class="card-header">
                 <div class="card-header-title">Laporan Penjualan</div>
             </div>
@@ -72,7 +72,7 @@
                 <div class="content">
                     <div class="field">
                         <div class="columns is-desktop">
-                            <div class="column"><button class="button is-primary">Export</button></div>
+                            <div class="column"><button class="button is-primary" @click="modalExports = true">Export</button></div>
                         </div>
                         <div class="columns is-desktop">
                             <div class="column">
@@ -102,6 +102,52 @@
                     </div>
                 </div>
             </div>
+
+            <div class="modal" :class="{'is-active': modalExports}">
+                <div class="modal-background"></div>
+                    <div class="modal-card">
+                        <header class="modal-card-head">
+                        <p class="modal-card-title">Export Laporan</p>
+                        <button class="delete" @click="modalExports = false"></button>
+                        </header>
+                        <section class="modal-card-body">
+                        <div class="columns is-desktop">
+                            <div class="column">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-header-title">
+                                            <input type="radio" value="paket_produk" class="mr-5" v-model="jenisExport">Paket Produk
+                                        </div>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="content">Laporan akan ditampilkan berdasarkan Paket Produk dan tidak menampilkan variasi</div>
+                                    </div>
+                                </div>
+                                <label class="checkbox">
+                                <input type="checkbox" v-model="checkExportNoSeri">
+                                Sertakan No Seri
+                            </label>
+                            </div>
+                            <div class="column">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <div class="card-header-title">
+                                            <input type="radio" value="detail_produk" class="mr-5" v-model="jenisExport">Detail Produk
+                                        </div>
+                                    </div>
+                                    <div class="card-content">
+                                        <div class="content">Laporan akan ditampilkan berdasarkan Paket Produk dan menampilkan variasi warna dll</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        </section>
+                        <footer class="modal-card-foot">
+                        <button class="button is-success" @click="exportLaporan" :disabled="checkExports">Export</button>
+                        <button class="button is-danger" @click="modalExports = false">Cancel</button>
+                        </footer>
+                    </div>
+            </div>
         </div>
     </div>
 </template>
@@ -123,6 +169,9 @@
                 tanggalAwalPO: null,
                 tanggalAkhirPO: null,
                 reports: [],
+                modalExports: false,
+                jenisExport: null,
+                checkExportNoSeri: false,
             }
         },
         methods: {
@@ -147,7 +196,7 @@
             },
             async printReport(){
                 let customer = null;
-                let typeSales = this.typeSales;
+                let typeSales = this.typeSales.sort();
                 let tanggalAwalPO = this.tanggalAwalPO;
                 let tanggalAkhirPO =  this.tanggalAkhirPO;
                 if (this.selectCustomer == null) {
@@ -203,12 +252,13 @@
                 serverSide: false,
                 destroy: true,
                 processing: true,
+                autoWidth: false,
                 language: {
                     processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                 },
                 data: this.reports,
                 columns: [
-                    { data: 'no_po'},
+                    { data: 'kosong'},
                     { data: 'no_paket'},
                     { data: 'no_so'},
                     { data: 'nama_customer'},
@@ -244,9 +294,36 @@
                 dataSrc: function(row) {
                     return row.no_po;
                 },
-            }
+            },
             });
-            }
+            },
+            async exportLaporan(){
+                let customer = null;
+                let checkexport = null;
+                let typeSales = this.typeSales.sort();
+                let tanggalAwalPO = this.tanggalAwalPO;
+                let tanggalAkhirPO =  this.tanggalAkhirPO;
+                if (this.selectCustomer == null) {
+                    customer = 'semua';
+                }else{
+                    customer = this.selectCustomer.value;
+                }
+
+                if(this.checkExportNoSeri == false){
+                    checkexport = 'kosong';
+                }else{
+                    checkexport = 'seri';
+                }
+                try {
+                    await axios.get("/penjualan/penjualan/export/"+typeSales+"/"+customer+"/"+tanggalAwalPO+"/"+tanggalAkhirPO+"/"+checkexport+"/"+this.jenisExport).then((response) => {
+                            document.location.href = "/penjualan/penjualan/export/"+typeSales+"/"+customer+"/"+tanggalAwalPO+"/"+tanggalAkhirPO+"/"+checkexport+"/"+this.jenisExport;
+                        }).catch((error) => {
+                            console.log(error);
+                    });
+                } catch (error) {
+                    console.log(error);
+                }
+            },
         },
         mounted() {
             this.loadData();
@@ -279,37 +356,19 @@
                     return true;
                 }
             },
-            reportsgroupPO(){
+            checkReports(){
                 if(this.reports.length > 0){
-                    return this.reports.reduce((r, a) => {
-                    r[a.no_po] = [...r[a.no_po] || [], a];
-                    return r;
-                }, {});
+                    return true;
                 }
-
-                // headerReports: [
-                //     {text: 'No PO', value: 'no_po'},
-                //     {text: 'No AKN', value: 'no_paket'},
-                //     {text: 'No SO', value: 'no_so'},
-                //     {text: 'Customer / Distributor', value: 'nama_customer'},
-                //     {text: 'Tanggal Pesan', value: 'tgl_kirim'},
-                //     {text: 'Batas Kontrak', value: 'tgl_kontrak'},
-                //     {text: 'Tanggal PO', value: 'tgl_po'},
-                //     {text: 'Instansi', value: 'instansi'},
-                //     {text: 'Satuan', value: 'satuan'},
-                //     {text: 'Produk', value: 'nama_produk'},
-                //     {text: 'No Seri', value: 'no_seri'},
-                //     {text: 'Jumlah', value: 'jumlah'},
-                //     {text: 'Keterangan', value: 'ket'}
-                // ],
-            },
-        },
-        updated(){
-            
+                return false;
+            },  
+            checkExports(){
+                if(this.jenisExport == null && this.checkExportNoSeri == false){
+                    return true;
+                }
+                return false;
+            }
         },
     }
 
 </script>
-
-<style scoped>
-</style>
