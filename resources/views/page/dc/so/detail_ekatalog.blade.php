@@ -554,7 +554,7 @@
 
         var checkedAryBelumProses = [];
         $('#noseri_belum_proses_table').on('click', 'input[name="check_all"]', function() {
-            var rows = $('#noseri_belum_proses_table').DataTable().rows({ 'search': 'applied' }).nodes();
+            var rows = $('#noseri_belum_proses_table').DataTable().rows().nodes();
             if ($('#noseri_belum_proses_table').find('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 // $('#cekbrgedit').prop('disabled', false);
@@ -587,7 +587,7 @@
 
         checkedArySelesaiProses = [];
         $('#noseri_selesai_proses_table').on('click', 'input[name="check_all"]', function() {
-            var rows = $('#noseri_selesai_proses_table').DataTable().rows({ 'search': 'applied' }).nodes();
+            var rows = $('#noseri_selesai_proses_table').DataTable().rows().nodes();
             if ($('#noseri_selesai_proses_table').find('input[name="check_all"]:checked').length > 0) {
                 // $('#cekbrg').prop('disabled', false);
                 $('#cekbrgedit').prop('disabled', false);
