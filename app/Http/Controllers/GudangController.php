@@ -50,6 +50,10 @@ use Mockery\Undefined;
 
 class GudangController extends Controller
 {
+    public function dashboard()
+    {
+        return view('page.gbj.dashboard');
+    }
     function updateStokGudang($id)
     {
         $d = NoseriBarangJadi::whereHas('gudang', function($q) use($id) {

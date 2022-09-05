@@ -23,7 +23,7 @@ class RedirectIfAuthenticated
 
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
-               // return redirect(RouteServiceProvider::HOME);
+                // return redirect(RouteServiceProvider::HOME);
                 if ($request->user()->hasRole("24")) {
                     return redirect('/ppic');
                 } else if ($request->user()->hasRole("15")) {
@@ -46,6 +46,8 @@ class RedirectIfAuthenticated
                     return redirect('/direksi/dashboard');
                 } else if ($request->user()->hasRole("8")) {
                     return redirect('/penjualan/dashboard');
+                } else if ($request->user()->hasRole("31")) {
+                    return redirect('/gbj/dashboard');
                 }
             }
         }
