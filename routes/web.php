@@ -80,7 +80,7 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     Route::view('/tso', 'page.gbj.tso');
     Route::get('/dp', [GudangController::class, 'terimaRakit']);
     Route::view('/lp', 'page.gbj.lp');
-    Route::get('/dashboard', [GudangController::class, 'dashboard']);
+    Route::view('/dashboard', 'page.gbj.dashboard');
     Route::group(['prefix' => '/tp'], function () {
         Route::get('/', [GudangController::class, 'allTp']);
         Route::get('/{id}', [GudangController::class, 'getDetailHistory1']);
