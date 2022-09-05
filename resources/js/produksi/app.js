@@ -10,7 +10,7 @@ import 'jquery/dist/jquery'
 window.Vue = require('vue').default;
 Vue.use(VueRouter);
 Vue.use(Vuetify)
-
+ 
 const app = new Vue({
     el: '#app',
     router,
