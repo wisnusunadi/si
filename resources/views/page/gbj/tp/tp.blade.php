@@ -550,7 +550,7 @@
                 if (userid != 2) {
                     // console.log(data)
                     // return
-                    return `<td><a href="export_spb/`+data.pesanan.id+`">
+                    return `<td><a href="export_spb/`+data.id+`">
                         <button class="btn btn-outline-primary"><i class="fas fa-print"></i> Cetak</button>
                         </a></td>`
                 } else {

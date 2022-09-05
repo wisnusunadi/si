@@ -86,19 +86,19 @@
                     <div class="col-lg-12">
                         <table class="table table-bordered table_produk_perakitan ">
                             <thead class="thead-dark">
-                                <tr>
-                                    <th rowspan="2">Periode</th>
-                                    <th colspan="2" class="text-center">Tanggal</th>
-                                    <th rowspan="2">Nomor BPPB</th>
-                                    <th rowspan="2">Produk</th>
-                                    <th rowspan="2">Jumlah</th>
-                                    <th rowspan="2">Status</th>
-                                    <th rowspan="2">Aksi</th>
-                                </tr>
-                                <tr>
-                                    <th class="text-center">Tanggal Masuk</th>
-                                    <th class="text-center">Tanggal Keluar</th>
-                                </tr>
+                              <tr>
+                                  <th rowspan="2">Periode</th>
+                                  <th colspan="2" class="text-center">Tanggal</th>
+                                  <th rowspan="2">Nomor BPPB</th>
+                                  <th rowspan="2">Produk</th>
+                                  <th rowspan="2">Jumlah</th>
+                                  <th rowspan="2">Progress</th>
+                                  <th rowspan="2">Aksi</th>
+                              </tr>
+                              <tr>
+                                  <th class="text-center">Tanggal Masuk</th>
+                                  <th class="text-center">Tanggal Keluar</th>
+                              </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -397,7 +397,9 @@
             }
         });
         var table = $('.table_produk_perakitan').DataTable({
-            processing: true,
+            processing: false,
+            ordering: false,
+            destroy: true,
             ajax: "/api/prd/kirim",
             columns: [
                 { data: 'periode'},
@@ -417,7 +419,7 @@
                     data: "jml"
                 },
                 {
-                    data: "status"
+                    data: "progress"
                 },
                 {
                     data: "action"
@@ -886,3 +888,4 @@
     })
 </script>
 @stop
+

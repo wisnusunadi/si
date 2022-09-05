@@ -125,12 +125,27 @@
 
 @section('adminlte_js')
 <script>
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Tidak Mendapatkan Token',
+        }).then(() => {
+            event.preventDefault();
+            document.getElementById('logout-form').submit();
+        })
+    }
+
     $('.dalam-perakitan').DataTable({
         processing: false,
         serverSide: false,
         destroy: true,
         ajax: {
             url: '/api/tfp/rakit',
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
         },
         columns: [{
                 data: 'DT_RowIndex',

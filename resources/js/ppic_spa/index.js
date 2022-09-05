@@ -17,8 +17,11 @@ import Pusher from "pusher-js"
 import "jquery/dist/jquery"
 import "datatables.net/js/jquery.dataTables.min"
 import "datatables-bulma/js/dataTables.bulma"
+import '@mdi/font/css/materialdesignicons.css'
+
 
 import VueSweetalert2 from "vue-sweetalert2"
+import Vuetify from 'vuetify'
 
  $.fn.DataTable.ext.pager.simple_numbers_no_ellipses = plugins.simple_numbers_no_ellipses
 
@@ -41,10 +44,12 @@ axios.defaults.headers.common = {
 // axios.defaults.baseURL = "http://localhost:8000/"
 
 Vue.use(VueSweetalert2);
+Vue.use(Vuetify);
 
 new Vue({
     router,
     store,
+    vuetify: new Vuetify(),
     render: h => h(App)
 }).$mount("#app")
 

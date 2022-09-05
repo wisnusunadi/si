@@ -18,7 +18,7 @@ use Illuminate\Support\Facades\Route;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
+Route::post('/login', [App\Http\Controllers\ApiController::class, 'authenticate']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
@@ -66,7 +66,7 @@ Route::prefix('/kota_kabupaten')->group(function () {
     Route::get('select', [App\Http\Controllers\ProvincesController::class, 'kota_kabupaten']);
 });
 Route::prefix('/customer')->group(function () {
-    Route::post('data/{divisi_id}/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer']);
+    Route::post('data/{divisi_id}/{filter}', [App\Http\Controllers\MasterController::class, 'get_data_customer'])->middleware('jwt.verify');
     Route::get('nama/{id}/{val}', [App\Http\Controllers\MasterController::class, 'get_nama_customer']);
     Route::post('detail/{id}', [App\Http\Controllers\MasterController::class, 'get_data_pesanan']);
     Route::get('get_instansi/{id}/{year}', [App\Http\Controllers\MasterController::class, 'get_instansi_customer']);
@@ -158,7 +158,7 @@ Route::prefix('/laporan')->group(function () {
 });
 
 Route::prefix('/gbj')->group(function () {
-    Route::post('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi']);
+    Route::post('data', [App\Http\Controllers\GudangController::class, 'get_data_barang_jadi'])->middleware('jwt.verify');
     Route::post('/create', [App\Http\Controllers\GudangController::class, 'StoreBarangJadi']);
     Route::post('/edit/{id}', [App\Http\Controllers\GudangController::class, 'UpdateBarangJadi']);
     Route::delete('/delete/{id}', [App\Http\Controllers\GudangController::class, 'DestroyBarangJadi']);
@@ -260,12 +260,12 @@ Route::prefix('/tfp')->group(function () {
     Route::get('data', [ProduksiController::class, 'getTFnon']);
     Route::post('noseri', [ProduksiController::class, 'getNoseri']);
     Route::get('data-so', [ProduksiController::class, 'getOutSO']);
-    Route::get('sudah-dicek', [ProduksiController::class, 'getSOCek']);
-    Route::get('belum-dicek', [ProduksiController::class, 'getSOCekBelum']);
+    Route::get('sudah-dicek', [ProduksiController::class, 'getSOCek'])->middleware('jwt.verify');
+    Route::get('belum-dicek', [ProduksiController::class, 'getSOCekBelum'])->middleware('jwt.verify');
     Route::get('detail-so/{id}/{value}', [ProduksiController::class, 'getDetailSO']);
     Route::get('edit-so/{id}/{value}', [ProduksiController::class, 'getEditSO']);
     Route::get('header-so/{id}/{value}', [ProduksiController::class, 'headerSo']);
-    Route::get('rakit', [GudangController::class, 'getRakit']);
+    Route::get('rakit', [GudangController::class, 'getRakit'])->middleware('jwt.verify');
     Route::get('rakit-noseri/{id}/{value}', [GudangController::class, 'getRakitNoseri']);
     Route::get('rakit-terima/{id}/{value}', [GudangController::class, 'getTerimaRakit']);
     Route::post('/seri-so', [ProduksiController::class, 'getNoseriSO']);
@@ -517,7 +517,7 @@ Route::prefix('/logistik')->group(function () {
     Route::post('dashboard/data/{value}', [App\Http\Controllers\LogistikController::class, 'dashboard_data']);
     Route::post('dashboard/so', [App\Http\Controllers\LogistikController::class, 'dashboard_so']);
     Route::group(['prefix' => '/so'], function () {
-        Route::put('create/{detail_pesanan_id}/{part_array}/{jenis}', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
+        Route::put('create/{jenis}', [App\Http\Controllers\LogistikController::class, 'create_logistik']);
         // Route::get('data', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::post('noseri/detail/{id}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so']);
         Route::post('noseri/detail/belum_kirim/{id}/{array}', [App\Http\Controllers\LogistikController::class, 'get_noseri_so_belum_kirim']);

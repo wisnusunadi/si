@@ -402,6 +402,7 @@
     var mytable = '';
     let prd1 = {};
     let tmp = []
+    var access_token = localStorage.getItem('lokal_token');
     $(document).ready(function () {
         $('#head-cb').prop('checked', false);
         $('#head-cb-produk').prop('checked', false);
@@ -439,6 +440,18 @@
                     .removeClass('disabled').attr('disabled', true);
             }
         });
+
+        if (access_token == null) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Tidak Mendapatkan Token',
+            }).then(() => {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            })
+        }
+
         let a = $('#gudang-barang').DataTable({
             processing: true,
             destroy: true,
@@ -446,6 +459,9 @@
             autoWidth: false,
             ajax: {
                 url: '/api/tfp/data-so',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [{
                     data: 'DT_RowIndex',

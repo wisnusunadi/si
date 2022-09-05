@@ -453,6 +453,7 @@
 
 @section('adminlte_js')
 <script>
+    var access_token = localStorage.getItem('lokal_token');
     $(document).ready(function () {
         let auth = $('#auth').val();
         $('#head-cb-so').prop('checked', false);
@@ -468,6 +469,17 @@
             $('.cb-child-so').prop('checked', isChecked)
         });
 
+        if (access_token == null) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Tidak Mendapatkan Token',
+            }).then(() => {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            })
+        }
+
         if (auth !== 31) {
             $('#belum-dicek').DataTable({
             destroy: true,
@@ -475,6 +487,9 @@
             serverSide: false,
             ajax: {
                 url: '/api/tfp/belum-dicek',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},
@@ -507,6 +522,9 @@
             serverSide: false,
             ajax: {
                 url: '/api/tfp/sudah-dicek',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},
