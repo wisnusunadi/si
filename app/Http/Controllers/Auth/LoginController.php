@@ -75,7 +75,7 @@ class LoginController extends Controller
             return redirect('/manager-teknik');
         } else if (auth()->user()->divisi->id == 23) {
             return redirect('/qc/dashboard');
-        } else if (auth()->user()->divisi->id == 26) {
+        } else if (auth()->user()->divisi->id == 26 || auth()->user()->divisi->id == 32 || auth()->user()->divisi->id == 8) {
             return redirect('/penjualan/dashboard');
         } else if (auth()->user()->divisi->id == 13) {
             return redirect('/gbj/dashboard');
@@ -87,8 +87,6 @@ class LoginController extends Controller
             return redirect('/dc/dashboard');
         } else if (auth()->user()->divisi->id == 2) {
             return redirect('/direksi/dashboard');
-        } else if (auth()->user()->divisi->id == 8) {
-            return redirect('/penjualan/dashboard');
         }
         return redirect('/home');
     }

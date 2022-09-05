@@ -226,12 +226,12 @@
                                                 <i class="fas fa-eye"></i>
                                                 Detail
                                             </a>
-                                            <a href="{{route('dc.coo.pdf')}}">
+
                                                 <button class="dropdown-item" type="button">
                                                     <i class="fas fa-file"></i>
                                                     Laporan PDF
                                                 </button>
-                                            </a>
+
                                         </div>
                                     </td>
                                 </tr>
