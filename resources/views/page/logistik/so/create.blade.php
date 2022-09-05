@@ -1,4 +1,4 @@
-<form action="/api/logistik/so/create/{{ $prd_array }}/{{ $part_array }}/{{ $jenis }}" method="POST"
+<form action="/api/logistik/so/create/{{ $jenis }}" method="POST"
     id="form-logistik-create">
     @method('PUT')
     @csrf
@@ -147,6 +147,7 @@
                                                         <th>No</th>
                                                         <th>Nama Barang</th>
                                                         <th>Jumlah</th>
+                                                        <th>Array</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>

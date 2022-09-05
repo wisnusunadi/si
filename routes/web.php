@@ -18,12 +18,17 @@ use Illuminate\Support\Facades\Auth;
 */
 
 Auth::routes();
+Route::group(['middleware' => 'guest'], function () {
+    Route::get('/', function () {
+        return view('auth.login');
+    });
+    });
 
-Route::get('/', function () {
-    if (auth()->user()->divisi->id == 24) return redirect('/ppic');
-    else if (auth()->user()->divisi->id == 3) return redirect('/manager-teknik');
-    else return view('home');
-})->middleware('auth');
+// Route::get('/', function () {
+//     if (auth()->user()->divisi->id == 24) return redirect('/ppic');
+//     else if (auth()->user()->divisi->id == 3) return redirect('/manager-teknik');
+//     else return view('home');
+// })->middleware('auth');
 
 Route::get('/home', function () {
     return redirect('/');
@@ -191,7 +196,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     // Route::get('/dep_doc/{id?}', 'digidocu\DocumentsController@dep_doc')->name('dc.dep_doc');
 });
 
-Route::group(['prefix' => 'qc', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'qc', 'middleware' => ['auth','divisi:qc,jual']], function () {
     Route::get('/dashboard', [App\Http\Controllers\QcController::class, 'dashboard'])->name('qc.dashboard');
     Route::group(['prefix' => '/so'], function () {
         Route::view('/show', 'page.qc.so.show')->name('qc.so.show');
@@ -219,7 +224,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
         Route::view('/show', 'page.logistik.so.show')->name('logistik.so.show');
         Route::post('/data/{value}', [App\Http\Controllers\LogistikController::class, 'get_data_so']);
         Route::get('/detail/{status}/{id}/{value}', [App\Http\Controllers\logistikController::class, 'update_so'])->name('logistik.so.detail');
-        Route::get('/create/{pesanan_id}/{jenis}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
+        Route::get('/create/{jenis}', [App\Http\Controllers\logistikController::class, 'create_logistik_view'])->name('logistik.so.create');
 
         Route::view('/edit', 'page.logistik.so.edit')->name('logistik.so.edit');
         Route::group(['prefix' => '/riwayat'], function () {
