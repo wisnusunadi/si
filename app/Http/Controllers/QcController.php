@@ -463,7 +463,7 @@ class QcController extends Controller
                         ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
                         ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
                         ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-                        ->where('detail_pesanan_part.pesanan_id', 'pesanan.id');
+                        ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
                     },'clogprd' => function($q){
                         $q->selectRaw('coalesce(count(noseri_logistik.id), 0)')
                            ->from('noseri_logistik')
