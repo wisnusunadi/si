@@ -341,6 +341,17 @@
 @section('adminlte_js')
 <script>
     // Tanggal Masuk
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Tidak Mendapatkan Token',
+        }).then(() => {
+            event.preventDefault();
+            document.getElementById('logout-form').submit();
+        })
+    }
     var start_date;
     var end_date;
     var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
@@ -400,7 +411,12 @@
             processing: false,
             ordering: false,
             destroy: true,
-            ajax: "/api/prd/kirim",
+            ajax: {
+                url: "/api/prd/kirim",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
+            },
             columns: [
                 { data: 'periode'},
                 {

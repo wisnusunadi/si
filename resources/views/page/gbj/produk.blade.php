@@ -730,21 +730,21 @@
         allowClear: true
     });
 
+    if (access_token == null) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Tidak Mendapatkan Token',
+        }).then(() => {
+            event.preventDefault();
+            document.getElementById('logout-form').submit();
+        })
+    }
+
     $(document).ready(function () {
         // load data
         $('.alasan').val('');
         // console.log(access_token);
-        if (access_token == null) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Tidak Mendapatkan Token',
-            }).then(() => {
-                event.preventDefault();
-                document.getElementById('logout-form').submit();
-            })
-        }
-
         var datatable = $('#gudang-barang').DataTable({
             processing: true,
             deferRender: true,
@@ -885,6 +885,9 @@
         url: '/api/gbj/sel-layout',
         type: 'GET',
         dataType: 'json',
+        beforeSend : function(xhr){
+            xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+        },
         success: function (res) {
             console.log(res);
             $("#change_layout").empty();
@@ -1236,6 +1239,9 @@
             serverSide: false,
             ajax: {
                 url: '/api/gbj/noseri/' + id,
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [{
                     data: 'ids'
@@ -1266,6 +1272,9 @@
             serverSide: false,
             ajax: {
                 url: '/api/gbj/noseri-done/' + id,
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [{
                     data: 'ids'
@@ -1298,6 +1307,9 @@
                 data: {
                     gbjid: id
                 },
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [{
                     data: 'DT_RowIndex'
@@ -1325,6 +1337,9 @@
                 data: {
                     gbj: id
                 },
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [{
                     data: 'DT_RowIndex'

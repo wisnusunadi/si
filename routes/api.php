@@ -299,7 +299,7 @@ Route::prefix('/prd')->group(function () {
     Route::post('/exp_jadwal', [ProduksiController::class, 'exp_jadwal']);
 
     // so
-    Route::post('/so', [ProduksiController::class, 'getSOProduksi']);
+    Route::post('/so', [ProduksiController::class, 'getSOProduksi'])->middleware('jwt.verify');
 
     // jadwal
     // plan
@@ -307,11 +307,11 @@ Route::prefix('/prd')->group(function () {
     Route::post('/plan-cal', [ProduksiController::class, 'calender_plan']);
 
     // on
-    Route::post('/ongoing', [ProduksiController::class, 'on_rakit']);
-    Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current']);
+    Route::post('/ongoing', [ProduksiController::class, 'on_rakit'])->middleware('jwt.verify');
+    Route::post('/ongoing-cal', [ProduksiController::class, 'calender_current'])->middleware('jwt.verify');
     Route::get('/ongoing/h/{id}', [ProduksiController::class, 'detailRakitHeader']);
     Route::get('/ajax_his_rakit', [ProduksiController::class, 'ajax_history_rakit']);
-    Route::post('/riwayat_rakit', [ProduksiController::class, 'get_his_rakit']);
+    Route::post('/riwayat_rakit', [ProduksiController::class, 'get_his_rakit'])->middleware('jwt.verify');
     Route::get('/ajax_perproduk', [ProduksiController::class, 'ajax_perproduk']);
     Route::get('/detail_perproduk/{id}', [ProduksiController::class, 'detail_perproduk']);
     Route::get('/product_his_rakit', [ProduksiController::class, 'product_his_rakit']);
@@ -323,7 +323,7 @@ Route::prefix('/prd')->group(function () {
     Route::get('/testing', [ProduksiController::class, 'change_jadwal']);
 
     // kirim
-    Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit']);
+    Route::get('/kirim', [ProduksiController::class, 'getSelesaiRakit'])->middleware('jwt.verify');
     Route::get('/headerSeri/{id}', [ProduksiController::class, 'getHeaderSeri']);
     Route::get('/historySeri/{id}/{value}', [ProduksiController::class, 'historySeri']);
     Route::get('/riwayat_seri_rakit/{id}/{value}', [ProduksiController::class, 'get_detail_noseri_rakit']);
@@ -340,7 +340,7 @@ Route::prefix('/prd')->group(function () {
         Route::post('/rakit/h', [ProduksiController::class, 'h_rakit']);
         Route::post('/unit/h', [ProduksiController::class, 'h_unit']);
         Route::get('/header/{id}', [ProduksiController::class, 'header_his_rakit']);
-        Route::post('/pengiriman', [ProduksiController::class, 'h_pengiriman']);
+        Route::post('/pengiriman', [ProduksiController::class, 'h_pengiriman'])->middleware('jwt.verify');
     });
 });
 

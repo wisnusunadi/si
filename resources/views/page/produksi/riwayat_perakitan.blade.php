@@ -433,6 +433,17 @@
 @section('adminlte_js')
 <script>
         // Tanggal Perakitan
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Tidak Mendapatkan Token',
+        }).then(() => {
+            event.preventDefault();
+            document.getElementById('logout-form').submit();
+        })
+    }
     var start_date;
     var end_date;
     var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
@@ -514,7 +525,10 @@
             type: "post",
             headers: {
                 'X-CSRF-TOKEN': '{{csrf_token()}}'
-            }
+            },
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
         },
         columns: [
             {data: 'day_rakit'},
@@ -647,7 +661,10 @@
             lengthChange: false,
             ajax: {
                 url: "/api/prd/ajax_sisa",
-                type: "post"
+                type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
             },
             columns: [
                 {data: 'start'},

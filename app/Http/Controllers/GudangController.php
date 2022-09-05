@@ -736,11 +736,13 @@ class GudangController extends Controller
                     $nbjj = NoseriBarangJadi::find($cc->id);
                     // return $nbjj;
                     NoseriBrgJadiLog::create([
+                            'gbj_id' => $request->gbjid,
                             'noseri_id' => $cc->id,
                             'data_lama' => $nbjj->noseri,
                             'action' => 'delete',
                             'action_by' => $request->actionby,
-                            'status' => 'waiting'
+                            'status' => 'waiting',
+                            'remark' => $request->alasan
                         ]);
                     NoseriBarangJadi::find($cc->id)->update(['is_change' => 0, 'is_delete' => 1]);
                 }
@@ -752,11 +754,13 @@ class GudangController extends Controller
                             $nbjj = NoseriBarangJadi::find($d->noseri_id);
 
                             NoseriBrgJadiLog::create([
+                                    'gbj_id' => $request->gbjid,
                                     'noseri_id' => $d->noseri_id,
                                     'data_lama' => $nbjj->noseri,
                                     'action' => 'delete',
                                     'action_by' => $request->actionby,
-                                    'status' => 'waiting'
+                                    'status' => 'waiting',
+                                    'remark' => $request->alasan
                                 ]);
                             NoseriBarangJadi::find($d->noseri_id)->update(['is_change' => 0, 'is_delete' => 1]);
                         }
@@ -877,7 +881,12 @@ class GudangController extends Controller
                 ->addColumn('tgl_aju', function($d){
                     return Carbon::createFromFormat('Y-m-d H:i:s', $d->created_at)->isoFormat('D MMMM YYYY');
                 })
-                ->rawColumns(['checkbox', 'produk'])
+                ->addColumn('action', function($d) {
+                    return '<button class="btn btn-outline-success btn-sm btnAlasan" type="button" data-id="'.$d->id.'">
+                            <i class="far fa-eye"></i> Detail
+                            </button>';
+                })
+                ->rawColumns(['checkbox', 'produk', 'action'])
                 ->make(true);
         } catch (\Exception $e) {
             return response()->json([
@@ -923,7 +932,12 @@ class GudangController extends Controller
                 ->addColumn('requested', function($d) {
                     return $d->actionn->nama;
                 })
-                ->rawColumns(['checkbox', 'produk'])
+                ->addColumn('action', function($d) {
+                    return '<button class="btn btn-outline-success btn-sm btnAlasan" type="button" data-id="'.$d->id.'">
+                            <i class="far fa-eye"></i> Detail
+                            </button>';
+                })
+                ->rawColumns(['checkbox', 'produk', 'action'])
                 ->make(true);
         } catch (\Exception $e) {
             return response()->json([
@@ -949,12 +963,14 @@ class GudangController extends Controller
             } else {
                 foreach($data->get() as $k => $c) {
                     NoseriBrgJadiLog::create([
+                        'gbj_id' => $request->gbjid,
                         'noseri_id' => $c->id,
                         'data_lama' => $c->noseri,
                         'data_baru' => $request->new[$k],
                         'action' => 'update',
                         'action_by' => $request->actionby,
-                        'status' => 'waiting'
+                        'status' => 'waiting',
+                        'remark' => $request->alasan
                     ]);
                     NoseriBarangJadi::find($c->id)->update(['noseri' => $request->new[$k], 'is_change' => 0]);
                 }
@@ -988,7 +1004,7 @@ class GudangController extends Controller
                         NoseriBrgJadiLog::where('noseri_id', $cc->id)->where([
                             'action' => 'delete',
                             'status' => 'waiting'
-                        ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                        ])->update(['status' => 'rejected', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                         NoseriBarangJadi::find($cc->id)->update(['is_change' => 1, 'is_delete' => 0]);
                     }
                 } else {
@@ -996,7 +1012,7 @@ class GudangController extends Controller
                         NoseriBrgJadiLog::where('noseri_id', $ddd->noseri_id)->where([
                             'action' => 'delete',
                             'status' => 'waiting'
-                        ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                        ])->update(['status' => 'rejected', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                         NoseriBarangJadi::find($ddd->noseri_id)->update(['is_change' => 1, 'is_delete' => 0]);
                     }
                 }
@@ -1009,7 +1025,7 @@ class GudangController extends Controller
                         NoseriBrgJadiLog::where('noseri_id', $ckc->id)->where([
                             'action' => 'delete',
                             'status' => 'waiting'
-                        ])->update(['status' => 'approve', 'acc_by' => $request->accby]);
+                        ])->update(['status' => 'approve', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                         NoseriBarangJadi::find($ckc->id)->delete();
                     }
                     return response()->json(['error'=>false, 'msg'=> 'Noseri Berhasil Dihapus']);
@@ -1019,18 +1035,17 @@ class GudangController extends Controller
                             NoseriBrgJadiLog::where('noseri_id', $d->noseri_id)->where([
                                 'action' => 'delete',
                                 'status' => 'waiting'
-                            ])->update(['status' => 'approve', 'acc_by' => $request->accby]);
+                            ])->update(['status' => 'approve', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                             NoseriTGbj::where('noseri_id',$d->noseri_id)->delete();
                             NoseriBarangJadi::find($d->noseri_id)->delete();
                         }
                         return response()->json(['error'=>false, 'msg'=> 'Noseri Berhasil Dihapus']);
                     } else {
-                        return 'ok';
                         foreach($check->get() as $dd) {
                             NoseriBrgJadiLog::where('noseri_id', $dd->noseri_id)->where([
                                 'action' => 'delete',
                                 'status' => 'waiting'
-                            ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                            ])->update(['status' => 'rejected', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                             NoseriBarangJadi::find($dd->noseri_id)->update(['is_change' => 1]);
                         }
                         return response()->json(['error' => true, 'msg' => 'Noseri Ada yang Sedang Digunakan']);
@@ -1060,7 +1075,7 @@ class GudangController extends Controller
                     NoseriBrgJadiLog::where('noseri_id', $request->noseriid[$i])->where([
                         'action' => 'update',
                         'status' => 'waiting'
-                    ])->update(['status' => 'rejected', 'acc_by' => $request->accby]);
+                    ])->update(['status' => 'rejected', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                     NoseriBarangJadi::where('id', $request->noseriid[$i])->update(['is_change' => 1, 'noseri'=> $a[$i]]);
                 }
                 return response()->json(['error' => false, 'msg' => 'Noseri Batal Diubah']);
@@ -1071,7 +1086,7 @@ class GudangController extends Controller
                     NoseriBrgJadiLog::where('noseri_id', $c->id)->where([
                         'action' => 'update',
                         'status' => 'waiting'
-                    ])->update(['status' => 'approved', 'acc_by' => $request->accby]);
+                    ])->update(['status' => 'approved', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                     NoseriBarangJadi::find($c->id)->update(['is_change' => 1]);
                 }
                 return response()->json(['error' => false, 'msg' => 'Noseri Berhasil Diubah']);
@@ -2610,21 +2625,150 @@ class GudangController extends Controller
         }
     }
 
+    function get_alasan_from_staff(Request $request)
+    {
+        try {
+            $data = NoseriBrgJadiLog::find($request->id);
+
+            return response()->json([
+                'error' => false,
+                'msg' => 'Data Berhasil Ditemukan',
+                'data'=> $data->remark
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function getNoseriHistoryPerubahan(Request $request)
+    {
+        try {
+            $data = NoseriBrgJadiLog::where('gbj_id', $request->gbj)->orderByDesc('id')->get();
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('status', function($q) {
+                    if ($q->action == 'update') {
+                        switch ($q->status) {
+                            case 'rejected':
+                                return '<span class="badge badge-danger">Perubahan Ditolak</span>';
+                                break;
+
+                            case 'approved':
+                                return '<span class="badge badge-success">Perubahan Diterima</span>';
+                                break;
+
+                            default:
+                                return '<span class="badge badge-dark">Menunggu Persetujuan</span>';
+                                break;
+                        }
+                    } else {
+                        switch ($q->status) {
+                            case 'rejected':
+                                return '<span class="badge badge-danger">Hapus Ditolak</span>';
+                                break;
+
+                            case 'approved':
+                                return '<span class="badge badge-success">Hapus Diterima</span>';
+                                break;
+
+                            default:
+                                return '<span class="badge badge-dark">Menunggu Persetujuan</span>';
+                                break;
+                        }
+                    }
+
+                })
+                ->addColumn('aksi', function($d) {
+                    return '<a data-toggle="modal" data-target="#openModalHistory" class="openModalHistory" data-attr="" data-id="' . $d->id . '">
+                                <button class="btn btn-outline-info btn-sm"><i class="fas fa-eye"></i>Detail</button>
+                            </a>';
+                })
+                ->rawColumns(['status', 'aksi'])
+                ->make(true);
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    function headerCountNoseri($id)
+    {
+        $data = NoseriBarangJadi::whereHas('gudang', function ($d) use ($id) {
+            $d->where('id', $id);
+        })
+        ->where([
+            'is_aktif' => 1,
+            'is_ready' => 0,
+            'is_change' => 1,
+            'is_delete' => 0
+        ])->get()->count();
+
+        $data_done = NoseriBarangJadi::whereHas('gudang', function ($d) use ($id) {
+            $d->where('id', $id);
+        })->where([
+            'is_aktif' => 1,
+            'is_ready' => 1,
+            'is_change' => 1,
+            'is_delete' => 0
+        ])->get()->count();
+
+        $data_wait = NoseriBrgJadiLog::where([
+            'status' => 'waiting'
+        ])->whereHas('noseri', function($d) use($id){
+            $d->where('gdg_barang_jadi_id', $id);
+        })->get()->count();
+
+        return response()->json([
+            'belum' => $data,
+            'sudah' => $data_done,
+            'wait' => $data_wait
+        ]);
+    }
+
+    function detailNoseriHistoryPerubahan(Request $request)
+    {
+        try {
+            $data = NoseriBrgJadiLog::find($request->id);
+            if (!$data->komentar) {
+                return response()->json([
+                    'error' => false,
+                    'msg' => 'Komentar Kosong Belum Di ACC',
+                    'data_mgr' => '-',
+                    'data_stf' => $data->remark
+                ]);
+            } else {
+                return response()->json([
+                    'error' => false,
+                    'msg' => 'Komentar ada sudah Di ACC',
+                    'data_mgr' => $data->komentar,
+                    'data_stf' => $data->remark
+                ]);
+            }
+
+
+        } catch (\Exception $e) {
+            return response()->json(['error' => true, 'msg' => $e->getMessage()]);
+        }
+    }
+
     function storeCekSO(Request $request)
     {
         try {
-            // dd($request->data);
-            $h = Pesanan::find($request->pesanan_id);
-            $dt = DetailPesanan::where('pesanan_id', $h->id)->get()->pluck('id')->toArray();
-            foreach ($request->data as $key => $value) {
-                DetailPesananProduk::whereIn('id', [$key])
-                    ->update(['status_cek' => 4, 'checked_by' => $request->userid, 'gudang_barang_jadi_id' => $value]);
-            }
+        //    dd($request->data);
+        $h = Pesanan::find($request->pesanan_id);
+        $dt = DetailPesanan::where('pesanan_id', $h->id)->get()->pluck('id')->toArray();
+        foreach ($request->data as $key => $value) {
+            DetailPesananProduk::whereIn('id', [$key])
+                ->update(['status_cek' => 4, 'checked_by' => $request->userid, 'gudang_barang_jadi_id' => $value[0]]);
+        }
 
-            $h->status_cek = 4;
-            $h->checked_by = $request->userid;
-            $h->log_id = 6;
-            $h->save();
+        $h->status_cek = 4;
+        $h->checked_by = $request->userid;
+        $h->log_id = 6;
+        $h->save();
 
             return response()->json(['msg' => 'Successfully']);
         } catch (\Exception $e) {
