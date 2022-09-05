@@ -1,7 +1,7 @@
-
 <html>
-
     <head>
+        <title>ERP</title>
+        <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/image/logo/logo_title.ico') }}" />
         <style>
             .login-page {
                 height: 100vh;
@@ -11,17 +11,11 @@
                 align-items: center;
             }
         </style>
-
-
        <link rel="stylesheet" href="{{ asset('assets/adminlte/dist/css/adminlte.min.css') }}" />
        <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/all.min.css') }}" />
        <link rel="stylesheet" href="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.css') }}">
-
-
     </head>
-
     <body>
-
         <div class="login-page">
             <div class="container">
                 <div class="card flex-row p-5">
