@@ -452,59 +452,65 @@
     $(document).on('click', '#btnSave', function(e) {
             e.preventDefault();
             let ids = {};
-            let dpp_id = [];
+            let allVals = [];
 
-            $('.cb-child-so').each(function() {
-                if ($(this).is(":checked")) {
-                    // so_dpp.gbj = ids;
-                    if (ids[$(this).val()] === undefined){
-                        ids[$(this).val()] = [];
-                        ids[$(this).val()].push($(this).next().val())
-                    }
-                    else {
-                        ids[$(this).val()].push($(this).next().val())
-                    }
+            $(".cb-child-so:checked").each(function() {
+                allVals.push($(this).val())
+                if (ids[$(this).val()] === undefined){
+                    ids[$(this).val()] = []
+                    ids[$(this).val()].push($(this).parent().next().children()[0].value)
                 }
-            })
-
-            Swal.fire({
-            title: 'Are you sure?',
-            text: "You won't be able to revert this!",
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: 'Yes, save it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $(this).prop('disabled', true);
-                    Swal.fire({
-                        title: 'Please wait',
-                        text: 'Data is transferring...',
-                        allowOutsideClick: false,
-                        showConfirmButton: false
-                    });
-                    Swal.fire(
-                    'Sukses!',
-                    'Data Berhasil Disimpan',
-                    'success'
-                    )
-                    $.ajax({
-                        url: "/api/so/cek",
-                        type: "post",
-                        data: {
-                            pesanan_id : id,
-                            userid: $('#userid').val(),
-                            data: ids,
-                        },
-                        success: function(res) {
-                            location.reload();
-                            console.log(res);
-                        }
-                    })
+                else {
+                    ids[$(this).val()].push($(this).parent().next().children()[0].value)
                 }
-            })
 
+            });
+
+            if (allVals.length == 0) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Tidak Ada yang Dipilih',
+                })
+            } else {
+                Swal.fire({
+                title: 'Are you sure?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, save it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        $(this).prop('disabled', true);
+                        Swal.fire({
+                            title: 'Please wait',
+                            text: 'Data is transferring...',
+                            allowOutsideClick: false,
+                            showConfirmButton: false
+                        });
+                        Swal.fire(
+                            'Sukses!',
+                            'Data Berhasil Disimpan',
+                            'success'
+                        )
+                        $.ajax({
+                            url: "/api/so/cek",
+                            type: "post",
+                            data: {
+                                pesanan_id : id,
+                                userid: $('#userid').val(),
+                                data: ids,
+                            },
+                            success: function(res) {
+                                location.reload();
+                                // console.log(res);
+                            }
+                        })
+                    }
+                })
+            }
         })
 
     $(document).on('click', '.detailmodal', function(e) {
