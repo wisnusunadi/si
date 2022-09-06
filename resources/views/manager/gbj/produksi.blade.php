@@ -170,6 +170,23 @@
     $('.buttonSubmit').attr('id', 'btnApproveEdit');
     $('.buttonReject').attr('id', 'btnRejectEdit');
     var authid = $('#authid').val();
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
     // Datatable
     $('#tableUbah').DataTable({
         processing: true,
@@ -180,7 +197,10 @@
             'url': '/api/v2/gbj/list-update-noseri',
             'headers': {
                 'X-CSRF-TOKEN': '{{csrf_token()}}'
-            }
+            },
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
         },
         columns: [
             {data: 'DT_RowIndex'},
@@ -202,7 +222,10 @@
             'url': '/api/v2/gbj/list-approve-noseri',
             'headers': {
                 'X-CSRF-TOKEN': '{{csrf_token()}}'
-            }
+            },
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
         },
         columns: [
             {data: 'DT_RowIndex'},
@@ -234,7 +257,10 @@
                 },
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
+                },
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
             },
             columns: [
                 {data: 'checkbox'},
@@ -269,7 +295,10 @@
                 },
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
+                },
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
             },
             columns: [
                 {data: 'checkbox'},
