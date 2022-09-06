@@ -33,13 +33,6 @@
             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
                 <div class="col-md-12">
                     <div class="card">
-                        <div class="card-header">
-                            <div class="card-tools">
-                                <select name="" id="" class="form-control" v-model="month">
-                                    <option v-for="(month, index) in monthNames" :key="index" :value="index">{{month}}</option>
-                                </select>
-                            </div>
-                        </div>
                         <div class="card-body">
                             <Table :months="month"/>
                         </div>
