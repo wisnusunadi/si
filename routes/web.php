@@ -62,7 +62,7 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
     Route::view('/{any?}', 'spa.manager_teknik.spa');
 });
 
-Route::middleware('auth')->prefix('/gbj')->group(function () {
+Route::group(['prefix' => 'produksi', 'middleware' => ['auth','divisi:gbj,mgrgdg']], function () {
     Route::view('/stok/{any?}', 'page.gbj.stok');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
     Route::view('/produk/{any?}', 'page.gbj.produk');
@@ -85,7 +85,7 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
-Route::middleware('auth')->prefix('/produksi')->group(function () {
+Route::group(['prefix' => 'produksi', 'middleware' => ['auth','divisi:prd']], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
     Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');

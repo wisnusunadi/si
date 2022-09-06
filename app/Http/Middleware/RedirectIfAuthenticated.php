@@ -46,6 +46,8 @@ class RedirectIfAuthenticated
                     return redirect('/direksi/dashboard');
                 } else if ($request->user()->hasRole("8")) {
                     return redirect('/penjualan/dashboard');
+                } else if ($request->user()->hasRole("31")) {
+                    return redirect('/gbj/dashboard');
                 }
             }
         }

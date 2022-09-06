@@ -7,7 +7,7 @@ Auth::routes();
 
 // Manager Gudang Barang Jadi
 
-Route::group(['prefix' => '/gbjmanager', 'middleware' => 'auth'], function (){
+Route::group(['prefix' => '/gbjmanager', 'middleware' => ['auth','divisi:mgrgdg']], function (){
     Route::view('/produksi', 'manager.gbj.produksi');
 });
 
