@@ -410,6 +410,17 @@
 @stop
 @section('adminlte_js')
 <script>
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Tidak Mendapatkan Token',
+        }).then(() => {
+            event.preventDefault();
+            document.getElementById('logout-form').submit();
+        })
+    }
     // Date
     var today = new Date();
     var dd = today.getDate();
@@ -676,6 +687,9 @@
         url: '/api/gbj/sel-divisi',
         type: 'GET',
         dataType: 'json',
+        beforeSend : function(xhr){
+            xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+        },
         success: function (res) {
             // ii++;
             console.log(res);
@@ -720,6 +734,9 @@
             url: '/api/gk/gkspr',
             type: 'POST',
             dataType: 'json',
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
             success: function (res) {
                 console.log(res);
                 $.each(res, function (key, value) {
@@ -750,6 +767,9 @@
             url: '/api/gk/gkunit',
             type: 'post',
             dataType: 'json',
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
             success: function (res) {
                 console.log(res);
                 $.each(res, function (key, value) {

@@ -196,7 +196,7 @@
                             <table class="table table-bordered" id="gudang_barang">
                                 <thead>
                                     <tr>
-                                        <th>No</th> 
+                                        <th>No</th>
                                         <th>Kode Produk</th>
                                         <th>Produk</th>
                                         <th>Jenis Produk</th>
@@ -237,7 +237,7 @@
                         </tr>
                     </thead>
                     <tbody></tbody>
-                </table> 
+                </table>
             </div>
         </div>
     </div>
@@ -248,6 +248,18 @@
 
 @section('adminlte_js')
 <script>
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Tidak Mendapatkan Token',
+        }).then(() => {
+            event.preventDefault();
+            document.getElementById('logout-form').submit();
+        })
+    }
+
      function detailtanggal() {
         $('#modal-per-tanggal').modal('show');
     }
@@ -278,8 +290,11 @@
         var $dTable = $('.pertanggal').DataTable({
             "lengthChange": false,
             ajax: {
-            url: "/api/gk/transaksi/all",
-            type: "post",
+                url: "/api/gk/transaksi/all",
+                type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'tanggal'},
@@ -346,7 +361,9 @@
             ajax: {
                 url: "/api/gk/transaksi/by-product",
                 type: "post",
-
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex'},
@@ -393,6 +410,9 @@
                 serverSide: true,
                 ajax: {
                     url: "/api/gk/transaksi/noseri/" + id,
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'noser'},
@@ -400,7 +420,7 @@
                     {data: 'repair'},
                     {data: 'tingkat'},
                     {data: 'layout'},
-                    
+
                 ],
                 "language": {
                     "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"

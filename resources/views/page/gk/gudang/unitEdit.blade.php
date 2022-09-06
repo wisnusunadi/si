@@ -286,6 +286,17 @@
 @section('adminlte_js')
 <script>
     let varian = []
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Tidak Mendapatkan Token',
+        }).then(() => {
+            event.preventDefault();
+            document.getElementById('logout-form').submit();
+        })
+    }
     $(document).ready(function () {
         $.ajax({
         type: 'get',
@@ -340,6 +351,9 @@
         serverSide: true,
         ajax: {
             url: "/api/gk/his-unit/" +id,
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
         },
         columns: [
             {data: 'inn'},

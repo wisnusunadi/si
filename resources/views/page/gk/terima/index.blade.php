@@ -169,7 +169,7 @@
             <div class="col-xl-12 d-flex justify-content-end">
                 <div class="btn-simpan mb-3">
                     <button class="btn btn-success" onclick="terima()" id="buttonSubmit" type="button">Terima</button>&nbsp;
-                    <button class="btn btn-info" onclick="rancang()" type="button">Rancang</button>&nbsp;
+                    {{-- <button class="btn btn-info" onclick="rancang()" type="button">Rancang</button>&nbsp; --}}
                     <button class="btn btn-secondary" onclick="batal()" type="button">Batal</button>
                 </div>
             </div>
@@ -331,6 +331,17 @@
 @stop
 @section('adminlte_js')
 <script>
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Oops...',
+            text: 'Tidak Mendapatkan Token',
+        }).then(() => {
+            event.preventDefault();
+            document.getElementById('logout-form').submit();
+        })
+    }
     // Sparepart
     var sparepart = [];
     var unit = [];
@@ -512,26 +523,8 @@
                             spr_arr = [];
                             console.log(seri);
                             $('.modalAddSparepart').modal('hide');
-                            // let obj = {
-                            //     noseri: $('.scan-produk1').DataTable().column(0).nodes().to$().find('input.seri').map(function () {
-                            //                 return $(this).val();
-                            //             }),
-                            //     kerusakan: $('.scan-produk1').DataTable().column(1).nodes().to$().find('input.remark').map(function () {
-                            //                 return $(this).val();
-                            //             }),
-                            //     tingkat: $('.scan-produk1').DataTable().column(2).nodes().to$().find('select.layout_id').map(function () {
-                            //                 return $(this).val();
-                            //             }),
-                            // }
-                            // spr_arr.push(obj);
-                            // seri[d] = spr_arr;
-                            // spr_arr = [];
-                            // console.log(seri);
-                            // $('.modalAddSparepart').modal('hide');
                         })
                     } else {
-                        // console.log('not');
-                        // console.log(res);
                         Swal.fire({
                             icon: 'error',
                             title: 'Oops...',
@@ -695,17 +688,6 @@
                             showConfirmButton: false,
                             timer: 1500
                         }).then(function () {
-
-                            // const obj1 = {
-                            //         noseri: value.childNodes[0].firstChild.value,
-                            //         kerusakan: value.childNodes[1].firstChild.value,
-                            //         tingkat: value.childNodes[2].firstChild.value,
-                            //     }
-                            //     unit_arr.push(obj1);
-                            // seri_unit[c] = unit_arr;
-                            // unit_arr = [];
-                            // console.log(seri_unit)
-                            // $('.modalAddUnit').modal('hide');
                             let obj1 = {
                                 noseri: $('.scan-produk').DataTable().column(0).nodes().to$().find('input[type=text]').map(function () {
                                             return $(this).val();
@@ -720,8 +702,6 @@
                             unit_arr.push(obj1);
                             seri_unit[c] = unit_arr;
                             unit_arr = [];
-                            // console.log("unit"+ unit_arr);
-                            // console.log(res);
                             $('.modalAddUnit').modal('hide');
                         })
                     } else {
@@ -730,7 +710,6 @@
                             title: 'Oops...',
                             text: res.error,
                         })
-                        // console.log(res);
                     }
                 }
             })
@@ -776,6 +755,9 @@
         url: '/api/gbj/sel-divisi',
         type: 'GET',
         dataType: 'json',
+        beforeSend : function(xhr){
+            xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+        },
         success: function (res) {
             // ii++;
             console.log(res);
@@ -868,6 +850,9 @@
             url: '/api/gk/sel-spare',
             type: 'POST',
             dataType: 'json',
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
             success: function (res) {
             $.each(res, function (key, value) {
                 sparepart.push([value.id, value.nama]);
@@ -878,6 +863,9 @@
             url: '/api/gbj/sel-gbj',
             type: 'get',
             dataType: 'json',
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
             success: function (res) {
                 // ii++;
                 $.each(res, function (key, value) {

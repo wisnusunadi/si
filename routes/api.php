@@ -171,8 +171,8 @@ Route::prefix('/gbj')->group(function () {
     Route::get('sel-product/{id}', [GudangController::class, 'select_product_by_id']);
     Route::get('sel-satuan', [GudangController::class, 'select_satuan']);
     Route::get('sel-layout', [GudangController::class, 'select_layout']);
-    Route::get('sel-divisi', [GudangController::class, 'select_divisi']);
-    Route::get('sel-gbj', [GudangController::class, 'select_gbj']);
+    Route::get('sel-divisi', [GudangController::class, 'select_divisi'])->middleware('jwt.verify');
+    Route::get('sel-gbj', [GudangController::class, 'select_gbj'])->middleware('jwt.verify');
 
     // so
     Route::post('/createNon', [App\Http\Controllers\GudangController::class, 'tanpaSo']);
@@ -353,8 +353,8 @@ Route::prefix('/spr')->group(function () {
 });
 Route::prefix('/gk')->group(function () {
     Route::get('/his-spr/{id}', [SparepartController::class, 'history_spr']);
-    Route::get('/unit', [SparepartController::class, 'get_unit']);
-    Route::get('/his-unit/{id}', [SparepartController::class, 'history_unit']);
+    Route::get('/unit', [SparepartController::class, 'get_unit'])->middleware('jwt.verify');
+    Route::get('/his-unit/{id}', [SparepartController::class, 'history_unit'])->middleware('jwt.verify');
 
     Route::post('/draft-tf', [SparepartController::class, 'get_draft_tf']);
     Route::post('/draft-terima', [SparepartController::class, 'get_draft_terima']);
@@ -371,9 +371,9 @@ Route::prefix('/gk')->group(function () {
     // select
     Route::post('/sel-m-jasa', [MasterController::class, 'select_m_jasa']);
     Route::post('/sel-m-spare', [MasterController::class, 'select_m_sparepart']);
-    Route::post('/sel-spare', [MasterController::class, 'select_sparepart']);
-    Route::post('/gkspr', [MasterController::class, 'select_gk_spr']);
-    Route::post('/gkunit', [MasterController::class, 'select_gk_unit']);
+    Route::post('/sel-spare', [MasterController::class, 'select_sparepart'])->middleware('jwt.verify');
+    Route::post('/gkspr', [MasterController::class, 'select_gk_spr'])->middleware('jwt.verify');
+    Route::post('/gkunit', [MasterController::class, 'select_gk_unit'])->middleware('jwt.verify');
     Route::post('/gklayout', [MasterController::class, 'select_gk_layout']);
     Route::get('/sel-tahun', [SparepartController::class, 'get_trx_tahun']);
 
@@ -413,32 +413,32 @@ Route::prefix('/gk')->group(function () {
 
     // history trx
     Route::prefix('/transaksi')->group(function () {
-        Route::post('/by-product', [SparepartController::class, 'history_by_produk']);
-        Route::post('/all', [SparepartController::class, 'historyAll']);
-        Route::get('/noseri/{id}', [SparepartController::class, 'get_noseri_history']);
+        Route::post('/by-product', [SparepartController::class, 'history_by_produk'])->middleware('jwt.verify');
+        Route::post('/all', [SparepartController::class, 'historyAll'])->middleware('jwt.verify');
+        Route::get('/noseri/{id}', [SparepartController::class, 'get_noseri_history'])->middleware('jwt.verify');
         Route::get('/header/{id}', [App\Http\Controllers\SparepartController::class, 'get_detail_id']);
-        Route::get('/history/{id}', [App\Http\Controllers\SparepartController::class, 'get_trx']);
-        Route::post('/grafik-trf', [SparepartController::class, 'grafik_trf']);
+        Route::get('/history/{id}', [App\Http\Controllers\SparepartController::class, 'get_trx'])->middleware('jwt.verify');
+        Route::post('/grafik-trf', [SparepartController::class, 'grafik_trf'])->middleware('jwt.verify');
     });
 
     Route::prefix('/dashboard')->group(function () {
-        Route::post('/tingkat', [SparepartController::class, 'byTingkat']);
-        Route::post('/layout', [SparepartController::class, 'byLayout']);
+        Route::post('/tingkat', [SparepartController::class, 'byTingkat'])->middleware('jwt.verify');
+        Route::post('/layout', [SparepartController::class, 'byLayout'])->middleware('jwt.verify');
 
         // stok
-        Route::post('/stok/34', [SparepartController::class, 'stok34']);
-        Route::post('/stok/510', [SparepartController::class, 'stok510']);
-        Route::post('/stok/10', [SparepartController::class, 'stok10plus']);
+        Route::post('/stok/34', [SparepartController::class, 'stok34'])->middleware('jwt.verify');
+        Route::post('/stok/510', [SparepartController::class, 'stok510'])->middleware('jwt.verify');
+        Route::post('/stok/10', [SparepartController::class, 'stok10plus'])->middleware('jwt.verify');
 
         Route::post('/stok/34/h', [SparepartController::class, 'h_stok34']);
         Route::post('/stok/510/h', [SparepartController::class, 'h_stok510']);
         Route::post('/stok/10/h', [SparepartController::class, 'h_stok10plus']);
 
         // in
-        Route::post('/in/36', [SparepartController::class, 'in36']);
-        Route::post('/in/612', [SparepartController::class, 'in612']);
-        Route::post('/in/1236', [SparepartController::class, 'in1236']);
-        Route::post('/in/36plus', [SparepartController::class, 'in36plus']);
+        Route::post('/in/36', [SparepartController::class, 'in36'])->middleware('jwt.verify');
+        Route::post('/in/612', [SparepartController::class, 'in612'])->middleware('jwt.verify');
+        Route::post('/in/1236', [SparepartController::class, 'in1236'])->middleware('jwt.verify');
+        Route::post('/in/36plus', [SparepartController::class, 'in36plus'])->middleware('jwt.verify');
 
         Route::post('/in/36/h', [SparepartController::class, 'h_in36']);
         Route::post('/in/612/h', [SparepartController::class, 'h_in612']);
