@@ -659,17 +659,34 @@
 
 @section('adminlte_js')
 <script>
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
+    console.log(access_token);
     $(document).ready(function () {
-        //
         penjualan();
         $('#nav-home-tab').on('click', function(){
-            console.log('jual');
+            // console.log('jual');
             produkdestroy();
             terimadestroy();
             penjualan();
         })
         $('#nav-profile-tab').on('click', function(){
-            console.log('produk');
+            // console.log('produk');
             penjualandestroy();
             terimadestroy();
             produk();
@@ -758,7 +775,7 @@
             });
         })
         $('#nav-contact-tab').on('click', function(){
-            console.log('terima');
+            // console.log('terima');
             penjualandestroy();
             produkdestroy();
             terima();
@@ -869,6 +886,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/list1',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -888,6 +908,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/list2',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -907,6 +930,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/list',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -926,6 +952,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/list-all',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -1059,6 +1088,9 @@
                 autoWidth: false,
                 ajax: {
                     url: '/api/dashboard-gbj/stok/1020',
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -1073,6 +1105,9 @@
                 autoWidth: false,
                 ajax: {
                     url: '/api/dashboard-gbj/stok/59',
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -1087,6 +1122,9 @@
                 autoWidth: false,
                 ajax: {
                     url: '/api/dashboard-gbj/stok/14',
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -1104,6 +1142,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/byproduct',
                     type: "get",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -1152,6 +1193,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/in/36',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex', width: '20%'},
@@ -1169,6 +1213,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/in/612',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex', width: '20%'},
@@ -1186,6 +1233,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/in/1236',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex', width: '20%'},
@@ -1203,6 +1253,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/in/36plus',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex', width: '20%'},
@@ -1255,6 +1308,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/terimaall',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -1272,6 +1328,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/terimaproduk1',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -1289,6 +1348,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/terimaproduk2',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -1306,6 +1368,9 @@
                 ajax: {
                     url: '/api/dashboard-gbj/terimaproduk3',
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'DT_RowIndex'},
@@ -1329,6 +1394,9 @@
                     ajax: {
                         url: "/api/dashboard-gbj/noseri/" + id,
                         type: "get",
+                        beforeSend : function(xhr){
+                            xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                        }
                     },
                     columns: [
                         {data: "noser"},

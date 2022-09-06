@@ -128,12 +128,18 @@
     var access_token = localStorage.getItem('lokal_token');
     if (access_token == null) {
         Swal.fire({
-            icon: 'error',
-            title: 'Oops...',
-            text: 'Tidak Mendapatkan Token',
-        }).then(() => {
-            event.preventDefault();
-            document.getElementById('logout-form').submit();
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
         })
     }
 
