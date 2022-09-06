@@ -18053,6 +18053,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _context.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/pelaksanaan", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }, {
                   params: {
                     konfirmasi: "0"
                   }
@@ -18072,7 +18076,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    checkToken: function checkToken() {
+      var _this2 = this;
+
+      if (localStorage.getItem('lokal_token') == null) {
+        // event.preventDefault();
+        this.$swal({
+          title: 'Session Expired',
+          text: 'Silahkan login kembali',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        }).then(function (result) {
+          if (result.value) {
+            _this2.logout();
+          }
+        });
+      }
+    },
+    logout: function logout() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/logout");
+
+              case 2:
+                document.location.href = "/";
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
+  },
+  created: function created() {
+    this.checkToken();
   },
   mounted: function mounted() {
     this.loadData();
@@ -18139,6 +18186,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _context.next = 3;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/penyusunan", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }, {
                   params: {
                     konfirmasi: "0"
                   }
@@ -18158,7 +18209,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    checkToken: function checkToken() {
+      var _this2 = this;
+
+      if (localStorage.getItem('lokal_token') == null) {
+        // event.preventDefault();
+        this.$swal({
+          title: 'Session Expired',
+          text: 'Silahkan login kembali',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        }).then(function (result) {
+          if (result.value) {
+            _this2.logout();
+          }
+        });
+      }
+    },
+    logout: function logout() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/logout");
+
+              case 2:
+                document.location.href = "/";
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
+  },
+  created: function created() {
+    this.checkToken();
   },
   mounted: function mounted() {
     this.loadData();
@@ -19609,7 +19703,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               _this.$store.commit("setIsLoading", true);
 
               _context.next = 3;
-              return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/gbj").then(function (response) {
+              return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/gbj", {
+                headers: {
+                  Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                }
+              }).then(function (response) {
                 _this.data_produk = response.data;
               });
 
@@ -19622,7 +19720,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               }
 
               _context.next = 7;
-              return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/rencana_perakitan").then(function (response) {
+              return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/rencana_perakitan", {
+                headers: {
+                  Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                }
+              }).then(function (response) {
                 _this.rencana_jadwal = response.data;
               });
 
@@ -19744,6 +19846,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
                 _context4.next = 5;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/gbj", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }, {
                   params: {
                     id: _this4.produk.value
                   }
@@ -19756,6 +19862,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 5:
                 _context4.next = 7;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/gk/unit", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }, {
                   params: {
                     id: _this4.produk.value
                   }
@@ -19913,7 +20023,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 35:
                 _context5.next = 37;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/" + _this5.status).then(function (response) {
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/" + _this5.status, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this5.$store.commit("setJadwal", response.data);
 
                   _this5.editProdukModal = false;
@@ -19953,7 +20067,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
 
               case 47:
                 _context5.next = 49;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/" + _this5.status).then(function (response) {
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/" + _this5.status, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this5.$store.commit("setJadwal", response.data);
 
                   _this5.deleteProdukModal = false;
@@ -19982,6 +20100,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this6.updated_events = JSON.parse(JSON.stringify(events));
                 _context6.next = 4;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/gbj", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }, {
                   params: {
                     id: events.produk_id
                   }
@@ -19994,6 +20116,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
               case 4:
                 _context6.next = 6;
                 return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/gk/unit", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }, {
                   params: {
                     id: events.produk_id
                   }
@@ -20037,7 +20163,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                         switch (_context7.prev = _context7.next) {
                           case 0:
                             _context7.next = 2;
-                            return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/" + _this7.status).then(function (response) {
+                            return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/" + _this7.status, {
+                              headers: {
+                                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                              }
+                            }).then(function (response) {
                               _this7.$store.commit("setJadwal", response.data);
                             });
 
@@ -20636,74 +20766,139 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var body;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _this.$store.commit("setIsLoading", true);
 
-                _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_3___default().post("/api/prd/so").then(function (response) {
+                body = {};
+                _context.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_3___default().post("/api/prd/so", body, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.salesOrder = response.data.data;
                 });
 
-              case 3:
+              case 4:
                 jquery__WEBPACK_IMPORTED_MODULE_2___default()("#table_so_detail").DataTable({
                   pagingType: "simple_numbers_no_ellipses"
                 });
-                _context.next = 6;
-                return axios__WEBPACK_IMPORTED_MODULE_3___default().post("/api/ppic/master_pengiriman/data").then(function (response) {
+                _context.next = 7;
+                return axios__WEBPACK_IMPORTED_MODULE_3___default().post("/api/ppic/master_pengiriman/data", body, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.data_so = response.data.data;
                 });
 
-              case 6:
+              case 7:
                 jquery__WEBPACK_IMPORTED_MODULE_2___default()("#table_so").DataTable({
                   pagingType: "simple_numbers_no_ellipses"
                 });
-                _context.next = 9;
-                return axios__WEBPACK_IMPORTED_MODULE_3___default().get("/api/ppic/data/gbj").then(function (response) {
+                _context.next = 10;
+                return axios__WEBPACK_IMPORTED_MODULE_3___default().get("/api/ppic/data/gbj", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.data_gbj = response.data;
                 });
 
-              case 9:
+              case 10:
                 jquery__WEBPACK_IMPORTED_MODULE_2___default()("#table_gbj").DataTable({
                   pagingType: "simple_numbers_no_ellipses"
                 });
-                _context.next = 12;
-                return axios__WEBPACK_IMPORTED_MODULE_3___default().get("/api/ppic/data/gk/sparepart").then(function (response) {
+                _context.next = 13;
+                return axios__WEBPACK_IMPORTED_MODULE_3___default().get("/api/ppic/data/gk/sparepart", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.data_sparepart = response.data;
                 });
 
-              case 12:
-                _context.next = 14;
-                return axios__WEBPACK_IMPORTED_MODULE_3___default().get("/api/ppic/data/gk/unit").then(function (response) {
+              case 13:
+                _context.next = 15;
+                return axios__WEBPACK_IMPORTED_MODULE_3___default().get("/api/ppic/data/gk/unit", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.data_unit = response.data.data;
                 });
 
-              case 14:
+              case 15:
                 jquery__WEBPACK_IMPORTED_MODULE_2___default()("#table_sparepart").DataTable({
                   pagingType: "simple_numbers_no_ellipses"
                 });
                 jquery__WEBPACK_IMPORTED_MODULE_2___default()("#table_unit").DataTable({
                   pagingType: "simple_numbers_no_ellipses"
                 });
-                _context.next = 18;
+                _context.next = 19;
                 return axios__WEBPACK_IMPORTED_MODULE_3___default().get("/api/ppic/counting/komentar").then(function (response) {
                   _this.jumlah_permintaan = response.data[0];
                   _this.jumlah_proses = response.data[1];
                 });
 
-              case 18:
+              case 19:
                 _this.$store.commit("setIsLoading", false);
 
-              case 19:
+              case 20:
               case "end":
                 return _context.stop();
             }
           }
         }, _callee);
       }))();
+    },
+    checkToken: function checkToken() {
+      var _this2 = this;
+
+      if (localStorage.getItem('lokal_token') == null) {
+        // event.preventDefault();
+        this.$swal({
+          title: 'Session Expired',
+          text: 'Silahkan login kembali',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        }).then(function (result) {
+          if (result.value) {
+            _this2.logout();
+          }
+        });
+      }
+    },
+    logout: function logout() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_3___default().post("/logout");
+
+              case 2:
+                document.location.href = "/";
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
+  },
+  created: function created() {
+    this.checkToken();
   },
   mounted: function mounted() {
     this.loadData();
@@ -20957,7 +21152,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$store.commit("setIsLoading", true);
 
                 _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/pelaksanaan").then(function (response) {
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/pelaksanaan", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.$store.commit("setJadwal", response.data);
                 });
 
@@ -20973,10 +21172,51 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    checkToken: function checkToken() {
+      var _this2 = this;
+
+      if (localStorage.getItem('lokal_token') == null) {
+        // event.preventDefault();
+        this.$swal({
+          title: 'Session Expired',
+          text: 'Silahkan login kembali',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        }).then(function (result) {
+          if (result.value) {
+            _this2.logout();
+          }
+        });
+      }
+    },
+    logout: function logout() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/logout");
+
+              case 2:
+                document.location.href = "/";
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
   },
   created: function created() {
     this.loadData();
+    this.checkToken();
   },
   computed: {
     notif: function notif() {
@@ -21039,7 +21279,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$store.commit("setIsLoading", true);
 
                 _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/penyusunan").then(function (response) {
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().get("/api/ppic/data/perakitan/penyusunan", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.$store.commit("setJadwal", response.data);
                 });
 
@@ -21055,10 +21299,51 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee);
       }))();
+    },
+    checkToken: function checkToken() {
+      var _this2 = this;
+
+      if (localStorage.getItem('lokal_token') == null) {
+        // event.preventDefault();
+        this.$swal({
+          title: 'Session Expired',
+          text: 'Silahkan login kembali',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        }).then(function (result) {
+          if (result.value) {
+            _this2.logout();
+          }
+        });
+      }
+    },
+    logout: function logout() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
+          while (1) {
+            switch (_context2.prev = _context2.next) {
+              case 0:
+                _context2.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_1___default().post("/logout");
+
+              case 2:
+                document.location.href = "/";
+
+              case 3:
+              case "end":
+                return _context2.stop();
+            }
+          }
+        }, _callee2);
+      }))();
     }
   },
   created: function created() {
     this.loadData();
+    this.checkToken();
   },
   computed: {
     notif: function notif() {
@@ -21217,23 +21502,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var body;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _this.$store.commit("setIsLoading", true);
 
-                _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/ppic/master_stok/data").then(function (response) {
+                body = {};
+                _context.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/ppic/master_stok/data", body, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.data = response.data.data;
                 });
 
-              case 3:
+              case 4:
                 jquery__WEBPACK_IMPORTED_MODULE_1___default()("#table_so").DataTable();
 
                 _this.$store.commit("setIsLoading", false);
 
-              case 5:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -21245,18 +21536,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var body1;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _this2.$store.commit("setIsLoading", true);
 
-                _context2.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/ppic/master_stok/detail/" + id).then(function (response) {
+                body1 = {};
+                _context2.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/ppic/master_stok/detail/" + id, body1, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this2.detail = response.data.data;
                 });
 
-              case 3:
+              case 4:
                 jquery__WEBPACK_IMPORTED_MODULE_1___default()("#detailtable").DataTable();
 
                 _this2.$store.commit("setIsLoading", false);
@@ -21264,14 +21561,57 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this2.nama_produk = nama;
                 _this2.showModal = true;
 
-              case 7:
+              case 8:
               case "end":
                 return _context2.stop();
             }
           }
         }, _callee2);
       }))();
+    },
+    checkToken: function checkToken() {
+      var _this3 = this;
+
+      if (localStorage.getItem('lokal_token') == null) {
+        // event.preventDefault();
+        this.$swal({
+          title: 'Session Expired',
+          text: 'Silahkan login kembali',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        }).then(function (result) {
+          if (result.value) {
+            _this3.logout();
+          }
+        });
+      }
+    },
+    logout: function logout() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/logout");
+
+              case 2:
+                document.location.href = "/";
+
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
     }
+  },
+  created: function created() {
+    this.checkToken();
   },
   mounted: function mounted() {
     this.loadData();
@@ -21400,7 +21740,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this.$store.commit("setIsLoading", true);
 
                 _context.next = 4;
-                return axios__WEBPACK_IMPORTED_MODULE_2___default().get("/api/ppic/datatables/perakitan").then(function (response) {
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().get("/api/ppic/datatables/perakitan", {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.tablePerakitan = response.data.data;
                 });
 
@@ -21449,7 +21793,11 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this2.loading = true;
                 _this2.nama_produk = nama;
                 _context2.next = 6;
-                return axios__WEBPACK_IMPORTED_MODULE_2___default().get("/api/ppic/datatables/perakitandetail/" + data).then(function (response) {
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().get("/api/ppic/datatables/perakitandetail/" + data, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this2.detail = response.data;
                 });
 
@@ -21470,7 +21818,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee2, null, [[1, 9]]);
       }))();
+    },
+    checkToken: function checkToken() {
+      var _this3 = this;
+
+      if (localStorage.getItem('lokal_token') == null) {
+        // event.preventDefault();
+        this.$swal({
+          title: 'Session Expired',
+          text: 'Silahkan login kembali',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        }).then(function (result) {
+          if (result.value) {
+            _this3.logout();
+          }
+        });
+      }
+    },
+    logout: function logout() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/logout");
+
+              case 2:
+                document.location.href = "/";
+
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
     }
+  },
+  created: function created() {
+    this.checkToken();
   },
   mounted: function mounted() {
     this.loadData();
@@ -21615,23 +22006,29 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var body;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _this.$store.commit("setIsLoading", true);
 
-                _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/ppic/master_pengiriman/data").then(function (response) {
+                body = {};
+                _context.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/ppic/master_pengiriman/data", body, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.data = response.data.data;
                 });
 
-              case 3:
+              case 4:
                 jquery__WEBPACK_IMPORTED_MODULE_1___default()("#table_so").DataTable();
 
                 _this.$store.commit("setIsLoading", false);
 
-              case 5:
+              case 6:
               case "end":
                 return _context.stop();
             }
@@ -21643,18 +22040,24 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this2 = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee2() {
+        var body;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee2$(_context2) {
           while (1) {
             switch (_context2.prev = _context2.next) {
               case 0:
                 _this2.$store.commit("setIsLoading", true);
 
-                _context2.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/ppic/master_pengiriman/detail/" + id).then(function (response) {
+                body = {};
+                _context2.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/ppic/master_pengiriman/detail/" + id, body, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this2.detail = response.data.data;
                 });
 
-              case 3:
+              case 4:
                 jquery__WEBPACK_IMPORTED_MODULE_1___default()("#detailtable").DataTable();
 
                 _this2.$store.commit("setIsLoading", false);
@@ -21662,14 +22065,57 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                 _this2.nama_produk = nama;
                 _this2.showModal = true;
 
-              case 7:
+              case 8:
               case "end":
                 return _context2.stop();
             }
           }
         }, _callee2);
       }))();
+    },
+    checkToken: function checkToken() {
+      var _this3 = this;
+
+      if (localStorage.getItem('lokal_token') == null) {
+        // event.preventDefault();
+        this.$swal({
+          title: 'Session Expired',
+          text: 'Silahkan login kembali',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        }).then(function (result) {
+          if (result.value) {
+            _this3.logout();
+          }
+        });
+      }
+    },
+    logout: function logout() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee3() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee3$(_context3) {
+          while (1) {
+            switch (_context3.prev = _context3.next) {
+              case 0:
+                _context3.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/logout");
+
+              case 2:
+                document.location.href = "/";
+
+              case 3:
+              case "end":
+                return _context3.stop();
+            }
+          }
+        }, _callee3);
+      }))();
     }
+  },
+  created: function created() {
+    this.checkToken();
   },
   mounted: function mounted() {
     this.loadData();
@@ -21907,14 +22353,20 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
       var _this = this;
 
       return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee() {
+        var body;
         return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee$(_context) {
           while (1) {
             switch (_context.prev = _context.next) {
               case 0:
                 _this.$store.commit("setIsLoading", true);
 
-                _context.next = 3;
-                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/prd/so").then(function (response) {
+                body = {};
+                _context.next = 4;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/prd/so", body, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.salesOrder = response.data.data;
                 }).then(function () {
                   return jquery__WEBPACK_IMPORTED_MODULE_1___default()("#table_so").DataTable({
@@ -21922,9 +22374,13 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 });
 
-              case 3:
-                _context.next = 5;
-                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/ppic/master_pengiriman/data").then(function (response) {
+              case 4:
+                _context.next = 6;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/api/ppic/master_pengiriman/data", body, {
+                  headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                  }
+                }).then(function (response) {
                   _this.data = response.data.data;
                 }).then(function () {
                   return jquery__WEBPACK_IMPORTED_MODULE_1___default()("#table_produk").DataTable({
@@ -21932,10 +22388,10 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                   });
                 });
 
-              case 5:
+              case 6:
                 _this.$store.commit("setIsLoading", false);
 
-              case 6:
+              case 7:
               case "end":
                 return _context.stop();
             }
@@ -22036,7 +22492,50 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
           }
         }, _callee3, null, [[2, 7]]);
       }))();
+    },
+    checkToken: function checkToken() {
+      var _this4 = this;
+
+      if (localStorage.getItem('lokal_token') == null) {
+        // event.preventDefault();
+        this.$swal({
+          title: 'Session Expired',
+          text: 'Silahkan login kembali',
+          icon: 'warning',
+          showCancelButton: false,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'OK'
+        }).then(function (result) {
+          if (result.value) {
+            _this4.logout();
+          }
+        });
+      }
+    },
+    logout: function logout() {
+      return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().mark(function _callee4() {
+        return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default().wrap(function _callee4$(_context4) {
+          while (1) {
+            switch (_context4.prev = _context4.next) {
+              case 0:
+                _context4.next = 2;
+                return axios__WEBPACK_IMPORTED_MODULE_2___default().post("/logout");
+
+              case 2:
+                document.location.href = "/";
+
+              case 3:
+              case "end":
+                return _context4.stop();
+            }
+          }
+        }, _callee4);
+      }))();
     }
+  },
+  created: function created() {
+    this.checkToken();
   },
   mounted: function mounted() {
     this.loadData();

@@ -41,7 +41,7 @@ Route::get("/test", function () {
 Route::view('/modul_dashboard/show', 'auth.dashboard');
 
 Route::group(['prefix' => 'ppic', 'middleware' => 'auth'], function () {
-    Route::view('/{any?}', 'spa.ppic.spa');
+    Route::view('/{any?}', 'spa.ppic.spa')->middleware('divisi:ppic');
     Route::group(['middleware' => ['divisi:jual,dirut,ppic']], function () {
         Route::view('/master_stok/show', 'spa.ppic.master_stok.show');
         Route::view('/master_pengiriman/show', 'spa.ppic.master_pengiriman.show');
@@ -65,7 +65,7 @@ Route::middleware('auth')->prefix('/ppic_direksi')->group(function () {
     Route::view('/{any?}', 'page.direksi.perencanaan');
 });
 Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
-    Route::view('/{any?}', 'spa.manager_teknik.spa');
+    Route::view('/{any?}', 'spa.manager_teknik.spa')->middleware('divisi:dirtek');
 });
 
 Route::group(['prefix' => '/gbj', 'middleware' => ['auth','divisi:gbj,mgrgdg']], function () {

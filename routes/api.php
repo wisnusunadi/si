@@ -29,21 +29,21 @@ Route::prefix('/master')->group(function () {
 });
 
 Route::prefix('/ppic')->group(function () {
-    Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data']);
-    Route::post('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_stok']);
-    Route::post('/master_pengiriman/data', [App\Http\Controllers\PpicController::class, 'get_master_pengiriman_data']);
-    Route::post('/master_pengiriman/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_pengiriman']);
-    Route::get('/data/perakitan/{status?}', [App\Http\Controllers\PpicController::class, 'get_data_perakitan']);
-    Route::get('/datatables/perakitan', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan']);
-    Route::get('/datatables/perakitandetail/{id}', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan_detail']);
-    Route::get('/data/rencana_perakitan', [App\Http\Controllers\PpicController::class, 'get_data_perakitan_rencana']);
-    Route::get('/data/gbj', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi']);
+    Route::post('/master_stok/data', [App\Http\Controllers\PpicController::class, 'get_master_stok_data'])->middleware('jwt.verify');
+    Route::post('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_stok'])->middleware('jwt.verify');
+    Route::post('/master_pengiriman/data', [App\Http\Controllers\PpicController::class, 'get_master_pengiriman_data'])->middleware('jwt.verify');
+    Route::post('/master_pengiriman/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_pengiriman'])->middleware('jwt.verify');
+    Route::get('/data/perakitan/{status?}', [App\Http\Controllers\PpicController::class, 'get_data_perakitan'])->middleware('jwt.verify');
+    Route::get('/datatables/perakitan', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan'])->middleware('jwt.verify');
+    Route::get('/datatables/perakitandetail/{id}', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan_detail'])->middleware('jwt.verify');
+    Route::get('/data/rencana_perakitan', [App\Http\Controllers\PpicController::class, 'get_data_perakitan_rencana'])->middleware('jwt.verify');
+    Route::get('/data/gbj', [App\Http\Controllers\PpicController::class, 'get_data_barang_jadi'])->middleware('jwt.verify');
     Route::get('/data/so', [App\Http\Controllers\PpicController::class, 'get_data_so']);
     Route::get('/data/so2', [PpicController::class,'get_data_so2']);
     Route::get('/data/so/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_data_so_detail']);
     Route::get('/data/master_pengiriman_for_ppic/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_pengiriman_for_ppic']);
-    Route::get('/data/gk/sparepart', [App\Http\Controllers\PpicController::class, 'get_data_sparepart_gk']);
-    Route::get('/data/gk/unit', [App\Http\Controllers\PpicController::class, 'get_data_unit_gk']);
+    Route::get('/data/gk/sparepart', [App\Http\Controllers\PpicController::class, 'get_data_sparepart_gk'])->middleware('jwt.verify');
+    Route::get('/data/gk/unit', [App\Http\Controllers\PpicController::class, 'get_data_unit_gk'])->middleware('jwt.verify');
     Route::get('/data/komentar', [App\Http\Controllers\PpicController::class, 'get_komentar_jadwal_perakitan']);
     Route::post('/create/perakitan', [App\Http\Controllers\PpicController::class, 'create_data_perakitan']);
     Route::post('/update/perakitan/{id}', [App\Http\Controllers\PpicController::class, 'update_data_perakitan']);
@@ -74,8 +74,8 @@ Route::prefix('/customer')->group(function () {
     Route::get('update_modal/{id}', [App\Http\Controllers\MasterController::class, 'update_customer_modal']);
     //Route::put('update/{id}', [App\Http\Controllers\MasterController::class, 'update_customer']);
     Route::delete('delete/{id}', [App\Http\Controllers\MasterController::class, 'delete_customer']);
-    Route::get('select', [App\Http\Controllers\MasterController::class, 'select_customer']);;
-    Route::get('select_rencana', [App\Http\Controllers\MasterController::class, 'select_customer_rencana']);;
+    Route::get('select', [App\Http\Controllers\MasterController::class, 'select_customer'])->middleware('jwt.verify');
+    Route::get('select_rencana', [App\Http\Controllers\MasterController::class, 'select_customer_rencana']);
 
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_customer_id']);;
     Route::get('check/{id}', [App\Http\Controllers\MasterController::class, 'check_customer']);
