@@ -32,7 +32,7 @@ class RedirectIfAuthenticated
                     return redirect('/manager-teknik');
                 } else if ($request->user()->hasRole("23")) {
                     return redirect('/qc/dashboard');
-                } else if ($request->user()->hasRole("26")) {
+                } else if ($request->user()->hasRole("26") || $request->user()->hasRole("8") ) {
                     return redirect('/penjualan/dashboard');
                 } else if ($request->user()->hasRole("13")) {
                     return redirect('/gbj/dashboard');
@@ -44,8 +44,6 @@ class RedirectIfAuthenticated
                     return redirect('/dc/dashboard');
                 } else if ($request->user()->hasRole("2")) {
                     return redirect('/direksi/dashboard');
-                } else if ($request->user()->hasRole("8")) {
-                    return redirect('/penjualan/dashboard');
                 } else if ($request->user()->hasRole("31")) {
                     return redirect('/gbj/dashboard');
                 }

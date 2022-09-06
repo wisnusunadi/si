@@ -447,7 +447,7 @@ return [
             'icon' => 'fas fa-search',
             'auth' => [26]
         ],
-        
+
         // [
         //     'text' => 'Nama & Alamat',
         //     'url'  => '/nama_alamat',
@@ -1019,7 +1019,7 @@ return [
             'text' => 'Dashboard',
             'url' => '/gbj/dashboard',
             'icon' => 'fas fa-layer-group',
-            'auth' => [13, 31],
+            'auth' => [31, 13],
         ],
         // [
         //     'header' => 'Produksi',

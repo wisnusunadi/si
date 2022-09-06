@@ -159,6 +159,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
             Route::view('/show', 'page.penjualan.customer.show')->name('penjualan.customer.show');
             //Export
             Route::get('/export', [App\Http\Controllers\MasterController::class, 'export_customer'])->name('penjualan.customer.export');
+            Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_customer'])->name('penjualan.customer.detail');
         });
 
         Route::group(['middleware' => ['divisi:jual']], function () {
@@ -166,7 +167,6 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
             Route::view('/create', 'page.penjualan.customer.create')->name('penjualan.customer.create');
             Route::post('/store', [App\Http\Controllers\MasterController::class, 'create_customer'])->name('penjualan.customer.store');
             Route::put('/update/{id}', [App\Http\Controllers\MasterController::class, 'update_customer'])->name('penjualan.customer.update');
-            Route::get('/detail/{id}', [App\Http\Controllers\MasterController::class, 'detail_customer'])->name('penjualan.customer.detail');
         });
     });
 
@@ -362,7 +362,9 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
     });
 });
 
-Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'as', 'middleware' => ['auth','divisi:asp']], function () {
+
+
     Route::view('/dashboard', 'page.as.dashboard')->name('as.dashboard');
 
     Route::group(['prefix' => '/penjualan'], function () {
