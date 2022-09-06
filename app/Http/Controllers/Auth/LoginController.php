@@ -77,7 +77,7 @@ class LoginController extends Controller
             return redirect('/qc/dashboard');
         } else if (auth()->user()->divisi->id == 26 || auth()->user()->divisi->id == 8 || auth()->user()->divisi->id == 32) {
             return redirect('/penjualan/dashboard');
-        } else if (auth()->user()->divisi->id == 13 || auth()->user()->divisi->id == 31) {
+        } else if (auth()->user()->divisi->id == 31 || auth()->user()->divisi->id == 13) {
             return redirect('/gbj/dashboard');
         } else if (auth()->user()->divisi->id == 17) {
             return redirect('/produksi/dashboard');
