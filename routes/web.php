@@ -365,7 +365,9 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
 
 });
 
-Route::group(['prefix' => 'as', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => 'as', 'middleware' => ['auth','divisi:asp']], function () {
+
+
     Route::view('/dashboard', 'page.as.dashboard')->name('as.dashboard');
 
     Route::group(['prefix' => '/penjualan'], function () {
