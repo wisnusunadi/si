@@ -5,6 +5,7 @@ import Home from '../views/Home.vue'
 import GudangBarangJadi from "../views/GudangBarangJadi.vue"
 import GudangKarantina from "../views/GudangKarantina.vue"
 import Perakitan from "../views/Perakitan.vue"
+import Penjualan from "../views/Penjualan.vue"
 import SalesOrder from "../views/SalesOrder.vue"
 import LaporanPesanan from "../views/LaporanPesanan.vue"
 import LaporanPenjualan from "../views/LaporanPenjualan.vue"
@@ -42,6 +43,11 @@ const routes = [
         path: '/ppic/perakitan',
         name: 'Perakitan',
         component: Perakitan,
+    },
+    {
+        path: '/ppic/penjualan',
+        name: 'Penjualan',
+        component: Penjualan,
     },
     {
         path: '/ppic/so',
