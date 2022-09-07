@@ -1030,7 +1030,7 @@ return [
             'text' => 'Dashboard',
             'url' => '/gbj/dashboard',
             'icon' => 'fas fa-layer-group',
-            'auth' => [13, 31],
+            'auth' => [31, 13],
         ],
         // [
         //     'header' => 'Produksi',

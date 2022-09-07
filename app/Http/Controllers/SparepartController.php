@@ -850,16 +850,19 @@ class SparepartController extends Controller
     {
         try {
             $data = [];
-            $keluar = DB::table('v_gk_keluar')
-                    ->where([
-                        ['tahun', '=', $request->tahun],
-                        ['gbj_id', '=', $request->id]
-                    ])
-                    ->orWhere([
-                        ['tahun', '=', $request->tahun],
-                        ['sparepart_id', '=', $request->id]
-                    ])
-                   ->get();
+            $keluar = DB::table(DB::raw('t_gk_detail tgd'))
+                    ->select(DB::raw('year(tg.date_out) as tahun'),
+                    DB::raw('monthname(tg.date_out) as bulan'),
+                    'tgd.sparepart_id as sparepart_id',
+                    'tgd.gbj_id as gbj_id',
+                    DB::raw('count(tgd.is_keluar) as jumlah'))
+                    ->join(DB::raw('t_gk tg'),'tg.id','=','tgd.gk_id')
+                    ->where('tgd.is_draft','=',0)
+                    ->where('tgd.is_keluar','=',1)
+                    ->whereYear('tg.date_out','=',$request->tahun)
+                    ->where('tgd.gbj_id','=',$request->id)
+                    ->groupByRaw('tgd.sparepart_id, tgd.gbj_id, year(tg.date_out), monthname(tg.date_out)')
+                    ->get();
             foreach ($keluar as $a) {
                 $data[] = [
                     'bulan' => $a->bulan,
@@ -868,16 +871,19 @@ class SparepartController extends Controller
             }
 
             $msk = [];
-            $masuk = DB::table('v_gk_masuk')
-                   ->where([
-                       ['tahun', '=', $request->tahun],
-                       ['gbj_id', '=', $request->id]
-                   ])
-                   ->orWhere([
-                       ['tahun', '=', $request->tahun],
-                       ['sparepart_id', '=', $request->id]
-                   ])
-                  ->get();
+            $masuk = DB::table(DB::raw('t_gk_detail tgd'))
+                    ->select(DB::raw('year(tg.date_in) as tahun'),
+                    DB::raw('monthname(tg.date_in) as bulan'),
+                    'tgd.sparepart_id as sparepart_id',
+                    'tgd.gbj_id as gbj_id',
+                    DB::raw('count(tgd.is_keluar) as jumlah'))
+                    ->join(DB::raw('t_gk tg'),'tg.id','=','tgd.gk_id')
+                    ->where('tgd.is_draft','=',0)
+                    ->where('tgd.is_keluar','=',0)
+                    ->whereYear('tg.date_in','=',$request->tahun)
+                    ->where('tgd.gbj_id','=',$request->id)
+                    ->groupByRaw('tgd.sparepart_id, tgd.gbj_id, year(tg.date_in), monthname(tg.date_in)')
+                    ->get();
             foreach ($masuk as $b) {
                 $msk[] = [
                     'bulan' => $b->bulan,

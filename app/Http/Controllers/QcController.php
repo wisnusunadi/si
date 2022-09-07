@@ -93,7 +93,7 @@ class QcController extends Controller
                 $q->where(['pesanan_id' => $idpesanan]);
             })->with(['NoseriBarangJadi'])->orderBy('id');
         } elseif ($status == 'sudah') {
-            $data = NoseriTGbj::has('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
+            $data = NoseriTGbj::Has('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
                 $q->where(['gdg_brg_jadi_id' => $id]);
             })->whereHas('detail.header', function ($q) use ($idpesanan) {
                 $q->where(['pesanan_id' => $idpesanan]);
@@ -1226,29 +1226,29 @@ class QcController extends Controller
     public function get_data_riwayat_pengujian()
     {
         $prd =  collect(DetailPesanan::addSelect(['tgl_mulai' => function($q){
-                    $q->selectRaw('MIN(noseri_detail_pesanan.tgl_uji)')
-                    ->from('noseri_detail_pesanan')
-                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
-                    ->limit(1);
-                }, 'tgl_selesai' => function($q){
-                    $q->selectRaw('MAX(noseri_detail_pesanan.tgl_uji)')
-                    ->from('noseri_detail_pesanan')
-                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
-                    ->limit(1);
-                }, 'jumlah_pengujian' => function($q){
-                    $q->selectRaw('count(noseri_detail_pesanan.id)')
-                    ->from('noseri_detail_pesanan')
-                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
-                }, 'nama' => function($q){
-                    $q->selectRaw('penjualan_produk.nama')
-                    ->from('penjualan_produk')
-                    ->whereColumn('penjualan_produk.id', 'detail_pesanan.penjualan_produk_id')
-                    ->limit(1);
-                }
-                ])->havingRaw('jumlah_pengujian > 0')->with(['PenjualanProduk.Produk', 'DetailPesananProduk', 'Pesanan.Ekatalog', 'Pesanan.Spa', 'Pesanan.Spb'])->get());
+            $q->selectRaw('MIN(noseri_detail_pesanan.tgl_uji)')
+            ->from('noseri_detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+            ->limit(1);
+        }, 'tgl_selesai' => function($q){
+            $q->selectRaw('MAX(noseri_detail_pesanan.tgl_uji)')
+            ->from('noseri_detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+            ->limit(1);
+        }, 'jumlah_pengujian' => function($q){
+            $q->selectRaw('count(noseri_detail_pesanan.id)')
+            ->from('noseri_detail_pesanan')
+            ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id');
+        }, 'nama' => function($q){
+            $q->selectRaw('penjualan_produk.nama')
+            ->from('penjualan_produk')
+            ->whereColumn('penjualan_produk.id', 'detail_pesanan.penjualan_produk_id')
+            ->limit(1);
+        }
+        ])->havingRaw('jumlah_pengujian > 0')->with(['PenjualanProduk.Produk', 'DetailPesananProduk', 'Pesanan.Ekatalog', 'Pesanan.Spa', 'Pesanan.Spb'])->get());
 
         $part = collect(DetailPesananPart::addSelect(['tgl_mulai' => function($q){
                     $q->selectRaw('MIN(outgoing_pesanan_part.tanggal_uji)')

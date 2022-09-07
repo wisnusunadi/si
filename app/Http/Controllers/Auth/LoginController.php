@@ -3,8 +3,14 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Models\User;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Validator;
+use Tymon\JWTAuth\Exceptions\JWTException;
+use Tymon\JWTAuth\JWTAuth;
 
 class LoginController extends Controller
 {
@@ -42,17 +48,25 @@ class LoginController extends Controller
         return 'username';
     }
 
-    // protected function validateLogin(Request $request)
-    // {
-    //     $request->validate([
-    //         $this->username() => 'required|string',
-    //         'password' => 'required',
-    //     ]);
-    // }
+ //   protected function sendLoginResponse(Request $request)
+  //  {
+        // $user = User::where('username', $request->username)->firstOrFail();
+        // $token = $user->createToken('auth_token')->plainTextToken;
+
+        // $user = User::where('username', $request->username)->firstOrFail();
+        // $user->createToken('auth_token')->accessToken;
+
+
+
+      //  return response()->json(compact('token'));
+
+
+      //  return $this->authenticated();
+  //  }
+
 
     public function authenticated()
     {
-
         if (auth()->user()->divisi->id == 24) {
             return redirect('/ppic');
         } else if (auth()->user()->divisi->id == 15) {
@@ -61,9 +75,9 @@ class LoginController extends Controller
             return redirect('/manager-teknik');
         } else if (auth()->user()->divisi->id == 23) {
             return redirect('/qc/dashboard');
-        } else if (auth()->user()->divisi->id == 26 || auth()->user()->divisi->id == 32 || auth()->user()->divisi->id == 8) {
+        } else if (auth()->user()->divisi->id == 26 || auth()->user()->divisi->id == 8 || auth()->user()->divisi->id == 32) {
             return redirect('/penjualan/dashboard');
-        } else if (auth()->user()->divisi->id == 13) {
+        } else if (auth()->user()->divisi->id == 31 || auth()->user()->divisi->id == 13) {
             return redirect('/gbj/dashboard');
         } else if (auth()->user()->divisi->id == 17) {
             return redirect('/produksi/dashboard');
@@ -76,4 +90,6 @@ class LoginController extends Controller
         }
         return redirect('/home');
     }
+
+
 }

@@ -226,12 +226,12 @@
                                                 <i class="fas fa-eye"></i>
                                                 Detail
                                             </a>
-                                            <a href="{{route('dc.coo.pdf')}}">
+
                                                 <button class="dropdown-item" type="button">
                                                     <i class="fas fa-file"></i>
                                                     Laporan PDF
                                                 </button>
-                                            </a>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -571,8 +571,8 @@
         });
 
         $('#noseri_belum_proses_table').on('click', '.nosericheck', function() {
-            $('#noseri_belum_proses_table').find('#check_all').prop('checked', false);
             var rows = $('#noseri_belum_proses_table').DataTable().rows().nodes();
+            $('#noseri_belum_proses_table').find('#check_all').prop('checked', false);
             if ($('.nosericheck:checked', rows).length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 // $('#cekbrgedit').prop('disabled', false);
@@ -605,8 +605,8 @@
         });
 
         $('#noseri_selesai_proses_table').on('click', '.nosericheck', function() {
-            $('#check_all').prop('checked', false);
             var rows = $('#noseri_selesai_proses_table').DataTable().rows().nodes();
+            $('#check_all').prop('checked', false);
             if ($('.nosericheck:checked', rows).length > 0) {
                 // $('#cekbrg').prop('disabled', false);
                 $('#cekbrgedit').prop('disabled', false);

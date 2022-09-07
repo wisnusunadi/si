@@ -558,16 +558,16 @@
         });
 
         $('#noseri_selesai_proses_table').on('click', '.nosericheck', function() {
-            $('#check_all').prop('checked', false);
             var rows = $('#noseri_selesai_proses_table').DataTable().rows().nodes();
-            if ($('.nosericheck:checked').length > 0) {
+            $('#check_all').prop('checked', false);
+            if ($('.nosericheck:checked', rows).length > 0) {
                 // $('#cekbrg').prop('disabled', false);
                 $('#cekbrgedit').prop('disabled', false);
                 checkedArySelesaiProses = [];
                 $.each($(".nosericheck:checked", rows), function() {
                     checkedArySelesaiProses.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
                 });
-            } else if ($('#noseri_selesai_proses_table').find('.nosericheck:checked').length <= 0) {
+            } else if ($('.nosericheck:checked', rows).length <= 0) {
                 // $('#cekbrg').prop('disabled', true);
                 $('#cekbrgedit').prop('disabled', true);
             }

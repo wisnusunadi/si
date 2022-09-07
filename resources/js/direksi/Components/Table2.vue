@@ -34,6 +34,7 @@
 </template>
 
 <script>
+    import axios from 'axios'
     export default {
         props: {
             months: Number,
@@ -48,8 +49,8 @@
         },
         created() {
             let dateObj = new Date();
-            let month = this.months + 1;
-            this.prevmonths = this.months;  
+            let month = dateObj.getMonth() + 1;
+            this.prevmonths = dateObj.getMonth();  
             let year = dateObj.getUTCFullYear();
             console.log("month", month);
             let last_date = new Date(year, month + 1, 0).getDate();
