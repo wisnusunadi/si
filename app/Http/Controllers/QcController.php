@@ -93,7 +93,7 @@ class QcController extends Controller
                 $q->where(['pesanan_id' => $idpesanan]);
             })->with(['NoseriBarangJadi'])->orderBy('id');
         } elseif ($status == 'sudah') {
-            $data = NoseriTGbj::DoesntHave('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
+            $data = NoseriTGbj::has('NoseriDetailPesanan')->whereHas('detail', function ($q) use ($id) {
                 $q->where(['gdg_brg_jadi_id' => $id]);
             })->whereHas('detail.header', function ($q) use ($idpesanan) {
                 $q->where(['pesanan_id' => $idpesanan]);
