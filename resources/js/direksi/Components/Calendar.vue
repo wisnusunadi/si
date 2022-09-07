@@ -44,12 +44,21 @@
                     this.calendarOptions.events = this.convertJadwal(response.data);
                 })
             },
+            checkCalendar(){
+                if(this.calendarOptions.events.length == 0){
+                    console.log('kosong');
+                }else{
+                    this.$refs.calendar.getApi().next()
+                }
+            }
         },
 
         mounted() {
             this.event();
-            this.$refs.calendar.getApi().next();
-        }
+        },
+        beforeUpdate() {
+            this.checkCalendar();
+        },
     }
 
 </script>

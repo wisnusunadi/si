@@ -74889,7 +74889,7 @@ module.exports = JSON.parse('[{"header":"General","menu":[{"text":"Dashboard","i
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('[{"header":"General","menu":[{"text":"Dashboard","icon":"fas fa-home","url":"/ppic"}]},{"header":"Data","menu":[{"text":"Stok","icon":"fas fa-boxes","submenu":[{"text":"GBJ","url":"/ppic/gbj"},{"text":"GK","url":"/ppic/gk"}]},{"text":"Perakitan","icon":"fas fa-table","url":"/ppic/perakitan"},{"text":"Sales Order","icon":"fas fa-database","url":"/ppic/so"},{"text":"Laporan Pesanan","icon":"fas fa-book-open","url":"/ppic/laporan_pesanan"},{"text":"Proses Pesanan","icon":"fas fa-sort-amount-up-alt","url":"/ppic/proses_pesanan"}]},{"header":"Fitur","menu":[{"text":"Jadwal Perakitan","icon":"fas fa-calendar-alt","submenu":[{"text":"Perencanaan","url":"/ppic/jadwal_perencanaan"},{"text":"Pelaksanaan","url":"/ppic/jadwal_pelaksanaan"}]}]}]');
+module.exports = JSON.parse('[{"header":"General","menu":[{"text":"Dashboard","icon":"fas fa-home","url":"/ppic"}]},{"header":"Data","menu":[{"text":"Stok","icon":"fas fa-boxes","submenu":[{"text":"GBJ","url":"/ppic/gbj"},{"text":"GK","url":"/ppic/gk"}]},{"text":"Perakitan","icon":"fas fa-table","url":"/ppic/perakitan"},{"text":"Sales Order","icon":"fas fa-database","url":"/ppic/so"},{"text":"Laporan","icon":"fas fa-book-open","submenu":[{"text":"Pesanan","url":"/ppic/laporan_pesanan"},{"text":"Penjualan","url":"/ppic/laporan_penjualan"}]},{"text":"Proses Pesanan","icon":"fas fa-sort-amount-up-alt","url":"/ppic/proses_pesanan"}]},{"header":"Fitur","menu":[{"text":"Jadwal Perakitan","icon":"fas fa-calendar-alt","submenu":[{"text":"Perencanaan","url":"/ppic/jadwal_perencanaan"},{"text":"Pelaksanaan","url":"/ppic/jadwal_pelaksanaan"}]}]}]');
 
 /***/ })
 
@@ -75003,7 +75003,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var datatables_bulma_js_dataTables_bulma__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(datatables_bulma_js_dataTables_bulma__WEBPACK_IMPORTED_MODULE_8__);
 /* harmony import */ var vue_sweetalert2__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-sweetalert2 */ "./node_modules/vue-sweetalert2/dist/vue-sweetalert.umd.js");
 /* harmony import */ var vue_sweetalert2__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(vue_sweetalert2__WEBPACK_IMPORTED_MODULE_9__);
-/* provided dependency */ var process = __webpack_require__(/*! process/browser.js */ "./node_modules/process/browser.js");
 
 
 
@@ -75036,8 +75035,8 @@ new vue__WEBPACK_IMPORTED_MODULE_10__["default"]({
 }).$mount("#app");
 
 if (_ppic_spa_store__WEBPACK_IMPORTED_MODULE_1__["default"].state.enable_notif) {
-  var pusher = new (pusher_js__WEBPACK_IMPORTED_MODULE_6___default())(process.env.MIX_PUSHER_APP_KEY, {
-    cluster: process.env.MIX_PUSHER_APP_CLUSTER,
+  var pusher = new (pusher_js__WEBPACK_IMPORTED_MODULE_6___default())("", {
+    cluster: "mt1",
     encrypted: true
   });
   var channel = pusher.subscribe('notif');

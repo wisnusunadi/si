@@ -16,7 +16,7 @@
 
     <footer class="footer">
       <p class="has-text-centered">
-        Copyright by IT team Sinko Prima Alloy 2021
+        Copyright by IT team Sinko Prima Alloy {{ yearNow }}
       </p>
     </footer>
   </div>
@@ -39,6 +39,12 @@ export default {
       this.$store.commit("setUser", response.data);
     });
   },
+
+  computed: {
+    yearNow() {
+      return new Date().getFullYear();
+    },
+  }
 };
 </script>
 

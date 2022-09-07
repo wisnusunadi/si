@@ -3300,7 +3300,7 @@ export default {
                 }
             } else if (jenis == "ekatpo") {
                 let dataPO = {
-                    no_paket: this.ekat.epurno,
+                    no_paket: this.$route.params.id,
                     no_po: this.formpenjualanpo.po.nomorpo,
                     tgl_po: this.formpenjualanpo.po.tgl_po,
                     no_do: this.formpenjualanpo.do.nomordo,
