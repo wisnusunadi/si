@@ -421,20 +421,20 @@
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
                                                                     <div class="col-lg-6 col-md-12 col-form-label">
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="radio" name="status" id="satuan1" value="sepakat" />
-                                                                            <label class="form-check-label" for="satuan1">Sepakat</label>
+                                                                            <input class="form-check-input" type="radio" name="status" id="status1" value="sepakat" />
+                                                                            <label class="form-check-label" for="status1">Sepakat</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="radio" name="status" id="satuan2" value="negosiasi" />
-                                                                            <label class="form-check-label" for="satuan2">Negosiasi</label>
+                                                                            <input class="form-check-input" type="radio" name="status" id="status2" value="negosiasi" />
+                                                                            <label class="form-check-label" for="status2">Negosiasi</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="radio" name="status" id="satuan3" value="batal" />
-                                                                            <label class="form-check-label" for="satuan3">Batal</label>
+                                                                            <input class="form-check-input" type="radio" name="status" id="status3" value="batal" />
+                                                                            <label class="form-check-label" for="status3">Batal</label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input" type="radio" name="status" id="satuan4" value="draft" />
-                                                                            <label class="form-check-label" for="satuan4">Draft</label>
+                                                                            <input class="form-check-input" type="radio" name="status" id="status4" value="draft" />
+                                                                            <label class="form-check-label" for="status4">Draft</label>
                                                                         </div>
                                                                         <div class="invalid-feedback" id="msgstatus">
                                                                             @if($errors->has('status'))
@@ -1040,7 +1040,7 @@
 
         function checkpenjualanform() {
             if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
-                if (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "" && $("#batas_kontrak").val() != "") {
+                if (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("input[name='status']:checked").val() != "" && $('#tanggal_pemesanan').val() != "" && $("#batas_kontrak").val() != "") {
                     $('#pills-instansi-tab').removeClass('disabled');
                     if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
                         $('#pills-produk-tab').removeClass('disabled');
@@ -1054,7 +1054,7 @@
             }
 
           else if ($('input[type="radio"][name="status"]:checked').val() == "draft") {
-            if (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "") {
+            if (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && $("input[name='status']:checked").val() != "" && $('#tanggal_pemesanan').val() != "") {
 
                 if (($('#no_paket').val() != "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length > 0 ) || ($('#no_paket').val() == "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length <= 0) &&  !$("#no_paket").hasClass('is-invalid') ) {
                     $('#pills-instansi-tab').removeClass('disabled');
@@ -1067,7 +1067,7 @@
             }
 
             else {
-                if (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $('#tanggal_pemesanan').val() != "") {
+                if (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("input[name='status']:checked").val() != "" && $('#tanggal_pemesanan').val() != "") {
                     $('#pills-instansi-tab').removeClass('disabled');
                     if ($("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "") {
                         $('#pills-produk-tab').removeClass('disabled');
@@ -1196,16 +1196,16 @@ var jenis_array = [];
                 jasa_harga = true;
             }
             if ($('input[type="radio"][name="status"]:checked').val() == "sepakat") {
-                if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid')) && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
+                if ($('#customer_id').val() != "" && $('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $(".provinsi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("input[name='status']:checked").val() != "" && $("#batas_kontrak").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid')) && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
                     $('#btntambah').removeAttr("disabled");
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
-            } else if ($('input[type="radio"][name="status"]:checked').val() == "draft" || $('input[type="radio"][name="status"]:checked').val() == "batal") {
-                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#status").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid'))) {
+            } else if ($('input[type="radio"][name="status"]:checked').val() == "draft") {
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid'))) {
                     if (($('#no_paket').val() != "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length > 0 ) || ($('#no_paket').val() == "" && $('input[type="checkbox"][name="isi_nopaket"]:checked').length <= 0) &&  !$("#no_paket").hasClass('is-invalid') ) {
                         if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
-                            if(penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true){
+                            if(penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true){
                                 $('#btntambah').removeAttr("disabled");
                             }else{
                                 $('#btntambah').attr("disabled", true);
@@ -1220,9 +1220,23 @@ var jenis_array = [];
                 } else {
                     $('#btntambah').attr("disabled", true);
                 }
+            } else if( $('input[type="radio"][name="status"]:checked').val() == "batal"){
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("input[name='status']:checked").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid'))) {
+                    if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
+                            if(penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true){
+                                $('#btntambah').removeAttr("disabled");
+                            }else{
+                                $('#btntambah').attr("disabled", true);
+                            }
+                    } else {
+                        $('#btntambah').removeAttr("disabled");
+                        }
+                } else {
+                    $('#btntambah').attr("disabled", true);
+                }
             }
             else {
-                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("#status").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid')) && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
+                if ($('#tanggal_pemesanan').val() != "" && $("#instansi").val() !== "" && $("#alamatinstansi").val() !== "" && $("#satuan_kerja").val() != "" && ($("#no_paket").val() != "" && !$("#no_paket").hasClass('is-invalid')) && $("input[name='status']:checked").val() != "" && $("#deskripsi").val() != "" && (($('#no_urut').val() != "" && !$("#no_urut").hasClass('is-invalid')) && !$("#no_paket").hasClass('is-invalid')) && penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true && part_id == true && part_jumlah == true && part_harga == true && jasa_id == true && jasa_harga == true) {
 
                     $('#btntambah').removeAttr("disabled");
                 } else {
@@ -1592,7 +1606,7 @@ var jenis_array = [];
 
             } else {
                 $("#msgstatus").text("Status Harus dipilih");
-                $("#status").addClass('is-invalid');
+                $("input[name='status']:checked").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
 
@@ -1663,7 +1677,7 @@ var jenis_array = [];
                 $('#isi_nopaket').prop("checked", false);
                 $('#no_paket').attr('readonly', false);
                 $("#msgstatus").text("Status Harus dipilih");
-                $("#status").addClass('is-invalid');
+                $("input[name='status']:checked").addClass('is-invalid');
                 $('#btntambah').attr("disabled", true);
             }
             checkvalidasi();
@@ -2901,7 +2915,7 @@ var jenis_array = [];
             if ($(this).val() != "") {
                 $("#msgprovinsi").text("");
                 $("#provinsi").removeClass('is-invalid');
-                // if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("#status").val() != "" && $("#batas_kontrak").val() != "") {
+                // if ($("#tanggal_pemesanan").val() != "" && $("#instansi").val() != "" && $("#satuan_kerja").val() != "" && $("#no_paket").val() != "" && $("input[name='status']:checked").val() != "" && $("#batas_kontrak").val() != "") {
                 //     $('#btntambah').removeAttr("disabled");
                 // } else {
                 //     $('#btntambah').attr("disabled", true);
