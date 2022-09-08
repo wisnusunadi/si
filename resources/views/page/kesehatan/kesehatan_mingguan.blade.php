@@ -1,6 +1,5 @@
 @extends('adminlte.page')
-
-@section('title', 'Beta Version')
+@section('title', 'ERP')
 
 @section('content_header')
 <h1 class="m-0 text-dark">Dashboard</h1>
@@ -52,7 +51,7 @@
             <thead style="text-align: center;">
               <tr>
                 <th colspan="12">
-                  <a href="/kesehatan_mingguan_tensi/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                  <a href="/kesehatan/mingguan/tensi/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
                 </th>
               </tr>
               <tr>
@@ -84,7 +83,7 @@
             <thead style="text-align: center;">
               <tr>
                 <th colspan="12">
-                  <a href="/kesehatan_mingguan_rapid/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                  <a href="/kesehatan/mingguan/rapid/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
                 </th>
               </tr>
               <tr>
@@ -112,7 +111,7 @@
 <!-- Modal Detail -->
 <div class="modal fade  bd-example-modal-lg" id="detail_mod_tensi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-    <form method="post" action="/kesehatan_mingguan_tensi/aksi_ubah">
+    <form method="post" action="/kesehatan/mingguan/tensi/aksi_ubah">
       {{ csrf_field() }}
       {{ method_field('PUT')}}
       <div class="modal-content">
@@ -179,7 +178,7 @@
 <!-- Modal Detail -->
 <div class="modal fade  bd-example-modal-lg" id="detail_mod_rapid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-    <form method="post" action="/kesehatan_mingguan_rapid/aksi_ubah">
+    <form method="post" action="/kesehatan/mingguan/rapid/aksi_ubah">
       {{ csrf_field() }}
       {{ method_field('PUT')}}
       <div class="modal-content">
@@ -282,7 +281,13 @@
           language: {
             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
           },
-          ajax: '/kesehatan_mingguan_tensi/data',
+          ajax: {
+            'url': '/kesehatan/mingguan/tensi/data',
+            'type': 'POST',
+            'headers': {
+              'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+          },
           columns: [{
               data: 'DT_RowIndex',
               orderable: false,
@@ -340,7 +345,13 @@
           language: {
             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
           },
-          ajax: '/kesehatan_mingguan_rapid/data',
+          ajax: {
+            'url': '/kesehatan/mingguan/rapid/data',
+            'type': 'POST',
+            'headers': {
+              'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+          },
           columns: [{
               data: 'DT_RowIndex',
               orderable: false,

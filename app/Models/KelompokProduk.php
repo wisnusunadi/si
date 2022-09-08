@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class KelompokProduk extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'kelompok_produk';
 
     public function Produk()

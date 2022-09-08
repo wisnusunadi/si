@@ -1,5 +1,5 @@
 @extends('adminlte.page')
-@section('title', 'Beta Version')
+@section('title', 'ERP')
 @section('content_header')
 @stop
 @section('content')
@@ -28,7 +28,7 @@
         </div>
         <div class="col-lg-12" id="rapid">
             <div class="col-lg-12">
-                <form action="/kesehatan_mingguan_tensi/aksi_tambah" method="post" enctype="multipart/form-data" id="form">
+                <form action="/kesehatan/mingguan/tensi/aksi_tambah" method="post" enctype="multipart/form-data" id="form">
                     {{ csrf_field() }}
                     <div class="card">
                         <div class="card-header bg-success">
@@ -96,7 +96,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan_mingguan"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
+                            <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan/mingguan"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
                             <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                         </div>
                     </div>
@@ -159,7 +159,7 @@
                                                         <textarea type="text" class="form-control keterangan" name="keterangan[]"></textarea>
                                                     </td>
                                                     <td>
-                                                    <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable"><i class="fas fa-times-circle"></i></button> 
+                                                    <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable"><i class="fas fa-times-circle"></i></button>
                                                     </td>
                                                 </tr>`;
             $('#tabel_rapid tr:last').after(data);

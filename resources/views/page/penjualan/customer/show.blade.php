@@ -348,11 +348,7 @@
                 'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
-                },
-                "processData": true,
-                beforeSend : function(xhr){
-                var access_token = localStorage.getItem('lokal_token');
-                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             }
             },
             language: {

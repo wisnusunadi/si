@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class RencanaPenjualan extends Model
 {
     use HasFactory;
-
+    protected $connection = 'erp';
     protected $table = "rencana_penjualan";
 
     protected $fillable = ['customer_id', 'tahun', 'instansi', 'created_at', 'updated_at'];

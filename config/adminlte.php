@@ -485,25 +485,6 @@ return [
                 ]
             ]
         ],
-        [
-            'text' => 'Request Emiindo',
-            'icon' => 'fas fa-mail-bulk',
-            'auth' => [26],
-            'submenu' => [
-                [
-                    'text' => 'Ekatalog - SPA',
-                    'url'  => '/penjualan/request_emiindo/akn_po',
-                ],
-                // [
-                //     'text' => 'Status Penjualan',
-                //     'url'  => '/penjualan/request_emiindo/status_penjualan',
-                // ],
-                [
-                    'text' => 'Terima Ekatalog - SPA',
-                    'url'  => '/penjualan/request_emiindo/daftar_penerimaan',
-                ]
-            ]
-        ],
         // [
         //     'text' => 'Sales Order',
         //     'url'  => '/penjualan/so/show',
@@ -634,6 +615,26 @@ return [
             ],
         ],
         // kesehatan (28)
+           //Kesehatan
+           [
+            'text' => 'Beranda',
+            'url'  => '/kesehatan/dashboard',
+            'icon' => 'fas fa-home',
+            'auth' => [28]
+        ],
+        [
+            'text' => 'Data Karyawan',
+            'icon' => 'fas fa-users',
+            'auth' => [28],
+            'submenu' => [
+                [
+                    'icon' => 'far fa-circle',
+                    'text' => 'Daftar Karyawan',
+                    'url'  => '/karyawan/',
+                    'auth' => [28],
+                ],
+            ],
+        ],
         [
             'text' => 'Kesehatan',
             'icon' => 'fas fa-book-medical',
@@ -648,7 +649,7 @@ return [
                             'icon' => 'fas fa-table',
                             'text' => 'Data',
                             'auth' => [28],
-                            'url'  => '/kesehatan',
+                            'url'  => '/kesehatan/',
                         ],
                         [
                             'icon' => 'fas fa-info-circle',
@@ -658,34 +659,87 @@ return [
                         ]
                     ],
                 ],
-                // [
-                //     'icon' => 'fas fa-heartbeat',
-                //     'text' => 'Harian',
-                //     'auth' => [28],
-                //     'submenu' => [
-                //         [
-                //             'icon' => 'fas fa-table',
-                //             'text' => 'Data',
-                //             'auth' => [28],
-                //             'url'  => '/kesehatan_harian',
-                //         ],
-                //         [
-                //             'icon' => 'fas fa-info-circle',
-                //             'text' => 'Detail',
-                //             'auth' => [28],
-                //             'url'  => '/kesehatan_harian/detail',
-                //         ],
-                //         [
-                //             'icon' => 'fas fa-file-medical',
-                //             'text' => 'Laporan',
-                //             'auth' => [28],
-                //             'url'  => '/laporan_harian',
-                //         ]
-                //     ],
-                // ],
-
+                [
+                    'icon' => 'fas fa-vial',
+                    'text' => 'Mingguan',
+                    'auth' => [28],
+                    'submenu' => [
+                        [
+                            'icon' => 'fas fa-table',
+                            'text' => 'Data',
+                            'auth' => [28],
+                            'url'  => '/kesehatan/mingguan',
+                        ],
+                        [
+                            'icon' => 'fas fa-info-circle',
+                            'text' => 'Detail',
+                            'auth' => [28],
+                            'url'  => '/kesehatan/mingguan/detail',
+                        ],  [
+                            'icon' => 'fas fa-file-medical',
+                            'text' => 'Laporan',
+                            'auth' => [28],
+                            'url'  => '/kesehatan/laporan/mingguan',
+                        ]
+                    ],
+                ],
+                [
+                    'icon' => 'fas fa-weight',
+                    'text' => 'Bulanan',
+                    'auth' => [28],
+                    'submenu' => [
+                        [
+                            'icon' => 'fas fa-table',
+                            'text' => 'Data',
+                            'auth' => [28],
+                            'url'  => '/kesehatan/bulanan',
+                        ],
+                        [
+                            'icon' => 'fas fa-info-circle',
+                            'text' => 'Detail',
+                            'auth' => [28],
+                            'url'  => '/kesehatan/bulanan/detail',
+                        ],
+                        [
+                            'icon' => 'fas fa-file-medical',
+                            'text' => 'Laporan',
+                            'auth' => [28],
+                            'url'  => '/kesehatan/laporan/bulanan',
+                        ]
+                    ],
+                ]
             ],
         ],
+        [
+            'icon' => 'fas fa-people-arrows',
+            'text' => 'Khusus',
+            'auth' => [28],
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-person-booth',
+                    'text' => 'Karyawan Sakit',
+                    'auth' => [28],
+                    'url'  => '/karyawan/sakit',
+                ],
+                [
+                    'icon' => 'fas fa-walking',
+                    'text' => 'Karyawan Masuk',
+                    'url'  => '/karyawan/masuk',
+                    'auth' => [28],
+
+                ]
+            ],
+        ],
+        [
+            'icon' => 'fas fa-tablets',
+            'text' => 'Obat',
+            'auth' => [28],
+            'url'  => '/obat/',
+        ],
+
+
+
+
         // GBMP (11)
         [
             'header' => 'GBMP',
@@ -1497,7 +1551,8 @@ return [
             'url' => 'gbjmanager/produksi',
             'icon' => 'fas fa-cubes',
             'auth' => [31],
-        ]
+        ],
+
     ],
 
     /*

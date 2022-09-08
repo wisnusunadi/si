@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class OutgoingPesananPart extends Model
 {
     // use HasFactory;
+    protected $connection = 'erp';
     protected $table = 'outgoing_pesanan_part';
     protected $fillable = ['detail_pesanan_part_id', 'detail_logistik_part_id', 'tanggal_uji', 'jumlah_ok', 'jumlah_nok'];
 

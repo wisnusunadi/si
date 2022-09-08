@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class NoseriDetailLogistik extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'noseri_logistik';
     protected $fillable = ['detail_logistik_id', 'noseri_detail_pesanan_id'];
 

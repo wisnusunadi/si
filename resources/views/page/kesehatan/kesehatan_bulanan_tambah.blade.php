@@ -195,7 +195,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan_bulanan"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
+                            <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan/bulanan"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
                             <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                         </div>
                     </div>
@@ -252,7 +252,7 @@
                                 $('#tabel_berat').append(`<tr> <td>` + no + `</td>
                                 <td><input id="date` + value[`id`] + `" type="date" class="form-control" readonly><input type="text" class="form-control d-none" name="kesehatan_awal_id[` + x + `]" value="` + value['kesehatan_awal']['id'] + `"></td>
                                                          <td>` + value[`nama`] + `</td>
-                                                         <td>    
+                                                         <td>
                                                          <div class="input-group mb-3">
                                                          <input type="number" class="form-control d-none" name="karyawan_id[` + x + `]" value="` + value[`id`] + `">
                                                          <input type="text" class="form-control" name="tinggi[` + x + `]" readonly  value="` + value['kesehatan_awal']['tinggi'] + `" id="tinggi">
@@ -261,7 +261,7 @@
                                                          </div>
                                                          </div>
                                                          </td>
-                                                         <td>    
+                                                         <td>
                                                          <div class="input-group mb-3">
                                                          <input type="text" class="form-control" name="berat[` + x + `]" id="berat">
                                                          <div class="input-group-append">
@@ -270,7 +270,7 @@
                                                           </div>
                                                           <small id="status_bmi" class="form-text text-muted"></small>
                                                          </td>
-                                                        <td>    
+                                                        <td>
                                                         <div class="input-group mb-3">
                                                          <input type="text" class="form-control" name="lemak[` + x + `]" >
                                                          <div class="input-group-append">
@@ -278,7 +278,7 @@
                                                         </div>
                                                         </div>
                                                         </td>
-                                                        <td>    
+                                                        <td>
                                                         <div class="input-group mb-3">
                                                          <input type="text" class="form-control" name="kandungan_air[` + x + `]" >
                                                          <div class="input-group-append">
@@ -286,7 +286,7 @@
                                                         </div>
                                                         </div>
                                                         </td>
-                                                        <td>    
+                                                        <td>
                                                        <div class="input-group mb-3">
                                                          <input type="text" class="form-control" name="otot[` + x + `]" >
                                                          <div class="input-group-append">
@@ -294,7 +294,7 @@
                                                         </div>
                                                         </div>
                                                         </td>
-                                                        <td>    
+                                                        <td>
                                                         <div class="input-group mb-3">
                                                          <input type="text" class="form-control" name="tulang[` + x + `]" >
                                                          <div class="input-group-append">
@@ -302,7 +302,7 @@
                                                         </div>
                                                         </div>
                                                         </td>
-                                                        <td>    
+                                                        <td>
                                                         <div class="input-group mb-3">
                                                          <input type="text" class="form-control" name="kalori[` + x + `]" >
                                                          <div class="input-group-append">
@@ -310,7 +310,7 @@
                                                         </div>
                                                         </div>
                                                         </td>
-                                                        <td>    
+                                                        <td>
                                                         <div class="input-group mb-3">
                                                          <textarea type="text" class="form-control" name="keterangan[` + x + `]" ></textarea>
                                                         </td>
@@ -354,7 +354,7 @@
                                 $('#tabel_gcu').append(`<tr> <td>` + no + `</td>
                                 <td><input id="dates` + value[`id`] + `" type="date" class="form-control" readonly></td>
                                                          <td>` + value[`nama`] + `</td>
-                                                         <td>    
+                                                         <td>
                                                          <div class="input-group mb-3">
                                                          <input type="number" class="form-control d-none" name="karyawan_id[` + x + `]" value="` + value[`id`] + `">
                                                          <input type="text" class="form-control" name="glukosa[` + x + `]" id="glukosa` + value[`id`] + `">
@@ -364,7 +364,7 @@
                                                           </div>
                                                           <small id="glukosa_status` + value[`id`] + `" class="form-text text-muted"></small>
                                                         </td>
-                                                        <td>    
+                                                        <td>
                                                          <div class="input-group mb-3">
                                                          <input type="text" class="form-control" name="kolesterol[` + x + `]" id="kolesterol` + value[`id`] + `">
                                                          <div class="input-group-append">
@@ -373,7 +373,7 @@
                                                           </div>
                                                           <small id="kolesterol_status` + value[`id`] + `" class="form-text text-muted"></small>
                                                         </td>
-                                                        <td>    
+                                                        <td>
                                                          <div class="input-group mb-3">
                                                          <input type="text" class="form-control" name="asam_urat[` + x + `]" id="asam_urat` + value[`id`] + `">
                                                          <div class="input-group-append">
@@ -382,7 +382,7 @@
                                                           </div>
                                                           <small id="asam_urat_status` + value[`id`] + `" class="form-text text-muted"></small>
                                                         </td>
-                                                        <td>    
+                                                        <td>
                                                          <textarea type="text" class="form-control" name="keterangan[` + x + `]"></textarea>
                                                         </td>
                                                         </tr>`);

@@ -9,12 +9,12 @@
     <div class="card">
       <div class="card-body">
         <div class='table-responsive'>
-          <h2>Karyawan Sakit Masuk</h2>
+          <h2>Karyawan Masuk</h2>
           <table id="tabel" class="table table-hover styled-table table-striped">
             <thead style="text-align: center;">
               <tr>
                 <th colspan="12">
-                  <a href="/karyawan_masuk/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                  <a href="/karyawan/masuk/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
                 </th>
               </tr>
               <tr>
@@ -40,7 +40,7 @@
 <div class="modal fade  bd-example-modal-lg" id="riwayat_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
     <div class="card-body">
-      <form method="post" action="/kesehatan_harian_mingguan_tensi/aksi_ubah">
+      <form method="post" action="/kesehatan/harian/mingguan/tensi/aksi_ubah">
         {{ csrf_field() }}
         {{ method_field('PUT')}}
         <div class="modal-content">
@@ -76,11 +76,17 @@
   $(function() {
     var tabel = $('#tabel').DataTable({
       processing: true,
-      serverSide: false,
+      serverSide: true,
       language: {
         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
       },
-      ajax: '/karyawan_masuk/data',
+      ajax: {
+        'url': '/karyawan/masuk/data',
+        'type': 'POST',
+        'headers': {
+          'X-CSRF-TOKEN': '{{csrf_token()}}'
+        }
+      },
       columns: [{
           data: 'DT_RowIndex',
           orderable: false,
@@ -121,7 +127,7 @@
         language: {
           processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
         },
-        ajax: '/karyawan_masuk/detail/data/' + rows[0]['karyawan_sakit_id'],
+        ajax: '/karyawan/masuk/detail/data/' + rows[0]['karyawan_sakit_id'],
         columns: [{
           data: 'analisa'
         }, {
