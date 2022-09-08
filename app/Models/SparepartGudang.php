@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SparepartGudang extends Model
 {
     use HasFactory;
-
+    protected $connection = 'erp';
     protected $table = 'm_gs';
 
     // protected $fillable = ['kelompok', 'kode', 'nama', 'stok'];

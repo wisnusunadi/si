@@ -163,7 +163,7 @@
         var tensi_tabel = $('#tensi_tabel').DataTable({
             processing: true,
             serverSide: false,
-            ajax: '/kesehatan_mingguan_tensi/detail/' + karyawan_id,
+            ajax: '/kesehatan/mingguan/tensi/detail/' + karyawan_id,
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
@@ -195,7 +195,7 @@
         var tensi_tabel = $('#rapid_tabel').DataTable({
             processing: true,
             serverSide: false,
-            ajax: '/kesehatan_mingguan_rapid/detail/' + karyawan_id,
+            ajax: '/kesehatan/mingguan/rapid/detail/' + karyawan_id,
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
@@ -294,11 +294,11 @@
     });
     $('#karyawan_id').change(function() {
         var karyawan_id = $(this).val();
-        $('#tensi_tabel').DataTable().ajax.url('/kesehatan_mingguan_tensi/detail/' + karyawan_id).load();
-        $('#rapid_tabel').DataTable().ajax.url('/kesehatan_mingguan_rapid/detail/' + karyawan_id).load();
+        $('#tensi_tabel').DataTable().ajax.url('/kesehatan/mingguan/tensi/detail/' + karyawan_id).load();
+        $('#rapid_tabel').DataTable().ajax.url('/kesehatan/mingguan/rapid/detail/' + karyawan_id).load();
         var updateChart = function() {
             $.ajax({
-                url: "/kesehatan_mingguan_tensi/detail/data/" + karyawan_id,
+                url: "/kesehatan/mingguan/tensi/detail/data/" + karyawan_id,
                 type: 'GET',
                 dataType: 'json',
                 headers: {

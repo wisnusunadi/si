@@ -9,6 +9,7 @@ class NoseriBrgJadiLog extends Model
 {
     use HasFactory;
 
+    protected $connection = 'erp';
     protected $table = 'noseri_brg_jadi_log';
 
     protected $fillable = ['noseri_id', 'data_lama', 'data_baru', 'action', 'action_by', 'acc_by', 'status'];

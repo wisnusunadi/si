@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Provinsi extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'provinsi';
 
     public function Customer()

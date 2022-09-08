@@ -19,6 +19,8 @@ class RedirectIfAuthenticated
      */
     public function handle(Request $request, Closure $next, ...$guards)
     {
+        $request->headers->set('accept', 'application/json', true);
+        //dd($request->user());
         $guards = empty($guards) ? [null] : $guards;
 
         foreach ($guards as $guard) {
@@ -46,6 +48,8 @@ class RedirectIfAuthenticated
                     return redirect('/direksi/dashboard');
                 } else if ($request->user()->hasRole("31")) {
                     return redirect('/gbj/dashboard');
+                } else if ($request->user()->hasRole("28")) {
+                    return redirect()->route('kesehatan.dashboard');
                 }
             }
         }

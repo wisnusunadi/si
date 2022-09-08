@@ -50,11 +50,11 @@
           <table id="berat_tabel" class="table table-hover styled-table table-striped" style="display:none">
             <thead style="text-align: center;">
               <tr>
-                <th colspan="13">
-                  <a href="/kesehatan_bulanan/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                <th colspan="16">
+                  <a href="/kesehatan_bulanan/berat/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
                 </th>
               </tr>
-              <tr>
+              <!-- <tr>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -64,20 +64,23 @@
                 <th></th>
                 <th colspan="5">Komposisi</th>
                 <th></th>
-              </tr>
+              </tr> -->
               <tr>
                 <th>No</th>
                 <th>Tgl Pengecekan</th>
                 <th>Divisi</th>
                 <th>Nama</th>
-                <th>Tinggi</th>
                 <th>Berat</th>
-                <th>BMI</th>
                 <th>Fat</th>
                 <th>Tbw</th>
                 <th>Muscle</th>
                 <th>Bone</th>
                 <th>Kalori</th>
+                <th>Suhu</th>
+                <th>Spo2</th>
+                <th>Pr</th>
+                <th>Sistolik</th>
+                <th>Diastolik</th>
                 <th></th>
               </tr>
             </thead>
@@ -88,7 +91,7 @@
             <thead style="text-align: center;">
               <tr>
                 <th colspan="12">
-                  <a href="/kesehatan_bulanan/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                  <a href="/kesehatan_bulanan/gcu/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
                 </th>
               </tr>
               <tr>
@@ -126,7 +129,7 @@
         </div>
         <div class="modal-body">
           <div class="data_detail">
-            <table style="text-align: center;" class="table table-hover styled-table table-striped" width="100%" id="tabel_detail">
+            <table style="text-align: center;" class="table table-hover styled-table table-striped" width="100%" id="tabel_detail_berat">
               <thead>
                 <tr>
                   <th></th>
@@ -229,7 +232,7 @@
         </div>
         <div class="modal-body">
           <div class="data_detail">
-            <table style="text-align: center;" class="table table-hover styled-table table-striped" width="100%" id="tabel_detail">
+            <table style="text-align: center;" class="table table-hover styled-table table-striped" width="100%" id="tabel_detail_gcu">
               <thead>
                 <tr>
                   <th></th>
@@ -303,11 +306,17 @@
       $(function() {
         var berat_tabel = $('#berat_tabel').DataTable({
           processing: true,
-          serverSide: false,
+          serverSide: true,
           language: {
             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
           },
-          ajax: '/kesehatan_bulanan_berat/data',
+          ajax: {
+            'url': '/kesehatan_bulanan_berat/data',
+            'type': 'POST',
+            'headers': {
+              'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+          },
           columns: [{
               data: 'DT_RowIndex',
               orderable: false,
@@ -317,35 +326,14 @@
               data: 'tgl_cek'
             },
             {
-              data: 'x'
+              data: 'x',
+              searchable: true
             },
             {
               data: 'y'
             },
             {
-              data: 'ti'
-            },
-            {
               data: 'z'
-            },
-            {
-              data: 'bmi',
-              render: function(data, type, full) {
-                $s = '<br><span class="badge bg-success  ">Sehat</span>';
-                $k = '<br><span class="badge bg-danger  ">Kekurangan Berat Badan</span>';
-                $o = '<br><span class="badge bg-danger  ">Kegemukan (Obesitas)</span>';
-                $g = '<br><span class="badge bg-warning  ">Kelebihan Berat Badan</span>';
-                if (data >= 30) {
-                  return parseFloat(data).toFixed(2) + $o;
-                } else if (data >= 25 || data >= 29.9) {
-                  return parseFloat(data).toFixed(2) + $g;
-                } else if (data >= 18.5 || data >= 24.9) {
-                  return parseFloat(data).toFixed(2) + $s;
-                } else {
-                  return parseFloat(data).toFixed(2) + $k;
-                }
-
-              }
             },
             {
               data: 'l'
@@ -363,6 +351,21 @@
               data: 'ka'
             },
             {
+              data: 'suhu_k'
+            },
+            {
+              data: 'sp'
+            },
+            {
+              data: 'pr'
+            },
+            {
+              data: 'sis'
+            },
+            {
+              data: 'dias'
+            },
+            {
               data: 'button'
             },
           ]
@@ -374,7 +377,7 @@
             console.log(rows);
             $('input[id="id"]').val(rows[0]['id']);
             $('textarea[id="catatan"]').val(rows[0]['keterangan']);
-            $('.data_detail_head_gcu').html(rows[0].karyawan['nama']);
+            $('.data_detail_head_gcu').html(rows[0].y);
             $('input[id="tgl"]').val(rows[0]['tgl_cek']);
             $('input[id="berat"]').val(rows[0]['berat']);
             $('input[id="lemak"]').val(rows[0]['lemak']);
@@ -399,11 +402,17 @@
       $(function() {
         var gcu_tabel = $('#gcu_tabel').DataTable({
           processing: true,
-          serverSide: false,
+          serverSide: true,
           language: {
             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
           },
-          ajax: '/kesehatan_bulanan_gcu/data',
+          ajax: {
+            url: '/kesehatan_bulanan_gcu/data',
+            type: 'POST',
+            headers: {
+              'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+          },
           columns: [{
               data: 'DT_RowIndex',
               orderable: false,
@@ -498,6 +507,7 @@
       var gcu = $('#gcu_tabel').DataTable();
       gcu.destroy();
       $("#detail_gagal").show();
+
     }
   });
 </script>

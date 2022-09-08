@@ -28,7 +28,7 @@
         </div>
         <div class="col-lg-12" id="rapid">
             <div class="col-lg-12">
-                <form action="/kesehatan_mingguan_rapid/aksi_tambah" method="post" enctype="multipart/form-data" id="form">
+                <form action="/kesehatan/mingguan/rapid/aksi_tambah" method="post" enctype="multipart/form-data" id="form">
                     {{ csrf_field() }}
                     <div class="card">
                         <div class="card-header bg-success">
@@ -48,7 +48,7 @@
                                                     <th>Nama</th>
                                                     <th>Hasil</th>
                                                     <th>Catatan</th>
-                                                    <th>File</th>
+                                                    <!-- <th>File</th> -->
                                                     <th></th>
                                                 </tr>
                                             </thead>
@@ -126,9 +126,9 @@
                                                     <td>
                                                         <textarea type="text" class="form-control keterangan" name="keterangan[]"></textarea>
                                                     </td>
-                                                    <td>
+                                                    <!-- <td>
                                                         <input type="file" class="form-control file" name="file[]">
-                                                    </td>
+                                                    </td> -->
                                                     <td>
                                                         <button name="add" type="button" id="tambahitem" class="btn btn-success"><i class="nav-icon fas fa-plus-circle"></i></button>
                                                     </td>
@@ -140,7 +140,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan_mingguan"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
+                            <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan/mingguan"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
                             <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                         </div>
                     </div>
@@ -278,11 +278,9 @@
                                                     <td>
                                                         <textarea type="text" class="form-control keterangan" name="keterangan[]"></textarea>
                                                     </td>
+
                                                     <td>
-                                                        <input type="file" class="form-control file" name="file[]">
-                                                    </td>
-                                                    <td>
-                                                    <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable"><i class="fas fa-times-circle"></i></button> 
+                                                    <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable"><i class="fas fa-times-circle"></i></button>
                                                     </td>
                                                 </tr>`;
             $('#tabel_rapid tr:last').after(data);

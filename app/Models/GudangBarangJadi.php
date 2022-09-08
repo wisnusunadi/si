@@ -11,7 +11,7 @@ use App\Models\NoseriBarangJadi;
 class GudangBarangJadi extends Model
 {
     use HasFactory;
-
+    protected $connection = 'erp';
     protected $table = "gdg_barang_jadi";
     protected $fillable = ['produk_id', 'nama', 'stok', 'ruang', 'updated_by', 'created_by', 'stok_siap'];
 

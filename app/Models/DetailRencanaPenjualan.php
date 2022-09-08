@@ -9,6 +9,7 @@ class DetailRencanaPenjualan extends Model
 {
     use HasFactory;
 
+    protected $connection = 'erp';
     protected $table = 'detail_rencana_penjualan';
 
     protected $fillable = ['rencana_penjualan_id', 'penjualan_produk_id', 'jumlah', 'harga', 'updated_at', 'created_at'];
