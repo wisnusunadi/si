@@ -1035,7 +1035,7 @@ class GudangController extends Controller
                             NoseriBrgJadiLog::where('noseri_id', $d->noseri_id)->where([
                                 'action' => 'delete',
                                 'status' => 'waiting'
-                            ])->update(['status' => 'approve', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
+                            ])->update(['status' => 'approved', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                             NoseriTGbj::where('noseri_id',$d->noseri_id)->delete();
                             NoseriBarangJadi::find($d->noseri_id)->delete();
                         }
