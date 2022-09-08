@@ -49,7 +49,7 @@
                                     </div>
                                     <div class="d-flex justify-content-end">
                                         <div>
-                                            <button type="submit" class="btn btn-block btn-primary" onclick="login()">
+                                            <button type="submit" class="btn btn-block btn-primary login_button" onclick="login()">
                                                 <span class="fas fa-sign-in-alt"></span>
                                                 Login
                                             </button>
@@ -105,7 +105,10 @@
                             password : password,
                             _token: '{{csrf_token()}}'
                         },
-
+                        beforeSend: function() {
+                            $(".login_button").attr("disabled", true);
+                            $(".login_button").text('Harap Tunggu');
+                        },
                         success: function(response) {
                             location.reload();
 
@@ -116,6 +119,8 @@
                                     'Username atau Password Salah',
                                     'error'
                                 );
+                                $(".login_button").text('Login');
+                                $(".login_button").attr("disabled", false);
                         }
                     });
       }

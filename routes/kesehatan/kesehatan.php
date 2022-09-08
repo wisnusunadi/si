@@ -55,8 +55,8 @@ Route::group(['prefix' => '/kesehatan'], function (){
          Route::get('/rapid/tambah',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_mingguan_rapid_tambah']);
         Route::get('/tensi/tambah',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_mingguan_tensi_tambah']);
         Route::post('/tensi/aksi_tambah',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_mingguan_tensi_aksi_tambah']);
-        // Route::put('/tensi/aksi_ubah',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_mingguan_tensi_aksi_ubah']);
-        // Route::put('/rapid/aksi_ubah',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_mingguan_rapid_aksi_ubah']);
+         Route::put('/tensi/aksi_ubah',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_mingguan_tensi_aksi_ubah']);
+         Route::put('/rapid/aksi_ubah',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_mingguan_rapid_aksi_ubah']);
          Route::post('/rapid/aksi_tambah',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_mingguan_rapid_aksi_tambah']);
         // /* Get Data */
          Route::post('/tensi/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_mingguan_tensi_data']);

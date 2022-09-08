@@ -1722,5 +1722,36 @@ class KesehatanController extends Controller
             })
             ->make(true);
     }
+    public function kesehatan_mingguan_tensi_aksi_ubah(Request $request)
+    {
+        $id = $request->id;
+        $kesehatan_mingguan_tensi = kesehatan_mingguan_tensi::find($id);
+        $kesehatan_mingguan_tensi->sistolik = $request->sistolik;
+        $kesehatan_mingguan_tensi->diastolik = $request->diastolik;
+        $kesehatan_mingguan_tensi->keterangan = $request->catatan;
+        $kesehatan_mingguan_tensi->save();
+
+        if ($kesehatan_mingguan_tensi) {
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
+    }
+
+    public function kesehatan_mingguan_rapid_aksi_ubah(Request $request)
+    {
+        $id = $request->id;
+        $kesehatan_mingguan_rapid = kesehatan_mingguan_rapid::find($id);
+        $kesehatan_mingguan_rapid->hasil = $request->hasil;
+        $kesehatan_mingguan_rapid->jenis = $request->jenis;
+        $kesehatan_mingguan_rapid->keterangan = $request->catatan;
+        $kesehatan_mingguan_rapid->save();
+
+        if ($kesehatan_mingguan_rapid) {
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
+    }
 
 }

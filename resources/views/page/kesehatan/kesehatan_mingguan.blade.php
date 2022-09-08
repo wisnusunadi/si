@@ -111,7 +111,7 @@
 <!-- Modal Detail -->
 <div class="modal fade  bd-example-modal-lg" id="detail_mod_tensi" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-    <form method="post" action="/kesehatan_mingguan_tensi/aksi_ubah">
+    <form method="post" action="/kesehatan/mingguan/tensi/aksi_ubah">
       {{ csrf_field() }}
       {{ method_field('PUT')}}
       <div class="modal-content">
@@ -178,7 +178,7 @@
 <!-- Modal Detail -->
 <div class="modal fade  bd-example-modal-lg" id="detail_mod_rapid" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-    <form method="post" action="/kesehatan_mingguan_rapid/aksi_ubah">
+    <form method="post" action="/kesehatan/mingguan/rapid/aksi_ubah">
       {{ csrf_field() }}
       {{ method_field('PUT')}}
       <div class="modal-content">
