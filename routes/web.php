@@ -168,7 +168,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/penjualan'], function () {
-        Route::group(['middleware' => ['divisi:dc,jual,asp,dirut']], function () {
+        Route::group(['middleware' => ['divisi:dc,jual,asp,dirut,qc,log']], function () {
             Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
             Route::get('/detail/spa/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa'])->name('penjualan.penjualan.detail.spa');
             Route::get('/detail/spb/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spb'])->name('penjualan.penjualan.detail.spb');
@@ -290,7 +290,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/pengiriman'], function () {
-        Route::group(['middleware' => ['divisi:jual,asp,dirut']], function () {
+        Route::group(['middleware' => ['divisi:jual,asp,dirut,log']], function () {
             Route::view('/show', 'page.logistik.pengiriman.show')->name('logistik.pengiriman.show');
             Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
             Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_pengiriman_detail_data'])->name('logistik.pengiriman.detail');
