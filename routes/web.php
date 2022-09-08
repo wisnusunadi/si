@@ -385,7 +385,6 @@ Route::group(['prefix' => 'as', 'middleware' => ['auth','divisi:asp']], function
         Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_so'])->name('as.so.detail');
         Route::view('/show', 'page.as.so.show')->name('as.so.show');
         Route::view('/list/{id}', 'page.as.so.list')->name('as.so.list');
-        Route::get('/edit/{id}', [App\Http\Controllers\AfterSalesController::class, 'get_data_detail_part']);
     });
 
     // Route::group(['prefix' => '/coo'], function () {

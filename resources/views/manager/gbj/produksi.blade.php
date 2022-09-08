@@ -88,6 +88,7 @@
                         <th>No Seri Lama</th>
                         <th>No Seri Baru</th>
                         <th>Diajukan Oleh</th>
+                        <th>Detail</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -125,6 +126,7 @@
                             <th>Tanggal Pengajuan</th>
                             <th>No Seri</th>
                             <th>Diajukan Oleh</th>
+                            <th>Detail</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -160,6 +162,23 @@
         </div>
       </div>
     </div>
+
+    <div class="modal modelDetail" aria-labelledby="testing" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title judulKomentar" id="staticBackdropLabel"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <label for="">Alasan Pengajuan</label>
+                <textarea class="form-control alasan_staff" disabled name="" id="" cols="30" rows="10"></textarea>
+              </div>
+          </div>
+        </div>
+      </div>
 
 @stop
 
@@ -270,6 +289,7 @@
                 {data: 'lama'},
                 {data: 'baru'},
                 {data: 'requested'},
+                {data: 'action'},
             ],
             language: {
                 search: "Cari:"
@@ -307,6 +327,7 @@
                 {data: 'tgl_aju'},
                 {data: 'noseri'},
                 {data: 'requested'},
+                {data: 'action'},
             ],
             language: {
                 search: "Cari:"
@@ -640,6 +661,24 @@
                 }
             })
         }
+    })
+
+    $(document).on('click', '.btnAlasan', function () {
+        let id = $(this).data('id');
+        $.ajax({
+            url: '/api/v2/gbj/alasan_edit_noseri_staff',
+            type: 'post',
+            data: {
+                id: id,
+            },
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
+            success: function(res) {
+                $('.alasan_staff').val(res.data);
+            }
+        })
+        $('.modelDetail').modal('show');
     })
 
 </script>

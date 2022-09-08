@@ -76,7 +76,7 @@
             <input type="text" name="" id="kt_datepicker_2" class="form-control">
         </div>
     </div>
-    <a href="{{ route('export.rakitseri') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Export</a>
+    {{-- <a href="{{ route('export.rakitseri') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Export</a> --}}
 </div>
 <div class="row ml-2">
     <div class="col-lg-12">

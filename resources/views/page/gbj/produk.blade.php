@@ -36,11 +36,11 @@
                                         </button>
                                     </span>
 
-                                    <span class="float-left mr-1">
+                                    {{-- <span class="float-left mr-1">
                                         <a href="{{ route('gbj.noseri') }}" class="btn btn-outline-secondary" id="btnExportNoseri">
                                             <i class="fas fa-download"></i>&nbsp;Noseri
                                         </a>
-                                    </span>
+                                    </span> --}}
                                 @endif
                                 </div>
                             </div>
@@ -292,7 +292,7 @@
                                     <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill"
                                         href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home"
                                         aria-selected="true">Belum Digunakan
-                                        <span class="badge badge-dark" id="count_belum">0</span>
+                                        {{-- <span class="badge badge-dark" id="count_belum">0</span> --}}
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -300,7 +300,7 @@
                                         href="#custom-tabs-four-profile" role="tab"
                                         aria-controls="custom-tabs-four-profile" aria-selected="false">Sudah
                                         Digunakan
-                                        <span class="badge badge-dark" id="count_sudah">0</span>
+                                        {{-- <span class="badge badge-dark" id="count_sudah">0</span> --}}
                                     </a>
                                 </li>
                                 <li class="nav-item">
@@ -308,7 +308,7 @@
                                         href="#custom-tabs-four-wait-approved" role="tab"
                                         aria-controls="custom-tabs-four-wait-approved" aria-selected="false">
                                         Menunggu Persetujuan
-                                        <span class="badge badge-dark" id="count_wait">0</span>
+                                        {{-- <span class="badge badge-dark" id="count_wait">0</span> --}}
                                     </a>
                                 </li>
                                 {{-- History Nomor Seri --}}
@@ -1186,22 +1186,22 @@
         $('.seri_id').val(id);
         $('#gbjid').val(id);
 
-        $.ajax({
-            url: '/api/v2/gbj/header_count_noseri_status/' + id,
-            type: 'get',
-            dataType: 'json',
-            success: function (res) {
-                console.log(res);
-                $('#count_belum').text(res.belum)
-                $('#count_sudah').text(res.sudah)
-                if (res.wait === 0) {
-                    $('#count_wait').hide();
-                } else {
-                    $('#count_wait').show()
-                    $('#count_wait').text(res.wait)
-                }
-            }
-        })
+        // $.ajax({
+        //     url: '/api/v2/gbj/header_count_noseri_status/' + id,
+        //     type: 'get',
+        //     dataType: 'json',
+        //     success: function (res) {
+        //         console.log(res);
+        //         $('#count_belum').text(res.belum)
+        //         $('#count_sudah').text(res.sudah)
+        //         if (res.wait === 0) {
+        //             $('#count_wait').hide();
+        //         } else {
+        //             $('#count_wait').show()
+        //             $('#count_wait').text(res.wait)
+        //         }
+        //     }
+        // })
 
         $.ajax({
             url: '/api/gbj/sel-divisi',
@@ -1805,6 +1805,9 @@
             type: 'post',
             data: {
                 id:ids
+            },
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
             },
             dataType: 'json',
             success: function (res) {

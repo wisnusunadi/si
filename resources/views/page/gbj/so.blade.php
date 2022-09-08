@@ -59,9 +59,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Proses</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" id="pills-batal_po-tab" data-toggle="pill" href="#pills-batal_po" role="tab" aria-controls="pills-batal_po" aria-selected="false">Batal Proses</a>
-                            </li>
+                            </li> --}}
                             @endif
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
