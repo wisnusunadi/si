@@ -501,14 +501,22 @@
         async created() {
             this.$store.commit("setIsLoading", true);
 
-            await axios.get("/api/ppic/data/gbj").then((response) => {
+            await axios.get("/api/ppic/data/gbj",{
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                }
+            }).then((response) => {
                 this.data_produk = response.data;
             });
 
             this.getDataKomentar();
 
             if (this.status === "pelaksanaan") {
-                await axios.get("/api/ppic/data/rencana_perakitan").then((response) => {
+                await axios.get("/api/ppic/data/rencana_perakitan",{
+                headers: {
+                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                }
+            }).then((response) => {
                     this.rencana_jadwal = response.data;
                 });
             }
@@ -583,7 +591,11 @@
                 this.$store.commit("setIsLoading", true);
 
                 await axios
-                    .get("/api/ppic/data/gbj", {
+                    .get("/api/ppic/data/gbj",{
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                        }
+                    }, {
                         params: {
                             id: this.produk.value,
                         },
@@ -597,7 +609,11 @@
                     });
 
                 await axios
-                    .get("/api/ppic/data/gk/unit", {
+                    .get("/api/ppic/data/gk/unit",{
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                        }
+                    }, {
                         params: {
                             id: this.produk.value,
                         },
@@ -722,7 +738,11 @@
                     }
 
                     await axios
-                        .get("/api/ppic/data/perakitan/" + this.status)
+                        .get("/api/ppic/data/perakitan/" + this.status,{
+                            headers: {
+                                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                            }
+                        })
                         .then((response) => {
                             this.$store.commit("setJadwal", response.data);
                             this.editProdukModal = false;
@@ -740,7 +760,11 @@
                             });
                     }
                     await axios
-                        .get("/api/ppic/data/perakitan/" + this.status)
+                        .get("/api/ppic/data/perakitan/" + this.status,{
+                            headers: {
+                                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                            }
+                        })
                         .then((response) => {
                             this.$store.commit("setJadwal", response.data);
                             this.deleteProdukModal = false;
@@ -755,6 +779,10 @@
 
                 await axios
                     .get("/api/ppic/data/gbj", {
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                        }
+                    }, {
                         params: {
                             id: events.produk_id,
                         },
@@ -768,7 +796,11 @@
                     });
 
                 await axios
-                    .get("/api/ppic/data/gk/unit", {
+                    .get("/api/ppic/data/gk/unit",{
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                        }
+                    }, {
                         params: {
                             id: events.produk_id,
                         },
@@ -799,7 +831,11 @@
                     )
                     .then(async (response) => {
                         await axios
-                            .get("/api/ppic/data/perakitan/" + this.status)
+                            .get("/api/ppic/data/perakitan/" + this.status,{
+                                headers: {
+                                    Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                                }
+                            })
                             .then((response) => {
                                 this.$store.commit("setJadwal", response.data);
                             });

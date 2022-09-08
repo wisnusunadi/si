@@ -221,6 +221,23 @@
 @stop
 @section('adminlte_js')
 <script>
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
     window.history.pushState(null, "", window.location.href);
     window.onpopstate = function() {
         window.history.pushState(null, "", window.location.href);
@@ -299,6 +316,9 @@
         processing: true,
         ajax: {
             url: "/api/gk/transaksi/history/" + id,
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
         },
         columns: [
             {data: 'tanggal'},
@@ -370,6 +390,9 @@
             processing: true,
             ajax: {
                 url: "/api/gk/transaksi/noseri/" + idd,
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex'},
@@ -426,6 +449,9 @@ $('#tahun').change(function (e) {
         data: {
             id: id,
             tahun: this.value,
+        },
+        beforeSend : function(xhr){
+            xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
         },
         success: function (res) {
             console.log(res);

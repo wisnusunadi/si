@@ -73,15 +73,18 @@ class LaporanPenjualan implements WithMultipleSheets
         }
         // $sheets[] = new SheetSudahPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->tampilan);
 
-        if ($x == ['ekatalog', 'spa', 'spb']) {
-            $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
-        } else if ($x == ['ekatalog', 'spa']) {
-            $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
-        } else if ($x == ['ekatalog', 'spb']) {
-            $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
-        } else if ($this->jenis_penjualan == 'ekatalog') {
-            $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir);
+
+
+        if ($jenis_laporan == 'detail_produk') {
+            $sheets[] = new SheetBerdasarkanDetailProduk($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->jenis_laporan);
+        } else if ($jenis_laporan == 'paket_produk') {
+            $sheets[] = new SheetBerdasarkanPaket($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->jenis_laporan);
+        } else if ($jenis_laporan == 'no_po') {
+            $sheets[] = new SheetBerdasarkanPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->jenis_laporan);
+        } else {
+            $sheets[] = new SheetBerdasarkanSJ($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->jenis_laporan);
         }
+        // $sheets[] = new SheetSudahPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->tampilan);
 
         return $sheets;
     }

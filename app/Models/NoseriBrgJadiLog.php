@@ -12,7 +12,7 @@ class NoseriBrgJadiLog extends Model
     protected $connection = 'erp';
     protected $table = 'noseri_brg_jadi_log';
 
-    protected $fillable = ['noseri_id', 'data_lama', 'data_baru', 'action', 'action_by', 'acc_by', 'status'];
+    protected $fillable = ['noseri_id', 'data_lama', 'data_baru', 'action', 'action_by', 'acc_by', 'status', 'komentar', 'gbj_id', 'remark'];
 
     function noseri()
     {

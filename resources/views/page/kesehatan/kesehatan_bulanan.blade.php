@@ -51,7 +51,7 @@
             <thead style="text-align: center;">
               <tr>
                 <th colspan="16">
-                  <a href="/kesehatan_bulanan/berat/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                  <a href="/kesehatan/bulanan/berat/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
                 </th>
               </tr>
               <!-- <tr>
@@ -91,7 +91,7 @@
             <thead style="text-align: center;">
               <tr>
                 <th colspan="12">
-                  <a href="/kesehatan_bulanan/gcu/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                  <a href="/kesehatan/bulanan/gcu/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
                 </th>
               </tr>
               <tr>
@@ -117,7 +117,7 @@
 <!-- Modal Detail -->
 <div class="modal fade  bd-example-modal-xl" id="detail_mod_berat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-xl" role="document">
-    <form method="post" action="/kesehatan_bulanan_berat/aksi_ubah">
+    <form method="post" action="/kesehatan/bulanan/berat/aksi_ubah">
       {{ csrf_field() }}
       {{ method_field('PUT')}}
       <div class="modal-content">
@@ -220,7 +220,7 @@
 <!-- Modal Detail -->
 <div class="modal fade  bd-example-modal-lg" id="detail_mod_gcu" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-    <form method="post" action="/kesehatan_bulanan_gcu/aksi_ubah">
+    <form method="post" action="/kesehatan/bulanan/gcu/aksi_ubah">
       {{ csrf_field() }}
       {{ method_field('PUT')}}
       <div class="modal-content">
@@ -311,7 +311,7 @@
             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
           },
           ajax: {
-            'url': '/kesehatan_bulanan_berat/data',
+            'url': '/kesehatan/bulanan/berat/data',
             'type': 'POST',
             'headers': {
               'X-CSRF-TOKEN': '{{csrf_token()}}'
@@ -407,7 +407,7 @@
             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
           },
           ajax: {
-            url: '/kesehatan_bulanan_gcu/data',
+            url: '/kesehatan/bulanan/gcu/data',
             type: 'POST',
             headers: {
               'X-CSRF-TOKEN': '{{csrf_token()}}'

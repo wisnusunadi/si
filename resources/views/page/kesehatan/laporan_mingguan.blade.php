@@ -240,13 +240,13 @@
         $('#tensi_card').removeAttr('hidden');
         $('#rapid_card').attr('hidden', 'hidden');
         $('#tensi_tabel').removeAttr('style');
-        $('#tensi_tabel').DataTable().ajax.url('/laporan_mingguan/data/' + filter_mingguan + '/' + filter + '/' + id + '/' + tgl_1 + '/' + tgl_2).load();
+        $('#tensi_tabel').DataTable().ajax.url('/kesehatan/laporan/mingguan/data/' + filter_mingguan + '/' + filter + '/' + id + '/' + tgl_1 + '/' + tgl_2).load();
 
       } else if (filter_mingguan == 'rapid') {
         $('#rapid_card').removeAttr('hidden');
         $('#tensi_card').attr('hidden', 'hidden');
         $('#rapid').removeAttr('style');
-        $('#rapid').DataTable().ajax.url('/laporan_mingguan/data/' + filter_mingguan + '/' + filter + '/' + id + '/' + tgl_1 + '/' + tgl_2).load();
+        $('#rapid').DataTable().ajax.url('/kesehatan/laporan/mingguan/data/' + filter_mingguan + '/' + filter + '/' + id + '/' + tgl_1 + '/' + tgl_2).load();
       }
       //********
     } else if (date1 >= date2 || id == "" || filter == "") {
@@ -258,13 +258,13 @@
         $('#tensi_card').removeAttr('hidden');
         $('#rapid_card').attr('hidden', 'hidden');
         $('#tensi_tabel').removeAttr('style');
-        $('#tensi_tabel').DataTable().ajax.url('/laporan_mingguan/data/' + filter_mingguan + '/' + filter + '/' + id + '/' + tgl_1 + '/' + tgl_2).load();
+        $('#tensi_tabel').DataTable().ajax.url('/kesehatan/laporan/mingguan/data/' + filter_mingguan + '/' + filter + '/' + id + '/' + tgl_1 + '/' + tgl_2).load();
 
       } else if (filter_mingguan == 'rapid') {
         $('#rapid_card').removeAttr('hidden');
         $('#tensi_card').attr('hidden', 'hidden');
         $('#rapid').removeAttr('style');
-        $('#rapid').DataTable().ajax.url('/laporan_mingguan/data/' + filter_mingguan + '/' + filter + '/' + id + '/' + tgl_1 + '/' + tgl_2).load();
+        $('#rapid').DataTable().ajax.url('/kesehatan/laporan/mingguan/data/' + filter_mingguan + '/' + filter + '/' + id + '/' + tgl_1 + '/' + tgl_2).load();
       }
       //********
     } else {
@@ -279,8 +279,8 @@
   });
 
   $('#reset').click(function() {
-    $('#tensi_tabel').DataTable().ajax.url('/laporan_mingguan/data/' + 'y' + '/' + 'x' + '/' + 0 + '/' + 0 + '/' + 0).load();
-    $('#rapid').DataTable().ajax.url('/laporan_mingguan/data/' + 'y' + '/' + 'x' + '/' + 0 + '/' + 0 + '/' + 0).load();
+    $('#tensi_tabel').DataTable().ajax.url('/kesehatan/laporan/mingguan/data/' + 'y' + '/' + 'x' + '/' + 0 + '/' + 0 + '/' + 0).load();
+    $('#rapid').DataTable().ajax.url('/kesehatan/laporan/mingguan/data/' + 'y' + '/' + 'x' + '/' + 0 + '/' + 0 + '/' + 0).load();
   });
 </script>
 <script>
@@ -305,7 +305,7 @@
           className: "btn btn-primary"
         },
       ],
-      ajax: '/laporan_mingguan/data/' + 'y' + '/' + 'x' + '/' + 0 + '/' + 0 + '/' + 0,
+      ajax: '/kesehatan/laporan/mingguan/data/' + 'y' + '/' + 'x' + '/' + 0 + '/' + 0 + '/' + 0,
       columns: [{
           data: 'DT_RowIndex',
           orderable: false,
@@ -357,7 +357,7 @@
           className: "btn btn-primary"
         },
       ],
-      ajax: '/laporan_mingguan/data/' + 'y' + '/' + 'x' + '/' + 0 + '/' + 0 + '/' + 0,
+      ajax: '/kesehatan/laporan/mingguan/data/' + 'y' + '/' + 'x' + '/' + 0 + '/' + 0 + '/' + 0,
       columns: [{
           data: 'DT_RowIndex',
           orderable: false,

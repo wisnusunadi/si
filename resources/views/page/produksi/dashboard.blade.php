@@ -436,6 +436,23 @@
 @section('adminlte_js')
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.2.0/js/bootstrap-datepicker.min.js"></script>
 <script>
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
         // var dateObj = new Date();
         // var month = dateObj.getUTCMonth() + 1; //months from 1-12
         // var year = dateObj.getUTCFullYear();
@@ -552,6 +569,9 @@
         ajax: {
             url: '/api/prd/minus5',
             type: "post",
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
         },
         columns: [
             {data: 'DT_RowIndex'},
@@ -645,6 +665,9 @@
         ajax: {
             url: '/api/prd/exp',
             type: "post",
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
         },
         columns: [
             {data: 'DT_RowIndex'},
@@ -732,6 +755,9 @@
             ajax: {
                 url: "/api/prd/exp_rakit",
                 type: "post",
+                beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
             },
             columns: [
                 {data: 'start'},
@@ -760,6 +786,9 @@
                 ajax: {
                     url: "/api/prd/exp_jadwal",
                     type: "post",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    }
                 },
                 columns: [
                     {data: 'start'},
@@ -793,6 +822,9 @@
         ajax: {
             url: '/api/prd/minus10',
             type: "post",
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
         },
         columns: [
             {data: 'DT_RowIndex'},
@@ -877,6 +909,9 @@
             ajax: {
                 url: "/api/prd/exp_rakit",
                 type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'start'},

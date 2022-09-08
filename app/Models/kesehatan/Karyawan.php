@@ -37,4 +37,12 @@ class Karyawan extends Model
     {
         return $this->hasMany(Kesehatan_mingguan_rapid::class);
     }
+    public function gcu_karyawan()
+    {
+        return $this->hasMany(Gcu_karyawan::class);
+    }
+    public function kesehatan_tahunan()
+    {
+        return $this->hasMany(Kesehatan_tahunan::class);
+    }
 }

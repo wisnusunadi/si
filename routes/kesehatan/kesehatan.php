@@ -18,21 +18,33 @@ Route::group(['prefix' => '/kesehatan'], function (){
         Route::get('/data/{id}',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_data_detail']);
         //});
 
+
+        Route::group(['prefix' => '/laporan'], function (){
+        Route::get('/harian', [App\Http\Controllers\kesehatan\KesehatanController::class,'laporan_harian']);
+        Route::get('/mingguan', [App\Http\Controllers\kesehatan\KesehatanController::class,'laporan_mingguan']);
+        Route::get('/bulanan', [App\Http\Controllers\kesehatan\KesehatanController::class,'laporan_bulanan']);
+        Route::get('/tahunan', [App\Http\Controllers\kesehatan\KesehatanController::class,'laporan_tahunan']);
+        Route::get('/harian/data/{filter}/{id}/{start}/{end}', [App\Http\Controllers\kesehatan\KesehatanController::class,'laporan_harian_data']);
+        Route::get('/mingguan/data/{filter_mingguan}/{filter}/{id}/{start}/{end}', [App\Http\Controllers\kesehatan\KesehatanController::class,'laporan_mingguan_data']);
+        Route::get('/bulanan/data/{filter_bulanan}/{filter}/{id}/{start}/{end}', [App\Http\Controllers\kesehatan\KesehatanController::class,'laporan_bulanan_data']);
+        Route::get('/tahunan/data/{filter}/{id}/{start}/{end}', [App\Http\Controllers\kesehatan\KesehatanController::class,'laporan_tahunan_data']);
+        });
+
         Route::group(['prefix' => '/bulanan'], function (){
-            Route::post('/berat/detail/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_berat_detail_data']);
-            // Route::get('', 'KesehatanController@kesehatan_bulanan');
-            // Route::get('/gcu/tambah', 'KesehatanController@kesehatan_bulanan_gcu_tambah');
-            // Route::get('/berat/tambah', 'KesehatanController@kesehatan_bulanan_berat_tambah');
-            // Route::get('/tambah/data', 'KesehatanController@kesehatan_bulanan_tambah_data');
-            // Route::post('/gcu/aksi_tambah', 'KesehatanController@kesehatan_bulanan_gcu_aksi_tambah');
-            // Route::post('/berat/aksi_tambah', 'KesehatanController@kesehatan_bulanan_berat_aksi_tambah');
-            // Route::put('/berat/aksi_ubah', 'KesehatanController@kesehatan_bulanan_berat_aksi_ubah');
-            // Route::put('/gcu/aksi_ubah', 'KesehatanController@kesehatan_bulanan_gcu_aksi_ubah');
-            // Route::post('/gcu/data', 'KesehatanController@kesehatan_bulanan_gcu_data');
-            // Route::post('/berat/data', 'KesehatanController@kesehatan_bulanan_berat_data');
-            // Route::get('/detail', 'KesehatanController@kesehatan_bulanan_gcu_detail');
-            // Route::post('/berat/detail/{karyawan_id}', 'KesehatanController@kesehatan_bulanan_berat_detail_data');
-            // Route::get('/detail/data/{karyawan_id}', 'KesehatanController@kesehatan_bulanan_detail_data_karyawan');
+        Route::get('/',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan']);
+        Route::get('/gcu/tambah',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_tambah']);
+        Route::get('/berat/tambah',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_berat_tambah']);
+        Route::get('/tambah/data',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_tambah_data']);
+        Route::post('/gcu/aksi_tambah',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_aksi_tambah']);
+        Route::post('/berat/aksi_tambah',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_berat_aksi_tambah']);
+        Route::put('/berat/aksi_ubah',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_berat_aksi_ubah']);
+        Route::put('/gcu/aksi_ubah',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_aksi_ubah']);
+        Route::post('/gcu/data',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_data']);
+        Route::post('/berat/data',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_berat_data']);
+        Route::get('/detail',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_detail']);
+        Route::post('/berat/detail/{karyawan_id}',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_berat_detail_data']);
+        Route::get('/gcu/detail/{karyawan_id}',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_detail_data']);
+        Route::get('/detail/data/{karyawan_id}',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_detail_data_karyawan']);
         });
 
         Route::group(['prefix' => '/mingguan'], function (){

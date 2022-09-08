@@ -252,7 +252,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <span class="float-left"><a class="btn btn-danger rounded-pill" href="/karyawan_masuk"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
+                            <span class="float-left"><a class="btn btn-danger rounded-pill" href="/karyawan/masuk"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
                             <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                         </div>
                     </div>

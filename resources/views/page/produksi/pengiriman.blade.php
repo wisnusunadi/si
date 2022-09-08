@@ -49,7 +49,6 @@
     .calendar-time {
         display: none;
     }
-
 </style>
 <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
 <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
@@ -77,6 +76,7 @@
             <input type="text" name="" id="kt_datepicker_2" class="form-control">
         </div>
     </div>
+    {{-- <a href="{{ route('export.rakitseri') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Export</a> --}}
 </div>
 <div class="row ml-2">
     <div class="col-lg-12">
@@ -341,6 +341,23 @@
 @section('adminlte_js')
 <script>
     // Tanggal Masuk
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
     var start_date;
     var end_date;
     var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
@@ -400,7 +417,12 @@
             processing: false,
             ordering: false,
             destroy: true,
-            ajax: "/api/prd/kirim",
+            ajax: {
+                url: "/api/prd/kirim",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
+            },
             columns: [
                 { data: 'periode'},
                 {

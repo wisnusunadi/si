@@ -110,7 +110,7 @@
 
         </div>
         <div class="col-lg-6">
-            <form action="/kesehatan_harian/aksi_tambah" method="post">
+            <form action="/kesehatan/harian/aksi_tambah" method="post">
                 {{ csrf_field() }}
                 <div class="card">
                     <div class="card-header bg-success">
@@ -150,7 +150,7 @@
         var tensi_tabel = $('#tensi_tabel').DataTable({
             processing: true,
             serverSide: false,
-            ajax: '/kesehatan_bulanan_gcu/detail/' + karyawan_id,
+            ajax: '/kesehatan/bulanan/gcu/detail/' + karyawan_id,
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
@@ -224,7 +224,7 @@
         var berat_tabel = $('#berat_tabel').DataTable({
             processing: true,
             serverSide: false,
-            ajax: '/kesehatan_bulanan_gcu/detail/' + karyawan_id,
+            ajax: '/kesehatan/bulanan/gcu/detail/' + karyawan_id,
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
@@ -331,11 +331,11 @@
     });
     $('#karyawan_id').change(function() {
         var karyawan_id = $(this).val();
-        $('#tensi_tabel').DataTable().ajax.url('/kesehatan_bulanan_gcu/detail/' + karyawan_id).load();
-        $('#berat_tabel').DataTable().ajax.url('/kesehatan_bulanan_berat/detail/' + karyawan_id).load();
+        $('#tensi_tabel').DataTable().ajax.url('/kesehatan/bulanan/gcu/detail/' + karyawan_id).load();
+        $('#berat_tabel').DataTable().ajax.url('/kesehatan/bulanan/berat/detail/' + karyawan_id).load();
         var updateChart = function() {
             $.ajax({
-                url: "/kesehatan_bulanan/detail/data/" + karyawan_id,
+                url: "/kesehatan/bulanan/detail/data/" + karyawan_id,
                 type: 'GET',
                 dataType: 'json',
                 headers: {

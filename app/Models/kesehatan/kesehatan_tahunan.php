@@ -1,10 +1,10 @@
 <?php
 
-namespace App;
+namespace App\Models\kesehatan;
 
 use Illuminate\Database\Eloquent\Model;
 
-class kesehatan_tahunan extends Model
+class Kesehatan_tahunan extends Model
 {
     protected $connection = 'kesehatan';
     protected $table = 'kesehatan_tahunans';
@@ -13,10 +13,10 @@ class kesehatan_tahunan extends Model
 
     public function Karyawan()
     {
-        return $this->belongsTo('App\Karyawan', 'karyawan_id');
+        return $this->belongsTo(Karyawan::class, 'karyawan_id');
     }
     public function Pemeriksa()
     {
-        return $this->belongsTo('App\Karyawan', 'pemeriksa_id');
+        return $this->belongsTo(Karyawan::class, 'pemeriksa_id');
     }
 }

@@ -307,12 +307,25 @@
 "https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.37/js/bootstrap-datetimepicker.min.js">
         </script>
 <script>
+    var access_token = localStorage.getItem('lokal_token');
     $(document).ready(function () {
+        if (access_token == null) {
+            Swal.fire({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    document.getElementById('logout-form').submit();
+                }
+            })
+        }
         cal_jadwal();
-        // $('#home-tab').on('click', function() {
-        //     tab_jadwaldestroy();
-        //     cal_jadwal();
-        // })
 
         $('#profile-tab').on('click', function() {
             tab_jadwal();
@@ -325,32 +338,6 @@
         let date = new Date();
         $('#tgl_perakitan').val(date.toISOString().substr(0, 10));
     })
-
-    // Charts
-        // $(document).ready(function () {
-        //     var options = {
-        //     chart: {
-        //         type: 'bar',
-        //         height: 350,
-        //     },
-        //     plotOptions: {
-        //         bar: {
-        //         horizontal: true
-        //         }
-        //     },
-        //     series: [{
-        //         name: 'Jumlah',
-        //         data: [30,40,45,50,49,60,70,91,125]
-        //     }],
-        //     xaxis: {
-        //         categories: ['Produk 1', 'Produk 2', 'Produk 3', 'Produk 4', 'Produk 5', 'Produk 6', 'Produk 7', 'Produk 8', 'Produk 9'],
-        //     }
-        //     }
-
-        //     var charts = new ApexCharts(document.querySelector(".chart"), options);
-
-        //     charts.render();
-        // });
 
     function modalRakit() {
 
@@ -393,6 +380,9 @@
                     url: "/api/prd/ongoing-cal",
                     type: "post",
                     dataType: "json",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    },
                     success: function (res) {
                         var events = [];
                         if (res != null) {
@@ -431,6 +421,9 @@
             ajax: {
                 url: "/api/prd/ongoing",
                 type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
             },
             columns: [
                 { data: 'periode'},

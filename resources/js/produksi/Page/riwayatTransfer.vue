@@ -116,7 +116,12 @@
         methods: {
             async loadData() {
                 try {
-                    await axios.post('/api/prd/history/pengiriman').then(res => {
+                    const body = {};
+                    await axios.post('/api/prd/history/pengiriman', body, {
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                        }
+                    }).then(res => {
                         this.dataRiwayat = res.data.data;
                     });
                     $('#myTable').DataTable();
@@ -147,7 +152,29 @@
                         this.selectedProduct = this.productUnique.slice();
                     }
                 })
+            },
+            checkToken(){
+                if(localStorage.getItem('lokal_token') == null){
+                    // event.preventDefault();
+                    this.$swal({
+                        title: 'Session Expired',
+                        text: 'Silahkan login kembali',
+                        icon: 'warning',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.value) {
+                            localStorage.removeItem('lokal_token');
+                            document.getElementById('logout-form').submit();
+                        }
+                    })
+                }
             }
+        },
+        created() {
+            this.checkToken();
         },
         mounted() {
             this.loadData();

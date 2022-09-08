@@ -6,12 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Divisi;
 use App\Models\kesehatan\Berat_karyawan;
 use App\Models\kesehatan\Detail_obat;
+use App\Models\kesehatan\Gcu_karyawan;
 use App\Models\kesehatan\Karyawan;
 use App\Models\kesehatan\Karyawan_masuk;
 use App\Models\kesehatan\Karyawan_sakit;
 use App\Models\kesehatan\Kesehatan_awal;
 use App\Models\kesehatan\Kesehatan_mingguan_rapid;
 use App\Models\kesehatan\Kesehatan_mingguan_tensi;
+use App\Models\kesehatan\Kesehatan_tahunan;
 use App\Models\kesehatan\Obat;
 use App\Models\kesehatan\Riwayat_penyakit;
 use App\Models\kesehatan\Riwayat_stok_obat;
@@ -991,6 +993,734 @@ class KesehatanController extends Controller
     {
         return view('page.kesehatan.kesehatan_bulanan');
     }
+    public function kesehatan_bulanan_gcu_data()
+    {
+        $data = Gcu_karyawan::with('karyawan')
+            ->orderBy('tgl_cek', 'DESC');
 
+            return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('x', function ($data) {
+                return $data->karyawan->divisi->nama;
+            })
+            ->addColumn('glu', function ($data) {
+                if ($data->glukosa != NULL) {
+                    return $data->glukosa;
+                } else {
+                    return '0 %';
+                }
+            })
+
+            ->addColumn('kol', function ($data) {
+                if ($data->kolesterol != NULL) {
+                    return $data->kolesterol;
+                } else {
+                    return '0 %';
+                }
+            })
+
+            ->addColumn('asam', function ($data) {
+                if ($data->asam_urat != NULL) {
+                    return $data->asam_urat;
+                } else {
+                    return '0 %';
+                }
+            })
+            ->addColumn('button', function ($data) {
+                $btn = '<div class="inline-flex"><button type="button" id="edit_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-edit"></i></button></div>';
+                return $btn;
+            })
+            ->rawColumns(['button'])
+            ->make(true);
+    }
+    public function kesehatan_bulanan_berat_data()
+    {
+        $data = berat_karyawan::orderBy('tgl_cek', 'DESC');
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('x', function ($data) {
+                return $data->karyawan->divisi->nama;
+            })
+            ->addColumn('y', function ($data) {
+                return $data->karyawan->nama;
+            })
+            ->addColumn('z', function ($data) {
+                return $data->berat . ' Kg';
+            })
+            ->addColumn('l', function ($data) {
+                if ($data->lemak != NULL) {
+                    return $data->lemak . ' gram';
+                } else {
+                    return '0 gram';
+                }
+            })
+            ->addColumn('k', function ($data) {
+                if ($data->kandungan_air != NULL) {
+                    return $data->kandungan_air . ' %';
+                } else {
+                    return '0 %';
+                }
+            })
+            ->addColumn('o', function ($data) {
+                if ($data->otot != NULL) {
+                    return $data->otot . ' Kg';
+                } else {
+                    return '0 Kg';
+                }
+            })
+            ->addColumn('t', function ($data) {
+                if ($data->tulang != NULL) {
+                    return $data->tulang . ' Kg';
+                } else {
+                    return '0 Kg';
+                }
+            })
+            ->addColumn('ka', function ($data) {
+                if ($data->kalori != NULL) {
+                    return $data->kalori . ' kkal';
+                } else {
+                    return '0 kkal';
+                }
+            })
+            ->addColumn('suhu_k', function ($data) {
+                return $data->suhu . ' °C';
+            })
+            ->addColumn('sis', function ($data) {
+                return $data->sistolik . ' mmHg';
+            })
+            ->addColumn('dias', function ($data) {
+                return $data->diastolik . ' mmHg';
+            })
+            ->addColumn('sp', function ($data) {
+                return $data->spo2 . ' %';
+            })
+            ->addColumn('pr', function ($data) {
+                return $data->pr . ' bpm';
+            })
+            ->addColumn('button', function ($data) {
+                $btn = '<div class="inline-flex"><button type="button" id="edit_berat"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-edit"></i></button></div>';
+                return $btn;
+            })
+            ->rawColumns(['button'])
+            ->make(true);
+    }
+    public function kesehatan_bulanan_gcu_tambah()
+    {
+        $karyawan = Karyawan::orderby('nama')->get();
+        return view('page.kesehatan.kesehatan_bulanan_gcu_tambah', ['karyawan' => $karyawan]);
+    }
+    public function kesehatan_bulanan_berat_tambah()
+    {
+        $karyawan = Karyawan::orderby('nama')->get();
+        return view('page.kesehatan.kesehatan_bulanan_berat_tambah', ['karyawan' => $karyawan]);
+    }
+    public function kesehatan_bulanan_berat_aksi_tambah(Request $request)
+    {
+        $this->validate(
+            $request,
+            [
+                'karyawan_id.*' => 'required',
+                'tgl_cek.*' => 'required',
+                'berat.*' => 'required',
+                'lemak.*' => 'required',
+                'kandungan_air.*' => 'required',
+                'otot.*' => 'required',
+                'tulang.*' => 'required',
+                'kalori.*' => 'required',
+            ],
+            [
+                'karyawan_id.required' => 'Divisi harus di pilih',
+                'tgl_cek.required' => 'Tanggal pengecekan harus dipilih',
+                'berat.required' => 'Berat harus di isi',
+                'lemak.required' => 'Lemak harus di isi',
+                'kandungan_air.required' => 'Kandungan air harus di isi',
+                'otot.required' => 'Otot harus di isi',
+                'tulang.required' => 'Tulang harus di isi',
+                'kalori.required' => 'Kalori harus di isi',
+            ]
+        );
+        for ($i = 0; $i < count($request->karyawan_id); $i++) {
+            $berat_karyawan = berat_karyawan::create([
+                'karyawan_id' => $request->karyawan_id[$i],
+                'tgl_cek' => $request->tgl_cek[$i],
+                'berat' => $request->berat[$i],
+                'lemak' => $request->lemak[$i],
+                'kandungan_air' => $request->kandungan_air[$i],
+                'otot' => $request->otot[$i],
+                'tulang' => $request->tulang[$i],
+                'kalori' => $request->kalori[$i],
+                'suhu' => $request->suhu[$i],
+                'spo2' => $request->spo2[$i],
+                'pr' => $request->pr[$i],
+                'sistolik' => $request->sistolik[$i],
+                'diastolik' => $request->diastolik[$i],
+                'keterangan' => $request->keterangan[$i]
+            ]);
+        }
+        if ($berat_karyawan) {
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
+    }
+    public function kesehatan_bulanan_gcu_aksi_tambah(Request $request)
+    {
+        $this->validate(
+            $request,
+            [
+                'tgl_cek.*' => 'required',
+                'karyawan_id.*' => 'required',
+                'glukosa.*' => 'required',
+                'kolesterol.*' => 'required',
+                'asam_urat.*' => 'required',
+            ],
+            [
+                'tgl_cek.required' => 'Tanggal pengecekan harus dipilih',
+                'karyawan_id.required' => 'Karyawan harus di isi',
+                'glukosa.required' => 'Glukosa harus di isi',
+                'kolesterol.required' => 'Kolesterol harus di isi',
+                'asam_urat.required' => 'Asam urat harus di isi',
+            ]
+        );
+
+        for ($i = 0; $i < count($request->karyawan_id); $i++) {
+            $gcu_karyawan = gcu_karyawan::create([
+                'karyawan_id' => $request->karyawan_id[$i],
+                'tgl_cek' => $request->tgl_cek[$i],
+                'glukosa' => $request->glukosa[$i],
+                'kolesterol' => $request->kolesterol[$i],
+                'asam_urat' => $request->asam_urat[$i],
+                'keterangan' => $request->keterangan[$i]
+            ]);
+        }
+
+        if ($gcu_karyawan) {
+            return redirect()->back()->with('success', 'Berhasil menambahkan data');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
+    }
+    public function kesehatan_bulanan_gcu_aksi_ubah(Request $request)
+    {
+        $id = $request->id;
+        $gcu_karyawan = Gcu_karyawan::find($id);
+        $gcu_karyawan->glukosa = $request->glukosa;
+        $gcu_karyawan->kolesterol = $request->kolesterol;
+        $gcu_karyawan->asam_urat = $request->asam_urat;
+        $gcu_karyawan->keterangan = $request->catatan;
+        $gcu_karyawan->save();
+
+        if ($gcu_karyawan) {
+            return redirect()->back()->with('success', 'Data berhasil di ubah');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
+    }
+    public function kesehatan_bulanan_berat_aksi_ubah(Request $request)
+    {
+        $id = $request->id;
+        $berat_karyawan = Berat_karyawan::find($id);
+        $berat_karyawan->berat = $request->berat;
+        $berat_karyawan->lemak = $request->lemak;
+        $berat_karyawan->otot = $request->otot;
+        $berat_karyawan->kandungan_air = $request->kandungan_air;
+        $berat_karyawan->tulang = $request->tulang;
+        $berat_karyawan->kalori = $request->kalori;
+        $berat_karyawan->keterangan = $request->catatan;
+        $berat_karyawan->save();
+
+        if ($berat_karyawan) {
+            return redirect()->back()->with('success', 'Data berhasil di ubah');
+        } else {
+            return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
+    }
+    public function kesehatan_bulanan_gcu_detail()
+    {
+        $karyawan = Karyawan::orderBy('nama', 'ASC')
+            ->has('Kesehatan_awal')
+            ->get();
+        return view('page.kesehatan.kesehatan_bulanan_detail', ['karyawan' => $karyawan]);
+    }
+    public function kesehatan_bulanan_detail_data_karyawan($karyawan_id)
+    {
+        $data = Gcu_karyawan::where('karyawan_id', $karyawan_id)->get();
+        $data2 = Berat_karyawan::where('karyawan_id', $karyawan_id)->get();
+        $tgl2 = $data2->pluck('tgl_cek');
+        $tgl = $data->pluck('tgl_cek');
+        $labels2 = $data->pluck('glukosa');
+        $labels3 = $data->pluck('kolesterol');
+        $labels4 = $data->pluck('asam_urat');
+        $labels5 = $data2->pluck('berat');
+        return response()->json(compact('tgl', 'tgl2', 'labels2', 'labels3', 'labels4', 'labels5'));
+    }
+
+    public function kesehatan_bulanan_gcu_detail_data($karyawan_id)
+    {
+        $data = Gcu_karyawan::where('karyawan_id', $karyawan_id);
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('glu', function ($data) {
+                if ($data->glukosa != NULL) {
+                    return $data->glukosa;
+                } else {
+                    return '0 %';
+                }
+            })
+
+            ->addColumn('kol', function ($data) {
+                if ($data->kolesterol != NULL) {
+                    return $data->kolesterol;
+                } else {
+                    return '0 %';
+                }
+            })
+
+            ->addColumn('asam', function ($data) {
+                if ($data->asam_urat != NULL) {
+                    return $data->asam_urat;
+                } else {
+                    return '0 %';
+                }
+            })
+            ->make(true);
+    }
+
+
+
+    public function laporan_mingguan()
+    {
+        $karyawan = Karyawan::orderBy('nama', 'ASC')
+            ->has('Kesehatan_awal')
+            ->get();
+        $divisi = Divisi::all();
+        return view('page.kesehatan.laporan_mingguan', ['karyawan' => $karyawan, 'divisi' => $divisi]);
+    }
+
+    public function laporan_mingguan_data($filter_mingguan, $filter, $id, $start, $end)
+    {
+        if ($filter == 'divisi' && $filter_mingguan == 'tensi') {
+            $data = kesehatan_mingguan_tensi::wherehas('karyawan', function ($divisi) use ($id) {
+                $divisi->where('divisi_id', $id);
+            })
+                ->orderBy('tgl_cek', 'DESC')
+                ->whereBetween('tgl_cek', [$start, $end]);
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('x', function ($data) {
+                    return $data->karyawan->divisi->nama;
+                })
+                ->addColumn('y', function ($data) {
+                    if ((($data->sistolik) - ($data->diastolik)) < 30) {
+                        return $data->karyawan->nama . '<br><span class="badge bg-danger"><i class="fas fa-exclamation"></i> perlu tindakan lanjut</span>';
+                    } else {
+                        return $data->karyawan->nama;
+                    }
+                })
+                ->addColumn('hasil', function ($data) {
+                    if ($data->sistolik < 130) {
+                        return '<span class="badge bg-success">Normal</span>';
+                    } else if ($data->sistolik >= 130 && $data->sistolik <= 139) {
+                        return '<span class="badge bg-warning">Pra-Hipertensi</span>';
+                    } else if ($data->sistolik >= 140 && $data->sistolik <= 159) {
+                        return '<span class="badge bg-info">Stadium 1 Hipertensi</span>';
+                    } else if ($data->sistolik >= 160) {
+                        return '<span class="badge bg-danger">Stadium 2 Hipertensi</span>';
+                    } else {
+                        return 'Error';
+                    }
+                })
+                ->addColumn('sis', function ($data) {
+                    return $data->sistolik . ' mmHg';
+                })
+                ->addColumn('dias', function ($data) {
+                    return $data->diastolik . ' mmHg';
+                })
+                ->rawColumns(['hasil', 'y'])
+                ->make(true);
+        } else if ($filter == 'karyawan' && $filter_mingguan == 'tensi') {
+            $data = kesehatan_mingguan_tensi::with('karyawan')
+                ->orderBy('tgl_cek', 'DESC')
+                ->where('karyawan_id', $id)
+                ->whereBetween('tgl_cek', [$start, $end]);
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('x', function ($data) {
+                    return $data->karyawan->divisi->nama;
+                })
+                ->addColumn('y', function ($data) {
+                    if ((($data->sistolik) - ($data->diastolik)) < 30) {
+                        return $data->karyawan->nama . '<br><span class="badge bg-danger"><i class="fas fa-exclamation"></i> perlu tindakan lanjut</span>';
+                    } else {
+                        return $data->karyawan->nama;
+                    }
+                })
+                ->addColumn('hasil', function ($data) {
+                    if ($data->sistolik < 130) {
+                        return '<span class="badge bg-success">Normal</span>';
+                    } else if ($data->sistolik >= 130 && $data->sistolik <= 139) {
+                        return '<span class="badge bg-warning">Pra-Hipertensi</span>';
+                    } else if ($data->sistolik >= 140 && $data->sistolik <= 159) {
+                        return '<span class="badge bg-info">Stadium 1 Hipertensi</span>';
+                    } else if ($data->sistolik >= 160) {
+                        return '<span class="badge bg-danger">Stadium 2 Hipertensi</span>';
+                    } else {
+                        return 'Error';
+                    }
+                })
+                ->addColumn('sis', function ($data) {
+                    return $data->sistolik . ' mmHg';
+                })
+                ->addColumn('dias', function ($data) {
+                    return $data->diastolik . ' mmHg';
+                })
+                ->rawColumns(['hasil', 'y'])
+                ->make(true);
+        } else if ($filter == 'karyawan' && $filter_mingguan == 'rapid') {
+            $data = kesehatan_mingguan_rapid::with('karyawan')
+                ->orderBy('tgl_cek', 'DESC')
+                ->where('karyawan_id', $id)
+                ->whereBetween('tgl_cek', [$start, $end]);
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('x', function ($data) {
+                    return $data->karyawan->divisi->nama;
+                })
+                ->addColumn('z', function ($data) {
+                    return $data->pemeriksa->nama;
+                })
+                ->addColumn('yy', function ($data) {
+                    return $data->karyawan->nama;
+                })
+                ->make(true);
+        } else if ($filter == 'divisi' && $filter_mingguan == 'rapid') {
+            $data = kesehatan_mingguan_rapid::wherehas('karyawan', function ($divisi) use ($id) {
+                $divisi->where('divisi_id', $id);
+            })
+                ->orderBy('tgl_cek', 'DESC')
+                ->whereBetween('tgl_cek', [$start, $end]);
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('x', function ($data) {
+                    return $data->karyawan->divisi->nama;
+                })
+                ->addColumn('z', function ($data) {
+                    return $data->pemeriksa->nama;
+                })
+                ->make(true);
+        } else if ($filter == 'x' && $filter_mingguan = 'y') {
+            $data = kesehatan_mingguan_rapid::with('karyawan')
+                ->orderBy('tgl_cek', 'DESC')
+                ->where('karyawan_id', 0);
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('x', function ($data) {
+                    return $data->karyawan->divisi->nama;
+                })
+                ->addColumn('yy', function ($data) {
+                    return $data->karyawan->nama;
+                })
+                ->addColumn('hasil', function ($data) {
+                    if ($data->sistolik < 130 && $data->diastolik < 85) {
+                        return 'Normal';
+                    } else if ($data->sistolik >= 130 && $data->sistolik <= 139 && $data->diastolik >= 85  && $data->diastolik <= 89) {
+                        return 'Pra-Hipertensi';
+                    } else if ($data->sistolik >= 140 && $data->sistolik <= 159 && $data->diastolik >= 90  && $data->diastolik <= 99) {
+                        return 'Stadium 1 Hipertensi';
+                    } else if ($data->sistolik >= 160  && $data->diastolik >= 100) {
+                        return 'Stadium 2 Hipertensi';
+                    } else {
+                        return '';
+                    }
+                })
+                ->addColumn('sis', function ($data) {
+                    return $data->sistolik . ' mmHg';
+                })
+                ->addColumn('dias', function ($data) {
+                    return $data->diastolik . ' mmHg';
+                })
+                ->make(true);
+        }
+    }
+
+    public function laporan_bulanan()
+    {
+        $karyawan = Karyawan::orderBy('nama', 'ASC')
+            ->has('Kesehatan_awal')
+            ->get();
+        $divisi = Divisi::all();
+        return view('page.kesehatan.laporan_bulanan', ['karyawan' => $karyawan, 'divisi' => $divisi]);
+    }
+
+    public function laporan_bulanan_data($filter_bulanan, $filter, $id, $start, $end)
+    {
+        if ($filter == 'divisi' && $filter_bulanan == 'gcu') {
+            $data = gcu_karyawan::wherehas('karyawan', function ($divisi) use ($id) {
+                $divisi->where('divisi_id', $id);
+            })
+                ->orderBy('tgl_cek', 'DESC')
+                ->whereBetween('tgl_cek', [$start, $end]);
+
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('x', function ($data) {
+                    return $data->karyawan->divisi->nama;
+                })
+                ->addColumn('xx', function ($data) {
+                    return $data->karyawan->nama;
+                })
+                ->addColumn('glu', function ($data) {
+                    if ($data->glukosa != NULL) {
+                        return $data->glukosa;
+                    } else {
+                        return '0 %';
+                    }
+                })
+
+                ->addColumn('kol', function ($data) {
+                    if ($data->kolesterol != NULL) {
+                        return $data->kolesterol;
+                    } else {
+                        return '0 %';
+                    }
+                })
+
+                ->addColumn('asam', function ($data) {
+                    if ($data->asam_urat != NULL) {
+                        return $data->asam_urat;
+                    } else {
+                        return '0 %';
+                    }
+                })
+                ->make(true);
+        } else if ($filter == 'karyawan' && $filter_bulanan == 'gcu') {
+            $data = gcu_karyawan::with('karyawan')
+                ->where('karyawan_id', $id)
+                ->orderBy('tgl_cek', 'DESC')
+                ->whereBetween('tgl_cek', [$start, $end]);
+
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('x', function ($data) {
+                    return $data->karyawan->divisi->nama;
+                })
+                ->addColumn('xx', function ($data) {
+                    return $data->karyawan->nama;
+                })
+                ->addColumn('glu', function ($data) {
+                    if ($data->glukosa != NULL) {
+                        return $data->glukosa;
+                    } else {
+                        return '0 %';
+                    }
+                })
+
+                ->addColumn('kol', function ($data) {
+                    if ($data->kolesterol != NULL) {
+                        return $data->kolesterol;
+                    } else {
+                        return '0 %';
+                    }
+                })
+
+                ->addColumn('asam', function ($data) {
+                    if ($data->asam_urat != NULL) {
+                        return $data->asam_urat;
+                    } else {
+                        return '0 %';
+                    }
+                })
+                ->make(true);
+        } else if ($filter == 'karyawan' && $filter_bulanan == 'berat') {
+            $data = berat_karyawan::with('karyawan')
+                ->where('karyawan_id', $id)
+                ->orderBy('tgl_cek', 'DESC')
+                ->whereBetween('tgl_cek', [$start, $end]);
+                return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('x', function ($data) {
+                    return $data->karyawan->divisi->nama;
+                })
+                ->addColumn('y', function ($data) {
+                    return $data->karyawan->nama;
+                })
+                ->addColumn('z', function ($data) {
+                    return $data->berat . ' Kg';
+                })
+                ->addColumn('l', function ($data) {
+                    if ($data->lemak != NULL) {
+                        return $data->lemak . ' gram';
+                    } else {
+                        return '0 gram';
+                    }
+                })
+                ->addColumn('k', function ($data) {
+                    if ($data->kandungan_air != NULL) {
+                        return $data->kandungan_air . ' %';
+                    } else {
+                        return '0 %';
+                    }
+                })
+                ->addColumn('o', function ($data) {
+                    if ($data->otot != NULL) {
+                        return $data->otot . ' Kg';
+                    } else {
+                        return '0 Kg';
+                    }
+                })
+                ->addColumn('t', function ($data) {
+                    if ($data->tulang != NULL) {
+                        return $data->tulang . ' Kg';
+                    } else {
+                        return '0 Kg';
+                    }
+                })
+                ->addColumn('ka', function ($data) {
+                    if ($data->kalori != NULL) {
+                        return $data->kalori . ' kkal';
+                    } else {
+                        return '0 kkal';
+                    }
+                })
+                ->addColumn('ti', function ($data) {
+                    return $data->karyawan->kesehatan_awal->tinggi . ' Cm';
+                })
+                ->addColumn('bmi', function ($data) {
+                    return  $data->berat / (($data->karyawan->kesehatan_awal->tinggi / 100) * ($data->karyawan->kesehatan_awal->tinggi / 100));
+                })
+                ->make(true);
+        } else if ($filter == 'divisi' && $filter_bulanan == 'berat') {
+            $data = berat_karyawan::wherehas('karyawan', function ($divisi) use ($id) {
+                $divisi->where('divisi_id', $id);
+            })
+                ->orderBy('tgl_cek', 'DESC')
+                ->whereBetween('tgl_cek', [$start, $end]);
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('x', function ($data) {
+                    return $data->karyawan->divisi->nama;
+                })
+                ->addColumn('y', function ($data) {
+                    return $data->karyawan->nama;
+                })
+                ->addColumn('z', function ($data) {
+                    return $data->berat . ' Kg';
+                })
+                ->addColumn('l', function ($data) {
+                    if ($data->lemak != NULL) {
+                        return $data->lemak . ' gram';
+                    } else {
+                        return '0 gram';
+                    }
+                })
+                ->addColumn('k', function ($data) {
+                    if ($data->kandungan_air != NULL) {
+                        return $data->kandungan_air . ' %';
+                    } else {
+                        return '0 %';
+                    }
+                })
+                ->addColumn('o', function ($data) {
+                    if ($data->otot != NULL) {
+                        return $data->otot . ' Kg';
+                    } else {
+                        return '0 Kg';
+                    }
+                })
+                ->addColumn('t', function ($data) {
+                    if ($data->tulang != NULL) {
+                        return $data->tulang . ' Kg';
+                    } else {
+                        return '0 Kg';
+                    }
+                })
+                ->addColumn('ka', function ($data) {
+                    if ($data->kalori != NULL) {
+                        return $data->kalori . ' kkal';
+                    } else {
+                        return '0 kkal';
+                    }
+                })
+                ->addColumn('ti', function ($data) {
+                    return $data->karyawan->kesehatan_awal->tinggi . ' Cm';
+                })
+                ->addColumn('bmi', function ($data) {
+                    return  $data->berat / (($data->karyawan->kesehatan_awal->tinggi / 100) * ($data->karyawan->kesehatan_awal->tinggi / 100));
+                })
+                ->make(true);
+        } else if ($filter == 'x' && $filter_bulanan = 'y') {
+            $data = gcu_karyawan::with('karyawan')
+                ->orderBy('tgl_cek', 'DESC')
+                ->where('karyawan_id', 0);
+
+            return datatables()->of($data)
+                ->addIndexColumn()
+                ->addColumn('x', function ($data) {
+                    return $data->karyawan->nama;
+                })
+                ->addColumn('glu', function ($data) {
+                    if ($data->glukosa != NULL) {
+                        return $data->glukosa;
+                    } else {
+                        return '0 %';
+                    }
+                })
+                ->addColumn('kol', function ($data) {
+                    if ($data->kolesterol != NULL) {
+                        return $data->kolesterol;
+                    } else {
+                        return '0 %';
+                    }
+                })
+                ->addColumn('asam', function ($data) {
+                    if ($data->asam_urat != NULL) {
+                        return $data->asam_urat;
+                    } else {
+                        return '0 %';
+                    }
+                })
+                ->make(true);
+        }
+    }
+    public function laporan_tahunan()
+    {
+        $karyawan = Karyawan::orderBy('nama', 'ASC')
+            ->has('Kesehatan_awal')
+            ->get();
+        $divisi = Divisi::all();
+        return view('page.kesehatan.laporan_tahunan', ['karyawan' => $karyawan, 'divisi' => $divisi]);
+    }
+    public function laporan_tahunan_data($filter, $id, $start, $end)
+    {
+        if ($filter == 'divisi') {
+            $data = Kesehatan_tahunan::wherehas('karyawan', function ($divisi) use ($id) {
+                $divisi->where('divisi_id', $id);
+            })
+                ->orderBy('tgl_cek', 'DESC')
+                ->whereBetween('tgl_cek', [$start, $end]);
+        } else if ($filter == 'karyawan') {
+            $data = kesehatan_tahunan::with('karyawan')
+                ->orderBy('tgl_cek', 'DESC')
+                ->where('karyawan_id', $id)
+                ->whereBetween('tgl_cek', [$start, $end]);
+        } else {
+            $data = kesehatan_tahunan::with('karyawan')
+                ->orderBy('tgl_cek', 'DESC')
+                ->where('karyawan_id', 0);
+        }
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('x', function ($data) {
+                return $data->karyawan->divisi->nama;
+            })
+            ->addColumn('y', function ($data) {
+                return $data->karyawan->nama;
+            })
+            ->addColumn('z', function ($data) {
+                return $data->pemeriksa->nama;
+            })
+            ->make(true);
+    }
 
 }

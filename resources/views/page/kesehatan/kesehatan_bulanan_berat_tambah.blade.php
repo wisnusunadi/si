@@ -29,7 +29,7 @@
             <div class="card-header  bg-success">
                 <div class="card-title"><i class="fas fa-plus-circle"></i>&nbsp;Pengukuran Berat Badan</div>
             </div>
-            <form action="/kesehatan_bulanan_berat/aksi_tambah" method="post" enctype="multipart/form-data">
+            <form action="/kesehatan/bulanan/berat/aksi_tambah" method="post" enctype="multipart/form-data">
 
                 <div class="card-body">
                     <div class="table-responsive">
@@ -169,7 +169,7 @@
                     </div>
                 </div>
                 <div class="card-footer">
-                    <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan_bulanan"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
+                    <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan/bulanan"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
                     <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                 </div>
             </form>
@@ -320,7 +320,7 @@
                                         <textarea type="text" class="form-control keterangan" name="keterangan[]"></textarea>
                                 </td>
                                 <td>
-                                <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable"><i class="fas fa-times-circle"></i></button> 
+                                <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable"><i class="fas fa-times-circle"></i></button>
                                                                    </td>
                             </tr>`;
             $('#tabel_berat tr:last').after(data);
