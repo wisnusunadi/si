@@ -98,19 +98,55 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
+      await axios.get("/api/ppic/data/gk/sparepart",{
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
         this.data_sparepart = response.data;
       });
       $("#table-sparepart").DataTable();
 
-      await axios.get("/api/ppic/data/gk/unit").then((response) => {
+      await axios.get("/api/ppic/data/gk/unit",{
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
         this.data_unit = response.data.data;
       });
 
       $("#table-unit").DataTable();
       this.$store.commit("setIsLoading", false);
     },
+
+    checkToken(){
+        if(localStorage.getItem('lokal_token') == null){
+            // event.preventDefault();
+            this.$swal({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.value) {
+                    this.logout()
+                }
+            })
+        }
+    },
+
+    async logout() {
+      await axios.post("/logout");
+      document.location.href = "/";
+    },
   },
+
+   created() {
+        this.checkToken();
+    },
 
   mounted() {
     this.loadData();

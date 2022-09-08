@@ -15,7 +15,7 @@
     <div id="app">
         <index></index>
     </div>
-    
+
 @section('adminlte_js')
     <script src="{{ asset('native/js/emiindo.js') }}"></script>
 @endsection
