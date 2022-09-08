@@ -227,6 +227,7 @@ class LogistikController extends Controller
 
         return datatables()->of($data)
             ->addIndexColumn()
+
             ->addColumn('no_seri', function ($data) {
                 return $data->NoseriTGbj->NoseriBarangJadi->noseri;
             })
@@ -705,6 +706,7 @@ class LogistikController extends Controller
 
         return datatables()->of($data)
             ->addIndexColumn()
+
             ->addColumn('no_seri', function ($data) {
                 return $data->NoseriTGbj->NoseriBarangJadi->noseri;
             })
@@ -1094,7 +1096,6 @@ class LogistikController extends Controller
 
     public function get_data_selesai_so()
     {
-
         $prd = Pesanan::whereIn('id', function($q) {
             $q->select('pesanan.id')
             ->from('pesanan')
@@ -4243,6 +4244,16 @@ class LogistikController extends Controller
         return Carbon::parse($value)->subDays($days);
     }
 
+    static function getHariBatasKontrak1($value, $limit)
+    {
+        if ($limit == 2) {
+            $days = '28';
+        } else {
+            $days = '35';
+        }
+        return Carbon::parse($value)->subDays($days);
+    }
+
     //Laporan
     // public function get_data_laporan_logistik($pengiriman, $ekspedisi, $tgl_awal, $tgl_akhir)
     // {
@@ -4502,11 +4513,12 @@ class LogistikController extends Controller
     //         ->rawColumns(['status', 'produk'])
     //         ->make(true);
     // }
+
     public function get_data_noseri_array($produk_id, $jumlah_kirim){
         $data = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $produk_id])->DoesntHave('NoseriDetailLogistik')->skip(0)->take($jumlah_kirim)->pluck('id');
         echo json_encode($data);
     }
-    public function get_surat_jalan_belum_kirim($po)
+    public function get_surat_jalan_belum_kirim($customer)
     {
         // $dataekat = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function($q) use($customer){
         //     $q->where('customer_id', $customer);
@@ -4526,19 +4538,7 @@ class LogistikController extends Controller
 
         // $data = $dataekat->merge($dataspa)->merge($dataspb)->merge($dataspap)->merge($dataspbp);
 
-        //$data = Logistik::where('status_id', '=', '11')->get();
-
-        $nopo = str_replace("!","/",$po);
-        $dataprd = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistik.DetailPesananProduk.DetailPesanan.Pesanan', function($q) use($nopo){
-            $q->where('Pesanan.no_po', $nopo);
-        })->get();
-
-        $datapart = Logistik::where('status_id', '=', '11')->whereHas('DetailLogistikPart.DetailPesananPart.Pesanan', function($q) use($nopo){
-            $q->where('Pesanan.no_po', $nopo);
-        })->get();
-
-        $data = $dataprd->merge($datapart);
-
+        $data = Logistik::where('status_id', '=', '11')->get();
         echo json_encode($data);
     }
 

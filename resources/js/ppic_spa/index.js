@@ -12,8 +12,8 @@ import App from './App.vue'
 import axios from 'axios'
 import $ from "jquery"
 import Pusher from "pusher-js"
-
-// global library
+ 
+// global library 
 import "jquery/dist/jquery"
 import "datatables.net/js/jquery.dataTables.min"
 import "datatables-bulma/js/dataTables.bulma"

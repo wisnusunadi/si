@@ -1068,8 +1068,6 @@ class DcController extends Controller
         if ($value == 'ekatalog') {
             $data = Pesanan::find($id);
 
-
-
             $x = array();
 
             $jumlah = 0;

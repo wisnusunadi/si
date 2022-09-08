@@ -41,7 +41,7 @@ Route::get("/test", function () {
 Route::view('/modul_dashboard/show', 'auth.dashboard');
 
 Route::group(['prefix' => 'ppic', 'middleware' => 'auth'], function () {
-    Route::view('/{any?}', 'spa.ppic.spa');
+    Route::view('/{any?}', 'spa.ppic.spa')->middleware('divisi:ppic');
     Route::group(['middleware' => ['divisi:jual,dirut,ppic']], function () {
         Route::view('/master_stok/show', 'spa.ppic.master_stok.show');
         Route::view('/master_pengiriman/show', 'spa.ppic.master_pengiriman.show');
@@ -65,10 +65,10 @@ Route::middleware('auth')->prefix('/ppic_direksi')->group(function () {
     Route::view('/{any?}', 'page.direksi.perencanaan');
 });
 Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
-    Route::view('/{any?}', 'spa.manager_teknik.spa');
+    Route::view('/{any?}', 'spa.manager_teknik.spa')->middleware('divisi:dirtek');
 });
 
-Route::middleware('auth')->prefix('/gbj')->group(function () {
+Route::group(['prefix' => '/gbj', 'middleware' => ['auth','divisi:gbj,mgrgdg']], function () {
     Route::view('/stok/{any?}', 'page.gbj.stok');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
     Route::view('/produk/{any?}', 'page.gbj.produk');
@@ -86,16 +86,18 @@ Route::middleware('auth')->prefix('/gbj')->group(function () {
     });
     Route::get('/data', [GudangController::class, 'get_data_barang_jadi']);
     Route::get('/export_spb/{id}', [GudangController::class, 'exportSpb'])->name('gbj.spb');
+    Route::get('/export_noseri', [GudangController::class, 'export_noseri_gudang'])->name('gbj.noseri');
 
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
-Route::middleware('auth')->prefix('/produksi')->group(function () {
+Route::group(['prefix' => '/produksi', 'middleware' => ['auth','divisi:prd']], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
     Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');
     Route::view('/perencanaan_perakitan', 'page.produksi.perencanaan_perakitan');
     Route::get('/riwayat_perakitan', [ProduksiController::class, 'his_rakit']);
+    Route::get('/export_noseri', [ProduksiController::class, 'export_noseri_produksi'])->name('export.rakitseri');
     Route::view('/pengiriman', 'page.produksi.pengiriman');
     Route::view('/riwayat_transfer', 'page.produksi.riwayat_transfer');
 });
@@ -169,7 +171,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/penjualan'], function () {
-        Route::group(['middleware' => ['divisi:dc,jual,asp,dirut']], function () {
+        Route::group(['middleware' => ['divisi:dc,jual,asp,dirut,qc,log']], function () {
             Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
             Route::get('/detail/spa/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa'])->name('penjualan.penjualan.detail.spa');
             Route::get('/detail/spb/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spb'])->name('penjualan.penjualan.detail.spb');
@@ -291,7 +293,7 @@ Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/pengiriman'], function () {
-        Route::group(['middleware' => ['divisi:jual,asp,dirut']], function () {
+        Route::group(['middleware' => ['divisi:jual,asp,dirut,log']], function () {
             Route::view('/show', 'page.logistik.pengiriman.show')->name('logistik.pengiriman.show');
             Route::post('/data/{pengiriman}/{provinsi}/{jenis_penjualan}', [App\Http\Controllers\LogistikController::class, 'get_data_pengiriman']);
             Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\LogistikController::class, 'get_pengiriman_detail_data'])->name('logistik.pengiriman.detail');
@@ -379,7 +381,7 @@ Route::group(['prefix' => 'as', 'middleware' => ['auth','divisi:asp']], function
     });
 
     Route::group(['prefix' => '/so'], function () {
-        Route::get('/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so'])->name('as.so.show');
+        Route::get('/data', [App\Http\Controllers\AfterSalesController::class, 'get_data_so']);
         Route::get('/detail/{id}/{jenis}', [App\Http\Controllers\AfterSalesController::class, 'get_detail_so'])->name('as.so.detail');
         Route::view('/show', 'page.as.so.show')->name('as.so.show');
         Route::view('/list/{id}', 'page.as.so.list')->name('as.so.list');
@@ -397,7 +399,7 @@ Route::group(['prefix' => 'as', 'middleware' => ['auth','divisi:asp']], function
     // });
 });
 
-Route::group(['prefix' => '/gk', 'middleware' => 'auth'], function () {
+Route::group(['prefix' => '/gk', 'middleware' => ['auth','divisi:gk']], function () {
     Route::view('/dashboard', 'page.gk.dashboard');
     Route::view('/gudang', 'page.gk.gudang.index');
     Route::get('/gudang/sparepart/{id}', [SparepartController::class, 'detail_spr']);

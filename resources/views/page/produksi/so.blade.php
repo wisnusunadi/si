@@ -150,6 +150,23 @@
 @section('adminlte_js')
 <script>
     $(document).ready(function () {
+        var access_token = localStorage.getItem('lokal_token');
+        if (access_token == null) {
+            Swal.fire({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    document.getElementById('logout-form').submit();
+                }
+            })
+        }
 
         $('#gudang-barang').DataTable({
             destroy: true,
@@ -158,6 +175,9 @@
             ajax: {
                 url: '/api/prd/so',
                 type: 'post',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
             },
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},
