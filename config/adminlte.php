@@ -485,25 +485,6 @@ return [
                 ]
             ]
         ],
-        [
-            'text' => 'Request Emiindo',
-            'icon' => 'fas fa-mail-bulk',
-            'auth' => [26],
-            'submenu' => [
-                [
-                    'text' => 'Ekatalog - SPA',
-                    'url'  => '/penjualan/request_emiindo/akn_po',
-                ],
-                // [
-                //     'text' => 'Status Penjualan',
-                //     'url'  => '/penjualan/request_emiindo/status_penjualan',
-                // ],
-                [
-                    'text' => 'Terima Ekatalog - SPA',
-                    'url'  => '/penjualan/request_emiindo/daftar_penerimaan',
-                ]
-            ]
-        ],
         // [
         //     'text' => 'Sales Order',
         //     'url'  => '/penjualan/so/show',
