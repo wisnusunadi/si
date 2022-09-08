@@ -586,7 +586,7 @@
 
     var id = '';
     $(document).on('click', '.editmodal', function(e) {
-        $('#variasiid').select2()
+        $('#variasiid').select2({})
         var x = $(this).data('value');
         console.log(x);
         id = $(this).data('id');

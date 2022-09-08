@@ -232,6 +232,24 @@
 <script>
     let produk = [];
     let layout = [];
+    var access_token = localStorage.getItem('lokal_token');
+
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
     $(document).ready(function () {
         // Data Divisi
         $('.division').select2({
@@ -242,6 +260,9 @@
             url: '/api/gbj/sel-divisi',
             type: 'GET',
             dataType: 'json',
+            beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
             success: function(res) {
                 if(res) {
                     $("#divisi").empty();
@@ -263,6 +284,9 @@
             url: '/api/gbj/sel-gbj',
             type: 'GET',
             dataType: 'json',
+            beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
             success: function(res) {
                 if(res) {
                     $("#gdg_brg_jadi_id").empty();

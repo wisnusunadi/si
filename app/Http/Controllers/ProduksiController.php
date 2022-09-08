@@ -753,7 +753,7 @@ class ProduksiController extends Controller
                                                 <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                             </button>
                                         </a>
-                                        
+
                                             ';
                             }
 
@@ -984,6 +984,7 @@ class ProduksiController extends Controller
                             $opt .= '<option value="' . $dt->id . '" >' . $dt->produk->nama . ' <b>'. $dt->nama.'</b></option>';
                         }
                         $a = '<select name="variasiid" id="variasiid" class="form-control">
+                                <option disabled selected hidden>Pilih Varian</option>
                                 ' . $opt . '
                                 </select>';
 
@@ -2414,7 +2415,8 @@ class ProduksiController extends Controller
             $header = new TFProduksi();
             $header->tgl_masuk = $request->tgl_transfer;
             $header->dari = 17;
-            $header->ke = $request->tujuan;
+            // $header->ke = $request->tujuan;
+            $header->ke = 13;
             $header->jenis = 'masuk';
             $header->created_at = Carbon::now();
             $header->created_by = $request->userid;
