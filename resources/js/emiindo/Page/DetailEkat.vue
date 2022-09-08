@@ -675,17 +675,11 @@
                                                                                 <div
                                                                                     class="col-lg-7 col-md-12"
                                                                                 >
-                                                                                    <textarea
-                                                                                        class="form-control col-form-label ui-autocomplete-input"
-                                                                                        name="alamatinstansi"
-                                                                                        id="alamatinstansi"
-                                                                                        autocomplete="off"
-                                                                                        v-model="
-                                                                                            forminfoakn
-                                                                                                .instansi
-                                                                                                .alamat
-                                                                                        "
-                                                                                    ></textarea>
+                                                                                    <textautocomplete 
+                                                                                    :items="forminfoakn.instansi.dataalamat" 
+                                                                                    @input="checkAlamat($event)" 
+                                                                                    v-model="forminfoakn.instansi.alamat"
+                                                                                    />
                                                                                     <div
                                                                                         class="invalid-feedback"
                                                                                         id="msgalamatinstansi"
@@ -732,17 +726,11 @@
                                                                                 <div
                                                                                     class="col-lg-5 col-md-12"
                                                                                 >
-                                                                                    <textarea
-                                                                                        class="form-control col-form-label ui-autocomplete-input"
-                                                                                        name="deskripsi"
-                                                                                        id="deskripsi"
-                                                                                        autocomplete="off"
-                                                                                        v-model="
-                                                                                            forminfoakn
-                                                                                                .instansi
-                                                                                                .deskripsi
-                                                                                        "
-                                                                                    ></textarea>
+                                                                                <textautocomplete 
+                                                                                    :items="forminfoakn.instansi.datadeskripsi" 
+                                                                                    @input="checkDeskripsi($event)" 
+                                                                                    v-model="forminfoakn.instansi.deskripsi"
+                                                                                    />
                                                                                     <div
                                                                                         class="invalid-feedback"
                                                                                         id="msgdeskripsi"
@@ -2471,14 +2459,15 @@ import mix from "../mixins/mix";
 import vSelect from "vue-select";
 import inputPrice from "../components/inputprice";
 import inputQty from "../components/inputqty";
-import { isNullLiteral } from "@babel/types";
+import textautocomplete from "../components/textautocomplete";
 export default {
     mixins: [mix],
     components: {
-        vSelect,
-        inputPrice,
-        inputQty,
-    },
+    vSelect,
+    inputPrice,
+    inputQty,
+    textautocomplete,
+},
     data() {
         return {
             loading: false,
@@ -2524,9 +2513,11 @@ export default {
                     nminstansi: null,
                     satuankerja: null,
                     alamat: null,
+                    dataalamat: null,
                     provinsi: null,
                     deskripsi: null,
                     keterangan: null,
+                    datadeskripsi: null,
                 },
             },
             formpenjualanpo: {
@@ -2667,6 +2658,32 @@ export default {
                 this.infopenjualan();
                 this.loading = false;
             }, 800);
+        },
+        async checkAlamat(e){
+            await axios.get('/api/penjualan/check_alamat', {
+                params: {
+                    term: e
+                }
+            }).then((response) => {
+                this.forminfoakn.instansi.dataalamat = response.data.map((item) => {
+                    return {
+                        text: item.alamat
+                    }
+                });
+            });
+        },
+        async checkDeskripsi(e){
+            await axios.get('/api/ekatalog/all_deskripsi', {
+                params: {
+                    term: e
+                }
+            }).then((response) => {
+                this.forminfoakn.instansi.datadeskripsi = response.data.map((item) => {
+                    return {
+                        text: item.deskripsi
+                    }
+                });
+            });
         },
         async updateekatalog(akn) {
             let jenis = this.$route.params.jenis;
