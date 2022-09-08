@@ -1701,6 +1701,86 @@ class PenjualanController extends Controller
         return view('page.penjualan.penjualan.detail_ekatalog', ['data' => $data, 'status' => $status, 'tgl_kontrak' => $tgl_kontrak]);
     }
 
+    public function get_data_detail_ekatalog_ppic($value)
+    {
+        $data  = Ekatalog::with(['Pesanan.State','Customer', 'Provinsi'])->addSelect(['tgl_kontrak_custom' => function($q){
+            $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
+            ->from('ekatalog as e')
+            ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
+            ->whereColumn('e.id', 'ekatalog.id')
+            ->limit(1);
+            },
+            'ckirimprd' => function($q){
+                $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                ->from('noseri_logistik')
+                ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+            },
+            'cjumlahprd' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah),0)')
+                ->from('detail_pesanan')
+                ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
+            },
+            'ckirimpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                ->from('detail_logistik_part')
+                ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+            },
+            'cjumlahpart' => function($q){
+                $q->selectRaw('coalesce(sum(detail_pesanan_part.jumlah),0)')
+                ->from('detail_pesanan_part')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
+            }])->where('id', $value)->first();
+
+            $status = "";
+
+
+                if ($data->Pesanan->log_id == "7") {
+                    $status = $data->Pesanan->State->nama;
+                } else if($data->log == "batal") {
+                    $status = 'Batal';
+                } else{
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                    if($hitung > 0){
+                        $status = $hitung;
+                    }else{
+                        $status = $hitung;
+                    }
+                }
+                $tgl_kontrak = "";
+                if($data->tgl_kontrak_custom != ""){
+                    if($data->Pesanan->log_id != '10'){
+                        $tgl_sekarang = Carbon::now();
+                        $tgl_parameter = $data->tgl_kontrak_custom;
+                        $hari = $tgl_sekarang->diffInDays($tgl_parameter);
+                        if ($tgl_sekarang->format('Y-m-d') < $tgl_parameter) {
+                            if ($hari > 7) {
+                                $tgl_kontrak =  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else if ($hari > 0 && $hari <= 7) {
+                                $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
+                            } else {
+                                $tgl_kontrak =  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
+                                <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
+                            }
+                        }
+                        else{
+                            $tgl_kontrak =  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
+                            <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
+                        }
+                    } else{
+                        $tgl_kontrak = Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
+                    }
+                }
+        return response()->json(['data' => $data, 'status' => $status, 'tgl_kontrak' => $tgl_kontrak]);
+    }
+
     public function get_data_detail_spb($value)
     {
         $data  = Spb::with(['Pesanan.State','Customer.Provinsi'])->addSelect([
@@ -2053,6 +2133,12 @@ class PenjualanController extends Controller
 
                 return $datas;
             })
+            ->addColumn('no_paket_ppic', function ($data) {
+                return $data->no_paket;
+            })
+            ->addColumn('status_ppic', function ($data) {
+                return $data->status;
+            })
             ->addColumn('so', function ($data) {
                 if ($data->Pesanan) {
                     if (!empty($data->Pesanan->so)) {
@@ -2102,6 +2188,25 @@ class PenjualanController extends Controller
                                 <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
                             </div>
                             <small class="text-muted">Selesai</small>';
+                        }
+                    }
+                }
+                return $datas;
+            })
+            ->addColumn('status_ppic', function ($data) {
+                $datas = "";
+                if($data->Pesanan->log_id == '7'){
+                        $datas .= 'penjualan';
+                } else {
+                    if ($data->status == "batal") {
+                        $datas .= 'batal';
+                        
+                    }else{
+                        $hitung = floor((($data->cseri / $data->cjumlah) * 100));
+                        if($hitung > 0){
+                            $datas = $hitung;
+                        }else{
+                            $datas = $hitung;
                         }
                     }
                 }
