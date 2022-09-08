@@ -58,59 +58,14 @@
     </div><!-- /.container-fluid -->
 </div>
 <section class="content">
+    <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
                 <div class="row">
                     <div class="col-lg-12">
-                        <ul class="nav nav-tabs" id="myTab" role="tabList">
-                            <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
-                            <li class="nav-item" role="presentation">
-                                <a href="#produk" class="nav-link active" id="produk-tab" data-toggle="tab" role="tab"
-                                    aria-controls="produk" aria-selected="true">Rancangan Perakitan</a>
-                            </li>
-                            <li class="nav-item" role="presentation">
-                                <a href="#semua-produk" class="nav-link" id="semua-produk-tab" data-toggle="tab"
-                                    role="tab" aria-controls="semua-produk" aria-selected="true">Buat Perakitan</a>
-                            </li>
-                        </ul>
                         <div class="tab-content card" id="myTabContent">
-                            <div class="tab-pane fade show active card-body" id="produk" role="tabpanel"
-                                aria-labelledby="produk-tab">
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="form-horizontal">
-                                            <div class="form-group row">
-                                                <label for="" id="tanggal" class="col-sm-5 text-right">Tanggal
-                                                    Masuk</label>
-                                                <div class="col-sm-2">
-                                                    <input type="text" class="form-control" id="datetimepicker1">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-lg-12">
-                                        <div class="table-responsive ">
-                                            <table class="table table-hover pertanggal" width="100%">
-                                                <thead>
-                                                    <tr>
-                                                        <th>Tanggal Masuk</th>
-                                                        <th>Dari</th>
-                                                        <th>Tujuan</th>
-                                                        <th>Aksi</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-
-                                                </tbody>
-                                            </table>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="tab-pane fade show card-body" id="semua-produk" role="tabpanel"
+                            <div class="tab-pane fade show active card-body" id="semua-produk" role="tabpanel"
                                 aria-labelledby="semua-produk-tab">
                                 <div class="row">
                                     <div class="col-lg-4 col-md-12 col-sm-12 mb-4">
@@ -118,54 +73,65 @@
                                             <div class="col-12">
                                                 <div class="card card-primary b-radius">
                                                     <div class="card-body">
-                                                        <ul class="list-group list-group-flush">
-                                                            <li class="list-group-item">
-                                                                <div class="row">
-                                                                    <div class="col-12 mt-3">
-                                                                        <form method="post">
-                                                                            <div class="form-group row top-min">
-                                                                                <label for=""
-                                                                                    class="col-12 font-weight-bold col-form-label">Tanggal
-                                                                                    Masuk</label>
-                                                                                <div class="col-12">
-                                                                                    <input type="date"
-                                                                                        class="form-control tgl_masuk"
-                                                                                        id="tgl_masuk" name="tgl_masuk">
-                                                                                    <div class="invalid-feedback">
-                                                                                        Silahkan Masukkan Tanggal Masuk
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group row top-min ">
-                                                                                <label for=""
-                                                                                    class="col-12 font-weight-bold col-form-label">Dari</label>
-                                                                                <div class="col-12">
-                                                                                    <select
-                                                                                        class="custom-select division"
-                                                                                        id="divisi" name="dari">
-                                                                                    </select>
-                                                                                    <div class="invalid-feedback">
-                                                                                        Silahkan Masukkan Dari Divisinya
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div class="form-group row top-min">
-                                                                                <label for=""
-                                                                                    class="col-12 font-weight-bold col-form-label">Keterangan</label>
-                                                                                <div class="col-12">
-                                                                                    <textarea name="deskripsi"
-                                                                                        id="deskripsi"
-                                                                                        class="form-control tujuan"></textarea>
-                                                                                    <div class="invalid-feedback">
-                                                                                        Silahkan Masukkan Keterangan
-                                                                                    </div>
-                                                                                </div>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
+                                                        <form method="post">
+                                                            <div class="form-group row top-min">
+                                                                <label for=""
+                                                                    class="col-12 font-weight-bold col-form-label">Tanggal
+                                                                    Masuk</label>
+                                                                <div class="col-12">
+                                                                    <input type="date"
+                                                                        class="form-control tgl_masuk"
+                                                                        id="tgl_masuk" name="tgl_masuk">
+                                                                        <div class="invalid-feedback">Form Tanggal Masuk harus diisi.</div>
                                                                 </div>
-                                                            </li>
-                                                        </ul>
+                                                            </div>
+                                                            <div class="form-group row top-min ">
+                                                                <label for=""
+                                                                    class="col-12 font-weight-bold col-form-label">Dari</label>
+                                                                <div class="col-12">
+                                                                    <select
+                                                                        class="custom-select division"
+                                                                        id="divisi" name="dari">
+                                                                    </select>
+                                                                    <div class="invalid-feedback">Form Dari harus diisi.</div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="form-group row top-min">
+                                                                <label for=""
+                                                                    class="col-12 font-weight-bold col-form-label">Keterangan</label>
+                                                                <div class="col-12">
+                                                                    <textarea name="deskripsi"
+                                                                        id="deskripsi"
+                                                                        class="form-control tujuan"></textarea>
+                                                                    <div class="invalid-feedback">Form Keterangan harus diisi.</div>
+                                                                </div>
+                                                            </div>
+                                                        </form>
+                                                    </div>
+                                                </div>
+                                                <div class="card card-primary b-radius">
+                                                    <div class="card-body">
+                                                        <div class="form-group row top-min">
+                                                            <label for=""
+                                                                class="col-12 font-weight-bold col-form-label">Produk</label>
+                                                            <div class="col-12">
+                                                                <select name="" id="gdg_brg_jadi_id" class="form-control product"></select>
+                                                                <div class="invalid-feedback">Form Produk harus diisi.</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="form-group row top-min">
+                                                            <label for=""
+                                                                class="col-12 font-weight-bold col-form-label">Jumlah</label>
+                                                            <div class="col-12">
+                                                                <input type="text" class="form-control" id="jumlah">
+                                                                <div class="invalid-feedback">Form Jumlah harus diisi.</div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row">
+                                                            <div class="col-12 d-flex justify-content-end">
+                                                                <button type="button" class="btn btn-primary btn-tambah">Tambah</button>
+                                                            </div>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -173,16 +139,11 @@
                                     </div>
                                     <div class="col-lg-8 col-md-12 col-sm-12">
                                         <div class="row">
-                                            <div class="col-12 d-flex justify-content-end mb-3">
-                                                <button class="float btn-tambah">
-                                                    <i class="fa fa-plus"></i>
-                                                </button>
-                                            </div>
                                             <div class="col-12 table-responsive mb-4">
                                                 <table class="table table-hover addData">
                                                     <thead>
                                                         <tr>
-                                                            <th style="width: 220px">Produk</th>
+                                                            <th>Produk</th>
                                                             <th>Jumlah</th>
                                                             <th>Aksi</th>
                                                         </tr>
@@ -192,13 +153,7 @@
                                                 </table>
                                             </div>
                                             <div class="col-12 d-flex justify-content-end">
-                                                <div class="btn-simpan hapus">
-                                                    <button class="btn btn-success" type="button"
-                                                        id="btnSubmit">Terima</button>&nbsp;
-                                                    <button class="btn btn-info" type="button"
-                                                        id="btnDraft">Rancang</button>&nbsp;
-                                                    <button id="btnCancel" class="btn btn-secondary " type="button">Batal</button>
-                                                </div>
+                                                    <button class="btn btn-primary btn-simpan" hidden type="button" >Simpan</button>&nbsp;
                                             </div>
                                         </div>
                                         </form>
@@ -212,72 +167,6 @@
         </div>
     </div>
 </section>
-
-<!-- Modal Detail Rancangan-->
-<div class="modal fade modal-rancangan" id="modelId" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-    aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Detail Rancangan</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="card">
-                    <div class="card-header">
-                        <div class="row">
-                            <div class="col-sm">
-                                <label for="">Tanggal Masuk</label>
-                                <div class="card nomor-so">
-                                    <div class="card-body">
-                                        <span id="in"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm">
-                                <label for="">Dari</label>
-                                <div class="card nomor-akn">
-                                    <div class="card-body">
-                                        <span id="from"></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="col-sm">
-                                <label for="">Tujuan</label>
-                                <div class="card nomor-po">
-                                    <div class="card-body">
-                                        <span id="tujuan"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-body">
-                        <table class="table table-rancangan">
-                            <thead>
-                                <tr>
-                                    <th>No</th>
-                                    <th>Produk</th>
-                                    <th>Jumlah</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
-            </div>
-        </div>
-    </div>
-</div>
 
 <!-- Modal Tambahan Perakitan-->
 <!-- Modal Detail-->
@@ -295,9 +184,9 @@
                 <table class="table table-striped scan-produk1">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="head-cb"></th>
-                            <th>Nomor Seri</th>
-                            <th>Layout</th>
+                            <th class="checkboxremove"><input type="checkbox" id="head-cb"></th>
+                            <th  style="min-width: 500px">Nomor Seri</th>
+                            <th style="min-width: 500px">Layout</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -307,38 +196,6 @@
                 <br>
                 <button type="button" class="btn btn-primary float-right" id="btnSeri">Simpan</button>
                 <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout">Ubah Layout</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<!-- Modal Tambahan Rancangan-->
-<!-- Modal Detail-->
-<div class="modal fade tambahan-rancangan" role="dialog" aria-labelledby="modelTitleId" aria-hidden="true">
-    <div class="modal-dialog modal-xl" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title"><b>Detail Produk <span id="title"></span></b>
-                </h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <table class="table table-striped scan-produk">
-                    <thead>
-                        <tr>
-                            <th><input type="checkbox" id="head-cb-rancang"></th>
-                            <th>Nomor Seri</th>
-                            <th>Layout</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-
-                    </tbody>
-                </table>
-                <button class="btn btn-info" data-toggle="modal" data-target="#ubah-layout-rancang">Ubah Layout</button>
-                <button type="button" class="btn btn-primary float-right" id="seriBtn">Simpan</button>
             </div>
         </div>
     </div>
@@ -363,32 +220,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary " onclick="ubahData()">Simpan</button>
-            </div>
-        </div>
-    </div>
-</div>
-
-<div class="modal fade" id="ubah-layout-rancang" tabindex="-1" role="dialog" aria-labelledby="modelTitleId"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">Ubah Layout</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="">Layout</label>
-                    <select name="" id="change_layout_rancang" class="form-control">
-                    </select>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="button" class="btn btn-primary" onclick="ubahDataRancang()">Simpan</button>
+                <button type="button" class="btn btn-primary ubahData">Simpan</button>
             </div>
         </div>
     </div>
@@ -398,725 +230,310 @@
 
 @section('adminlte_js')
 <script>
-    var function_layout = [];
-    (function ($) {
-        $.fn.inputFilter = function (inputFilter) {
-            return this.on("input keydown keyup mousedown mouseup select contextmenu drop", function () {
-                if (inputFilter(this.value)) {
-                    this.oldValue = this.value;
-                    this.oldSelectionStart = this.selectionStart;
-                    this.oldSelectionEnd = this.selectionEnd;
-                } else if (this.hasOwnProperty("oldValue")) {
-                    this.value = this.oldValue;
-                    this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
-                } else {
-                    this.value = "";
-                }
-            });
-        };
-    }(jQuery));
+    let produk = [];
+    let layout = [];
+    var access_token = localStorage.getItem('lokal_token');
 
-    $(document).on('click', '.btn-tambah', function () {
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
+    $(document).ready(function () {
+        // Data Divisi
+        $('.division').select2({
+            placeholder: "Pilih Tujuan",
+            allowClear: true
+        });
         $.ajax({
-            success: function () {
-                addData()
-                $('.btn-simpan').removeClass('hapus');
+            url: '/api/gbj/sel-divisi',
+            type: 'GET',
+            dataType: 'json',
+            beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
+            success: function(res) {
+                if(res) {
+                    $("#divisi").empty();
+                    $("#divisi").append('<option selected></option>');
+                    $.each(res, function(key, value) {
+                        $("#divisi").append('<option value="'+value.id+'">'+value.nama+'</option');
+                    });
+                } else {
+                    $("#divisi").empty();
+                }
             }
         });
-    });
-    var i = 0;
-
-    function addData() {
+        // Data Produk
+        $('.product').select2({
+            placeholder: "Pilih Produk",
+            allowClear: true
+        });
         $.ajax({
             url: '/api/gbj/sel-gbj',
             type: 'GET',
             dataType: 'json',
-            success: function (res) {
-                $(".productt").append('<option selected></option>');
-                $.each(res, function (key, value) {
-                    $(".productt").append('<option value="' + value.id + '">' + value.produk.nama +
-                        ' ' + value.nama + '</option');
-                });
-                $('.productt').select2({
-                    placeholder: "Pilih Produk",
-                    allowClear: true
-                })
+            beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
+            success: function(res) {
+                if(res) {
+                    $("#gdg_brg_jadi_id").empty();
+                    $("#gdg_brg_jadi_id").append('<option selected></option>');
+                    $.each(res, function(key, value) {
+                        $("#gdg_brg_jadi_id").append('<option value="'+value.id+'">'+value.produk.nama+' '+value.nama+'</option');
+                    });
+                } else {
+                    $("#gdg_brg_jadi_id").empty();
+                }
             }
         });
-
-
-        let tambah_data = '<tr id="row' + i + '"><td><select name="gdg_brg_jadi_id[' + i + ']" id="gdg' + i +
-            '" class="form-control productt"></select></td><td><input type="text" class="form-control number" id="qty" name="qty[' +
-            i +
-            ']"></td><td><button class="btn btn-primary" id="btnPlus"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-delete"><i class="fas fa-trash"></i> Hapus</button></td></tr>';
-        $('tbody.tambah_data').append(tambah_data);
-        $('#gdg' + i + '').select2();
-        $(".number").inputFilter(function (value) {
-            return /^\d*$/.test(value); // Allow digits only, using a RegExp
-        });
-        i++;
-    }
-
-    $(document).on('click', '.btn-delete', function (e) {
-        e.preventDefault();
-        $(this).parent().parent().remove();
-        var check = $('tbody.tambah_data tr').length;
-        if (check != 0) {
-            $('.btn-simpan').removeClass('hapus');
-        } else {
-            $('.btn-simpan').addClass('hapus');
-        }
-    });
-    var id = '';
-    let jml = '';
-    var gbj;
-    $(document).on('click', '.editmodal', function () {
-        id = $(this).data('id');
-
-
-        $.ajax({
-            url: '/api/draft/data',
-            type: "post",
-            data: {
-                id: id,
-            },
-            success: function (res) {
-                console.log(res);
-                $('span#in').text(res.data[0].in);
-                $('span#from').text(res.data[0].from);
-                $('span#tujuan').text(res.data[0].tujuan);
-            },
-
-        });
-        $('.table-rancangan').DataTable().destroy();
-        $('.table-rancangan').DataTable({
-            processing: true,
-            serverSide: true,
-            "lengthChange": false,
-            autoWidth: false,
-            "searching": false,
-            ajax: {
-                url: '/api/draft/data',
-                type: "post",
-                data: {
-                    id: id,
-                },
-            },
-            columns: [{
-                    data: 'DT_RowIndex'
-                },
-                {
-                    data: 'nama_produk'
-                },
-                {
-                    data: 'jml'
-                },
-                {
-                    data: 'action'
-                },
-            ],
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-        });
-        modalRancangan();
-    });
-
-    $("#head-cb-rancang").on('click', function () {
-        var isChecked = $("#head-cb-rancang").prop('checked')
-        $('.scan-produk').DataTable()
-                .column(0)
-                .nodes()
-                .to$()
-                .find('input[type=checkbox]')
-                .prop('checked', isChecked);
-
-    });
-
-    $(document).on('click', '.detail', function (e) {
-        var id = $(this).data('id');
-        gbj = $(this).data('gbj');
-        var tr = $(this).closest('tr');
-        jml = tr.find('#qty').val();
-        did = tr.find('#tfid').val();
-        console.log(did);
-        $('span#title').text($(this).data('nama') + $(this).data('var'));
-
-        $('.scan-produk').DataTable({
-            destroy: true,
-            "ordering": false,
-            "autoWidth": false,
-            searching: false,
-            "lengthChange": false,
-            processing: true,
-            serverSide: false,
-            ajax: {
-                url: "/api/draft/data-seri",
-                type: "post",
-                data: {
-                    t_gbj_detail_id: id,
-                },
-            },
-            columns: [{
-                    data: 'checkbox'
-                },
-                {
-                    data: 'serii'
-                },
-                {
-                    data: 'posisi'
-                },
-            ],
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-        });
-
-        tambahanRancangan();
-    });
-
-    var start_date;
-    var end_date;
-    var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
-        var dateStart = parseDateValue(start_date);
-        var dateEnd = parseDateValue(end_date);
-
-        var evalDate = parseDateValue(aData[0]);
-        if ((isNaN(dateStart) && isNaN(dateEnd)) ||
-            (isNaN(dateStart) && evalDate <= dateEnd) ||
-            (dateStart <= evalDate && isNaN(dateEnd)) ||
-            (dateStart <= evalDate && evalDate <= dateEnd)) {
-            return true;
-        }
-        return false;
-    });
-
-    function parseDateValue(rawDate) {
-        var dateArray = rawDate.split("-");
-        var parsedDate = new Date(dateArray[2], parseInt(dateArray[1]) - 1, dateArray[
-        0]);
-        return parsedDate;
-    }
-
-    $(document).ready(function () {
-        $('#head-cb-rancang').prop('checked', false);
-        $('#head-cb').prop('checked', false);
-        $('.division').select2({
-            placeholder: "Pilih Divisi",
-            allowClear: true
-        });
-
+        // Data Layout
         $.ajax({
             url: '/api/gbj/sel-layout',
             type: 'GET',
             dataType: 'json',
             success: function (res) {
-                console.log(res);
-                $.each(res, function (key, value) {
-                    $("#change_layout").append('<option value="' + value.id + '">' + value
-                        .ruang + '</option');
+                layout.push(res);
+                $("#change_layout").empty();
+                res.map(function(value) {
+                    $("#change_layout").append('<option value="'+value.id+'">'+value.ruang+'</option');
                 });
-                function_layout.push(res);
             }
         });
+    });
+    $(document).on('click', '.btn-tambah', function() {
+        console.log("produk", produk);
+        let prd = $('#gdg_brg_jadi_id').val();
+        let namaprd = $('#gdg_brg_jadi_id option:selected').text();
+        let jml = $('#jumlah').val();
+        if (prd == '') return $('#gdg_brg_jadi_id').addClass('is-invalid');
+        if (jml == '') return $('#jumlah').addClass('is-invalid');
+        if (produk.length > 0) {
+            let cek = produk.find(function(value) {
+                return value.prd == prd;
+            });
+            if (cek) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Produk sudah ada!'
+                });
+            }else{
+                produk.push({
+                    prd: prd,
+                    namaprd: namaprd,
+                    jml: jml,
+                    noseri: [],
+                    layout: []
+                }) && addData(prd, namaprd, jml);
+            }
+        }
+        if(produk.length == 0) return produk.push({
+            prd: prd,
+            namaprd: namaprd,
+            jml: jml,
+            noseri: [],
+            layout: []
+        }) && addData(prd, namaprd, jml);
+    });
 
-        $.each(function_layout[0], function (index, val) {
-            $("#change_layout_rancang").append('<option value="' + val.id + '">' + val.ruang +
-                '</option');
-        });
-
-        var table = $('.pertanggal').DataTable({
-            processing: true,
+    $(document).on('click', '.btn-add-seri', function() {
+        let namaprd = $(this).data('namaprd');
+        let jml = $(this).data('jml');
+        let prd = $(this).data('prd');
+        $('.scan-produk1').DataTable().destroy();
+        $('.scan-produk1 tbody').empty();
+        $('#titlee').text(namaprd);
+        // Data Kosong
+        let data_noseri = '<tr>'+
+                            '<td>'+
+                                '<input type="checkbox" class="cb-child">'+
+                            '</td>'+
+                            '<td>'+
+                                '<input type="text" class="form-control" id="noseri" style="text-transform:uppercase">'+
+                                '<div class="invalid-feedback">Nomor seri ada yang sama atau kosong.</div>'+
+                            '</td>'+
+                            '<td>'+
+                                '<select class="form-control layout"></select>'+
+                            '</td>'+
+                        '</tr>';
+        for(let i = 0; i < jml; i++) {
+            $('.scan-produk1 tbody').append(data_noseri)
+            layout[0].forEach(element => {
+                $('.scan-produk1 tbody tr:last-child td:last-child select').append('<option value="'+element.id+'">'+element.ruang+'</option>');
+            });
+        }
+        $('.scan-produk1').DataTable({
+            scrollY: '500px',
+            scrollCollapse: true,
+            paging: false,
+            ordering: false,
+            searching: false,
             "lengthChange": false,
-            ajax: {
-                url: '/api/draft/data',
-                type: "post",
-            },
-            columns: [{
-                    data: 'in',
-                    name: 'in'
-                },
-                {
-                    data: 'from',
-                    name: 'from'
-                },
-                {
-                    data: 'tujuan'
-                },
-                {
-                    data: 'action'
-                }
-            ],
+            autoWidth: false,
             "language": {
                 "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
+            },
         });
-
-        $('#datetimepicker1').daterangepicker({
-            autoUpdateInput: false
+        $('.checkboxremove').removeClass('sorting_asc');
+        $('#btnSeri').removeData('prd', 'jml');
+        $('#btnSeri').attr('data-prd', prd);
+        $('#btnSeri').attr('data-jml', jml);
+        // Data Isi
+        produk.forEach(function(element) {
+            if(element.prd == prd) return element.noseri.forEach(function(item, index) {
+                $('.scan-produk1 tbody tr').each(function(i, v) {
+                    if(i == index) return $(this).find('td:nth-child(2) input').val(item) && $(this).find('td:nth-child(3) select').val(element.layout[index]);
+                });
+            });
         });
-
-        $('#datetimepicker1').on('apply.daterangepicker', function (ev, picker) {
-            $(this).val(picker.startDate.format('DD-MM-YYYY') + ' - ' + picker.endDate.format(
-                'DD-MM-YYYY'));
-            start_date = picker.startDate.format('DD-MM-YYYY');
-            end_date = picker.endDate.format('DD-MM-YYYY');
-            $.fn.dataTableExt.afnFiltering.push(DateFilterFunction);
-            table.draw();
-        });
-
-        $('#datetimepicker1').on('cancel.daterangepicker', function (ev, picker) {
-            $(this).val('');
-            start_date = '';
-            end_date = '';
-            $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction, 1));
-            table.draw();
-        });
-
-        $("#head-cb").on('click', function () {
-            var isChecked = $("#head-cb").prop('checked')
-            // $('.cb-child').prop('checked', isChecked)
-            $('.scan-produk1').DataTable()
-                .column(0)
-                .nodes()
-                .to$()
-                .find('input[type=checkbox]')
-                .prop('checked', isChecked);
-        });
-
-        // divisi
-        $.ajax({
-            url: '/api/gbj/sel-divisi',
-            type: 'GET',
-            dataType: 'json',
-            success: function (res) {
-                if (res) {
-                    console.log(res);
-                    $(".division").empty();
-                    $(".division").append('<option selected></option>');
-                    $.each(res, function (key, value) {
-                        $(".division").append('<option value="' + value.id + '">' + value
-                            .nama + '</option');
-                    });
-                } else {
-                    $(".division").empty();
-                }
-            }
-        });
-
+        $('.tambahan-perakitan').modal('show');
     });
 
-    const seri = {};
-    const layout = {};
-    const serir = {};
-    var nose;
-    var lay;
-    var i = 0;
-    $(document).on('click', '#btnPlus', function () {
-        $('#head-cb').prop('checked', false);
-        var tr = $(this).closest('tr');
-        x = tr.find('#qty').val();
-        y = tr.find('.productt').val();
-        yText = tr.find('.productt option:selected').text();
-        $('span#titlee').text(yText);
-        tambahanPerakitan(x);
-        i++;
+    $(document).on('click', '.btn-hapus', function () {
+        let prd = $(this).data('prd');
+        let index = produk.findIndex(x => x.prd == prd);
+        produk.splice(index, 1);
+        $(this).parents('tr').remove();
+        if (produk.length == 0) return $('.btn-simpan').attr('hidden', true);
     })
 
-    $(document).on('click', '#btnCancel', function() {
-        location.reload();
-    })
-
-
-    $(document).on('click', '#btnSubmit', function (e) {
-
-        if ($('#tgl_masuk').val() == '' && $('#divisi').val() == '' && $('#deskripsi').val() == '') {
-            $('.tgl_masuk').addClass('is-invalid');
-            $('#divisi').addClass('is-invalid');
-            $('#deskripsi').addClass('is-invalid');
-            // alert('Data tidak boleh kosong');
-        } else if ($('#tgl_masuk').val() == '' && $('#divisi').val() == '') {
-            $('.tgl_masuk').addClass('is-invalid');
-            $('#divisi').addClass('is-invalid');
-            $('#deskripsi').removeClass('is-invalid');
-        } else if ($('#divisi').val() == '' && $('#deskripsi').val() == '') {
-            $('.tgl_masuk').removeClass('is-invalid');
-            $('#divisi').addClass('is-invalid');
-            $('#deskripsi').addClass('is-invalid');
-        } else if ($('#tgl_masuk').val() == '' && $('#deskripsi').val() == '') {
-            $('.tgl_masuk').addClass('is-invalid');
-            $('#divisi').removeClass('is-invalid');
-            $('#deskripsi').addClass('is-invalid');
-        } else if ($('#tgl_masuk').val() == '') {
-            $('.tgl_masuk').addClass('is-invalid');
-            $('#divisi').removeClass('is-invalid');
-            $('#deskripsi').removeClass('is-invalid');
-        } else if ($('#divisi').val() == '') {
-            $('#divisi').addClass('is-invalid');
-            $('.tgl_masuk').removeClass('is-invalid');
-            $('#deskripsi').removeClass('is-invalid');
-        } else if ($('#deskripsi').val() == '') {
-            $('.tgl_masuk').removeClass('is-invalid');
-            $('#divisi').removeClass('is-invalid');
-            $('#deskripsi').addClass('is-invalid');
-        } else {
-            $('.tgl_masuk').removeClass('is-invalid');
-            $('#divisi').removeClass('is-invalid');
-            $('#deskripsi').removeClass('is-invalid');
-
-            const tgl_masuk = $('#tgl_masuk').val();
-            const hari_ini = Date.now();
-            const get = new Date(hari_ini);
-            const get_tgl = moment(get).format('YYYY-MM-DD');
-            if (tgl_masuk > get_tgl) {
-                Swal.fire({
-                    title: 'Peringatan!',
-                    text: 'Tanggal masuk tidak boleh lebih besar dari tanggal hari ini',
-                    icon: 'warning',
-                    confirmButtonText: 'Oke'
-                })
-            } else {
-                e.preventDefault();
-
-                Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, save it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        Swal.fire({
-                        title: 'Please wait',
-                        text: 'Data is transferring...',
-                        allowOutsideClick: false,
-                        showConfirmButton: false
-                    });
-                        Swal.fire(
-                        'Sukses!',
-                        'Data Berhasil Disimpan',
-                        'success'
-                        )
-                        $.ajax({
-                            url: "/api/draft/final",
-                            type: "post",
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                tgl_masuk: $('#tgl_masuk').val(),
-                                dari: $('#divisi').val(),
-                                deskripsi: $('#deskripsi').val(),
-                                userid: $('#userid').val(),
-                                data: seri,
-                            },
-                            success: function (res) {
-
-                            }
-                        })
-                        location.reload();
-                    }
-                })
-
-            }
-        }
-    });
-
-    $(document).on('click', '#btnDraft', function (e) {
-        e.preventDefault();
-
-        if ($('#tgl_masuk').val() == '' && $('#divisi').val() == '' && $('#deskripsi').val() == '') {
-            $('.tgl_masuk').addClass('is-invalid');
-            $('#divisi').addClass('is-invalid');
-            $('#deskripsi').addClass('is-invalid');
-            // alert('Data tidak boleh kosong');
-        } else if ($('#tgl_masuk').val() == '' && $('#divisi').val() == '') {
-            $('.tgl_masuk').addClass('is-invalid');
-            $('#divisi').addClass('is-invalid');
-            $('#deskripsi').removeClass('is-invalid');
-        } else if ($('#divisi').val() == '' && $('#deskripsi').val() == '') {
-            $('.tgl_masuk').removeClass('is-invalid');
-            $('#divisi').addClass('is-invalid');
-            $('#deskripsi').addClass('is-invalid');
-        } else if ($('#tgl_masuk').val() == '' && $('#deskripsi').val() == '') {
-            $('.tgl_masuk').addClass('is-invalid');
-            $('#divisi').removeClass('is-invalid');
-            $('#deskripsi').addClass('is-invalid');
-        } else if ($('#tgl_masuk').val() == '') {
-            $('.tgl_masuk').addClass('is-invalid');
-            $('#divisi').removeClass('is-invalid');
-            $('#deskripsi').removeClass('is-invalid');
-        } else if ($('#divisi').val() == '') {
-            $('#divisi').addClass('is-invalid');
-            $('.tgl_masuk').removeClass('is-invalid');
-            $('#deskripsi').removeClass('is-invalid');
-        } else if ($('#deskripsi').val() == '') {
-            $('.tgl_masuk').removeClass('is-invalid');
-            $('#divisi').removeClass('is-invalid');
-            $('#deskripsi').addClass('is-invalid');
-        } else {
-            $('.tgl_masuk').removeClass('is-invalid');
-            $('#divisi').removeClass('is-invalid');
-            $('#deskripsi').removeClass('is-invalid');
-
-            const prd = [];
-            const jml = [];
-
-            $('select[name^="gdg_brg_jadi_id"]').each(function () {
-                prd.push($(this).val());
-            });
-
-            $('input[name^="qty"]').each(function () {
-                jml.push($(this).val());
-            });
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, draft it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        $(this).prop('disabled', true);
-                        Swal.fire(
-                        'Sukses!',
-                        'Data Berhasil Disimpan',
-                        'success'
-                        )
-                        $.ajax({
-                            url: "/api/draft/rancang",
-                            type: "post",
-                            data: {
-                                "_token": "{{ csrf_token() }}",
-                                tgl_masuk: $('#tgl_masuk').val(),
-                                dari: $('#divisi').val(),
-                                deskripsi: $('#deskripsi').val(),
-                                userid: $('#userid').val(),
-                                data: seri,
-                            },
-                            success: function (res) {
-                                console.log(res);
-                            }
-                        })
-                        setTimeout(() => {
-                            location.reload();
-                        }, 1000);
-                    }
-                })
-
-
-        }
-    });
-
-    $(document).on('click', '#seriBtn', function (e) {
-        let no_seri = [];
+    function addData(prd, namaprd, jml) {
+        let tambah_data = '<tr>'+
+                            '<td>'+namaprd+'</td>'+
+                            '<td>'+jml+'</td>'+
+                            '<td><button class="btn btn-primary btn-add-seri" data-prd="'+prd+'" data-namaprd="'+namaprd+'" data-jml="'+jml+'"><i class="fas fa-qrcode"></i> Tambah</button>&nbsp;<button class="btn btn-danger btn-hapus" data-prd="'+prd+'"><i class="fas fa-trash"></i> Hapus</button></td>'+
+                        '</tr>';
+        $('.tambah_data').append(tambah_data);
+        $('.btn-simpan').attr('hidden', false);
+        $('#gdg_brg_jadi_id').removeClass('is-invalid');
+        $('#jumlah').removeClass('is-invalid');
+    }
+    $(document).on('click', '#btnSeri', function () {
+        let prd = $(this).data('prd');
+        let jml = $(this).data('jml');
+        let noseri = [];
         let layout = [];
-        serir[did] = {gbj: gbj, jumlah: jml, data: []};
-        let a = $('.scan-produk').DataTable().column(0).nodes()
-            .to$().find('input[type=checkbox]:checked');
-        $(a).each(function (index, elm) {
-            let noseri_temp = $(elm).val();
-            let layout_temp = $(elm).parent().next().next().children().val()
-
-            serir[did].data.push({
-                noseri: noseri_temp,
-                layout: layout_temp
-            })
-        });
-
-
-        $('.cb-child-rancang').each(function () {
-            if ($(this).is(':checked')) {
-                // a.push($(this).val());
-                Swal.fire({
-                    position: 'center',
-                    icon: 'success',
-                    title: 'Noseri Berhasil disimpan',
-                    showConfirmButton: false,
-                    timer: 1500
-                })
-            }
-
-        })
-        console.log(serir);
-        $('.tambahan-rancangan').modal('hide');
-    })
-    $(document).on('click', '#btnSave', function () {
-        Swal.fire({
-        title: 'Are you sure?',
-        text: "You won't be able to revert this!",
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes, save it!'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire(
-                'Sukses!',
-                'Data Berhasil Diterima',
-                'success'
-                )
-                $.ajax({
-                    url: "/api/tfp/create-final",
-                    type: "post",
-                    data: {
-                        "_token": "{{csrf_token()}}",
-                        id: id,
-                        seri: serir,
-                    },
-                    success: function (res) {
-                        console.log(res);
-                        // location.reload();
+        // Validasi Scanning
+        $('.scan-produk1 tbody tr').each(function(i, v) {
+            $(this).find('td:nth-child(2) input').removeClass('is-invalid');
+            if($(this).find('td:nth-child(2) input').val() == '') return $(this).find('td:nth-child(2) input').addClass('is-invalid') && Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Nomor seri tidak boleh kosong!',
+            });
+            if(noseri.includes($(this).find('td:nth-child(2) input').val())) return $(this).find('td:nth-child(2) input').addClass('is-invalid') && Swal.fire({
+                    icon: 'error',
+                    title: 'Oops...',
+                    text: 'Nomor seri tidak boleh sama!',
+            });
+            noseri.push($(this).find('td:nth-child(2) input').val());
+            layout.push($(this).find('td:nth-child(3) select').val());
+            // console.log(noseri);
+            $.ajax({
+                url: "/api/gbj/ceknoseri",
+                type: "post",
+                data: {
+                    noseri: noseri
+                },
+                success: function(res) {
+                    if (res.msg) {
+                        if(noseri.length == jml) return produk.find(function(element, index) {
+                            if(element.prd == prd ) return element.noseri = noseri, element.layout = layout,
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Data berhasil disimpan!',
+                            }).then(function() {
+                                $('.tambahan-perakitan').modal('hide');
+                            });
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: res.error,
+                        });
                     }
-                })
+                }
+            })
 
-            }
-        })
-
-    })
-
-    // load modal
-    function ubahData() {
+        });
+    });
+    $(document).on('click', '#head-cb', function() {
+        let cb = $(this).is(':checked');
+        $('.scan-produk1 tbody tr').each(function(index, element) {
+            $(this).find('td:nth-child(1) input').prop('checked', cb);
+        });
+    });
+    $(document).on('click', '.ubahData', function () {
         let checkbox_terpilih = $('.scan-produk1 tbody .cb-child:checked');
         let layout = $('#change_layout').val();
         $.each(checkbox_terpilih, function (index, elm) {
             let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
         });
         $('#ubah-layout').modal('hide');
-    }
-
-    function ubahDataRancang() {
-        let checkbox_terpilih = $('.scan-produk tbody .cb-child-rancang:checked');
-        let layout = $('#change_layout_rancang').val();
-        $.each(checkbox_terpilih, function (index, elm) {
-            let b = $(checkbox_terpilih).parent().next().next().children().val(layout);
-        });
-        $('#ubah-layout-rancang').modal('hide');
-    }
-
-    $('#datetimepicker1').daterangepicker({});
-
-    function modalRancangan() {
-        $('.modal-rancangan').modal('show');
-    }
-
-    function tambahanRancangan(x) {
-        $('.tambahan-rancangan').modal('show');
-    }
-
-    function tambahanPerakitan(x) {
-        $('.tambahan-perakitan').modal('show');
-        $('.scan-produk1').DataTable().destroy();
-        $('.scan-produk1 tbody').empty();
-
-        let a = 1;
-        for (let index = 0; index < x; index++) {
-            $('.scan-produk1 tbody').append('<tr id="row' + a +
-                '"><td><input type="checkbox" class="cb-child"  value="' + y +
-                '"></td><td><input type="text" name="noseri_id[][' + a + ']" id="noseri_id[' + a +
-                ']" class="form-control seri" style="text-transform:uppercase"><div class="invalid-feedback">Nomor seri ada yang sama.</div></td><td><select name="layout_id[' +
-                a + ']" id="layout_id' + a + '" class="form-control layout"></select></td></tr>');
-            $.each(function_layout[0], function (indexInArray, valueOfElement) {
-                $('#layout_id' + a).append('<option value="' + valueOfElement.id + '">' + valueOfElement.ruang +
-                    '</option>');
-            });
-            a++;
+    })
+    $(document).on('click', '.btn-simpan', function () {
+        $('#tgl_masuk').removeClass('is-invalid');
+        $('#divisi').removeClass('is-invalid');
+        $('#deskripsi').removeClass('is-invalid');
+        let data = {
+            tgl_masuk: $('#tgl_masuk').val(),
+            divisi: $('#divisi').val(),
+            deskripsi: $('#deskripsi').val(),
+            produk: produk,
+            userid: $('#userid').val()
         }
-        var tableScan = $('.scan-produk1').DataTable({
-            "language": {
-                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-            }
-        });
-
-        $(document).on('click', '#btnSeri', function () {
-            let no_seri = [];
-            let layout = [];
-            let a = $('.scan-produk1').DataTable().column(0).nodes().to$().find('input[type="checkbox"]:checked').map(function () {
-                no_seri.push($(this).parent().next().children().val());
-                layout.push($(this).parent().next().next().children().val());
-            }).get();
-            console.log("data");
-            console.log(no_seri);
-            console.log(layout);
-            let arr = [];
-            const data = tableScan.$('.seri').map(function () {
-                return $(this).val();
-            }).get();
-
-            data.forEach(function (item) {
-                if (item != '') {
-                    arr.push(item);
+        if(data.tgl_masuk == '' || data.divisi == '' || data.deskripsi == '' || data.produk.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Data tidak boleh kosong!',
+            });
+            $('#tgl_masuk').addClass('is-invalid');
+            $('#divisi').addClass('is-invalid');
+            $('#deskripsi').addClass('is-invalid');
+        } else {
+            $.ajax({
+                url: '/api/tfp/create-final',
+                type: 'POST',
+                dataType: 'json',
+                data: data,
+                success: function (res) {
+                    console.log(res);
+                    if(res.error == false) {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: 'Data berhasil disimpan!',
+                            showConfirmButton: false,
+                            timer: 1500
+                        }).then(function() {
+                            location.reload();
+                        });
+                    } else {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Oops...',
+                            text: 'Data gagal disimpan!',
+                        });
+                    }
                 }
-            })
-
-            const count = arr =>
-                arr.reduce((a, b) => ({
-                    ...a,
-                    [b]: (a[b] || 0) + 1
-                }), {})
-
-            const duplicates = dict =>
-                Object.keys(dict).filter((a) => dict[a] > 1)
-
-            if (duplicates(count(arr)).length > 0) {
-                $('.seri').removeClass('is-invalid');
-                $('.seri').filter(function () {
-                    for (let index = 0; index < duplicates(count(arr)).length; index++) {
-                        if ($(this).val() == duplicates(count(arr))[index]) {
-                            return true;
-                        }
-                    }
-                }).addClass('is-invalid');
-
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Nomor seri ' + duplicates(count(arr)) + ' ada yang sama.',
-                })
-            } else {
-                const ids = [];
-                const noserii = [];
-                const lay = [];
-                seri[y] = {
-                    "jumlah": x,
-                    "noseri": [],
-                    "layout": []
-                };
-                console.log(seri);
-                $('.cb-child').each(function () {
-                    if ($(this).is(":checked")) {
-                        ids.push($(this).parent().next().children().val());
-                        lay.push($(this).parent().next().next().children().val());
-                        $.ajax({
-                            url: "/api/gbj/ceknoseri",
-                            type: "post",
-                            data: {
-                                noseri: ids
-                            },
-                            success: function (res) {
-                                if (res.msg) {
-                                    seri[y].noseri = no_seri;
-                                    seri[y].layout = layout;
-                                    $('.tambahan-perakitan').modal('hide');
-
-                                } else {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Oops...',
-                                        text: res.error
-                                    })
-                                }
-                            }
-                        })
-                    }
-                });
-            }
-        });
-    }
-
+            });
+        }
+    })
 </script>
 @stop

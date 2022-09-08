@@ -420,6 +420,9 @@ class PpicController extends Controller
             ->addColumn('batal', function ($data) {
                 return $data->getJumlahPermintaanPesanan("ekatalog", "batal");
             })
+            ->addColumn('draft', function ($data) {
+                return $data->getJumlahPermintaanPesanan("ekatalog", "draft");
+            })
             ->addColumn('po', function ($data) {
                 $jumlah = ($data->getJumlahPermintaanPesanan("ekatalog_po", "") - $data->getJumlahTransferPesanan("ekatalog")) + ($data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa")) + ($data->getJumlahPermintaanPesanan("spb", "") - $data->getJumlahTransferPesanan("spb"));
                 return $jumlah;
@@ -1768,7 +1771,6 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('jumlah_pesanan', function ($data) use ($id) {
-
                 // $res = DetailPesanan::where('pesanan_id', $ids)->get();
                 // $jumlah = 0;
                 // foreach ($res as $a) {

@@ -22,7 +22,11 @@ export default {
       this.$store.commit("setIsLoading", true);
 
       await axios
-        .get("/api/ppic/data/perakitan/pelaksanaan")
+        .get("/api/ppic/data/perakitan/pelaksanaan", {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        })
         .then((response) => {
           this.$store.commit("setJadwal", response.data);
         });
@@ -30,10 +34,35 @@ export default {
 
       this.$store.commit("setIsLoading", false);
     },
+
+    checkToken(){
+        if(localStorage.getItem('lokal_token') == null){
+            // event.preventDefault();
+            this.$swal({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.value) {
+                    this.logout()
+                }
+            })
+        }
+    },
+
+    async logout() {
+        await axios.post("/logout");
+        document.location.href = "/";
+    },
   },
 
   created() {
     this.loadData();
+    this.checkToken();
   },
 
   computed: {

@@ -10,32 +10,38 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
+
     .nomor-akn {
         background-color: #DF7458;
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
+
     .nomor-po {
         background-color: #85D296;
         color: #fff;
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
+
     .hidden {
         display: none;
     }
-    #listseri{
+
+    #listseri {
         width: 100%;
         height: 100%;
         overflow-y: scroll;
         overflow-x: hidden;
     }
-    .overflowAuto{
+
+    .overflowAuto {
         height: 100%;
         overflow-y: auto;
         overflow-x: hidden;
     }
+
 </style>
 <input type="hidden" name="" id="auth" value="{{ Auth::user()->divisi_id }}">
 <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
@@ -63,6 +69,7 @@
                                     <th>Nomor PO</th>
                                     <th>Customer</th>
                                     <th>Batas Transfer</th>
+                                    <th>Progress</th>
                                     <th>Status</th>
                                     <th>Aksi</th>
                                 </tr>
@@ -128,7 +135,6 @@
                                         <tr>
                                             <th>Produk</th>
                                             <th>Produk</th>
-                                            {{-- <th><input type="checkbox" id="head-cb-produk"></th> --}}
                                             <th>Produk</th>
                                             <th>Jumlah</th>
                                             <th>Merk</th>
@@ -242,17 +248,18 @@
                     <div class="p-2 flex-grow-1 bd-highlight">
                         <div class="custom-control custom-switch">
                             <input type="checkbox" class="custom-control-input" id="switchScan" checked>
-                            <label class="custom-control-label" id="switchScanLabel" for="switchScan">Scan Nomor Seri Untuk Alat (Aktif)</label>
-                          </div>
+                            <label class="custom-control-label" id="switchScanLabel" for="switchScan">Scan Nomor Seri
+                                Untuk Alat (Aktif)</label>
+                        </div>
                     </div>
                     <div class="p-2 bd-highlight">
                         <div class="form-group">
                             <label for="">Scan Nomor Seri</label>
-                            <input type="text" name="" class="form-control barcodeScanAlat" id="" >
+                            <input type="text" name="" class="form-control barcodeScanAlat" id="">
                             <input type="text" name="" class="form-control barcodeScanNonAlat" id="" hidden>
                         </div>
                     </div>
-                  </div>
+                </div>
                 <div class="d-flex justify-content-end">
                 </div>
                 <div class="row">
@@ -261,7 +268,7 @@
                             <thead>
                                 <tr>
                                     <th>Nomor Seri</th>
-                                    <th><input type="checkbox" id="head-cb"></th>
+                                    {{-- <th><input type="checkbox" id="head-cb"></th> --}}
                                 </tr>
                             </thead>
                             <tbody>
@@ -327,25 +334,67 @@
     </div>
 </div>
 
-<div class="modal fade" id="modalPreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="modalPreview" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body" id="bodyPreview">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body" id="bodyPreview">
 
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" class="btn btn-primary">Save changes</button>
-        </div>
-      </div>
     </div>
-  </div>
+</div>
+
+<div class="modal fade import-seri importSeri" id="" role="dialog" aria-labelledby="modelTitleId">
+    <div class="modal-dialog dialogModal modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Unggah File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form name="formImport" id="formImport" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="soid1" id="soid1" value="">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Sales Order File</label>
+                        <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".xlsx">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-outline-info"><i class="fas fa-eye"> Preview</i></button>
+                    </div>
+            </form>
+        </div>
+        <form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
+            <input type="hidden" name="soid" id="soid" value="">
+            <div class="modal-footer" id="csv_data_file" style="width:100%; height:400px; overflow:auto;">
+
+            </div>
+            <div class="modal-footer justify-content-between" id="footer-btn">
+                <p id="bodyNoseri">Noseri Yang Belum Terdaftar:
+                    <br>
+                    <span id="existNoseri"></span>
+                </p>
+                <button type="submit" class="btn btn-default float-right btnImport"><i class="fas fa-upload">
+                        Unggah</i></button>
+            </div>
+        </form>
+    </div>
+</div>
+
 @stop
 
 @section('adminlte_js')
@@ -353,6 +402,7 @@
     var mytable = '';
     let prd1 = {};
     let tmp = []
+    var access_token = localStorage.getItem('lokal_token');
     $(document).ready(function () {
         $('#head-cb').prop('checked', false);
         $('#head-cb-produk').prop('checked', false);
@@ -390,11 +440,34 @@
                     .removeClass('disabled').attr('disabled', true);
             }
         });
+
+        if (access_token == null) {
+            Swal.fire({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    document.getElementById('logout-form').submit();
+                }
+            })
+        }
+
         let a = $('#gudang-barang').DataTable({
             processing: true,
             destroy: true,
+            ordering: false,
+            autoWidth: false,
             ajax: {
                 url: '/api/tfp/data-so',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -414,6 +487,9 @@
                 {
                     data: 'batas_out',
                     name: 'batas_out'
+                },
+                {
+                    data: 'progress'
                 },
                 {
                     data: 'status',
@@ -444,6 +520,112 @@
                 cell.innerHTML = i + 1;
             });
         }).draw();
+
+        $(document).on('click', '.downloadtemplate', function () {
+            window.location = window.location.origin + '/api/v2/gbj/template_so/' + $(this).data('id')
+        })
+        $(document).on('click', '.importtemplate', function () {
+            // window.location = window.location.origin + '/api/v2/gbj/template_so/' + $(this).data('id')
+            console.log('import');
+            $('#soid').val($(this).data('id'))
+            $('#soid1').val($(this).data('id'))
+            $('#template_noseri').val('');
+            $('.importSeri').modal('show')
+            $('#footer-btn').hide()
+            $('#csv_data_file').empty()
+        })
+
+        $('#formImport').on('submit', function(e){
+            e.preventDefault();
+            // console.log('ok');
+            $.ajax({
+                url: "/api/v2/gbj/preview-so",
+                method: "post",
+                data: new FormData(this),
+                dataType: "json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data) {
+                    // console.log(data);
+                    $('#csv_data_file').html(data.data);
+                    if (data.error == true) {
+                        if (data.success == false) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.msg,
+                            }).then((result) => {
+                                if (result.value) {
+                                    $('#footer-btn').hide()
+                                    $('#bodyNoseri').hide()
+                                    $('.btnImport').removeClass('btn-default')
+                                    $('.btnImport').addClass('btn-danger')
+                                    $('.btnImport').prop('disabled', true);
+                                }
+                            });
+                        } else {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: data.msg,
+                            }).then((result) => {
+                                if (result.value) {
+                                    $('#bodyNoseri').show()
+                                    $('#existNoseri').html(data.noseri)
+                                    $('.btnImport').removeClass('btn-default')
+                                    $('.btnImport').addClass('btn-danger')
+                                    $('.btnImport').prop('disabled', true);
+                                }
+                            });
+                            $('#footer-btn').show()
+                        }
+                    } else {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: data.msg,
+                        }).then((result) => {
+                            if (result.value) {
+                                $('#bodyNoseri').hide()
+                                if ($('.btnImport').hasClass('btn-default')) {
+                                    $('.btnImport').removeClass('btn-default')
+                                } else {
+                                    $('.btnImport').removeClass('btn-danger')
+                                }
+                                $('.btnImport').addClass('btn-success')
+                                $('.btnImport').prop('disabled', false);
+                            }
+                        });
+                        $('#footer-btn').show()
+                    }
+                }
+            })
+        })
+
+        $('#formStoreImport').on('submit', function(e){
+            e.preventDefault();
+            $.ajax({
+                url: "/api/v2/gbj/store-sodb",
+                method: "post",
+                data: new FormData(this),
+                dataType: "json",
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function(data) {
+                    console.log(data);
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: data.msg,
+                    }).then((res) => {
+                        // console.log(res);
+                        location.reload()
+                    })
+                }
+            })
+        })
     });
     // add
     var id = '';
@@ -549,6 +731,7 @@
         });
         $('#addProdukModal').modal('show');
     });
+
     function make_temp_array(prd1) {
         let result = {};
         console.log("func", prd1)
@@ -564,7 +747,7 @@
     var jml = '';
     var dpp = '';
     let dataTampungSeri = [];
-    const list  = document.getElementById('listseri');
+    const list = document.getElementById('listseri');
     $(document).on('click', '.detailmodal', function (e) {
         $('.barcodeScanAlat').val('');
         $('.barcodeScanNonAlat').val('');
@@ -639,7 +822,7 @@
             },
         });
         let s = $('.modal-scan').modal('show');
-        
+
         $('.modal-scan').on('shown.bs.modal', function () {
             $('#scan_filter').addClass('hidden');
         });
@@ -664,41 +847,41 @@
                 if (datas !== undefined) {
                     let checkeds = $('.cb-child').prop('checked', true);
                     if (prd1.length < 0 || prd1[dpp] == undefined) {
-                            if(tmp.includes(datas.ids)){
-                                console.log("sudah ada")
-                            }else{
-                                tmp.push(datas.ids)
-                                if(tmp.length > max){
-                                    Swal.fire({
-                                                icon: 'error',
-                                                title: 'Gagal',
-                                                text: 'Jumlah Nomor Seri Melebihi Batas',
-                                                type: 'error',
-                                                timer: 1000
-                                            })
-                                            tmp.pop()
-                                            checkeds.prop('checked', false);
-                                }
+                        if (tmp.includes(datas.ids)) {
+                            console.log("sudah ada")
+                        } else {
+                            tmp.push(datas.ids)
+                            if (tmp.length > max) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: 'Jumlah Nomor Seri Melebihi Batas',
+                                    type: 'error',
+                                    timer: 1000
+                                })
+                                tmp.pop()
+                                checkeds.prop('checked', false);
                             }
-                        }else{
-                            for (nomorseri in prd1[dpp]){
-                                if(nomorseri == "noseri"){
-                                    if (prd1[dpp][nomorseri].includes(datas.ids)){
-                                        console.log("ada")
-                                    }else{
-                                        prd1[dpp][nomorseri].push(datas.ids);
-                                        if (prd1[dpp][nomorseri].length > max) {
-                                            Swal.fire({
-                                                icon: 'error',
-                                                title: 'Gagal',
-                                                text: 'Jumlah Nomor Seri Melebihi Batas',
-                                                type: 'error',
-                                                timer: 1000
-                                            })
-                                            prd1[dpp][nomorseri].pop();
-                                            checkeds.prop('checked', false);
-                                        }
+                        }
+                    } else {
+                        for (nomorseri in prd1[dpp]) {
+                            if (nomorseri == "noseri") {
+                                if (prd1[dpp][nomorseri].includes(datas.ids)) {
+                                    console.log("ada")
+                                } else {
+                                    prd1[dpp][nomorseri].push(datas.ids);
+                                    if (prd1[dpp][nomorseri].length > max) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Gagal',
+                                            text: 'Jumlah Nomor Seri Melebihi Batas',
+                                            type: 'error',
+                                            timer: 1000
+                                        })
+                                        prd1[dpp][nomorseri].pop();
+                                        checkeds.prop('checked', false);
                                     }
+                                }
                             }
                         }
                     }
@@ -713,55 +896,55 @@
             let barcode = $(this).val();
             let search = mytable.search(barcode).draw();
             let data = mytable.row('tr:contains("' + barcode + '")').data();
-            if(barcode.length >= 10){
+            if (barcode.length >= 10) {
                 if (data !== undefined) {
                     let checked = $('.cb-child').prop('checked', true);
                     if (prd1.length < 0 || prd1[dpp] == undefined) {
-                            if(tmp.includes(data.ids)){
-                                console.log("sudah ada")
-                            }else{
-                                tmp.push(data.ids)
-                                if(tmp.length > max){
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Gagal',
-                                        text: 'Jumlah Nomor Seri Melebihi Batas',
-                                        type: 'error',
-                                        timer: 1000
-                                    })
-                                    tmp.pop();
-                                    checked.prop('checked', false);
-                                }
+                        if (tmp.includes(data.ids)) {
+                            console.log("sudah ada")
+                        } else {
+                            tmp.push(data.ids)
+                            if (tmp.length > max) {
+                                Swal.fire({
+                                    icon: 'error',
+                                    title: 'Gagal',
+                                    text: 'Jumlah Nomor Seri Melebihi Batas',
+                                    type: 'error',
+                                    timer: 1000
+                                })
+                                tmp.pop();
+                                checked.prop('checked', false);
                             }
-                        }else{
-                            for (nomorseri in prd1[dpp]){
-                                if(nomorseri == "noseri"){
-                                    if (prd1[dpp][nomorseri].includes(data.ids)){
-                                        console.log("ada")
-                                    }else{
-                                        prd1[dpp][nomorseri].push(data.ids);
-                                        if (prd1[dpp][nomorseri].length > max) {
-                                            Swal.fire({
-                                                icon: 'error',
-                                                title: 'Gagal',
-                                                text: 'Jumlah Nomor Seri Melebihi Batas',
-                                                type: 'error',
-                                                timer: 1000
-                                            })
-                                            prd1[dpp][nomorseri].pop();
-                                            checked.prop('checked', false);
-                                        }
+                        }
+                    } else {
+                        for (nomorseri in prd1[dpp]) {
+                            if (nomorseri == "noseri") {
+                                if (prd1[dpp][nomorseri].includes(data.ids)) {
+                                    console.log("ada")
+                                } else {
+                                    prd1[dpp][nomorseri].push(data.ids);
+                                    if (prd1[dpp][nomorseri].length > max) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Gagal',
+                                            text: 'Jumlah Nomor Seri Melebihi Batas',
+                                            type: 'error',
+                                            timer: 1000
+                                        })
+                                        prd1[dpp][nomorseri].pop();
+                                        checked.prop('checked', false);
                                     }
+                                }
                             }
                         }
                     }
-                    if(checked){
+                    if (checked) {
                         var idd = $(checked).val();
                         var title = $(checked).parent().prev()[0].textContent;
                         var textid = 'text' + $(checked).attr('id');
-                        $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
+                        $(list).append('<tr><td id=' + textid + '>' + title + '</td></tr>')
                     }
-                }else{
+                } else {
                     Swal.fire({
                         icon: 'error',
                         title: 'Oops...',
@@ -777,14 +960,14 @@
             }
         });
     });
-    $('.scan-produk').on('click', '.cb-child',function (){
+    $('.scan-produk').on('click', '.cb-child', function () {
         if ($(this).is(':checked')) {
             if (prd1.length < 0 || prd1[dpp] == undefined) {
-                if(tmp.includes($(this).val())){
+                if (tmp.includes($(this).val())) {
                     console.log("sudah ada")
-                }else{
+                } else {
                     tmp.push($(this).val())
-                    if(tmp.length > max){
+                    if (tmp.length > max) {
                         Swal.fire({
                             icon: 'error',
                             title: 'Gagal',
@@ -796,11 +979,11 @@
                         $(this).prop('checked', false);
                     }
                 }
-            }else{
-                for (nomorseri in prd1[dpp]){
-                    if(nomorseri == "noseri"){
-                     prd1[dpp][nomorseri].push($(this).val())
-                     if (prd1[dpp][nomorseri].length > max) {
+            } else {
+                for (nomorseri in prd1[dpp]) {
+                    if (nomorseri == "noseri") {
+                        prd1[dpp][nomorseri].push($(this).val())
+                        if (prd1[dpp][nomorseri].length > max) {
                             Swal.fire({
                                 icon: 'error',
                                 title: 'Gagal',
@@ -811,15 +994,15 @@
                             prd1[dpp][nomorseri].pop();
                             $(this).prop('checked', false);
                         }
+                    }
                 }
-           }
-        }
+            }
         } else {
             if (prd1.length < 0 || prd1[dpp] == undefined) {
                 tmp.splice($.inArray($(this).val(), tmp), 1);
-            }else{
-                for (nomorseri in prd1[dpp]){
-                    if(nomorseri == "noseri"){
+            } else {
+                for (nomorseri in prd1[dpp]) {
+                    if (nomorseri == "noseri") {
                         prd1[dpp][nomorseri].splice($.inArray($(this).val(), prd1[dpp][nomorseri]), 1)
                     }
                 }
@@ -830,14 +1013,14 @@
         console.log("tmp", tmp)
         console.log("prd1", prd1)
     })
-    $('.scan-produk').on('change', '.cb-child',function (){
+    $('.scan-produk').on('change', '.cb-child', function () {
         var idd = $(this).val();
         var title = $(this).parent().prev()[0].textContent;
         var textid = 'text' + $(this).attr('id');
         if ($(this).is(':checked')) {
-            $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
+            $(list).append('<tr><td id=' + textid + '>' + title + '</td></tr>')
         } else {
-            $('#'+textid).remove()
+            $('#' + textid).remove()
         }
     });
     $('.scan-produk').on('change', '#head-cb', function () {
@@ -847,7 +1030,7 @@
                 var idd = $(this).val();
                 var title = $(this).parent().prev()[0].textContent;
                 var textid = 'text' + $(this).attr('id');
-                $(list).append('<tr><td id='+ textid +'>'+title+'</td></tr>')
+                $(list).append('<tr><td id=' + textid + '>' + title + '</td></tr>')
             })
         } else {
             $('.cb-child').prop('checked', false);
@@ -858,9 +1041,10 @@
     var dataTemp = [];
     $(document).on('click', '#simpan', function (e) {
         $('.simpanSeri').attr('id', 'simpanSeriBelumDigunakan');
-        let checked = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked').map(function () {
-            return $(this).val();
-        }).get();
+        let checked = $('.scan-produk').DataTable().column(1).nodes().to$().find('input[type=checkbox]:checked')
+            .map(function () {
+                return $(this).val();
+            }).get();
         if (checked.length > max) {
             Swal.fire({
                 icon: 'error',
@@ -877,11 +1061,11 @@
             })
             if (prd1.length < 0 || prd1[dpp] == undefined) {
                 prd1[dpp] = {
-                "jumlah": jml,
-                "prd": prd,
-                "noseri": [...new Set(tmp)]
+                    "jumlah": jml,
+                    "prd": prd,
+                    "noseri": [...new Set(tmp)]
                 };
-            }else{
+            } else {
                 console.log("prd1", prd1);
             }
             tmp = [];
@@ -1221,5 +1405,6 @@
         $('#jml').val(jml);
         $('#dpp').val(dpp);
     });
+
 </script>
 @stop

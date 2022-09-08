@@ -136,7 +136,11 @@
                         </tr>
                     </thead>
                     <tbody>
-
+                        <tr>
+                            <td>WESRUF9835734958</td>
+                            <td><span class="badge badge-warning">Sudah Ditransfer</span></td>
+                            <td><button class="btn btn-outline-success lihatData"><i class="fa fa-eye"></i></button></td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -165,23 +169,15 @@
                                 </div>
                             </div>
                             {{-- col --}}
-                            <div class="col"> <label for="">Tanggal Masuk & Tanggal Keluar</label>
-                                <div class="card-group">
-                                    <div class="card nomor-akn">
-                                        <div class="card-body">
-                                            <p class="card-text" id="in">10-04-2022</p>
-                                        </div>
-                                    </div>
-                                    <div class="card nomor-akn">
-                                        <div class="card-body">
-                                            <p class="card-text" id="out">23-09-2022</p>
-                                        </div>
+                            <div class="col"> <label for="">Status</label>
+                                <div class="card nomor-akn">
+                                    <div class="card-body">
+                                        <p class="card-text" id="in">Sudah Ditransfer</p>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-
                     <div class="card-body">
                         <form action="" id="myForm" name="myForm">
                             <input type="hidden" name="id" id="kode">
@@ -220,18 +216,93 @@
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-                <button type="submit" class="btn btn-primary" id="btnSave">Simpan</button>
-            </div>
-        </form>
         </div>
     </div>
 </div>
+
+{{-- Modal Edit --}}
+<div class="modal fade editDetail" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="card">
+            <div class="card-header">
+                <div class="row">
+                    <div class="col">
+                        <label for="">No Seri</label>
+                        <div class="card nomor-so">
+                            <div class="card-body" id="nose">89798797856456</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="">Tanggal Masuk & Keluar</label>
+                        <div class="card-group">
+                            <div class="card nomor-po">
+                                <div class="card-body" id="tgl_in">23-05-2022</div>
+                            </div>
+                            <div class="card nomor-po">
+                                <div class="card-body" id="tgl_out">24-05-2022</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="">Dari</label>
+                        <div class="card nomor-akn">
+                            <div class="card-body" id="from">Gudang Penjualan</div>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <label for="">Ke</label>
+                        <div class="card instansi">
+                            <div class="card-body" id="to">After Sales</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+          <div class="card-body">
+            <label for="">Kerusakan</label>
+            <textarea name="" id="kerusakan" cols="30" rows="5" class="form-control"></textarea>
+            <label for="">Perbaikan</label>
+            <textarea name="" id="perbaikan" cols="30" rows="5" class="form-control"></textarea>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+        <button type="button" class="btn btn-primary buttonSimpan">Simpan</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 @stop
 @section('adminlte_js')
 <script>
     let varian = []
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
     $(document).ready(function () {
         $.ajax({
         type: 'get',
@@ -286,6 +357,9 @@
         serverSide: true,
         ajax: {
             url: "/api/gk/his-unit/" +id,
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
         },
         columns: [
             {data: 'inn'},
@@ -347,40 +421,31 @@
         changeStatus();
     })
 
-    $('body').on('submit', '#myForm', function(e) {
-        e.preventDefault();
-        var actionType = $('#btnSave').val();
-        $('#btnSave').html('Sending..');
-        $('#btnSave').attr('disabled', true);
+    $(document).on('click', '.editData', function () {
+        $('.editDetail').modal('show');
+    });
+
+    $(document).on('click', '.buttonSimpan', function () {
+        let nomorseri = $('#nose').text();
+        let tgl_in = $('#tgl_in').text();
+        let tgl_out = new Date();
+        let kerusakan = $('#kerusakan').val();
+        let perbaikan = $('#perbaikan').val();
+        let data = {
+            nomorseri: nomorseri.trim(),
+            tgl_in: tgl_in.trim(),
+            tgl_out: tgl_out,
+            kerusakan: kerusakan,
+            perbaikan: perbaikan
+        }
         Swal.fire({
-            title: 'Please wait',
-            text: 'Data is transferring...',
-            allowOutsideClick: false,
-            showConfirmButton: false
-        });
-        var formData = new FormData(this);
-        $.ajax({
-            type: 'POST',
-            url: "/api/gk/ubahunit",
-            data: formData,
-            cache:false,
-            contentType: false,
-            processData: false,
-            success: (data) => {
-                $('#myForm').trigger('reset');
-                $('.changeStatus').modal('hide');
-                $('#btnSave').html('Kirim');
-                Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: data.msg,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                $('.table_edit_sparepart').DataTable().ajax.reload();
-                location.reload();
-            }
-        });
-    })
+            icon: 'success',
+            title: 'Berhasil',
+            text: 'Data berhasil disimpan!',
+            showConfirmButton: false,
+            timer: 1500
+        })
+        console.log(data);
+    });
 </script>
 @stop

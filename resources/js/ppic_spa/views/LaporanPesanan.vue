@@ -121,7 +121,12 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
-      await axios.post("/api/ppic/master_stok/data").then((response) => {
+      const body = {};
+      await axios.post("/api/ppic/master_stok/data",body, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
         this.data = response.data.data;
       });
       $("#table_so").DataTable();
@@ -131,7 +136,12 @@ export default {
 
     async getDetail(id, nama) {
       this.$store.commit("setIsLoading", true);
-      await axios.post("/api/ppic/master_stok/detail/" + id).then((response) => {
+      const body1 = {};
+      await axios.post("/api/ppic/master_stok/detail/" + id,body1, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
         this.detail = response.data.data;
       });
       $("#detailtable").DataTable();
@@ -141,7 +151,35 @@ export default {
 
       this.showModal = true;
     },
+
+    checkToken(){
+        if(localStorage.getItem('lokal_token') == null){
+            // event.preventDefault();
+            this.$swal({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.value) {
+                    this.logout()
+                }
+            })
+        }
+    },
+
+    async logout() {
+      await axios.post("/logout");
+      document.location.href = "/";
+    },
   },
+
+  created() {
+        this.checkToken();
+    },
 
   mounted() {
     this.loadData();

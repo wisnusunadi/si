@@ -88,7 +88,11 @@
             async loadData() {
                 try {
                     this.$store.commit("setIsLoading", true);
-                    await axios.get("/api/ppic/datatables/perakitan").then((response) => {
+                    await axios.get("/api/ppic/datatables/perakitan", {
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                        }
+                    }).then((response) => {
                         this.tablePerakitan = response.data.data;
                     });
                     $('#table').DataTable({
@@ -113,7 +117,11 @@
                 try {
                     this.loading = true;
                     this.nama_produk = nama;
-                    await axios.get("/api/ppic/datatables/perakitandetail/"+data).then((response) => {
+                    await axios.get("/api/ppic/datatables/perakitandetail/"+data, {
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                        }
+                    }).then((response) => {
                         this.detail = response.data;
                     });
                     this.loading = false;
@@ -121,6 +129,33 @@
                     this.error = err;
                 }
             },
+            checkToken(){
+                if(localStorage.getItem('lokal_token') == null){
+                    // event.preventDefault();
+                    this.$swal({
+                        title: 'Session Expired',
+                        text: 'Silahkan login kembali',
+                        icon: 'warning',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.value) {
+                            this.logout()
+                        }
+                    })
+                }
+            },
+
+            async logout() {
+            await axios.post("/logout");
+            document.location.href = "/";
+            },
+        },
+
+        created() {
+            this.checkToken();
         },
 
         mounted() {
