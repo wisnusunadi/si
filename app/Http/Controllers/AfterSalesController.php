@@ -11,11 +11,7 @@ use App\Models\DetailLogistikPart;
 use App\Models\DetailPesananPart;
 use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
-
-use App\Models\Ekatalog;
-use App\Models\Spa;
 use App\Models\Spb;
-
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
@@ -314,12 +310,6 @@ class AfterSalesController extends Controller
         }
 
         return view('page.as.so.detail', ['id' => $id, 'jenis' => $jenis, 'd' => $d, 'status' => $status]);
-    }
-
-    public function get_data_detail_part($id)
-    {
-        $data = DetailPesananPart::find($id);
-        return view('page.as.penjualan.edit', ['id' => $id, 'data' => $data]);
     }
 
     public function get_detail_pengiriman($id, $jenis)

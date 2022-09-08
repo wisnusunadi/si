@@ -135,7 +135,6 @@
                                         <tr>
                                             <th>Produk</th>
                                             <th>Produk</th>
-                                            {{-- <th><input type="checkbox" id="head-cb-produk"></th> --}}
                                             <th>Produk</th>
                                             <th>Jumlah</th>
                                             <th>Merk</th>
@@ -369,7 +368,7 @@
                 <input type="hidden" name="soid1" id="soid1" value="">
                 <div class="modal-body">
                     <div class="form-group">
-                        <label for="">Noseri</label>
+                        <label for="">Sales Order File</label>
                         <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".xlsx">
                     </div>
 
@@ -403,6 +402,7 @@
     var mytable = '';
     let prd1 = {};
     let tmp = []
+    var access_token = localStorage.getItem('lokal_token');
     $(document).ready(function () {
         $('#head-cb').prop('checked', false);
         $('#head-cb-produk').prop('checked', false);
@@ -440,11 +440,34 @@
                     .removeClass('disabled').attr('disabled', true);
             }
         });
+
+        if (access_token == null) {
+            Swal.fire({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    document.getElementById('logout-form').submit();
+                }
+            })
+        }
+
         let a = $('#gudang-barang').DataTable({
             processing: true,
             destroy: true,
+            ordering: false,
+            autoWidth: false,
             ajax: {
                 url: '/api/tfp/data-so',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [{
                     data: 'DT_RowIndex',
@@ -592,14 +615,14 @@
                 processData: false,
                 success: function(data) {
                     console.log(data);
-                    // Swal.fire({
-                    //     icon: 'success',
-                    //     title: 'Berhasil',
-                    //     text: data.msg,
-                    // }).then((res) => {
-                    //     // console.log(res);
-                    //     location.reload()
-                    // })
+                    Swal.fire({
+                        icon: 'success',
+                        title: 'Berhasil',
+                        text: data.msg,
+                    }).then((res) => {
+                        // console.log(res);
+                        location.reload()
+                    })
                 }
             })
         })

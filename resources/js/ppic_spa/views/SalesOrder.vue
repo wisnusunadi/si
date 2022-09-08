@@ -217,58 +217,30 @@ export default {
     },
 
     methods: {
-        async loadData() {
-            this.$store.commit("setIsLoading", true);
-            await axios
-                .post("/api/prd/so")
-                .then((response) => {
-                    this.salesOrder = response.data.data;
-                })
-                .then(() =>
-                    $("#table_so").DataTable({
-                        pagingType: "simple_numbers_no_ellipses",
-                    })
-                );
+    async loadData() {
+        this.$store.commit("setIsLoading", true);
+        const body = {};
+        await axios.post("/api/prd/so",body, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
+          this.salesOrder = response.data.data;
+        }).then(() => ($("#table_so").DataTable({
+          pagingType: "simple_numbers_no_ellipses",
+        })))
 
-            await axios
-                .post("/api/ppic/master_pengiriman/data")
-                .then((response) => {
-                    this.data = response.data.data;
-                })
-                .then(() =>
-                    $("#table_produk").DataTable({
-                        pagingType: "simple_numbers_no_ellipses",
-                    })
-                );
-
-            this.$store.commit("setIsLoading", false);
-        },
-
-        // methods: {
-        //     async loadData() {
-        //         this.$store.commit("setIsLoading", true);
-        //         await axios
-        //             .post("/api/prd/so")
-        //             .then((response) => {
-        //                 this.salesOrder = response.data.data;
-        //             })
-        //             .then(() =>
-        //                 $("#table_so").DataTable({
-        //                     pagingType: "simple_numbers_no_ellipses",
-        //                 })
-        //             );
-
-        //         await axios
-        //             .get("/api/ppic/data/so2")
-        //             .then((response) => {
-        //                 this.data = response.data.data;
-        //             })
-        //             .then(() =>
-        //                 $("#table_produk").DataTable({
-        //                     pagingType: "simple_numbers_no_ellipses",
-        //                 })
-        //             );
-
+        await axios.post("/api/ppic/master_pengiriman/data",body, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
+        this.data = response.data.data;
+        }).then(() => ($("#table_produk").DataTable({
+            pagingType: "simple_numbers_no_ellipses",
+            })
+        ));
+    },
         async getDetail(id, nama) {
             this.$store.commit("setIsLoading", true);
             await axios
@@ -341,9 +313,36 @@ export default {
         //     ],
         //   });
     },
-
-    mounted() {
-        this.loadData();
+    checkToken(){
+        if(localStorage.getItem('lokal_token') == null){
+            // event.preventDefault();
+            this.$swal({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.value) {
+                    this.logout()
+                }
+            })
+        }
     },
+
+    async logout() {
+      await axios.post("/logout");
+      document.location.href = "/";
+    },
+
+  created() {
+        this.checkToken();
+    },
+
+  mounted() {
+    this.loadData();
+  },
 };
 </script>

@@ -1319,55 +1319,57 @@
                     text: "Apakah anda yakin ingin membatalkan pesanan?",
                     type: "warning",
                     showCancelButton: true,
-                    confirmButtonClass: "btn-danger",
-                    confirmButtonText: "Batalkan",
-                    cancelButtonText: "Kembali",
-                    closeOnConfirm: false,
-                    closeOnCancel: false
-                },
-                function(isConfirm) {
-                    if (isConfirm) {
+                    confirmButtonText: 'Batalkan',
+                    cancelButtonText: 'Tutup',
+                    reverseButtons: true
+                }).then((result) => {
+                    if (result.isConfirmed) {
+
                         $.ajax({
+                            url: '/api/penjualan/penjualan/cancel/' + id + '/' + jenis,
+                            type: 'POST',
                             headers: {
                                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                             },
-                            url: '/api/penjualan/penjualan/cancel',
-                            type: 'POST',
-                            data: {'id': id, 'jenis': jenis, 'alasan': alasan},
-                            beforeSend: function() {
-                                $('#loader').show();
-                            },
-                            success: function(result) {
+                            success: function(response) {
                                 if (response['data'] == "success") {
                                     swal.fire(
-                                        'Berhasil',
-                                        'Berhasil melakukan Perubahan Pesanan',
+                                        'Batal',
+                                        'Sukses Batalkan Pesanan',
                                         'success'
                                     );
-                                    $("#editmodal").modal('hide');
-                                    location.reload();
+                                    $('#penjualantable').DataTable().ajax.reload();
+                                    if (jenis == 'spa') {
+                                        $('#spatable').DataTable().ajax.reload();
+                                    } else if (jenis == 'spb') {
+                                        $('#spbtable').DataTable().ajax.reload();
+                                    }
+                                    $("#deletemodal").modal('hide');
                                 } else if (response['data'] == "error") {
                                     swal.fire(
                                         'Gagal',
-                                        'Gagal melakukan Perubahan Pesanan',
+                                        'Gagal melakukan Hapus Data',
                                         'error'
                                     );
                                 }
                             },
-                            complete: function() {
-                                $('#loader').hide();
-                            },
-                            error: function(jqXHR, testStatus, error) {
-                                console.log(error);
-                                alert("Page " + href + " cannot open. Error:" + error);
-                                $('#loader').hide();
-                            },
-                            timeout: 8000
-                        })
-                    } else {
-                        swal("Cancelled", "Your imaginary file is safe :)", "error");
+                            error: function(xhr, status, error) {
+                                swal.fire(
+                                    'Error',
+                                    'Data telah digunakan dalam Transaksi Lain',
+                                    'warning'
+                                );
+                                // console.log(action);
+                            }
+                        });
+                        return false;
+                        swalWithBootstrapButtons.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        )
                     }
-                });
+                })
             });
 
             $(document).on('submit', '#form-pesanan-update', function(e) {
@@ -1492,7 +1494,27 @@
                     $('#deletemodal').find('form').attr('action', '/api/spb/delete/' + id);
                     $('#deletemodal').find('form').attr('data-target', 'spb');
                 }
+                // $.ajax({
+                //     url: href,
+                //     beforeSend: function() {
+                //         $('#loader').show();
+                //     },
+                //     // return the result
+                //     success: function(result) {
                 $('#deletemodal').modal("show");
+                // $('#detail').html(result).show();
+
+                //     },
+                //     complete: function() {
+                //         $('#loader').hide();
+                //     },
+                //     error: function(jqXHR, testStatus, error) {
+                //         console.log(error);
+                //         alert("Page " + href + " cannot open. Error:" + error);
+                //         $('#loader').hide();
+                //     },
+                //     timeout: 8000
+                // })
             });
 
 

@@ -59,9 +59,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-selesai_kirim-tab" data-toggle="pill" href="#pills-selesai_kirim" role="tab" aria-controls="pills-selesai_kirim" aria-selected="false">Sudah Proses</a>
                             </li>
-                            <li class="nav-item">
+                            {{-- <li class="nav-item">
                                 <a class="nav-link" id="pills-batal_po-tab" data-toggle="pill" href="#pills-batal_po" role="tab" aria-controls="pills-batal_po" aria-selected="false">Batal Proses</a>
-                            </li>
+                            </li> --}}
                             @endif
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
@@ -121,21 +121,12 @@
                                                         <th>Nomor SO</th>
                                                         <th>Nomor PO</th>
                                                         <th>Customer</th>
-                                                        <th>Batas Transfer</th>
+                                                        <th>Status</th>
                                                         <th>Aksi</th>
                                                     </tr>
                                                 </thead>
                                                 <tbody>
-                                                    <tr>
-                                                        <td>1</td>
-                                                        <td>SO-00001</td>
-                                                        <td>PO-00001</td>
-                                                        <td>PT. ABC</td>
-                                                        <td>20 Desember 2019</td>
-                                                        <td>
-                                                            <button class="btn btn-sm btn-outline-success button_batal"><i class="fas fa-eye"></i> Detail</button>
-                                                        </td>
-                                                    </tr>
+
                                                 </tbody>
                                             </table>
                                         </div>
@@ -379,7 +370,7 @@
                                                     <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
                                                     <div class="info-box-content">
                                                     <span class="info-box-text">No SO</span>
-                                                    <span class="info-box-number">SO 1234</span>
+                                                    <span class="info-box-number" id="noso">SO 1234</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -388,7 +379,7 @@
                                                     <span class="info-box-icon"><i class="fas fa-receipt"></i></span>
                                                     <div class="info-box-content">
                                                     <span class="info-box-text">No PO </span>
-                                                    <span class="info-box-number">PO 1234</span>
+                                                    <span class="info-box-number" id="nopo">PO 1234</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -397,15 +388,16 @@
                                                     <span class="info-box-icon"><i class="far fa-user"></i></span>
                                                     <div class="info-box-content">
                                                     <span class="info-box-text">Nama Customer</span>
-                                                    <span class="info-box-number">PT Emiindo Jaya</span>
+                                                    <span class="info-box-number" id="cust">PT Emiindo Jaya</span>
                                                     </div>
                                                 </div>
                                             </div>
                                             <div class="col-lg-6 col-md-6">
                                                 <div class="info-box bg-indigo" style="box-shadow: none">
+                                                    <span class="info-box-icon"><i class="far fa-calendar"></i></span>
                                                     <div class="info-box-content">
                                                     <span class="info-box-text">Tanggal Batal</span>
-                                                    <span class="info-box-number">18 September 2022</span>
+                                                    <span class="info-box-number" id="tglbatal">18 September 2022</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -417,7 +409,7 @@
                                                 <div class="info-box bg-danger">
                                                     <span class="info-box-icon"><i class="fas fa-exclamation-triangle fa-fw"></i></span>
                                                     <div class="info-box-content">
-                                                    <span class="info-box-text">Alasan Batal</span>
+                                                    <span class="info-box-text" id="spanAlasan">Alasan Batal</span>
                                                     <span class="info-box-number"></span>
                                                     </div>
                                                 </div>
@@ -435,9 +427,10 @@
                                             <tr>
                                                 <th>No</th>
                                                 <th>Nama Produk</th>
+                                                <th>Nama Produk</th>
                                                 <th>Jumlah</th>
                                             </tr>
-                                        </thead> 
+                                        </thead>
                                         <tbody>
                                         </tbody>
                                     </table>
@@ -450,7 +443,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal"><i class="fas fa-times"></i> Tutup</button>
                 @if(Auth::user()->divisi_id !== 31)
-                <button type="button" class="btn btn-dark btn-sm float-right"><i class="fas fa-check"></i> Terima</button>
+                <button type="button" class="btn btn-dark btn-sm float-right" id="btnProsesBatal"><i class="fas fa-check"></i> Terima</button>
                 @endif
             </div>
         </div>
@@ -460,6 +453,7 @@
 
 @section('adminlte_js')
 <script>
+    var access_token = localStorage.getItem('lokal_token');
     $(document).ready(function () {
         let auth = $('#auth').val();
         $('#head-cb-so').prop('checked', false);
@@ -475,12 +469,33 @@
             $('.cb-child-so').prop('checked', isChecked)
         });
 
-        $('#belum-dicek').DataTable({
+        if (access_token == null) {
+            Swal.fire({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    document.getElementById('logout-form').submit();
+                }
+            })
+        }
+
+        if (auth !== 31) {
+            $('#belum-dicek').DataTable({
             destroy: true,
             processing: true,
             serverSide: false,
             ajax: {
                 url: '/api/tfp/belum-dicek',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},
@@ -507,12 +522,15 @@
             ]
         });
 
-        $('#sudah-dicek').DataTable({ 
+        $('#sudah-dicek').DataTable({
             destroy: true,
             processing: true,
             serverSide: false,
             ajax: {
                 url: '/api/tfp/sudah-dicek',
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 { data: 'DT_RowIndex', name: 'DT_RowIndex'},
@@ -538,19 +556,37 @@
                 { "width": "10%", "targets": 5 }
             ]
         });
+        }
 
-        $('#batal-table').DataTable({
+        $('#batal-po').DataTable({
             destroy: true,
             processing: true,
             serverSide: false,
+            ajax: {
+                url: '/api/v2/gbj/so_batal',
+                type: 'post',
+            },
+            columns: [
+                { data: 'DT_RowIndex', name: 'DT_RowIndex'},
+                { data: 'so', name: 'so'},
+                {data: 'no_po'},
+                { data: 'nama_customer', name: 'nama_customer'},
+                // { data: 'batas_out', name: 'batas_out'},
+                {data: 'logs'},
+                { data: 'aksi', name: 'aksi'},
+            ],
             "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+                processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
             },
         })
     });
 
     var id = '';
     $(document).on('click', '.editmodal', function(e) {
+        $('#variasiid').select2({})
         var x = $(this).data('value');
         console.log(x);
         id = $(this).data('id');
@@ -736,8 +772,106 @@
         $('#viewProdukModal').modal('show');
     });
 
-    $(document).on('click', '.button_batal', function(e) {
+    let idd;
+    $(document).on('click', '.btndetail', function(e) {
+        let so = $(this).parent().prev().prev().prev().prev().html();
+        let po = $(this).parent().prev().prev().prev().html();
+        let customer = $(this).parent().prev().prev().html();
+        idd = $(this).data('id');
+        let x = $(this).data('value');
+        let alasan = $(this).data('alasan')
+        let tgl = $(this).data('tgl')
+        // console.log(alasan);
+
+        $('span#noso').text(so);
+        $('span#nopo').text(po);
+        $('span#cust').text(customer);
+        $('span#tglbatal').text(tgl);
+        $('span#spanAlasan').text(alasan);
+
+        $('#produktable').DataTable({
+            destroy: true,
+            processing: true,
+            autoWidth: false,
+            bPaginate: false,
+            ordering: false,
+            scrollY: 300,
+            ajax: {
+                url: "/api/tfp/detail-so/" +idd+"/"+x,
+            },
+            columns: [
+                {data: 'detail_pesanan_id'},
+                { data: 'paket' },
+                { data: 'produk' },
+                { data: 'qty' },
+            ],
+            "drawCallback": function ( settings ) {
+                var api = this.api();
+                var rows = api.rows( {page:'current'} ).nodes();
+                var last=null;
+
+                api.column(0, {page:'current'} ).data().each( function ( group, i ) {
+
+                    if (last !== group) {
+                        var rowData = api.row(i).data();
+
+                        $(rows).eq(i).before(
+                        '<tr class="table-dark text-bold"><td style="display:none;">'+group+'</td><td colspan="3">' + rowData.paket + '</td></tr>'
+                    );
+                        last = group;
+                    }
+                });
+            },
+            "columnDefs":[
+                    {"targets": [0], "visible": false},
+                    {"targets": [1], "visible": false},
+                ],
+                "language": {
+                "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            }
+        })
         $('#pesananBatal').modal('show');
+    })
+
+    $(document).on('click', '#btnProsesBatal', function(e) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, save it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    url: "/api/v2/gbj/proses_so_batal",
+                    type: "post",
+                    data: {
+                        pesananid: idd,
+                    },
+                    success: function(res) {
+                        // console.log(res)
+                        if (res.error == true) {
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: res.msg
+                            })
+                        } else {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Success',
+                                text: res.msg
+                            }).then(() => {
+                                console.log('ok');
+                            })
+                        }
+                    }
+                })
+            }
+        })
+
     })
 
 </script>

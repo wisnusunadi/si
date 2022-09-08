@@ -7,7 +7,7 @@ Auth::routes();
 
 // Manager Gudang Barang Jadi
 
-Route::group(['prefix' => '/gbjmanager', 'middleware' => 'auth'], function (){
+Route::group(['prefix' => '/gbjmanager', 'middleware' => ['auth','divisi:mgrgdg']], function (){
     Route::view('/produksi', 'manager.gbj.produksi');
 });
 
@@ -22,6 +22,8 @@ Route::group(['prefix' => 'manager', 'middleware' => 'auth'], function (){
     Route::group(['prefix' => 'qc'], function () {
         Route::get('/show', [App\Http\Controllers\QCController::class, 'manager_qc_show'])->name('manager.qc.show');
         Route::post('/show_data', [App\Http\Controllers\QCController::class, 'manager_qc_show_data'])->name('manager.qc.show.data');
+        Route::get('/detail', [App\Http\Controllers\QCController::class, 'manager_qc_detail'])->name('manager.qc.detail');
+        Route::post('/detail_data', [App\Http\Controllers\QCController::class, 'manager_qc_detail_data'])->name('manager.qc.detail.data');
     });
 
     Route::group(['prefix' => 'logistik'], function () {

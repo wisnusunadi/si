@@ -9,6 +9,7 @@ Route::prefix('/v2')->group(function() {
     Route::prefix('/prd')->group(function() {
         Route::get('/produk-so', [ProduksiController::class, 'getCountProdukBySO']);
         Route::get('/data-so/{id}', [ProduksiController::class, 'detailCountProdukBySO']);
+        Route::post('/telat_rakit', [ProduksiController::class, 'storeTelatRakit']);
     });
 
     Route::prefix('/gbj')->group(function() {
@@ -18,17 +19,24 @@ Route::prefix('/v2')->group(function() {
         Route::post('delete-noseri', [GudangController::class, 'delete_noseri']);
         Route::post('edit-noseri', [GudangController::class, 'edit_noseri']);
         Route::post('list-waiting-noseri', [GudangController::class, 'get_data_waiting_approve']);
-        Route::post('list-approve-noseri', [GudangController::class, 'list_approve_noseri']);
-        Route::post('list-update-noseri', [GudangController::class, 'list_update_noseri']);
-        Route::post('detail-update-noseri', [GudangController::class, 'detail_list_update_noseri']);
-        Route::post('detail-delete-noseri', [GudangController::class, 'detail_list_delete_noseri']);
+        Route::post('list-approve-noseri', [GudangController::class, 'list_approve_noseri'])->middleware('jwt.verify');
+        Route::post('list-update-noseri', [GudangController::class, 'list_update_noseri'])->middleware('jwt.verify');
+        Route::post('detail-update-noseri', [GudangController::class, 'detail_list_update_noseri'])->middleware('jwt.verify');
+        Route::post('detail-delete-noseri', [GudangController::class, 'detail_list_delete_noseri'])->middleware('jwt.verify');
         Route::post('proses-delete-noseri', [GudangController::class, 'proses_delete_noseri']);
         Route::post('proses-update-noseri', [GudangController::class, 'proses_update_noseri']);
         Route::post('tets',[GudangController::class, 'updateStokGudang']);
+        Route::post('riwayat_perubahan_noseri', [GudangController::class, 'getNoseriHistoryPerubahan'])->middleware('jwt.verify');
+        Route::post('alasan_edit_noseri_staff', [GudangController::class, 'get_alasan_from_staff'])->middleware('jwt.verify');
+        Route::post('detail_riwayat_perubahan_noseri', [GudangController::class, 'detailNoseriHistoryPerubahan'])->middleware('jwt.verify');
+        Route::get('header_count_noseri_status/{a}', [GudangController::class, 'headerCountNoseri'])->middleware('jwt.verify');
 
         Route::get('template_so/{id}', [GudangController::class, 'download_template_so']);
         Route::post('preview-so', [GudangController::class, 'preview_so']);
         Route::post('store-sodb', [GudangController::class, 'store_so_to_db']);
+
+        Route::post('so_batal', [GudangController::class, 'get_so_batal']);
+        Route::post('proses_so_batal', [GudangController::class, 'proses_so_batal']);
     });
 
 });

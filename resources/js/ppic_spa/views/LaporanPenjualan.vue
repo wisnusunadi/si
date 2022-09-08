@@ -178,12 +178,16 @@
             async loadData() {
                 this.$store.commit('setIsLoading', true);
                 try {
-                    await axios.get("/api/customer/select").then((response) => {
+                    await axios.get("/api/customer/select",{
+                        headers: {
+                            Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+                        }
+                    }).then((response) => {
                     this.customerList = response.data;
                 });
                 } catch (error) {
                    console.log(error);
-                   this.$swal("Error", "Terjadi kesalahan saat memuat data", "error"); 
+                   this.$swal("Error", "Terjadi kesalahan saat memuat data", "error");
                 }
                 this.$store.commit('setIsLoading', false);
             },
@@ -335,6 +339,34 @@
                     console.log(error);
                 }
             },
+
+            checkToken(){
+                if(localStorage.getItem('lokal_token') == null){
+                    // event.preventDefault();
+                    this.$swal({
+                        title: 'Session Expired',
+                        text: 'Silahkan login kembali',
+                        icon: 'warning',
+                        showCancelButton: false,
+                        confirmButtonColor: '#3085d6',
+                        cancelButtonColor: '#d33',
+                        confirmButtonText: 'OK'
+                    }).then((result) => {
+                        if (result.value) {
+                            this.logout()
+                        }
+                    })
+                }
+            },
+
+            async logout() {
+                await axios.post("/logout");
+                document.location.href = "/";
+            },
+        },
+
+        created() {
+            this.checkToken();
         },
         mounted() {
             this.loadData();
@@ -372,7 +404,7 @@
                     return true;
                 }
                 return false;
-            },  
+            },
             checkExports(){
                 if(this.jenisExport == null && this.checkExportNoSeri == false){
                     return true;

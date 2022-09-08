@@ -1095,7 +1095,6 @@ class LogistikController extends Controller
 
     public function get_data_selesai_so()
     {
-
         $prd = Pesanan::whereIn('id', function($q) {
             $q->select('pesanan.id')
             ->from('pesanan')

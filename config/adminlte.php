@@ -478,18 +478,22 @@ return [
             'text' => 'Penjualan',
             'icon' => 'fas fa-mail-bulk',
             'auth' => [26],
+            'url'  => '/penjualan/penjualan/show',
+        ],
+        [
+            'text' => 'Request Emiindo',
+            'icon' => 'fas fa-mail-bulk',
+            'auth' => [26],
             'submenu' => [
-                    [
-                        'text' => 'Transaksi Internal',
-                        'url'  => '/penjualan/penjualan/show',
-                        'icon' => 'far fa-circle',
-                    ],
-                    [
-                        'text' => 'Transaksi Eksternal',
-                        'url'  => '/penjualan/penjualan/eksternal',
-                        'icon' => 'far fa-circle',
-                    ],
+                [
+                    'text' => 'Ekatalog - SPA',
+                    'url'  => '/penjualan/request_emiindo/akn_po',
+                ],
+                [
+                    'text' => 'Status Penjualan',
+                    'url'  => '/penjualan/request_emiindo/status_penjualan',
                 ]
+            ]
         ],
         [
             'text' => 'Request Emiindo',
@@ -1012,7 +1016,7 @@ return [
             'header' => 'ALAT UJI',
             'auth' => [23, 34]
         ],
-        
+
 
         [
             'text'    => 'Permintaan',

@@ -338,6 +338,23 @@
 @stop
 @section('adminlte_js')
 <script>
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
      $(document).on('click', '#jml-produk-20', function () {
             $('#jml-produk-20').addClass('active');
             $('.jml-produk-20-table').removeClass('hidden');
@@ -433,6 +450,9 @@
             ajax: {
                 url: "/api/gk/dashboard/stok/34",
                 type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex'},
@@ -459,6 +479,9 @@
             ajax: {
                 url: "/api/gk/dashboard/stok/510",
                 type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex'},
@@ -485,6 +508,9 @@
             ajax: {
                 url: "/api/gk/dashboard/stok/10",
                 type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex'},
@@ -510,7 +536,10 @@
             "lengthChange": false,
             ajax: {
                 url: "/api/gk/dashboard/in/36",
-                type: "post"
+                type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex'},
@@ -537,7 +566,10 @@
             "lengthChange": false,
             ajax: {
                 url: "/api/gk/dashboard/in/612",
-                type: "post"
+                type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex'},
@@ -564,7 +596,10 @@
             "lengthChange": false,
             ajax: {
                 url: "/api/gk/dashboard/in/1236",
-                type: "post"
+                type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex'},
@@ -591,7 +626,10 @@
             "lengthChange": false,
             ajax: {
                 url: "/api/gk/dashboard/in/36plus",
-                type: "post"
+                type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex'},
@@ -612,7 +650,10 @@
             serverSide: true,
             ajax: {
                 url: "/api/gk/dashboard/layout",
-                type: "post"
+                type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex'},
@@ -689,6 +730,9 @@
             ajax: {
                 url: "/api/gk/dashboard/tingkat",
                 type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [
                 {data: 'DT_RowIndex'},

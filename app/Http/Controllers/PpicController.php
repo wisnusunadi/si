@@ -1770,7 +1770,10 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('jumlah_pesanan', function ($data) use ($id) {
+<<<<<<< HEAD
 
+=======
+>>>>>>> a7000981ceadd419d2ffb286cccaaa921af7bb19
                 // $res = DetailPesanan::where('pesanan_id', $ids)->get();
                 // $jumlah = 0;
                 // foreach ($res as $a) {

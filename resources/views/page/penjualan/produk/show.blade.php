@@ -57,18 +57,19 @@
             display: inline-block;
         }
 
-        .borderless {
-            border: 0 none;
+        .dropdown-item {
+            font-size: 14px;
         }
 
-        .filter {
-            margin: 10px;
+        .btn{
+            font-size:14px;
         }
 
         .blue-bg {
             background-color: #e0eff3;
             color: #17a2b8;
         }
+    }
 
         .yellow-bg {
             background-color: #fff4dc;
@@ -204,20 +205,42 @@
                                                         <div class="form-group">
                                                             <input type="text" style="width:200px;" class="form-control" id="harga_min" name="stok" value="0" />
                                                         </div>
-                                                        <div class="dropdown-header">
-                                                            Harga Maksimum
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="3" name="produk" />
+                                                            <label class="form-check-label" for="dropdownkelompokproduk">
+                                                                Aksesoris
+                                                            </label>
                                                         </div>
-                                                        <div class="form-group">
-                                                            <input type="text" style="width:200px;" class="form-control" id="harga_maks" name="stok" value="0" disabled />
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <div class="form-check">
+                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="4" name="produk" />
+                                                            <label class="form-check-label" for="dropdownkelompokproduk">
+                                                                Lain - lain
+                                                            </label>
                                                         </div>
+                                                    </div>
+                                                    <div class="dropdown-header">
+                                                        Harga Minimum
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text" style="width:200px;" class="form-control" id="harga_min" name="stok" value="0" />
+                                                    </div>
+                                                    <div class="dropdown-header">
+                                                        Harga Maksimum
+                                                    </div>
+                                                    <div class="form-group">
+                                                        <input type="text" style="width:200px;" class="form-control" id="harga_maks" name="stok" value="0" disabled />
+                                                    </div>
 
-                                                        <button class="btn btn-primary float-right">
-                                                            Cari
-                                                        </button>
-                                                    </form>
-                                                </div>
-                                            </span>
-                                        </div>
+                                                    <button class="btn btn-primary float-right">
+                                                        Cari
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </span>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
@@ -277,24 +300,24 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col-8">
-                                            <h5>Detail Produk</h5>
-                                            <div class="card">
-                                                <div class="card-body">
-                                                    <div class="table-responsive">
-                                                        <table class="table" id="showdetailtable" width="100%">
-                                                            <thead class="align-center">
-                                                                <tr>
-                                                                    <th>No</th>
-                                                                    <th>Produk</th>
-                                                                    <th>Kelompok</th>
-                                                                    <th>Jumlah</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                            </tbody>
-                                                        </table>
-                                                    </div>
+                                    </div>
+                                    <div class="col-8">
+                                        <h5>Detail Produk</h5>
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+                                                    <table class="table" id="showdetailtable" width="100%">
+                                                        <thead class="align-center">
+                                                            <tr>
+                                                                <th>No</th>
+                                                                <th>Produk</th>
+                                                                <th>Kelompok</th>
+                                                                <th>Jumlah</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>
+                                                        </tbody>
+                                                    </table>
                                                 </div>
                                             </div>
                                         </div>
@@ -314,7 +337,6 @@
                                 </div>
                                 <div class="modal-body" id="edit">
 
-                                </div>
                             </div>
                         </div>
                     </div>
@@ -344,8 +366,8 @@
                                                         </span>
                                                     </div>
                                                 </div>
-                                            </form>
-                                        </div>
+                                            </div>
+                                        </form>
                                     </div>
                                 </div>
                             </div>
@@ -354,7 +376,8 @@
                 </div>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 @endsection
 
 @section('adminlte_js')
@@ -389,7 +412,6 @@
             }
 
             $(document).on('submit', '#form-penjualan-produk-update', function(e) {
-                console.log("tes");
                 e.preventDefault();
                 var action = $(this).attr('data-attr');
                 $.ajax({
@@ -420,15 +442,16 @@
                         alert($('#form-penjualan-produk-update').serialize());
                     }
                 });
-                return false;
             });
 
             var showtable = $('#showtable').DataTable({
                 destroy: true,
-                processing: true,
                 serverSide: true,
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
                 ajax: {
-                    'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
+                    'url': '/api/penjualan_produk/detail/' + rows[0].id,
                     "dataType": "json",
                     'type': 'POST',
                     'headers': {
@@ -436,25 +459,16 @@
                     }
                 },
                 columns: [{
-                        data: 'DT_RowIndex',
                         className: 'nowrap-text align-center',
+                        data: 'DT_RowIndex',
                         orderable: false,
                         searchable: false
                     },
                     {
-                        data: 'no_akd',
-                        className: 'nowrap-text align-center tabnum',
-                        orderable: true,
-                        searchable: true
+                        className: 'nowrap-text',
+                        data: 'nama'
                     },
                     {
-                        data: 'merk',
-                        className: 'nowrap-text align-center',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'jenis_paket',
                         className: 'nowrap-text align-center',
                         orderable: true,
                         searchable: true
@@ -881,12 +895,8 @@
                             },
                             processResults: function(data) {
                                 return {
-                                    results: $.map(data, function(obj) {
-                                        return {
-                                            id: obj.id,
-                                            text: obj.nama
-                                        };
-                                    })
+                                    id: obj.id,
+                                    text: obj.nama
                                 };
                             },
 
@@ -938,71 +948,66 @@
                     validasi();
                 });
 
-
                 $(document).on('keyup change', '#createtable .jumlah', function(){
                     validasi();
                 })
 
-                $('#harga_min').on('keyup change', function() {
+        $('#harga_min').on('keyup change', function() {
 
-                    if ($(this).val().startsWith("0")) {
-                        $(this).val('0');
-                        $("#harga_maks").val('0');
-                    }
+            if ($(this).val().startsWith("0")) {
+                $(this).val('0');
+                $("#harga_maks").val('0');
+            }
 
-                    var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                    $(this).val(result);
-                    if ($(this).val() == "") {
-                        $("#harga_maks").attr('disabled', true);
-                    } else if ($(this).val().startsWith("0")) {
-                        $("#harga_maks").attr('disabled', true);
-                    } else {
-                        $("#harga_maks").removeAttr('disabled');
-                    }
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
+            if ($(this).val() == "") {
+                $("#harga_maks").attr('disabled', true);
+            } else if ($(this).val().startsWith("0")) {
+                $("#harga_maks").attr('disabled', true);
+            } else {
+                $("#harga_maks").removeAttr('disabled');
+            }
 
-                });
-                $('#harga_maks').on('keyup change', function() {
+        });
+        $('#harga_maks').on('keyup change', function() {
 
-                    if ($(this).val().startsWith("0")) {
-                        $(this).val('0');
-                    }
-                    var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
-                    $(this).val(result);
+            if ($(this).val().startsWith("0")) {
+                $(this).val('0');
+            }
+            var result = $(this).val().replace(/\D/g, "").replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+            $(this).val(result);
 
-                });
+        });
 
-                $('#filter').submit(function() {
-                    var produk = [];
-                    var harga_min = $('#harga_min').val();
-                    var harga_maks = $('#harga_maks').val();
+        $('#filter').submit(function() {
+            var produk = [];
+            var harga_min = $('#harga_min').val();
+            var harga_maks = $('#harga_maks').val();
 
-                    $("input[name=produk]:checked").each(function() {
-                        produk.push($(this).val());
-                    });
+            $("input[name=produk]:checked").each(function() {
+                produk.push($(this).val());
+            });
 
-                    if (produk != 0) {
-                        var x = produk;
+            if (produk != 0) {
+                var x = produk;
 
-                    } else {
-                        var x = ['kosong']
-                    }
+            } else {
+                var x = ['kosong']
+            }
 
-                    if (harga_min != 0) {
-                        var y = harga_min.replace(/\./g, '')
+            if (harga_min != 0) {
+                var y = harga_min.replace(/\./g, '')
 
-                    } else {
-                        var y = ['kosong']
-                    }
-                    if (harga_maks != 0) {
-                        var z = harga_maks.replace(/\./g, '');
+            } else {
+                var y = ['kosong']
+            }
+            if (harga_maks != 0) {
+                var z = harga_maks.replace(/\./g, '');
 
-                    } else {
-                        var z = ['kosong']
-                    }
-                    console.log(y);
-                    console.log(z);
-                    console.log(x);
-
+            } else {
+                var z = ['kosong']
+            }
                     $('#showtable').DataTable().ajax.url('/api/penjualan_produk/data/' + x + '/' + y + '/' + z + '').load();
                     return false;
                 });

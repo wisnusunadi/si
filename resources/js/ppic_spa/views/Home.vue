@@ -217,32 +217,53 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
-        await axios.post("/api/prd/so").then((response) => {
+      const body = {};
+        await axios.post("/api/prd/so", body, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
           this.salesOrder = response.data.data;
         });
       $("#table_so_detail").DataTable({
         pagingType: "simple_numbers_no_ellipses",
       });
 
-      await axios.post("/api/ppic/master_pengiriman/data").then((response) => {
+      await axios.post("/api/ppic/master_pengiriman/data",body, {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
         this.data_so = response.data.data;
       });
       $("#table_so").DataTable({
         pagingType: "simple_numbers_no_ellipses",
       });
 
-      await axios.get("/api/ppic/data/gbj").then((response) => {
+      await axios.get("/api/ppic/data/gbj", {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
         this.data_gbj = response.data;
       });
       $("#table_gbj").DataTable({
         pagingType: "simple_numbers_no_ellipses",
       });
 
-      await axios.get("/api/ppic/data/gk/sparepart").then((response) => {
+      await axios.get("/api/ppic/data/gk/sparepart", {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
         this.data_sparepart = response.data;
       });
 
-      await axios.get("/api/ppic/data/gk/unit").then((response) => {
+      await axios.get("/api/ppic/data/gk/unit", {
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
         this.data_unit = response.data.data;
       });
       $("#table_sparepart").DataTable({
@@ -259,7 +280,34 @@ export default {
 
       this.$store.commit("setIsLoading", false);
     },
+    checkToken(){
+        if(localStorage.getItem('lokal_token') == null){
+            // event.preventDefault();
+            this.$swal({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.value) {
+                    this.logout()
+                }
+            })
+        }
+    },
+
+    async logout() {
+      await axios.post("/logout");
+      document.location.href = "/";
+    },
   },
+
+  created() {
+        this.checkToken();
+    },
 
   mounted() {
     this.loadData();

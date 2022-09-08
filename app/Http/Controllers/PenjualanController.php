@@ -1771,7 +1771,6 @@ class PenjualanController extends Controller
             ->rawColumns(['button'])
             ->make(true);
     }
-
     public function get_data_detail_paket_spb($id)
     {
         $data  = DetailSpb::where('spb_id', $id)
@@ -1790,7 +1789,6 @@ class PenjualanController extends Controller
             ->rawColumns(['button',])
             ->make(true);
     }
-
     public function get_data_detail_paket_ekatalog($id)
     {
         $data  = DetailEkatalog::with('gudangbarangjadi')->where('ekatalog_id', $id)
@@ -1814,7 +1812,6 @@ class PenjualanController extends Controller
             ->rawColumns(['button', 'variasi'])
             ->make(true);
     }
-
     public function get_data_paket_pesanan_ekat($id)
     {
         $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($id) {
@@ -1823,7 +1820,7 @@ class PenjualanController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('paket_produk', function ($data) {
-                return $data->DetailPesanan->PenjualanProduk->nama_alias . ' (' . $data->DetailPesanan->jumlah . ' unit)';
+                return $data->DetailPesanan->PenjualanProduk->nama . ' (' . $data->DetailPesanan->jumlah . ' unit)';
             })
             ->addColumn('nama_produk', function ($data) {
                 return $data->GudangBarangJadi->Produk->nama . ' ' . $data->GudangBarangJadi->nama;
@@ -3813,10 +3810,17 @@ class PenjualanController extends Controller
         return view('page.penjualan.penjualan.cancel', ['id' => $id, 'data' => $data]);
     }
 
+<<<<<<< HEAD
     public function cancel_spa_spb(Request $r)
     {
         if ($r->jenis == "spa") {
             $spa = Spa::find($r->id);
+=======
+    public function cancel_spa_spb($id, $jenis)
+    {
+        if ($jenis == "spa") {
+            $spa = Spa::find($id);
+>>>>>>> a7000981ceadd419d2ffb286cccaaa921af7bb19
             $spa->log = "batal";
             $u = $spa->save();
             if ($u) {
@@ -3824,8 +3828,8 @@ class PenjualanController extends Controller
             } else if (!$u) {
                 return response()->json(['data' => 'error']);
             }
-        } else if ($r->jenis == "spb") {
-            $spb = Spb::find($r->id);
+        } else if ($jenis == "spb") {
+            $spb = Spb::find($id);
             $spb->log = "batal";
             $u = $spb->save();
             if ($u) {

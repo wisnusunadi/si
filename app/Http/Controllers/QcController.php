@@ -1781,9 +1781,41 @@ class QcController extends Controller
     //Tambah
     public function create_data_qc(/*$seri_id, $tfgbj_id, */$jenis, $pesanan_id, $produk_id, Request $request)
     {
+        // $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan', function ($q) use ($pesanan_id) {
+        //     $q->where('Pesanan_id', $pesanan_id);
+        // })->where('gudang_barang_jadi_id', $produk_id)->first();
+
+        // $replace_array_seri = strtr($seri_id, array('[' => '', ']' => ''));
+        // $array_seri = explode(',', $replace_array_seri);
+
         $bool = true;
         $bools = true;
+        // for ($i = 0; $i < count($array_seri); $i++) {
 
+        //     $data = NoseriTGbj::find($array_seri[$i]);
+
+
+        //     $check = NoseriDetailPesanan::where('t_tfbj_noseri_id', '=', $array_seri[$i])->first();
+        //     if ($check == null) {
+        //         $c = NoseriDetailPesanan::create([
+        //             'detail_pesanan_produk_id' => $data->detail->detail_pesanan_produk_id,
+        //             't_tfbj_noseri_id' => $array_seri[$i],
+        //             'status' => $request->cek,
+        //             'tgl_uji' => $request->tanggal_uji,
+        //         ]);
+        //         if (!$c) {
+        //             $bool = false;
+        //         }
+        //     } else {
+        //         $NoseriDetailPesanan = NoseriDetailPesanan::find($check->id);
+        //         $NoseriDetailPesanan->status = $request->cek;
+        //         $NoseriDetailPesanan->tgl_uji = $request->tanggal_uji;
+        //         $u = $NoseriDetailPesanan->save();
+        //         if (!$u) {
+        //             $bool = false;
+        //         }
+        //     }
+        // }
         if ($jenis == "produk") {
             for ($i = 0; $i < count($request->noseri_id); $i++) {
                 $data = NoseriTGbj::find($request->noseri_id[$i]);
@@ -1825,11 +1857,15 @@ class QcController extends Controller
         }
 
         if ($bool == true) {
+            // $uk = "";
             $po = Pesanan::find($pesanan_id);
+
+            // $uk = count($po->DetailPesanan)." ".count($po->DetailPesananPart);
             if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) <= 0) {
                 if ($po->log_id == "8") {
-                    if ($po->getJumlahPesanan() <= $po->getJumlahCek()) {
-                        if ($po->getJumlahKirim() <= 0) {
+                    // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek();
+                    if ($po->getJumlahPesanan() == $po->getJumlahCek()) {
+                        if ($po->getJumlahKirim() == 0) {
                             $pou = Pesanan::find($pesanan_id);
                             $pou->log_id = '11';
                             $u = $pou->save();
@@ -1854,46 +1890,11 @@ class QcController extends Controller
                             }
                         }
                     }
-                } else if($po->log_id == "6"){
-                    if($po->getJumlahPesanan() <= $po->getJumlahSeri()){
-                        if($po->getJumlahPesanan() > $po->getJumlahCek()){
-                            $pou = Pesanan::find($pesanan_id);
-                            $pou->log_id = '8';
-                            $u = $pou->save();
-                            if (!$u) {
-                                $bools = false;
-                            }
-                        } else if ($po->getJumlahPesanan() <= $po->getJumlahCek()) {
-                            if ($po->getJumlahKirim() <= 0) {
-                                $pou = Pesanan::find($pesanan_id);
-                                $pou->log_id = '11';
-                                $u = $pou->save();
-                                if (!$u) {
-                                    $bools = false;
-                                }
-                            } else {
-                                if ($po->getJumlahKirim() >= $po->getJumlahPesanan()) {
-                                    $pou = Pesanan::find($pesanan_id);
-                                    $pou->log_id = '10';
-                                    $u = $pou->save();
-                                    if (!$u) {
-                                        $bools = false;
-                                    }
-                                } else {
-                                    $pou = Pesanan::find($pesanan_id);
-                                    $pou->log_id = '13';
-                                    $u = $pou->save();
-                                    if (!$u) {
-                                        $bools = false;
-                                    }
-                                }
-                            }
-                        }
-                    }
                 }
             } else if (count($po->DetailPesanan) <= 0 && count($po->DetailPesananPart) > 0) {
+                // $uk = "Jumlah Pesan Part ".$po->getJumlahPesananPartNonJasa()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
                 if ($po->getJumlahPesananPartNonJasa() <= $po->getJumlahCekPart("ok")) {
-                    if ($po->getJumlahKirimPart() <= 0) {
+                    if ($po->getJumlahKirimPart() == 0) {
                         $pou = Pesanan::find($pesanan_id);
                         $pou->log_id = '11';
                         $u = $pou->save();
@@ -1926,9 +1927,10 @@ class QcController extends Controller
                     }
                 }
             } else if (count($po->DetailPesanan) > 0 && count($po->DetailPesananPart) > 0) {
+                // $uk = "Jumlah Pesan Produk ".$po->getJumlahPesanan()." Jumlah Cek Produk ".$po->getJumlahCek()." Jumlah Pesan Part ".$po->getJumlahPesananPartNonJasa()." Jumlah Cek Part ".$po->getJumlahCekPart("ok");
                 if ($po->log_id == "8") {
-                    if (($po->getJumlahPesanan() <= $po->getJumlahCek()) && ($po->getJumlahPesananPartNonJasa() <= $po->getJumlahCekPart("ok"))) {
-                        if ($po->getJumlahKirim() <= 0 && $po->getJumlahKirimPart() <= 0) {
+                    if (($po->getJumlahPesanan() == $po->getJumlahCek()) && ($po->getJumlahPesananPartNonJasa() == $po->getJumlahCekPart("ok"))) {
+                        if ($po->getJumlahKirim() == 0 && $po->getJumlahKirimPart() == 0) {
                             $pou = Pesanan::find($pesanan_id);
                             $pou->log_id = '11';
                             $u = $pou->save();
@@ -1950,44 +1952,6 @@ class QcController extends Controller
                                 if (!$u) {
                                     $bools = false;
                                 }
-                            }
-                        }
-                    }
-                }
-                else if($po->log_id == "6"){
-                    if($po->getJumlahPesanan() <= $po->getJumlahSeri()){
-                        if (($po->getJumlahPesanan() <= $po->getJumlahCek()) && ($po->getJumlahPesananPartNonJasa() <= $po->getJumlahCekPart("ok"))) {
-                            if ($po->getJumlahKirim() <= 0 && $po->getJumlahKirimPart() <= 0) {
-                                $pou = Pesanan::find($pesanan_id);
-                                $pou->log_id = '11';
-                                $u = $pou->save();
-                                if (!$u) {
-                                    $bools = false;
-                                }
-                            } else if ($po->getJumlahKirim() > 0 || $po->getJumlahKirimPart() > 0) {
-                                if ($po->getJumlahKirim() >= $po->getJumlahPesanan() && $po->getJumlahKirimPart() >= $po->getJumlahPesananPartNonJasa()) {
-                                    $pou = Pesanan::find($pesanan_id);
-                                    $pou->log_id = '10';
-                                    $u = $pou->save();
-                                    if (!$u) {
-                                        $bools = false;
-                                    }
-                                } else {
-                                    $pou = Pesanan::find($pesanan_id);
-                                    $pou->log_id = '13';
-                                    $u = $pou->save();
-                                    if (!$u) {
-                                        $bools = false;
-                                    }
-                                }
-                            }
-                        }
-                        else {
-                            $pou = Pesanan::find($pesanan_id);
-                            $pou->log_id = '8';
-                            $u = $pou->save();
-                            if (!$u) {
-                                $bools = false;
                             }
                         }
                     }
@@ -2655,90 +2619,6 @@ class QcController extends Controller
         ->whereNotIn('log_id', ['7', '20'])
         ->havingRaw('cjumlahprd > clogprd OR cjumlahpart > clogpart')
         ->get();
-
-        // $po = Pesanan::addSelect(['cjumlahprd' => function($q){
-        //     $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
-        //     ->from('detail_pesanan')
-        //     ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
-        //     ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
-        //     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-        // }, 'cjumlahpart' => function($q){
-        //     $q->selectRaw('sum(detail_pesanan_part.jumlah)')
-        //     ->from('detail_pesanan_part')
-        //     ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-        //     ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-        //     ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
-        // },'clogprd' => function($q){
-        //     $q->selectRaw('count(noseri_logistik.id)')
-        //        ->from('noseri_logistik')
-        //        ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-        //        ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-        //        ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-        //        ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-        //        ->limit(1);
-        // },
-        // 'clogpart' => function($q){
-        //     $q->selectRaw('sum(detail_logistik_part.jumlah)')
-        //        ->from('detail_logistik_part')
-        //        ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-        //        ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-        //        ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-        //        ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
-        //        ->limit(1);
-        // }])
-        // ->whereIn('log_id', ['9'])
-        // ->havingRaw('clogprd < cjumlahprd OR clogpart < cjumlahpart');
-
-        // $gudang = Pesanan::addSelect(['jumlah_produk' => function($q){
-        //     $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
-        //     ->from('detail_pesanan')
-        //     ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
-        //     ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
-        //     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-        // }, 'jumlah_gudang' => function($q){
-        //     $q->selectRaw('count(t_gbj_noseri.id)')
-        //     ->from('t_gbj_noseri')
-        //     ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-        //     ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-        //     ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
-        // }])->whereNotIn('log_id', ['7'])->havingRaw('jumlah_produk > jumlah_gudang');
-
-
-        // $data = Pesanan::addSelect(['cqcprd' => function($q){
-        //     $q->selectRaw('count(noseri_detail_pesanan.id)')
-        //         ->from('noseri_detail_pesanan')
-        //         ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-        //         ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-        //         ->where('noseri_detail_pesanan.status', 'ok')
-        //         ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-        // },
-        // 'cqcpart' => function($q){
-        //     $q->selectRaw('coalesce(sum(outgoing_pesanan_part.jumlah_ok), 0)')
-        //     ->from('outgoing_pesanan_part')
-        //     ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
-        //     ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-        //     ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-        //     ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
-        // },
-        // 'clogprd' => function($q){
-        //     $q->selectRaw('count(noseri_logistik.id)')
-        //        ->from('noseri_logistik')
-        //        ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-        //        ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-        //        ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-        //        ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-        //        ->limit(1);
-        // },
-        // 'clogpart' => function($q){
-        //     $q->selectRaw('sum(detail_logistik_part.jumlah)')
-        //        ->from('detail_logistik_part')
-        //        ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-        //        ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-        //        ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-        //        ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
-        // }])
-        // ->havingRaw('cqcprd > clogprd OR clogprd > clogpart')
-        // ->union($po)->union($gudang);
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('so', function ($data) {
