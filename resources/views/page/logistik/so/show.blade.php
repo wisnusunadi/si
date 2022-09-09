@@ -305,22 +305,6 @@
                         'X-CSRF-TOKEN': '{{ csrf_token() }}'
                     }
                 },
-                {
-                    data: 'so',
-                    className: 'align-center nowrap-text'
-                },
-                {
-                    data: 'no_po',
-                    className: 'align-center nowrap-text'
-                },
-                {
-                    data: 'tgl_awal',
-                    className: 'align-center nowrap-text',
-                },
-                {
-                    data: 'tgl_akhir',
-                    className: 'align-center nowrap-text',
-                },
                 columns: [
                     {
                         data: 'DT_RowIndex',
@@ -373,10 +357,10 @@
                         data: 'no_po',
                         className: 'align-center nowrap-text'
                     },
-                    {
-                        data: 'batas',
-                        className: 'align-center nowrap-text',
-                    },
+                    // {
+                    //     data: 'batas',
+                    //     className: 'align-center nowrap-text',
+                    // },
                     {
                         data: 'tgl_awal',
                         className: 'align-center nowrap-text',
