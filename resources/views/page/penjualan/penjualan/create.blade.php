@@ -1918,6 +1918,7 @@ var jenis_array = [];
                         term: params.term
                     }
                 },
+               
                 processResults: function(data) {
                     return {
                         results: $.map(data, function(obj) {
