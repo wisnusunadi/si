@@ -1,9 +1,9 @@
 <template>
     <div>
-        <input type="text" class="form-control" v-model="displayValue" @blur="isInputActive = false" @focus="isInputActive = true" @keypress="isNumber($event)">
+        <input type="text" class="form-control" v-model="displayValue" @blur="isInputActive = false" @focus="isInputActive = true" @keypress="isNumber($event)" @keyup="changeSplitInt($event)">
     </div>
 </template>
-<script>
+<script> 
 export default {
     props: {
         nilai: {
@@ -26,6 +26,13 @@ export default {
                 return true;
             }
         },
+        changeSplitInt(evt){
+            var value = evt.target.value;
+            var value = value.replace(/\./g, '');
+            var value = value.replace(/\,/g, '.');
+            var value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+            evt.target.value = value;
+        }
     },
     computed: {
         displayValue: {
