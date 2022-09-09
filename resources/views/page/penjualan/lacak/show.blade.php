@@ -40,6 +40,10 @@
         white-space: nowrap;
     }
 
+    .align-center{
+        text-align: center;
+    }
+
 
     @media screen and (min-width: 992px) {
         .labelket{
@@ -367,7 +371,7 @@
                 className: 'nowraps'
             }, {
                 data: 'log',
-                className: 'nowraps'
+                className: 'nowraps align-center'
             }, ]
         });
     }
@@ -407,7 +411,7 @@
                 data: 'nama_customer',
             }, {
                 data: 'log',
-                className: 'nowraps'
+                className: 'nowraps align-center'
             }, ]
         });
     }
@@ -458,11 +462,11 @@
                 },
                 {
                     data: 'log',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'status',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 }
             ]
         });
@@ -520,7 +524,7 @@
                 },
                 {
                     data: 'status',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 }
             ]
         });
@@ -577,7 +581,7 @@
                 },
                 {
                     data: 'status',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 }
             ]
         });
@@ -635,7 +639,7 @@
                 },
                 {
                     data: 'status',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 }
             ]
         });
@@ -683,7 +687,7 @@
                 },
                 {
                     data: 'status',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 }
             ]
         });
