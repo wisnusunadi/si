@@ -68,7 +68,7 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
     Route::view('/{any?}', 'spa.manager_teknik.spa')->middleware('divisi:dirtek');
 });
 
-Route::group(['prefix' => '/gbj', 'middleware' => ['auth','divisi:gbj,mgrgdg']], function () {
+Route::group(['prefix' => '/gbj', 'middleware' => ['auth','divisi:gbj,mgrgdg,dirut']], function () {
     Route::view('/stok/{any?}', 'page.gbj.stok');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
     Route::view('/produk/{any?}', 'page.gbj.produk');
@@ -91,7 +91,7 @@ Route::group(['prefix' => '/gbj', 'middleware' => ['auth','divisi:gbj,mgrgdg']],
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
-Route::group(['prefix' => '/produksi', 'middleware' => ['auth','divisi:prd']], function () {
+Route::group(['prefix' => '/produksi', 'middleware' => ['auth','divisi:prd,dirut']], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
     Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');
@@ -399,7 +399,7 @@ Route::group(['prefix' => 'as', 'middleware' => ['auth','divisi:asp']], function
     // });
 });
 
-Route::group(['prefix' => '/gk', 'middleware' => ['auth','divisi:gk']], function () {
+Route::group(['prefix' => '/gk', 'middleware' => ['auth','divisi:gk,dirut']], function () {
     Route::view('/dashboard', 'page.gk.dashboard');
     Route::view('/gudang', 'page.gk.gudang.index');
     Route::get('/gudang/sparepart/{id}', [SparepartController::class, 'detail_spr']);
