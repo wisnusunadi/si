@@ -12,6 +12,7 @@
       id="autocomplete-results"
       v-show="isOpen"
       class="autocomplete-results"
+      ref="scrollCointainer"
     >
       <li
         class="loading"
@@ -26,6 +27,7 @@
         @click="setResult(result.text)"
         class="autocomplete-result"
         :class="{ 'is-active': i === arrowCounter }"
+        ref="options"
       >
         {{ result.text }}
       </li>
@@ -103,15 +105,23 @@
           this.arrowCounter = -1;
         }
       },
-      onArrowDown() {
+      onArrowDown(e) {
+        e.preventDefault();
         if (this.arrowCounter < this.results.length - 1) {
           this.arrowCounter++;
         }
+        this.fixScrolling();
       },
-      onArrowUp() {
+      onArrowUp(e) {
+        e.preventDefault();
         if (this.arrowCounter > 0) {
           this.arrowCounter--;
         }
+        this.fixScrolling();
+      },
+      fixScrolling(){
+        const container = this.$refs.options[this.arrowCounter].scrollHeight;
+        this.$refs.scrollCointainer.scrollTop = container * this.arrowCounter;
       },
       onEnter(event) {
         event.preventDefault();

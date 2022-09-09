@@ -321,22 +321,6 @@
                                                                     >Instansi</a
                                                                 >
                                                             </li>
-                                                            <li
-                                                                class="nav-item"
-                                                                role="presentation"
-                                                            >
-                                                                <a
-                                                                    class="nav-link"
-                                                                    id="pills-produk-tab"
-                                                                    data-toggle="pill"
-                                                                    href="#pills-produk"
-                                                                    role="tab"
-                                                                    aria-controls="pills-produk"
-                                                                    aria-selected="false"
-                                                                    >Rencana
-                                                                    Penjualan</a
-                                                                >
-                                                            </li>
                                                         </ul>
 
                                                         <div
@@ -760,51 +744,6 @@
                                                                                     ></textarea>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div
-                                                                    class="tab-pane fade show"
-                                                                    id="pills-produk"
-                                                                    role="tabpanel"
-                                                                    aria-labelledby="pills-produk-tab"
-                                                                >
-                                                                    <div
-                                                                        class="card removeshadow"
-                                                                    >
-                                                                        <div
-                                                                            class="card-header"
-                                                                        >
-                                                                            <h6>
-                                                                                Rencana
-                                                                                Penjualan
-                                                                            </h6>
-                                                                        </div>
-                                                                        <div
-                                                                            class="card-body"
-                                                                        >
-                                                                            <table
-                                                                                class="table perencanaan"
-                                                                            >
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>
-                                                                                            Nama
-                                                                                            Produk
-                                                                                        </th>
-                                                                                        <th>
-                                                                                            Qty
-                                                                                        </th>
-                                                                                        <th>
-                                                                                            Realisasi
-                                                                                        </th>
-                                                                                        <th>
-                                                                                            Harga
-                                                                                        </th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody></tbody>
-                                                                            </table>
                                                                         </div>
                                                                     </div>
                                                                 </div>
