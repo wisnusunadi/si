@@ -127,7 +127,11 @@ export default {
   methods: {
     async loadData() {
       this.$store.commit("setIsLoading", true);
-      await axios.get("/api/ppic/data/gbj").then((response) => {
+      await axios.get("/api/ppic/data/gbj",{
+            headers: {
+                Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
+            }
+        }).then((response) => {
         this.data = response.data;
       });
       this.$store.commit("setIsLoading", false);
@@ -147,7 +151,35 @@ export default {
         });
       this.$store.commit("setIsLoading", false);
     },
+
+    checkToken(){
+        if(localStorage.getItem('lokal_token') == null){
+            // event.preventDefault();
+            this.$swal({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.value) {
+                    this.logout()
+                }
+            })
+        }
+    },
+
+    async logout() {
+      await axios.post("/logout");
+      document.location.href = "/";
+    },
   },
+
+  created() {
+        this.checkToken();
+    },
 
   mounted() {
     this.loadData();

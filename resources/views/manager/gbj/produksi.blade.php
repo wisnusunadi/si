@@ -45,15 +45,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1.</td>
-                            <td>Elitech</td>
-                            <td>ASL300</td>
-                            <td>Water Treatment</td>
-                            <td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal">
-                                <i class="far fa-eye"></i> Detail
-                              </button></td>
-                        </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -69,15 +61,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1.</td>
-                            <td>Elitech</td>
-                            <td>ASL300</td>
-                            <td>Water Treatment</td>
-                            <td><button type="button" class="btn btn-outline-primary" data-toggle="modal" data-target="#exampleModal2">
-                                <i class="far fa-eye"></i> Detail
-                              </button></td>
-                        </tr>
+
                     </tbody>
                 </table>
             </div>
@@ -89,7 +73,6 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -105,24 +88,17 @@
                         <th>No Seri Lama</th>
                         <th>No Seri Baru</th>
                         <th>Diajukan Oleh</th>
+                        <th>Detail</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td><input type="checkbox" name="cb-child" id=""></td>
-                        <td>Elitech</td>
-                        <td>Produk 1</td>
-                        <td>12 Desember 2020</td>
-                        <td>123456789</td>
-                        <td>123456789</td>
-                        <td>Admin</td>
-                    </tr>
+
                 </tbody>
             </table>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary buttonSubmit" id="btnApproveEdit"><i class="fas fa-check"></i> Setujui</button>&nbsp;
-            <button class="btn btn-danger buttonReject" id="btn-reject"><i class="fas fa-ban"></i> Reject</button>
+            <button class="btn btn-primary buttonSubmit" id="btnApproveEdit"><i class="fas fa-check"></i> Setuju</button>&nbsp;
+            <button class="btn btn-danger buttonReject" id="btn-reject"><i class="fas fa-ban"></i> Tolak</button>
         </div>
       </div>
     </div>
@@ -150,28 +126,60 @@
                             <th>Tanggal Pengajuan</th>
                             <th>No Seri</th>
                             <th>Diajukan Oleh</th>
+                            <th>Detail</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td><input type="checkbox" name="cb-child" id=""></td>
-                            <td>Elitech</td>
-                            <td>Produk 1</td>
-                            <td>12 Desember 2020</td>
-                            <td>123456789</td>
-                            <td>Admin</td>
-                        </tr>
+
                     </tbody>
                 </table>
             </div>
             <div class="modal-footer">
-                <button class="btn btn-primary buttonSubmit" id="btnApproveEdit"><i class="fas fa-check"></i> Setujui</button>&nbsp;
-                <button class="btn btn-danger buttonReject" id="btn-reject"><i class="fas fa-ban"></i> Reject</button>
+                <button class="btn btn-primary buttonSubmit" id="btnApproveEdit"><i class="fas fa-check"></i> Setuju</button>&nbsp;
+                <button class="btn btn-danger buttonReject" id="btn-reject"><i class="fas fa-ban"></i> Tolak</button>
             </div>
           </div>
         </div>
       </div>
     </div>
+
+    {{-- Modal Komentar --}}
+    <div class="modal modalKomentar" aria-labelledby="testing" aria-hidden="true">
+      <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title judulKomentar" id="staticBackdropLabel"></h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <textarea name="" id="" cols="10" rows="10" class="form-control textcomentar"></textarea>
+          </div>
+           <div class="modal-footer">
+            <button class="btn btn-primary kirimKomentar">Kirim</button>
+           </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="modal modelDetail" aria-labelledby="testing" aria-hidden="true">
+        <div class="modal-dialog">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title judulKomentar" id="staticBackdropLabel"></h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <label for="">Alasan Pengajuan</label>
+                <textarea class="form-control alasan_staff" disabled name="" id="" cols="30" rows="10"></textarea>
+              </div>
+          </div>
+        </div>
+      </div>
+
 @stop
 
 @section('adminlte_js')
@@ -181,6 +189,23 @@
     $('.buttonSubmit').attr('id', 'btnApproveEdit');
     $('.buttonReject').attr('id', 'btnRejectEdit');
     var authid = $('#authid').val();
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
     // Datatable
     $('#tableUbah').DataTable({
         processing: true,
@@ -191,7 +216,10 @@
             'url': '/api/v2/gbj/list-update-noseri',
             'headers': {
                 'X-CSRF-TOKEN': '{{csrf_token()}}'
-            }
+            },
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
         },
         columns: [
             {data: 'DT_RowIndex'},
@@ -213,7 +241,10 @@
             'url': '/api/v2/gbj/list-approve-noseri',
             'headers': {
                 'X-CSRF-TOKEN': '{{csrf_token()}}'
-            }
+            },
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
         },
         columns: [
             {data: 'DT_RowIndex'},
@@ -245,7 +276,10 @@
                 },
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
+                },
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
             },
             columns: [
                 {data: 'checkbox'},
@@ -255,6 +289,7 @@
                 {data: 'lama'},
                 {data: 'baru'},
                 {data: 'requested'},
+                {data: 'action'},
             ],
             language: {
                 search: "Cari:"
@@ -280,7 +315,10 @@
                 },
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
-                }
+                },
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
             },
             columns: [
                 {data: 'checkbox'},
@@ -289,6 +327,7 @@
                 {data: 'tgl_aju'},
                 {data: 'noseri'},
                 {data: 'requested'},
+                {data: 'action'},
             ],
             language: {
                 search: "Cari:"
@@ -347,6 +386,28 @@
 
     $(document).on('click', '#btnApproveEdit', function () {
         let a = $('#editTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+        function () {
+            return $(this).val();
+        }).get();
+
+        if (a.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Minimal 1 Data Dipilih!',
+            })
+        } else {
+            $('.judulKomentar').text('Alasan Persetujuan Edit Nomor Seri');
+            $('.textcomentar').val('');
+            $('.modalKomentar').modal('show');
+            $('.kirimKomentar').removeAttr('id');
+            $('.kirimKomentar').attr('id', 'btnApproveEditKomentar');
+        }
+
+    })
+
+    $(document).on('click', '#btnApproveHapus', function () {
+        let a = $('#hapusTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
             function () {
                 return $(this).val();
             }).get();
@@ -358,6 +419,71 @@
                 text: 'Minimal 1 Data Dipilih!',
             })
         } else {
+            $('.judulKomentar').text('Alasan Persetujuan Hapus Nomor Seri');
+            $('.textcomentar').val('');
+            $('.modalKomentar').modal('show');
+            $('.kirimKomentar').removeAttr('id');
+            $('.kirimKomentar').attr('id', 'btnApproveHapusKomentar');
+        }
+
+    });
+
+    $(document).on('click', '#btnRejectHapus', function () {
+        let a = $('#hapusTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+            function () {
+                return $(this).val();
+            }).get();
+
+        if (a.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Minimal 1 Data Dipilih!',
+            })
+        } else {
+            $('.judulKomentar').text('Alasan Penolakan Hapus Nomor Seri');
+            $('.textcomentar').val('');
+            $('.modalKomentar').modal('show');
+            $('.kirimKomentar').removeAttr('id');
+            $('.kirimKomentar').attr('id', 'btnRejectHapusKomentar');
+        }
+    });
+
+    $(document).on('click', '#btnRejectEdit', function () {
+        let a = $('#editTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+        function () {
+            return $(this).val();
+        }).get();
+
+        if (a.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Minimal 1 Data Dipilih!',
+            })
+        } else {
+            $('.judulKomentar').text('Alasan Penolakan Edit Nomor Seri');
+            $('.textcomentar').val('');
+            $('.modalKomentar').modal('show');
+            $('.kirimKomentar').removeAttr('id');
+            $('.kirimKomentar').attr('id', 'btnRejectEditKomentar');
+        }
+    });
+
+    $(document).on('click', '#btnApproveEditKomentar', function () {
+        let komentar = $('.textcomentar').val();
+        if (!komentar) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Komentar Tidak Boleh Kosong!',
+            })
+        } else {
+            let a = $('#editTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+                    function () {
+                        return $(this).val();
+                    }).get();
+
             Swal.fire({
                 title: 'Kamu Yakin?',
                 text: "You won't be able to revert this!",
@@ -375,6 +501,7 @@
                             is_acc: 'approved',
                             noseriid: a,
                             accby: authid,
+                            komentar: komentar,
                         },
                         success: function(res) {
                             Swal.fire({
@@ -383,29 +510,29 @@
                                 text: res.msg,
                             }).then(() => {
                                 location.reload()
+                                $('.textcomentar').val('');
                             });
                         }
                     })
                 }
             })
         }
-
     })
 
-    $(document).on('click', '#btnApproveHapus', function () {
-        let a = $('#hapusTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
-            function () {
-                return $(this).val();
-            }).get();
-        console.log(a);
-
-        if (a.length == 0) {
+    $(document).on('click', '#btnApproveHapusKomentar', function () {
+        let komentar = $('.textcomentar').val();
+        if (!komentar) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Minimal 1 Data Dipilih untuk Dihapus!',
+                text: 'Komentar Tidak Boleh Kosong!',
             })
         } else {
+            let a = $('#hapusTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+                function () {
+                    return $(this).val();
+                }).get();
+
             Swal.fire({
                 title: 'Kamu Yakin?',
                 text: "You won't be able to revert this!",
@@ -413,7 +540,7 @@
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, Approved it!'
+                confirmButtonText: 'Yes, approve it!'
             }).then((result) => {
                 if (result.isConfirmed) {
                     $.ajax({
@@ -423,9 +550,9 @@
                             is_acc: 'approved',
                             noseriid: a,
                             accby: authid,
+                            komentar: komentar,
                         },
                         success: function(res) {
-                            console.log(res);
                             Swal.fire({
                                 icon: 'success',
                                 title: 'Approved',
@@ -438,69 +565,22 @@
                 }
             })
         }
-    });
+    })
 
-    $(document).on('click', '#btnRejectHapus', function () {
-        let a = $('#hapusTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
-            function () {
-                return $(this).val();
-            }).get();
-        // console.log(a);
-        if (a.length == 0) {
+    $(document).on('click', '#btnRejectEditKomentar', function () {
+        let komentar = $('.textcomentar').val();
+        if (!komentar) {
             Swal.fire({
                 icon: 'error',
                 title: 'Oops...',
-                text: 'Minimal 1 Data Dipilih untuk Dihapus!',
+                text: 'Komentar Tidak Boleh Kosong!',
             })
         } else {
-            Swal.fire({
-                title: 'Kamu Yakin?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, reject it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    $.ajax({
-                        url: '/api/v2/gbj/proses-delete-noseri',
-                        type: 'post',
-                        data: {
-                            is_acc: 'rejected',
-                            noseriid: a,
-                            accby: authid,
-                        },
-                        success: function(res) {
-                            console.log(res);
-                            Swal.fire({
-                                icon: 'success',
-                                title: 'Rejected',
-                                text: res.msg,
-                            }).then(() => {
-                                location.reload()
-                            });
-                        }
-                    })
-                }
-            })
-        }
-    });
+            let a = $('#editTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+                function () {
+                    return $(this).val();
+                }).get();
 
-    $(document).on('click', '#btnRejectEdit', function () {
-        let a = $('#editTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
-            function () {
-                return $(this).val();
-            }).get();
-        console.log(a.length);
-
-        if (a.length == 0) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Oops...',
-                text: 'Minimal 1 Data Dipilih!',
-            })
-        } else {
             Swal.fire({
                 title: 'Kamu Yakin?',
                 text: "You won't be able to revert this!",
@@ -518,6 +598,7 @@
                             is_acc: 'rejected',
                             noseriid: a,
                             accby: authid,
+                            komentar: komentar,
                         },
                         success: function(res) {
                             Swal.fire({
@@ -532,7 +613,73 @@
                 }
             })
         }
-    });
+    })
+
+    $(document).on('click', '#btnRejectHapusKomentar', function () {
+        let komentar = $('.textcomentar').val();
+        if (!komentar) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Komentar Tidak Boleh Kosong!',
+            })
+        } else {
+            let a = $('#hapusTable').DataTable().column(0).nodes().to$().find('input[type=checkbox]:checked').map(
+                function () {
+                    return $(this).val();
+                }).get();
+
+            Swal.fire({
+                title: 'Kamu Yakin?',
+                text: "You won't be able to revert this!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Yes, reject it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/api/v2/gbj/proses-delete-noseri',
+                        type: 'post',
+                        data: {
+                            is_acc: 'rejected',
+                            noseriid: a,
+                            accby: authid,
+                            komentar: komentar,
+                        },
+                        success: function(res) {
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Rejected',
+                                text: res.msg,
+                            }).then(() => {
+                                location.reload()
+                            });
+                        }
+                    })
+                }
+            })
+        }
+    })
+
+    $(document).on('click', '.btnAlasan', function () {
+        let id = $(this).data('id');
+        $.ajax({
+            url: '/api/v2/gbj/alasan_edit_noseri_staff',
+            type: 'post',
+            data: {
+                id: id,
+            },
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
+            success: function(res) {
+                $('.alasan_staff').val(res.data);
+            }
+        })
+        $('.modelDetail').modal('show');
+    })
 
 </script>
 @stop

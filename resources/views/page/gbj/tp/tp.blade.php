@@ -268,15 +268,41 @@
 
 @section('adminlte_js')
 <script>
+    var access_token = localStorage.getItem('lokal_token');
+
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
+
+    $('#divisi').select2({
+        placeholder: "Choose...",
+        allowClear: true
+    })
     $.ajax({
         url: '/api/gbj/sel-divisi',
         type: 'GET',
         dataType: 'json',
+        beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
         success: function(res) {
             if(res) {
                 console.log(res);
                 $("#divisi").empty();
-                $("#divisi").append('<option value="">All</option>');
+                $("#divisi").append('<option selected></option>');
                 $.each(res, function(key, value) {
                     $("#divisi").append('<option value="'+value.nama+'">'+value.nama+'</option');
                 });
@@ -442,6 +468,7 @@
 
 
         $("#divisi").on("change", function () {
+            console.log($(this).val());
             $dTable.columns(2).search($(this).val()).draw();
         });
 
@@ -545,7 +572,7 @@
                 if (userid != 2) {
                     // console.log(data)
                     // return
-                    return `<td><a href="export_spb/`+data.pesanan.id+`">
+                    return `<td><a href="export_spb/`+data.id+`">
                         <button class="btn btn-outline-primary"><i class="fas fa-print"></i> Cetak</button>
                         </a></td>`
                 } else {

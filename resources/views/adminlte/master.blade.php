@@ -2,7 +2,7 @@
 <html lang="{{ str_replace('_', '-', app()->getLocale()) }}">
 
 <head>
-
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('assets/image/logo/logo_title.ico') }}" />
     {{-- Base Meta Tags --}}
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -73,6 +73,7 @@
 </head>
 
 <body class="@yield('classes_body')" style="font-family:Inter; padding-top: 0;" @yield('body_data')>
+    <div id="app"></div>
     {{-- Body Content --}}
     @yield('body')
 
@@ -88,20 +89,7 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     {{-- <script src="{{ asset('vendor/x-editable/jquery-editable-poshytip.min.js') }}"></script> --}}
     {{-- Custom Scripts --}}
-    <script>
-        $.ajax({
-        type: "POST",
-        url: "https://sinko.api.hyperdatasystem.com/api/login",
-        data: {
-            username: "superuser.api",
-            password: "password"
-        },
-        success: function (response) {
-            sessionStorage.setItem('token', response.token);
-            console.log(sessionStorage.getItem('token'))
-        }
-    });
-        </script>
+    <script src="{{ asset('native/js/login.js') }}"></script>
     @yield('master_js')
 </body>
 

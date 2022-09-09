@@ -226,12 +226,12 @@
                                                 <i class="fas fa-eye"></i>
                                                 Detail
                                             </a>
-                                            <a href="{{route('dc.coo.pdf')}}">
+
                                                 <button class="dropdown-item" type="button">
                                                     <i class="fas fa-file"></i>
                                                     Laporan PDF
                                                 </button>
-                                            </a>
+
                                         </div>
                                     </td>
                                 </tr>
@@ -554,7 +554,7 @@
 
         var checkedAryBelumProses = [];
         $('#noseri_belum_proses_table').on('click', 'input[name="check_all"]', function() {
-            var rows = $('#noseri_belum_proses_table').DataTable().rows({ 'search': 'applied' }).nodes();
+            var rows = $('#noseri_belum_proses_table').DataTable().rows().nodes();
             if ($('#noseri_belum_proses_table').find('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 // $('#cekbrgedit').prop('disabled', false);
@@ -571,15 +571,16 @@
         });
 
         $('#noseri_belum_proses_table').on('click', '.nosericheck', function() {
+            var rows = $('#noseri_belum_proses_table').DataTable().rows().nodes();
             $('#noseri_belum_proses_table').find('#check_all').prop('checked', false);
-            if ($('#noseri_belum_proses_table').find('.nosericheck:checked').length > 0) {
+            if ($('.nosericheck:checked', rows).length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 // $('#cekbrgedit').prop('disabled', false);
                 checkedAryBelumProses = [];
-                $.each($('#noseri_belum_proses_table').find(".nosericheck:checked"), function() {
+                $.each($(".nosericheck:checked", rows), function() {
                     checkedAryBelumProses.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
                 });
-            } else if ($('#noseri_belum_proses_table').find('.nosericheck:checked').length <= 0) {
+            } else if ($('.nosericheck:checked', rows).length <= 0) {
                 $('#cekbrg').prop('disabled', true);
                 // $('#cekbrgedit').prop('disabled', true);
             }
@@ -587,7 +588,7 @@
 
         checkedArySelesaiProses = [];
         $('#noseri_selesai_proses_table').on('click', 'input[name="check_all"]', function() {
-            var rows = $('#noseri_selesai_proses_table').DataTable().rows({ 'search': 'applied' }).nodes();
+            var rows = $('#noseri_selesai_proses_table').DataTable().rows().nodes();
             if ($('#noseri_selesai_proses_table').find('input[name="check_all"]:checked').length > 0) {
                 // $('#cekbrg').prop('disabled', false);
                 $('#cekbrgedit').prop('disabled', false);
@@ -604,15 +605,16 @@
         });
 
         $('#noseri_selesai_proses_table').on('click', '.nosericheck', function() {
+            var rows = $('#noseri_selesai_proses_table').DataTable().rows().nodes();
             $('#check_all').prop('checked', false);
-            if ($('#noseri_selesai_proses_table').find('.nosericheck:checked').length > 0) {
+            if ($('.nosericheck:checked', rows).length > 0) {
                 // $('#cekbrg').prop('disabled', false);
                 $('#cekbrgedit').prop('disabled', false);
                 checkedArySelesaiProses = [];
-                $.each($('#noseri_selesai_proses_table').find(".nosericheck:checked"), function() {
+                $.each($(".nosericheck:checked", rows), function() {
                     checkedArySelesaiProses.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
                 });
-            } else if ($('#noseri_selesai_proses_table').find('.nosericheck:checked').length <= 0) {
+            } else if ($('.nosericheck:checked', rows).length <= 0) {
                 // $('#cekbrg').prop('disabled', true);
                 $('#cekbrgedit').prop('disabled', true);
             }

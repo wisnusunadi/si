@@ -711,7 +711,7 @@
 
         var checkedAry = [];
         $('#noseritable').on('click', 'input[name="check_all"]', function() {
-            var rows = $('#noseritable').DataTable().rows({ 'search': 'applied' }).nodes();
+            var rows = $('#noseritable').DataTable().rows().nodes();
             // $('.nosericheck').prop('checked', this.checked);
             if ($('input[name="check_all"]:checked').length > 0) {
                 $('#cekbrg').prop('disabled', false);
@@ -728,14 +728,15 @@
         });
 
         $('#noseritable').on('click', '.nosericheck', function() {
+            var rows = $('#noseritable').DataTable().rows().nodes();
             $('#check_all').prop('checked', false);
-            if ($('.nosericheck:checked').length > 0) {
+            if ($('.nosericheck:checked', rows).length > 0) {
                 $('#cekbrg').prop('disabled', false);
                 checkedAry = [];
-                $.each($(".nosericheck:checked"), function() {
+                $.each($(".nosericheck:checked",rows), function() {
                     checkedAry.push($(this).closest('tr').find('.nosericheck').attr('data-id'));
                 });
-            } else if ($('.nosericheck:checked').length <= 0) {
+            } else if ($('.nosericheck:checked', rows).length <= 0) {
                 $('#cekbrg').prop('disabled', true);
             }
         });

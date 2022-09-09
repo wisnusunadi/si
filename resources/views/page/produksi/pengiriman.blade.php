@@ -49,7 +49,6 @@
     .calendar-time {
         display: none;
     }
-
 </style>
 <link rel="stylesheet" href="{{ asset('vendor/fullcalendar/main.css') }}">
 <script src="{{ asset('vendor/fullcalendar/main.js') }}"></script>
@@ -77,6 +76,7 @@
             <input type="text" name="" id="kt_datepicker_2" class="form-control">
         </div>
     </div>
+    {{-- <a href="{{ route('export.rakitseri') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Export</a> --}}
 </div>
 <div class="row ml-2">
     <div class="col-lg-12">
@@ -86,19 +86,19 @@
                     <div class="col-lg-12">
                         <table class="table table-bordered table_produk_perakitan ">
                             <thead class="thead-dark">
-                                <tr>
-                                    <th rowspan="2">Periode</th>
-                                    <th colspan="2" class="text-center">Tanggal</th>
-                                    <th rowspan="2">Nomor BPPB</th>
-                                    <th rowspan="2">Produk</th>
-                                    <th rowspan="2">Jumlah</th>
-                                    <th rowspan="2">Status</th>
-                                    <th rowspan="2">Aksi</th>
-                                </tr>
-                                <tr>
-                                    <th class="text-center">Tanggal Masuk</th>
-                                    <th class="text-center">Tanggal Keluar</th>
-                                </tr>
+                              <tr>
+                                  <th rowspan="2">Periode</th>
+                                  <th colspan="2" class="text-center">Tanggal</th>
+                                  <th rowspan="2">Nomor BPPB</th>
+                                  <th rowspan="2">Produk</th>
+                                  <th rowspan="2">Jumlah</th>
+                                  <th rowspan="2">Progress</th>
+                                  <th rowspan="2">Aksi</th>
+                              </tr>
+                              <tr>
+                                  <th class="text-center">Tanggal Masuk</th>
+                                  <th class="text-center">Tanggal Keluar</th>
+                              </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
@@ -341,6 +341,23 @@
 @section('adminlte_js')
 <script>
     // Tanggal Masuk
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
     var start_date;
     var end_date;
     var DateFilterFunction = (function (oSettings, aData, iDataIndex) {
@@ -397,8 +414,15 @@
             }
         });
         var table = $('.table_produk_perakitan').DataTable({
-            processing: true,
-            ajax: "/api/prd/kirim",
+            processing: false,
+            ordering: false,
+            destroy: true,
+            ajax: {
+                url: "/api/prd/kirim",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
+            },
             columns: [
                 { data: 'periode'},
                 {
@@ -417,7 +441,7 @@
                     data: "jml"
                 },
                 {
-                    data: "status"
+                    data: "progress"
                 },
                 {
                     data: "action"
@@ -886,3 +910,4 @@
     })
 </script>
 @stop
+

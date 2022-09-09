@@ -41,9 +41,9 @@
                 <div class="col-sm-6">
                     <nav>
                         <div class="nav nav-tabs topnav" id="nav-tab" role="tablist">
-                            <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
-                                aria-controls="home" aria-selected="true">Sparepart</a>
-                            <a id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
+                            {{-- <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab"
+                                aria-controls="home" aria-selected="true">Sparepart</a> --}}
+                            <a id="profile-tab active" data-toggle="tab" href="#profile" role="tab" aria-controls="profile"
                                 aria-selected="false">Unit</a>
                         </div>
                     </nav>
@@ -52,7 +52,7 @@
         </div><!-- /.container-fluid -->
     </div>
     <div class="tab-content" id="myTabContent">
-        <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
+        <div class="tab-pane fade" id="home" role="tabpanel" aria-labelledby="home-tab">
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card">
@@ -89,7 +89,7 @@
                 </div>
             </div>
         </div>
-        <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <div class="tab-pane fade show active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
             <div class="row">
                 <div class="col-xl-12">
                     <div class="card">
@@ -131,31 +131,48 @@
 @stop
 @section('adminlte_js')
 <script>
-    var tableSparepart = $('.tableSparepart').dataTable({
-        destroy: true,
-        "paging": true,
-        lengthChange: false,
-        "ordering": true,
-        "info": true,
-        "autoWidth": false,
-        "responsive": true,
-        bSortClasses: true,
-        bDeferRender: true,
-        processing: true,
-        ajax: {
-            url: "/api/spr/data",
-        },
-        columns: [
-            {data: 'kode'},
-            {data: 'produk'},
-            // {data: 'unit'},
-            {data: 'jml'},
-            {data: 'button'},
-        ],
-        "language": {
-            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
-        }
-    });
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+        Swal.fire({
+            title: 'Session Expired',
+            text: 'Silahkan login kembali',
+            icon: 'warning',
+            showCancelButton: false,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'OK'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                event.preventDefault();
+                document.getElementById('logout-form').submit();
+            }
+        })
+    }
+    // var tableSparepart = $('.tableSparepart').dataTable({
+    //     destroy: true,
+    //     "paging": true,
+    //     lengthChange: false,
+    //     "ordering": true,
+    //     "info": true,
+    //     "autoWidth": false,
+    //     "responsive": true,
+    //     bSortClasses: true,
+    //     bDeferRender: true,
+    //     processing: true,
+    //     ajax: {
+    //         url: "/api/spr/data",
+    //     },
+    //     columns: [
+    //         {data: 'kode'},
+    //         {data: 'produk'},
+    //         // {data: 'unit'},
+    //         {data: 'jml'},
+    //         {data: 'button'},
+    //     ],
+    //     "language": {
+    //         "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+    //     }
+    // });
     $('#search-sparepart').on('keyup', function () {
         tableSparepart.api().search(this.value).draw();
     });
@@ -173,6 +190,9 @@
         bDeferRender: true,
         ajax: {
             url: "/api/gk/unit",
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
         },
         columns: [
             {data: 'kode_produk'},

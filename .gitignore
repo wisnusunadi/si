@@ -13,6 +13,5 @@ npm-debug.log
 yarn-error.log
 /.idea
 /.vscode
-/public/native
 mix-manifest.json
 package-lock.json

@@ -76,14 +76,16 @@ class PpicController extends Controller
      * @param string $status status string
      * @return array collection of data
      */
-    public function get_data_perakitan($status = "all")
+    public function get_data_perakitan($status = "all", $bulan)
     {
         $this->update_perakitan_status();
         $status = $this->change_status($status);
         if ($status == $this->change_status('penyusunan')) {
             $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else if ($status == $this->change_status("pelaksanaan")) {
-            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orwhereNotIn('status', [6])->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
+            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orwhereNotIn('status', [6])
+            ->havingRaw('MONTH(tanggal_mulai) = ?',[$bulan])
+            ->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else {
             $data = JadwalPerakitan::with('Produk.produk')->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         }
@@ -93,7 +95,17 @@ class PpicController extends Controller
             $item->noseri_count = $noseri_count;
         }
 
-        return $data;
+        if (count($data) != 0) {
+            return response()->json([
+                'error' => 'false',
+                'data' => $data,
+            ],200);
+        } else {
+            return response()->json([
+                'error' => 'true',
+                'data' => 'Data Not Found',
+            ],404);
+        }
     }
 
     /**
@@ -420,6 +432,9 @@ class PpicController extends Controller
             ->addColumn('batal', function ($data) {
                 return $data->getJumlahPermintaanPesanan("ekatalog", "batal");
             })
+            ->addColumn('draft', function ($data) {
+                return $data->getJumlahPermintaanPesanan("ekatalog", "draft");
+            })
             ->addColumn('po', function ($data) {
                 $jumlah = ($data->getJumlahPermintaanPesanan("ekatalog_po", "") - $data->getJumlahTransferPesanan("ekatalog")) + ($data->getJumlahPermintaanPesanan("spa", "") - $data->getJumlahTransferPesanan("spa")) + ($data->getJumlahPermintaanPesanan("spb", "") - $data->getJumlahTransferPesanan("spb"));
                 return $jumlah;
@@ -689,7 +704,7 @@ class PpicController extends Controller
      *
      * @return array collections of data perakitan after new data added
      */
-    public function create_data_perakitan(Request $request)
+    public function create_data_perakitan(Request $request, $bulan)
     {
         $status = $this->change_status($request->status);
         $state = $this->change_state($request->state);
@@ -711,7 +726,7 @@ class PpicController extends Controller
         ];
         JadwalPerakitan::create($data);
 
-        return $this->get_data_perakitan($status);
+        return $this->get_data_perakitan($status, $bulan);
     }
 
     /**
@@ -769,6 +784,7 @@ class PpicController extends Controller
         // $object->no_bppb = $data->no_bppb;
         $object->tanggal_mulai = $data->tanggal_mulai;
         $object->tanggal_selesai = $data->tanggal_selesai;
+        $bulan = '';
 
         if (isset($request->tanggal_mulai)) {
             $data->tanggal_mulai = $request->tanggal_mulai;
@@ -805,7 +821,7 @@ class PpicController extends Controller
         $object->save();
         $data->save();
 
-        return $this->get_data_perakitan($request->status);
+        return $this->get_data_perakitan($request->status, $bulan);
     }
 
     /**
@@ -814,7 +830,7 @@ class PpicController extends Controller
      * @param string $status status string
      * @return array collections of data jadwal_perakitan after update
      */
-    public function update_many_data_perakitan(Request $request, $status)
+    public function update_many_data_perakitan(Request $request, $status, $bulan)
     {
         if (isset($request->data)) {
             foreach ($request->data as $data) {
@@ -854,7 +870,7 @@ class PpicController extends Controller
             }
         }
 
-        return $this->get_data_perakitan($status);
+        return $this->get_data_perakitan($status, $bulan);
     }
 
     /**
@@ -1768,7 +1784,6 @@ class PpicController extends Controller
                 }
             })
             ->addColumn('jumlah_pesanan', function ($data) use ($id) {
-
                 // $res = DetailPesanan::where('pesanan_id', $ids)->get();
                 // $jumlah = 0;
                 // foreach ($res as $a) {
