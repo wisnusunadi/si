@@ -308,6 +308,9 @@
         type: 'get',
         url: '/api/gbj/sel-gbj',
         dataType: 'json',
+        beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
         success: function (data) {
             console.log(data)
             $.map(data, function (item) {
