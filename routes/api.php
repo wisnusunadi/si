@@ -74,7 +74,7 @@ Route::prefix('/customer')->group(function () {
     Route::get('update_modal/{id}', [App\Http\Controllers\MasterController::class, 'update_customer_modal']);
     //Route::put('update/{id}', [App\Http\Controllers\MasterController::class, 'update_customer']);
     Route::delete('delete/{id}', [App\Http\Controllers\MasterController::class, 'delete_customer']);
-    Route::get('select', [App\Http\Controllers\MasterController::class, 'select_customer'])->middleware('jwt.verify');
+    Route::get('select', [App\Http\Controllers\MasterController::class, 'select_customer']);
     Route::get('select_rencana', [App\Http\Controllers\MasterController::class, 'select_customer_rencana']);
 
     Route::get('select/{id}', [App\Http\Controllers\MasterController::class, 'select_customer_id']);;

@@ -653,6 +653,23 @@
 @stop
 @section('adminlte_js')
 <script>
+    var access_token = localStorage.getItem('lokal_token');
+    if (access_token == null) {
+            Swal.fire({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    document.getElementById('logout-form').submit();
+                }
+            })
+        }
     $(function () {
         $('#divisitable').DataTable({});
         var pengirimantable = $('#pengirimantable').DataTable({
@@ -816,11 +833,14 @@
         }
 
         // Produksi
+        var date = new Date()
+        var d = date.getDate(),
+            m = date.getMonth(),
+            y = date.getFullYear()
+
         var Calendar = FullCalendar.Calendar;
         var calendarEl = document.getElementById('calendar');
 
-        // initialize the external events
-        // -----------------------------------------------------------------
         var calendar = new Calendar(calendarEl, {
             headerToolbar: {
                 left: 'prev,next today',
@@ -829,13 +849,14 @@
             },
             weekends: false,
             locale: 'id',
-            // stickyFooterScrollbar: true,
-            // dayMinWidth: 100,
             events: function (fetchInfo, successCallback, failureCallback) {
                 $.ajax({
                     url: "/api/prd/ongoing-cal",
                     type: "post",
                     dataType: "json",
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    },
                     success: function (res) {
                         var events = [];
                         if (res != null) {
@@ -845,18 +866,19 @@
                                     end: item.tanggal_selesai +
                                         'T23:59:59',
                                     title: item.produk.produk.nama +
-                                        '-' + item.produk.nama,
+                                        ' ' + item.produk.nama,
                                     backgroundColor: item.warna,
                                     borderColor: item.warna,
                                 })
                             })
                         }
+                        // console.log('events', events);
                         successCallback(events);
-                        testIsi.push("terisi")
                     }
                 })
-            },
+            }
         });
+
         calendar.render();
     });
     $(document).ready(function () {
@@ -984,6 +1006,9 @@
             ajax: {
                 url: '/api/dashboard-gbj/list-all',
                 type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [{
                     data: 'DT_RowIndex'
@@ -1015,6 +1040,9 @@
             ajax: {
                 url: '/api/dashboard-gbj/byproduct',
                 type: "get",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [{
                     data: 'DT_RowIndex'
@@ -1169,6 +1197,9 @@
             ajax: {
                 url: "/api/gk/dashboard/tingkat",
                 type: "post",
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                }
             },
             columns: [{
                     data: 'produk'
@@ -1206,6 +1237,9 @@
         ajax: {
             url: "/api/prd/exp_rakit",
             type: "post",
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
         },
         columns: [{
                 data: 'start'
@@ -1258,6 +1292,9 @@
         ajax: {
             url: "/api/prd/exp_rakit",
             type: "post",
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
         },
         columns: [{
                 data: 'start'
@@ -1310,6 +1347,9 @@
         ajax: {
             url: "/api/prd/exp_jadwal",
             type: "post",
+            beforeSend : function(xhr){
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            }
         },
         columns: [{
                 data: 'start'

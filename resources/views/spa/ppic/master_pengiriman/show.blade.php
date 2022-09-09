@@ -364,6 +364,23 @@
 @section('adminlte_js')
 <script>
     $(function() {
+        var access_token = localStorage.getItem('lokal_token');
+        if (access_token == null) {
+            Swal.fire({
+                title: 'Session Expired',
+                text: 'Silahkan login kembali',
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'OK'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    event.preventDefault();
+                    document.getElementById('logout-form').submit();
+                }
+            })
+        }
         $(document).on('click', '.detailmodal', function(event) {
             event.preventDefault();
             var id = $(this).data('id');
@@ -400,6 +417,9 @@
                 'dataType': 'JSON',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
+                },
+                beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
                 }
             },
             language: {
@@ -446,6 +466,9 @@
                     'dataType': 'JSON',
                     'headers': {
                         'X-CSRF-TOKEN': '{{csrf_token()}}'
+                    },
+                    beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
                     }
                 },
                 language: {
