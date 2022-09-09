@@ -83,7 +83,6 @@ class KesehatanController extends Controller
     {
         $karyawan = Karyawan::orderBy('nama', 'ASC')->get();
         $pengecek = Karyawan::where('divisi_id', '28')
-            ->orWhere('divisi_id', '22')
             ->get();
         return view('page.kesehatan.kesehatan_tambah', ['karyawan' => $karyawan, 'pengecek' => $pengecek]);
     }
@@ -410,7 +409,6 @@ class KesehatanController extends Controller
     public function kesehatan_mingguan_tambah()
     {
         $pengecek = Karyawan::where('divisi_id', '28')
-            ->orWhere('divisi_id', '22')
             ->get();
         $karyawan = Karyawan::all();
         $divisi = Divisi::all();
@@ -419,7 +417,6 @@ class KesehatanController extends Controller
     public function kesehatan_mingguan_tensi_tambah()
     {
         $pengecek = Karyawan::where('divisi_id', '28')
-            ->orWhere('divisi_id', '22')
             ->get();
         $karyawan = Karyawan::all();
         $divisi = Divisi::all();
