@@ -2660,30 +2660,26 @@ export default {
             }, 800);
         },
         async checkAlamat(e){
-            await axios.get('/api/penjualan/check_alamat', {
-                params: {
-                    term: e
-                }
-            }).then((response) => {
+            if(this.forminfoakn.instansi.dataalamat == null){
+                await axios.get('/api/penjualan/check_alamat').then((response) => {
                 this.forminfoakn.instansi.dataalamat = response.data.map((item) => {
                     return {
                         text: item.alamat
                     }
                 });
             });
+            }
         },
         async checkDeskripsi(e){
-            await axios.get('/api/ekatalog/all_deskripsi', {
-                params: {
-                    term: e
-                }
-            }).then((response) => {
+            if(this.forminfoakn.instansi.datadeskripsi == null){
+                await axios.get('/api/ekatalog/all_deskripsi').then((response) => {
                 this.forminfoakn.instansi.datadeskripsi = response.data.map((item) => {
                     return {
                         text: item.deskripsi
                     }
                 });
             });
+            }
         },
         async updateekatalog(akn) {
             let jenis = this.$route.params.jenis;

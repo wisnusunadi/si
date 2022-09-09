@@ -114,9 +114,11 @@
         }
       },
       onEnter() {
-        this.search = this.results[this.arrowCounter];
+        this.search = this.results[this.arrowCounter].text;
         this.isOpen = false;
-        this.arrowCounter = -1;
+        console.log("tutup",this.isOpen = false);
+        console.log("check",this.isOpen);
+        this.arrowCounter = -1; 
       },
     },
   };
