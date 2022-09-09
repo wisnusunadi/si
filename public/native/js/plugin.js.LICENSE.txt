@@ -5,14 +5,14 @@
   */
 
 /*!
- * @kurkle/color v0.2.1
+ * @kurkle/color v0.1.9
  * https://github.com/kurkle/color#readme
- * (c) 2022 Jukka Kurkela
+ * (c) 2020 Jukka Kurkela
  * Released under the MIT License
  */
 
 /*!
- * Chart.js v3.8.0
+ * Chart.js v3.7.1
  * https://www.chartjs.org
  * (c) 2022 Chart.js Contributors
  * Released under the MIT License
@@ -22,13 +22,13 @@
  * OverlayScrollbars
  * https://github.com/KingSora/OverlayScrollbars
  *
- * Version: 1.13.2
+ * Version: 1.13.0
  *
  * Copyright KingSora | Rene Haas.
  * https://github.com/KingSora
  *
  * Released under the MIT license.
- * Date: 01.06.2022
+ * Date: 02.08.2020
  */
 
 /*!
@@ -98,8 +98,8 @@ Docs & License: https://fullcalendar.io/
     PERFORMANCE OF THIS SOFTWARE.
     ***************************************************************************** */
 
-/*! DataTables 1.12.1
- * ©2008-2022 SpryMedia Ltd - datatables.net/license
+/*! DataTables 1.11.5
+ * ©2008-2021 SpryMedia Ltd - datatables.net/license
  */
 
 /**!
