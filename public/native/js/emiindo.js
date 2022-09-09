@@ -4333,20 +4333,19 @@ __webpack_require__.r(__webpack_exports__);
       }
     },
     onArrowDown: function onArrowDown() {
-      if (this.arrowCounter < this.results.length) {
-        this.arrowCounter = this.arrowCounter + 1;
+      if (this.arrowCounter < this.results.length - 1) {
+        this.arrowCounter++;
       }
     },
     onArrowUp: function onArrowUp() {
       if (this.arrowCounter > 0) {
-        this.arrowCounter = this.arrowCounter - 1;
+        this.arrowCounter--;
       }
     },
-    onEnter: function onEnter() {
+    onEnter: function onEnter(event) {
+      event.preventDefault();
       this.search = this.results[this.arrowCounter].text;
       this.isOpen = false;
-      console.log("tutup", this.isOpen = false);
-      console.log("check", this.isOpen);
       this.arrowCounter = -1;
     }
   }

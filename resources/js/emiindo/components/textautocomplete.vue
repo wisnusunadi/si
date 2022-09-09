@@ -66,7 +66,7 @@
     },
     created() {
       this.search = this.$attrs.value;
-    },
+    },  
     mounted() {
       document.addEventListener('click', this.handleClickOutside)
     },
@@ -104,21 +104,20 @@
         }
       },
       onArrowDown() {
-        if (this.arrowCounter < this.results.length) {
-          this.arrowCounter = this.arrowCounter + 1;
+        if (this.arrowCounter < this.results.length - 1) {
+          this.arrowCounter++;
         }
       },
       onArrowUp() {
         if (this.arrowCounter > 0) {
-          this.arrowCounter = this.arrowCounter - 1;
+          this.arrowCounter--;
         }
       },
-      onEnter() {
+      onEnter(event) {
+        event.preventDefault();
         this.search = this.results[this.arrowCounter].text;
         this.isOpen = false;
-        console.log("tutup",this.isOpen = false);
-        console.log("check",this.isOpen);
-        this.arrowCounter = -1; 
+        this.arrowCounter = -1;
       },
     },
   };
