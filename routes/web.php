@@ -171,13 +171,14 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/penjualan'], function () {
-        Route::group(['middleware' => ['divisi:dc,jual,asp,dirut,qc,log']], function () {
+        Route::group(['middleware' => ['divisi:dc,jual,asp,dirut,qc,log,ppic']], function () {
             Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
+            Route::get('/detail/ekatalog_ppic/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog_ppic']);
             Route::get('/detail/spa/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa'])->name('penjualan.penjualan.detail.spa');
             Route::get('/detail/spb/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spb'])->name('penjualan.penjualan.detail.spb');
         });
 
-        Route::group(['middleware' => ['divisi:jual,dirut']], function () {
+        Route::group(['middleware' => ['divisi:jual,dirut,ppic']], function () {
             Route::view('/show', 'page.penjualan.penjualan.show')->name('penjualan.penjualan.show');
             Route::post('/ekatalog/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
             Route::post('/spa/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
