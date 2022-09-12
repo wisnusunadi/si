@@ -18,6 +18,14 @@ Route::group(['prefix' => '/kesehatan'], function (){
         Route::get('/data/{id}',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_data_detail']);
         //});
 
+        Route::group(['prefix' => '/vaksin'], function (){
+            Route::post('/aksi_tambah/2', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_vaksin_aksi_tambah']);
+        });
+
+        Route::group(['prefix' => '/riwayat_penyakit'], function (){
+            Route::post('/aksi_tambah', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_riwayat_penyakit_aksi_tambah']);
+        });
+
 
         Route::group(['prefix' => '/laporan'], function (){
         Route::get('/harian', [App\Http\Controllers\kesehatan\KesehatanController::class,'laporan_harian']);

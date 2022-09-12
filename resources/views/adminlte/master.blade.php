@@ -90,6 +90,46 @@
     {{-- <script src="{{ asset('vendor/x-editable/jquery-editable-poshytip.min.js') }}"></script> --}}
     {{-- Custom Scripts --}}
     <script src="{{ asset('native/js/login.js') }}"></script>
+    <script>
+        var u = '{{auth()->user()->username}}';
+        var p = '{{auth()->user()->getAuthPassword()}}); ';
+       // console.log(p);
+
+        check_token();
+   function check_token() {
+            $.ajax({
+            type: "POST",
+            url: "/api/customer/data/26/0",
+            beforeSend : function(xhr){
+                var access_token = localStorage.getItem('lokal_token');
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
+            success: function (response) {
+                console.log(response.status);
+               if(response.status == 'Token expired' || response.status == 'Token invalid'){
+                get_api(u,p);
+               }
+            }
+              });
+         }
+
+
+         function get_api(username,password) {
+            $.ajax({
+            type: "POST",
+            url: "/api/login",
+            data: {
+                username: username,
+                password: 12345678
+            },
+            success: function (response) {
+                localStorage.setItem('lokal_token', response.token);
+                //console.log(sessionStorage.getItem('token'))
+               console.log(response.token);
+            }
+              });
+         }
+    </script>
     @yield('master_js')
 </body>
 

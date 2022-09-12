@@ -1,15 +1,69 @@
 @extends('adminlte.page')
-@section('title', 'Beta Version')
-@section('content_header')
-<h1 class="m-0 text-dark">Dashboard</h1>
-@stop
-@section('adminltecss')
-<style>
-    #obat td.bottom {
-        vertical-align: bottom;
-    }
-</style>
+@section('title', 'ERP')
 
+@section('content_header')
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-lg-6 col-md-4 col-sm-4">
+            <h1 class="m-0  text-dark">Tambah Karyawan Sakit</h1>
+        </div><!-- /.col -->
+        <div class="col-lg-6 col-md-8 col-sm-8">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{{route('kesehatan.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item"><a href="\karyawan\sakit">Karyawan Sakit</a></li>
+                <li class="breadcrumb-item active">Tambah Karyawan Sakit</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+@stop
+
+@section('adminlte_css')
+<style>
+    .hide{
+        display: none !important
+    }
+    .removeboxshadow {
+        box-shadow: none;
+        border: 1px;
+    }
+
+    .bg-color{
+        background-color: #e8fafc;
+    }
+
+    @media screen and (min-width: 993px) {
+        .labelket {
+            text-align: right;
+        }
+
+        section {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 992px) {
+        .labelket {
+            text-align: left;
+        }
+
+        section {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+    }
+    div.ui-tooltip {
+    max-width: 400px;
+}
+</style>
+@stop
 @section('content')
 <section class="content-header">
     <div class="container-fluid">
@@ -34,8 +88,8 @@
             </div>
             @endif
             <div class="col-lg-12">
-                <form action="/karyawan_sakit/aksi_tambah" method="post" enctype="multipart/form-data">
-                    {{ csrf_field() }}
+                <form action="/karyawan/sakit/aksi_tambah" method="post" enctype="multipart/form-data">
+                 @csrf
                     <div class="card">
                         <div class="card-header bg-success">
                             <div class="card-title"><i class="fas fa-plus-circle"></i>&nbsp;Tambah</div>
@@ -56,7 +110,7 @@
                                                 <label for="no_pemeriksaan" class="col-sm-4 col-form-label" style="text-align:right;">Nama</label>
                                                 <div class="col-sm-8">
                                                     <select type="text" class="form-control @error('karyawan_id') is-invalid @enderror select2" name="karyawan_id" style="width:45%;">
-                                                        <option value=""></option>
+
                                                         @foreach($karyawan as $k)
                                                         <option value="{{$k->id}}">{{$k->nama}}</option>
                                                         @endforeach
@@ -72,7 +126,7 @@
                                                 <label for="no_pemeriksaan" class="col-sm-4 col-form-label" style="text-align:right;">Pemeriksa</label>
                                                 <div class="col-sm-8">
                                                     <select type="text" class="form-control @error('pemeriksa_id') is-invalid @enderror select2" name="pemeriksa_id" style="width:45%;">
-                                                        <option value=""></option>
+
                                                         @foreach($pengecek as $p)
                                                         <option value="{{$p->id}}">{{$p->nama}}</option>
                                                         @endforeach
@@ -236,7 +290,7 @@
                         </div>
                         <div class="card-footer">
                             <span class="float-left"><a class="btn btn-danger rounded-pill" href="/karyawan/sakit"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
-                            <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
+                            <span class="float-right"><button class="btn btn-success rounded-pill" type="submit" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                         </div>
                     </div>
                 </form>
@@ -429,5 +483,6 @@
             }
         });
     });
+    $('.select2').select2();
 </script>
 @stop

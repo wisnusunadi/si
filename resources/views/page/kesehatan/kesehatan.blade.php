@@ -1,10 +1,87 @@
 @extends('adminlte.page')
 
-@section('title', 'Beta Version')
+@section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Dashboard</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Kesehatan</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('kesehatan.dashboard') }}">Beranda</a></li>
+                    <li class="breadcrumb-item active">Kesehatan Awal</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
 @stop
+@section('adminlte_css')
+<style>
+    table { border-collapse: collapse; empty-cells: show; }
+
+    td { position: relative; }
+
+    .foo {
+        border-radius: 50%;
+        float: left;
+        width: 10px;
+        height: 10px;
+        align-items: center !important;
+    }
+
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        body {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+
+    }
+
+    @media screen and (max-width: 1439px) {
+        body {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+
+    }
+
+
+
+</style>
+@stop
+
 
 @section('content')
 <div class="row">
@@ -27,7 +104,6 @@
     <div class="card">
       <div class="card-body">
         <div class='table-responsive'>
-          <h2>Kesehatan</h2>
           <table id="tabel" class="table table-hover styled-table table-striped">
             <thead style="text-align: center;">
               <tr>
@@ -98,8 +174,6 @@
 <div class="modal fade  bd-example-modal-lg" id="vaksin_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
     <div class="card-body">
-      {{ csrf_field() }}
-      {{ method_field('PUT')}}
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title" id="myModalLabel">
@@ -146,8 +220,8 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="col-lg-12">
-                <form method="post" action="/vaksin/aksi_tambah">
-                  {{ csrf_field() }}
+                <form method="post" action="/kesehatan/vaksin/aksi_tambah/2">
+                  @csrf
                   <div class="card">
                     <div class="card-header bg-success">
                       <div class="card-title"><i class="fas fa-plus-circle"></i>&nbsp;Tambah</div>
@@ -206,7 +280,7 @@
                       </div>
                     </div>
                     <div class="card-footer">
-                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
+                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah" type="submit"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                     </div>
                   </div>
                 </form>
@@ -273,8 +347,8 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="col-lg-12">
-                <form method="post" action="/riwayat_penyakit/aksi_tambah">
-                  {{ csrf_field() }}
+                <form method="post" action="/kesehatan/riwayat_penyakit/aksi_tambah">
+                  @csrf
                   <div class="card">
                     <div class="card-header bg-success">
                       <div class="card-title"><i class="fas fa-plus-circle"></i>&nbsp;Tambah</div>
@@ -336,7 +410,7 @@
                       </div>
                     </div>
                     <div class="card-footer">
-                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
+                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah" type="submit"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                     </div>
                   </div>
                 </form>
@@ -375,10 +449,11 @@
           searchable: false
         },
         {
-          data: 'x'
+          data: 'divisi'
         },
         {
-          data: 'karyawan.nama'
+          data: 'nama',
+          searchable: true
         },
         {
           data: 'umur'
@@ -457,7 +532,7 @@
           'headers': {
             'X-CSRF-TOKEN': '{{csrf_token()}}'
           },
-          'url': '/kesehatan_bulanan_berat/detail/' + rows[0]['karyawan_id']
+          'url': '/kesehatan/bulanan/berat/detail/' + rows[0]['karyawan_id']
         },
         columns: [{
             data: 'DT_RowIndex',
@@ -638,7 +713,7 @@
       $(this).closest('tr').remove();
       numberRow_vaksin($("#tabel_penyakit"));
     });
-
+    $('.select2').select2();
   });
 </script>
 @endsection

@@ -1207,6 +1207,9 @@
             url: '/api/gbj/sel-divisi',
             type: 'GET',
             dataType: 'json',
+            beforeSend : function(xhr){
+                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                },
             success: function (res) {
                 if (res) {
                     $(".dari").empty();

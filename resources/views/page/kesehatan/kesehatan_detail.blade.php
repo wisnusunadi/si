@@ -1,6 +1,85 @@
 @extends('adminlte.page')
-@section('title', 'Beta Version')
+@section('title', 'ERP')
+
 @section('content_header')
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Detail</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('kesehatan.dashboard') }}">Beranda</a></li>
+                    <li class="breadcrumb-item"><a href="/kesehatan">Kesehatan Awal</a></li>
+                    <li class="breadcrumb-item active">Detail</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+@stop
+@section('adminlte_css')
+<style>
+    table { border-collapse: collapse; empty-cells: show; }
+
+    td { position: relative; }
+
+    .foo {
+        border-radius: 50%;
+        float: left;
+        width: 10px;
+        height: 10px;
+        align-items: center !important;
+    }
+
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        body {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+
+    }
+
+    @media screen and (max-width: 1439px) {
+        body {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+
+    }
+
+
+
+</style>
 @stop
 @section('content')
 <section class="content-header">
@@ -338,37 +417,15 @@
             type: 'GET',
             dataType: 'json',
             success: function(data) {
-                console.log(data[0].karyawan)
-                $("#nama").text(data[0].karyawan.nama);
-                $("#divisi").text(data[0].karyawan.divisi.nama);
-                if (data[0].karyawan.kelamin == "L") {
-                    $("#kelamin").text('Laki Laki');
-                } else {
-                    $("#kelamin").text('Perempuan');
-                }
-                $("#tinggi").text(data[0].tinggi + " Cm");
-                $("#butawarna").text(data[0].status_mata);
-
-                //Hitung Umur
-                dobDate = new Date(data[0].karyawan.tgllahir);
-                nowDate = new Date();
-                var diff = nowDate.getTime() - dobDate.getTime();
-                var ageDate = new Date(diff); // miliseconds from epoch
-                var age = Math.abs(ageDate.getUTCFullYear() - 1970);
-                $("#umur").text(age + " Tahun");
-
-                if (data[0].mata_kiri <= 6) {
-                    $('#matakiri').text('Tidak Normal (kiri)');
-                } else {
-                    $('#matakiri').text('Normal (kiri)');
-                }
-
-                if (data[0].mata_kanan <= 6) {
-                    $('#matakanan').text('Tidak Normal (kanan)');
-                } else {
-                    $('#matakanan').text('Normal (kanan)');
-                }
-
+                 $("#nama").text(data.nama);
+                 $("#divisi").text(data.divisi);
+                 $("#kelamin").text(data.jenis);
+                $("#tinggi").text(data.tinggi);
+                $("#butawarna").text(data.status_mata);
+                $('#matakiri').text(data.mata_kiri);
+                $('#matakanan').text(data.mata_kiri);
+                $('#status_vaksin').text(data.status_vaksin);
+                $("#umur").text(data.umur);
             }
         });
     });

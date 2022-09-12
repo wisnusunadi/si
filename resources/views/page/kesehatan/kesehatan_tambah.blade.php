@@ -1,7 +1,66 @@
 @extends('adminlte.page')
-@section('title', 'Beta Version')
 @section('content_header')
-<h1 class="m-0 text-dark">Dashboard</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-lg-6 col-md-4 col-sm-4">
+            <h1 class="m-0  text-dark">Tambah Kesehatan Awal</h1>
+        </div><!-- /.col -->
+        <div class="col-lg-6 col-md-8 col-sm-8">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{{route('kesehatan.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item"><a href="\kesehatan">Kesehatan Awal</a></li>
+                <li class="breadcrumb-item active">Tambah Kesehatan</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+@stop
+
+@section('adminlte_css')
+<style>
+    .hide{
+        display: none !important
+    }
+    .removeboxshadow {
+        box-shadow: none;
+        border: 1px;
+    }
+
+    .bg-color{
+        background-color: #e8fafc;
+    }
+
+    @media screen and (min-width: 993px) {
+        .labelket {
+            text-align: right;
+        }
+
+        section {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 992px) {
+        .labelket {
+            text-align: left;
+        }
+
+        section {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+    }
+    div.ui-tooltip {
+    max-width: 400px;
+}
+</style>
 @stop
 @section('content')
 <section class="content-header">
@@ -43,7 +102,7 @@
                                                 <label for="no_pemeriksaan" class="col-sm-4 col-form-label" style="text-align:right;">Nama</label>
                                                 <div class="col-sm-8">
                                                     <select type="text" class="form-control  @error('karyawan_id') is-invalid @enderror select2" name="karyawan_id" style="width:45%;">
-                                                        <option value=""></option>
+
                                                         @foreach($karyawan as $k)
                                                         <option value="{{$k->id}}">{{$k->nama}}</option>
                                                         @endforeach
@@ -474,7 +533,7 @@
                                                             </td>
                                                             <td>
                                                                 <select type="text" class="form-control @error('pemeriksa_id') is-invalid @enderror pemeriksa_id select2 select2-info" name="pemeriksa_id[]" style="width:100%;" id="pemeriksa_id[]">
-                                                                    <option value=""></option>
+
                                                                     @foreach ($pengecek as $p)
                                                                     <option value="{{$p->id}}">{{$p->nama}}</option>
                                                                     @endforeach
@@ -552,6 +611,7 @@
 @section('adminlte_js')
 <script>
     $(document).ready(function() {
+        $('.select2').select2();
         function numberRow_vaksin($t) {
             var c = 0 - 1;
             $t.find("tr").each(function(ind, el) {
@@ -653,7 +713,7 @@
                                                             </td>
                                                             <td>
                                                                 <select type="text" class="form-control @error('pemeriksa_id') is-invalid @enderror pemeriksa_id select2 select2-info" name="pemeriksa_id[]" style="width:100%;" id="pemeriksa_id[]">
-                                                                    <option value=""></option>
+
                                                                     @foreach ($pengecek as $p)
                                                                     <option value="{{$p->id}}">{{$p->nama}}</option>
                                                                     @endforeach

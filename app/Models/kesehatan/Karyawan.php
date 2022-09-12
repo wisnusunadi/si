@@ -45,4 +45,8 @@ class Karyawan extends Model
     {
         return $this->hasMany(Kesehatan_tahunan::class);
     }
+    public function karyawan_sakit()
+    {
+        return $this->hasMany(Karyawan_sakit::class);
+    }
 }
