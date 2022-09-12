@@ -2755,12 +2755,28 @@ class GudangController extends Controller
         }
     }
 
+    function deleteCekSO(Request $request)
+    {
+        try {
+            // dd($request->all());
+            $h = Pesanan::find($request->pesanan_id);
+            foreach ($request->data as $key => $value) {
+                $dpid = DetailPesananProduk::whereIn('id', [$key])->get()->pluck('detail_pesanan_id');
+                DetailPesanan::whereIn('id', $dpid)->delete();
+            }
+            return response()->json(['msg' => 'Successfully', 'error' => false]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
     function storeCekSO(Request $request)
     {
         try {
-        //    dd($request->data);
             $h = Pesanan::find($request->pesanan_id);
-            // $dt = DetailPesanan::where('pesanan_id', $h->id)->get()->pluck('id')->toArray();
             foreach ($request->data as $key => $value) {
                 $dpid = DetailPesananProduk::where('id', $key)->get()->pluck('detail_pesanan_id');
                 DetailPesanan::whereIn('id', $dpid)->update(['jumlah' => $value[1]]);
@@ -2773,7 +2789,7 @@ class GudangController extends Controller
             $h->log_id = 6;
             $h->save();
 
-            return response()->json(['msg' => 'Successfully']);
+            return response()->json(['msg' => 'Successfully', 'error' => false]);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,

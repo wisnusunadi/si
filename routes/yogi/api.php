@@ -31,6 +31,7 @@ Route::prefix('/v2')->group(function() {
         Route::post('detail_riwayat_perubahan_noseri', [GudangController::class, 'detailNoseriHistoryPerubahan'])->middleware('jwt.verify');
         Route::get('header_count_noseri_status/{a}', [GudangController::class, 'headerCountNoseri'])->middleware('jwt.verify');
 
+        Route::post('delete_paket_so', [GudangController::class, 'deleteCekSO']);
         Route::get('template_so/{id}', [GudangController::class, 'download_template_so']);
         Route::post('preview-so', [GudangController::class, 'preview_so']);
         Route::post('store-sodb', [GudangController::class, 'store_so_to_db']);

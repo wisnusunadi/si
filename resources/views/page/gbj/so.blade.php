@@ -665,69 +665,130 @@
     let so = {};
     let so_dpp = {};
     $(document).on('click', '#btnSave', function(e) {
-            e.preventDefault();
-            let ids = {};
-            let allVals = [];
+        e.preventDefault();
+        let ids = {};
+        let allVals = [];
 
-            $(".cb-child-so:checked").each(function() {
-                allVals.push($(this).val())
-                if (ids[$(this).val()] === undefined){
-                    ids[$(this).val()] = []
-                    ids[$(this).val()].push($(this).parent().next().children()[0].value)
-                    ids[$(this).val()].push($(this).parent().next().next().children()[0].value)
+        $(".cb-child-so:checked").each(function() {
+            allVals.push($(this).val())
+            if (ids[$(this).val()] === undefined){
+                ids[$(this).val()] = []
+                ids[$(this).val()].push($(this).parent().next().children()[0].value)
+                ids[$(this).val()].push($(this).parent().next().next().children()[0].value)
+            }
+            else {
+                ids[$(this).val()].push($(this).parent().next().next().children()[0].value)
+            }
+
+        });
+
+        if (allVals.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Tidak Ada yang Dipilih',
+            })
+        } else {
+            Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, save it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $(this).prop('disabled', true);
+                    Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
+                    Swal.fire(
+                        'Sukses!',
+                        'Data Berhasil Disimpan',
+                        'success'
+                    )
+                    $.ajax({
+                        url: "/api/so/cek",
+                        type: "post",
+                        data: {
+                            pesanan_id : id,
+                            userid: $('#userid').val(),
+                            data: ids,
+                        },
+                        success: function(res) {
+                            location.reload();
+                            console.log(res);
+                        }
+                    })
                 }
-                else {
-                    ids[$(this).val()].push($(this).parent().next().next().children()[0].value)
-                }
+            })
+        }
+    })
 
-            });
+    $(document).on('click', '#btnDelete', function(e){
+        e.preventDefault();
+        let ids_del = {};
+        let allVals_del = [];
 
-            if (allVals.length == 0) {
-                Swal.fire({
-                    icon: 'error',
-                    title: 'Oops...',
-                    text: 'Tidak Ada yang Dipilih',
-                })
-            } else {
-                Swal.fire({
+        $(".cb-child-so:checked").each(function() {
+            allVals_del.push($(this).val())
+            if (ids_del[$(this).val()] === undefined){
+                ids_del[$(this).val()] = []
+                ids_del[$(this).val()].push($(this).parent().next().children()[0].value)
+                ids_del[$(this).val()].push($(this).parent().next().next().children()[0].value)
+            }
+            else {
+                ids_del[$(this).val()].push($(this).parent().next().next().children()[0].value)
+            }
+
+        });
+
+        if (allVals_del.length == 0) {
+            Swal.fire({
+                icon: 'error',
+                title: 'Oops...',
+                text: 'Tidak Ada yang Dipilih',
+            })
+        } else {
+            Swal.fire({
                 title: 'Are you sure?',
                 text: "You won't be able to revert this!",
                 icon: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, save it!'
-                }).then((result) => {
-                    if (result.isConfirmed) {
-                        // $(this).prop('disabled', true);
-                        // Swal.fire({
-                        //     title: 'Please wait',
-                        //     text: 'Data is transferring...',
-                        //     allowOutsideClick: false,
-                        //     showConfirmButton: false
-                        // });
-                        Swal.fire(
-                            'Sukses!',
-                            'Data Berhasil Disimpan',
-                            'success'
-                        )
-                        $.ajax({
-                            url: "/api/so/cek",
-                            type: "post",
-                            data: {
-                                pesanan_id : id,
-                                userid: $('#userid').val(),
-                                data: ids,
-                            },
-                            success: function(res) {
-                                // location.reload();
+                confirmButtonText: 'Yes, delete it!'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/api/v2/gbj/delete_paket_so",
+                        type: "post",
+                        data: {
+                            pesanan_id : id,
+                            userid: $('#userid').val(),
+                            data: ids_del,
+                        },
+                        success: function(res) {
+                            Swal.fire(
+                                'Deleted!',
+                                'Your data has been deleted.',
+                                'success'
+                            ).then(function (){
                                 console.log(res);
-                            }
-                        })
-                    }
-                })
-            }
-        })
+                                location.reload();
+                            })
+                        }
+                    })
+
+                }
+            })
+
+        }
+    })
 
     $(document).on('click', '.detailmodal', function(e) {
         var x = $(this).data('value');
