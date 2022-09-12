@@ -64,6 +64,7 @@ class LaporanPenjualan implements WithMultipleSheets
 
         if ($jenis_laporan == 'detail_produk') {
             $sheets[] = new SheetBerdasarkanDetailProduk($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->jenis_laporan);
+            $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->jenis_laporan);
         } else if ($jenis_laporan == 'paket_produk') {
             $sheets[] = new SheetBerdasarkanPaket($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->jenis_laporan);
             $sheets[] = new SheetBelumPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->jenis_laporan);
@@ -72,10 +73,8 @@ class LaporanPenjualan implements WithMultipleSheets
         } else {
             $sheets[] = new SheetBerdasarkanSJ($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->jenis_laporan);
         }
+
         // $sheets[] = new SheetSudahPO($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->tampilan);
-
-
-
         // if ($jenis_laporan == 'detail_produk') {
         //     $sheets[] = new SheetBerdasarkanDetailProduk($this->jenis_penjualan, $this->distributor, $this->tgl_awal, $this->tgl_akhir, $this->seri, $this->jenis_laporan);
         // } else if ($jenis_laporan == 'paket_produk') {
