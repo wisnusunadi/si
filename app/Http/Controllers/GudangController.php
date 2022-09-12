@@ -2759,17 +2759,19 @@ class GudangController extends Controller
     {
         try {
         //    dd($request->data);
-        $h = Pesanan::find($request->pesanan_id);
-        $dt = DetailPesanan::where('pesanan_id', $h->id)->get()->pluck('id')->toArray();
-        foreach ($request->data as $key => $value) {
-            DetailPesananProduk::whereIn('id', [$key])
-                ->update(['status_cek' => 4, 'checked_by' => $request->userid, 'gudang_barang_jadi_id' => $value[0]]);
-        }
+            $h = Pesanan::find($request->pesanan_id);
+            // $dt = DetailPesanan::where('pesanan_id', $h->id)->get()->pluck('id')->toArray();
+            foreach ($request->data as $key => $value) {
+                $dpid = DetailPesananProduk::where('id', $key)->get()->pluck('detail_pesanan_id');
+                DetailPesanan::whereIn('id', $dpid)->update(['jumlah' => $value[1]]);
+                DetailPesananProduk::whereIn('id', [$key])
+                    ->update(['status_cek' => 4, 'checked_by' => $request->userid, 'gudang_barang_jadi_id' => $value[0]]);
+            }
 
-        $h->status_cek = 4;
-        $h->checked_by = $request->userid;
-        $h->log_id = 6;
-        $h->save();
+            $h->status_cek = 4;
+            $h->checked_by = $request->userid;
+            $h->log_id = 6;
+            $h->save();
 
             return response()->json(['msg' => 'Successfully']);
         } catch (\Exception $e) {

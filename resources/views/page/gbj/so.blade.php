@@ -254,6 +254,7 @@
 
             </div>
             <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="btnDelete">Hapus</button>
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
                 <button type="button" class="btn btn-primary" id="btnSave">Simpan</button>
             </div>
@@ -673,9 +674,10 @@
                 if (ids[$(this).val()] === undefined){
                     ids[$(this).val()] = []
                     ids[$(this).val()].push($(this).parent().next().children()[0].value)
+                    ids[$(this).val()].push($(this).parent().next().next().children()[0].value)
                 }
                 else {
-                    ids[$(this).val()].push($(this).parent().next().children()[0].value)
+                    ids[$(this).val()].push($(this).parent().next().next().children()[0].value)
                 }
 
             });
@@ -697,13 +699,13 @@
                 confirmButtonText: 'Yes, save it!'
                 }).then((result) => {
                     if (result.isConfirmed) {
-                        $(this).prop('disabled', true);
-                        Swal.fire({
-                            title: 'Please wait',
-                            text: 'Data is transferring...',
-                            allowOutsideClick: false,
-                            showConfirmButton: false
-                        });
+                        // $(this).prop('disabled', true);
+                        // Swal.fire({
+                        //     title: 'Please wait',
+                        //     text: 'Data is transferring...',
+                        //     allowOutsideClick: false,
+                        //     showConfirmButton: false
+                        // });
                         Swal.fire(
                             'Sukses!',
                             'Data Berhasil Disimpan',
@@ -718,8 +720,8 @@
                                 data: ids,
                             },
                             success: function(res) {
-                                location.reload();
-                                // console.log(res);
+                                // location.reload();
+                                console.log(res);
                             }
                         })
                     }
