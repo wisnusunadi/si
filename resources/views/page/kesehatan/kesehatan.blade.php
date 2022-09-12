@@ -174,8 +174,6 @@
 <div class="modal fade  bd-example-modal-lg" id="vaksin_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
     <div class="card-body">
-      {{ csrf_field() }}
-      {{ method_field('PUT')}}
       <div class="modal-content">
         <div class="modal-header">
           <h4 class="modal-title" id="myModalLabel">
@@ -222,8 +220,8 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="col-lg-12">
-                <form method="post" action="/vaksin/aksi_tambah">
-                  {{ csrf_field() }}
+                <form method="post" action="/kesehatan/vaksin/aksi_tambah/2">
+                  @csrf
                   <div class="card">
                     <div class="card-header bg-success">
                       <div class="card-title"><i class="fas fa-plus-circle"></i>&nbsp;Tambah</div>
@@ -282,7 +280,7 @@
                       </div>
                     </div>
                     <div class="card-footer">
-                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
+                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah" type="submit"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                     </div>
                   </div>
                 </form>
@@ -349,8 +347,8 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="col-lg-12">
-                <form method="post" action="/riwayat_penyakit/aksi_tambah">
-                  {{ csrf_field() }}
+                <form method="post" action="/kesehatan/riwayat_penyakit/aksi_tambah">
+                  @csrf
                   <div class="card">
                     <div class="card-header bg-success">
                       <div class="card-title"><i class="fas fa-plus-circle"></i>&nbsp;Tambah</div>
@@ -412,7 +410,7 @@
                       </div>
                     </div>
                     <div class="card-footer">
-                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
+                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah" type="submit"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                     </div>
                   </div>
                 </form>
@@ -451,10 +449,11 @@
           searchable: false
         },
         {
-          data: 'x'
+          data: 'divisi'
         },
         {
-          data: 'karyawan.nama'
+          data: 'nama',
+          searchable: true
         },
         {
           data: 'umur'
@@ -533,7 +532,7 @@
           'headers': {
             'X-CSRF-TOKEN': '{{csrf_token()}}'
           },
-          'url': '/kesehatan_bulanan_berat/detail/' + rows[0]['karyawan_id']
+          'url': '/kesehatan/bulanan/berat/detail/' + rows[0]['karyawan_id']
         },
         columns: [{
             data: 'DT_RowIndex',

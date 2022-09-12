@@ -30,20 +30,27 @@ class KesehatanController extends Controller
     }
     public function kesehatan_data()
     {
-        $data = Kesehatan_awal::with('Karyawan.Vaksin_karyawan');
+        $data = Kesehatan_awal::with(['Karyawan.Vaksin_karyawan','Karyawan.Berat_karyawan','Karyawan.Divisi'])->get();
         return datatables()->of($data)
             ->addIndexColumn()
-            ->addColumn('x', function ($data) {
-                return $data->karyawan->Divisi->nama;
+            ->addColumn('divisi', function ($data) {
+                return $data->Karyawan->Divisi->nama;
+            })
+            ->addColumn('nama', function ($data) {
+                return $data->Karyawan->nama;
             })
             ->addColumn('berat_kg', function ($data) {
-           //    return $data->Karyawan->Berat_karyawan->last()->berat . ' Kg <br><div class="inline-flex"><button type="button" id="berat"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
+                if($data->Karyawan->Berat_karyawan->last()){
+                    return $data->Karyawan->Berat_karyawan->last()->berat.' Kg';
+                }else{
+                    return '-';
+                }
             })
             ->addColumn('tinggi_cm', function ($data) {
-                return $data->tinggi . ' Cm';
+               return $data->tinggi . ' Cm';
             })
             ->addColumn('bmi', function ($data) {
-                return $data->berat / (($data->tinggi / 100) * ($data->tinggi / 100));
+              return $data->berat / (($data->tinggi / 100) * ($data->tinggi / 100));
             })
             ->addColumn('suhu_k', function ($data) {
                 return $data->suhu . ' °C';
@@ -81,7 +88,7 @@ class KesehatanController extends Controller
     }
     public function kesehatan_tambah()
     {
-        $karyawan = Karyawan::orderBy('nama', 'ASC')->get();
+        $karyawan = Karyawan::doesnthave('Kesehatan_awal')->orderBy('nama', 'ASC')->get();
         $pengecek = Karyawan::where('divisi_id', '28')
             ->get();
         return view('page.kesehatan.kesehatan_tambah', ['karyawan' => $karyawan, 'pengecek' => $pengecek]);
@@ -325,8 +332,43 @@ class KesehatanController extends Controller
     }
     public function kesehatan_data_detail($karyawan_id)
     {
-        $data = Kesehatan_awal::with('karyawan.divisi')
-            ->where('karyawan_id', $karyawan_id)->get();
+        $kesehatan_awal = Kesehatan_awal::with('karyawan.divisi')
+            ->where('karyawan_id', $karyawan_id)->first();
+
+        if ($kesehatan_awal->Karyawan->Vaksin_karyawan->isEmpty()) {
+            $status = 'Belum Vaksin';
+        } else {
+            $status = 'Sudah Vaksin';
+        }
+
+        if ($kesehatan_awal->Karyawan->kelamin == 'L') {
+            $jenis = 'Laki laki';
+        } else {
+            $jenis = 'Perempuan';
+        }
+
+        if ($kesehatan_awal->mata_kiri <= 6) {
+            $mata_kiri = 'Tidak normal (kiri)';
+        } else {
+            $mata_kiri = 'Normal (kiri)';
+        }
+
+        if ($kesehatan_awal->mata_kanan <= 6) {
+            $mata_kanan = 'Tidak normal (kanan)';
+        } else {
+            $mata_kanan = 'Normal (kanan)';
+        }
+        $data = array();
+         $data['nama'] =  $kesehatan_awal->Karyawan->nama;
+         $data['divisi'] =  $kesehatan_awal->Karyawan->Divisi->nama;
+        $data['jenis'] =  $jenis;
+        $data['tinggi'] =  $kesehatan_awal->tinggi.' cm';
+        $data['status_mata'] =  $kesehatan_awal->status_mata;
+        $data['status_vaksin'] =  $status;
+        $data['mata_kiri'] =  $mata_kiri;
+        $data['mata_kanan'] =  $mata_kanan;
+        $data['umur'] =  Carbon::parse($kesehatan_awal->Karyawan->tgllahir)->age.' Tahun';
+
         echo json_encode($data);
     }
     public function kesehatan_mingguan()
@@ -708,14 +750,14 @@ class KesehatanController extends Controller
     }
     public function karyawan_sakit_data()
     {
-        $data = Karyawan_sakit::with(['Karyawan.Divisi','Obat'])->orderBy('tgl_cek', 'DESC')->get();
+        $data = Karyawan_sakit::with(['Karyawan.Divisi'])->orderBy('tgl_cek', 'DESC')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('x', function ($data) {
                 return $data->Karyawan->Divisi->nama;
             })
             ->addColumn('y', function ($data) {
-                return $data->Karyawan->nama;
+            return $data->Karyawan->nama;
             })
             ->addColumn('z', function ($data) {
                 return $data->pemeriksa->nama;
@@ -1748,6 +1790,67 @@ class KesehatanController extends Controller
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
         } else {
             return redirect()->back()->with('error', 'Gagal menambahkan data');
+        }
+    }
+
+    public function kesehatan_vaksin_aksi_tambah(Request $request)
+    {
+        $this->validate(
+            $request,
+            [
+                'tgl.*' => 'required',
+                'dosis.*' => 'required',
+                'tahap.*' => 'required',
+            ],
+            [
+                'tgl.required' => 'Tanggal harus di isi',
+                'dosis.required' => 'Dosis pengecekan harus di isi',
+                'tahap.required' => 'Tahap pengecekan harus di isi',
+            ]
+        );
+        for ($i = 0; $i < count($request->date); $i++) {
+            $vaksin_karyawan = Vaksin_karyawan::create([
+                'karyawan_id' => $request->fk_karyawan_id,
+                'tgl' => $request->date[$i],
+                'dosis' => $request->dosis[$i],
+                'tahap' => $request->ket[$i],
+            ]);
+        }
+        if ($vaksin_karyawan) {
+            return redirect()->back()->with('success', "Berhasil menambahkan data");
+        } else {
+            return redirect()->back()->with('error', "Gagal menambahkan data");
+        }
+    }
+
+    public function kesehatan_riwayat_penyakit_aksi_tambah(Request $request)
+    {
+        $this->validate(
+            $request,
+            [
+                'jenis.*' => 'required',
+                'nama.*' => 'required',
+                'kriteria.*' => 'required',
+            ],
+            [
+                'jenis.required' => 'Jenis penyakit harus di isi',
+                'nama.required' => 'Nama penyakit harus di isi',
+                'kriteria.required' => 'Kriteria harus di pilih',
+            ]
+        );
+        for ($i = 0; $i < count($request->nama); $i++) {
+            $riwayat_penyakit = riwayat_penyakit::create([
+                'karyawan_id' => $request->fk_karyawan_id,
+                'nama' => $request->nama[$i],
+                'jenis' => $request->jenis[$i],
+                'kriteria' => $request->kriteria[$i],
+                'keterangan' => $request->keterangan[$i],
+            ]);
+        }
+        if ($riwayat_penyakit) {
+            return redirect()->back()->with('success', "Berhasil menambahkan data");
+        } else {
+            return redirect()->back()->with('error', "Gagal menambahkan data");
         }
     }
 

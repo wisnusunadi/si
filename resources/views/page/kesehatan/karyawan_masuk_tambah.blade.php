@@ -1,4 +1,6 @@
 @extends('adminlte.page')
+@section('title', 'ERP')
+
 @section('content_header')
 <div class="container-fluid">
     <div class="row mb-2">

@@ -114,7 +114,7 @@
                 <th>No</th>
                 <th>Divisi</th>
                 <th>Jabatan</th>
-                <th>KTP</th>
+              {{--   <th>KTP</th> --}}
                 <th>Nama</th>
                 <th>Kelamin</th>
                 <th>Umur</th>
@@ -175,7 +175,7 @@
                                     </td>
                                     <td>
                                       <select class="form-control select2" id="divisi" name="divisi">
-                                        <option value="">Pilih Divisi</option>
+
                                         @foreach($karyawan as $k)
                                         <option value="{{$k->id}}">{{$k->nama}}</option>
                                         @endforeach
@@ -183,7 +183,7 @@
                                     </td>
                                     <td>
                                       <select class="form-control select2 " id="jabatan" name="jabatan">
-                                        <option value="">Pilih Jabatan</option>
+
                                         <option value="direktur">Direktur</option>
                                         <option value="manager">Manager</option>
                                         <option value="assisten manager">Ass Manager</option>
@@ -191,6 +191,7 @@
                                         <option value="staff">Staff</option>
                                         <option value="operator">Operator</option>
                                         <option value="harian">Harian</option>
+                                        <option value="lainnya">Lainnya</option>
                                       </select>
                                     </td>
                                     <td>
@@ -265,13 +266,13 @@
           data: 'x',
         },
         {
-          data: 'jabatan',
+          data: 'jabatans',
         },
-        {
-          data: 'ktp',
-          orderable: false,
-          searchable: false,
-        },
+        // {
+        //   data: 'ktp',
+        //   orderable: false,
+        //   searchable: false,
+        // },
         {
           data: 'nama',
         },
@@ -286,6 +287,10 @@
         },
         {
           data: 'button',
+        },
+        {
+          data: 'jabatan',
+          visible:false
         }
       ]
     });
@@ -315,5 +320,6 @@
       $('#edit_mod').modal('show');
     })
   });
+  $('.select2').select2();
 </script>
 @endsection
