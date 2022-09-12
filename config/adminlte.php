@@ -480,8 +480,8 @@ return [
                     'url'  => '/penjualan/request_emiindo/akn_po',
                 ],
                 [
-                    'text' => 'Status Penjualan',
-                    'url'  => '/penjualan/request_emiindo/status_penjualan',
+                    'text' => 'Terima E-Katalog',
+                    'url'  => '/penjualan/request_emiindo/daftar_penerimaan',
                 ]
             ]
         ],
