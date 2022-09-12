@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetailEkatalog extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'detail_ekatalog';
     protected $fillable = ['ekatalog_id', 'penjualan_produk_id', 'jumlah', 'harga', 'ongkir'];
 

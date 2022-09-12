@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Logistik extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'logistik';
     protected $fillable = ['ekspedisi_id', 'status_id', 'nosurat', 'noresi', 'tgl_kirim', 'nama_pengirim'];
 

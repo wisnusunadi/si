@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class JalurEkspedisi extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'jalur_ekspedisi';
 
     public function Ekspedisi()

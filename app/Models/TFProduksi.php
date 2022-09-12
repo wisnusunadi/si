@@ -10,7 +10,7 @@ class TFProduksi extends Model
     use HasFactory;
 
     //protected $table = 't_tfbj';
-
+    protected $connection = 'erp';
     protected $table = 't_gbj';
 
     protected $fillable = ['ke', 'deskripsi', 'status_id', 'pesanan_id', 'tgl_keluar', 'state_id', 'jenis', 'created_by', 'created_at'];

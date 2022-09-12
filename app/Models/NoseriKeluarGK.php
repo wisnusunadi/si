@@ -9,6 +9,7 @@ class NoseriKeluarGK extends Model
 {
     use HasFactory;
 
+    protected $connection = 'erp';
     protected $table = 't_gk_noseri_out';
 
     protected $fillable = ['gk_detail_id', 'noseri_id'];
