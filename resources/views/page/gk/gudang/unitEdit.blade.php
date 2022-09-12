@@ -431,7 +431,7 @@
 
     $('body').on('submit', '#myForm', function(e) {
         e.preventDefault();
-        var actionType = $('#btnSave').val();
+        var actionType = $('#btnSave').val(); 
         $('#btnSave').html('Sending..');
         $('#btnSave').attr('disabled', true);
         Swal.fire({
