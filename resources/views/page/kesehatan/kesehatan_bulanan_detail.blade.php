@@ -1,6 +1,85 @@
 @extends('adminlte.page')
-@section('title', 'Beta Version')
+@section('title', 'ERP')
+
 @section('content_header')
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Kesehatan Bulanan</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('kesehatan.dashboard') }}">Beranda</a></li>
+                    <li class="breadcrumb-item active"><a href="/kesehatan/bulanan">Kesehatan Bulanan</a></li>
+                    <li class="breadcrumb-item active">Detail</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+@stop
+@section('adminlte_css')
+<style>
+    table { border-collapse: collapse; empty-cells: show; }
+
+    td { position: relative; }
+
+    .foo {
+        border-radius: 50%;
+        float: left;
+        width: 10px;
+        height: 10px;
+        align-items: center !important;
+    }
+
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        body {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+
+    }
+
+    @media screen and (max-width: 1439px) {
+        body {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+
+    }
+
+
+
+</style>
 @stop
 @section('content')
 <section class="content-header">
@@ -110,7 +189,7 @@
 
         </div>
         <div class="col-lg-6">
-            <form action="/kesehatan_harian/aksi_tambah" method="post">
+            <form action="/kesehatan/harian/aksi_tambah" method="post">
                 {{ csrf_field() }}
                 <div class="card">
                     <div class="card-header bg-success">
@@ -150,7 +229,7 @@
         var tensi_tabel = $('#tensi_tabel').DataTable({
             processing: true,
             serverSide: false,
-            ajax: '/kesehatan_bulanan_gcu/detail/' + karyawan_id,
+            ajax: '/kesehatan/bulanan/gcu/detail/' + karyawan_id,
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
@@ -224,7 +303,7 @@
         var berat_tabel = $('#berat_tabel').DataTable({
             processing: true,
             serverSide: false,
-            ajax: '/kesehatan_bulanan_gcu/detail/' + karyawan_id,
+            ajax: '/kesehatan/bulanan/gcu/detail/' + karyawan_id,
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
@@ -331,11 +410,11 @@
     });
     $('#karyawan_id').change(function() {
         var karyawan_id = $(this).val();
-        $('#tensi_tabel').DataTable().ajax.url('/kesehatan_bulanan_gcu/detail/' + karyawan_id).load();
-        $('#berat_tabel').DataTable().ajax.url('/kesehatan_bulanan_berat/detail/' + karyawan_id).load();
+        $('#tensi_tabel').DataTable().ajax.url('/kesehatan/bulanan/gcu/detail/' + karyawan_id).load();
+        $('#berat_tabel').DataTable().ajax.url('/kesehatan/bulanan/berat/detail/' + karyawan_id).load();
         var updateChart = function() {
             $.ajax({
-                url: "/kesehatan_bulanan/detail/data/" + karyawan_id,
+                url: "/kesehatan/bulanan/detail/data/" + karyawan_id,
                 type: 'GET',
                 dataType: 'json',
                 headers: {
@@ -361,5 +440,6 @@
         }
         updateChart();
     });
+    $('.select2').select2();
 </script>
 @endsection

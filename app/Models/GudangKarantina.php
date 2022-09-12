@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class GudangKarantina extends Model
 {
     use HasFactory;
-
+    protected $connection = 'erp';
     protected $table = 't_gk';
 
     function detail() {

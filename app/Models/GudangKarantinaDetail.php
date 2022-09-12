@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class GudangKarantinaDetail extends Model
 {
     use HasFactory;
-
+    protected $connection = 'erp';
     protected $table = 't_gk_detail';
 
     protected $fillable = ['gk_id', 'gbj_id', 'sparepart_id', 'qty_unit', 'qty_spr', 'is_draft', 'is_keluar'];

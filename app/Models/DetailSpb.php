@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetailSpb extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'detail_spb';
     protected $fillable = ['spb_id', 'penjualan_produk_id', 'jumlah', 'harga', 'ongkir'];
 

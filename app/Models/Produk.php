@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Produk extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'produk';
     protected $fillable = ['kelompok_produk_id', 'merk', 'tipe', 'nama', 'nama_coo', 'satuan', 'coo', 'no_akd', 'ket', 'status'];
 
