@@ -2,7 +2,17 @@
     <div>
         <h1>Detail Penjualan</h1>
         <p>{{ detailpenjualanekatalog }}</p>
-        <div class="card">
+        <div class="tabs is-centered">
+            <ul>
+                <li :class="{'is-active': !tabs}" @click="tabs = false">
+                    <a><span>Informasi</span></a>
+                </li>
+                <li :class="{'is-active': tabs}" @click="tabs = true">
+                    <a><span>Produk</span></a>
+                </li>
+            </ul>
+        </div>
+        <div class="card" v-if="pesanan != null" :class="{'is-hidden':tabs}">
             <div class="card-header">
                 <div class="card-header-title">Informasi</div>
             </div>
@@ -22,6 +32,58 @@
                             <p class="has-text-weight-bold">{{ pesanan.no_po }}</p>
                         </div>
                     </div>
+                    <div class="columns">
+                        <div class="column">
+                            <p>No AKN</p>
+                            <p class="has-text-weight-bold">{{ pesanan.so }}</p>
+                        </div>
+                        <div class="column">
+                            <p>Tanggal Edit</p>
+                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.data.tgl_edit }}</p>
+                        </div>
+                        <div class="column">
+                            <p>Tanggal PO</p>
+                            <p class="has-text-weight-bold">{{ pesanan.tgl_po }}</p>
+                        </div>
+                    </div>
+                    <div class="columns">
+                        <div class="column">
+                            <p>No Urut</p>
+                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.data.no_urut }}</p>
+                        </div>
+                        <div class="column">
+                            <p>Tanggal Delivery</p>
+                            <span v-html="detailpenjualanekatalog.tgl_kontrak"></span>
+                        </div>
+                        <div class="column">
+                            <p>Status</p>
+                            <progress class="progress is-success" :value="detailpenjualanekatalog.status" max="100">{{detailpenjualanekatalog.status}}%</progress>
+                            <span><b>{{detailpenjualanekatalog.status}}%</b> Selesai</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-content">
+                <div class="notification is-primary">
+                <span class="has-text-weight-bold">Detail :</span> {{ detailpenjualanekatalog.data.deskripsi }}
+                </div>
+            </div>
+        </div>
+        
+        <div class="card" :class="{'is-hidden':!tabs}">
+            <div class="card-header">
+                <div class="card-header-title">Produk</div>
+            </div>
+            <div class="card-content">
+                <div class="content">
+                    <div class="columns is-gapless is-multiline is-mobile">
+                        <div class="column is-one-quarter">
+                            test
+                        </div>
+                        <div class="column is-half">
+                            test
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -33,6 +95,7 @@
         data() {
             return {
                 detailpenjualanekatalog: null,
+                tabs: false
             }
         },
         methods: {
