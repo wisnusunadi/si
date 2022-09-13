@@ -155,8 +155,6 @@ class GudangController extends Controller
                     return '-';
                 })
                 ->addColumn('jumlah', function ($data) {
-                    // $d = $data->get_sum_noseri();
-                    // $a = $data->get_sum_seri_siap();
                     $this->updateStokGudang($data->id);
                     return $data->stok . ' ' . $data->satuan.'<br><span class="badge badge-dark">Stok Siap: '.$data->stok_siap.' '.$data->satuan.'</span>';
                 })
