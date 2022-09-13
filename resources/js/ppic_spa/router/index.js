@@ -13,6 +13,9 @@ import ProsesPesanan from "../views/ProsesPesanan.vue"
 import JadwalPerencanaan from "../views/JadwalPerencanaan.vue"
 import JadwalPelaksanaan from "../views/JadwalPelaksanaan.vue"
 
+// Detail
+import PenjualanDetail from "../views/details/PenjualanDetail.vue"
+
 /**
  * This module is defined routes component in PPIC project
  * @namespace Router
@@ -50,6 +53,11 @@ const routes = [
         component: Penjualan,
     },
     {
+        path: '/ppic/penjualan/:id',
+        name: 'PenjualanDetail',
+        component: PenjualanDetail,
+    },
+    {
         path: '/ppic/so',
         name: 'SalesOrder',
         component: SalesOrder,
@@ -79,7 +87,6 @@ const routes = [
         name: 'ProsesPesanan',
         component: ProsesPesanan,
     },
-
 ]
 
 /**

@@ -43,50 +43,18 @@
                 </div>
             </div>
         </div>
-        <div class="modal" :class="{'is-active': modalEkportsEkatalog}">
-                <div class="modal-background"></div>
-                    <div class="modal-card">
-                        <header class="modal-card-head">
-                        <p class="modal-card-title">Export Laporan</p>
-                        <button class="delete" @click="modalEkportsEkatalog = false"></button>
-                        </header>
-                        <section class="modal-card-body">
-                            {{ detailpenjualanekatalog }}
-                        </section>
-                        <footer class="modal-card-foot">
-                        <button class="button is-danger" @click="modalEkportsEkatalog = false">Cancel</button>
-                        </footer>
-                    </div>
-            </div>
     </div>
 </template>
 <script>
-    import axios from 'axios';
     import $ from "jquery";
     export default {
-        data() {
-            return {
-                penjualanekatalogs: [],
-                modalEkportsEkatalog: false,
-                detailpenjualanekatalog: [],
+        props: {
+            penjualanekatalogs: {
+                type: Array,
+                required: true
             }
         },
         methods: {
-            async getPenjualan() {
-                try {
-                    this.$store.commit('setIsLoading', true);
-                    await axios.post('/penjualan/penjualan/ekatalog/data/semua')
-                    .then(response => {
-                        this.penjualanekatalogs = response.data.data;
-                        this.$store.commit('setIsLoading', false);
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    });
-                } catch (error) {
-                    console.log(error);
-                }
-            },
             akn(akn, status){
                 switch (status) {
                     case 'batal':
@@ -122,18 +90,10 @@
                 }
             },
             async detailekatalog(id){
-                this.$store.commit('setIsLoading', true);
-                await axios.get('/penjualan/penjualan/detail/ekatalog_ppic/'+id)
-                .then(response => {
-                    this.detailpenjualanekatalog = response.data;
-                    this.$store.commit('setIsLoading', false);
-                    this.modalEkportsEkatalog = true;
-                })
+                this.$router.push({ name: 'PenjualanDetail', params: { id: id, jenis: 'ekatalog' } });
             }
         },
-        mounted() {
-            this.getPenjualan();
-        },
+
         updated() {
             $('.table').DataTable();
         }
