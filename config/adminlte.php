@@ -480,8 +480,8 @@ return [
                     'url'  => '/penjualan/request_emiindo/akn_po',
                 ],
                 [
-                    'text' => 'Status Penjualan',
-                    'url'  => '/penjualan/request_emiindo/status_penjualan',
+                    'text' => 'Terima E-Katalog',
+                    'url'  => '/penjualan/request_emiindo/daftar_penerimaan',
                 ]
             ]
         ],
@@ -623,17 +623,18 @@ return [
             'auth' => [28]
         ],
         [
-            'text' => 'Data Karyawan',
+            'text' => 'Karyawan',
             'icon' => 'fas fa-users',
             'auth' => [28],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Daftar Karyawan',
-                    'url'  => '/karyawan/',
-                    'auth' => [28],
-                ],
-            ],
+            'url'  => '/karyawan/',
+            // 'submenu' => [
+            //     [
+            //         'icon' => 'far fa-circle',
+            //         'text' => 'Daftar Karyawan',
+            //         'url'  => '/karyawan/',
+            //         'auth' => [28],
+            //     ],
+            // ],
         ],
         [
             'text' => 'Kesehatan',

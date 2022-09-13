@@ -462,6 +462,7 @@ class Pesanan extends Model
             return  $jumlah;
         }
     }
+
     public function DetailPesananUnique()
     {
         $id = $this->id;

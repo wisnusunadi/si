@@ -31,12 +31,17 @@ class KaryawanController extends Controller
     }
     public function karyawan_data()
     {
-        $data = Karyawan::orderBy('nama', 'ASC');
+        $data = Karyawan::with(['Divisi'])->orderBy('nama', 'ASC');
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('x', function ($data) {
                 if($data->Divisi){
                     return $data->Divisi->nama;
+                }
+            })
+            ->addColumn('jabatans', function ($data) {
+                if($data->jabatan){
+                    return ucfirst($data->jabatan);
                 }
             })
             ->addColumn('umur', function ($data) {

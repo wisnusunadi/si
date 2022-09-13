@@ -1412,18 +1412,18 @@ class MasterController extends Controller
         return $data;
     }
 
-    function create_user_log(Request $request)
-    {
-        $row = new UserLog();
-        $row->user_id = $request->userid;
-        $row->user_nama = $request->usernama;
-        $row->subjek = $request->subjek;
-        $row->table = $this->table();
-        $row->keterangan = $request->keterangan;
-        $row->aksi = $request->aksi;
-        $row->created_at = Carbon::now();
-        $row->save();
-    }
+    // function create_user_log(Request $request)
+    // {
+    //     $row = new UserLog();
+    //     $row->user_id = $request->userid;
+    //     $row->user_nama = $request->usernama;
+    //     $row->subjek = $request->subjek;
+    //     $row->table = $this->table();
+    //     $row->keterangan = $request->keterangan;
+    //     $row->aksi = $request->aksi;
+    //     $row->created_at = Carbon::now();
+    //     $row->save();
+    // }
 
     public function export_customer()
     {

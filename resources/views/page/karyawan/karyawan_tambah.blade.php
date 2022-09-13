@@ -10,12 +10,60 @@
         </div><!-- /.col -->
         <div class="col-lg-6 col-md-8 col-sm-8">
             <ol class="breadcrumb float-sm-right">
-                <li class="breadcrumb-item"><a href="/karyawan/">Beranda</a></li>
+                <li class="breadcrumb-item"><a href="{{route('kesehatan.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item"><a href="\karyawan">Karyawan</a></li>
                 <li class="breadcrumb-item active">Tambah Karyawan</li>
             </ol>
         </div><!-- /.col -->
     </div><!-- /.row -->
 </div><!-- /.container-fluid -->
+@stop
+
+@section('adminlte_css')
+<style>
+    .hide{
+        display: none !important
+    }
+    .removeboxshadow {
+        box-shadow: none;
+        border: 1px;
+    }
+
+    .bg-color{
+        background-color: #e8fafc;
+    }
+
+    @media screen and (min-width: 993px) {
+        .labelket {
+            text-align: right;
+        }
+
+        section {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 992px) {
+        .labelket {
+            text-align: left;
+        }
+
+        section {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+    }
+    div.ui-tooltip {
+    max-width: 400px;
+}
+</style>
 @stop
 @section('content')
 <section class="content-header">

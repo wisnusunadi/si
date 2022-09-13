@@ -306,19 +306,19 @@
                     }
                 },
                 columns: [
-                    {
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'nama_produk',
-                    },
-                    {
-                        data: 'jumlah',
-                        orderable: false,
-                        searchable: false
-                    },
+                    // {
+                    //     data: 'DT_RowIndex',
+                    //     orderable: false,
+                    //     searchable: false
+                    // },
+                    // {
+                    //     data: 'nama_produk',
+                    // },
+                    // {
+                    //     data: 'jumlah',
+                    //     orderable: false,
+                    //     searchable: false
+                    // },
                 ],
             });
         }
