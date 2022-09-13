@@ -216,6 +216,11 @@
                     </div>
                 </div>
             </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="submit" class="btn btn-primary">Simpan</button>
+            </div>
+        </form>
         </div>
     </div>
 </div>
@@ -422,6 +427,42 @@
         })
 
         changeStatus();
+    })
+
+    $('body').on('submit', '#myForm', function(e) {
+        e.preventDefault();
+        var actionType = $('#btnSave').val(); 
+        $('#btnSave').html('Sending..');
+        $('#btnSave').attr('disabled', true);
+        Swal.fire({
+            title: 'Please wait',
+            text: 'Data is transferring...',
+            allowOutsideClick: false,
+            showConfirmButton: false
+        });
+        var formData = new FormData(this);
+        $.ajax({
+            type: 'POST',
+            url: "/api/gk/ubahunit",
+            data: formData,
+            cache:false,
+            contentType: false,
+            processData: false,
+            success: (data) => {
+                $('#myForm').trigger('reset');
+                $('.changeStatus').modal('hide');
+                $('#btnSave').html('Kirim');
+                Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: data.msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                $('.table_edit_sparepart').DataTable().ajax.reload();
+                location.reload();
+            }
+        });
     })
 
     $(document).on('click', '.editData', function () {
