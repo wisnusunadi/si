@@ -44,6 +44,16 @@
         text-align: center;
     }
 
+    #warning {
+        color: #FFC700;
+        font-weight: 600;
+    }
+
+    #info {
+        color: #3a7bb0;
+        font-weight: 600;
+    }
+
 
     @media screen and (min-width: 992px) {
         .labelket{
