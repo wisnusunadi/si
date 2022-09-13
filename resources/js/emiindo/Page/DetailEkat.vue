@@ -321,22 +321,6 @@
                                                                     >Instansi</a
                                                                 >
                                                             </li>
-                                                            <li
-                                                                class="nav-item"
-                                                                role="presentation"
-                                                            >
-                                                                <a
-                                                                    class="nav-link"
-                                                                    id="pills-produk-tab"
-                                                                    data-toggle="pill"
-                                                                    href="#pills-produk"
-                                                                    role="tab"
-                                                                    aria-controls="pills-produk"
-                                                                    aria-selected="false"
-                                                                    >Rencana
-                                                                    Penjualan</a
-                                                                >
-                                                            </li>
                                                         </ul>
 
                                                         <div
@@ -675,17 +659,11 @@
                                                                                 <div
                                                                                     class="col-lg-7 col-md-12"
                                                                                 >
-                                                                                    <textarea
-                                                                                        class="form-control col-form-label ui-autocomplete-input"
-                                                                                        name="alamatinstansi"
-                                                                                        id="alamatinstansi"
-                                                                                        autocomplete="off"
-                                                                                        v-model="
-                                                                                            forminfoakn
-                                                                                                .instansi
-                                                                                                .alamat
-                                                                                        "
-                                                                                    ></textarea>
+                                                                                    <textautocomplete 
+                                                                                    :items="forminfoakn.instansi.dataalamat" 
+                                                                                    @input="checkAlamat($event)" 
+                                                                                    v-model="forminfoakn.instansi.alamat"
+                                                                                    />
                                                                                     <div
                                                                                         class="invalid-feedback"
                                                                                         id="msgalamatinstansi"
@@ -732,17 +710,11 @@
                                                                                 <div
                                                                                     class="col-lg-5 col-md-12"
                                                                                 >
-                                                                                    <textarea
-                                                                                        class="form-control col-form-label ui-autocomplete-input"
-                                                                                        name="deskripsi"
-                                                                                        id="deskripsi"
-                                                                                        autocomplete="off"
-                                                                                        v-model="
-                                                                                            forminfoakn
-                                                                                                .instansi
-                                                                                                .deskripsi
-                                                                                        "
-                                                                                    ></textarea>
+                                                                                <textautocomplete 
+                                                                                    :items="forminfoakn.instansi.datadeskripsi" 
+                                                                                    @input="checkDeskripsi($event)" 
+                                                                                    v-model="forminfoakn.instansi.deskripsi"
+                                                                                    />
                                                                                     <div
                                                                                         class="invalid-feedback"
                                                                                         id="msgdeskripsi"
@@ -772,51 +744,6 @@
                                                                                     ></textarea>
                                                                                 </div>
                                                                             </div>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                                <div
-                                                                    class="tab-pane fade show"
-                                                                    id="pills-produk"
-                                                                    role="tabpanel"
-                                                                    aria-labelledby="pills-produk-tab"
-                                                                >
-                                                                    <div
-                                                                        class="card removeshadow"
-                                                                    >
-                                                                        <div
-                                                                            class="card-header"
-                                                                        >
-                                                                            <h6>
-                                                                                Rencana
-                                                                                Penjualan
-                                                                            </h6>
-                                                                        </div>
-                                                                        <div
-                                                                            class="card-body"
-                                                                        >
-                                                                            <table
-                                                                                class="table perencanaan"
-                                                                            >
-                                                                                <thead>
-                                                                                    <tr>
-                                                                                        <th>
-                                                                                            Nama
-                                                                                            Produk
-                                                                                        </th>
-                                                                                        <th>
-                                                                                            Qty
-                                                                                        </th>
-                                                                                        <th>
-                                                                                            Realisasi
-                                                                                        </th>
-                                                                                        <th>
-                                                                                            Harga
-                                                                                        </th>
-                                                                                    </tr>
-                                                                                </thead>
-                                                                                <tbody></tbody>
-                                                                            </table>
                                                                         </div>
                                                                     </div>
                                                                 </div>
@@ -2471,14 +2398,15 @@ import mix from "../mixins/mix";
 import vSelect from "vue-select";
 import inputPrice from "../components/inputprice";
 import inputQty from "../components/inputqty";
-import { isNullLiteral } from "@babel/types";
+import textautocomplete from "../components/textautocomplete";
 export default {
     mixins: [mix],
     components: {
-        vSelect,
-        inputPrice,
-        inputQty,
-    },
+    vSelect,
+    inputPrice,
+    inputQty,
+    textautocomplete,
+},
     data() {
         return {
             loading: false,
@@ -2524,9 +2452,11 @@ export default {
                     nminstansi: null,
                     satuankerja: null,
                     alamat: null,
+                    dataalamat: null,
                     provinsi: null,
                     deskripsi: null,
                     keterangan: null,
+                    datadeskripsi: null,
                 },
             },
             formpenjualanpo: {
@@ -2667,6 +2597,28 @@ export default {
                 this.infopenjualan();
                 this.loading = false;
             }, 800);
+        },
+        async checkAlamat(e){
+            if(this.forminfoakn.instansi.dataalamat == null){
+                await axios.get('/api/penjualan/check_alamat').then((response) => {
+                this.forminfoakn.instansi.dataalamat = response.data.map((item) => {
+                    return {
+                        text: item.alamat
+                    }
+                });
+            });
+            }
+        },
+        async checkDeskripsi(e){
+            if(this.forminfoakn.instansi.datadeskripsi == null){
+                await axios.get('/api/ekatalog/all_deskripsi').then((response) => {
+                this.forminfoakn.instansi.datadeskripsi = response.data.map((item) => {
+                    return {
+                        text: item.deskripsi
+                    }
+                });
+            });
+            }
         },
         async updateekatalog(akn) {
             let jenis = this.$route.params.jenis;

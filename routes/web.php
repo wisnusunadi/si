@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-
 Auth::routes();
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', function () {
@@ -424,3 +423,4 @@ Route::view('/uit', 'page.login_page.index');
 // {
 //     Route::view('/produksi', 'manager.gbj.produksi');
 // });
+Route::namespace('v2')->group(__DIR__ . '/kesehatan/kesehatan.php');

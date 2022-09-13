@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class SparepartHis extends Model
 {
     use HasFactory;
-
+    protected $connection = 'erp';
     protected $table = 't_gs_his';
 }

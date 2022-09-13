@@ -1,9 +1,85 @@
 @extends('adminlte.page')
 
-@section('title', 'Beta Version')
+@section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Dashboard</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Karyawan</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('kesehatan.dashboard') }}">Beranda</a></li>
+                    <li class="breadcrumb-item active">Karyawan</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+@stop
+@section('adminlte_css')
+<style>
+    table { border-collapse: collapse; empty-cells: show; }
+
+    td { position: relative; }
+
+    .foo {
+        border-radius: 50%;
+        float: left;
+        width: 10px;
+        height: 10px;
+        align-items: center !important;
+    }
+
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        body {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+
+    }
+
+    @media screen and (max-width: 1439px) {
+        body {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+
+    }
+
+
+
+</style>
 @stop
 
 @section('content')
@@ -27,24 +103,23 @@
     <div class="card">
       <div class="card-body">
         <div class='table-responsive'>
-          <h2>Karyawan</h2>
-          <table id="tabel" class="table table-hover styled-table table-striped">
+          <table id="tabel" class="table table-hover">
             <thead style="text-align: center;">
               <tr>
                 <th colspan="14">
-                  <a href="/kesehatan/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                  <a href="/karyawan/create" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
                 </th>
               </tr>
               <tr>
                 <th>No</th>
                 <th>Divisi</th>
+                <th>Jabatan</th>
+              {{--   <th>KTP</th> --}}
                 <th>Nama</th>
+                <th>Kelamin</th>
                 <th>Umur</th>
                 <th>Tgl Masuk</th>
-                <th>Tinggi</th>
-                <th>BMI</th>
-                <th>Vaksin</th>
-                <th>Buta warna</th>
+                <th></th>
               </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -56,86 +131,8 @@
   </div>
 </div>
 <!-- Modal Detail -->
-<div class="modal fade  bd-example-modal-xl" id="berat_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade  bd-example-modal-xl" id="edit_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-xl" role="document">
-    <div class="card-body">
-      <form method="post" action="/kesehatan_harian_mingguan_tensi/aksi_ubah">
-        {{ csrf_field() }}
-        {{ method_field('PUT')}}
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">
-              <div class="data_detail_head"></div>
-            </h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          </div>
-          <div class="modal-body">
-            <table class="table table-hover styled-table table-striped" width="100%" id="tabel_berat">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Tgl Cek</th>
-                  <th>Berat</th>
-                  <th>Lemak</th>
-                  <th>Kandungan_air</th>
-                  <th>Otot</th>
-                  <th>Tulang</th>
-                  <th>Kalori</th>
-                  <th>Keterangan</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-<!-- End Modal Detail -->
-<!-- Modal Detail -->
-<div class="modal fade  bd-example-modal-lg" id="vaksin_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
-    <div class="card-body">
-      <form method="post" action="/kesehatan_harian_mingguan_tensi/aksi_ubah">
-        {{ csrf_field() }}
-        {{ method_field('PUT')}}
-        <div class="modal-content">
-          <div class="modal-header">
-            <h4 class="modal-title" id="myModalLabel">
-              <div class="data_detail_head"></div>
-            </h4>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-          </div>
-          <div class="modal-body">
-            <table class="table table-hover styled-table table-striped" width="100%" id="tabel_detail">
-              <thead>
-                <tr>
-                  <th colspan="12">
-                    <button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;" data-target="#tambah_mod" data-toggle="modal" data-dismiss="modal"><i class="fas fa-plus"></i> &nbsp;Tambah Data</i></button>
-                  </th>
-                </tr>
-                <tr>
-                  <th>No</th>
-                  <th>Tgl</th>
-                  <th>Dosis</th>
-                  <th>Tahap</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </form>
-    </div>
-  </div>
-</div>
-<!-- End Modal Detail -->
-<!-- Modal Detail -->
-<div class="modal fade  bd-example-modal-lg" id="tambah_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
         <h4 class="modal-title" id="myModalLabel">
@@ -148,52 +145,74 @@
           <div class="row">
             <div class="col-lg-12">
               <div class="col-lg-12">
-                <form method="post" action="/kesehatan/vaksin/aksi_tambah">
+                <form method="post" action="/karyawan/update">
                   {{ csrf_field() }}
+                  {{method_field('PUT')}}
                   <div class="card">
                     <div class="card-header bg-success">
-                      <div class="card-title"><i class="fas fa-plus-circle"></i>&nbsp;Tambah</div>
+                      <div class="card-title"><i class="fas fa-plus-circle"></i>&nbsp;Ubah Data</div>
                     </div>
                     <div class="card-body">
                       <div class="col-lg-12">
                         <div class="row">
                           <div class="col-lg-12">
                             <div class="form-horizontal">
-                              <input type="text" name="fk_karyawan_id" class="d-none form-control" id="fk_karyawan_id" readonly>
+                              <input type="text" name="id" class="d-none form-control" id="id" readonly>
                               <table class="table table-bordered table-striped" id="tabel_vaksin">
                                 <thead>
                                   <tr>
-                                    <th>No</th>
-                                    <th>Tgl Vaksin</th>
-                                    <th>Dosis</th>
-                                    <th>Vaksin ke </th>
-                                    <th></th>
+                                    <th>Tgl Lahir</th>
+                                    <th width="25%">Divisi</th>
+                                    <th>Jabatan</th>
+                                    <th>Kelamin</th>
+                                    <th>Pemerika Rapid</th>
                                   </tr>
                                 </thead>
                                 <tbody>
                                   <tr>
-                                    <td>1</td>
                                     <td>
-                                      <input type="date" class="form-control date" name="date[]">
+                                      <input type="date" class="form-control" name="tgllahir" id="tgllahir">
                                     </td>
                                     <td>
-                                      <select class="form-control select2 dosis" name="dosis[]">
-                                        <option value="">Pilih</option>
-                                        <option value="Astrazeneca">Astrazeneca</option>
-                                        <option value="Sinovac">Sinovac</option>
-                                        <option value="Moderna">Moderna</option>
+                                      <select class="form-control select2" id="divisi" name="divisi">
+
+                                        @foreach($karyawan as $k)
+                                        <option value="{{$k->id}}">{{$k->nama}}</option>
+                                        @endforeach
                                       </select>
                                     </td>
                                     <td>
-                                      <select class="form-control select2 ket" name="ket[]">
-                                        <option value="">Pilih</option>
-                                        <option value="1">1</option>
-                                        <option value="2">2</option>
-                                        <option value="3">3</option>
+                                      <select class="form-control select2 " id="jabatan" name="jabatan">
+
+                                        <option value="direktur">Direktur</option>
+                                        <option value="manager">Manager</option>
+                                        <option value="assisten manager">Ass Manager</option>
+                                        <option value="supervisor">Supervisor</option>
+                                        <option value="staff">Staff</option>
+                                        <option value="operator">Operator</option>
+                                        <option value="harian">Harian</option>
+                                        <option value="lainnya">Lainnya</option>
                                       </select>
                                     </td>
                                     <td>
-                                      <button name="add" type="button" id="tambahitem_vaksin" class="btn btn-success"><i class="nav-icon fas fa-plus-circle"></i></button>
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="jenis" id="jenis" value="P">
+                                        <label class="form-check-label">Perempuan</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="jenis" id="jenis" value="L">
+                                        <label class="form-check-label">Laki laki</label>
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="pemeriksa_rapid" id="pemeriksa_rapid" value="1">
+                                        <label class="form-check-label">Ya</label>
+                                      </div>
+                                      <div class="form-check form-check-inline">
+                                        <input class="form-check-input" type="radio" name="pemeriksa_rapid" id="pemeriksa_rapid" value="0">
+                                        <label class="form-check-label">Tidak</label>
+                                      </div>
                                     </td>
                                   </tr>
                                 </tbody>
@@ -204,7 +223,7 @@
                       </div>
                     </div>
                     <div class="card-footer">
-                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
+                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Ubah Data</button></span>
                     </div>
                   </div>
                 </form>
@@ -226,185 +245,81 @@
   $(function() {
     var tabel = $('#tabel').DataTable({
       processing: true,
-      serverSide: false,
+      serverSide: true,
       language: {
         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
       },
-      ajax: '/kesehatan/data',
+      ajax: {
+        'url': '/karyawan/data',
+        'type': 'POST',
+        'datatype': 'JSON',
+        'headers': {
+          'X-CSRF-TOKEN': '{{csrf_token()}}'
+        }
+      },
       columns: [{
           data: 'DT_RowIndex',
           orderable: false,
           searchable: false
         },
         {
-          data: 'x'
+          data: 'x',
         },
         {
-          data: 'karyawan.nama'
+          data: 'jabatans',
+        },
+        // {
+        //   data: 'ktp',
+        //   orderable: false,
+        //   searchable: false,
+        // },
+        {
+          data: 'nama',
         },
         {
-          data: 'umur'
+          data: 'kelamin',
         },
         {
-          data: 'berat_kg'
+          data: 'umur',
         },
         {
-          data: 'tinggi_cm'
+          data: 'tgl_kerja',
         },
         {
-          data: 'bmi',
-          render: function(data, type, full) {
-            $s = '<br><span class="badge bg-success  ">Sehat</span>';
-            $k = '<br><span class="badge bg-danger  ">Kekurangan Berat Badan</span>';
-            $o = '<br><span class="badge bg-danger  ">Kegemukan (Obesitas)</span>';
-            $g = '<br><span class="badge bg-warning  ">Kelebihan Berat Badan</span>';
-            if (data >= 30) {
-              return parseFloat(data).toFixed(2) + $o;
-            } else if (data >= 25 || data >= 29.9) {
-              return parseFloat(data).toFixed(2) + $g;
-            } else if (data >= 18.5 || data >= 24.9) {
-              return parseFloat(data).toFixed(2) + $s;
-            } else {
-              return parseFloat(data).toFixed(2) + $k;
-            }
-          }
+          data: 'button',
         },
         {
-          data: 'vaksin_detail'
-        },
-        {
-          data: 'status_mata'
+          data: 'jabatan',
+          visible:false
         }
       ]
     });
-    $('#tabel > tbody').on('click', '#vaksin_detail', function() {
+
+
+    $('#tabel > tbody').on('click', '#edit', function() {
       var rows = tabel.rows($(this).parents('tr')).data();
       $('.data_detail_head').html(
-        'Riwayat Vaksin : ' + rows[0]['karyawan']['nama']
+        rows[0]['nama']
       );
-      $('input[id="fk_karyawan_id"]').val(rows[0]['karyawan_id']);
-      var y = $('#tabel_detail').DataTable({
-        processing: true,
-        destroy: true,
-        serverSide: false,
-        language: {
-          processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-        },
-        ajax: '/kesehatan/vaksin/' + rows[0]['karyawan_id'],
-        columns: [{
-            data: 'DT_RowIndex',
-            orderable: false,
-            searchable: false
-          },
-          {
-            data: 'tgl'
-          },
-          {
-            data: 'dosis'
-          },
-          {
-            data: 'tahap'
-          },
-        ],
-      });
-      $('#vaksin_mod').modal('show');
-    })
-    $('#tabel > tbody').on('click', '#berat', function() {
-      var rows = tabel.rows($(this).parents('tr')).data();
-      $('.data_detail_head').html(
-        rows[0]['karyawan']['nama']
-      );
-      var y = $('#tabel_berat').DataTable({
-        processing: true,
-        destroy: true,
-        serverSide: false,
-        language: {
-          processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-        },
-        ajax: '/kesehatan_bulanan_berat/detail/' + rows[0]['karyawan_id'],
-        columns: [{
-            data: 'DT_RowIndex',
-            orderable: false,
-            searchable: false
-          },
-          {
-            data: 'tgl_cek'
-          },
-          {
-            data: 'z'
-          },
-          {
-            data: 'l'
-          },
-          {
-            data: 'k'
-          },
-          {
-            data: 'o'
-          },
-          {
-            data: 't'
-          },
-          {
-            data: 'ka'
-          },
-          {
-            data: 'keterangan'
-          },
-        ],
-      });
-      $('#berat_mod').modal('show');
-    })
+      var optionDivisi = rows[0]['divisi_id'];
+      var optionJabatan = rows[0]['jabatan'];
+      var optionPemeriksa = rows[0]['pemeriksa_rapid'];
 
-    $('#tambah_mod').on('hidden.bs.modal', function() {
-      $('#tambah_mod form')[0].reset();
-    });
+      $("#divisi").val(optionDivisi).trigger('change');
+      $("#jabatan").val(optionJabatan).trigger('change');
+      $('input[name="jenis"][value="' + rows[0]['kelamin'] + '"]').attr('checked', 'checked');
 
-    function numberRow_vaksin($t) {
-      var c = 0 - 1;
-      $t.find("tr").each(function(ind, el) {
-        $(el).find("td:eq(0)").html(++c);
-        var j = c - 1;
-        $(el).find('.dosis').attr('name', 'dosis[' + j + ']');
-        $(el).find('.date').attr('name', 'date[' + j + ']');
-        $(el).find('.ket').attr('name', 'ket[' + j + ']');
-        $('.dosis').select2();
-        $('.ket').select2();
-      });
-    }
-    $('#tambahitem_vaksin').click(function(e) {
-      var data = `  <tr>  
-            <td>1</td>
-                                                                <td>
-                                                                <input type="date" class="form-control date" name="date[]">
-                                                                </td>
-                                                                <td>
-                                                                    <select class="form-control select2 dosis" name="dosis[]">
-                                                                        <option value="">Pilih</option>
-                                                                        <option value="Astrazeneca">Astrazeneca</option>
-                                                                        <option value="Sinovac">Sinovac</option>
-                                                                        <option value="Moderna">Moderna</option>
-                                                                    </select>
-                                                                </td>
-                                                                <td>
-                                                                    <select class="form-control select2 ket" name="ket[]">
-                                                                        <option value="">Pilih</option>
-                                                                        <option value="1">1</option>
-                                                                        <option value="2">2</option>
-                                                                        <option value="3">3</option>
-                                                                    </select>
-                                                                </td>
-                                                                <td>
-                                                                <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable_vaksin"><i class="fas fa-times-circle"></i></button> 
-                                                   </td>
-                                                </tr>`;
-      $('#tabel_vaksin tr:last').after(data);
-      numberRow_vaksin($("#tabel_vaksin"));
-    });
-    $('#tabel_vaksin').on('click', '#closetable_vaksin', function(e) {
-      $(this).closest('tr').remove();
-      numberRow_vaksin($("#tabel_vaksin"));
-    });
+      if (optionPemeriksa == 1) {
+        $('input[name="pemeriksa_rapid"][value="1"]').attr('checked', 'checked');
+      } else {
+        $('input[name="pemeriksa_rapid"][value="0"]').attr('checked', 'checked');
+      }
+
+      $('input[id="id"]').val(rows[0]['id']);
+      $('input[id="tgllahir"]').val(rows[0]['tgllahir']);
+      $('#edit_mod').modal('show');
+    })
   });
+  $('.select2').select2();
 </script>
 @endsection

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class TFProduksiDetail extends Model
 {
     use HasFactory;
-
+    protected $connection = 'erp';
     protected $table = 't_gbj_detail';
 
     protected $fillable = ['status_id', 'state_id', 'gdg_brg_jadi_id', 'detail_pesanan_produk_id', 't_gbj_id', 'qty', 'jenis', 'created_by', 'created_at'];

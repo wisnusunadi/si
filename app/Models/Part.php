@@ -12,6 +12,7 @@ class Part extends Model
 {
     use HasFactory;
 
+    protected $connection = 'erp';
     protected $primaryKey = "kode";
     protected $fillable = ['nama', 'kode', 'jumlah', 'foto'];
 

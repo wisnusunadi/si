@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class State extends Model
 {
     use HasFactory;
+    protected $connection = 'erp';
     protected $table = 'm_state';
     protected $fillable = ['nama', 'jenis_id', 'is_aktif'];
 

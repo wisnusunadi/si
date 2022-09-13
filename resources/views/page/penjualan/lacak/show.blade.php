@@ -356,19 +356,19 @@
                 data: 'DT_RowIndex',
                 orderable: false,
                 searchable: false,
-                className: 'nowraps'
+                className: 'nowraps align-center'
             }, {
                 data: 'so',
-                className: 'nowraps'
+                className: 'nowraps align-center'
             }, {
                 data: 'no_po',
-                className: 'nowraps'
+                className: 'nowraps align-center'
             }, {
                 data: 'tgl_po',
-                className: 'nowraps'
+                className: 'nowraps align-center'
             }, {
                 data: 'nama_customer',
-                className: 'nowraps'
+                className: 'nowraps align-center'
             }, {
                 data: 'log',
                 className: 'nowraps align-center'
@@ -400,15 +400,16 @@
                 className: 'nowraps'
             }, {
                 data: 'so',
-                className: 'nowraps'
+                className: 'nowraps align-center'
             }, {
                 data: 'no_po',
-                className: 'nowraps'
+                className: 'nowraps align-center'
             }, {
                 data: 'tgl_po',
-                className: 'nowraps'
+                className: 'nowraps align-center'
             }, {
                 data: 'nama_customer',
+                className: 'align-center'
             }, {
                 data: 'log',
                 className: 'nowraps align-center'
@@ -436,23 +437,23 @@
                     data: 'DT_RowIndex',
                     orderable: false,
                     searchable: false,
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'no_paket',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'so',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'tgl_buat',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'tgl_kontrak',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'customer',
@@ -496,31 +497,31 @@
                 },
                 {
                     data: 'noseri',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'no_so',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'nama_customer',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'nama_produk',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'tgl_uji',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'no_sj',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'tgl_kirim',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'status',
@@ -553,31 +554,31 @@
                 },
                 {
                     data: 'noseri',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'no_so',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'nama_customer',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'nama_produk',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'tgl_uji',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'no_sj',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'tgl_kirim',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'status',
@@ -611,31 +612,31 @@
                 },
                 {
                     data: 'noseri',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'no_so',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'nama_customer',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'nama_produk',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'tgl_uji',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'no_sj',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'tgl_kirim',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'status',
@@ -665,15 +666,15 @@
                     data: 'DT_RowIndex',
                     orderable: false,
                     searchable: false,
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'po',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'nosurat',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'resi'
@@ -683,7 +684,7 @@
                 },
                 {
                     data: 'tgl_kirim',
-                    className: 'nowraps'
+                    className: 'nowraps align-center'
                 },
                 {
                     data: 'status',

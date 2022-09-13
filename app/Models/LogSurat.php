@@ -9,6 +9,7 @@ class LogSurat extends Model
 {
     use HasFactory;
 
+    protected $connection = 'erp';
     protected $table = 't_log_surat';
 
     protected $fillable = ['pesanan_id', 'transfer_by', 'check_by', 'terima_by'];

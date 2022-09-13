@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class DetailPesananProduk extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'detail_pesanan_produk';
     protected $fillable = ['detail_pesanan_id', 'gudang_barang_jadi_id', 'checked_by', 'status_cek'];
     public $timestamps = false;

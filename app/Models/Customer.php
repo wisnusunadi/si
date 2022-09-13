@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'customer';
     protected $fillable = ['id_provinsi', 'nama', 'telp', 'email', 'alamat', 'npwp', 'ktp', 'batas', 'pic', 'ket', 'izin_usaha', 'nama_pemilik', 'modal_usaha', 'hasil_penjualan'];
 

@@ -9,6 +9,7 @@ class GudangBarangJadiHis extends Model
 {
     use HasFactory;
 
+    protected $connection = 'erp';
     protected $table = 'gdg_barang_jadi_his';
     protected $fillable = ['gdg_brg_jadi_id','stok', 'jenis', 'created_by', 'tgl_masuk', 'created_at', 'dari', 'ke', 'tujuan'];
 
