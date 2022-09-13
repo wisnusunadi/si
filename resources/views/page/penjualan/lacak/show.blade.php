@@ -290,7 +290,6 @@
                                         <th>No SO</th>
                                         <th>No PO</th>
                                         <th>Tanggal PO</th>
-
                                         <th>Customer</th>
                                         <th>Status</th>
                                     </tr>
@@ -457,9 +456,11 @@
                 },
                 {
                     data: 'customer',
+                    className: 'align-center'
                 },
                 {
                     data: 'instansi',
+                    className: 'align-center'
                 },
                 {
                     data: 'log',
@@ -677,10 +678,12 @@
                     className: 'nowraps align-center'
                 },
                 {
-                    data: 'resi'
+                    data: 'resi',
+                    className: 'align-center'
                 },
                 {
-                    data: 'customer'
+                    data: 'customer',
+                    className: 'align-center'
                 },
                 {
                     data: 'tgl_kirim',
