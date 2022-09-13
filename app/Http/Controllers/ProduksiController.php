@@ -623,7 +623,7 @@ class ProduksiController extends Controller
                 ->leftJoin('t_gbj_detail', 't_gbj_detail.t_gbj_id', '=', 't_gbj.id')
                 ->leftJoin('t_gbj_noseri', 't_gbj_noseri.t_gbj_detail_id', '=', 't_gbj_detail.id')
                 ->groupBy('pesanan.id')
-                ->havingRaw('count(t_gbj_noseri.id) < (select sum(detail_pesanan.jumlah) * detail_penjualan_produk.jumlah
+                ->havingRaw('count(t_gbj_noseri.id) < (select sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)
                 from detail_pesanan
                 join penjualan_produk on penjualan_produk.id = detail_pesanan.penjualan_produk_id
                 join detail_penjualan_produk on detail_penjualan_produk.penjualan_produk_id = penjualan_produk.id
