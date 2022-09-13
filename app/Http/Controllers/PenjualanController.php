@@ -1466,7 +1466,8 @@ class PenjualanController extends Controller
             ->leftJoin('spb','spb.pesanan_id','=','pesanan.id')
             ->leftJoin('customer as c_spb','c_spb.id','=','spb.customer_id')
             ->leftJoin('m_state','m_state.id','=','pesanan.log_id')
-            ->where('so', 'LIKE', '%' . $value . '%')->addSelect(['ckirimprd' => function($q){
+            ->where('so', 'LIKE', '%' . $value . '%')
+            ->addSelect(['ckirimprd' => function($q){
                 $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
                 ->from('noseri_logistik')
                 ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
@@ -1540,40 +1541,40 @@ class PenjualanController extends Controller
                 ->addColumn('log', function ($data) {
                     $progress = '';
                     $tes = $data->cjumlahprd + $data->cjumlahpart;
-                    if($tes > 0){
-                        $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                        if($hitung > 0){
-                            $progress = '<div class="progress">
-                                <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
-                            </div>
-                            <small class="text-muted">Selesai</small>';
-                        }else{
-                            $progress = '<div class="progress">
-                                <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
-                            </div>
-                            <small class="text-muted">Selesai</small>';
-                        }
-                    }
-                    $datas = "";
-                    if (!empty($data->state_name)) {
-                        if ($data->state_name == "penjualan") {
-                            $datas .= '<span class="red-text badge">'. ucfirst($data->state_name) . '</span>';
-                        } else {
-                            if($data->ekat_log == "batal"){
-                                $datas .= '<span class="red-text badge">Batal</span>';
-                            }
-                            else if($data->spa_log == "batal"){
-                                $datas .= '<span class="red-text badge">Batal</span>';
-                            }
-                            else if($data->spb_log == "batal"){
-                                $datas .= '<span class="red-text badge">Batal</span>';
-                            }
-                            else{
-                                $datas .= $progress;
-                            }
-                        }
-                    }
-                    return $datas;
+                    // if($tes > 0){
+                    //     $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                    //     if($hitung > 0){
+                    //         $progress = '<div class="progress">
+                    //             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                    //         </div>
+                    //         <small class="text-muted">Selesai</small>';
+                    //     }else{
+                    //         $progress = '<div class="progress">
+                    //             <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                    //         </div>
+                    //         <small class="text-muted">Selesai</small>';
+                    //     }
+                    // }
+                    // $datas = "";
+                    // if (!empty($data->state_name)) {
+                    //     if ($data->state_name == "penjualan") {
+                    //         $datas .= '<span class="red-text badge">'. ucfirst($data->state_name) . '</span>';
+                    //     } else {
+                    //         if($data->ekat_log == "batal"){
+                    //             $datas .= '<span class="red-text badge">Batal</span>';
+                    //         }
+                    //         else if($data->spa_log == "batal"){
+                    //             $datas .= '<span class="red-text badge">Batal</span>';
+                    //         }
+                    //         else if($data->spb_log == "batal"){
+                    //             $datas .= '<span class="red-text badge">Batal</span>';
+                    //         }
+                    //         else{
+                    //             $datas .= $progress;
+                    //         }
+                    //     }
+                    // }
+                    return $tes;
                 })
                 ->rawColumns(['log', 'nama_customer'])
                 ->make(true);
