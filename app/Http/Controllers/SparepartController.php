@@ -2161,6 +2161,7 @@ class SparepartController extends Controller
             $data->tk_kerusakan = $request->tk_kerusakan;
             $data->perbaikan = $request->perbaikan;
             $data->hasil_jadi_id = $request->hasil_jadi;
+            $data->noseri_fix_id = $request->noseri_fix;
             $data->status = 1;
             $data->updated_at = Carbon::now();
             $data->updated_by = $request->userid;
