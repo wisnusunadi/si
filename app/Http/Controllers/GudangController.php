@@ -68,6 +68,64 @@ class GudangController extends Controller
         GudangBarangJadi::find($id)->update(['stok' => $d, 'stok_siap' => $a]);
     }
     // get
+    function get_rekap_so_produk()
+    {
+        try {
+            $data = GudangBarangJadi::
+            select(DB::raw('concat(p.nama," ",gdg_barang_jadi.nama) as produkk'))
+            ->leftJoin('produk as p', 'p.id', '=', 'gdg_barang_jadi.produk_id')
+            ->addSelect([
+                'count_transfer' => function($query){
+                    $query->selectRaw('count(t_gbj_noseri.id)')
+                    ->from('t_gbj_noseri')
+                    ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->leftjoin('pesanan', 'pesanan.id', '=', 't_gbj.pesanan_id')
+                    ->whereNotIn('pesanan.log_id', ["7", "10", "20"])
+                    ->whereColumn('t_gbj_detail.gdg_brg_jadi_id', 'gdg_barang_jadi.id')
+                    ->limit(1);
+                },
+                'count_ekat_sepakat' => function ($query) {
+                    $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                    ->from('detail_pesanan')
+                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                    ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
+                    ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+                    ->whereRaw('pesanan.log_id not in (7) AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status = "sepakat"')
+                    ->limit(1);
+                },
+                'count_spa_po' => function ($query) {
+                    $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                    ->from('detail_pesanan')
+                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                    ->join('spa', 'spa.pesanan_id', '=', 'pesanan.id')
+                    ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+                    ->whereRaw('pesanan.log_id not in (7, 10) AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id')
+                    ->limit(1);
+                },'count_spb_po' => function ($query) {
+                    $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                    ->from('detail_pesanan')
+                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                    ->join('spb', 'spb.pesanan_id', '=', 'pesanan.id')
+                    ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+                    ->whereRaw('pesanan.log_id not in (7, 10) AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id')
+                    ->limit(1);
+                }
+            ])
+            ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_ekat_nego, 0) + coalesce(count_ekat_draft, 0) + coalesce(count_ekat_po, 0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) > count_transfer')
+            ->get();
+            return $data;
+        } catch (\Exception $e) {
+            return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
+        }
+    }
+
     public function get_data_barang_jadi(Request $request)
     {
         try {
