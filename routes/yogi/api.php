@@ -43,7 +43,7 @@ Route::prefix('/v2')->group(function() {
     });
 
     Route::prefix('gk')->group(function(){
-        Route::post('getNoseriGudang', [SparepartController::class, 'getNoseriGudang']);
+        Route::get('getNoseriGudang', [SparepartController::class, 'getNoseriGudang'])->name('autocom');
     });
 
 });

@@ -205,6 +205,11 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group fixidCol">
+                            <label for="">Nomor Seri Baru</label>
+                            <select name="noseri_fix_id" class="form-control fixid">
+                            </select>
+                          </div>
                         <div class="form-group">
                           <label for="">Kerusakan</label>
                           <textarea name="remark" id="remark" cols="5" rows="5" class="form-control"></textarea>
@@ -394,9 +399,43 @@
         ]
     });
     var id = '';
+    var gbj = '';
+    var status = '';
     $(document).on('click', '.unitmodal', function() {
         id = $(this).data('id');
-        console.log(id);
+        gbj = $(this).data('gbj');
+        status = $(this).data('status');
+        console.log(status);
+        var route = "{{ route('autocom') }}";
+            $('.fixid').select2({
+                placeholder: "Pilih Noseri",
+                ajax: {
+                    url: route,
+                    data: {
+                        id: gbj
+                    },
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.noseri,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    },
+                },
+                cache: true,
+                allowClear: true,
+                width: '100%'
+            });
+        if (status == 1) {
+            $('.fixidCol').show()
+        } else {
+            $('.fixidCol').hide()
+        }
 
         $.ajax({
             url: "/api/gk/noseri/" + id,
@@ -431,7 +470,7 @@
 
     $('body').on('submit', '#myForm', function(e) {
         e.preventDefault();
-        var actionType = $('#btnSave').val(); 
+        var actionType = $('#btnSave').val();
         $('#btnSave').html('Sending..');
         $('#btnSave').attr('disabled', true);
         Swal.fire({

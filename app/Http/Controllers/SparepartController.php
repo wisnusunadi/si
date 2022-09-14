@@ -74,14 +74,24 @@ class SparepartController extends Controller
     function getNoseriGudang(Request $request)
     {
         try {
-            $data = NoseriBarangJadi::where([
-                'is_aktif' => 1,
-                'gdg_barang_jadi_id' => $request->gbj,
-            ])
-            ->select('id', 'noseri')
-            ->get();
+            // $data = NoseriBarangJadi::where([
+            //     'is_aktif' => 1,
+            //     'gdg_barang_jadi_id' => $request->id,
+            // ])
+            // ->select('id', 'noseri')
+            // ->get();
+            $data = [];
+            if ($request->has('q') || $request->has('id')) {
+                $query = $request->q;
+                $data = NoseriBarangJadi::select('noseri', 'id')
+                            ->where([
+                                'is_aktif' => 1,
+                                'gdg_barang_jadi_id' => $request->id,
+                            ])
+                            ->where("noseri", "LIKE", "%$query%")->get();
+            }
+            return response()->json($data);
 
-            return $data;
         } catch (\Exception $e) {
             return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
         }
