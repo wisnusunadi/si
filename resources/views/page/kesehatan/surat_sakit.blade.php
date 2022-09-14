@@ -14,7 +14,7 @@
         <thead style="text-align: center;">
           <tr>
             <th colspan="3">
-              <u>SURAT KETERANGAN ISTIRAHAT</u><br>Nomor:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/{{$carbon->format('m')}}/ KESKER-SINKO/ {{$carbon->year}}
+              <u>SURAT KETERANGAN ISTIRAHAT</u><br>Nomor: {{$karyawan_sakit->id}}/{{$carbon->format('m')}}/ KESKER-SINKO/ {{$carbon->year}}
             </th>
           </tr>
         </thead>
@@ -68,8 +68,7 @@
           <tr>
             <td colspan="3" style="text-align: center;">
               <br>
-              Bahwa yang bersangkutan benar – benar berobat pada pelayanan kesehatan. Terhitung tanggal :
-              s/d . Demikian surat ini di berikan untuk dapat di pergunakan mestinya.
+              Bahwa yang bersangkutan benar – benar berobat pada pelayanan kesehatan. Terhitung tanggal : {{$karyawan_sakit->tgl_cek}}. Demikian surat ini di berikan untuk dapat di pergunakan mestinya.
             </td>
           </tr>
           <tr>

@@ -750,7 +750,7 @@ class KesehatanController extends Controller
     }
     public function karyawan_sakit_data()
     {
-        $data = Karyawan_sakit::with(['Karyawan.Divisi'])->orderBy('tgl_cek', 'DESC')->get();
+        $data = Karyawan_sakit::with(['Karyawan.Divisi','Pemeriksa'])->orderBy('tgl_cek', 'DESC')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('x', function ($data) {
@@ -760,7 +760,7 @@ class KesehatanController extends Controller
             return $data->Karyawan->nama;
             })
             ->addColumn('z', function ($data) {
-                return $data->pemeriksa->nama;
+                return $data->Pemeriksa->nama;
             })
             ->addColumn('o', function ($data) {
                 if ($data->obat_id != NULL) {
@@ -899,7 +899,8 @@ class KesehatanController extends Controller
         $dateOfBirth = $karyawan_sakit->karyawan->tgllahir;
         $umur = Carbon::parse($dateOfBirth)->age;
         $carbon = Carbon::now();
-        $pdf = PDF::loadView('page.kesehatan.surat_sakit', ['karyawan_sakit' => $karyawan_sakit, 'umur' => $umur, 'carbon' => $carbon])->setPaper('A5', 'Landscape');
+        $footer = Carbon::createFromFormat('Y-m-d', $karyawan_sakit->tgl_cek)->isoFormat('D MMMM Y');
+        $pdf = PDF::loadView('page.kesehatan.surat_sakit', ['karyawan_sakit' => $karyawan_sakit, 'umur' => $umur, 'carbon' => $carbon,'footer' => $footer])->setPaper('A5', 'Landscape');
         return $pdf->stream('');
     }
     public function karyawan_masuk()
