@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\ProduksiController;
+use App\Http\Controllers\SparepartController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('/v2')->group(function() {
@@ -39,6 +40,10 @@ Route::prefix('/v2')->group(function() {
 
         Route::post('so_batal', [GudangController::class, 'get_so_batal']);
         Route::post('proses_so_batal', [GudangController::class, 'proses_so_batal']);
+    });
+
+    Route::prefix('gk')->group(function(){
+        Route::post('getNoseriGudang', [SparepartController::class, 'getNoseriGudang']);
     });
 
 });

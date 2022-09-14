@@ -10,6 +10,7 @@ use App\Models\GudangKarantina;
 use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
 use App\Models\Layout;
+use App\Models\NoseriBarangJadi;
 use App\Models\NoseriKeluarGK;
 use App\Models\NoseriTGbj;
 use App\Models\Sparepart;
@@ -68,6 +69,22 @@ class SparepartController extends Controller
             return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
         }
 
+    }
+
+    function getNoseriGudang(Request $request)
+    {
+        try {
+            $data = NoseriBarangJadi::where([
+                'is_aktif' => 1,
+                'gdg_barang_jadi_id' => $request->gbj,
+            ])
+            ->select('id', 'noseri')
+            ->get();
+
+            return $data;
+        } catch (\Exception $e) {
+            return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
+        }
     }
 
     function get_unit()
@@ -390,7 +407,7 @@ class SparepartController extends Controller
                     if($d->seri) {
                         return ' ';
                     } else {
-                        return '<a data-toggle="modal" data-target="#unitmodal" class="unitmodal" data-attr=""  data-id="' . $d->id . '">
+                        return '<a data-toggle="modal" data-target="#unitmodal" class="unitmodal" data-attr=""  data-id="' . $d->id . '" data-gbj="'.$d->detail->gbj_id.'" data-status="'.$d->status.'">
                             <button class="btn btn-outline-info"><i class="far fa-edit"></i></button>
                             </a>';
                     }
