@@ -1,7 +1,6 @@
 <template>
-    <div>
-        <h1>Detail Penjualan</h1>
-        <p>{{ detailpenjualanekatalog }}</p>
+    <div v-if="detailpenjualanekatalog != null">
+        <h1 class="is-size-2 has-text-weight-bold">Detail Penjualan</h1>
         <div class="tabs is-centered">
             <ul>
                 <li :class="{'is-active': !tabs}" @click="tabs = false">
@@ -12,7 +11,7 @@
                 </li>
             </ul>
         </div>
-        <div class="card" v-if="pesanan != null" :class="{'is-hidden':tabs}">
+        <div class="card"  :class="{'is-hidden':tabs}">
             <div class="card-header">
                 <div class="card-header-title">Informasi</div>
             </div>
@@ -21,51 +20,51 @@
                     <div class="columns">
                         <div class="column">
                             <p>No SO</p>
-                            <p class="has-text-weight-bold">{{ pesanan.so }}</p>
+                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.so }}</p>
                         </div>
                         <div class="column">
                             <p>Tanggal Buat</p>
-                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.data.tgl_buat }}</p>
+                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.tgl_buat }}</p>
                         </div>
                         <div class="column">
                             <p>No PO</p>
-                            <p class="has-text-weight-bold">{{ pesanan.no_po }}</p>
+                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.no_po }}</p>
                         </div>
                     </div>
                     <div class="columns">
                         <div class="column">
                             <p>No AKN</p>
-                            <p class="has-text-weight-bold">{{ pesanan.so }}</p>
+                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.no_paket }}</p>
                         </div>
                         <div class="column">
                             <p>Tanggal Edit</p>
-                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.data.tgl_edit }}</p>
+                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.tgl_edit }}</p>
                         </div>
                         <div class="column">
                             <p>Tanggal PO</p>
-                            <p class="has-text-weight-bold">{{ pesanan.tgl_po }}</p>
+                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.tgl_po }}</p>
                         </div>
                     </div>
                     <div class="columns">
                         <div class="column">
                             <p>No Urut</p>
-                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.data.no_urut }}</p>
+                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.no_urut }}</p>
                         </div>
                         <div class="column">
                             <p>Tanggal Delivery</p>
-                            <span v-html="detailpenjualanekatalog.tgl_kontrak"></span>
+                            <p class="has-text-weight-bold" v-html="checkTanggalDelivery(detailpenjualanekatalog.tgl_kontrak)"></p>
                         </div>
                         <div class="column">
                             <p>Status</p>
-                            <progress class="progress is-success" :value="detailpenjualanekatalog.status" max="100">{{detailpenjualanekatalog.status}}%</progress>
-                            <span><b>{{detailpenjualanekatalog.status}}%</b> Selesai</span>
+                            <progress class="progress is-success" :value="$route.params.status" max="100">{{$route.params.status}}%</progress>
+                            <span><b>{{$route.params.status}}%</b> Selesai</span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="card-content">
                 <div class="notification is-primary">
-                <span class="has-text-weight-bold">Detail :</span> {{ detailpenjualanekatalog.data.deskripsi }}
+                <span class="has-text-weight-bold">Detail :</span> {{ detailpenjualanekatalog.deskripsi }}
                 </div>
             </div>
         </div>
@@ -76,12 +75,46 @@
             </div>
             <div class="card-content">
                 <div class="content">
-                    <div class="columns is-gapless is-multiline is-mobile">
+                    <div class="columns is-4">
                         <div class="column is-one-quarter">
                             test
                         </div>
-                        <div class="column is-half">
-                            test
+                        <div class="column is-8">
+                            <table class="table is-fullwidth has-text-centered">
+                                <thead>
+                                    <tr>
+                                        <th>No</th>
+                                        <th>Produk</th>
+                                        <th>Qty</th>
+                                        <th>Harga</th>
+                                        <th>Ongkir</th>
+                                        <th>Subtotal</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <template v-for="(paket, id) in detailpenjualanekatalog.detail_pesanan">
+                                    <tr>
+                                        <td>{{ id + 1 }}</td>
+                                        <td>{{ paket.nama_paket }}</td>
+                                        <td>{{ paket.jumlah }}</td>
+                                        <td>Rp. {{ formatRupiah(paket.harga) }}</td>
+                                        <td>Rp. {{ formatRupiah(paket.ongkir) }}</td>
+                                        <td>Rp. {{ formatRupiah(subtotal(paket.jumlah, paket.harga, paket.ongkir)) }}</td>
+                                    </tr>
+                                    <tr v-for="(detail, id) in paket.detail_produk" :key="id + 'detail'">
+                                        <td></td>
+                                        <td>{{ detail.nama_produk }}</td>
+                                        <td>{{ detail.jumlah }}</td>
+                                    </tr>    
+                                    </template>
+                                </tbody>
+                                <tfoot>
+                                    <tr>
+                                        <td colspan="5" class="has-text-right">Total</td>
+                                        <td>Rp. {{ formatRupiah(totalHrg(detailpenjualanekatalog.detail_pesanan)) }}</td>
+                                    </tr>
+                                </tfoot>
+                            </table>
                         </div>
                     </div>
                 </div>
@@ -91,7 +124,9 @@
 </template>
 <script>
     import axios from 'axios';
+    import mix from '../../../emiindo/mixins/mix';
     export default {
+        mixins: [mix],
         data() {
             return {
                 detailpenjualanekatalog: null,
@@ -108,7 +143,7 @@
                         case 'ekatalog':
                         await axios.get('/penjualan/penjualan/detail/ekatalog_ppic/'+id)
                             .then(response => {
-                                this.detailpenjualanekatalog = response.data;
+                                this.detailpenjualanekatalog = response.data.data;
                                 this.$store.commit('setIsLoading', false);
                             })
                             break;
@@ -120,13 +155,27 @@
                     console.log(error);
                 }
             },
-        },
-        computed: {
-            pesanan() {
-                if(this.detailpenjualanekatalog != null) {
-                    return this.detailpenjualanekatalog.data.pesanan;
+            checkTanggalDelivery(date) {
+                let dateNow = new Date().toISOString().slice(0, 10);
+                let difference = Math.ceil((new Date(date) - new Date(dateNow)) / (1000 * 3600 * 24));
+                if(dateNow < date){
+                    if(difference > 7){
+                    return `<div>${date}</div><div><small><i class="fas fa-clock" id="info"></i> ${difference} Hari Lagi</small></div>`;
+                    }else if (difference > 0 && difference <= 7){
+                        return `<div>${date}</div><div><small><i class="fas fa-exclamation-circle" id="warning"></i> ${difference} Hari Lagi</small></div>`;
+                    }else{
+                        return `<div>${date}</div><div><small><i class="fas fa-exclamation-circle" id="danger"></i> Batas Kontrak Habis</small></div>`;
+                    }
+                }else{
+                    return `<div class="text-danger">${date}</div><div class="text-danger"><small><i class="fas fa-check-circle" id="success"></i> Sudah Dikirim</small></div>`;
                 }
-                return null;
+            },
+            totalHrg(detail){
+                let total = 0;
+                detail.forEach(paket => {
+                    total += this.subtotal(paket.jumlah, paket.harga, paket.ongkir);
+                });
+                return total;
             }
         },
         mounted() {

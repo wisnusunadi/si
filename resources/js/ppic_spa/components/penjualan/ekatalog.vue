@@ -35,7 +35,7 @@
                                     <td v-html="checkdata(penjualanekatalog.tgl_kontrak)"></td>
                                     <td>{{ penjualanekatalog.nama_customer }}</td>
                                     <td v-html="status(penjualanekatalog.status_ppic)"></td>
-                                    <td><button class="button is-info is-light is-small" @click="detailekatalog(penjualanekatalog.id)">Detail</button></td>
+                                    <td><button class="button is-info is-light is-small" @click="detailekatalog(penjualanekatalog.id, penjualanekatalog.status_ppic)">Detail</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -89,8 +89,8 @@
                     return data
                 }
             },
-            async detailekatalog(id){
-                this.$router.push({ name: 'PenjualanDetail', params: { id: id, jenis: 'ekatalog' } });
+            async detailekatalog(id, status){
+                this.$router.push({ name: 'PenjualanDetail', params: { id: id, jenis: 'ekatalog', status } });
             }
         },
 
