@@ -51,7 +51,7 @@ Route::group(['prefix' => '/kesehatan'], function (){
         Route::post('/berat/data',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_berat_data']);
         Route::get('/detail',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_detail']);
         Route::post('/berat/detail/{karyawan_id}',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_berat_detail_data']);
-        Route::get('/gcu/detail/{karyawan_id}',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_detail_data']);
+        Route::post('/gcu/detail/{karyawan_id}',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_detail_data']);
         Route::get('/detail/data/{karyawan_id}',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_detail_data_karyawan']);
         });
 
