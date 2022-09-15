@@ -124,7 +124,7 @@
                             <th rowspan="2">Posisi Barang</th>
                             <th rowspan="2">Kerusakan</th>
                             <th rowspan="2">Perbaikan</th>
-                            <th rowspan="2">Tingkat Kerusakan</th>
+                            {{-- <th rowspan="2">Tingkat Kerusakan</th> --}}
                             <th rowspan="2">Hasil Jadi</th>
                             <th rowspan="2">Status</th>
                             <th rowspan="2">Aksi</th>
@@ -391,7 +391,7 @@
             {data: 'layout'},
             {data: 'remarks'},
             {data: 'perbaikan'},
-            {data: 'tingkat'},
+            // {data: 'tingkat'},
             {data: 'unit_baru'},
             {data: 'status'},
             {data: 'action'},
@@ -471,6 +471,10 @@
                 $('#kode').val(res.id);
                 $('#layout_id').val(res.layout);
                 $('#layout_id').select2().trigger('change');
+                $('.varian').val(res.hasiljadi);
+                $('.varian').select2().trigger('change');
+                // $('.fixid').val(res.noseri);
+                // $('.fixid').select2().trigger('change');
                 $('#tk_kerusakan').val(res.tingkat);
                 $('#tk_kerusakan').select2().trigger('change');
                 $('#remark').val(res.note);

@@ -88,7 +88,9 @@ class SparepartController extends Controller
                                 'is_aktif' => 1,
                                 'gdg_barang_jadi_id' => $request->id,
                             ])
-                            ->where("noseri", "LIKE", "%$query%")->get();
+                            ->where("noseri", "LIKE", "%$query%")
+                            ->whereRaw('id NOT IN (SELECT noseri_fix_id from t_gk_noseri where noseri_fix_id is not null)')
+                            ->get();
             }
             return response()->json($data);
 
@@ -815,6 +817,8 @@ class SparepartController extends Controller
                 'layout' => $d->layout_id,
                 'note' => $d->remark,
                 'repair' => $d->perbaikan,
+                'hasiljadi' => $d->hasil_jadi_id,
+                'noseri' => $d->noseri_fix_id,
                 'tingkat' => $d->tk_kerusakan,
             ]);
         } catch (\Exception $e) {
@@ -2175,7 +2179,7 @@ class SparepartController extends Controller
                     'remark' => $request->remark,
                     'perbaikan' => $request->perbaikan,
                     'hasil_jadi_id' => $request->hasil_jadi,
-                    'noseri_id' => $request->noseri_fix,
+                    'noseri_fix_id' => $request->noseri_fix,
                     'status' => 1,
                     'updated_at' => Carbon::now(),
                     'updated_by' => $request->userid,
