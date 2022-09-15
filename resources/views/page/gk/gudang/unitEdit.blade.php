@@ -211,10 +211,6 @@
                             </select>
                           </div>
                         <div class="form-group">
-                            <label for="">Ubah No Seri</label>
-                            <input type="text" class="form-control">
-                        </div>
-                        <div class="form-group">
                             <label for="">Perbaikan</label>
                             <textarea name="perbaikan" id="perbaikan" cols="5" rows="5" class="form-control"></textarea>
                           </div>
