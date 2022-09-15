@@ -857,7 +857,7 @@
                         'url': '/api/logistik/so/detail/select/' + pesanan_id + '/' + jenis_penjualan,
                         'data': {'produk_id': produk_id, 'part_id': part_id},
                         'dataType': 'json',
-                        'type': 'GET',
+                        'type': 'POST',
                         'headers': {
                             'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
@@ -1240,7 +1240,6 @@
                 }
                 $.ajax({
                     url: "/logistik/so/create/" + jenis_penjualan,
-                    data: {'produk_id':produk_id, 'part_id':part_id},
                     beforeSend: function() {
                         $('#loader').show();
                     },
