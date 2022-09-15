@@ -458,8 +458,7 @@ class KesehatanController extends Controller
     }
     public function kesehatan_mingguan_tensi_tambah()
     {
-        $pengecek = Karyawan::where('divisi_id', '28')
-            ->get();
+        $pengecek = Karyawan::where('divisi_id', '28')->get();
         $karyawan = Karyawan::all();
         $divisi = Divisi::all();
         return view('page.kesehatan.kesehatan_mingguan_tensi_tambah', ['divisi' => $divisi, 'pengecek' => $pengecek, 'karyawan' => $karyawan]);
