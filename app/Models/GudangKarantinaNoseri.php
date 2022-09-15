@@ -11,7 +11,7 @@ class GudangKarantinaNoseri extends Model
     protected $connection = 'erp';
     protected $table = 't_gk_noseri';
 
-    protected $fillable = ['gk_detail_id', 'noseri', 'remark', 'tk_kerusakan', 'is_draft', 'is_keluar', 'is_ready', 'out_noseri', 'created_by', 'updated_by', 'perbaikan'];
+    protected $fillable = ['gk_detail_id', 'noseri', 'remark', 'tk_kerusakan', 'is_draft', 'is_keluar', 'is_ready', 'out_noseri', 'created_by', 'updated_by', 'perbaikan', 'noseri_id', 'hasil_jadi_id'];
 
     function detail() {
         return $this->belongsTo(GudangKarantinaDetail::class, 'gk_detail_id');
@@ -24,6 +24,11 @@ class GudangKarantinaNoseri extends Model
     function unit()
     {
         return $this->belongsTo(GudangBarangJadi::class, 'hasil_jadi_id');
+    }
+
+    function noseri_new()
+    {
+        return $this->belongsTo(NoseriBarangJadi::class, 'noseri_fix_id');
     }
 
 

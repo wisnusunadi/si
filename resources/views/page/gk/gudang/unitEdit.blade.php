@@ -120,6 +120,7 @@
                             <th colspan="2" class="text-center">Tanggal</th>
                             <th colspan="2" class="text-center">Tujuan</th>
                             <th rowspan="2">No Seri</th>
+                            <th rowspan="2">No Seri Baru</th>
                             <th rowspan="2">Posisi Barang</th>
                             <th rowspan="2">Kerusakan</th>
                             <th rowspan="2">Perbaikan</th>
@@ -208,7 +209,7 @@
                         </div>
                         <div class="form-group fixidCol">
                             <label for="">Perubahan Nomor Seri Baru</label>
-                            <select name="noseri_fix_id" class="form-control fixid">
+                            <select name="noseri_fix" class="form-control fixid">
                             </select>
                           </div>
                         <div class="form-group">
@@ -386,6 +387,7 @@
             {data: 'from'},
             {data: 'to'},
             {data: 'noser'},
+            {data: 'noseri_new'},
             {data: 'layout'},
             {data: 'remarks'},
             {data: 'perbaikan'},
@@ -415,7 +417,7 @@
         var route = "{{ route('autocom') }}";
         $('.fixid').select2({
             placeholder: "Pilih Noseri",
-            minimumInputLength: 4,
+            minimumInputLength: 2,
             minimumResultsForSearch: 10,
             ajax: {
                 url: route,
@@ -499,19 +501,19 @@
             contentType: false,
             processData: false,
             success: (data) => {
-                console.log(data);
-                // $('#myForm').trigger('reset');
-                // $('.changeStatus').modal('hide');
-                // $('#btnSave').html('Kirim');
-                // Swal.fire({
-                //         position: 'center',
-                //         icon: 'success',
-                //         title: data.msg,
-                //         showConfirmButton: false,
-                //         timer: 1500
-                //     });
-                // $('.table_edit_sparepart').DataTable().ajax.reload();
-                // location.reload();
+                // console.log(data);
+                $('#myForm').trigger('reset');
+                $('.changeStatus').modal('hide');
+                $('#btnSave').html('Kirim');
+                Swal.fire({
+                        position: 'center',
+                        icon: 'success',
+                        title: data.msg,
+                        showConfirmButton: false,
+                        timer: 1500
+                    });
+                $('.table_edit_sparepart').DataTable().ajax.reload();
+                location.reload();
             }
         });
     })

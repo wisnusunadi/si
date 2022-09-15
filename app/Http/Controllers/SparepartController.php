@@ -354,6 +354,9 @@ class SparepartController extends Controller
                         return $d->noseri;
                     }
                 })
+                ->addColumn('noseri_new', function($d){
+                    return $d->noseri_fix_id == null ? '-' : $d->noseri_new->noseri;
+                })
                 ->addColumn('layout', function ($d) {
                     if($d->seri) {
                         return $d->seri->layout->ruang;
@@ -2165,19 +2168,18 @@ class SparepartController extends Controller
     function updateUnit(Request $request)
     {
         try {
-            dd($request->all());
-            // $data = GudangKarantinaNoseri::find($request->id);
-            // $data->layout_id = $request->layout_id;
-            // $data->remark = $request->remark;
-            // $data->tk_kerusakan = $request->tk_kerusakan;
-            // $data->perbaikan = $request->perbaikan;
-            // $data->hasil_jadi_id = $request->hasil_jadi;
-            // $data->noseri_fix_id = $request->noseri_fix;
-            // $data->status = 1;
-            // $data->updated_at = Carbon::now();
-            // $data->updated_by = $request->userid;
-            // $data->save();
-            // return $data;
+            GudangKarantinaNoseri::where('id', $request->id)
+                ->update([
+                    'layout_id' => $request->layout_id,
+                    'tk_kerusakan' => $request->tk_kerusakan,
+                    'remark' => $request->remark,
+                    'perbaikan' => $request->perbaikan,
+                    'hasil_jadi_id' => $request->hasil_jadi,
+                    'noseri_id' => $request->noseri_fix,
+                    'status' => 1,
+                    'updated_at' => Carbon::now(),
+                    'updated_by' => $request->userid,
+                ]);
 
             return response()->json(['msg' => 'Data Berhasil diubah']);
         } catch (\Exception $e) {
