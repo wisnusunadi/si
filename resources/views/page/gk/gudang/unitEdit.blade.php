@@ -206,8 +206,8 @@
                             </div>
                         </div>
                         <div class="form-group">
-                          <label for="">Kerusakan</label>
-                          <textarea name="remark" id="remark" cols="5" rows="5" class="form-control"></textarea>
+                            <label for="">Ubah No Seri</label>
+                            <input type="text" class="form-control">
                         </div>
                         <div class="form-group">
                             <label for="">Perbaikan</label>
