@@ -81,8 +81,8 @@ class SparepartController extends Controller
             // ->select('id', 'noseri')
             // ->get();
             $data = [];
-            if ($request->has('q') || $request->has('id')) {
-                $query = $request->q;
+            if ($request->has('search') || $request->has('id')) {
+                $query = $request->search;
                 $data = NoseriBarangJadi::select('noseri', 'id')
                             ->where([
                                 'is_aktif' => 1,
@@ -2165,17 +2165,18 @@ class SparepartController extends Controller
     function updateUnit(Request $request)
     {
         try {
-            $data = GudangKarantinaNoseri::find($request->id);
-            $data->layout_id = $request->layout_id;
-            $data->remark = $request->remark;
-            $data->tk_kerusakan = $request->tk_kerusakan;
-            $data->perbaikan = $request->perbaikan;
-            $data->hasil_jadi_id = $request->hasil_jadi;
-            $data->noseri_fix_id = $request->noseri_fix;
-            $data->status = 1;
-            $data->updated_at = Carbon::now();
-            $data->updated_by = $request->userid;
-            $data->save();
+            dd($request->all());
+            // $data = GudangKarantinaNoseri::find($request->id);
+            // $data->layout_id = $request->layout_id;
+            // $data->remark = $request->remark;
+            // $data->tk_kerusakan = $request->tk_kerusakan;
+            // $data->perbaikan = $request->perbaikan;
+            // $data->hasil_jadi_id = $request->hasil_jadi;
+            // $data->noseri_fix_id = $request->noseri_fix;
+            // $data->status = 1;
+            // $data->updated_at = Carbon::now();
+            // $data->updated_by = $request->userid;
+            // $data->save();
             // return $data;
 
             return response()->json(['msg' => 'Data Berhasil diubah']);

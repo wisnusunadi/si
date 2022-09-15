@@ -186,7 +186,7 @@
                             <div class="form-group col">
                                 <label for="">Layout</label>
                                 <select name="layout_id" id="layout_id" class="form-control layout_edit">
-                                   @foreach ($layout as $l)
+                                    @foreach ($layout as $l)
                                         <option value="{{ $l->id }}">{{ $l->ruang }}</option>
                                    @endforeach
                                 </select>
@@ -202,6 +202,7 @@
                             <div class="form-group col">
                                 <label for="">Hasil Jadi</label>
                                 <select name="hasil_jadi" id="varian" class="form-control varian">
+                                <option></option>
                                 </select>
                             </div>
                         </div>
@@ -315,23 +316,24 @@
     }
     $(document).ready(function () {
         $.ajax({
-        type: 'get',
-        url: '/api/gbj/sel-gbj',
-        dataType: 'json',
-        beforeSend : function(xhr){
-                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
-                },
-        success: function (data) {
-            console.log(data)
-            $.map(data, function (item) {
-                varian.push({
-                    id: item.id,
-                    text: item.produk.nama + ' ' + item.nama
-                })
-            });
-        }
+            type: 'get',
+            url: '/api/gbj/sel-gbj',
+            dataType: 'json',
+            beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    },
+            success: function (data) {
+                console.log(data)
+                $.map(data, function (item) {
+                    varian.push({
+                        id: item.id,
+                        text: item.produk.nama + ' ' + item.nama
+                    })
+                });
+            }
+        });
     });
-    });
+
     // disable button back browser
     window.history.pushState(null, "", window.location.href);
     window.onpopstate = function() {
@@ -340,6 +342,10 @@
 
     function changeStatus() {
         $('.varian').select2({
+            placeholder: "Pilih Unit",
+            allowClear: true,
+            minimumInputLength: 2,
+            minimumResultsForSearch: 10,
             data: varian,
             dropdownParent: $('.changeStatus')
         });
@@ -407,30 +413,35 @@
         status = $(this).data('status');
         console.log(status);
         var route = "{{ route('autocom') }}";
-            $('.fixid').select2({
-                placeholder: "Pilih Noseri",
-                ajax: {
-                    url: route,
-                    data: {
+        $('.fixid').select2({
+            placeholder: "Pilih Noseri",
+            minimumInputLength: 4,
+            minimumResultsForSearch: 10,
+            ajax: {
+                url: route,
+                data: function(params) {
+                    return {
+                        search: params.term,
                         id: gbj
-                    },
-                    dataType: 'json',
-                    delay: 250,
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data, function (item) {
-                                return {
-                                    text: item.noseri,
-                                    id: item.id
-                                }
-                            })
-                        };
-                    },
+                    }
                 },
-                cache: true,
-                allowClear: true,
-                width: '100%'
-            });
+                dataType: 'json',
+                delay: 250,
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {
+                                text: item.noseri,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+            },
+            cache: true,
+            allowClear: true,
+            width: '100%'
+        });
         if (status == 1) {
             $('.fixidCol').show()
         } else {
@@ -488,18 +499,19 @@
             contentType: false,
             processData: false,
             success: (data) => {
-                $('#myForm').trigger('reset');
-                $('.changeStatus').modal('hide');
-                $('#btnSave').html('Kirim');
-                Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: data.msg,
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                $('.table_edit_sparepart').DataTable().ajax.reload();
-                location.reload();
+                console.log(data);
+                // $('#myForm').trigger('reset');
+                // $('.changeStatus').modal('hide');
+                // $('#btnSave').html('Kirim');
+                // Swal.fire({
+                //         position: 'center',
+                //         icon: 'success',
+                //         title: data.msg,
+                //         showConfirmButton: false,
+                //         timer: 1500
+                //     });
+                // $('.table_edit_sparepart').DataTable().ajax.reload();
+                // location.reload();
             }
         });
     })
