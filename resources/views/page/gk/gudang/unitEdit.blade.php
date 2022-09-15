@@ -206,7 +206,7 @@
                             </div>
                         </div>
                         <div class="form-group fixidCol">
-                            <label for="">Nomor Seri Baru</label>
+                            <label for="">Perubahan Nomor Seri Baru</label>
                             <select name="noseri_fix_id" class="form-control fixid">
                             </select>
                           </div>
@@ -405,14 +405,17 @@
         id = $(this).data('id');
         gbj = $(this).data('gbj');
         status = $(this).data('status');
-        console.log(status);
         var route = "{{ route('autocom') }}";
             $('.fixid').select2({
                 placeholder: "Pilih Noseri",
+                dropdownParent: $('.changeStatus'),
                 ajax: {
                     url: route,
-                    data: {
-                        id: gbj
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term),
+                            id: gbj,
+                        };
                     },
                     dataType: 'json',
                     delay: 250,
