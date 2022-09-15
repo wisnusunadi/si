@@ -1003,7 +1003,11 @@ class ProduksiController extends Controller
                             }
                         }
                     }
-                    return $x . '<input type="hidden" class="jumlah" name="qty[]" id="qty" value="' . $x . '">';
+                    if ($data->status_cek == 4) {
+                        return $x;
+                    } else {
+                        return '<input type="text" class="form-control jumlah" name="qty[]" id="qty" value="' . $x . '">';
+                    }
                 })
                 ->addColumn('jumlah', function ($data) {
                     $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($data) {

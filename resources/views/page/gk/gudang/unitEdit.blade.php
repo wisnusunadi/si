@@ -205,6 +205,11 @@
                                 </select>
                             </div>
                         </div>
+                        <div class="form-group fixidCol">
+                            <label for="">Perubahan Nomor Seri Baru</label>
+                            <select name="noseri_fix_id" class="form-control fixid">
+                            </select>
+                          </div>
                         <div class="form-group">
                             <label for="">Ubah No Seri</label>
                             <input type="text" class="form-control">
@@ -394,9 +399,46 @@
         ]
     });
     var id = '';
+    var gbj = '';
+    var status = '';
     $(document).on('click', '.unitmodal', function() {
         id = $(this).data('id');
-        console.log(id);
+        gbj = $(this).data('gbj');
+        status = $(this).data('status');
+        var route = "{{ route('autocom') }}";
+            $('.fixid').select2({
+                placeholder: "Pilih Noseri",
+                dropdownParent: $('.changeStatus'),
+                ajax: {
+                    url: route,
+                    data: function (params) {
+                        return {
+                            q: $.trim(params.term),
+                            id: gbj,
+                        };
+                    },
+                    dataType: 'json',
+                    delay: 250,
+                    processResults: function (data) {
+                        return {
+                            results: $.map(data, function (item) {
+                                return {
+                                    text: item.noseri,
+                                    id: item.id
+                                }
+                            })
+                        };
+                    },
+                },
+                cache: true,
+                allowClear: true,
+                width: '100%'
+            });
+        if (status == 1) {
+            $('.fixidCol').show()
+        } else {
+            $('.fixidCol').hide()
+        }
 
         $.ajax({
             url: "/api/gk/noseri/" + id,
@@ -431,7 +473,7 @@
 
     $('body').on('submit', '#myForm', function(e) {
         e.preventDefault();
-        var actionType = $('#btnSave').val(); 
+        var actionType = $('#btnSave').val();
         $('#btnSave').html('Sending..');
         $('#btnSave').attr('disabled', true);
         Swal.fire({

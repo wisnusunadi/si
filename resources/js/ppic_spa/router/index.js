@@ -5,12 +5,16 @@ import Home from '../views/Home.vue'
 import GudangBarangJadi from "../views/GudangBarangJadi.vue"
 import GudangKarantina from "../views/GudangKarantina.vue"
 import Perakitan from "../views/Perakitan.vue"
+import Penjualan from "../views/Penjualan.vue"
 import SalesOrder from "../views/SalesOrder.vue"
 import LaporanPesanan from "../views/LaporanPesanan.vue"
 import LaporanPenjualan from "../views/LaporanPenjualan.vue"
 import ProsesPesanan from "../views/ProsesPesanan.vue"
 import JadwalPerencanaan from "../views/JadwalPerencanaan.vue"
 import JadwalPelaksanaan from "../views/JadwalPelaksanaan.vue"
+
+// Detail
+import PenjualanDetail from "../views/details/PenjualanDetail.vue"
 
 /**
  * This module is defined routes component in PPIC project
@@ -44,6 +48,16 @@ const routes = [
         component: Perakitan,
     },
     {
+        path: '/ppic/penjualan',
+        name: 'Penjualan',
+        component: Penjualan,
+    },
+    {
+        path: '/ppic/penjualan/:id',
+        name: 'PenjualanDetail',
+        component: PenjualanDetail,
+    },
+    {
         path: '/ppic/so',
         name: 'SalesOrder',
         component: SalesOrder,
@@ -73,7 +87,6 @@ const routes = [
         name: 'ProsesPesanan',
         component: ProsesPesanan,
     },
-
 ]
 
 /**
