@@ -1257,7 +1257,7 @@ class GudangController extends Controller
                     $a->where('tgl_masuk', $value)->where('dari', 17)->where('ke', 13);
                 });
             })->where('status_id', null)->where('jenis', 'masuk')->get();
-            $layout = Layout::where('jenis_id', 1)->get();
+            $layout = Layout::where('jenis_id', 1)->orderBy('ruang')->get();
             $a = 0;
             return datatables()->of($data)
                 ->addColumn('layout', function ($d) use ($layout, $a) {
