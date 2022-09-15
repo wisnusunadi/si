@@ -207,7 +207,7 @@
                             </div>
                         </div>
                         <div class="form-group fixidCol">
-                            <label for="">Nomor Seri Baru</label>
+                            <label for="">Perubahan Nomor Seri Baru</label>
                             <select name="noseri_fix_id" class="form-control fixid">
                             </select>
                           </div>
