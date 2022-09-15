@@ -17,7 +17,8 @@ Route::group(['prefix' => '/kesehatan'], function (){
         Route::post('/penyakit/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_riwayat_penyakit']);
         Route::get('/data/{id}',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_data_detail']);
         //});
-
+        Route::get('/vaksin/chart/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'chart_vaksin']);
+        Route::get('/berat/chart/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'chart_berat_tahun']);
         Route::group(['prefix' => '/vaksin'], function (){
             Route::post('/aksi_tambah/2', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_vaksin_aksi_tambah']);
         });
