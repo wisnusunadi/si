@@ -1,7 +1,84 @@
 @extends('adminlte.page')
-@section('title', 'Beta Version')
+@section('title', 'ERP')
+
 @section('content_header')
-<h1 class="m-0 text-dark">Dashboard</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Obat</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('kesehatan.dashboard') }}">Beranda</a></li>
+                    <li class="breadcrumb-item active">Obat</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+@stop
+@section('adminlte_css')
+<style>
+    table { border-collapse: collapse; empty-cells: show; }
+
+    td { position: relative; }
+
+    .foo {
+        border-radius: 50%;
+        float: left;
+        width: 10px;
+        height: 10px;
+        align-items: center !important;
+    }
+
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        body {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+
+    }
+
+    @media screen and (max-width: 1439px) {
+        body {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+
+    }
+
+
+
+</style>
 @stop
 @section('content')
 <div class="row">
@@ -24,7 +101,6 @@
     <div class="card">
       <div class="card-body">
         <div class='table-responsive'>
-          <h2>Obat</h2>
           <table id="tabel" class="table table-hover styled-table table-striped">
             <thead style="text-align: center;">
               <tr>
@@ -63,21 +139,23 @@
             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
           </div>
           <div class="modal-body">
-            <table class="table table-hover styled-table table-striped" width="100%" id="tabel_detail">
-              <thead>
-                <tr>
-                  <th>No</th>
-                  <th>Tgl</th>
-                  <th>Divisi</th>
-                  <th>Nama</th>
-                  <th>Analisa</th>
-                  <th>Diagnosa</th>
-                  <th>Jumlah</th>
-                </tr>
-              </thead>
-              <tbody>
-              </tbody>
-            </table>
+            <div class='table-responsive'>
+              <table class="table table-hover styled-table table-striped" width="100%" id="tabel_detail">
+                <thead>
+                  <tr>
+                    <th>No</th>
+                    <th>Tgl</th>
+                    <th>Divisi</th>
+                    <th>Nama</th>
+                    <th>Analisa</th>
+                    <th>Diagnosa</th>
+                    <th>Jumlah</th>
+                  </tr>
+                </thead>
+                <tbody>
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       </form>
@@ -162,17 +240,132 @@
   </div>
 </div>
 <!-- End Modal Detail -->
+<!-- Modal Detail -->
+<div class="modal fade  bd-example-modal-xl" id="obat_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-xl" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title" id="myModalLabel">
+          <div class="data_detail_head"></div>
+        </h4>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      <div class="modal-body">
+        <div class="data_detail">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="col-lg-12">
+                <form method="post" action="/obat/stok/aksi_tambah">
+                  {{ csrf_field() }}
+                  <div class="card">
+                    <div class="card-header bg-success">
+                      Penambahan Stok
+                    </div>
+                    <div class="card-body">
+                      <div class="col-lg-12">
+                        <div class="row">
+                          <div class="col-lg-12">
+                            <div class="form-horizontal">
+                              <input type="text" name="id" class="d-none form-control" id="id" readonly>
+                              <table class="table table-bordered table-striped" id="tabel_vaksin">
+                                <thead>
+                                  <tr>
+                                    <th>Tgl Pembelian</th>
+                                    <th width="25%">Stok</th>
+                                    <th>Keterangan</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr>
+                                    <td>
+                                      <input type="text" class="form-control d-none" name="id" id="id">
+                                      <input type="date" class="form-control" name="tgl_pembelian">
+                                    </td>
+                                    <td>
+                                      <div class="input-group mb-3">
+                                        <input type="text" class="form-control" id="stok" name="stok">
+                                        <div class="input-group-append">
+                                          <span class="input-group-text">Pcs</span>
+                                        </div>
+                                      </div>
+                                    </td>
+                                    <td>
+                                      <textarea type="text" class="form-control" name="keterangan" id="keterangan"></textarea>
+                                    </td>
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="card-footer">
+                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Update Stok</button></span>
+                    </div>
+                  </div>
+                </form>
+                <div class="card">
+                  <div class="card-header bg-success">
+                    Riwayat Penambahan Stok
+                  </div>
+                  <div class="card-body">
+                    <div class="col-lg-12">
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <div class="form-horizontal">
+                            <input type="text" name="id" class="d-none form-control" id="id" readonly>
+                            <table class="table table-bordered table-striped" id="tabel_riwayat">
+                              <thead>
+                                <tr>
+                                  <th>No</th>
+                                  <th>Tgl Pembelian</th>
+                                  <th>Keterangan</th>
+                                  <th width="5%">Jumlah</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                              </tbody>
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- End Modal Detail -->
 @stop
 @section('adminlte_js')
 <script>
   $(function() {
+    $('#tabel_riwayat').DataTable({
+
+    });
+
     var tabel = $('#tabel').DataTable({
       processing: true,
-      serverSide: false,
+      serverSide: true,
       language: {
         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
       },
-      ajax: '/obat/data',
+      ajax: {
+        'url': '/obat/data',
+        'type': 'POST',
+        'headers': {
+          'X-CSRF-TOKEN': '{{csrf_token()}}'
+        }
+      },
       columns: [{
           data: 'DT_RowIndex',
           orderable: false,
@@ -211,22 +404,22 @@
             searchable: false
           },
           {
-            data: 'tgl_cek'
+            data: 'tgl'
+          },
+          {
+            data: 'div'
           },
           {
             data: 'x'
           },
           {
-            data: 'y'
+            data: 'anal'
           },
           {
-            data: 'analisa'
+            data: 'diag'
           },
           {
-            data: 'diagnosa'
-          },
-          {
-            data: 'jumlah'
+            data: 'jum'
           }
         ],
       });
@@ -240,6 +433,47 @@
       $('input[id="stok"]').val(rows[0]['stok']);
       $('textarea[id="keterangan"]').val(rows[0]['keterangan']);
       $('#edit_mod').modal('show');
+    })
+
+    $('#tabel > tbody').on('click', '#stok', function() {
+      var rows = tabel.rows($(this).parents('tr')).data();
+      $('.data_detail_head').html(
+        'Stok ' + rows[0]['nama']
+      );
+      $('input[id="id"]').val(rows[0]['id']);
+
+      var y = $('#tabel_riwayat').DataTable({
+        processing: true,
+        destroy: true,
+        serverSide: false,
+        pageLength: 5,
+        lengthMenu: [
+          [5, 10, 20, -1],
+          [5, 10, 20, "Semua"]
+        ],
+        language: {
+          processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+        },
+        ajax: '/obat/stok/data/' + rows[0]['id'],
+        columns: [{
+            data: 'DT_RowIndex',
+            orderable: false,
+            searchable: false
+          },
+          {
+            data: 'tgl_pembelian'
+          },
+          {
+            data: 'keterangan'
+          },
+          {
+            data: 'a'
+          },
+        ],
+      });
+
+
+      $('#obat_mod').modal('show');
     })
   });
 </script>

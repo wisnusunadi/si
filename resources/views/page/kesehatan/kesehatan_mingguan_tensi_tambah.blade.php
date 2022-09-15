@@ -1,6 +1,66 @@
 @extends('adminlte.page')
-@section('title', 'Beta Version')
 @section('content_header')
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-lg-6 col-md-4 col-sm-4">
+            <h1 class="m-0  text-dark">Tambah Pemeriksaan Tensi</h1>
+        </div><!-- /.col -->
+        <div class="col-lg-6 col-md-8 col-sm-8">
+            <ol class="breadcrumb float-sm-right">
+                <li class="breadcrumb-item"><a href="{{route('kesehatan.dashboard')}}">Beranda</a></li>
+                <li class="breadcrumb-item"><a href="\kesehatan\mingguan">Kesehatan Mingguan</a></li>
+                <li class="breadcrumb-item active">Tambah Pemeriksaan Tensi</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+@stop
+
+@section('adminlte_css')
+<style>
+    .hide{
+        display: none !important
+    }
+    .removeboxshadow {
+        box-shadow: none;
+        border: 1px;
+    }
+
+    .bg-color{
+        background-color: #e8fafc;
+    }
+
+    @media screen and (min-width: 993px) {
+        .labelket {
+            text-align: right;
+        }
+
+        section {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+    }
+
+    @media screen and (max-width: 992px) {
+        .labelket {
+            text-align: left;
+        }
+
+        section {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+    }
+    div.ui-tooltip {
+    max-width: 400px;
+}
+</style>
 @stop
 @section('content')
 <section class="content-header">
@@ -28,7 +88,7 @@
         </div>
         <div class="col-lg-12" id="rapid">
             <div class="col-lg-12">
-                <form action="/kesehatan_mingguan_tensi/aksi_tambah" method="post" enctype="multipart/form-data" id="form">
+                <form action="/kesehatan/mingguan/tensi/aksi_tambah" method="post" enctype="multipart/form-data" id="form">
                     {{ csrf_field() }}
                     <div class="card">
                         <div class="card-header bg-success">
@@ -60,7 +120,7 @@
                                                     </td>
                                                     <td>
                                                         <select type="text" class="form-control @error('karyawan_id') is-invalid @enderror karyawan_id select2 select2-info" name="karyawan_id[]" style="width:100%;" id="karyawan_id[]">
-                                                            <option value=""></option>
+
                                                             @foreach ($karyawan as $k)
                                                             <option value="{{$k->id}}">{{$k->nama}}</option>
                                                             @endforeach
@@ -96,7 +156,7 @@
                             </div>
                         </div>
                         <div class="card-footer">
-                            <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan_mingguan"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
+                            <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan/mingguan"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
                             <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                         </div>
                     </div>
@@ -133,7 +193,7 @@
                                                     </td>
                                                     <td>
                                                         <select type="text" class="form-control @error('karyawan_id') is-invalid @enderror karyawan_id select2 select2-info" name="karyawan_id[]" style="width:100%;" >
-                                                            <option value=""></option>
+
                                                             @foreach ($karyawan as $k)
                                                             <option value="{{$k->id}}">{{$k->nama}}</option>
                                                             @endforeach
@@ -159,7 +219,7 @@
                                                         <textarea type="text" class="form-control keterangan" name="keterangan[]"></textarea>
                                                     </td>
                                                     <td>
-                                                    <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable"><i class="fas fa-times-circle"></i></button> 
+                                                    <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable"><i class="fas fa-times-circle"></i></button>
                                                     </td>
                                                 </tr>`;
             $('#tabel_rapid tr:last').after(data);

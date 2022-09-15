@@ -348,8 +348,7 @@
                 'type': 'POST',
                 'headers': {
                     'X-CSRF-TOKEN': '{{csrf_token()}}'
-                },
-                "processData": true,
+                }    ,"processData": true,
                 beforeSend : function(xhr){
                 var access_token = localStorage.getItem('lokal_token');
                 xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
@@ -702,6 +701,6 @@
             $('#showtable').DataTable().ajax.url('/api/customer/data/' + divisi_id + '/' + x).load();
             return false;
         });
-    })
+    });
 </script>
 @stop

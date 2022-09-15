@@ -9,6 +9,7 @@ class NoseriBarangJadi extends Model
 {
     use HasFactory;
 
+    protected $connection = 'erp';
     protected $table = "noseri_barang_jadi";
 
     protected $fillable = ['is_aktif', 'is_ready', 'is_delete' ,'used_by', 'layout_id', 'gdg_barang_jadi_id', 'dari', 'noseri', 'jenis', 'created_by', 'is_change'];

@@ -21,6 +21,7 @@
                 <th>No AKN</th>
                 <th>Customer / Distributor</th>
                 <th>Instansi</th>
+                <th>Alamat Instansi</th>
                 <th>Satuan</th>
                 <th>Tanggal Pesan</th>
                 <th>Batas Kontrak</th>
@@ -83,6 +84,13 @@
             <td>
                 @if($e->Pesanan->Ekatalog)
                 {{$e->Pesanan->Ekatalog->instansi}}
+                @else
+                -
+                @endif
+            </td>
+            <td>
+                @if($e->Pesanan->Ekatalog)
+                {{$e->Pesanan->Ekatalog->alamat}}
                 @else
                 -
                 @endif

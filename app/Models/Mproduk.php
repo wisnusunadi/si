@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class Mproduk extends Model
 {
     use HasFactory;
-
+    protected $connection = 'erp';
     protected $table = 'm_produk';
 
     function detailproduk() {

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class GudangKarantinaNoseri extends Model
 {
     use HasFactory;
-
+    protected $connection = 'erp';
     protected $table = 't_gk_noseri';
 
     protected $fillable = ['gk_detail_id', 'noseri', 'remark', 'tk_kerusakan', 'is_draft', 'is_keluar', 'is_ready', 'out_noseri', 'created_by', 'updated_by', 'perbaikan'];

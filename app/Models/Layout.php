@@ -8,6 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Layout extends Model
 {
     use HasFactory;
-
+    protected $connection = 'erp';
     protected $table = 'm_layout';
 }

@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Ekspedisi extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'ekspedisi';
     protected $fillable = ['nama', 'alamat', 'email', 'telp', 'ket'];
 

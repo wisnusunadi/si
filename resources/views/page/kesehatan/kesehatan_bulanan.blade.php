@@ -1,9 +1,85 @@
 @extends('adminlte.page')
 
-@section('title', 'Beta Version')
+@section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Dashboard</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Kesehatan Bulanan</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="{{ route('kesehatan.dashboard') }}">Beranda</a></li>
+                    <li class="breadcrumb-item active">Kesehatan Bulanan</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
+@stop
+@section('adminlte_css')
+<style>
+    table { border-collapse: collapse; empty-cells: show; }
+
+    td { position: relative; }
+
+    .foo {
+        border-radius: 50%;
+        float: left;
+        width: 10px;
+        height: 10px;
+        align-items: center !important;
+    }
+
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        body {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+
+    }
+
+    @media screen and (max-width: 1439px) {
+        body {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+
+    }
+
+
+
+</style>
 @stop
 
 @section('content')
@@ -27,7 +103,6 @@
     <div class="card">
       <div class="card-body">
         <div class='table-responsive'>
-          <h2>Kesehatan Bulanan</h2>
           <div class="form-group row">
             <label for="no_pemeriksaan" class="col-sm-4 col-form-label" style="text-align:right;">Data</label>
             <div class="col-sm-8">
@@ -50,11 +125,11 @@
           <table id="berat_tabel" class="table table-hover styled-table table-striped" style="display:none">
             <thead style="text-align: center;">
               <tr>
-                <th colspan="13">
-                  <a href="/kesehatan_bulanan/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                <th colspan="16">
+                  <a href="/kesehatan/bulanan/berat/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
                 </th>
               </tr>
-              <tr>
+              <!-- <tr>
                 <th></th>
                 <th></th>
                 <th></th>
@@ -64,20 +139,23 @@
                 <th></th>
                 <th colspan="5">Komposisi</th>
                 <th></th>
-              </tr>
+              </tr> -->
               <tr>
                 <th>No</th>
                 <th>Tgl Pengecekan</th>
                 <th>Divisi</th>
                 <th>Nama</th>
-                <th>Tinggi</th>
                 <th>Berat</th>
-                <th>BMI</th>
                 <th>Fat</th>
                 <th>Tbw</th>
                 <th>Muscle</th>
                 <th>Bone</th>
                 <th>Kalori</th>
+                <th>Suhu</th>
+                <th>Spo2</th>
+                <th>Pr</th>
+                <th>Sistolik</th>
+                <th>Diastolik</th>
                 <th></th>
               </tr>
             </thead>
@@ -88,7 +166,7 @@
             <thead style="text-align: center;">
               <tr>
                 <th colspan="12">
-                  <a href="/kesehatan_bulanan/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                  <a href="/kesehatan/bulanan/gcu/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
                 </th>
               </tr>
               <tr>
@@ -114,7 +192,7 @@
 <!-- Modal Detail -->
 <div class="modal fade  bd-example-modal-xl" id="detail_mod_berat" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-xl" role="document">
-    <form method="post" action="/kesehatan_bulanan_berat/aksi_ubah">
+    <form method="post" action="/kesehatan/bulanan/berat/aksi_ubah">
       {{ csrf_field() }}
       {{ method_field('PUT')}}
       <div class="modal-content">
@@ -126,7 +204,7 @@
         </div>
         <div class="modal-body">
           <div class="data_detail">
-            <table style="text-align: center;" class="table table-hover styled-table table-striped" width="100%" id="tabel_detail">
+            <table style="text-align: center;" class="table table-hover styled-table table-striped" width="100%" id="tabel_detail_berat">
               <thead>
                 <tr>
                   <th></th>
@@ -217,7 +295,7 @@
 <!-- Modal Detail -->
 <div class="modal fade  bd-example-modal-lg" id="detail_mod_gcu" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
-    <form method="post" action="/kesehatan_bulanan_gcu/aksi_ubah">
+    <form method="post" action="/kesehatan/bulanan/gcu/aksi_ubah">
       {{ csrf_field() }}
       {{ method_field('PUT')}}
       <div class="modal-content">
@@ -229,7 +307,7 @@
         </div>
         <div class="modal-body">
           <div class="data_detail">
-            <table style="text-align: center;" class="table table-hover styled-table table-striped" width="100%" id="tabel_detail">
+            <table style="text-align: center;" class="table table-hover styled-table table-striped" width="100%" id="tabel_detail_gcu">
               <thead>
                 <tr>
                   <th></th>
@@ -303,11 +381,17 @@
       $(function() {
         var berat_tabel = $('#berat_tabel').DataTable({
           processing: true,
-          serverSide: false,
+          serverSide: true,
           language: {
             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
           },
-          ajax: '/kesehatan_bulanan_berat/data',
+          ajax: {
+            'url': '/kesehatan/bulanan/berat/data',
+            'type': 'POST',
+            'headers': {
+              'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+          },
           columns: [{
               data: 'DT_RowIndex',
               orderable: false,
@@ -317,35 +401,14 @@
               data: 'tgl_cek'
             },
             {
-              data: 'x'
+              data: 'x',
+              searchable: true
             },
             {
               data: 'y'
             },
             {
-              data: 'ti'
-            },
-            {
               data: 'z'
-            },
-            {
-              data: 'bmi',
-              render: function(data, type, full) {
-                $s = '<br><span class="badge bg-success  ">Sehat</span>';
-                $k = '<br><span class="badge bg-danger  ">Kekurangan Berat Badan</span>';
-                $o = '<br><span class="badge bg-danger  ">Kegemukan (Obesitas)</span>';
-                $g = '<br><span class="badge bg-warning  ">Kelebihan Berat Badan</span>';
-                if (data >= 30) {
-                  return parseFloat(data).toFixed(2) + $o;
-                } else if (data >= 25 || data >= 29.9) {
-                  return parseFloat(data).toFixed(2) + $g;
-                } else if (data >= 18.5 || data >= 24.9) {
-                  return parseFloat(data).toFixed(2) + $s;
-                } else {
-                  return parseFloat(data).toFixed(2) + $k;
-                }
-
-              }
             },
             {
               data: 'l'
@@ -363,6 +426,21 @@
               data: 'ka'
             },
             {
+              data: 'suhu_k'
+            },
+            {
+              data: 'sp'
+            },
+            {
+              data: 'pr'
+            },
+            {
+              data: 'sis'
+            },
+            {
+              data: 'dias'
+            },
+            {
               data: 'button'
             },
           ]
@@ -374,7 +452,7 @@
             console.log(rows);
             $('input[id="id"]').val(rows[0]['id']);
             $('textarea[id="catatan"]').val(rows[0]['keterangan']);
-            $('.data_detail_head_gcu').html(rows[0].karyawan['nama']);
+            $('.data_detail_head_gcu').html(rows[0].y);
             $('input[id="tgl"]').val(rows[0]['tgl_cek']);
             $('input[id="berat"]').val(rows[0]['berat']);
             $('input[id="lemak"]').val(rows[0]['lemak']);
@@ -399,11 +477,17 @@
       $(function() {
         var gcu_tabel = $('#gcu_tabel').DataTable({
           processing: true,
-          serverSide: false,
+          serverSide: true,
           language: {
             processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
           },
-          ajax: '/kesehatan_bulanan_gcu/data',
+          ajax: {
+            url: '/kesehatan/bulanan/gcu/data',
+            type: 'POST',
+            headers: {
+              'X-CSRF-TOKEN': '{{csrf_token()}}'
+            }
+          },
           columns: [{
               data: 'DT_RowIndex',
               orderable: false,
@@ -498,7 +582,9 @@
       var gcu = $('#gcu_tabel').DataTable();
       gcu.destroy();
       $("#detail_gagal").show();
+
     }
   });
+  $('.select2').select2();
 </script>
 @endsection

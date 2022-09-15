@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Spa extends Model
 {
+    protected $connection = 'erp';
     protected $table = 'spa';
     protected $fillable = ['customer_id', 'pesanan_id', 'ket', 'log'];
 
