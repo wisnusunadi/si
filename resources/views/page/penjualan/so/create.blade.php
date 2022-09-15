@@ -304,62 +304,62 @@
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-5 col-md-6">
-                                    <div class="row">
-                                        <div class="col-lg-12">
-                                            <div class="card">
-                                                <div class="card-header">
-                                                    <h6 class="card-title">Info Produk</h6>
-                                                </div>
-                                                <div class="card-body overflowy">
-                                                    @if ($ekatalog->ket != null)
-                                                    <div class="alert alert-danger" role="alert">
-                                                        <strong><i class="fas fa-exclamation-triangle"></i> Catatan : </strong>{{ $ekatalog->ket }}
+                                    <div class="col-lg-5 col-md-6">
+                                        <div class="row">
+                                            <div class="col-lg-12">
+                                                <div class="card">
+                                                    <div class="card-header">
+                                                        <h6 class="card-title">Info Produk</h6>
                                                     </div>
-                                                @endif
-                                                    <div class="card">
-                                                        <div class="card-body">
-                                                            <div class="row d-flex justify-content-around">
-                                                                <div class="p-2">
-                                                                    <?php $totalharga = 0; $ongkir = 0; ?>
-                                                                            @foreach ($ekatalog->Pesanan->DetailPesanan as $i)
-                                                                            <?php
-                                                                            $totalharga = $totalharga + $i->jumlah * $i->harga;
-                                                                            $ongkir = $ongkir + $i->ongkir;
-                                                                            ?>
-                                                                        @endforeach
-                                                                        <div class="text-muted">Ongkir</div>
-                                                                        <div>
-                                                                            <h6><b>@currency($ongkir)</b></h6>
-                                                                        </div>
-                                                                    </div>
+                                                    <div class="card-body overflowy">
+                                                        @if ($ekatalog->ket != null)
+                                                        <div class="alert alert-danger" role="alert">
+                                                            <strong><i class="fas fa-exclamation-triangle"></i> Catatan : </strong>{{ $ekatalog->ket }}
+                                                        </div>
+                                                    @endif
+                                                        <div class="card">
+                                                            <div class="card-body">
+                                                                <div class="row d-flex justify-content-around">
                                                                     <div class="p-2">
-                                                                        <div class="text-muted">Total Harga</div>
-                                                                        <div>
-                                                                            <h6>
-                                                                                <b>
-                                                                                    @currency($totalharga)
-                                                                                </b>
-                                                                            </h6>
+                                                                        <?php $totalharga = 0; $ongkir = 0; ?>
+                                                                                @foreach ($ekatalog->Pesanan->DetailPesanan as $i)
+                                                                                <?php
+                                                                                $totalharga = $totalharga + $i->jumlah * $i->harga;
+                                                                                $ongkir = $ongkir + $i->ongkir;
+                                                                                ?>
+                                                                            @endforeach
+                                                                            <div class="text-muted">Ongkir</div>
+                                                                            <div>
+                                                                                <h6><b>@currency($ongkir)</b></h6>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="p-2">
+                                                                            <div class="text-muted">Total Harga</div>
+                                                                            <div>
+                                                                                <h6>
+                                                                                    <b>
+                                                                                        @currency($totalharga)
+                                                                                    </b>
+                                                                                </h6>
+                                                                            </div>
                                                                         </div>
                                                                     </div>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="row">
-                                                            <div class="col-lg-12">
-                                                                <div class="table-responsive">
-                                                                    <table class="table table-hover" id="showtable"
-                                                                        style="width:100%;">
-                                                                        <thead>
-                                                                            <tr>
-                                                                                <th>Paket Produk</th>
-                                                                                <th>Produk</th>
-                                                                                <th>Jumlah</th>
-                                                                            </tr>
-                                                                        </thead>
-                                                                    </table>
+                                                            <div class="row">
+                                                                <div class="col-lg-12">
+                                                                    <div class="table-responsive">
+                                                                        <table class="table table-hover" id="showtable"
+                                                                            style="width:100%;">
+                                                                            <thead>
+                                                                                <tr>
+                                                                                    <th>Paket Produk</th>
+                                                                                    <th>Produk</th>
+                                                                                    <th>Jumlah</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                        </table>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -369,6 +369,7 @@
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div>
                     </div>
