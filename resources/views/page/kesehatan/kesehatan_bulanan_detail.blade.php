@@ -229,7 +229,13 @@
         var tensi_tabel = $('#tensi_tabel').DataTable({
             processing: true,
             serverSide: false,
-            ajax: '/kesehatan/bulanan/gcu/detail/' + karyawan_id,
+            ajax: {
+          'type': 'POST',
+          'headers': {
+            'X-CSRF-TOKEN': '{{csrf_token()}}'
+          },
+          'url': '/kesehatan/bulanan/gcu/detail/' + karyawan_id,
+          },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
@@ -303,7 +309,13 @@
         var berat_tabel = $('#berat_tabel').DataTable({
             processing: true,
             serverSide: false,
-            ajax: '/kesehatan/bulanan/gcu/detail/' + karyawan_id,
+            ajax: {
+          'type': 'POST',
+          'headers': {
+            'X-CSRF-TOKEN': '{{csrf_token()}}'
+          },
+          'url': '/kesehatan/bulanan/berat/detail/' + karyawan_id,
+          },
             language: {
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },

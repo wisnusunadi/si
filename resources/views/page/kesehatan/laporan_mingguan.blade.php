@@ -1,11 +1,86 @@
 @extends('adminlte.page')
 
-@section('title', 'Beta Version')
+@section('title', 'ERP')
 
 @section('content_header')
-<h1 class="m-0 text-dark">Dashboard</h1>
+<div class="container-fluid">
+    <div class="row mb-2">
+        <div class="col-sm-6">
+            <h1 class="m-0  text-dark">Laporan Mingguan</h1>
+        </div><!-- /.col -->
+        <div class="col-sm-6">
+            <ol class="breadcrumb float-sm-right">
+                    <li class="breadcrumb-item"><a href="/kesehatan/mingguan">Beranda</a></li>
+                    <li class="breadcrumb-item active">Laporan Mingguan</li>
+            </ol>
+        </div><!-- /.col -->
+    </div><!-- /.row -->
+</div><!-- /.container-fluid -->
 @stop
+@section('adminlte_css')
+<style>
+    table { border-collapse: collapse; empty-cells: show; }
 
+    td { position: relative; }
+
+    .foo {
+        border-radius: 50%;
+        float: left;
+        width: 10px;
+        height: 10px;
+        align-items: center !important;
+    }
+
+    tr.line-through td:not(:nth-last-child(-n+2)):before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 35%;
+        border-bottom: 1px solid;
+        width: 100%;
+    }
+
+    @media screen and (min-width: 1440px) {
+
+        body {
+            font-size: 14px;
+        }
+
+        #detailmodal {
+            font-size: 14px;
+        }
+
+        .btn {
+            font-size: 14px;
+        }
+
+
+    }
+
+    @media screen and (max-width: 1439px) {
+        body {
+            font-size: 12px;
+        }
+
+        h4 {
+            font-size: 20px;
+        }
+
+        #detailmodal {
+            font-size: 12px;
+        }
+
+        .btn {
+            font-size: 12px;
+        }
+
+
+    }
+
+
+
+</style>
+@stop
 @section('content')
 <div class="row">
   <div class="col-lg-12">
@@ -384,6 +459,7 @@
       ]
     });
   });
+  $('.select2').select2();
 </script>
 
 @endsection
