@@ -33,7 +33,7 @@ Route::prefix('/ppic')->group(function () {
     Route::post('/master_stok/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_stok'])->middleware('jwt.verify');
     Route::post('/master_pengiriman/data', [App\Http\Controllers\PpicController::class, 'get_master_pengiriman_data'])->middleware('jwt.verify');
     Route::post('/master_pengiriman/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_master_pengiriman'])->middleware('jwt.verify');
-    Route::get('/data/perakitan/{status?}', [App\Http\Controllers\PpicController::class, 'get_data_perakitan'])->middleware('jwt.verify');
+    Route::get('/data/perakitan/{status?}/{bulan}', [App\Http\Controllers\PpicController::class, 'get_data_perakitan'])->middleware('jwt.verify');
     Route::get('/datatables/perakitan', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan'])->middleware('jwt.verify');
     Route::get('/datatables/perakitandetail/{id}', [App\Http\Controllers\PpicController::class, 'get_datatables_data_perakitan_detail'])->middleware('jwt.verify');
     Route::get('/data/rencana_perakitan', [App\Http\Controllers\PpicController::class, 'get_data_perakitan_rencana'])->middleware('jwt.verify');
