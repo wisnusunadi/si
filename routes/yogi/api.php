@@ -44,6 +44,7 @@ Route::prefix('/v2')->group(function() {
 
     Route::prefix('gk')->group(function(){
         Route::get('getNoseriGudang', [SparepartController::class, 'getNoseriGudang'])->name('autocom');
+        Route::post('/checkSeriNew', [SparepartController::class, 'checkNoseriNew']);
     });
 
 });
