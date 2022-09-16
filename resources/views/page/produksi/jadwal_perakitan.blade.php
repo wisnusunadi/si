@@ -744,21 +744,6 @@
             return format;
         }
 
-        $(document).on('click', '.evaluasirakit', function () {
-            const id = $(this).data('id');
-            $('#jwdid1').val(id);
-            const prd = $(this).parent().prev().prev().text();
-            const jml = $(this).data('jml');
-            const produk = $(this).data('produk');
-            const tglmulai = $(this).parent().prev().prev().prev().prev().prev().text();
-            const tglselesai = $(this).parent().prev().prev().prev().prev().find('span.tanggal').text();
-            $('#produkEvaluasi').text(prd);
-            $('#jmlEvaluasi').text(jml + ' Unit');
-            $('#tglMulaiEvaluasi').text(tglmulai);
-            $('#tglSelesaiEvaluasi').text(tglselesai);
-            $('.modalEvaluasiPerakitan').modal('show');
-        })
-
         $('#btnCheck').click(function(){
             let arr = [];
             const data = scanProduk.$('.noseri').map(function () {
@@ -860,6 +845,23 @@
             console.log($(this).data('id'));
         });
 
+        $(document).on('click', '.evaluasirakit', function () {
+            const id = $(this).data('id');
+            $('#jwdid1').val(id);
+            const prd = $(this).parent().prev().prev().text();
+            const jml = $(this).data('jml');
+            const produk = $(this).data('produk');
+            const eval = $(this).data('eval');
+            const tglmulai = $(this).parent().prev().prev().prev().prev().prev().text();
+            const tglselesai = $(this).parent().prev().prev().prev().prev().find('span.tanggal').text();
+            $('#produkEvaluasi').text(prd);
+            $('#jmlEvaluasi').text(jml + ' Unit');
+            $('#tglMulaiEvaluasi').text(tglmulai);
+            $('#tglSelesaiEvaluasi').text(tglselesai);
+            $('#keteranganEvaluasi').text(eval);
+            $('.modalEvaluasiPerakitan').modal('show');
+        })
+
         $('body').on('submit', '#transferForm', function(e) {
             e.preventDefault();
             var actionType = $('.detailtransferKirim').val();
@@ -925,13 +927,13 @@
                 confirmButtonText: 'Ya, Kirim!'
             }).then((result) => {
                 if (result.value) {
-                    // $(this).prop('disabled', true);
-                    // Swal.fire({
-                    //     title: 'Please wait',
-                    //     text: 'Data is transferring...',
-                    //     allowOutsideClick: false,
-                    //     showConfirmButton: false
-                    // });
+                    $(this).prop('disabled', true);
+                    Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
                     $.ajax({
                         url: "/api/v2/prd/telat_rakit",
                         type: "post",
@@ -941,17 +943,17 @@
                         processData: false,
                         success: (data) => {
                             console.log(data);
-                            // Swal.fire({
-                            //     icon: 'success',
-                            //     title: 'Berhasil',
-                            //     text: 'Data berhasil dikirim.',
-                            // })
-                            // $('.modalEvaluasiPerakitan').modal('hide');
-                            // $('#table_produk_perakitan').DataTable().ajax
-                            //     .reload();
-                            // setTimeout(() => {
-                            //     location.reload();
-                            // }, 2000);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Data berhasil dikirim.',
+                            })
+                            $('.modalEvaluasiPerakitan').modal('hide');
+                            $('#table_produk_perakitan').DataTable().ajax
+                                .reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
                         }
                     })
                 }

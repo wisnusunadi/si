@@ -2015,7 +2015,7 @@ class ProduksiController extends Controller
     {
         try {
             $data = DB::select("select jp.id, jp.produk_id, jp.created_at, jp.tanggal_mulai, jp.tanggal_selesai,
-        jp.no_bppb, jp.jumlah, count(jrn.jadwal_id) as jml_rakit,
+        jp.no_bppb, jp.jumlah, jp.evaluasi, count(jrn.jadwal_id) as jml_rakit,
         concat(p.nama,' ',gbj.nama) as produkk,
         datediff(now(), jp.tanggal_selesai) as selisih
         from jadwal_perakitan jp
@@ -2072,7 +2072,7 @@ class ProduksiController extends Controller
                             </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'">
                                 <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
                             </a>
-                            </a>&nbsp;<a data-toggle="modal" data-target="#evaluasirakit" class="evaluasirakit" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'">
+                            </a>&nbsp;<a data-toggle="modal" data-target="#evaluasirakit" class="evaluasirakit" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'" data-eval="'.$d->evaluasi.'">
                                 <button class="btn btn-outline-secondary btn-sm"><i class="far fa-edit"></i> Evaluasi Perakitan</button>
                             </a>';
                     return $a;
