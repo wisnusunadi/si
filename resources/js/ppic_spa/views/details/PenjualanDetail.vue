@@ -77,7 +77,7 @@
                 <div class="content">
                     <div class="columns is-4">
                         <div class="column is-one-quarter">
-                            test
+                            <DoughnutChart></DoughnutChart>
                         </div>
                         <div class="column is-8">
                             <table class="table is-fullwidth has-text-centered">
@@ -101,7 +101,7 @@
                                         <td>Rp. {{ formatRupiah(paket.ongkir) }}</td>
                                         <td>Rp. {{ formatRupiah(subtotal(paket.jumlah, paket.harga, paket.ongkir)) }}</td>
                                     </tr>
-                                    <tr v-for="(detail, id) in paket.detail_produk" :key="id + 'detail'">
+                                    <tr v-for="(detail, id) in paket.detail_produk">
                                         <td></td>
                                         <td>{{ detail.nama_produk }}</td>
                                         <td>{{ detail.jumlah }}</td>
@@ -125,6 +125,7 @@
 <script>
     import axios from 'axios';
     import mix from '../../../emiindo/mixins/mix';
+    import DoughnutChart from '../../components/DoughnutChart';
     export default {
         mixins: [mix],
         data() {
@@ -132,6 +133,9 @@
                 detailpenjualanekatalog: null,
                 tabs: false
             }
+        },
+        components: {
+            DoughnutChart
         },
         methods: {
             async getPenjualan() {
