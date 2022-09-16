@@ -36,8 +36,10 @@ use Illuminate\Foundation\Auth\AuthenticatesUsers;
 use Illuminate\Support\Arr;
 use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
+use App\Models\JalurEkspedisi;
 use App\Models\Sparepart;
 use App\Models\SparepartGudang;
+use App\Models\SystemLog;
 use App\Models\UserLog;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -819,6 +821,22 @@ class MasterController extends Controller
         }
 
         if ($bool == true) {
+            $obj = [
+                'nama' => $request->nama_ekspedisi,
+                'alamat' => $request->alamat,
+                'email' => $request->email,
+                'telp' => $request->telepon,
+                'ket' => $request->keterangan,
+                'jalur' => JalurEkspedisi::whereIn('id', $request->jalur)->get()->pluck('nama'),
+                'provinsi' => $request->jurusan == 'provinsi' ? Provinsi::whereIn('id', $request->provinsi)->get()->pluck('nama') : 'Seluruh Indonesia',
+            ];
+
+            SystemLog::create([
+                'tipe' => 'Logistik',
+                'subjek' => 'Tambah Ekspedisi Baru',
+                'response' => json_encode($obj),
+                'user_id' => $request->user_id,
+            ]);
             // Alert::success('Berhasil', 'Berhasil menambahkan data');
             return redirect()->back()->with('success', 'success');
         } else {
@@ -882,6 +900,29 @@ class MasterController extends Controller
         ]);
 
         if ($c) {
+            $obj = [
+                'nama' => $request->nama_customer,
+                'telp' => $request->telepon,
+                'alamat' => $request->alamat,
+                'email' => $request->email,
+                'id_provinsi' => $request->provinsi,
+                'ktp' => $request->ktp,
+                'npwp' => $request->npwp,
+                'batas' => $request->batas,
+                'pic' => $request->pic,
+                'izin_usaha' => $request->izin_usaha,
+                'modal_usaha' => $request->modal_usaha,
+                'hasil_penjualan' => $request->hasil_penjualan,
+                'nama_pemilik' => $request->pemilik,
+                'ket' => $request->keterangan,
+            ];
+
+            SystemLog::create([
+                'tipe' => 'Penjualan',
+                'subjek' => 'Tambah Customer / Distributor',
+                'response' => json_encode($obj),
+                'user_id' => Auth::user()->id
+            ]);
             return redirect()->back()->with('success', 'success');
         } else {
             return redirect()->back()->with('error', 'error');
@@ -1017,6 +1058,19 @@ class MasterController extends Controller
         $p->coo = $request->coo;
         $u = $p->save();
         if ($u) {
+            $obj = [
+                'produk' => $p->nama,
+                'nama_coo' => $request->nama_coo,
+                'no_akd' => $request->no_akd,
+                'coo' => $request->coo == 1 ? 'Produk Utama' : 'Bukan Produk Utama',
+            ];
+
+            SystemLog::create([
+                'tipe' => 'DC',
+                'subjek' => 'Perubahan Data COO Produk',
+                'response' => json_encode($obj),
+                'user_id' => $request->user_id,
+            ]);
             return response()->json(['data' => 'success']);
         } else if (!$u) {
             return response()->json(['data' => 'error']);
@@ -1032,6 +1086,29 @@ class MasterController extends Controller
     public function delete_customer($id)
     {
         $customer = Customer::find($id);
+        $obj = [
+            'nama' => $customer->nama,
+            'telp' => $customer->tel,
+            'alamat' => $customer->alamat,
+            'email' => $customer->email,
+            'id_provinsi' => $customer->id_provinsi,
+            'ktp' => $customer->ktp,
+            'npwp' => $customer->npwp,
+            'batas' => $customer->batas,
+            'pic' => $customer->pic,
+            'izin_usaha' => $customer->izin_usaha,
+            'modal_usaha' => $customer->modal_usaha,
+            'hasil_penjualan' => $customer->hasil_penjualan,
+            'nama_pemilik' => $customer->nama_pemilik,
+            'ket' => $customer->ket,
+        ];
+
+        SystemLog::create([
+            'tipe' => 'Penjualan',
+            'subjek' => 'Hapus Customer / Distributor',
+            'response' => json_encode($obj),
+            'user_id' => Auth::user()->id
+        ]);
         $customer->delete();
 
         if ($customer) {
@@ -1150,7 +1227,22 @@ class MasterController extends Controller
             $q = $Ekspedisi->JalurEkspedisi()->sync($jalur_array);
         }
 
-        if ($q) {
+        if ($q) {$obj = [
+            'nama' => $request->nama_ekspedisi,
+            'alamat' => $request->alamat,
+            'email' => $request->email,
+            'telp' => $request->telepon,
+            'ket' => $request->keterangan,
+            'jalur' => JalurEkspedisi::whereIn('id', $request->jalur)->get()->pluck('nama'),
+            'provinsi' => $request->jurusan == 'provinsi' ? Provinsi::whereIn('id', $request->provinsi_id)->get()->pluck('nama') : 'Seluruh Indonesia',
+        ];
+
+        SystemLog::create([
+            'tipe' => 'Logistik',
+            'subjek' => 'Ubah Ekspedisi',
+            'response' => json_encode($obj),
+            'user_id' => $request->user_id,
+        ]);
             return response()->json(['data' => 'success']);
         } else if (!$q) {
             return response()->json(['data' => 'error']);
