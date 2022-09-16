@@ -2522,7 +2522,7 @@ class ProduksiController extends Controller
 
             $obj = [
                 'tgl_keluar' => $request->tgl_transfer,
-                'tujuan' => Divisi::find($request->tujuan)->nama,
+                'tujuan' => Divisi::find(13)->nama,
                 'produk' => Produk::find(GudangBarangJadi::find($request->gbj_id)->produk_id)->nama.' '.GudangBarangJadi::find($request->gbj_id)->nama,
                 'jumlah' => count($request->noseri),
                 'jadwal' => $request->jadwal_id,
