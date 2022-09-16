@@ -246,23 +246,23 @@
             }
         });
 
-        $.ajax({
-            url: '/api/gbj/sel-layout',
-            type: 'GET',
-            dataType: 'json',
-            success: function (res) {
-                if (res) {
-                    console.log(res);
-                    $("#layout_id").empty();
-                    $.each(res, function (key, value) {
-                        $("#layout_id").append('<option value="' + value.id + '">' + value
-                            .ruang + '</option');
-                    });
-                } else {
-                    $("#layout_id").empty();
-                }
-            }
-        });
+        // $.ajax({
+        //     url: '/api/gbj/sel-layout',
+        //     type: 'GET',
+        //     dataType: 'json',
+        //     success: function (res) {
+        //         if (res) {
+        //             console.log(res);
+        //             $("#layout_id").empty();
+        //             $.each(res, function (key, value) {
+        //                 $("#layout_id").append('<option value="' + value.id + '">' + value
+        //                     .ruang + '</option');
+        //             });
+        //         } else {
+        //             $("#layout_id").empty();
+        //         }
+        //     }
+        // });
 
         openModalTerima();
     });

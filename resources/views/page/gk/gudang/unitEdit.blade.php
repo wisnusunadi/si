@@ -120,10 +120,11 @@
                             <th colspan="2" class="text-center">Tanggal</th>
                             <th colspan="2" class="text-center">Tujuan</th>
                             <th rowspan="2">No Seri</th>
+                            <th rowspan="2">No Seri Baru</th>
                             <th rowspan="2">Posisi Barang</th>
                             <th rowspan="2">Kerusakan</th>
                             <th rowspan="2">Perbaikan</th>
-                            <th rowspan="2">Tingkat Kerusakan</th>
+                            {{-- <th rowspan="2">Tingkat Kerusakan</th> --}}
                             <th rowspan="2">Hasil Jadi</th>
                             <th rowspan="2">Status</th>
                             <th rowspan="2">Aksi</th>
@@ -186,7 +187,7 @@
                             <div class="form-group col">
                                 <label for="">Layout</label>
                                 <select name="layout_id" id="layout_id" class="form-control layout_edit">
-                                   @foreach ($layout as $l)
+                                    @foreach ($layout as $l)
                                         <option value="{{ $l->id }}">{{ $l->ruang }}</option>
                                    @endforeach
                                 </select>
@@ -202,12 +203,13 @@
                             <div class="form-group col">
                                 <label for="">Hasil Jadi</label>
                                 <select name="hasil_jadi" id="varian" class="form-control varian">
+                                <option></option>
                                 </select>
                             </div>
                         </div>
                         <div class="form-group fixidCol">
                             <label for="">Perubahan Nomor Seri Baru</label>
-                            <select name="noseri_fix_id" class="form-control fixid">
+                            <select name="noseri_fix" class="form-control fixid">
                             </select>
                           </div>
                         <div class="form-group">
@@ -311,23 +313,24 @@
     }
     $(document).ready(function () {
         $.ajax({
-        type: 'get',
-        url: '/api/gbj/sel-gbj',
-        dataType: 'json',
-        beforeSend : function(xhr){
-                    xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
-                },
-        success: function (data) {
-            console.log(data)
-            $.map(data, function (item) {
-                varian.push({
-                    id: item.id,
-                    text: item.produk.nama + ' ' + item.nama
-                })
-            });
-        }
+            type: 'get',
+            url: '/api/gbj/sel-gbj',
+            dataType: 'json',
+            beforeSend : function(xhr){
+                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                    },
+            success: function (data) {
+                console.log(data)
+                $.map(data, function (item) {
+                    varian.push({
+                        id: item.id,
+                        text: item.produk.nama + ' ' + item.nama
+                    })
+                });
+            }
+        });
     });
-    });
+
     // disable button back browser
     window.history.pushState(null, "", window.location.href);
     window.onpopstate = function() {
@@ -336,6 +339,10 @@
 
     function changeStatus() {
         $('.varian').select2({
+            placeholder: "Pilih Unit",
+            allowClear: true,
+            minimumInputLength: 2,
+            minimumResultsForSearch: 10,
             data: varian,
             dropdownParent: $('.changeStatus')
         });
@@ -376,10 +383,11 @@
             {data: 'from'},
             {data: 'to'},
             {data: 'noser'},
+            {data: 'noseri_new'},
             {data: 'layout'},
             {data: 'remarks'},
             {data: 'perbaikan'},
-            {data: 'tingkat'},
+            // {data: 'tingkat'},
             {data: 'unit_baru'},
             {data: 'status'},
             {data: 'action'},
@@ -402,34 +410,35 @@
         gbj = $(this).data('gbj');
         status = $(this).data('status');
         var route = "{{ route('autocom') }}";
-            $('.fixid').select2({
-                placeholder: "Pilih Noseri",
-                dropdownParent: $('.changeStatus'),
-                ajax: {
-                    url: route,
-                    data: function (params) {
-                        return {
-                            q: $.trim(params.term),
-                            id: gbj,
-                        };
-                    },
-                    dataType: 'json',
-                    delay: 250,
-                    processResults: function (data) {
-                        return {
-                            results: $.map(data, function (item) {
-                                return {
-                                    text: item.noseri,
-                                    id: item.id
-                                }
-                            })
-                        };
-                    },
+        $('.fixid').select2({
+            placeholder: "Pilih Noseri",
+            minimumInputLength: 2,
+            minimumResultsForSearch: 10,
+            ajax: {
+                url: route,
+                data: function(params) {
+                    return {
+                        search: params.term,
+                        id: gbj
+                    }
                 },
-                cache: true,
-                allowClear: true,
-                width: '100%'
-            });
+                dataType: 'json',
+                delay: 250,
+                processResults: function (data) {
+                    return {
+                        results: $.map(data, function (item) {
+                            return {
+                                text: item.noseri,
+                                id: item.id
+                            }
+                        })
+                    };
+                },
+            },
+            cache: true,
+            allowClear: true,
+            width: '100%'
+        });
         if (status == 1) {
             $('.fixidCol').show()
         } else {
@@ -457,6 +466,10 @@
                 $('#kode').val(res.id);
                 $('#layout_id').val(res.layout);
                 $('#layout_id').select2().trigger('change');
+                $('.varian').val(res.hasiljadi);
+                $('.varian').select2().trigger('change');
+                // $('.fixid').val(res.noseri);
+                // $('.fixid').select2().trigger('change');
                 $('#tk_kerusakan').val(res.tingkat);
                 $('#tk_kerusakan').select2().trigger('change');
                 $('#remark').val(res.note);
@@ -487,6 +500,7 @@
             contentType: false,
             processData: false,
             success: (data) => {
+                // console.log(data);
                 $('#myForm').trigger('reset');
                 $('.changeStatus').modal('hide');
                 $('#btnSave').html('Kirim');
