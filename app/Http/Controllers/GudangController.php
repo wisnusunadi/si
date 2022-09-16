@@ -27,8 +27,10 @@ use App\Models\Produk;
 use App\Models\Satuan;
 use App\Models\Spa;
 use App\Models\Spb;
+use App\Models\SystemLog;
 use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
+use App\Models\User;
 use Illuminate\Filesystem\Filesystem;
 use Yajra\DataTables\Facades\DataTables;
 use Illuminate\Http\Request;
@@ -1054,6 +1056,13 @@ class GudangController extends Controller
                 array_push($dataseri, $nbj->is_ready);
             }
             if ($request->is_acc == 'rejected') {
+                $obj = [
+                    'produk' => Produk::find(GudangBarangJadi::find(NoseriBarangJadi::whereIn('id', $request->noseriid)->first()->gdg_barang_jadi_id)->produk_id)->nama.' '.GudangBarangJadi::find(NoseriBarangJadi::whereIn('id', $request->noseriid)->first()->gdg_barang_jadi_id)->nama,
+                    'noseri' => NoseriBarangJadi::whereIn('id', $request->noseriid)->get()->pluck('noseri'),
+                    'status' => $request->is_acc == 'rejected' ? 'Ditolak' : 'Disetujui',
+                    'komentar' => $request->komentar,
+                    'oleh' => User::find($request->accby)->nama
+                ];
                 if (count($dataseri) == 0) {
                     $cek = NoseriBarangJadi::whereIn('id', $request->noseriid)->get();
 
@@ -1073,11 +1082,30 @@ class GudangController extends Controller
                         NoseriBarangJadi::find($ddd->noseri_id)->update(['is_change' => 1, 'is_delete' => 0]);
                     }
                 }
+
+                SystemLog::create([
+                    'tipe' => 'GBJ - Manager',
+                    'subjek' => 'Penolakan Hapus Noseri Gudang',
+                    'response' => json_encode($obj),
+                    'user_id' => $request->accby
+                ]);
                 return response()->json(['error'=>false, 'msg'=> 'Penolakan Berhasil Dilakukan']);
             } else {
+                $obj = [
+                    'produk' => Produk::find(GudangBarangJadi::find(NoseriBarangJadi::whereIn('id', $request->noseriid)->first()->gdg_barang_jadi_id)->produk_id)->nama.' '.GudangBarangJadi::find(NoseriBarangJadi::whereIn('id', $request->noseriid)->first()->gdg_barang_jadi_id)->nama,
+                    'noseri' => NoseriBarangJadi::whereIn('id', $request->noseriid)->get()->pluck('noseri'),
+                    'status' => $request->is_acc == 'rejected' ? 'Ditolak' : 'Disetujui',
+                    'komentar' => $request->komentar,
+                    'oleh' => User::find($request->accby)->nama
+                ];
                 if (count($dataseri) == 0) {
                     $cekk = NoseriBarangJadi::whereIn('id', $request->noseriid)->get();
-
+                    SystemLog::create([
+                        'tipe' => 'GBJ - Manager',
+                        'subjek' => 'Persetujuan Hapus Noseri Gudang',
+                        'response' => json_encode($obj),
+                        'user_id' => $request->accby
+                    ]);
                     foreach($cekk as $ckc) {
                         NoseriBrgJadiLog::where('noseri_id', $ckc->id)->where([
                             'action' => 'delete',
@@ -1088,6 +1116,12 @@ class GudangController extends Controller
                     return response()->json(['error'=>false, 'msg'=> 'Noseri Berhasil Dihapus']);
                 } else {
                     if (empty(array_filter($dataseri))) {
+                        SystemLog::create([
+                            'tipe' => 'GBJ - Manager',
+                            'subjek' => 'Persetujuan Hapus Noseri Gudang',
+                            'response' => json_encode($obj),
+                            'user_id' => $request->accby
+                        ]);
                         foreach($check->get() as $d) {
                             NoseriBrgJadiLog::where('noseri_id', $d->noseri_id)->where([
                                 'action' => 'delete',
@@ -1098,6 +1132,20 @@ class GudangController extends Controller
                         }
                         return response()->json(['error'=>false, 'msg'=> 'Noseri Berhasil Dihapus']);
                     } else {
+                        $obj1 = [
+                            'produk' => Produk::find(GudangBarangJadi::find(NoseriBarangJadi::whereIn('id', $request->noseriid)->first()->gdg_barang_jadi_id)->produk_id)->nama.' '.GudangBarangJadi::find(NoseriBarangJadi::whereIn('id', $request->noseriid)->first()->gdg_barang_jadi_id)->nama,
+                            'noseri' => NoseriBarangJadi::whereIn('id', $request->noseriid)->get()->pluck('noseri'),
+                            'status' => $request->is_acc == 'rejected' ? 'Ditolak' : 'Disetujui',
+                            'komentar' => $request->komentar,
+                            'oleh' => User::find($request->accby)->nama,
+                            'alasan' => 'Noseri Sedang Digunakan'
+                        ];
+                        SystemLog::create([
+                            'tipe' => 'GBJ - Manager',
+                            'subjek' => 'Persetujuan Hapus Noseri Gudang Gagal',
+                            'response' => json_encode($obj1),
+                            'user_id' => $request->accby
+                        ]);
                         foreach($check->get() as $dd) {
                             NoseriBrgJadiLog::where('noseri_id', $dd->noseri_id)->where([
                                 'action' => 'delete',
@@ -1123,6 +1171,13 @@ class GudangController extends Controller
     function proses_update_noseri(Request $request)
     {
         try {
+            $obj = [
+                'produk' => Produk::find(GudangBarangJadi::find(NoseriBarangJadi::whereIn('id', $request->noseriid)->first()->gdg_barang_jadi_id)->produk_id)->nama.' '.GudangBarangJadi::find(NoseriBarangJadi::whereIn('id', $request->noseriid)->first()->gdg_barang_jadi_id)->nama,
+                'noseri' => NoseriBarangJadi::whereIn('id', $request->noseriid)->get()->pluck('noseri'),
+                'status' => $request->is_acc == 'rejected' ? 'Ditolak' : 'Disetujui',
+                'komentar' => $request->komentar,
+                'oleh' => User::find($request->accby)->nama
+            ];
             if ($request->is_acc == 'rejected') {
                 $a = NoseriBrgJadiLog::whereIn('noseri_id', $request->noseriid)->where([
                     'action' => 'update',
@@ -1135,6 +1190,12 @@ class GudangController extends Controller
                     ])->update(['status' => 'rejected', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                     NoseriBarangJadi::where('id', $request->noseriid[$i])->update(['is_change' => 1, 'noseri'=> $a[$i]]);
                 }
+                SystemLog::create([
+                    'tipe' => 'GBJ - Manager',
+                    'subjek' => 'Penolakan Perubahan Noseri',
+                    'response' => json_encode($obj),
+                    'user_id' => $request->accby
+                ]);
                 return response()->json(['error' => false, 'msg' => 'Noseri Batal Diubah']);
             } else {
                 // return 'acc';
@@ -1146,6 +1207,12 @@ class GudangController extends Controller
                     ])->update(['status' => 'approved', 'acc_by' => $request->accby, 'komentar' => $request->komentar]);
                     NoseriBarangJadi::find($c->id)->update(['is_change' => 1]);
                 }
+                SystemLog::create([
+                    'tipe' => 'GBJ - Manager',
+                    'subjek' => 'Persetujuan Perubahan Noseri',
+                    'response' => json_encode($obj),
+                    'user_id' => $request->accby
+                ]);
                 return response()->json(['error' => false, 'msg' => 'Noseri Berhasil Diubah']);
             }
         } catch (\Exception $e) {
@@ -1812,6 +1879,16 @@ class GudangController extends Controller
                 ];
             }
             NoseriBarangJadi::insert($dat_arr);
+            $obj = [
+                'produk' => $bb,
+                'noseri' => $aa
+            ];
+            SystemLog::create([
+                'tipe' => 'GBJ',
+                'subjek' => 'Upload Noseri Excel',
+                'response' => json_encode($obj),
+                'user_id' => $request->userid
+            ]);
             return response()->json(['msg' => 'Data Berhasil Diunggah', 'error' => false]);
         } catch (\Exception $e) {
             return response()->json([
@@ -2415,7 +2492,6 @@ class GudangController extends Controller
             }else{
                 if ($id) {
                     $brg_jadi = GudangBarangJadi::find($id);
-                    $brg_his = new GudangBarangJadiHis();
 
                     if (empty($brg_jadi->id)) {
                         return response()->json(['msg' => 'Data not found']);
@@ -2440,15 +2516,17 @@ class GudangController extends Controller
                     $brg_jadi->updated_by = $request->userid;
                     $brg_jadi->save();
 
-                    $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
-                    $brg_his->produk_id = $request->produk_id;
-                    $brg_his->satuan_id = $request->satuan_id;
-                    $brg_his->nama = $request->nama;
-                    $brg_his->deskripsi = $request->deskripsi;
-                    $brg_his->status = $request->status;
-                    $brg_his->created_at = Carbon::now();
-                    $brg_his->created_by = $request->userid;
-                    $brg_his->save();
+                    $obj =  [
+                        'produk' => Produk::find($request->produk_id)->nama,
+                        'variasi' => $request->nama,
+                        'satuan' => Satuan::find($request->satuan_id)->nama,
+                    ];
+                    SystemLog::create([
+                        'tipe' => 'GBJ',
+                        'subjek' => 'Perubahan Produk Gudang',
+                        'response' => json_encode($obj),
+                        'user_id' => $request->userid,
+                    ]);
                 } else {
                     $brg_jadi = new GudangBarangJadi();
                     $brg_jadi->produk_id = $request->produk_id;
@@ -2471,17 +2549,17 @@ class GudangController extends Controller
                     $brg_jadi->created_by = $request->userid;
                     $brg_jadi->save();
 
-                    $brg_his = new GudangBarangJadiHis();
-                    $brg_his->gdg_brg_jadi_id = $brg_jadi->id;
-                    $brg_his->satuan_id = $request->satuan_id;
-                    $brg_his->produk_id = $request->produk_id;
-                    $brg_his->nama = $request->nama;
-                    $brg_his->stok = 0;
-                    $brg_his->deskripsi = $request->deskripsi;
-                    $brg_his->status = $request->status;
-                    $brg_his->created_at = Carbon::now();
-                    $brg_his->created_by = $request->userid;
-                    $brg_his->save();
+                    $obj =  [
+                        'produk' => Produk::find($request->produk_id)->nama,
+                        'variasi' => $request->nama,
+                        'satuan' => Satuan::find($request->satuan_id)->nama,
+                    ];
+                    SystemLog::create([
+                        'tipe' => 'GBJ',
+                        'subjek' => 'Penambahan Produk Gudang',
+                        'response' => json_encode($obj),
+                        'user_id' => $request->userid,
+                    ]);
                 }
             return response()->json(['msg' => 'Successfully']);
             }
@@ -2673,6 +2751,20 @@ class GudangController extends Controller
                 $gdg->update(['stok' => $stok]);
             }
 
+            $obj = [
+                'dari' => Divisi::find($request->divisi)->nama,
+                'deskripsi' => $request->deskripsi,
+                'tgl_masuk' => $request->tgl_masuk,
+                'data' => $request->produk
+            ];
+
+            SystemLog::create([
+                'tipe' => 'GBJ',
+                'subjek' => 'Penerimaan Selain Perakitan',
+                'response' =>json_encode($obj),
+                'user_id' => $request->userid,
+            ]);
+
             return response()->json(['msg' => 'Data Berhasil Diterima', 'error' => false]);
         } catch (\Exception $e) {
             return response()->json([
@@ -2844,6 +2936,20 @@ class GudangController extends Controller
             $h->checked_by = $request->userid;
             $h->log_id = 6;
             $h->save();
+
+            $obj = [
+                'pesanan_so' => $h->so,
+                'pesanan_po' => $h->no_po,
+                'data' => $request->data,
+                'status_cek' => 'Sudah Dicek'
+            ];
+
+            SystemLog::create([
+                'tipe' => 'GBJ',
+                'subjek' => 'Persiapan Produk Gudang',
+                'response' => json_encode($obj),
+                'user_id' => $request->userid
+            ]);
 
             return response()->json(['msg' => 'Successfully', 'error' => false]);
         } catch (\Exception $e) {
@@ -4002,14 +4108,22 @@ class GudangController extends Controller
             $stok = $a->stok + $count;
             // return $stok;
             GudangBarangJadi::where('id', $request->id)->update(['stok' => $stok]);
-            GudangBarangJadiHis::create([
-                'gdg_brg_jadi_id' => $request->id,
-                'stok' => $count,
-                'tgl_masuk' => Carbon::now(),
-                'jenis' => 'MASUK',
-                'created_by' => $request->created_by,
-                'created_at' => Carbon::now(),
-                'dari' => $request->dari,
+
+            $pid = GudangBarangJadi::find($request->id)->produk_id;
+            $obj_seri = [
+                $request->no_seri
+            ];
+            $obj = [
+                'produk' => Produk::find($pid)->nama.' '.GudangBarangJadi::find($request->id)->nama,
+                'jumlah' => $count,
+                'noseri' => $request->no_seri,
+            ];
+
+            SystemLog::create([
+                'tipe' => 'GBJ',
+                'subjek' => 'Penambahan Noseri Produk',
+                'response' => json_encode($obj),
+                'user_id' => $request->created_by,
             ]);
             return response()->json(['success' => 'Sukses', 'error' => false]);
         } catch (\Exception $e) {
@@ -4072,6 +4186,23 @@ class GudangController extends Controller
                                 'tujuan' => $request->deskripsi,
                             ]);
                         }
+
+                        $obj = [
+                            'produk' => Produk::find(GudangBarangJadi::find($values['prd'])->produk_id)->nama.' '.GudangBarangJadi::find($values['prd'])->nama,
+                            'dpp_id' => $key,
+                            'pesanan_so' => Pesanan::find($request->pesanan_id)->so,
+                            'pesanan_po' => Pesanan::find($request->pesanan_id)->no_po,
+                            'jumlah' => count($values['noseri']),
+                            'noseri' => NoseriBarangJadi::whereIn('id', $values['noseri'])->get()->pluck('noseri'),
+                            'tgl_keluar' => Carbon::now()
+                        ];
+
+                        SystemLog::create([
+                            'tipe' => 'GBJ',
+                            'subjek' => 'Sales Order Noseri By Sistem',
+                            'response' => json_encode($obj),
+                            'user_id' => $request->userid
+                        ]);
                     } else {
                         $dd = TFProduksiDetail::create([
                             't_gbj_id' => $a->id,
@@ -4119,6 +4250,23 @@ class GudangController extends Controller
                                 'tujuan' => $request->deskripsi,
                             ]);
                         }
+
+                        $obj = [
+                            'produk' => Produk::find(GudangBarangJadi::find($values['prd'])->produk_id)->nama.' '.GudangBarangJadi::find($values['prd'])->nama,
+                            'dpp_id' => $key,
+                            'pesanan_so' => Pesanan::find($request->pesanan_id)->so,
+                            'pesanan_po' => Pesanan::find($request->pesanan_id)->no_po,
+                            'jumlah' => count($values['noseri']),
+                            'noseri' => NoseriBarangJadi::whereIn('id', $values['noseri'])->get()->pluck('noseri'),
+                            'tgl_keluar' => Carbon::now()
+                        ];
+
+                        SystemLog::create([
+                            'tipe' => 'GBJ',
+                            'subjek' => 'Sales Order Noseri By Sistem',
+                            'response' => json_encode($obj),
+                            'user_id' => $request->userid
+                        ]);
                     }
                 }
             } else {
@@ -4183,6 +4331,20 @@ class GudangController extends Controller
                         ]);
                     }
                 }
+
+                $obj = [
+                    'data' => $request->data,
+                    'pesanan_so' => Pesanan::find($request->pesanan_id)->so,
+                    'pesanan_po' => Pesanan::find($request->pesanan_id)->no_po,
+                    'tgl_keluar' => Carbon::now()
+                ];
+
+                SystemLog::create([
+                    'tipe' => 'GBJ',
+                    'subjek' => 'Sales Order Noseri By Sistem',
+                    'response' => json_encode($obj),
+                    'user_id' => $request->userid
+                ]);
             }
 
             $po = Pesanan::find($request->pesanan_id);
