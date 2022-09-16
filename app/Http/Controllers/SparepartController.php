@@ -2202,7 +2202,7 @@ class SparepartController extends Controller
                     'remark' => $request->remark,
                     'perbaikan' => $request->perbaikan,
                     'hasil_jadi_id' => $request->hasil_jadi,
-                    'noseri_fix_id' => $request->noseri_fix,
+                    'noseri_fix_id' => strtoupper($request->noseri_fix),
                     'status' => 1,
                     'updated_at' => Carbon::now(),
                     'updated_by' => $request->userid,
