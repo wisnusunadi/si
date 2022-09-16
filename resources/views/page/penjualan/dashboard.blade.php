@@ -283,8 +283,12 @@
                             <div class="row">
                                 <div class="col-12">
                                     <h4></h4>
-                                    <div class="chart">
-                                        <canvas id="chart_penjualan" style="min-height: 250px; height: 250px; max-height: 250px; max-width: 100%;"></canvas>
+                                    <select name="" id="" class="form-control" placeholder="Pilih Tahun">
+                                        <option value=""></option>
+                                    </select>
+                                    <div class="chart" style="min-height: 300px; max-height: 300px; ">
+
+                                        <canvas id="chart_penjualan" style="max-width: 100%; min-height:100%; max-height:100%;"></canvas>
                                     </div>
                                 </div>
                             </div>

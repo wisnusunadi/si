@@ -69,7 +69,7 @@
             background-color: #e0eff3;
             color: #17a2b8;
         }
-    }
+
 
         .yellow-bg {
             background-color: #fff4dc;
@@ -205,42 +205,19 @@
                                                         <div class="form-group">
                                                             <input type="text" style="width:200px;" class="form-control" id="harga_min" name="stok" value="0" />
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="3" name="produk" />
-                                                            <label class="form-check-label" for="dropdownkelompokproduk">
-                                                                Aksesoris
-                                                            </label>
+                                                        <div class="dropdown-header">
+                                                            Harga Maksimum
                                                         </div>
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <div class="form-check">
-                                                            <input type="checkbox" class="form-check-input" id="dropdownkelompokproduk" value="4" name="produk" />
-                                                            <label class="form-check-label" for="dropdownkelompokproduk">
-                                                                Lain - lain
-                                                            </label>
+                                                        <div class="form-group">
+                                                            <input type="text" style="width:200px;" class="form-control" id="harga_maks" name="stok" value="0" disabled />
                                                         </div>
-                                                    </div>
-                                                    <div class="dropdown-header">
-                                                        Harga Minimum
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <input type="text" style="width:200px;" class="form-control" id="harga_min" name="stok" value="0" />
-                                                    </div>
-                                                    <div class="dropdown-header">
-                                                        Harga Maksimum
-                                                    </div>
-                                                    <div class="form-group">
-                                                        <input type="text" style="width:200px;" class="form-control" id="harga_maks" name="stok" value="0" disabled />
-                                                    </div>
-
-                                                    <button class="btn btn-primary float-right">
-                                                        Cari
-                                                    </button>
-                                                </form>
-                                            </div>
-                                        </span>
+                                                        <button class="btn btn-primary float-right">
+                                                            Cari
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </span>
+                                        </div>
                                     </div>
                                     <div class="row">
                                         <div class="col-12">
@@ -445,69 +422,76 @@
             });
 
             var showtable = $('#showtable').DataTable({
-                destroy: true,
-                serverSide: true,
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            destroy: true,
+            processing: true,
+            serverSide: true,
+            ajax: {
+                'url': '/api/penjualan_produk/data/kosong/kosong/kosong',
+                "dataType": "json",
+                'type': 'POST',
+                'headers': {
+                    'X-CSRF-TOKEN': '{{csrf_token()}}'
+                }
+            },
+            columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
                 },
-                ajax: {
-                    'url': '/api/penjualan_produk/detail/' + rows[0].id,
-                    "dataType": "json",
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{csrf_token()}}'
-                    }
+                {
+                    data: 'no_akd',
+                    className: 'nowrap-text align-center tabnum',
+                    orderable: true,
+                    searchable: true
                 },
-                columns: [{
-                        className: 'nowrap-text align-center',
-                        data: 'DT_RowIndex',
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        className: 'nowrap-text',
-                        data: 'nama'
-                    },
-                    {
-                        className: 'nowrap-text align-center',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'nama_alias',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'nama',
-                        orderable: true,
-                        searchable: true
-                    },
-                    {
-                        data: 'harga',
-                        className: 'nowrap-text align-right tabnum',
-                        render: $.fn.dataTable.render.number(',', '.', 2)
-                            // function(data) {
-                            //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
-                            // }
-                            ,
-                        orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'is_aktif',
-                        className: 'nowrap-text align-center',
-                         orderable: false,
-                        searchable: false
-                    },
-                    {
-                        data: 'button',
-                        className: 'nowrap-text align-center',
-                         orderable: false,
-                        searchable: false
-                    }
-                ]
-            });
+                {
+                    data: 'merk',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'jenis_paket',
+                    className: 'nowrap-text align-center',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'nama_alias',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'nama',
+                    orderable: true,
+                    searchable: true
+                },
+                {
+                    data: 'harga',
+                    className: 'nowrap-text align-right tabnum',
+                    render: $.fn.dataTable.render.number(',', '.', 2)
+                        // function(data) {
+                        //     return '<span class="float-left">Rp. </span><span class="float-right">' + $.fn.dataTable.render.number(',', '.', 2) + '</span>';
+                        // }
+                        ,
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'is_aktif',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'button',
+                    className: 'nowrap-text align-center',
+                    orderable: false,
+                    searchable: false
+                }
+            ]
+        }); 
 
         //    login();
 

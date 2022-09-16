@@ -2900,238 +2900,235 @@ class LogistikController extends Controller
         return view('page.logistik.so.cancel', ['id' => $id, 'p' => $p]);
     }
 
-    public function create_logistik_view(Request $r, $jenis)
+    public function create_logistik_view($jenis)
     {
-        $value = [];
-        $value2 = [];
-        $prd_array = [];
-        $part_array = [];
-        $a = 0;
-        $f = 0;
-        $part_id = $r->part_id;
-        $produk_id = $r->produk_id;
+        return view('page.logistik.so.create', ['jenis' => $jenis]);
+        // $value = [];
+        // $value2 = [];
+        // $a = 0;
+        // $f = 0;
         // $x = explode(',', $produk_id);
         // $y = explode(',', $part_id);
         // $arr = json_decode($produk_id);
         // $x = array_column($r->produk_id, 'id');
         // $y = array_column($r->part_id, 'id');
-        if ($jenis == "EKAT") {
-            // if ($produk_id == '0') {
-            //     $datas = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
-            //         $q->where('pesanan_id', $pesanan_id);
-            //     })->get();
-            //     $array_id = array();
-            //     foreach ($datas as $i) {
-            //         $ids = $i->id;
-            //         $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($ids) {
-            //             $q->where('detail_pesanan_produk_id', $ids);
-            //         })->count();
-            //         $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $ids])->count();
+        // if ($jenis == "EKAT") {
+        //     // if ($produk_id == '0') {
+        //     //     $datas = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
+        //     //         $q->where('pesanan_id', $pesanan_id);
+        //     //     })->get();
+        //     //     $array_id = array();
+        //     //     foreach ($datas as $i) {
+        //     //         $ids = $i->id;
+        //     //         $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($ids) {
+        //     //             $q->where('detail_pesanan_produk_id', $ids);
+        //     //         })->count();
+        //     //         $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $ids])->count();
 
-            //         $detail_pesanan = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($ids) {
-            //             $q->where('id', $ids);
-            //         })->get();
-            //         $jumlahpesanan = 0;
+        //     //         $detail_pesanan = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($ids) {
+        //     //             $q->where('id', $ids);
+        //     //         })->get();
+        //     //         $jumlahpesanan = 0;
 
-            //         $jumlahsekarang = $jumlahsudahuji - $jumlahterkirim;
-            //         if ($jumlahsekarang > 0) {
-            //             $array_id[] = $i->id;
-            //         }
-            //     }
+        //     //         $jumlahsekarang = $jumlahsudahuji - $jumlahterkirim;
+        //     //         if ($jumlahsekarang > 0) {
+        //     //             $array_id[] = $i->id;
+        //     //         }
+        //     //     }
 
-            //     foreach ($array_id as $d) {
-            //         $value[$a]['id'] = $d;
-            //         $count = 0;
+        //     //     foreach ($array_id as $d) {
+        //     //         $value[$a]['id'] = $d;
+        //     //         $count = 0;
 
-            //         $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
-            //         foreach ($e as $f) {
-            //             $value[$a]['noseri'][$count] = $f->id;
-            //             $count++;
-            //         }
-            //         $a++;
-            //     }
+        //     //         $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
+        //     //         foreach ($e as $f) {
+        //     //             $value[$a]['noseri'][$count] = $f->id;
+        //     //             $count++;
+        //     //         }
+        //     //         $a++;
+        //     //     }
 
-            //     $prd_array =  json_encode($value);
-            //     $part_array =  0;
-            // } else {
-                // foreach ($x as $d) {
-                //     $value[$a]['id'] = $d;
-                //     $count = 0;
-                //     $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
-                //     foreach ($e as $f) {
-                //         $value[$a]['noseri'][$count] = $f->id;
-                //         $count++;
-                //     }
-                //     $a++;
-                // }
-                // $prd_array =  json_encode($value);
-                // $part_array =  0;
-                foreach ($produk_id as $d) {
-                    $value[$a]['id'] = $d['id'];
-                    $count = 0;
-                    // $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
-                    $e = explode(',', $d['array_no_seri']);
-                    foreach ($e as $f) {
-                        $value[$a]['noseri'][$count] = $f;
-                        $count++;
-                    }
-                    $a++;
-                }
+        //     //     $prd_array =  json_encode($value);
+        //     //     $part_array =  0;
+        //     // } else {
+        //         // foreach ($x as $d) {
+        //         //     $value[$a]['id'] = $d;
+        //         //     $count = 0;
+        //         //     $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
+        //         //     foreach ($e as $f) {
+        //         //         $value[$a]['noseri'][$count] = $f->id;
+        //         //         $count++;
+        //         //     }
+        //         //     $a++;
+        //         // }
+        //         // $prd_array =  json_encode($value);
+        //         // $part_array =  0;
+        //         foreach ($produk_id as $d) {
+        //             $value[$a]['id'] = $d['id'];
+        //             $count = 0;
+        //             // $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
+        //             $e = explode(',', $d['array_no_seri']);
+        //             foreach ($e as $f) {
+        //                 $value[$a]['noseri'][$count] = $f;
+        //                 $count++;
+        //             }
+        //             $a++;
+        //         }
 
-                $prd_array =  json_encode($value);
-                $part_array =  0;
-            // }
-            return view('page.logistik.so.create', ['prd_array' => $prd_array, 'part_array' => $part_array, 'jenis' => $jenis]);
-        } else {
-            foreach ($produk_id as $d) {
-                if($d['id'] != "0"){
-                    $value[$a]['id'] = $d['id'];
-                    $count = 0;
-                    // $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
-                    $e = explode(',', $d['array_no_seri']);
-                    foreach ($e as $f) {
-                        $value[$a]['noseri'][$count] = $f;
-                        $count++;
-                    }
-                    $a++;
-                }
-                else{
-                    $value = [];
-                }
-            }
+        //         $prd_array =  json_encode($value);
+        //         $part_array =  0;
+        //     // }
+        //     return view('page.logistik.so.create', ['jenis' => $jenis]);
+        // } else {
+        //     foreach ($produk_id as $d) {
+        //         if($d['id'] != "0"){
+        //             $value[$a]['id'] = $d['id'];
+        //             $count = 0;
+        //             // $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
+        //             $e = explode(',', $d['array_no_seri']);
+        //             foreach ($e as $f) {
+        //                 $value[$a]['noseri'][$count] = $f;
+        //                 $count++;
+        //             }
+        //             $a++;
+        //         }
+        //         else{
+        //             $value = [];
+        //         }
+        //     }
 
-            if(count($value) > 0){
-                $prd_array = json_encode($value);
-            }else{
-                $prd_array = 0;
-            }
+        //     if(count($value) > 0){
+        //         $prd_array = json_encode($value);
+        //     }else{
+        //         $prd_array = 0;
+        //     }
 
-            foreach ($part_id as $d) {
-                if($d['id'] != "0") {
-                    $value2[$f]['id'] = $d;
-                    $f++;
-                }
-                else{
-                    $value2 = [];
-                }
-                // $prd_array =  0;
-                // $part_array = json_encode($value);
-            }
+        //     foreach ($part_id as $d) {
+        //         if($d['id'] != "0") {
+        //             $value2[$f]['id'] = $d;
+        //             $f++;
+        //         }
+        //         else{
+        //             $value2 = [];
+        //         }
+        //         // $prd_array =  0;
+        //         // $part_array = json_encode($value);
+        //     }
 
-            if(count($value2) > 0){
-                $part_array = json_encode($value2);
-            }else{
-                $part_array = 0;
-            }
-            // if ($produk_id != 0 && $part_id == 0) {
-            //     foreach ($x as $d) {
-            //         $value[$a]['id'] = $d;
-            //         $count = 0;
-            //         $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
-            //         foreach ($e as $f) {
-            //             $value[$a]['noseri'][$count] = $f->id;
-            //             $count++;
-            //         }
-            //         $a++;
-            //     }
-            //     $prd_array =  json_encode($value);
-            //     $part_array =  0;
-            // } else if ($produk_id == 0 && $part_id != 0) {
-            //     foreach ($y as $d) {
-            //         $value[$a]['id'] = $d;
-            //         $a++;
-            //     }
-            //     $prd_array =  0;
-            //     $part_array = json_encode($value);
-            // } else if ($produk_id != 0 && $part_id != 0) {
-            //     foreach ($x as $d) {
-            //         $value[$a]['id'] = $d;
-            //         $count = 0;
-            //         $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
-            //         foreach ($e as $q) {
-            //             $value[$a]['noseri'][$count] = $q->id;
-            //             $count++;
-            //         }
-            //         $a++;
-            //     }
-            //     foreach ($y as $e) {
-            //         $value2[$f]['id'] = $e;
-            //         $f++;
-            //     }
-            //     $prd_array =  json_encode($value);
-            //     $part_array =   json_encode($value2);
-            // } else {
-            //     $datas = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
-            //         $q->where('pesanan_id', $pesanan_id);
-            //     })->get();
-            //     $array_id = array();
-            //     foreach ($datas as $i) {
-            //         $ids = $i->id;
-            //         $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($ids) {
-            //             $q->where('detail_pesanan_produk_id', $ids);
-            //         })->count();
-            //         $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $ids])->count();
+        //     if(count($value2) > 0){
+        //         $part_array = json_encode($value2);
+        //     }else{
+        //         $part_array = 0;
+        //     }
+        //     // if ($produk_id != 0 && $part_id == 0) {
+        //     //     foreach ($x as $d) {
+        //     //         $value[$a]['id'] = $d;
+        //     //         $count = 0;
+        //     //         $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
+        //     //         foreach ($e as $f) {
+        //     //             $value[$a]['noseri'][$count] = $f->id;
+        //     //             $count++;
+        //     //         }
+        //     //         $a++;
+        //     //     }
+        //     //     $prd_array =  json_encode($value);
+        //     //     $part_array =  0;
+        //     // } else if ($produk_id == 0 && $part_id != 0) {
+        //     //     foreach ($y as $d) {
+        //     //         $value[$a]['id'] = $d;
+        //     //         $a++;
+        //     //     }
+        //     //     $prd_array =  0;
+        //     //     $part_array = json_encode($value);
+        //     // } else if ($produk_id != 0 && $part_id != 0) {
+        //     //     foreach ($x as $d) {
+        //     //         $value[$a]['id'] = $d;
+        //     //         $count = 0;
+        //     //         $e = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
+        //     //         foreach ($e as $q) {
+        //     //             $value[$a]['noseri'][$count] = $q->id;
+        //     //             $count++;
+        //     //         }
+        //     //         $a++;
+        //     //     }
+        //     //     foreach ($y as $e) {
+        //     //         $value2[$f]['id'] = $e;
+        //     //         $f++;
+        //     //     }
+        //     //     $prd_array =  json_encode($value);
+        //     //     $part_array =   json_encode($value2);
+        //     // } else {
+        //     //     $datas = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($pesanan_id) {
+        //     //         $q->where('pesanan_id', $pesanan_id);
+        //     //     })->get();
+        //     //     $array_id = array();
+        //     //     foreach ($datas as $i) {
+        //     //         $ids = $i->id;
+        //     //         $jumlahterkirim = NoseriDetailLogistik::whereHas('DetailLogistik', function ($q) use ($ids) {
+        //     //             $q->where('detail_pesanan_produk_id', $ids);
+        //     //         })->count();
+        //     //         $jumlahsudahuji = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $ids])->count();
 
-            //         $detail_pesanan = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($ids) {
-            //             $q->where('id', $ids);
-            //         })->get();
-            //         $jumlahpesanan = 0;
+        //     //         $detail_pesanan = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($ids) {
+        //     //             $q->where('id', $ids);
+        //     //         })->get();
+        //     //         $jumlahpesanan = 0;
 
-            //         $jumlahsekarang = $jumlahsudahuji - $jumlahterkirim;
-            //         if ($jumlahsekarang > 0) {
-            //             $array_id[] = $i->id;
-            //         }
-            //     }
+        //     //         $jumlahsekarang = $jumlahsudahuji - $jumlahterkirim;
+        //     //         if ($jumlahsekarang > 0) {
+        //     //             $array_id[] = $i->id;
+        //     //         }
+        //     //     }
 
-            //     foreach ($array_id as $d) {
-            //         $value[$a]['id'] = $d;
-            //         $count = 0;
+        //     //     foreach ($array_id as $d) {
+        //     //         $value[$a]['id'] = $d;
+        //     //         $count = 0;
 
-            //         $t = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
-            //         foreach ($t as $c) {
-            //             $value[$a]['noseri'][$count] = $c->id;
-            //             $count++;
-            //         }
-            //         $a++;
-            //     }
+        //     //         $t = NoseriDetailPesanan::where(['status' => 'ok', 'detail_pesanan_produk_id' => $d])->doesntHave('NoseriDetailLogistik')->get();
+        //     //         foreach ($t as $c) {
+        //     //             $value[$a]['noseri'][$count] = $c->id;
+        //     //             $count++;
+        //     //         }
+        //     //         $a++;
+        //     //     }
 
 
-            //     $datas = DetailPesananPart::where('pesanan_id', $pesanan_id)->get();
-            //     $part_array = array();
-            //     foreach ($datas as $e) {
-            //         if (!isset($e->DetailLogistikPart)) {
-            //             $value2[$f]['id'] = $e->id;
-            //             $f++;
-            //         }
-            //     }
-            //     $prd_array = json_encode($value);
-            //     $part_array =   json_encode($value2);
-            // }
+        //     //     $datas = DetailPesananPart::where('pesanan_id', $pesanan_id)->get();
+        //     //     $part_array = array();
+        //     //     foreach ($datas as $e) {
+        //     //         if (!isset($e->DetailLogistikPart)) {
+        //     //             $value2[$f]['id'] = $e->id;
+        //     //             $f++;
+        //     //         }
+        //     //     }
+        //     //     $prd_array = json_encode($value);
+        //     //     $part_array =   json_encode($value2);
+        //     // }
 
-            //MEMANG DICOMMENT
-            // if ($detail_pesanan_id == "0") {
-            //     $array_id = array();
-            //     $datas = DetailPesananPart::where('pesanan_id', $pesanan_id)->get();
-            //     foreach ($datas as $i) {
-            //         if (isset($i->DetailLogistikPart)) {
-            //             echo $i->id;
-            //             $value[$a]['id'] = $i->id;
-            //             $a++;
-            //         }
-            //     }
+        //     //MEMANG DICOMMENT
+        //     // if ($detail_pesanan_id == "0") {
+        //     //     $array_id = array();
+        //     //     $datas = DetailPesananPart::where('pesanan_id', $pesanan_id)->get();
+        //     //     foreach ($datas as $i) {
+        //     //         if (isset($i->DetailLogistikPart)) {
+        //     //             echo $i->id;
+        //     //             $value[$a]['id'] = $i->id;
+        //     //             $a++;
+        //     //         }
+        //     //     }
 
-            //     $id =  json_encode($value);
-            //     $id_produk =  json_encode($value2);
-            // } else {
-            //     foreach ($x as $d) {
-            //         $value[$a]['id'] = $d;
-            //         $a++;
-            //     }
-            //     $id =  json_encode($value);
-            //     $id_produk =  json_encode($value2);
-            // }
-            return view('page.logistik.so.create', ['jenis' => $jenis]);
-        }
+        //     //     $id =  json_encode($value);
+        //     //     $id_produk =  json_encode($value2);
+        //     // } else {
+        //     //     foreach ($x as $d) {
+        //     //         $value[$a]['id'] = $d;
+        //     //         $a++;
+        //     //     }
+        //     //     $id =  json_encode($value);
+        //     //     $id_produk =  json_encode($value2);
+        //     // }
+        //     return view('page.logistik.so.create', ['jenis' => $jenis]);
+        // }
     }
     public function create_logistik(Request $request, $jenis)
     {
