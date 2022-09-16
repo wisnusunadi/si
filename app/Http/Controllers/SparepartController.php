@@ -2134,6 +2134,29 @@ class SparepartController extends Controller
         GudangKarantinaNoseri::find($request->id)->update(['is_ready' => 1]);
     }
 
+    function checkNoseriNew(Request $request)
+    {
+        try {
+            $check = GudangKarantinaNoseri::where('noseri_fix_id', $request->noseri_fix)->get()->count();
+            if ($check == 0) {
+                return response()->json([
+                    'error' => false,
+                    'status' => 'success',
+                    'msg' => 'Data Belum Digunakan',
+                ]);
+            } else {
+                return response()->json([
+                    'error' => false,
+                    'status' => 'failed',
+                    'msg' => 'Data sudah Digunakan',
+                ]);
+            }
+
+        } catch (\Exception $e) {
+            return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
+        }
+    }
+
     // transaksi noseri
     function updateUnit(Request $request)
     {
