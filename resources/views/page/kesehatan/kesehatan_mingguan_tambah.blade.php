@@ -251,7 +251,7 @@
                                 $('#tabel_tensi').append(`<tr> <td>` + no + `</td>
                                 <td><input id="date` + value[`id`] + `" type="date" class="form-control" readonly></td>
                                                          <td>` + value[`nama`] + `</td>
-                                                         <td>    
+                                                         <td>
                                                          <div class="input-group mb-3">
                                                          <input type="number" class="form-control d-none" name="karyawan_id[` + x + `]" value="` + value[`id`] + `">
                                                          <input type="text" class="form-control" name=" sistolik[` + x + `]" >
@@ -260,7 +260,7 @@
                                                            </div>
                                                            </div>
                                                         </td>
-                                                         <td>    
+                                                         <td>
                                                          <div class="input-group mb-3">
                                                          <input type="text" class="form-control" name="diastolik[` + x + `]" >
                                                          <div class="input-group-append">
@@ -268,7 +268,7 @@
                                                            </div>
                                                            </div>
                                                         </td>
-                                                        <td>    
+                                                        <td>
                                                          <textarea type="text" class="form-control" name="keterangan[` + x + `]" ></textarea>
                                                         </td>
                                                         </tr>`);
@@ -308,8 +308,8 @@
                                 no++;
                                 b++;
                                 $('#tabel_rapid').append(`<tr> <td>` + no + `</td>
-                                                     <td>   
-                                                     <input type="number" class="form-control d-none" name="karyawan_id[` + x + `]" value="` + value[`id`] + `"> 
+                                                     <td>
+                                                     <input type="number" class="form-control d-none" name="karyawan_id[` + x + `]" value="` + value[`id`] + `">
                                                      <select type="text" class="form-control @error('jenis_tes[` + x + `]') is-invalid @enderror" name="jenis_tes[` + x + `]" style="width:100%;" id="jenis_tes` + no + `">
                                                          <option value="">Pilih Produk</option>
                                                          <option value="Rapid">Rapid</option>
@@ -324,9 +324,9 @@
                                                         @endforeach
                                                          </select>
                                                          </td>
-                                                        <td><input id="dates` + value[`id`] + `" type="date" class="form-control" readonly></td>      
+                                                        <td><input id="dates` + value[`id`] + `" type="date" class="form-control" readonly></td>
                                                          <td>` + value[`nama`] + `</td>
-                                                         <td>         
+                                                         <td>
                                                         <div id ="rapids` + no + `" class="row" hidden>
                                                         <div class="icheck-success d-inline col-sm-6">
                                                             <input type="radio" name="hasil_covid[` + x + `]" value="Non reaktif" id="hasil_cov` + no + `">
@@ -368,7 +368,7 @@
                                                         </div>
                                                        </div>
                                                         </td>
-                                                        <td>    
+                                                        <td>
                                                          <textarea type="text" class="form-control" name="keterangan[` + x + `]"  ></textarea>
                                                         </td>
                                                         </tr>`);
