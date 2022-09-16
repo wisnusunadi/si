@@ -2062,12 +2062,20 @@ class ProduksiController extends Controller
                     return $d->jumlah . ' Unit'. '<br><span class="badge badge-dark">Kurang ' . intval($d->jumlah - $d->jml_rakit) . ' Unit</span>';
                 })
                 ->addColumn('action', function ($d) {
-                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="'.$d->produk_id.'">
+                //     $a = '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="'.$d->produk_id.'">
+                //                     <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
+                //             </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'">
+                //                 <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
+                //             </a>';
+                    $a = '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="'.$d->produk_id.'">
                                     <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
                             </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'">
                                 <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
                             </a>
-                            ';
+                            </a>&nbsp;<a data-toggle="modal" data-target="#evaluasirakit" class="evaluasirakit" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'">
+                                <button class="btn btn-outline-secondary btn-sm"><i class="far fa-edit"></i> Evaluasi Perakitan</button>
+                            </a>';
+                    return $a;
                 })
                 ->addColumn('created_at', function ($d) {
                     return $d->created_at;
@@ -2085,6 +2093,31 @@ class ProduksiController extends Controller
                 ->rawColumns(['action', 'jml', 'end'])
                 ->make(true);
         return $res;
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+
+    }
+
+    function storeTelatRakit(Request $request)
+    {
+        try {
+            JadwalPerakitan::find($request->jadwal_id)->update(['evaluasi' => $request->evaluasi]);
+            $obj = [
+                'jadwal' => $request->jadwal_id,
+                'evaluasi' => $request->evaluasi,
+            ];
+
+            SystemLog::create([
+                'tipe' => 'Produksi',
+                'subjek' => 'Evaluasi Perakitan',
+                'response' => json_encode($obj),
+                'user_id' => $request->created_by,
+            ]);
+            return response()->json(['msg' => 'Data Berhasil disimpan']);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
