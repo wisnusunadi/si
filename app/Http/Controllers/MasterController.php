@@ -1086,29 +1086,6 @@ class MasterController extends Controller
     public function delete_customer($id)
     {
         $customer = Customer::find($id);
-        $obj = [
-            'nama' => $customer->nama,
-            'telp' => $customer->tel,
-            'alamat' => $customer->alamat,
-            'email' => $customer->email,
-            'id_provinsi' => $customer->id_provinsi,
-            'ktp' => $customer->ktp,
-            'npwp' => $customer->npwp,
-            'batas' => $customer->batas,
-            'pic' => $customer->pic,
-            'izin_usaha' => $customer->izin_usaha,
-            'modal_usaha' => $customer->modal_usaha,
-            'hasil_penjualan' => $customer->hasil_penjualan,
-            'nama_pemilik' => $customer->nama_pemilik,
-            'ket' => $customer->ket,
-        ];
-
-        SystemLog::create([
-            'tipe' => 'Penjualan',
-            'subjek' => 'Hapus Customer / Distributor',
-            'response' => json_encode($obj),
-            'user_id' => Auth::user()->id
-        ]);
         $customer->delete();
 
         if ($customer) {
@@ -1228,21 +1205,21 @@ class MasterController extends Controller
         }
 
         if ($q) {$obj = [
-            'nama' => $request->nama_ekspedisi,
-            'alamat' => $request->alamat,
-            'email' => $request->email,
-            'telp' => $request->telepon,
-            'ket' => $request->keterangan,
-            'jalur' => JalurEkspedisi::whereIn('id', $request->jalur)->get()->pluck('nama'),
-            'provinsi' => $request->jurusan == 'provinsi' ? Provinsi::whereIn('id', $request->provinsi_id)->get()->pluck('nama') : 'Seluruh Indonesia',
-        ];
+                'nama' => $request->nama_ekspedisi,
+                'alamat' => $request->alamat,
+                'email' => $request->email,
+                'telp' => $request->telepon,
+                'ket' => $request->keterangan,
+                'jalur' => JalurEkspedisi::whereIn('id', $request->jalur)->get()->pluck('nama'),
+                'provinsi' => $request->jurusan == 'provinsi' ? Provinsi::whereIn('id', $request->provinsi_id)->get()->pluck('nama') : 'Seluruh Indonesia',
+            ];
 
-        SystemLog::create([
-            'tipe' => 'Logistik',
-            'subjek' => 'Ubah Ekspedisi',
-            'response' => json_encode($obj),
-            'user_id' => $request->user_id,
-        ]);
+            SystemLog::create([
+                'tipe' => 'Logistik',
+                'subjek' => 'Ubah Ekspedisi',
+                'response' => json_encode($obj),
+                'user_id' => $request->user_id,
+            ]);
             return response()->json(['data' => 'success']);
         } else if (!$q) {
             return response()->json(['data' => 'error']);
