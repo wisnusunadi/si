@@ -95,7 +95,7 @@
                                     <template v-for="(paket, id) in detailpenjualanekatalog.detail_pesanan">
                                     <tr>
                                         <td>{{ id + 1 }}</td>
-                                        <td>{{ paket.nama_paket }} button.</td>
+                                        <td>{{ paket.nama_paket }} <button class="button is-primary is-small is-rounded is-outlined" @click="showChart(paket.id, 'paket')"><i class="fas fa-eye"></i></button></td>
                                         <td>{{ paket.jumlah }}</td>
                                         <td>Rp. {{ formatRupiah(paket.harga) }}</td>
                                         <td>Rp. {{ formatRupiah(paket.ongkir) }}</td>
@@ -103,7 +103,7 @@
                                     </tr>
                                     <tr v-for="detail in paket.detail_produk">
                                         <td></td>
-                                        <td>{{ detail.nama_produk }}</td>
+                                        <td>{{ detail.nama_produk }} <button class="button is-primary is-small is-rounded is-outlined" @click="showChart(detail.id, 'variasi')"><i class="fas fa-eye"></i></button></td>
                                         <td>{{ detail.jumlah }}</td>
                                     </tr>    
                                     </template>
@@ -131,7 +131,8 @@
         data() {
             return {
                 detailpenjualanekatalog: null,
-                tabs: false
+                tabs: false,
+                chartData: null,
             }
         },
         components: {
@@ -180,6 +181,20 @@
                     total += this.subtotal(paket.jumlah, paket.harga, paket.ongkir);
                 });
                 return total;
+            },
+            async showChart(id, jenis){
+                this.tabs = true;
+                await axios.get('/api/get_stok_pesanan',
+                {
+                    params: {
+                        id,
+                        jenis
+                    }
+                }
+                ).then(response => {
+                    this.chartData = response.data;
+                    console.log(this.chartData);
+                })
             }
         },
         mounted() {
