@@ -95,13 +95,13 @@
                                     <template v-for="(paket, id) in detailpenjualanekatalog.detail_pesanan">
                                     <tr>
                                         <td>{{ id + 1 }}</td>
-                                        <td>{{ paket.nama_paket }}</td>
+                                        <td>{{ paket.nama_paket }} button.</td>
                                         <td>{{ paket.jumlah }}</td>
                                         <td>Rp. {{ formatRupiah(paket.harga) }}</td>
                                         <td>Rp. {{ formatRupiah(paket.ongkir) }}</td>
                                         <td>Rp. {{ formatRupiah(subtotal(paket.jumlah, paket.harga, paket.ongkir)) }}</td>
                                     </tr>
-                                    <tr v-for="(detail, id) in paket.detail_produk">
+                                    <tr v-for="detail in paket.detail_produk">
                                         <td></td>
                                         <td>{{ detail.nama_produk }}</td>
                                         <td>{{ detail.jumlah }}</td>
