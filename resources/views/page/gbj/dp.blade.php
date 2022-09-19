@@ -218,7 +218,7 @@
         var tgl = $(this).data('tgl');
         var brgid = $(this).data('brgid');
         console.log(id);
-        $('span#title').text(nama.concat(' ', tipe));
+        $('span#title').text(nama);
 
         $('.scan-produk').DataTable().destroy();
         $('.scan-produk').DataTable({
@@ -246,23 +246,23 @@
             }
         });
 
-        $.ajax({
-            url: '/api/gbj/sel-layout',
-            type: 'GET',
-            dataType: 'json',
-            success: function (res) {
-                if (res) {
-                    console.log(res);
-                    $("#layout_id").empty();
-                    $.each(res, function (key, value) {
-                        $("#layout_id").append('<option value="' + value.id + '">' + value
-                            .ruang + '</option');
-                    });
-                } else {
-                    $("#layout_id").empty();
-                }
-            }
-        });
+        // $.ajax({
+        //     url: '/api/gbj/sel-layout',
+        //     type: 'GET',
+        //     dataType: 'json',
+        //     success: function (res) {
+        //         if (res) {
+        //             console.log(res);
+        //             $("#layout_id").empty();
+        //             $.each(res, function (key, value) {
+        //                 $("#layout_id").append('<option value="' + value.id + '">' + value
+        //                     .ruang + '</option');
+        //             });
+        //         } else {
+        //             $("#layout_id").empty();
+        //         }
+        //     }
+        // });
 
         openModalTerima();
     });
@@ -274,7 +274,7 @@
         var tgl = $(this).data('tgl');
         var brgid = $(this).data('brgid');
         console.log(tgl);
-        $('span#titlee').text(nama.concat(' ', tipe));
+        $('span#titlee').text(nama);
 
         $('.table-seri').DataTable().destroy();
         $('.table-seri').DataTable({

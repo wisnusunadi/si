@@ -73,6 +73,7 @@
     <div class="container-fluid">
         <form action="{{route('penjualan.customer.store')}}" method="post">
             {{csrf_field()}}
+            <input type="hidden" name="user_id" value={{ Auth::user()->id }}>
             <div class="row d-flex justify-content-center">
                 <div class="col-lg-10 co-md-12">
                             <div class="row">

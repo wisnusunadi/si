@@ -300,6 +300,76 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade modalEvaluasiPerakitan">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Evaluasi Perakitan</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-sm">
+                                <label for="">Nama Produk</label>
+                                <div class="card" style="background-color: #C8E1A7">
+                                    <div class="card-body">
+                                        <span id="produkEvaluasi"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-sm">
+                                <label for="">Jumlah Transfer</label>
+                                <div class="card" style="background-color: #F89F81">
+                                    <div class="card-body">
+                                            <span id="jmlEvaluasi"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-sm">
+                                <label for="">Tanggal Mulai</label>
+                                <div class="card" style="background-color: #FFE0B4">
+                                    <div class="card-body">
+                                        <span id="tglMulaiEvaluasi"></span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <label for="">Tanggal Selesai</label>
+                                <div class="card" style="background-color: #FFECB2">
+                                    <div class="card-body">
+                                        <span id="tglSelesaiEvaluasi"></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form action="" id="evaluasiForm" name="evaluasiForm">
+                    <input type="hidden" name="jadwal_id" id="jwdid1">
+                    <input type="hidden" name="created_by" value="{{ Auth::user()->id }}">
+                    <div class="card-body">
+                        <label for="">Keterangan</label>
+                        <div class="form-group">
+                            <textarea name="evaluasi" id="keteranganEvaluasi" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="submit" class="btn btn-primary detailEvaluasiKirim">Simpan</button>
+            </div>
+        </form>
+        </div>
+    </div>
+</div>
 @stop
 
 @section('adminlte_js')
@@ -518,126 +588,134 @@
         });
 
         $(document).on('click', '#btnSave', function (e) {
-            e.preventDefault();
-            let arr = [];
-            const data = scanProduk.$('.noseri').map(function () {
-                return $(this).val();
-            }).get();
+            if ($('#no_bppb').val().length <= 10) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Warning',
+                    text: 'Nomor BPPB Minimal 10 Karakter.',
+                })
+            } else {
+                e.preventDefault();
+                let arr = [];
+                const data = scanProduk.$('.noseri').map(function () {
+                    return $(this).val();
+                }).get();
 
-            data.forEach(function (item) {
-                if (item != '') {
-                    arr.push(item);
-                }
-            })
-
-            const count = arr =>
-                arr.reduce((a, b) => ({
-                    ...a,
-                    [b]: (a[b] || 0) + 1
-                }), {})
-
-            const duplicates = dict =>
-                Object.keys(dict).filter((a) => dict[a] > 1)
-
-            Swal.fire({
-                title: 'Apakah Kamu Yakin?',
-                text: "Melakukan Perakitan di Tanggal "+ new Date($('#tgl_perakitan').val()).toLocaleDateString('id-ID', {year:"numeric", month: "long", day: "numeric"}) + " Sejumlah "+arr.length+ " Nomor seri",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    Swal.fire({
-                        title: 'Please wait',
-                        text: 'Data is transferring...',
-                        allowOutsideClick: false,
-                        showConfirmButton: false
-                    });
-                    $(this).prop('disabled', true);
-
-                    if (duplicates(count(arr)).length > 0) {
-                        $('.noseri').removeClass('is-invalid');
-                        $('.noseri').filter(function () {
-                            for (let index = 0; index < duplicates(count(arr))
-                                .length; index++) {
-                                if ($(this).val() == duplicates(count(arr))[index]) {
-                                    return true;
-                                }
-                            }
-                        }).addClass('is-invalid');
-
-                        Swal.fire({
-                            icon: 'error',
-                            title: 'Oops...',
-                            text: 'Nomor seri ' + duplicates(count(arr)) +
-                                ' ada yang sama.',
-                        }).then((result) => {
-                            if (result.value) {
-                                $(this).prop('disabled', false);
-                            }
-                        });
-                    } else {
-                        $('.noseri').removeClass('is-invalid');
-                        $.ajax({
-                            url: "/api/prd/cek-noseri",
-                            type: "post",
-                            data: {
-                                noseri: arr,
-                            },
-                            success: function(res) {
-                                // console.log(res);
-                                if(res.error == true) {
-                                    Swal.fire({
-                                        icon: 'error',
-                                        title: 'Oops...',
-                                        text: res.msg,
-                                    }).then((result) => {
-                                        if (result.value) {
-                                            $('#btnSave').prop('disabled', false);
-                                        }
-                                    });
-                                } else {
-                                    let tgl = $('#tgl_perakitan').val();
-                                    let today = new Date();
-                                    let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-                                    let datetime = tgl + ' ' + time;
-                                    // console.log('a');
-                                    $.ajax({
-                                        url: "/api/prd/rakit-seri",
-                                        type: "post",
-                                        data: {
-                                            "_token": "{{ csrf_token() }}",
-                                            no_bppb: $('#no_bppb').val(),
-                                            noseri: arr,
-                                            userid: $('#userid').val(),
-                                            jadwal_id: id,
-                                            tgl_perakitan: datetime,
-                                        },
-                                        success: function (res) {
-                                            console.log(res);
-                                            Swal.fire({
-                                                icon: 'success',
-                                                title: 'Berhasil',
-                                                text: 'Data berhasil disimpan.',
-                                            })
-                                            $('.modalRakit').modal('hide');
-                                            $('.scan-produk').DataTable().destroy();
-                                            $('.scan-produk tbody').empty();
-                                            $('#table_produk_perakitan').DataTable().ajax
-                                                .reload();
-                                            location.reload();
-                                        }
-                                    })
-                                }
-                            }
-                        })
+                data.forEach(function (item) {
+                    if (item != '') {
+                        arr.push(item);
                     }
-                } else if (result.dismiss === Swal.DismissReason.cancel) {
-                    Swal.fire('Changes are not saved', '', 'info')
-                }
-            })
+                })
+
+                const count = arr =>
+                    arr.reduce((a, b) => ({
+                        ...a,
+                        [b]: (a[b] || 0) + 1
+                    }), {})
+
+                const duplicates = dict =>
+                    Object.keys(dict).filter((a) => dict[a] > 1)
+
+                Swal.fire({
+                    title: 'Apakah Kamu Yakin?',
+                    text: "Melakukan Perakitan di Tanggal "+ new Date($('#tgl_perakitan').val()).toLocaleDateString('id-ID', {year:"numeric", month: "long", day: "numeric"}) + " Sejumlah "+arr.length+ " Nomor seri",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, save it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        Swal.fire({
+                            title: 'Please wait',
+                            text: 'Data is transferring...',
+                            allowOutsideClick: false,
+                            showConfirmButton: false
+                        });
+                        $(this).prop('disabled', true);
+
+                        if (duplicates(count(arr)).length > 0) {
+                            $('.noseri').removeClass('is-invalid');
+                            $('.noseri').filter(function () {
+                                for (let index = 0; index < duplicates(count(arr))
+                                    .length; index++) {
+                                    if ($(this).val() == duplicates(count(arr))[index]) {
+                                        return true;
+                                    }
+                                }
+                            }).addClass('is-invalid');
+
+                            Swal.fire({
+                                icon: 'error',
+                                title: 'Oops...',
+                                text: 'Nomor seri ' + duplicates(count(arr)) +
+                                    ' ada yang sama.',
+                            }).then((result) => {
+                                if (result.value) {
+                                    $(this).prop('disabled', false);
+                                }
+                            });
+                        } else {
+                            $('.noseri').removeClass('is-invalid');
+                            $.ajax({
+                                url: "/api/prd/cek-noseri",
+                                type: "post",
+                                data: {
+                                    noseri: arr,
+                                },
+                                success: function(res) {
+                                    if(res.error == true) {
+                                        Swal.fire({
+                                            icon: 'error',
+                                            title: 'Oops...',
+                                            text: res.msg,
+                                        }).then((result) => {
+                                            if (result.value) {
+                                                $('#btnSave').prop('disabled', false);
+                                            }
+                                        });
+                                    } else {
+                                        let tgl = $('#tgl_perakitan').val();
+                                        let today = new Date();
+                                        let time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+                                        let datetime = tgl + ' ' + time;
+                                        // console.log('a');
+                                        $.ajax({
+                                            url: "/api/prd/rakit-seri",
+                                            type: "post",
+                                            data: {
+                                                "_token": "{{ csrf_token() }}",
+                                                no_bppb: $('#no_bppb').val(),
+                                                noseri: arr,
+                                                userid: $('#userid').val(),
+                                                jadwal_id: id,
+                                                tgl_perakitan: datetime,
+                                            },
+                                            success: function (res) {
+                                                console.log(res);
+                                                Swal.fire({
+                                                    icon: 'success',
+                                                    title: 'Berhasil',
+                                                    text: 'Data berhasil disimpan.',
+                                                })
+                                                $('.modalRakit').modal('hide');
+                                                $('.scan-produk').DataTable().destroy();
+                                                $('.scan-produk tbody').empty();
+                                                $('#table_produk_perakitan').DataTable().ajax
+                                                    .reload();
+                                                location.reload();
+                                            }
+                                        })
+                                    }
+                                }
+                            })
+                        }
+                    } else if (result.dismiss === Swal.DismissReason.cancel) {
+                        Swal.fire('Changes are not saved', '', 'info')
+                    }
+                })
+            }
+
 
         })
 
@@ -767,6 +845,23 @@
             console.log($(this).data('id'));
         });
 
+        $(document).on('click', '.evaluasirakit', function () {
+            const id = $(this).data('id');
+            $('#jwdid1').val(id);
+            const prd = $(this).parent().prev().prev().text();
+            const jml = $(this).data('jml');
+            const produk = $(this).data('produk');
+            const eval = $(this).data('eval');
+            const tglmulai = $(this).parent().prev().prev().prev().prev().prev().text();
+            const tglselesai = $(this).parent().prev().prev().prev().prev().find('span.tanggal').text();
+            $('#produkEvaluasi').text(prd);
+            $('#jmlEvaluasi').text(jml + ' Unit');
+            $('#tglMulaiEvaluasi').text(tglmulai);
+            $('#tglSelesaiEvaluasi').text(tglselesai);
+            $('#keteranganEvaluasi').text(eval);
+            $('.modalEvaluasiPerakitan').modal('show');
+        })
+
         $('body').on('submit', '#transferForm', function(e) {
             e.preventDefault();
             var actionType = $('.detailtransferKirim').val();
@@ -805,6 +900,55 @@
                                 text: 'Data berhasil dikirim.',
                             })
                             $('.modalDetailTransfer').modal('hide');
+                            $('#table_produk_perakitan').DataTable().ajax
+                                .reload();
+                            setTimeout(() => {
+                                location.reload();
+                            }, 2000);
+                        }
+                    })
+                }
+            })
+        })
+
+        $('body').on('submit', '#evaluasiForm', function(e) {
+            e.preventDefault();
+            var actionType = $('.detailEvaluasiKirim').val();
+            $('.detailEvaluasiKirim').html('Sending..');
+            var formData = new FormData(this);
+            const keterangan = $('#keteranganEvaluasi').val();
+            Swal.fire({
+                title: 'Apakah anda yakin?',
+                text: 'Data akan ditransfer.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Ya, Kirim!'
+            }).then((result) => {
+                if (result.value) {
+                    $(this).prop('disabled', true);
+                    Swal.fire({
+                        title: 'Please wait',
+                        text: 'Data is transferring...',
+                        allowOutsideClick: false,
+                        showConfirmButton: false
+                    });
+                    $.ajax({
+                        url: "/api/v2/prd/telat_rakit",
+                        type: "post",
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: (data) => {
+                            console.log(data);
+                            Swal.fire({
+                                icon: 'success',
+                                title: 'Berhasil',
+                                text: 'Data berhasil dikirim.',
+                            })
+                            $('.modalEvaluasiPerakitan').modal('hide');
                             $('#table_produk_perakitan').DataTable().ajax
                                 .reload();
                             setTimeout(() => {

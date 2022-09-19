@@ -10,6 +10,7 @@
                 @if($jenis == "produk")
                 <div class="card-body">
                     <div class="margin">
+                        <input type="hidden" name="user_idd" value="{{ Auth::user()->id }}">
                         <div><small class="text-muted">Nama Produk</small></div>
                         <div><b>{{$data->GudangBarangJadi->Produk->nama}} {{$data->GudangBarangJadi->nama}}</b></div>
                     </div>
@@ -21,6 +22,7 @@
                 @elseif($jenis == "part")
                 <div class="card-body">
                     <div class="margin">
+                        <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                         <div><small class="text-muted">Nama Part</small></div>
                         <div><b>{{$data->Sparepart->nama}}</b></div>
                     </div>

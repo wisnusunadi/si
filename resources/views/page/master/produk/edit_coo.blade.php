@@ -47,6 +47,7 @@
                     @csrf
                     <div class="card card-outline card-warning">
                         <div class="card-header">
+                            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
                             <h6 class="card-title">Ubah Data</h6>
                         </div>
                         <div class="card-body">
