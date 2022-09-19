@@ -216,6 +216,10 @@
                             </select> --}}
                             </div>
                             <div class="form-group">
+                                <label for="">Kerusakan</label>
+                                <textarea name="remark" id="remark" cols="5" rows="5" class="form-control"></textarea>
+                              </div>
+                            <div class="form-group">
                                 <label for="">Perbaikan</label>
                                 <textarea name="perbaikan" id="perbaikan" cols="5" rows="5"
                                     class="form-control"></textarea>
@@ -496,7 +500,7 @@
                 $('#layout_id').select2().trigger('change');
                 $('.varian').val(res.hasiljadi);
                 $('.varian').select2().trigger('change');
-                // $('.fixid').val(res.noseri);
+                $('.fixid').val(res.noseri);
                 // $('.fixid').select2().trigger('change');
                 $('#tk_kerusakan').val(res.tingkat);
                 $('#tk_kerusakan').select2().trigger('change');
@@ -548,7 +552,7 @@
                                 showConfirmButton: false,
                                 timer: 1500
                             });
-                            // $('.table_edit_sparepart').DataTable().ajax.reload();
+                            $('.table_edit_sparepart').DataTable().ajax.reload();
                             // location.reload();
                         },
                     });

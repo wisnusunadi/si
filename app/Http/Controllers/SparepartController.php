@@ -357,7 +357,7 @@ class SparepartController extends Controller
                     }
                 })
                 ->addColumn('noseri_new', function($d){
-                    return $d->noseri_fix_id == null ? '-' : $d->noseri_new->noseri;
+                    return $d->noseri_fix_id == null ? '-' : $d->noseri_fix_id;
                 })
                 ->addColumn('layout', function ($d) {
                     if($d->seri) {
