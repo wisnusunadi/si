@@ -31,6 +31,7 @@
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         font-size: 18px
     }
+
     .sudah_ditransfer {
         float: left;
         width: auto;
@@ -140,7 +141,8 @@
                         <tr>
                             <td>WESRUF9835734958</td>
                             <td><span class="badge badge-warning">Sudah Ditransfer</span></td>
-                            <td><button class="btn btn-outline-success lihatData"><i class="fa fa-eye"></i></button></td>
+                            <td><button class="btn btn-outline-success lihatData"><i class="fa fa-eye"></i></button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -183,43 +185,41 @@
                         <form action="" id="myForm" name="myForm">
                             <input type="hidden" name="id" id="kode">
                             <input type="hidden" name="userid" id="user_id" value="{{ Auth::user()->id }}">
-                        <div class="form-row">
-                            <div class="form-group col">
-                                <label for="">Layout</label>
-                                <select name="layout_id" id="layout_id" class="form-control layout_edit">
-                                    @foreach ($layout as $l)
+                            <div class="form-row">
+                                <div class="form-group col">
+                                    <label for="">Layout</label>
+                                    <select name="layout_id" id="layout_id" class="form-control layout_edit">
+                                        @foreach ($layout as $l)
                                         <option value="{{ $l->id }}">{{ $l->ruang }}</option>
-                                   @endforeach
-                                </select>
+                                        @endforeach
+                                    </select>
+                                </div>
+                                <div class="form-group col">
+                                    <label for="">Tingkat Kerusakan</label>
+                                    <select name="tk_kerusakan" id="tk_kerusakan" class="form-control kerusakan_edit">
+                                        <option value="1">Level 1</option>
+                                        <option value="2">Level 2</option>
+                                        <option value="3">Level 3</option>
+                                    </select>
+                                </div>
+                                <div class="form-group col">
+                                    <label for="">Hasil Jadi</label>
+                                    <select name="hasil_jadi" id="varian" class="form-control varian">
+                                        <option></option>
+                                    </select>
+                                </div>
                             </div>
-                            <div class="form-group col">
-                                <label for="">Tingkat Kerusakan</label>
-                                <select name="tk_kerusakan" id="tk_kerusakan" class="form-control kerusakan_edit">
-                                    <option value="1">Level 1</option>
-                                    <option value="2">Level 2</option>
-                                    <option value="3">Level 3</option>
-                                </select>
+                            <div class="form-group fixidCol">
+                                <label for="">Perubahan Nomor Seri Baru</label>
+                                <input type="text" class="form-control fixid" name="noseri_fix">
+                                {{-- <select name="noseri_fix" class="form-control fixid">
+                            </select> --}}
                             </div>
-                            <div class="form-group col">
-                                <label for="">Hasil Jadi</label>
-                                <select name="hasil_jadi" id="varian" class="form-control varian">
-                                <option></option>
-                                </select>
+                            <div class="form-group">
+                                <label for="">Perbaikan</label>
+                                <textarea name="perbaikan" id="perbaikan" cols="5" rows="5"
+                                    class="form-control"></textarea>
                             </div>
-                        </div>
-                        <div class="form-group fixidCol">
-                            <label for="">Perubahan Nomor Seri Baru</label>
-                            <select name="noseri_fix" class="form-control fixid">
-                            </select>
-                          </div>
-                        <div class="form-group">
-                          <label for="">Kerusakan</label>
-                          <textarea name="remark" id="remark" cols="5" rows="5" class="form-control"></textarea>
-                        </div>
-                        <div class="form-group">
-                            <label for="">Perbaikan</label>
-                            <textarea name="perbaikan" id="perbaikan" cols="5" rows="5" class="form-control"></textarea>
-                          </div>
                     </div>
                 </div>
             </div>
@@ -227,71 +227,72 @@
                 <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
                 <button type="submit" class="btn btn-primary">Simpan</button>
             </div>
-        </form>
+            </form>
         </div>
     </div>
 </div>
 
 {{-- Modal Edit --}}
-<div class="modal fade editDetail" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1" aria-labelledby="staticBackdrop" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
-      </div>
-      <div class="modal-body">
-        <div class="card">
-            <div class="card-header">
-                <div class="row">
-                    <div class="col">
-                        <label for="">No Seri</label>
-                        <div class="card nomor-so">
-                            <div class="card-body" id="nose">89798797856456</div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label for="">Tanggal Masuk & Keluar</label>
-                        <div class="card-group">
-                            <div class="card nomor-po">
-                                <div class="card-body" id="tgl_in">23-05-2022</div>
+<div class="modal fade editDetail" id="staticBackdrop" data-backdrop="static" data-keyboard="false" tabindex="-1"
+    aria-labelledby="staticBackdrop" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col">
+                                <label for="">No Seri</label>
+                                <div class="card nomor-so">
+                                    <div class="card-body" id="nose">89798797856456</div>
+                                </div>
                             </div>
-                            <div class="card nomor-po">
-                                <div class="card-body" id="tgl_out">24-05-2022</div>
+                            <div class="col">
+                                <label for="">Tanggal Masuk & Keluar</label>
+                                <div class="card-group">
+                                    <div class="card nomor-po">
+                                        <div class="card-body" id="tgl_in">23-05-2022</div>
+                                    </div>
+                                    <div class="card nomor-po">
+                                        <div class="card-body" id="tgl_out">24-05-2022</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <label for="">Dari</label>
+                                <div class="card nomor-akn">
+                                    <div class="card-body" id="from">Gudang Penjualan</div>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <label for="">Ke</label>
+                                <div class="card instansi">
+                                    <div class="card-body" id="to">After Sales</div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <label for="">Dari</label>
-                        <div class="card nomor-akn">
-                            <div class="card-body" id="from">Gudang Penjualan</div>
-                        </div>
-                    </div>
-                    <div class="col">
-                        <label for="">Ke</label>
-                        <div class="card instansi">
-                            <div class="card-body" id="to">After Sales</div>
-                        </div>
+                    <div class="card-body">
+                        <label for="">Kerusakan</label>
+                        <textarea name="" id="kerusakan" cols="30" rows="5" class="form-control"></textarea>
+                        <label for="">Perbaikan</label>
+                        <textarea name="" id="perbaikan" cols="30" rows="5" class="form-control"></textarea>
                     </div>
                 </div>
             </div>
-          <div class="card-body">
-            <label for="">Kerusakan</label>
-            <textarea name="" id="kerusakan" cols="30" rows="5" class="form-control"></textarea>
-            <label for="">Perbaikan</label>
-            <textarea name="" id="perbaikan" cols="30" rows="5" class="form-control"></textarea>
-          </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
+                <button type="button" class="btn btn-primary buttonSimpan">Simpan</button>
+            </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-dismiss="modal">Keluar</button>
-        <button type="button" class="btn btn-primary buttonSimpan">Simpan</button>
-      </div>
     </div>
-  </div>
 </div>
 
 @stop
@@ -320,9 +321,9 @@
             type: 'get',
             url: '/api/gbj/sel-gbj',
             dataType: 'json',
-            beforeSend : function(xhr){
-                        xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
-                    },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+            },
             success: function (data) {
                 console.log(data)
                 $.map(data, function (item) {
@@ -337,7 +338,7 @@
 
     // disable button back browser
     window.history.pushState(null, "", window.location.href);
-    window.onpopstate = function() {
+    window.onpopstate = function () {
         window.history.pushState(null, "", window.location.href);
     };
 
@@ -359,8 +360,8 @@
         dropdownParent: $('.changeStatus')
     });
 
-    $('.btnBack').click(function() {
-        window.location.href = '{{ url('/gk/gudang')}}'
+    $('.btnBack').click(function () {
+        window.location.href = '{{ url(' / gk / gudang ')}}'
     })
     var id = $('#id').val();
     console.log(id);
@@ -376,97 +377,119 @@
         processing: true,
         serverSide: true,
         ajax: {
-            url: "/api/gk/his-unit/" +id,
-            beforeSend : function(xhr){
+            url: "/api/gk/his-unit/" + id,
+            beforeSend: function (xhr) {
                 xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
             }
         },
-        columns: [
-            {data: 'inn'},
-            {data: 'out'},
-            {data: 'from'},
-            {data: 'to'},
-            {data: 'noser'},
-            {data: 'noseri_new'},
-            {data: 'layout'},
-            {data: 'remarks'},
-            {data: 'perbaikan'},
+        columns: [{
+                data: 'inn'
+            },
+            {
+                data: 'out'
+            },
+            {
+                data: 'from'
+            },
+            {
+                data: 'to'
+            },
+            {
+                data: 'noser'
+            },
+            {
+                data: 'noseri_new'
+            },
+            {
+                data: 'layout'
+            },
+            {
+                data: 'remarks'
+            },
+            {
+                data: 'perbaikan'
+            },
             // {data: 'tingkat'},
-            {data: 'unit_baru'},
-            {data: 'status'},
-            {data: 'action'},
+            {
+                data: 'unit_baru'
+            },
+            {
+                data: 'status'
+            },
+            {
+                data: 'action'
+            },
         ],
         "language": {
-        "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
+            "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
         },
-        "columnDefs": [
-            {
-                "targets": [9],
-                "visible": document.getElementById('auth').value == '2' ? false : true
-            }
-        ]
+        "columnDefs": [{
+            "targets": [9],
+            "visible": document.getElementById('auth').value == '2' ? false : true
+        }]
     });
     var id = '';
     var gbj = '';
     var status = '';
-    $(document).on('click', '.unitmodal', function() {
+    $(document).on('click', '.unitmodal', function () {
         id = $(this).data('id');
-        gbj = $(this).data('gbj');
+        // gbj = $(this).data('gbj');
         status = $(this).data('status');
-        console.log(status);
-        var route = "{{ route('autocom') }}";
-        $('.fixid').select2({
-            placeholder: "Pilih Noseri",
-            minimumInputLength: 2,
-            minimumResultsForSearch: 10,
-            ajax: {
-                url: route,
-                data: function(params) {
-                    return {
-                        search: params.term,
-                        id: gbj
-                    }
-                },
-                dataType: 'json',
-                delay: 250,
-                processResults: function (data) {
-                    return {
-                        results: $.map(data, function (item) {
-                            return {
-                                text: item.noseri,
-                                id: item.id
-                            }
-                        })
-                    };
-                },
-            },
-            cache: true,
-            allowClear: true,
-            width: '100%'
-        });
+        // var route = "{{ route('autocom') }}";
+        // $('.fixid').select2({
+        //     placeholder: "Pilih Noseri",
+        //     minimumInputLength: 2,
+        //     minimumResultsForSearch: 10,
+        //     ajax: {
+        //         url: route,
+        //         data: function(params) {
+        //             return {
+        //                 search: params.term,
+        //                 id: gbj
+        //             }
+        //         },
+        //         dataType: 'json',
+        //         delay: 250,
+        //         processResults: function (data) {
+        //             return {
+        //                 results: $.map(data, function (item) {
+        //                     return {
+        //                         text: item.noseri,
+        //                         id: item.id
+        //                     }
+        //                 })
+        //             };
+        //         },
+        //     },
+        //     cache: true,
+        //     allowClear: true,
+        //     width: '100%'
+        // });
         if (status == 1) {
             $('.fixidCol').show()
         } else {
             $('.fixidCol').hide()
         }
 
-        $.ajax({
-            url: "/api/gk/noseri/" + id,
-            type: "get",
-            dataType: "json",
-            success: function(res) {
-                $('div#nose').text(res.noser);
-                $('p#in').text(res.in);
-                $('p#out').text(res.out);
-            }
-        })
+        // $.ajax({
+        //     url: "/api/gk/noseri/" + id,
+        //     type: "get",
+        //     dataType: "json",
+        //     success: function (res) {
+        //         $('div#nose').text(res.noser);
+        //         $('p#in').text(res.in);
+        //         $('p#out').text(res.out);
+        //     }
+        // })
 
         $.ajax({
             url: "/api/gk/detailseri",
             type: "post",
-            data: {id : id},
+            data: {
+                id: id
+            },
             dataType: "json",
-            success: function(res) {
+            success: function (res) {
                 console.log(res);
                 $('#kode').val(res.id);
                 $('#layout_id').val(res.layout);
@@ -485,7 +508,7 @@
         changeStatus();
     })
 
-    $('body').on('submit', '#myForm', function(e) {
+    $('body').on('submit', '#myForm', function (e) {
         e.preventDefault();
         var actionType = $('#btnSave').val();
         $('#btnSave').html('Sending..');
@@ -499,27 +522,50 @@
         var formData = new FormData(this);
         $.ajax({
             type: 'POST',
-            url: "/api/gk/ubahunit",
+            url: "/api/v2/gk/checkSeriNew",
             data: formData,
-            cache:false,
+            cache: false,
             contentType: false,
             processData: false,
             success: (data) => {
-                // console.log(data);
-                $('#myForm').trigger('reset');
-                $('.changeStatus').modal('hide');
-                $('#btnSave').html('Kirim');
-                Swal.fire({
-                        position: 'center',
-                        icon: 'success',
-                        title: data.msg,
+                if (data.status == 'success') {
+                    $.ajax({
+                        type: 'POST',
+                        url: "/api/gk/ubahunit",
+                        data: formData,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: (data) => {
+                            // console.log(data);
+                            $('#myForm').trigger('reset');
+                            $('.changeStatus').modal('hide');
+                            $('#btnSave').html('Kirim');
+                            Swal.fire({
+                                position: 'center',
+                                icon: 'success',
+                                title: data.msg,
+                                showConfirmButton: false,
+                                timer: 1500
+                            });
+                            // $('.table_edit_sparepart').DataTable().ajax.reload();
+                            // location.reload();
+                        },
+                    });
+                } else {
+                    Swal.fire({
+                        title: 'Error',
+                        text: data.msg,
+                        icon: 'error',
                         showConfirmButton: false,
                         timer: 1500
                     });
-                $('.table_edit_sparepart').DataTable().ajax.reload();
-                location.reload();
+                    $('#btnSave').html('Save Changes');
+                    $('#btnSave').attr('disabled', false);
+                }
             }
-        });
+        })
+
     })
 
     $(document).on('click', '.editData', function () {
@@ -548,5 +594,6 @@
         })
         console.log(data);
     });
+
 </script>
 @stop
