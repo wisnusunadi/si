@@ -35,7 +35,7 @@
                                     <td v-html="checkdata(penjualanekatalog.tgl_kontrak)"></td>
                                     <td>{{ penjualanekatalog.nama_customer }}</td>
                                     <td v-html="status(penjualanekatalog.status_ppic)"></td>
-                                    <td><button class="button is-info is-light is-small" @click="detailekatalog(penjualanekatalog.id, penjualanekatalog.status_ppic)">Detail</button></td>
+                                    <td><button class="button is-info is-light is-small" @click="detailekatalog(penjualanekatalog.pesanan.id, penjualanekatalog.status_ppic)">Detail</button></td>
                                 </tr>
                             </tbody>
                         </table>

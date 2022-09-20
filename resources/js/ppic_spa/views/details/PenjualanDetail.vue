@@ -79,14 +79,10 @@
                 <div class="content">
                     <div class="columns is-variable bd-klmn-columns is-1">
                         <div class="column is-3" v-if="checkChart">
-                            <div class="bd-notification is-primary has-text-centered">
-                                <div class="column is-one-quarter">
-                                    <DoughnutChart :chartData="chartData" v-if="loadingChart"></DoughnutChart>
-                                    <div v-else class="is-loading"></div>
-                                </div>
-                            </div>
+                            <DoughnutChart :chartData="chartData" v-if="loadingChart"></DoughnutChart>
+                            <div v-else class="is-loading"></div>
                         </div>
-                        <div class="column is-9">
+                        <div class="column" :class="[checkChart ? 'is-9' : 'is-12']">
                             <div class="bd-notification is-primary has-text-centered">
                                 <table class="table is-fullwidth has-text-centered">
                                     <thead>
