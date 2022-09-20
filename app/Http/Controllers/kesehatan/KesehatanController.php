@@ -1883,12 +1883,43 @@ class KesehatanController extends Controller
     }
     public function chart_berat_tahun()
     {
-        // //$data = array();
-        // // $karyawan = Karyawan::has('Kesehatan_awal')
-        // // ->with(['Kesehatan_awal','Berat_karyawan'])
-        // // ->whereHas('Berat_karyawan',function($q){
-        // //     $q->whereBetween('tgl_cek', ["2022-01-01", "2022-12-31"]);
-        // // })->get();
+        $data = array();
+        $jan = Karyawan::has('Kesehatan_awal')
+        ->with('Berat_karyawan',function($q){
+            $q->whereMonth('tgl_cek', '1');
+            $q->whereYear('tgl_cek', '2022');
+        })->get();
+
+
+        $obesitas = 0;
+        $normal = 0;
+        $kurang = 0;
+
+        $bulan = ['jan','feb','mar','apr','mei','jun','jul','agu','sept','okt','nov','des'];
+
+
+        // for ($i=0;$i<=11;$i++){
+        //     $data[$bulan[$i]] =array() ;
+
+        //       $data[$bulan[$i]][0]['obesitas'] = 'x';
+        //       $data[$bulan[$i]][1]['normal'] = 'x';
+        //       $data[$bulan[$i]][2]['kurang'] = 'x';
+        // }
+
+          // $data[$bulan[0]];
+          foreach($jan as $j){
+            $data[$bulan[0]]['obesitas'] = $j->id;
+            // if ($k->Berat_karyawan->last()){
+            //     $bmi = $k->Berat_karyawan->last()->berat  / (($k->Kesehatan_awal->tinggi / 100) * ($k->Kesehatan_awal->tinggi / 100)) ;
+            //     if($bmi >= 25){
+            //         $data[$bulan[0]][0]['obesitas'] = $obesitas+1;
+            //     }else if($bmi >= 18.5 || $bmi <= 24.9){
+            //         $data[$bulan[0]][1]['normal'] =  $normal ++;
+            //     }else if($bmi >= 18.5 || $bmi < 18.59){
+            //         $data[$bulan[0]][2]['kurang']=  $kurang +1;
+            //     }
+            //  }
+            }
         // $obesitas = 0;
         // $normal = 0;
         // $kurang = 0;
@@ -1910,11 +1941,19 @@ class KesehatanController extends Controller
         // // }
         // $data_jan = Berat_karyawan::whereBetween('tgl_cek', ["2022-01-01", "2022-12-31"])->get();
         // $data_feb = Berat_karyawan::whereBetween('tgl_cek', ["2022-01-01", "2022-12-31"])->get();
-
-
-
-        // return response()->json($data);
-
+         return response()->json($data);
     }
+
+    // public function riwayat_penyakit_data(Request $request)
+    // {
+    //   $riwayat_penyakit = Riwayat_penyakit::where('nama', 'LIKE', '%' . $request->term . '%')->groupby('nama')->get();
+    //   $data = array();
+    //   foreach($riwayat_penyakit as $r){
+    //     $data[] = $r->nama;
+    //   }
+    //   return response()->json($data);
+    // }
+
+
 
 }
