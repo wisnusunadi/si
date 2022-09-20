@@ -10,6 +10,7 @@ use App\Models\GudangKarantina;
 use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
 use App\Models\Layout;
+use App\Models\NoseriBarangJadi;
 use App\Models\NoseriKeluarGK;
 use App\Models\NoseriTGbj;
 use App\Models\Sparepart;
@@ -68,6 +69,34 @@ class SparepartController extends Controller
             return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
         }
 
+    }
+
+    function getNoseriGudang(Request $request)
+    {
+        try {
+            // $data = NoseriBarangJadi::where([
+            //     'is_aktif' => 1,
+            //     'gdg_barang_jadi_id' => $request->id,
+            // ])
+            // ->select('id', 'noseri')
+            // ->get();
+            $data = [];
+            if ($request->has('search') || $request->has('id')) {
+                $query = $request->search;
+                $data = NoseriBarangJadi::select('noseri', 'id')
+                            ->where([
+                                'is_aktif' => 1,
+                                'gdg_barang_jadi_id' => $request->id,
+                            ])
+                            ->where("noseri", "LIKE", "%$query%")
+                            ->whereRaw('id NOT IN (SELECT noseri_fix_id from t_gk_noseri where noseri_fix_id is not null)')
+                            ->get();
+            }
+            return response()->json($data);
+
+        } catch (\Exception $e) {
+            return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
+        }
     }
 
     function get_unit()
@@ -327,6 +356,9 @@ class SparepartController extends Controller
                         return $d->noseri;
                     }
                 })
+                ->addColumn('noseri_new', function($d){
+                    return $d->noseri_fix_id == null ? '-' : $d->noseri_fix_id;
+                })
                 ->addColumn('layout', function ($d) {
                     if($d->seri) {
                         return $d->seri->layout->ruang;
@@ -390,7 +422,7 @@ class SparepartController extends Controller
                     if($d->seri) {
                         return ' ';
                     } else {
-                        return '<a data-toggle="modal" data-target="#unitmodal" class="unitmodal" data-attr=""  data-id="' . $d->id . '">
+                        return '<a data-toggle="modal" data-target="#unitmodal" class="unitmodal" data-attr=""  data-id="' . $d->id . '" data-gbj="'.$d->detail->gbj_id.'" data-status="'.$d->status.'">
                             <button class="btn btn-outline-info"><i class="far fa-edit"></i></button>
                             </a>';
                     }
@@ -785,6 +817,8 @@ class SparepartController extends Controller
                 'layout' => $d->layout_id,
                 'note' => $d->remark,
                 'repair' => $d->perbaikan,
+                'hasiljadi' => $d->hasil_jadi_id,
+                'noseri' => $d->noseri_fix_id,
                 'tingkat' => $d->tk_kerusakan,
             ]);
         } catch (\Exception $e) {
@@ -2161,17 +2195,18 @@ class SparepartController extends Controller
     function updateUnit(Request $request)
     {
         try {
-            $data = GudangKarantinaNoseri::find($request->id);
-            $data->layout_id = $request->layout_id;
-            $data->remark = $request->remark;
-            $data->tk_kerusakan = $request->tk_kerusakan;
-            $data->perbaikan = $request->perbaikan;
-            $data->hasil_jadi_id = $request->hasil_jadi;
-            $data->status = 1;
-            $data->updated_at = Carbon::now();
-            $data->updated_by = $request->userid;
-            $data->save();
-            // return $data;
+            GudangKarantinaNoseri::where('id', $request->id)
+                ->update([
+                    'layout_id' => $request->layout_id,
+                    'tk_kerusakan' => $request->tk_kerusakan,
+                    'remark' => $request->remark,
+                    'perbaikan' => $request->perbaikan,
+                    'hasil_jadi_id' => $request->hasil_jadi,
+                    'noseri_fix_id' => strtoupper($request->noseri_fix),
+                    'status' => 1,
+                    'updated_at' => Carbon::now(),
+                    'updated_by' => $request->userid,
+                ]);
 
             return response()->json(['msg' => 'Data Berhasil diubah']);
         } catch (\Exception $e) {

@@ -7,14 +7,16 @@ use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
 use App\Models\Ekatalog;
 use App\Models\Logistik;
+use App\Models\NoseriBarangJadi;
 use App\Models\NoseriCoo;
 use App\Models\NoseriDetailLogistik;
 use App\Models\NoseriDetailPesanan;
+use App\Models\NoseriTGbj;
 use Illuminate\Http\Request;
 use PDF;
 use App\Models\Pesanan;
 use App\Models\Produk;
-
+use App\Models\SystemLog;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 
@@ -1268,6 +1270,28 @@ class DcController extends Controller
             }
         }
         if ($bool == true) {
+            $obj = [
+                'noseri' => NoseriBarangJadi::whereIn('id',
+                                NoseriTGbj::whereIn('id',
+                                    NoseriDetailPesanan::whereIn('id',
+                                        NoseriDetailLogistik::whereIn('id', $array_seri)
+                                        ->get()->pluck('noseri_detail_pesanan_id'))
+                                    ->get()->pluck('t_tfbj_noseri_id'))
+                                ->get()->pluck('noseri_id'))
+                            ->get()->pluck('noseri'),
+                'diketahui' => $request->diketahui,
+                'nama' => $request->nama,
+                'jabatan' => $request->jabatan,
+                'tgl_kirim' => $request->tgl_kirim,
+                'keterangan' => $request->keterangan,
+            ];
+
+            SystemLog::create([
+                'tipe' => 'DC',
+                'subjek' => 'Pembuatan COO',
+                'response' => json_encode($obj),
+                'user_id' => $request->user_id,
+            ]);
             return response()->json(['data' =>  'success']);
         } else {
             return response()->json(['data' =>  'error']);
@@ -1292,6 +1316,28 @@ class DcController extends Controller
             }
         }
         if ($bool == true) {
+            $obj = [
+                'noseri' => NoseriBarangJadi::whereIn('id',
+                                NoseriTGbj::whereIn('id',
+                                    NoseriDetailPesanan::whereIn('id',
+                                        NoseriDetailLogistik::whereIn('id', $array_seri)
+                                        ->get()->pluck('noseri_detail_pesanan_id'))
+                                    ->get()->pluck('t_tfbj_noseri_id'))
+                                ->get()->pluck('noseri_id'))
+                            ->get()->pluck('noseri'),
+                'diketahui' => $request->diketahui,
+                'nama' => $request->nama,
+                'jabatan' => $request->jabatan,
+                'tgl_kirim' => $request->edit_tgl_kirim,
+                'keterangan' => $request->edit_keterangan,
+            ];
+
+            SystemLog::create([
+                'tipe' => 'DC',
+                'subjek' => 'Perubahan Beberapa COO',
+                'response' => json_encode($obj),
+                'user_id' => $request->user_id,
+            ]);
             return response()->json(['data' =>  'success']);
         } else {
             return response()->json(['data' =>  'error']);
@@ -1306,6 +1352,25 @@ class DcController extends Controller
         $l->catatan = $request->keterangan;
         $l->save();
         if ($l) {
+            $obj = [
+                'noseri' => NoseriBarangJadi::whereIn('id',
+                                NoseriTGbj::whereIn('id',
+                                    NoseriDetailPesanan::whereIn('id',
+                                        NoseriDetailLogistik::where('id', NoseriCoo::find($id)->noseri_logistik_id)
+                                        ->get()->pluck('noseri_detail_pesanan_id'))
+                                    ->get()->pluck('t_tfbj_noseri_id'))
+                                ->get()->pluck('noseri_id'))
+                            ->get()->pluck('noseri'),
+                'tgl_kirim' => $request->tgl_kirim,
+                'keterangan' => $request->keterangan,
+            ];
+
+            SystemLog::create([
+                'tipe' => 'DC',
+                'subjek' => 'Perubahan COO',
+                'response' => json_encode($obj),
+                'user_id' => $request->user_id,
+            ]);
             return response()->json(['data' =>  'success']);
         } else {
             return response()->json(['data' =>  'error']);
