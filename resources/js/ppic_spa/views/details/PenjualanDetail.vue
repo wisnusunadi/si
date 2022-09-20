@@ -11,7 +11,7 @@
                 </li>
             </ul>
         </div>
-        <div class="card"  :class="{'is-hidden':tabs}">
+        <div class="card" :class="{'is-hidden':tabs}">
             <div class="card-header">
                 <div class="card-header-title">Informasi</div>
             </div>
@@ -52,11 +52,13 @@
                         </div>
                         <div class="column">
                             <p>Tanggal Delivery</p>
-                            <p class="has-text-weight-bold" v-html="checkTanggalDelivery(detailpenjualanekatalog.tgl_kontrak)"></p>
+                            <p class="has-text-weight-bold"
+                                v-html="checkTanggalDelivery(detailpenjualanekatalog.tgl_kontrak)"></p>
                         </div>
                         <div class="column">
                             <p>Status</p>
-                            <progress class="progress is-success" :value="$route.params.status" max="100">{{$route.params.status}}%</progress>
+                            <progress class="progress is-success" :value="$route.params.status"
+                                max="100">{{$route.params.status}}%</progress>
                             <span><b>{{$route.params.status}}%</b> Selesai</span>
                         </div>
                     </div>
@@ -64,57 +66,73 @@
             </div>
             <div class="card-content">
                 <div class="notification is-primary">
-                <span class="has-text-weight-bold">Detail :</span> {{ detailpenjualanekatalog.deskripsi }}
+                    <span class="has-text-weight-bold">Detail :</span> {{ detailpenjualanekatalog.deskripsi }}
                 </div>
             </div>
         </div>
-        
+
         <div class="card" :class="{'is-hidden':!tabs}">
             <div class="card-header">
                 <div class="card-header-title">Produk</div>
             </div>
             <div class="card-content">
                 <div class="content">
-                    <div class="columns is-4">
-                        <div class="column is-one-quarter">
-                            <DoughnutChart></DoughnutChart>
+                    <div class="columns is-variable bd-klmn-columns is-1">
+                        <div class="column is-3" v-if="checkChart">
+                            <div class="bd-notification is-primary has-text-centered">
+                                <div class="column is-one-quarter">
+                                    <DoughnutChart :chartData="chartData" v-if="loadingChart"></DoughnutChart>
+                                    <div v-else class="is-loading"></div>
+                                </div>
+                            </div>
                         </div>
-                        <div class="column is-8">
-                            <table class="table is-fullwidth has-text-centered">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Produk</th>
-                                        <th>Qty</th>
-                                        <th>Harga</th>
-                                        <th>Ongkir</th>
-                                        <th>Subtotal</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <template v-for="(paket, id) in detailpenjualanekatalog.detail_pesanan">
-                                    <tr>
-                                        <td>{{ id + 1 }}</td>
-                                        <td>{{ paket.nama_paket }} <button class="button is-primary is-small is-rounded is-outlined" @click="showChart(paket.id, 'paket')"><i class="fas fa-eye"></i></button></td>
-                                        <td>{{ paket.jumlah }}</td>
-                                        <td>Rp. {{ formatRupiah(paket.harga) }}</td>
-                                        <td>Rp. {{ formatRupiah(paket.ongkir) }}</td>
-                                        <td>Rp. {{ formatRupiah(subtotal(paket.jumlah, paket.harga, paket.ongkir)) }}</td>
-                                    </tr>
-                                    <tr v-for="detail in paket.detail_produk">
-                                        <td></td>
-                                        <td>{{ detail.nama_produk }} <button class="button is-primary is-small is-rounded is-outlined" @click="showChart(detail.id, 'variasi')"><i class="fas fa-eye"></i></button></td>
-                                        <td>{{ detail.jumlah }}</td>
-                                    </tr>    
-                                    </template>
-                                </tbody>
-                                <tfoot>
-                                    <tr>
-                                        <td colspan="5" class="has-text-right">Total</td>
-                                        <td>Rp. {{ formatRupiah(totalHrg(detailpenjualanekatalog.detail_pesanan)) }}</td>
-                                    </tr>
-                                </tfoot>
-                            </table>
+                        <div class="column is-9">
+                            <div class="bd-notification is-primary has-text-centered">
+                                <table class="table is-fullwidth has-text-centered">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>Produk</th>
+                                            <th>Qty</th>
+                                            <th>Harga</th>
+                                            <th>Ongkir</th>
+                                            <th>Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <template v-for="(paket, id) in detailpenjualanekatalog.detail_pesanan">
+                                            <tr>
+                                                <td>{{ id + 1 }}</td>
+                                                <td>{{ paket.nama_paket }} <button
+                                                        class="button is-primary is-small is-rounded is-outlined"
+                                                        @click="showChart(paket.id, 'paket')"><i
+                                                            class="fas fa-eye"></i></button></td>
+                                                <td>{{ paket.jumlah }}</td>
+                                                <td>Rp. {{ formatRupiah(paket.harga) }}</td>
+                                                <td>Rp. {{ formatRupiah(paket.ongkir) }}</td>
+                                                <td>Rp.
+                                                    {{ formatRupiah(subtotal(paket.jumlah, paket.harga, paket.ongkir)) }}
+                                                </td>
+                                            </tr>
+                                            <tr v-for="detail in paket.detail_produk">
+                                                <td></td>
+                                                <td>{{ detail.nama_produk }} <button
+                                                        class="button is-primary is-small is-rounded is-outlined"
+                                                        @click="showChart(detail.id, 'variasi')"><i
+                                                            class="fas fa-eye"></i></button></td>
+                                                <td>{{ detail.jumlah }}</td>
+                                            </tr>
+                                        </template>
+                                    </tbody>
+                                    <tfoot>
+                                        <tr>
+                                            <td colspan="5" class="has-text-right">Total</td>
+                                            <td>Rp. {{ formatRupiah(totalHrg(detailpenjualanekatalog.detail_pesanan)) }}
+                                            </td>
+                                        </tr>
+                                    </tfoot>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -133,6 +151,7 @@
                 detailpenjualanekatalog: null,
                 tabs: false,
                 chartData: null,
+                loadingChart: false,
             }
         },
         components: {
@@ -146,13 +165,13 @@
                     this.$store.commit('setIsLoading', true);
                     switch (jenis) {
                         case 'ekatalog':
-                        await axios.get('/penjualan/penjualan/detail/ekatalog_ppic/'+id)
-                            .then(response => {
-                                this.detailpenjualanekatalog = response.data.data;
-                                this.$store.commit('setIsLoading', false);
-                            })
+                            await axios.get('/penjualan/penjualan/detail/ekatalog_ppic/' + id)
+                                .then(response => {
+                                    this.detailpenjualanekatalog = response.data.data;
+                                    this.$store.commit('setIsLoading', false);
+                                })
                             break;
-                    
+
                         default:
                             break;
                     }
@@ -163,42 +182,51 @@
             checkTanggalDelivery(date) {
                 let dateNow = new Date().toISOString().slice(0, 10);
                 let difference = Math.ceil((new Date(date) - new Date(dateNow)) / (1000 * 3600 * 24));
-                if(dateNow < date){
-                    if(difference > 7){
-                    return `<div>${date}</div><div><small><i class="fas fa-clock" id="info"></i> ${difference} Hari Lagi</small></div>`;
-                    }else if (difference > 0 && difference <= 7){
+                if (dateNow < date) {
+                    if (difference > 7) {
+                        return `<div>${date}</div><div><small><i class="fas fa-clock" id="info"></i> ${difference} Hari Lagi</small></div>`;
+                    } else if (difference > 0 && difference <= 7) {
                         return `<div>${date}</div><div><small><i class="fas fa-exclamation-circle" id="warning"></i> ${difference} Hari Lagi</small></div>`;
-                    }else{
+                    } else {
                         return `<div>${date}</div><div><small><i class="fas fa-exclamation-circle" id="danger"></i> Batas Kontrak Habis</small></div>`;
                     }
-                }else{
+                } else {
                     return `<div class="text-danger">${date}</div><div class="text-danger"><small><i class="fas fa-check-circle" id="success"></i> Sudah Dikirim</small></div>`;
                 }
             },
-            totalHrg(detail){
+            totalHrg(detail) {
                 let total = 0;
                 detail.forEach(paket => {
                     total += this.subtotal(paket.jumlah, paket.harga, paket.ongkir);
                 });
                 return total;
             },
-            async showChart(id, jenis){
+            async showChart(id, jenis) {
                 this.tabs = true;
-                await axios.get('/api/get_stok_pesanan',
-                {
+                this.loadingChart = false;
+                await axios.get('/api/get_stok_pesanan', {
                     params: {
                         id,
                         jenis
                     }
-                }
-                ).then(response => {
+                }).then(response => {
                     this.chartData = response.data;
-                    console.log(this.chartData);
+                    this.loadingChart = true;
                 })
             }
         },
         mounted() {
             this.getPenjualan();
         },
+        computed: {
+            checkChart() {
+                if (this.chartData != null) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
+        }
     }
+
 </script>
