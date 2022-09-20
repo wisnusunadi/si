@@ -1,5 +1,5 @@
 /*!
-   Copyright 2008-2021 SpryMedia Ltd.
+   SpryMedia Ltd.
 
  This source file is free software, available under the following license:
    MIT license - http://datatables.net/license
@@ -9,12 +9,12 @@
  or FITNESS FOR A PARTICULAR PURPOSE. See the license files for details.
 
  For details please refer to: http://www.datatables.net
- DataTables 1.11.5
- ©2008-2021 SpryMedia Ltd - datatables.net/license
+ DataTables 1.12.1
+ ©2008-2022 SpryMedia Ltd - datatables.net/license
 */
 
 /*!
- * ApexCharts v3.35.0
+ * ApexCharts v3.35.3
  * (c) 2018-2022 ApexCharts
  * Released under the MIT License.
  */
@@ -39,8 +39,8 @@
  */
 
 /*!
- * Vue.js v2.6.14
- * (c) 2014-2021 Evan You
+ * Vue.js v2.7.5
+ * (c) 2014-2022 Evan You
  * Released under the MIT License.
  */
 
@@ -70,9 +70,11 @@ Docs & License: https://fullcalendar.io/
 (c) 2021 Adam Shaw
 */
 
-/*! DataTables 1.11.5
- * ©2008-2021 SpryMedia Ltd - datatables.net/license
+/*! DataTables 1.12.1
+ * ©2008-2022 SpryMedia Ltd - datatables.net/license
  */
+
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 
 /*! svg.draggable.js - v2.2.2 - 2019-01-08
   * https://github.com/svgdotjs/svg.draggable.js
