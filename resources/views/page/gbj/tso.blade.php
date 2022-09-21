@@ -8,6 +8,9 @@
     <div class="container-fluid">
         <h1>Transfer Produk Gudang Barang Jadi Tanpa SO</h1>
     </div><!-- /.container-fluid -->
+        <button type="button" class="btn btn-success" id="downloadTemplate">
+            <i class="fas fa-download"></i>&nbsp;Template
+        </button>
 </section>
 
 <section class="content">
@@ -596,6 +599,10 @@
 
     })
 
-
+    // download template
+    $('#downloadTemplate').click(function () {
+        console.log('test');
+        // window.location = window.location.origin + '/api/v2/gbj/template_noseri'
+    })
 </script>
 @stop
