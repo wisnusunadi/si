@@ -33,6 +33,7 @@
     </div>
     <div class="col-lg-7 col-md-6">
         <form action="/api/dc/so/update/{{$noseri_id}}" id="form-update-coo" method="POST">
+            <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
             <div class="card">
                 <div class="card-header">
                     <h6 class="card-title">Tambah</h6>
