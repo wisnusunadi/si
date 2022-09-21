@@ -724,21 +724,48 @@ class ProduksiController extends Controller
                                                     <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                                 </button>
                                             </a>
-                                           ';
+                                            <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
+                                            <a data-toggle="modal" data-target="#importtemplate" class="importtemplate" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-info btn-sm" type="button">
+                                                    <i class="fas fa-file-import"></i>&nbsp;Unggah
+                                                </button>
+                                            </a>';
                                 } elseif ($x[1] == 'SPA') {
                                     return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '">
                                                 <button class="btn btn-outline-primary btn-sm" type="button">
                                                     <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                                 </button>
                                             </a>
-                                            ';
+                                            <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="spa"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
+                                            <a data-toggle="modal" data-target="#importtemplate" class="importtemplate" data-attr="" data-value="spa"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-info btn-sm" type="button">
+                                                    <i class="fas fa-file-import"></i>&nbsp;Unggah
+                                                </button>
+                                            </a>';
                                 } elseif ($x[1] == 'SPB') {
                                     return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '">
                                                 <button class="btn btn-outline-primary btn-sm" type="button">
                                                     <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                                 </button>
                                             </a>
-                                            ';
+                                            <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="spb"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
+                                            <a data-toggle="modal" data-target="#importtemplate" class="importtemplate" data-attr="" data-value="spb"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-info btn-sm" type="button">
+                                                    <i class="fas fa-file-import"></i>&nbsp;Unggah
+                                                </button>
+                                            </a>';
                                 }
                             }
                         } else {
@@ -752,7 +779,11 @@ class ProduksiController extends Controller
                                             <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                         </button>
                                     </a>
-
+                                    <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
                                             ';
                             } elseif ($x[1] == 'SPA') {
                                 return '<a data-toggle="modal" data-target="#editmodal" class="ubahmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '">
@@ -760,7 +791,11 @@ class ProduksiController extends Controller
                                                 <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                             </button>
                                         </a>
-
+                                        <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="spa"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
                                             ';
                             } elseif ($x[1] == 'SPB') {
                                 return '<a data-toggle="modal" data-target="#editmodal" class="ubahmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '">
@@ -768,7 +803,11 @@ class ProduksiController extends Controller
                                                 <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                             </button>
                                         </a>
-
+                                        <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="spb"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
                                             ';
                             }
 
