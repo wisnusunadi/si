@@ -2445,6 +2445,31 @@ class GudangController extends Controller
         }
     }
 
+    // function template_tanpa_so()
+    // {
+    //     // spreadsheet
+    //     $spreadsheet = new Spreadsheet();
+    //     $spreadsheet->createSheet();
+
+    //     $spreadsheet->setActiveSheetIndex(0);
+    //     $spreadsheet->getActiveSheet()->setTitle('Template');
+    //     $spreadsheet->getActiveSheet()->setCellValue('A1', 'Tujuan');
+    //     $spreadsheet->getActiveSheet()->setCellValue('B1', 'Produk');
+    //     $spreadsheet->getActiveSheet()->setCellValue('C1', 'Noseri');
+    //     $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(30);
+    //     $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(45);
+    //     $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+
+    //     $spreadsheet->setActiveSheetIndex(1);
+    //     $spreadsheet->getActiveSheet()->setTitle('Master Tujuan');
+    //     $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
+    //     $spreadsheet->getActiveSheet()->setCellValue('B1', 'Nama');
+    //     $spreadsheet->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+
+    //     $tujuan = Divisi::whereNotIn('id', [1,2,3,4,5,31])->get();
+
+    // }
+
     // store
     function storeNoseri(Request $request)
     {
