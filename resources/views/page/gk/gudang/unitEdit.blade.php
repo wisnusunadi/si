@@ -475,16 +475,16 @@
             $('.fixidCol').hide()
         }
 
-        // $.ajax({
-        //     url: "/api/gk/noseri/" + id,
-        //     type: "get",
-        //     dataType: "json",
-        //     success: function (res) {
-        //         $('div#nose').text(res.noser);
-        //         $('p#in').text(res.in);
-        //         $('p#out').text(res.out);
-        //     }
-        // })
+        $.ajax({
+            url: "/api/gk/noseri/" + id,
+            type: "get",
+            dataType: "json",
+            success: function (res) {
+                $('div#nose').text(res.noser);
+                $('p#in').text(res.in);
+                $('p#out').text(res.out);
+            }
+        })
 
         $.ajax({
             url: "/api/gk/detailseri",
