@@ -8,9 +8,12 @@
     <div class="container-fluid">
         <h1>Transfer Produk Gudang Barang Jadi Tanpa SO</h1>
     </div><!-- /.container-fluid -->
-        <button type="button" class="btn btn-success" id="downloadTemplate">
+        {{-- <button type="button" class="btn btn-success" id="downloadTemplate">
             <i class="fas fa-download"></i>&nbsp;Template
         </button>
+        <button type="button" class="btn btn-info" id="importTemplate">
+            <i class="fas fa-file"></i>&nbsp;Unggah
+        </button> --}}
 </section>
 
 <section class="content">
@@ -133,6 +136,46 @@
                 <button class="btn btn-primary" type="button" id="btnSave">Simpan</button>
             </div>
         </div>
+    </div>
+</div>
+
+<div class="modal fade import-seri importSeri" id="" role="dialog" aria-labelledby="modelTitleId">
+    <div class="modal-dialog dialogModal modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Unggah File</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form name="formImport" id="formImport" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="soid1" id="soid1" value="">
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="">Sales Order File</label>
+                        <input type="file" name="file_csv" id="template_noseri" class="form-control" accept=".xlsx">
+                    </div>
+
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-outline-info"><i class="fas fa-eye"> Preview</i></button>
+                    </div>
+            </form>
+        </div>
+        <form name="formStoreImport" id="formStoreImport" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="userid" id="userid" value="{{ Auth::user()->id }}">
+            {{-- <input type="hidden" name="soid" id="soid" value=""> --}}
+            <div class="modal-footer" id="csv_data_file" style="width:100%; height:400px; overflow:auto;">
+
+            </div>
+            <div class="modal-footer justify-content-between" id="footer-btn">
+                <p id="bodyNoseri">Noseri Yang Belum Terdaftar:
+                    <br>
+                    <span id="existNoseri"></span>
+                </p>
+                <button type="submit" class="btn btn-default float-right btnImport"><i class="fas fa-upload">
+                        Unggah</i></button>
+            </div>
+        </form>
     </div>
 </div>
 @stop
@@ -601,8 +644,14 @@
 
     // download template
     $('#downloadTemplate').click(function () {
-        console.log('test');
-        // window.location = window.location.origin + '/api/v2/gbj/template_noseri'
+        // console.log('test');
+        window.location = window.location.origin + '/api/v2/gbj/template_nonso'
+    })
+
+    $('#importTemplate').click(function () {
+        // console.log('test');
+        // window.location = window.location.origin + '/api/v2/gbj/template_nonso'
+        $('.importSeri').modal('show')
     })
 </script>
 @stop
