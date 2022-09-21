@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Exports\NoseriRakitExport;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananProduk;
+use App\Models\Divisi;
 use App\Models\GudangBarangJadi;
 use App\Models\GudangBarangJadiHis;
 use App\Models\JadwalPerakitan;
@@ -12,6 +13,8 @@ use App\Models\JadwalRakitNoseri;
 use App\Models\NoseriBarangJadi;
 use App\Models\NoseriTGbj;
 use App\Models\Pesanan;
+use App\Models\Produk;
+use App\Models\SystemLog;
 use App\Models\TFProduksi;
 use App\Models\TFProduksiDetail;
 use Carbon\Carbon;
@@ -67,6 +70,18 @@ class ProduksiController extends Controller
                     // ]);
                 }
             }
+
+            $obj = [
+                'data' => $request->data,
+                'tgl_keluar' => Carbon::now()
+            ];
+
+            SystemLog::create([
+                'tipe' => 'GBJ',
+                'subjek' => 'Pengeluaran Tanpa SO',
+                'response' => json_encode($obj),
+                'user_id' => $request->userid
+            ]);
 
             return response()->json(['msg' => 'Data Berhasil ditransfer', 'error' => false,]);
         } catch (\Exception $e) {
@@ -709,21 +724,48 @@ class ProduksiController extends Controller
                                                     <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                                 </button>
                                             </a>
-                                           ';
+                                            <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
+                                            <a data-toggle="modal" data-target="#importtemplate" class="importtemplate" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-info btn-sm" type="button">
+                                                    <i class="fas fa-file-import"></i>&nbsp;Unggah
+                                                </button>
+                                            </a>';
                                 } elseif ($x[1] == 'SPA') {
                                     return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '">
                                                 <button class="btn btn-outline-primary btn-sm" type="button">
                                                     <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                                 </button>
                                             </a>
-                                            ';
+                                            <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="spa"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
+                                            <a data-toggle="modal" data-target="#importtemplate" class="importtemplate" data-attr="" data-value="spa"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-info btn-sm" type="button">
+                                                    <i class="fas fa-file-import"></i>&nbsp;Unggah
+                                                </button>
+                                            </a>';
                                 } elseif ($x[1] == 'SPB') {
                                     return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '">
                                                 <button class="btn btn-outline-primary btn-sm" type="button">
                                                     <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                                 </button>
                                             </a>
-                                            ';
+                                            <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="spb"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
+                                            <a data-toggle="modal" data-target="#importtemplate" class="importtemplate" data-attr="" data-value="spb"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-info btn-sm" type="button">
+                                                    <i class="fas fa-file-import"></i>&nbsp;Unggah
+                                                </button>
+                                            </a>';
                                 }
                             }
                         } else {
@@ -737,7 +779,11 @@ class ProduksiController extends Controller
                                             <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                         </button>
                                     </a>
-
+                                    <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="ekatalog"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
                                             ';
                             } elseif ($x[1] == 'SPA') {
                                 return '<a data-toggle="modal" data-target="#editmodal" class="ubahmodal" data-attr="" data-value="spa"  data-id="' . $data->id . '">
@@ -745,7 +791,11 @@ class ProduksiController extends Controller
                                                 <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                             </button>
                                         </a>
-
+                                        <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="spa"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
                                             ';
                             } elseif ($x[1] == 'SPB') {
                                 return '<a data-toggle="modal" data-target="#editmodal" class="ubahmodal" data-attr="" data-value="spb"  data-id="' . $data->id . '">
@@ -753,7 +803,11 @@ class ProduksiController extends Controller
                                                 <i class="fas fa-plus"></i>&nbsp;Siapkan Produk
                                             </button>
                                         </a>
-
+                                        <a data-toggle="modal" data-target="#downloadtemplate" class="downloadtemplate" data-attr="" data-value="spb"  data-id="' . $data->id . '">
+                                                <button class="btn btn-outline-dark btn-sm" type="button">
+                                                    <i class="fas fa-download"></i>&nbsp;Template
+                                                </button>
+                                            </a>
                                             ';
                             }
 
@@ -1003,7 +1057,11 @@ class ProduksiController extends Controller
                             }
                         }
                     }
-                    return $x . '<input type="hidden" class="jumlah" name="qty[]" id="qty" value="' . $x . '">';
+                    if ($data->status_cek == 4) {
+                        return $x;
+                    } else {
+                        return '<input type="text" class="form-control jumlah" name="qty[]" id="qty" value="' . $x . '">';
+                    }
                 })
                 ->addColumn('jumlah', function ($data) {
                     $s = DetailPesanan::whereHas('DetailPesananProduk', function ($q) use ($data) {
@@ -1996,7 +2054,7 @@ class ProduksiController extends Controller
     {
         try {
             $data = DB::select("select jp.id, jp.produk_id, jp.created_at, jp.tanggal_mulai, jp.tanggal_selesai,
-        jp.no_bppb, jp.jumlah, count(jrn.jadwal_id) as jml_rakit,
+        jp.no_bppb, jp.jumlah, jp.evaluasi, count(jrn.jadwal_id) as jml_rakit,
         concat(p.nama,' ',gbj.nama) as produkk,
         datediff(now(), jp.tanggal_selesai) as selisih
         from jadwal_perakitan jp
@@ -2043,12 +2101,20 @@ class ProduksiController extends Controller
                     return $d->jumlah . ' Unit'. '<br><span class="badge badge-dark">Kurang ' . intval($d->jumlah - $d->jml_rakit) . ' Unit</span>';
                 })
                 ->addColumn('action', function ($d) {
-                    return '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="'.$d->produk_id.'">
+                //     $a = '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="'.$d->produk_id.'">
+                //                     <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
+                //             </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'">
+                //                 <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
+                //             </a>';
+                    $a = '<a data-toggle="modal" data-target="#detailmodal" class="detailmodal" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-produk="'.$d->produk_id.'">
                                     <button class="btn btn-outline-info btn-sm"><i class="far fa-edit"></i> Rakit Produk</button>
                             </a>&nbsp;<a data-toggle="modal" data-target="#detailtransfer" class="detailtransfer" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'">
                                 <button class="btn btn-outline-danger btn-sm"><i class="far fa-edit"></i> Transfer Sisa Produk</button>
                             </a>
-                            ';
+                            </a>&nbsp;<a data-toggle="modal" data-target="#evaluasirakit" class="evaluasirakit" data-attr=""  data-id="' . $d->id . '" data-jml="' . intval($d->jumlah - $d->jml_rakit) . '" data-prd="' . $d->produkk.'" data-produk="'.$d->produk_id.'" data-eval="'.$d->evaluasi.'">
+                                <button class="btn btn-outline-secondary btn-sm"><i class="far fa-edit"></i> Evaluasi Perakitan</button>
+                            </a>';
+                    return $a;
                 })
                 ->addColumn('created_at', function ($d) {
                     return $d->created_at;
@@ -2066,6 +2132,31 @@ class ProduksiController extends Controller
                 ->rawColumns(['action', 'jml', 'end'])
                 ->make(true);
         return $res;
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+
+    }
+
+    function storeTelatRakit(Request $request)
+    {
+        try {
+            JadwalPerakitan::find($request->jadwal_id)->update(['evaluasi' => $request->evaluasi]);
+            $obj = [
+                'jadwal' => $request->jadwal_id,
+                'evaluasi' => $request->evaluasi,
+            ];
+
+            SystemLog::create([
+                'tipe' => 'Produksi',
+                'subjek' => 'Evaluasi Perakitan',
+                'response' => json_encode($obj),
+                'user_id' => $request->created_by,
+            ]);
+            return response()->json(['msg' => 'Data Berhasil disimpan']);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -2266,6 +2357,22 @@ class ProduksiController extends Controller
                     }
                 }
 
+                $obj = [
+                    'waktu_rakit' => $request->tgl_perakitan,
+                    'jadwal' => $request->jadwal_id,
+                    'no_bppb' => strtoupper($request->no_bppb),
+                    'noseri' => $request->noseri,
+                    'jumlah' => count($request->noseri)
+                ];
+
+                SystemLog::create([
+                    'tipe' => 'Produksi',
+                    'subjek' => 'Perakitan Produk',
+                    'response' => json_encode($obj),
+                    'user_id' => $request->userid,
+                    'created_at' => Carbon::now()
+                ]);
+
                 return response()->json(['msg' => 'Successfully']);
             } else {
                 return response()->json(['msg' => 'Noseri Sudah Ada, Silahkan Gunakan yang lain.']);
@@ -2284,7 +2391,19 @@ class ProduksiController extends Controller
     {
         try {
             JadwalPerakitan::find($request->jadwal_id)->update(['keterangan' => $request->keterangan, 'status_tf' => 14]);
-        return response()->json(['msg' => 'Data Berhasil disimpan']);
+            $obj = [
+                'jadwal' => $request->jadwal_id,
+                'keterangan' => $request->keterangan,
+                'tgl_closing' => Carbon::now(),
+            ];
+
+            SystemLog::create([
+                'tipe' => 'Produksi',
+                'subjek' => 'Tutup Perakitan',
+                'response' => json_encode($obj),
+                'user_id' => $request->created_by,
+            ]);
+            return response()->json(['msg' => 'Data Berhasil disimpan']);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -2298,6 +2417,19 @@ class ProduksiController extends Controller
     {
         try {
             JadwalPerakitan::find($request->jadwal_id)->update(['keterangan_transfer' => $request->keterangan_transfer, 'status_tf' => 14]);
+
+            $obj = [
+                'jadwal' => $request->jadwal_id,
+                'keterangan_transfer' => $request->keterangan_transfer,
+                'tgl_closing' => Carbon::now(),
+            ];
+
+            SystemLog::create([
+                'tipe' => 'Produksi',
+                'subjek' => 'Tutup Pengiriman',
+                'response' => json_encode($obj),
+                'user_id' => $request->created_by,
+            ]);
             return response()->json(['msg' => 'Data Berhasil disimpan']);
         } catch (\Exception $e) {
             return response()->json([
@@ -2460,36 +2592,21 @@ class ProduksiController extends Controller
                 JadwalRakitNoseri::where('jadwal_id', $request->jadwal_id)->whereIn('noseri', [$request->noseri[$key]])->update(['waktu_tf' => $request->tgl_transfer, 'status' => 14, 'transfer_by' => $request->userid]);
             }
 
-            // // rubah logic
-            // $sdh_terkirim = JadwalRakitNoseri::whereHas('header', function ($q) use ($request) {
-            //     $q->where('produk_id', $request->gbj_id);
-            // })->where('status', 14)->get()->count();
-            // $blm_terkirim = JadwalRakitNoseri::whereHas('header', function ($q) use ($request) {
-            //     $q->where('produk_id', $request->gbj_id);
-            // })->where('status', 11)->get()->count();
-            // $sdh_terisi = JadwalRakitNoseri::whereHas('header', function ($q) use ($request) {
-            //     $q->where('produk_id', $request->gbj_id);
-            // })->get()->count();
-            // $total_rakit = JadwalPerakitan::find($request->jadwal_id);
-            // $now = intval($total_rakit->jumlah - $sdh_terkirim);
-            // if ($sdh_terkirim == $total_rakit->jumlah) {
-            //     $total_rakit->status_tf = 14;
-            //     $total_rakit->filled_by = $request->userid;
-            //     $total_rakit->updated_at = Carbon::now();
-            //     $total_rakit->save();
-            // } else {
-            //     if ($sdh_terisi == $total_rakit->jumlah) {
-            //         $total_rakit->status_tf = 13;
-            //         $total_rakit->filled_by = $request->userid;
-            //         $total_rakit->updated_at = Carbon::now();
-            //         $total_rakit->save();
-            //     } else {
-            //         $total_rakit->status_tf = 12;
-            //         $total_rakit->filled_by = $request->userid;
-            //         $total_rakit->updated_at = Carbon::now();
-            //         $total_rakit->save();
-            //     }
-            // }
+            $obj = [
+                'tgl_keluar' => $request->tgl_transfer,
+                'tujuan' => Divisi::find(13)->nama,
+                'produk' => Produk::find(GudangBarangJadi::find($request->gbj_id)->produk_id)->nama.' '.GudangBarangJadi::find($request->gbj_id)->nama,
+                'jumlah' => count($request->noseri),
+                'jadwal' => $request->jadwal_id,
+                'noseri' => $request->noseri
+            ];
+
+            SystemLog::create([
+                'tipe' => 'Produksi',
+                'subjek' => 'Pengiriman Noseri Produksi',
+                'response' => json_encode($obj),
+                'user_id' => $request->userid
+            ]);
 
             return response()->json(['msg' => 'Berhasil Transfer ke Gudang']);
         } catch (\Exception $e) {
@@ -2506,6 +2623,19 @@ class ProduksiController extends Controller
         try {
             $cek_data = JadwalRakitNoseri::where('id', $request->noseriid)->where('jadwal_id', $request->jadwal_id)->get()->count();
             if ($cek_data > 0) {
+                $obj = [
+                    'jadwal' => $request->jadwal_id,
+                    'noseriid' => $request->noseriid,
+                    // 'noseri' => JadwalRakitNoseri::find($request->noseriid)->noseri,
+                    'tgl_hapus' => Carbon::now(),
+                ];
+
+                SystemLog::create([
+                    'tipe' => 'Produksi',
+                    'subjek' => 'Hapus Noseri Perakitan',
+                    'response' => json_encode($obj),
+                    'user_id' => $request->userby
+                ]);
                 JadwalRakitNoseri::where('id', $request->noseriid)->where('jadwal_id', $request->jadwal_id)->delete();
                 JadwalPerakitan::find($request->jadwal_id)->update(['status_tf' => 12]);
 
@@ -2545,6 +2675,19 @@ class ProduksiController extends Controller
     function deleteAllSeri(Request $request)
     {
         try {
+            $obj = [
+                'jadwal' => $request->jadwal_id,
+                // 'noseriid' => JadwalRakitNoseri::whereIn('noseri', $request->noseri)->where('jadwal_id', $request->jadwal_id)->pluck('id'),
+                // 'noseri' => JadwalRakitNoseri::whereIn('noseri', $request->noseri)->where('jadwal_id', $request->jadwal_id)->pluck('noseri'),
+                'tgl_hapus' => Carbon::now(),
+            ];
+
+            SystemLog::create([
+                'tipe' => 'Produksi',
+                'subjek' => 'Hapus Beberapa Noseri Perakitan',
+                'response' => json_encode($obj),
+                'user_id' => $request->userby
+            ]);
             JadwalRakitNoseri::whereIn('noseri', $request->noseri)->where('jadwal_id', $request->jadwal_id)->delete();
             JadwalPerakitan::find($request->jadwal_id)->update(['status_tf' => 12]);
             return response()->json(['msg' => 'Sukses']);

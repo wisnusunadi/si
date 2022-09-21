@@ -30,6 +30,7 @@ use App\Models\JadwalPerakitanRencana;
 use Yajra\DataTables\Facades\DataTables;
 use App\Models\DetailLogistikPart;
 use App\Models\DetailPesananPart;
+use App\Models\SystemLog;
 
 class PpicController extends Controller
 {
@@ -76,14 +77,16 @@ class PpicController extends Controller
      * @param string $status status string
      * @return array collection of data
      */
-    public function get_data_perakitan($status = "all")
+    public function get_data_perakitan($status = "all", $bulan)
     {
         $this->update_perakitan_status();
         $status = $this->change_status($status);
         if ($status == $this->change_status('penyusunan')) {
             $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else if ($status == $this->change_status("pelaksanaan")) {
-            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orwhereNotIn('status', [6])->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
+            $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orwhereNotIn('status', [6])
+            ->havingRaw('MONTH(tanggal_mulai) = ?',[$bulan])
+            ->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else {
             $data = JadwalPerakitan::with('Produk.produk')->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         }
@@ -93,7 +96,17 @@ class PpicController extends Controller
             $item->noseri_count = $noseri_count;
         }
 
-        return $data;
+        if (count($data) != 0) {
+            return response()->json([
+                'error' => 'false',
+                'data' => $data,
+            ],200);
+        } else {
+            return response()->json([
+                'error' => 'true',
+                'data' => 'Data Not Found',
+            ],404);
+        }
     }
 
     /**
@@ -692,7 +705,7 @@ class PpicController extends Controller
      *
      * @return array collections of data perakitan after new data added
      */
-    public function create_data_perakitan(Request $request)
+    public function create_data_perakitan(Request $request, $bulan)
     {
         $status = $this->change_status($request->status);
         $state = $this->change_state($request->state);
@@ -712,9 +725,38 @@ class PpicController extends Controller
             'warna' => $selected_color,
             'status_tf' => 11,
         ];
+
+        $obj = [
+            'no_bppb' => $request->no_bppb,
+            'produk_id' => Produk::find(GudangBarangJadi::find($request->produk_id)->produk_id)->nama.' '.GudangBarangJadi::find($request->produk_id)->nama,
+            'jumlah' => $request->jumlah,
+            'tanggal_mulai' => $request->tanggal_mulai,
+            'tanggal_selesai' => $request->tanggal_selesai,
+            'status' => $status,
+            'state' => $state,
+            'konfirmasi' => $request->konfirmasi,
+            'warna' => $selected_color,
+            'status_tf' => 11,
+        ];
         JadwalPerakitan::create($data);
 
-        return $this->get_data_perakitan($status);
+        if ($status == 6) {
+            SystemLog::create([
+                'tipe' => 'PPIC',
+                'subjek' => 'Tambah Rencana Perakitan',
+                'response' => json_encode($obj),
+                // 'user_id' => Auth::user()->id
+            ]);
+        } else if($status == 7) {
+            SystemLog::create([
+                'tipe' => 'PPIC',
+                'subjek' => 'Tambah Pelaksanaan Perakitan',
+                'response' => json_encode($obj),
+                // 'user_id' =>
+            ]);
+        }
+
+        return $this->get_data_perakitan($status, $bulan);
     }
 
     /**
@@ -772,6 +814,7 @@ class PpicController extends Controller
         // $object->no_bppb = $data->no_bppb;
         $object->tanggal_mulai = $data->tanggal_mulai;
         $object->tanggal_selesai = $data->tanggal_selesai;
+        $bulan = '';
 
         if (isset($request->tanggal_mulai)) {
             $data->tanggal_mulai = $request->tanggal_mulai;
@@ -808,7 +851,7 @@ class PpicController extends Controller
         $object->save();
         $data->save();
 
-        return $this->get_data_perakitan($request->status);
+        return $this->get_data_perakitan($request->status, $bulan);
     }
 
     /**
@@ -817,7 +860,7 @@ class PpicController extends Controller
      * @param string $status status string
      * @return array collections of data jadwal_perakitan after update
      */
-    public function update_many_data_perakitan(Request $request, $status)
+    public function update_many_data_perakitan(Request $request, $status, $bulan)
     {
         if (isset($request->data)) {
             foreach ($request->data as $data) {
@@ -855,9 +898,68 @@ class PpicController extends Controller
                 $object->save();
                 $data->save();
             }
+
+            $obj = [
+                'jadwalid' => $event,
+                'tgl_mulai' => $request->tanggal_mulai,
+                'tgl_selesai' => $request->tanggal_selesai,
+                'jumlah' => $request->jumlah,
+                'state' => $state,
+                'konfirmasi' => $request->konfirmasi
+            ];
+            if ($request->user_id == 2) {
+                if ($request->jenis == 'batal') {
+                    SystemLog::create([
+                        'tipe' => 'PPIC',
+                        'subjek' => 'Batal Permintaan Persetujuan Perakitan',
+                        'response' => json_encode($obj),
+                        'user_id' => $request->user_id
+                    ]);
+                } else {
+                    if ($state == 19) {
+                        SystemLog::create([
+                            'tipe' => 'PPIC',
+                            'subjek' => 'Permintaan Perubahan Perakitan',
+                            'response' => json_encode($obj),
+                            'user_id' => $request->user_id
+                        ]);
+                    } else {
+                        SystemLog::create([
+                            'tipe' => 'PPIC',
+                            'subjek' => 'Permintaan Persetujuan Perakitan',
+                            'response' => json_encode($obj),
+                            'user_id' => $request->user_id
+                        ]);
+                    }
+                }
+            } else {
+                if ($request->jenis == 'reject') {
+                    SystemLog::create([
+                        'tipe' => 'PPIC',
+                        'subjek' => 'Penolakan Permintaan Perubahan Perakitan',
+                        'response' => json_encode($obj),
+                        'user_id' => $request->user_id
+                    ]);
+                } elseif ($request->jenis == 'acc') {
+                    SystemLog::create([
+                        'tipe' => 'PPIC',
+                        'subjek' => 'Persetujuan Permintaan Perubahan Perakitan',
+                        'response' => json_encode($obj),
+                        'user_id' => $request->user_id
+                    ]);
+                } elseif($request->jenis == 'ok') {
+                    SystemLog::create([
+                        'tipe' => 'PPIC',
+                        'subjek' => 'Setujui Permintaan Persetujuan Perakitan',
+                        'response' => json_encode($obj),
+                        'user_id' => $request->user_id
+                    ]);
+                }
+            }
+
         }
 
-        return $this->get_data_perakitan($status);
+        return $this->get_data_perakitan($status, $bulan);
     }
 
     /**
