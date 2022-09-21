@@ -705,7 +705,7 @@ class PpicController extends Controller
      *
      * @return array collections of data perakitan after new data added
      */
-    public function create_data_perakitan(Request $request, $bulan)
+    public function create_data_perakitan(Request $request)
     {
         $status = $this->change_status($request->status);
         $state = $this->change_state($request->state);
@@ -756,7 +756,7 @@ class PpicController extends Controller
             ]);
         }
 
-        return $this->get_data_perakitan($status, $bulan);
+        return $this->get_data_perakitan($status);
     }
 
     /**
