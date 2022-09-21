@@ -68,12 +68,24 @@ class KesehatanController extends Controller
             })
             ->addColumn('vaksin_detail', function ($data) {
                 if ($data->Karyawan->Vaksin_karyawan->isEmpty()) {
-                    $status = 'Belum Vaksin';
+                    $status = '<span class="badge red-text">Belum Vaksin</span>';
                 } else {
-                    $status = 'Sudah Vaksin';
+                    $status = '<span class="badge green-text">Sudah Vaksin</span>';
                 }
-                $btn = '' . $status . '<br><div class="inline-flex"><button type="button" id="vaksin_detail" class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
-                return $btn;
+                // $btn = '' . $status . '<br><div class="inline-flex"><button type="button" id="vaksin_detail" class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
+                return $status;
+            })
+            ->editColumn('status_mata', function ($data) {
+                if ($data->status_mata == "Defisensi") {
+                    $status = '<span class="badge red-text">'.$data->status_mata.'</span>';
+                } else if($data->status_mata == "Abnormal"){
+                    $status = '<span class="badge yellow-text">'.$data->status_mata.'</span>';
+                }
+                else {
+                    $status = '<span class="badge green-text">'.$data->status_mata.'</span>';
+                }
+                // $btn = '' . $status . '<br><div class="inline-flex"><button type="button" id="vaksin_detail" class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
+                return $status;
             })
             ->addColumn('detail', function ($s) {
                 $btn = '<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  title="Klik untuk melihat detail Kesehatan">';
@@ -81,9 +93,11 @@ class KesehatanController extends Controller
 
                 $btn .= '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">';
                 $btn .= '<button class="btn btn-block dropdown-item" type="button" id="penyakit" ><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;Riwayat Penyakit</span></button>';
+                $btn .= '<button class="btn btn-block dropdown-item" type="button" id="vaksin_detail" ><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;Riwayat Vaksin</span></button>';
+                $btn .= '</div>';
                 return $btn;
             })
-            ->rawColumns(['berat_kg', 'vaksin_detail', 'detail'])
+            ->rawColumns(['berat_kg', 'vaksin_detail', 'detail', 'status_mata'])
             ->make(true);
     }
     public function kesehatan_tambah()
@@ -317,7 +331,7 @@ class KesehatanController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl_cek', function ($data) {
-                return $data->Karyawan_sakit->tgl_cek;
+                return Carbon::createFromFormat('Y-m-d', $data->Karyawan_sakit->tgl_cek)->format('d-m-Y');
             })
             ->addColumn('diag', function ($data) {
                 return $data->Karyawan_sakit->diagnosa;
@@ -605,17 +619,25 @@ class KesehatanController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('a', function ($data) {
+
+                $x = "";
                 if ($data->stok <= 1) {
-                    $x = $data->stok . ' Pc';
+                    $x = $data->stok.' Pc';
                 } else {
-                    $x =  $data->stok . ' Pcs';
+                    $x =  $data->stok.' Pcs';
                 }
-                $btn = $x . '<br><div class="inline-flex"><button type="button" id="stok"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-sync" aria-hidden="true"></i></button></div>';
+                $btn = $x.'<i class="fas fa-sync m-1" id="stok" aria-hidden="true"></i>';
+                // $btn = $x . '<br><div class="inline-flex"><button type="button" id="stok"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-sync" aria-hidden="true"></i></button></div>';
+
                 return $btn;
             })
             ->addColumn('button', function ($data) {
-                $btn = '<div class="inline-flex"><button type="button" id="riwayat"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
-                $btn = $btn . '<div class="inline-flex"><button type="button" id="edit" class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-edit"></i></button></div>';
+                $btn = '<div class="btn-toolbar d-flex justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+                <button type="button" id="riwayat"  class="btn btn-sm btn-outline-primary btn-sm m-1"><i class="fas fa-eye"></i> Riwayat Pakai</button>
+                <button type="button" id="edit" class="btn btn-sm btn-warning btn-sm m-1"><i class="fas fa-edit"></i> Ubah</button></a></div>';
+
+                // $btn = '<div class="inline-flex"><button type="button" id="riwayat"  class="btn btn-block btn-primary btn-sm" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
+                // $btn = $btn . '<div class="inline-flex"><button type="button" id="edit" class="btn btn-block btn-success btn-sm" style="border-radius:50%;" ><i class="fas fa-edit"></i></button></div>';
                 return $btn;
             })
             ->rawColumns(['button', 'detail_button', 'a'])
@@ -642,7 +664,7 @@ class KesehatanController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl', function ($data) {
-                return $data->karyawan_sakit->tgl_cek;
+                return Carbon::createFromFormat('Y-m-d', $data->Karyawan_sakit->tgl_cek)->format('d-m-Y');
             })
             ->addColumn('div', function ($data) {
                 return $data->karyawan_sakit->karyawan->divisi->nama;
@@ -752,6 +774,9 @@ class KesehatanController extends Controller
         $data = Karyawan_sakit::with(['Karyawan.Divisi','Pemeriksa'])->orderBy('tgl_cek', 'DESC')->get();
         return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('tgl_cek', function($data){
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_cek)->format('d-m-Y');
+            })
             ->addColumn('x', function ($data) {
                 return $data->Karyawan->Divisi->nama;
             })
@@ -790,19 +815,50 @@ class KesehatanController extends Controller
                 }
             })
             ->addColumn('detail_button', function ($data) {
-                $btn = $data->tindakan;
-                $btn = $btn . '<br><div class="inline-flex"><button type="button" id="detail_tindakan"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-eye"></i></button></div>';
-                return  $btn;
+                $btn = '';
+                if($data->tindakan == "Terapi"){
+                    $btn = '<span class="badge yellow-text">';
+                }
+                else{
+                    $btn = '<span class="badge red-text">';
+                }
+                $btn .= $data->tindakan.'</span>';
+
+                return $btn;
+                // $btn = $data->tindakan;
+                // $btn = $btn . '<br><div class="inline-flex"><button type="button" id="detail_tindakan"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-eye"></i></button></div>';
+                // return  $btn;
+
+            })
+            ->editColumn('keputusan', function ($data) {
+                $btn = '';
+                if($data->keputusan == "Lanjut bekerja"){
+                    $btn = '<span class="badge green-text">';
+                }
+                else{
+                    $btn = '<span class="badge red-text">';
+                }
+                $btn .= $data->keputusan.'</span>';
+
+                return $btn;
             })
             ->addColumn('button', function () {
+
                 $btn = '<div class="inline-flex"><button type="button" id="edit_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
                 return $btn;
             })
             ->addColumn('cetak', function ($data) {
-                $btn = '<div class="inline-flex"><a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" id="cetak_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-print"></i></button></a></div>';
+
+                $btn = '<div class="btn-toolbar d-flex justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+                <button type="button" id="detail_tindakan"  class="btn btn-sm btn-outline-info m-1"><i class="fas fa-eye"></i> Penanganan</button>';
+                if($data->keputusan == 'Dipulangkan'){
+                    $btn .= '<a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" class="btn btn-sm btn-warning m-1" id="cetak_gcu"><i class="fas fa-print"></i> Cetak</button></a>';
+                }
+                $btn .= '</div>';
+                // $btn = '<div class="inline-flex"><a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" id="cetak_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-print"></i></button></a></div>';
                 return $btn;
             })
-            ->rawColumns(['button', 'detail_button', 'cetak'])
+            ->rawColumns(['button', 'detail_button', 'cetak', 'keputusan'])
             ->make(true);
     }
     public function karyawan_sakit_tambah()
@@ -819,6 +875,7 @@ class KesehatanController extends Controller
         $data = Detail_obat::with('obat')->where('karyawan_sakit_id', $id);
         return datatables()->of($data)
             ->addIndexColumn()
+
             ->addColumn('x', function ($data) {
                 return $data->obat->nama;
             })
@@ -911,6 +968,9 @@ class KesehatanController extends Controller
         $data = Karyawan_masuk::with(['Karyawan.Divisi','Pemeriksa'])->orderBy('tgl_cek', 'DESC');
         return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('tgl_cek', function($data){
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_cek)->format('d-m-Y');
+            })
             ->addColumn('x', function ($data) {
                 return $data->Karyawan->Divisi->nama;
             })
@@ -922,10 +982,10 @@ class KesehatanController extends Controller
             })
             ->addColumn('button', function ($data) {
                 if ($data->alasan == "Sakit") {
-                    $btn = '<div class="inline-flex"><button type="button" id="riwayat"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
+                    $btn = '<div class="inline-flex"><button type="button" id="riwayat" class="btn btn-block btn-outline-primary btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> Detail</button></div>';
                     return $btn;
                 } else {
-                    $btn = '<div class="inline-flex"><button type="button"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" disabled><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
+                    $btn = '<div class="inline-flex"><button type="button"  class="btn btn-block btn-light btn-sm" disabled><i class="fa fa-eye" aria-hidden="true"></i> Detail</button></div>';
                     return $btn;
                 }
             })

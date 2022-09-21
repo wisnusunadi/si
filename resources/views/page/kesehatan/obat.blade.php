@@ -39,6 +39,19 @@
         width: 100%;
     }
 
+    .align-center{
+        text-align: center;
+    }
+    #stok{
+        color: #0d6efd;
+        opacity: 0.6;
+
+    }
+
+    #stok:hover{
+        transition: color 0.5s;
+        opacity: 1;
+    }
     @media screen and (min-width: 1440px) {
 
         body {
@@ -105,7 +118,7 @@
             <thead style="text-align: center;">
               <tr>
                 <th colspan="12">
-                  <a href="/obat/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                  <button type="button" id="btntambahobat" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button>
                 </th>
               </tr>
               <tr>
@@ -125,14 +138,14 @@
   </div>
 </div>
 <!-- Modal Detail -->
-<div class="modal fade  bd-example-modal-lg" id="riwayat_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade  bd-example-modal-xl" id="riwayat_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="card-body">
-      <form method="post" action="/kesehatan_harian_mingguan_tensi/aksi_ubah">
+      {{-- <form method="post" action="/kesehatan_harian_mingguan_tensi/aksi_ubah">
         {{ csrf_field() }}
-        {{ method_field('PUT')}}
+        {{ method_field('PUT')}} --}}
         <div class="modal-content">
-          <div class="modal-header">
+          <div class="modal-header card-outline card-info">
             <h4 class="modal-title" id="myModalLabel">
               <div class="data_detail_head"></div>
             </h4>
@@ -140,7 +153,7 @@
           </div>
           <div class="modal-body">
             <div class='table-responsive'>
-              <table class="table table-hover styled-table table-striped" width="100%" id="tabel_detail">
+              <table class="table table-hover styled-table table-striped align-center" width="100%" id="tabel_detail" >
                 <thead>
                   <tr>
                     <th>No</th>
@@ -158,7 +171,7 @@
             </div>
           </div>
         </div>
-      </form>
+      {{-- </form> --}}
     </div>
   </div>
 </div>
@@ -345,6 +358,20 @@
   </div>
 </div>
 <!-- End Modal Detail -->
+
+<div class="modal fade  bd-example-modal-xl" id="tambahmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header card-outline card-primary">
+                <h4 class="modal-title" id="myModalLabel">
+                    Tambah Obat
+                </h4>
+            </div>
+            <div class="modal-body" id="tambahdata">
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 @section('adminlte_js')
 <script>
@@ -384,6 +411,49 @@
           data: 'button'
         }
       ]
+    });
+
+    $(document).on('click', '#btntambahobat', function(){
+                $.ajax({
+                    url: "/obat/tambah",
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    // return the result
+                    success: function(result) {
+                        $('#tambahmodal').modal("show");
+                        $('#tambahdata').html(result).show();
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+    });
+
+    $(document).on('keyup change', '#nama_obat', function() {
+        var nama = $(this).val();
+        $.ajax({
+            url: '/obat/cekdata/' + nama,
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                if (data.length > 0) {
+                    $('#nama_obat').addClass('is-invalid');
+                    $('#nama_obat_message').html('Data Telah Terpakai');
+                    $('#button_tambah').attr("disabled", true);
+                } else {
+                    $('#nama_obat').removeClass('is-invalid');
+                    $('#nama_obat_message').html('');
+                    $('#button_tambah').attr("disabled", false);
+                }
+            }
+        })
     });
     $('#tabel > tbody').on('click', '#riwayat', function() {
       var rows = tabel.rows($(this).parents('tr')).data();
@@ -425,6 +495,7 @@
       });
       $('#riwayat_mod').modal('show');
     })
+
 
     $('#tabel > tbody').on('click', '#edit', function() {
       var rows = tabel.rows($(this).parents('tr')).data();

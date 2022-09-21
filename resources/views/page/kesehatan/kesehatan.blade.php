@@ -120,7 +120,7 @@
                 <th>Tinggi</th>
                 <th>Vaksin</th>
                 <th>Buta warna</th>
-                <th></th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody style="text-align: center;">

@@ -192,23 +192,46 @@
                                   <span class="sr-only">Toggle Dropdown</span>
                                 </button>
                                 <div class="dropdown-menu">
-                                  <a class="dropdown-item" href="#">2022</a>
-                                  <a class="dropdown-item" href="#">2021</a>
-                                  <a class="dropdown-item" href="#">2020</a>
-                                  <a class="dropdown-item" href="#">2019</a>
+                                  <a class="dropdown-item" href="#" value="">{{ now()->year }}</a>
+                                  <a class="dropdown-item" href="#">{{ now()->year - 1 }}</a>
+                                  <a class="dropdown-item" href="#">{{ now()->year - 2 }}</a>
+                                  <a class="dropdown-item" href="#">{{ now()->year - 3 }}</a>
+                                  <a class="dropdown-item" href="#">{{ now()->year - 4 }}</a>
                                 </div>
                             </div>
                             <div class="table-responsive">
-                                <table class="table table-hover" id="karyawan_sakit_table">
+                                <table class="table table-hover table-striped" style="text-align:center;" id="karyawan_sakit_table">
                                     <thead class="bg-secondary">
                                         <tr>
                                             <th>No</th>
                                             <th>Nama</th>
                                             <th>Divisi</th>
                                             <th>Frekuensi Sakit</th>
-                                            <th>Terakhir Sakit</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>1</td>
+                                            <td>Mukhlis</td>
+                                            <td>
+                                                <div>Produksi</div>
+                                                <small class="text-muted">Operator</small>
+                                            </td>
+                                            <td>50 kali</td>
+                                            <td><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></td>
+                                        </tr>
+                                        <tr>
+                                            <td>2</td>
+                                            <td>Tiara</td>
+                                            <td>
+                                                <div>Admin</div>
+                                                <small class="text-muted">Staff</small>
+                                            </td>
+                                            <td>42 kali</td>
+                                            <td><button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button></td>
+                                        </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </div>
