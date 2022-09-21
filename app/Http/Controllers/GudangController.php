@@ -2306,6 +2306,20 @@ class GudangController extends Controller
                                 'tujuan' => $request->deskripsi,
                             ]);
                         }
+
+                        $obj = [
+                            'data' => $arr,
+                            'pesanan_so' => Pesanan::find($request->soid)->so,
+                            'pesanan_po' => Pesanan::find($request->soid)->no_po,
+                            'tgl_keluar' => Carbon::now()
+                        ];
+
+                        SystemLog::create([
+                            'tipe' => 'GBJ',
+                            'subjek' => 'Sales Order Noseri By Upload',
+                            'response' => json_encode($obj),
+                            'user_id' => $request->userid
+                        ]);
                     } else {
                         $detail = TFProduksiDetail::create([
                             't_gbj_id' => $a->id,
@@ -2351,6 +2365,20 @@ class GudangController extends Controller
                                 'tujuan' => $request->deskripsi,
                             ]);
                         }
+
+                        $obj = [
+                            'data' => $arr,
+                            'pesanan_so' => Pesanan::find($request->soid)->so,
+                            'pesanan_po' => Pesanan::find($request->soid)->no_po,
+                            'tgl_keluar' => Carbon::now()
+                        ];
+
+                        SystemLog::create([
+                            'tipe' => 'GBJ',
+                            'subjek' => 'Sales Order Noseri By Upload',
+                            'response' => json_encode($obj),
+                            'user_id' => $request->userid
+                        ]);
                     }
                 }
             } else {
@@ -2412,6 +2440,20 @@ class GudangController extends Controller
                         ]);
                     }
                 }
+
+                $obj = [
+                    'data' => $arr,
+                    'pesanan_so' => Pesanan::find($request->soid)->so,
+                    'pesanan_po' => Pesanan::find($request->soid)->no_po,
+                    'tgl_keluar' => Carbon::now()
+                ];
+
+                SystemLog::create([
+                    'tipe' => 'GBJ',
+                    'subjek' => 'Sales Order Noseri By Upload',
+                    'response' => json_encode($obj),
+                    'user_id' => $request->userid
+                ]);
             }
 
             $po = Pesanan::find($request->soid);
@@ -2466,11 +2508,13 @@ class GudangController extends Controller
             $spreadsheet->setActiveSheetIndex(0);
             $spreadsheet->getActiveSheet()->setTitle('Template');
             $spreadsheet->getActiveSheet()->setCellValue('A1', 'Tujuan');
-            $spreadsheet->getActiveSheet()->setCellValue('B1', 'Produk');
-            $spreadsheet->getActiveSheet()->setCellValue('C1', 'Noseri');
+            $spreadsheet->getActiveSheet()->setCellValue('B1', 'Deskripsi');
+            $spreadsheet->getActiveSheet()->setCellValue('C1', 'Produk');
+            $spreadsheet->getActiveSheet()->setCellValue('D1', 'Noseri');
             $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(30);
             $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(45);
-            $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+            $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(45);
+            $spreadsheet->getActiveSheet()->getColumnDimension('D')->setWidth(20);
 
             $tujuan_val = $spreadsheet->getActiveSheet()->getCell('A2')
                 ->getDataValidation();
@@ -2488,7 +2532,7 @@ class GudangController extends Controller
             $tujuan_val->setFormula1('\'Master Tujuan\'!$B$2:$B$688');
             $tujuan_val->setSqref('A2:A10000');
 
-            $produk_val = $spreadsheet->getActiveSheet()->getCell('B2')
+            $produk_val = $spreadsheet->getActiveSheet()->getCell('C2')
                 ->getDataValidation();
             $produk_val->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST );
             $produk_val->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_INFORMATION );
@@ -2502,7 +2546,7 @@ class GudangController extends Controller
             $produk_val->setPrompt('Tolong pilih produk yang tersedia.');
 
             $produk_val->setFormula1('\'Master Produk\'!$B$2:$B$888');
-            $produk_val->setSqref('B2:B10000');
+            $produk_val->setSqref('C2:C10000');
 
             $duplicate = new Conditional();
             $duplicate->setConditionType(Conditional::CONDITION_DUPLICATES);
@@ -2510,10 +2554,10 @@ class GudangController extends Controller
             $duplicate->getStyle()->getFill()->setFillType(Fill::FILL_SOLID);
             $duplicate->getStyle()->getFill()->getEndColor()->setARGB(Color::COLOR_YELLOW);
 
-            $conditionalStyles = $spreadsheet->getActiveSheet()->getStyle('C2:C10000')->getConditionalStyles();
+            $conditionalStyles = $spreadsheet->getActiveSheet()->getStyle('D2:D10000')->getConditionalStyles();
             $conditionalStyles[] = $duplicate;
 
-            $spreadsheet->getActiveSheet()->getStyle('C2:C10000')->setConditionalStyles($conditionalStyles);
+            $spreadsheet->getActiveSheet()->getStyle('D2:D10000')->setConditionalStyles($conditionalStyles);
 
             $spreadsheet->setActiveSheetIndex(1);
             $spreadsheet->getActiveSheet()->setTitle('Master Tujuan');
@@ -2597,10 +2641,217 @@ class GudangController extends Controller
         }
     }
 
-    function preview_tanpa_so()
+    function preview_tanpa_so(Request $request)
     {
         try {
+            // dd($request->all());
+            $file = $request->file('file_csv');
+            $filename = $file->getClientOriginalName();
 
+            $file->move(public_path('upload/nonso/'), $filename);
+
+            $reader = new ReaderXlsx();
+            $spreadsheet = $reader->load(public_path('upload/nonso/'. $filename));
+
+            $spreadsheet->setActiveSheetIndex(0);
+
+            $sheet        = $spreadsheet->getActiveSheet();
+            $row_limit    = $sheet->getHighestDataRow();
+            $column_limit = $sheet->getHighestDataColumn();
+            $row_range    = range( 2, $row_limit );
+            $column_range = range( 'E', $column_limit );
+            $startcount = 2;
+            $data = array();
+
+            foreach ( $row_range as $row ) {
+                $data[] = [
+                    'tujuan' =>$sheet->getCell( 'A' . $row )->getValue(),
+                    'desk' => $sheet->getCell( 'B' . $row )->getValue(),
+                    'produk' => $sheet->getCell( 'C' . $row )->getValue(),
+                    'noseri' => $sheet->getCell( 'D' . $row )->getValue(),
+                ];
+                $startcount++;
+            }
+
+            foreach($data as $d) {
+                $tujuan[] = $d['tujuan'];
+                $desk[] = $d['desk'];
+                $produk[] = $d['produk'];
+                $noseri[] = $d['noseri'];
+            }
+
+            $cek = NoseriBarangJadi::whereIn('noseri', $noseri)->get()->pluck('noseri');
+            $no_seri = [];
+            $sheet1 = $sheet->toArray(null, true, true, true);
+            $numrow = 1;
+            $html = "<input type='hidden' name='namafile' value='" . $filename . "'>";
+            $html .= "<table class='table table-bordered table-striped table-hover tableImport'>
+                    <thead>
+                    <tr>
+                    <th>Tujuan</th>
+                    <th>Deskripsi</th>
+                    <th>Produk</th>
+                    <th>Noseri</th>
+                    </tr>
+                    </thead>
+                    <tbody>";
+            foreach($sheet1 as $key => $row) {
+                $a = $row['A'];
+                $b = $row['B'];
+                $c = $row['C'];
+                $d = $row['D'];
+                if($numrow > 1) {
+                    $nis_td = (!empty($c)) ? "" : " style='background: #E07171;'";
+                    $html .= "<tr>";
+                    $html .= "<td" . $nis_td . ">" . $a . "</td>";
+                    $html .= "<td" . $nis_td . ">" . $b . "</td>";
+                    $html .= "<td" . $nis_td . ">" . $c . "</td>";
+                    $html .= "<td" . $nis_td . ">" . $d . "</td>";
+                    $html .= "</tr>";
+                }
+                $numrow++;
+            }
+            $html .= "</tbody></table>";
+
+            if(count($cek) != count($noseri)) {
+                $seri_final = [];
+                foreach ($cek as $item) {
+                    array_push($no_seri, $item);
+                }
+
+                foreach($noseri as $ns) {
+                    if (!in_array($ns, $no_seri)) {
+                        array_push($seri_final, $ns);
+                    }
+                }
+                return response()->json(['msg' => 'Nomor seri '.implode(', ', $seri_final).' belum terdaftar', 'error' => true, 'data' => $html, 'noseri' => implode(', ', $seri_final)]);
+            } else {
+                return response()->json(['msg' => 'File Sudah Bisa Diunggah', 'error' => false, 'data' => $html]);
+            }
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function store_nonso_to_db(Request $request)
+    {
+        try {
+            $reader = new ReaderXlsx();
+            $spreadsheet = $reader->load(public_path('upload/nonso/'. $request->namafile));
+            $spreadsheet->setActiveSheetIndex(0);
+
+            $sheet        = $spreadsheet->getActiveSheet();
+            $row_limit    = $sheet->getHighestDataRow();
+            $column_limit = $sheet->getHighestDataColumn();
+            $row_range    = range( 2, $row_limit );
+            $column_range = range( 'E', $column_limit );
+            $startcount = 2;
+            $data = array();
+            $dat_arr = array();
+            $new_arr = array();
+            $detail_arr = array();
+            $noseri_arr = array();
+            $dat_log = [];
+            foreach ( $row_range as $row ) {
+                $data[] = [
+                    'tujuan' =>$sheet->getCell( 'A' . $row )->getValue(),
+                    'desk' => $sheet->getCell( 'B' . $row )->getValue(),
+                    'produk' => $sheet->getCell( 'C' . $row )->getValue(),
+                    'noseri' => $sheet->getCell( 'D' . $row )->getValue(),
+                ];
+                $startcount++;
+            }
+
+            foreach($data as $kh => $d) {
+                $tujuan[] = $d['tujuan'];
+                $desk[] = $d['desk'];
+                $produk[] = $d['produk'];
+                $noseri[] = $d['noseri'];
+            }
+
+            foreach($produk as $key => $prd) {
+                $dat_arr[] = [
+                    'tujuan' => Divisi::where('nama', $tujuan[$key])->first()->id,
+                    'produk' => GudangBarangJadi::
+                                join('produk', 'produk.id', 'gdg_barang_jadi.produk_id')
+                                ->where(DB::raw("concat(produk.nama, ' ', gdg_barang_jadi.nama)"), $prd)
+                                ->select('gdg_barang_jadi.id', DB::raw("concat(produk.nama, ' ', gdg_barang_jadi.nama) as name"))
+                                ->first()->id,
+                    'serii' => $noseri[$key],
+                    'desk' => $desk[$key],
+                    'noseri' => NoseriBarangJadi::where('noseri', $noseri[$key])->first()->id,
+                ];
+            }
+            // return $dat_arr;
+            $arr = [];
+            foreach($dat_arr as $da) {
+                $arr[$da['produk']]['tujuan'] = $da['tujuan'];
+                $arr[$da['produk']]['desk'] = $da['desk'];
+                $arr[$da['produk']]['noseri'][] = $da['noseri'];
+            }
+
+            // return $arr;
+            foreach($arr as $key => $value) {
+                $header = TFProduksi::create([
+                    'tgl_keluar' => Carbon::now(),
+                    'ke' => $value['tujuan'],
+                    'deskripsi' => $value['desk'],
+                    'jenis' => 'keluar',
+                    'created_at' => Carbon::now(),
+                    'created_by' => $request->userid
+                ]);
+
+                $detail = TFProduksiDetail::create([
+                    't_gbj_id' => $header->id,
+                    'gdg_brg_jadi_id' => $key,
+                    'qty' => count($value['noseri']),
+                    'jenis' => 'keluar',
+                    'created_at' => Carbon::now(),
+                    'created_by' => $request->userid
+                ]);
+
+                foreach($value['noseri'] as $k => $v) {
+                    NoseriTGbj::create([
+                        't_gbj_detail_id' => $detail->id,
+                        'noseri_id' => $v,
+                        'layout_id' => 1,
+                        'status_id' => 2,
+                        'jenis' => 'keluar',
+                        'created_at' => Carbon::now(),
+                        'created_by' => $request->userid
+                    ]);
+
+                    NoseriBarangJadi::find($v)->update(['is_ready' => 1, 'used_by' => $value['tujuan']]);
+                    // NoseriLog::create([
+                    //     'gbj_id' => $value['prd'],
+                    //     'noseri_id' => $v,
+                    //     'nonso' => $header->id,
+                    //     'log_id' => $key,
+                    //     'created_by' => $request->userid
+                    // ]);
+                }
+            }
+
+            $obj = [
+                'data' => $arr,
+                'tgl_keluar' => Carbon::now()
+            ];
+
+            SystemLog::create([
+                'tipe' => 'GBJ',
+                'subjek' => 'Pengeluaran Tanpa SO By Upload',
+                'response' => json_encode($obj),
+                'user_id' => $request->userid
+            ]);
+
+            $del = new Filesystem;
+            $del->cleanDirectory(public_path('upload/nonso/'));
+            File::delete(public_path('upload/nonso/'.$request->namafile));
+
+            return response()->json(['msg' => 'Data Terkirim']);
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
