@@ -172,7 +172,7 @@
                                 </div>
                             </div>
                             {{-- col --}}
-                            <div class="col"> <label for="">Status</label>
+                            <div class="col"> <label for="">Tanggal</label>
                                 <div class="card nomor-akn">
                                     <div class="card-body">
                                         <p class="card-text" id="in">Sudah Ditransfer</p>
