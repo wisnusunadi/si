@@ -77,7 +77,7 @@ class PpicController extends Controller
      * @param string $status status string
      * @return array collection of data
      */
-    public function get_data_perakitan($status = "all", $bulan)
+    public function get_data_perakitan($status = "all")
     {
         $this->update_perakitan_status();
         $status = $this->change_status($status);
@@ -85,7 +85,7 @@ class PpicController extends Controller
             $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else if ($status == $this->change_status("pelaksanaan")) {
             $data = JadwalPerakitan::with('Produk.produk')->where('status', $status)->orwhereNotIn('status', [6])
-            ->havingRaw('MONTH(tanggal_mulai) = ?',[$bulan])
+            // ->havingRaw('MONTH(tanggal_mulai) = ?',[$bulan])
             ->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
         } else {
             $data = JadwalPerakitan::with('Produk.produk')->orderBy('tanggal_mulai', 'asc')->orderBy('tanggal_selesai', 'asc')->get();
@@ -705,7 +705,7 @@ class PpicController extends Controller
      *
      * @return array collections of data perakitan after new data added
      */
-    public function create_data_perakitan(Request $request, $bulan)
+    public function create_data_perakitan(Request $request)
     {
         $status = $this->change_status($request->status);
         $state = $this->change_state($request->state);
@@ -756,7 +756,7 @@ class PpicController extends Controller
             ]);
         }
 
-        return $this->get_data_perakitan($status, $bulan);
+        return $this->get_data_perakitan($status);
     }
 
     /**
