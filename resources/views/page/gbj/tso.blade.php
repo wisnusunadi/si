@@ -726,26 +726,40 @@
 
     $('#formStoreImport').on('submit', function(e){
         e.preventDefault();
-        $.ajax({
-            url: "/api/v2/gbj/store-nonsodb",
-            method: "post",
-            data: new FormData(this),
-            dataType: "json",
-            contentType: false,
-            cache: false,
-            processData: false,
-            success: function(data) {
-                // console.log(data);
-                Swal.fire({
-                    icon: 'success',
-                    title: 'Berhasil',
-                    text: data.msg,
-                }).then((res) => {
-                    // console.log(res);
-                    location.reload()
+        Swal.fire({
+            title: 'Kamu Yakin?',
+            text: "Transfer Data ini!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, transfer it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $(this).prop('disabled', true);
+                $.ajax({
+                    url: "/api/v2/gbj/store-nonsodb",
+                    method: "post",
+                    data: new FormData(this),
+                    dataType: "json",
+                    contentType: false,
+                    cache: false,
+                    processData: false,
+                    success: function(data) {
+                        // console.log(data);
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Berhasil',
+                            text: data.msg,
+                        }).then((res) => {
+                            // console.log(res);
+                            location.reload()
+                        })
+                    }
                 })
             }
         })
+
     })
 </script>
 @stop
