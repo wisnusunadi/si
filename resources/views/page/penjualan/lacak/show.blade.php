@@ -486,10 +486,10 @@
     }
 
     function noseri(data){
-        $('#noseritable').DataTable({
+        var noseritable = $('#noseritable').DataTable({
             destroy: true,
             processing: true,
-            serverSide: true,
+            // serverSide: true,
             ajax: {
                 'url': '/api/penjualan/lacak/data/no_seri/'+ data,
                 'dataType': 'json',
@@ -502,44 +502,112 @@
                 processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
             },
             columns: [{
-                    data: 'DT_RowIndex',
-                    orderable: false,
-                    searchable: false
+                    data: null,
                 },
                 {
                     data: 'noseri',
                     className: 'nowraps align-center'
                 },
                 {
-                    data: 'no_so',
+                    data: 'no_po',
+                    className: 'nowraps align-center',
+                },
+                {
+                    data: null,
+                    className: 'nowraps align-center',
+                    render: function (data, type, row) {
+                        if (row.c_ekat_nama != null) {
+                            return row.c_ekat_nama;
+                        }else if (row.c_spa_nama != null) {
+                            return row.c_spa_nama;
+                        }else if (row.c_spb_nama != null) {
+                            return row.c_spb_nama;
+                        }else{
+                            return '-'
+                        }
+                    }
+                },
+                {
+                    data: 'p_nama',
                     className: 'nowraps align-center'
                 },
                 {
-                    data: 'nama_customer',
-                    className: 'nowraps align-center'
-                },
-                {
-                    data: 'nama_produk',
-                    className: 'nowraps align-center'
-                },
-                {
-                    data: 'tgl_uji',
-                    className: 'nowraps align-center'
+                    data: null,
+                    className: 'nowraps align-center',
+                    render: function (data, type, row) {
+                        if (row.tgl_uji != null) {
+                            return moment(new Date(row.tgl_uji).toString()).format('DD-MM-YYYY');
+                        }else if (row.tglserah_on != null) {
+                            return moment(new Date(row.tglserah_on).toString()).format('DD-MM-YYYY');
+                        }else if (row.tglserah_off != null) {
+                            return moment(new Date(row.tglserah_off).toString()).format('DD-MM-YYYY');
+                        }else if (row.tglserah_spb != null) {
+                            return moment(new Date(row.tglserah_spb).toString()).format('DD-MM-YYYY');
+                        }else{
+                            return '-'
+                        }
+                    }
                 },
                 {
                     data: 'no_sj',
                     className: 'nowraps align-center'
                 },
                 {
-                    data: 'tgl_kirim',
-                    className: 'nowraps align-center'
+                    data: null,
+                    className: 'nowraps align-center',
+                    render: function (data, type, row) {
+                        if (row.tgl_sj != null) {
+                            return moment(new Date(row.tgl_sj).toString()).format('DD-MM-YYYY');
+                        }else if (row.tgl_kirim != null) {
+                            return moment(new Date(row.tgl_kirim).toString()).format('DD-MM-YYYY');
+                        }else{
+                            return '-'
+                        }
+                    }
                 },
                 {
-                    data: 'status',
-                    className: 'nowraps align-center'
+                    name: null,
+                    className: 'nowraps align-center',
+                    render: function(data, type, row){
+
+                        if (row.state_nama != null) {
+                            if (row.state_nama == "Penjualan") {
+                                return '<span class="red-text badge">'+row.state_nama + '</span>';
+                            } else if (row.state_nama == "PO") {
+                                return '<span class="purple-text badge">'+row.state_nama + '</span>';
+                            } else if (row.state_nama == "Gudang") {
+                                return '<span class="orange-text badge">'+row.state_nama + '</span>';
+                            } else if (row.state_nama == "QC") {
+                                return '<span class="yellow-text badge">'+row.state_nama + '</span>';
+                            } else if (row.state_nama == "Belum Terkirim") {
+                                return '<span class="red-text badge">'+row.state_nama + '</span>';
+                            } else if (row.state_nama == "Terkirim Sebagian") {
+                                return '<span class="blue-text badge">'+row.state_nama + '</span>';
+                            } else if (row.state_nama == "Kirim") {
+                                return '<span class="green-text badge">'+row.state_nama + '</span>';
+                            }
+                        }
+                        else{
+                            return '<span class="green-text badge">Kirim</span>'
+                        }
+                    }
                 }
-            ]
+            ],
+            columnDefs : [
+                {
+                    "searchable": false,
+                    "orderable": false,
+                    "targets": 0
+                },
+            ],
+            order: [[7, 'asc']],
         });
+
+        noseritable.on('order.dt search.dt', function () {
+                noseritable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                    cell.innerHTML = i + 1;
+                });
+            }).draw();
     }
 
     function customer(data){

@@ -81,6 +81,9 @@
 <div class="row ml-2">
     <div class="col-lg-12">
         <div class="card">
+            <div class="card-header">
+                <a href="{{ route('export.rakitseri') }}" class="btn btn-outline-success"><i class="far fa-file-excel"></i> Noseri</a>
+            </div>
             <div class="card-body">
                 <div class="row">
                     <div class="col-lg-12">

@@ -1250,7 +1250,72 @@ class PenjualanController extends Controller
                 ->rawColumns(['divisi_id', 'status', 'nama_customer'])
                 ->make(true);
         } else if ($parameter == 'no_seri') {
-            $data =  NoseriBarangJadi::select(
+            //Baru
+            $si_ekat = DB::connection('si_21')->table('seri_on')
+                ->select(
+                    'seri_on.noseri_on as noseri',
+                    'admjual_on.nopo_on as no_po',
+                    'qc_on.tglterima_on as tglterima_on',
+                    'qc_on.tglserah_on as tglserah_on',
+                    'gudang_on.tglsj_on as tgl_sj',
+                    'gudang_on.nosj_on as no_sj',
+                    'spa_on.satuan_on as satuan',
+                    'distributor.pabrik as c_ekat_nama',
+                    'produk_master.nam_prod as p_nama'
+                )
+                ->leftjoin('gudang_on', 'gudang_on.nolkppgdg_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('admjual_on', 'admjual_on.nolkppadm_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('qc_on', 'qc_on.nolkppqc_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('spa_on', 'spa_on.nolkpp_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_on.pabrik_on')
+                ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_on.idprod_on')
+                ->where('seri_on.noseri_on', 'LIKE', '%' . $value . '%')
+                ->whereNotNull('gudang_on.tglsj_on')
+                ->get();
+
+
+            $si_spa = DB::connection('si_21')->table('seri_off')
+                ->select(
+                    'seri_off.noseri_off as noseri',
+                    'admjual_off.nopo_off as no_po',
+                    'qc_off.tglterima_off as tglterima_off',
+                    'qc_off.tglserah_off as tglserah_off',
+                    'gudang_off.tglsj_off as tgl_sj',
+                    'gudang_off.nosj_off as no_sj',
+                    'distributor.pabrik as c_spa_nama',
+                    'produk_master.nam_prod as p_nama'
+                )
+                ->leftjoin('gudang_off', 'gudang_off.idordergdg_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('admjual_off', 'admjual_off.idorderadm_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('qc_off', 'qc_off.idorderqc_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('spa_off', 'spa_off.idorder_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_off.pabrik_off')
+                ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_off.idprod_off')
+                ->where('seri_off.noseri_off', 'LIKE', '%' . $value . '%')
+                ->whereNotNull('gudang_off.tglsj_off')
+                ->get();
+
+            $si_spb = DB::connection('si_21')->table('seri_spb')
+                ->select(
+                    'seri_spb.noseri_spb as noseri',
+                    'admjual_spb.nopo_spb as no_po',
+                    'qc_spb.tglterimaqc_spb as tglterima_spb',
+                    'qc_spb.tglserahqc_spb as tglserah_spb',
+                    'gudang_spb.tglsjgdg_spb as tgl_sj',
+                    'gudang_spb.nosjgdg_spb as no_sj',
+                    'spb.pelanggan_spb as c_spb_nama',
+                    'produk_master.nam_prod as p_nama'
+                )
+                ->leftjoin('gudang_spb', 'gudang_spb.nogdg_spb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('admjual_spb', 'admjual_spb.noadm_spb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('qc_spb', 'qc_spb.noqc_spb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('spb', 'spb.nospb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spb.idprod_spb')
+                ->where('seri_spb.noseri_spb', 'LIKE', '%' . $value . '%')
+                ->whereNotNull('gudang_spb.tglsjgdg_spb')
+                ->get();
+
+            $spa =  NoseriBarangJadi::select(
                 'noseri_barang_jadi.noseri',
                 'pesanan.no_po',
                 'pesanan.so',
@@ -1284,143 +1349,138 @@ class PenjualanController extends Controller
                 ->leftJoin('customer as c_spb', 'c_spb.id', '=', 'spb.customer_id')
                 ->where('noseri_barang_jadi.noseri', 'LIKE', '%' . $value . '%')
                 ->whereNotNull('t_gbj.pesanan_id')
-
                 ->orderBy('noseri_barang_jadi.noseri', 'ASC')
                 ->get();
 
-            return datatables()->of($data)
-                ->addIndexColumn()
-                ->addColumn('noseri', function ($data) {
 
-                    return $data->noseri;
-                    // return $data->NoseriBarangJadi->noseri;
-                })
-                ->addColumn('nama_produk', function ($data) {
-                    return $data->pesanan;
-                    // if ($data->p_nama) {
-                    //     return $data->p_nama;
-                    // } else {
-                    //     return '-';
-                    // }
-                    // return $data->NoseriBarangJadi->Gudang->Produk->nama;
-                })
-                ->addColumn('no_so', function ($data) {
-                    // return $data->pesanan;
-                    // if ($data->no_po) {
-                    //     return $data->no_po;
-                    // } else {
-                    //     return '-';
-                    // }
-                    // if ($data->NoseriDetailPesanan) {
-                    //     return $data->NoseriDetailPesanan->DetailPesananProduk->DetailPesanan->Pesanan->no_po;
-                    // } else {
-                    //     return '-';
-                    // }
-                })
-                ->addColumn('nama_customer', function ($data) {
+            $data = $si_spa->merge($si_spb)->merge($si_ekat)->merge($spa);
 
-                    if ($data->so) {
-                        $name = explode('/', $data->so);
-                        if ($name[1] == 'EKAT') {
-                            $datas = $data->c_ekat_nama;
-                            if ($data->satuan) {
-                                $datas .= "<div><small>" . $data->satuan . "</small></div>";
-                            }
-                        } else if ($name[1] == 'SPA') {
-                            $datas = $data->c_spa_nama;
-                        } else if ($name[1] == 'SPB') {
-                            $datas = $data->c_spb_nama;
-                        }
-                        return $datas;
-                    } else {
-                        return '-';
-                    }
-                })
-                ->addColumn('tgl_uji', function ($data) {
-                    // if ($data->NoseriDetailPesanan) {
-                    //         return $data->NoseriDetailPesanan->tgl_uji;
-                    // } else {
-                    //     return '-';
-                    // }
 
-                    // if (isset($data->tgl_uji)) {
-                    //     return Carbon::createFromFormat('Y-m-d', $data->tgl_uji)->format('d-m-Y');
-                    // } else {
-                    //     return '-';
-                    // }
-                })
-                ->addColumn('no_sj', function ($data) {
-                    // if (isset($data->no_sj)) {
-                    //     return $data->no_sj;
-                    // } else {
-                    //     return '-';
-                    // }
-                    // if ($data->NoseriDetailPesanan) {
-                    //     if ($data->NoseriDetailPesanan->NoseriDetailLogistik){
-                    //         if ($data->NoseriDetailPesanan->NoseriDetailLogistik->DetailLogistik){
-                    //             return $data->NoseriDetailPesanan->NoseriDetailLogistik->DetailLogistik->Logistik->nosurat;
-                    //         }
-                    //     }
-                    // } else {
-                    //     return '-';
-                    // }
-                })
-                ->addColumn('tgl_kirim', function ($data) {
-                    // if (isset($data->tgl_sj)) {
-                    //     return Carbon::createFromFormat('Y-m-d', $data->tgl_sj)->format('d-m-Y');
-                    // } else {
-                    //     return '-';
-                    // }
-                    // if ($data->NoseriDetailPesanan) {
-                    //     if ($data->NoseriDetailPesanan->NoseriDetailLogistik){
-                    //         if ($data->NoseriDetailPesanan->NoseriDetailLogistik->DetailLogistik){
-                    //             return Carbon::createFromFormat('Y-m-d', $data->NoseriDetailPesanan->NoseriDetailLogistik->DetailLogistik->Logistik->tgl_kirim)->format('d-m-Y');
-                    //         }
-                    //     }
-                    // } else {
-                    //     return '-';
-                    // }
-                })
-                ->addColumn('status', function ($data) {
-                    // if ($data->NoseriDetailPesanan) {
-                    //     if ($data->NoseriDetailPesanan->NoseriDetailLogistik){
-                    //         if ($data->NoseriDetailPesanan->NoseriDetailLogistik->DetailLogistik){
-                    //             if ($data->NoseriDetailPesanan->NoseriDetailLogistik->DetailLogistik->Logistik->status_id != "10"){
-                    //                 return '<span class="red-text badge">Belum Terkirim</span>';
-                    //             }else{
-                    //                 return '<span class="green-text badge">Kirim</span>';
-                    //             }
-                    //         }
-                    //     }
-                    //     else{
-                    //         return '<span class="yellow-text badge">QC</span>';
-                    //     }
-                    // } else {
-                    //     return '<span class="orange-text badge">Gudang</span>';
-                    // }
-                    // $datas = "";
-                    // if (!empty($data->state_nama)) {
-                    //     if ($data->state_nama == "Penjualan") {
-                    //         $datas .= '<span class="red-text badge">';
-                    //     } else if ($data->state_nama == "PO") {
-                    //         $datas .= '<span class="purple-text badge">';
-                    //     } else if ($data->state_nama == "Gudang") {
-                    //         $datas .= '<span class="orange-text badge">';
-                    //     } else if ($data->state_nama == "QC") {
-                    //         $datas .= '<span class="yellow-text badge">';
-                    //     } else if ($data->state_nama == "Belum Terkirim") {
-                    //         $datas .= '<span class="red-text badge">';
-                    //     } else if ($data->state_nama == "Terkirim Sebagian") {
-                    //         $datas .= '<span class="blue-text badge">';
-                    //     } else if ($data->state_nama == "Kirim") {
-                    //         $datas .= '<span class="green-text badge">';
-                    //     }
-                    //     $datas .= ucfirst($data->state_nama) . '</span>';
-                    // }
-                    // return $datas;
-                })
-                ->rawColumns(['status',  'nama_customer'])
-                ->make(true);
+            return response()->json(['data' => $data]);
+            // $data =  NoseriBarangJadi::select(
+            //     'noseri_barang_jadi.noseri',
+            //     'pesanan.no_po',
+            //     'pesanan.so',
+            //     'noseri_detail_pesanan.tgl_uji',
+            //     'logistik.tgl_kirim as tgl_sj',
+            //     'logistik.nosurat as no_sj',
+            //     'produk.nama as p_nama',
+            //     'c_ekat.nama as c_ekat_nama',
+            //     'c_spa.nama as c_spa_nama',
+            //     'c_spb.nama as c_spb_nama',
+            //     'ekatalog.satuan as satuan',
+            //     'm_state.nama as state_nama',
+            // )
+
+            //     ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
+            //     ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+            //     ->leftjoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
+            //     ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.t_tfbj_noseri_id', '=', 't_gbj_noseri.id')
+            //     ->leftJoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
+            //     ->leftJoin('detail_logistik', 'detail_logistik.id', '=', 'noseri_logistik.detail_logistik_id')
+            //     ->leftJoin('logistik', 'logistik.id', '=', 'detail_logistik.logistik_id')
+            //     ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+            //     ->leftjoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+            //     ->leftJoin('pesanan', 'pesanan.id', '=', 't_gbj.pesanan_id')
+            //     ->leftJoin('m_state', 'm_state.id', '=', 'pesanan.log_id')
+            //     ->leftJoin('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
+            //     ->leftJoin('customer as c_ekat', 'c_ekat.id', '=', 'ekatalog.customer_id')
+            //     ->leftJoin('spa', 'spa.pesanan_id', '=', 'pesanan.id')
+            //     ->leftJoin('customer as c_spa', 'c_spa.id', '=', 'spa.customer_id')
+            //     ->leftJoin('spb', 'spb.pesanan_id', '=', 'pesanan.id')
+            //     ->leftJoin('customer as c_spb', 'c_spb.id', '=', 'spb.customer_id')
+            //     ->where('noseri_barang_jadi.noseri', 'LIKE', '%' . $value . '%')
+            //     ->whereNotNull('t_gbj.pesanan_id')
+
+            //     ->orderBy('noseri_barang_jadi.noseri', 'ASC')
+            //     ->get();
+
+            // return datatables()->of($data)
+            //     ->addIndexColumn()
+            //     ->addColumn('noseri', function ($data) {
+
+            //         return $data->noseri;
+            //     })
+            //     ->addColumn('nama_produk', function ($data) {
+            //         if ($data->p_nama) {
+            //             return $data->p_nama;
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('no_so', function ($data) {
+            //         if ($data->no_po) {
+            //             return $data->no_po;
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('nama_customer', function ($data) {
+
+            //         if ($data->so) {
+            //             $name = explode('/', $data->so);
+            //             if ($name[1] == 'EKAT') {
+            //                 $datas = $data->c_ekat_nama;
+            //                 if ($data->satuan) {
+            //                     $datas .= "<div><small>" . $data->satuan . "</small></div>";
+            //                 }
+            //             } else if ($name[1] == 'SPA') {
+            //                 $datas = $data->c_spa_nama;
+            //             } else if ($name[1] == 'SPB') {
+            //                 $datas = $data->c_spb_nama;
+            //             }
+            //             return $datas;
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('tgl_uji', function ($data) {
+
+            //         // if (isset($data->tgl_uji)) {
+            //         //     return Carbon::createFromFormat('Y-m-d', $data->tgl_uji)->format('d-m-Y');
+            //         // } else {
+            //         //     return '-';
+            //         // }
+            //     })
+            //     ->addColumn('no_sj', function ($data) {
+            //         if (isset($data->no_sj)) {
+            //             return $data->no_sj;
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('tgl_kirim', function ($data) {
+            //         if (isset($data->tgl_sj)) {
+            //             return Carbon::createFromFormat('Y-m-d', $data->tgl_sj)->format('d-m-Y');
+            //         } else {
+            //             return '-';
+            //         }
+            //     })
+            //     ->addColumn('status', function ($data) {
+
+            //         $datas = "";
+            //         if (!empty($data->state_nama)) {
+            //             if ($data->state_nama == "Penjualan") {
+            //                 $datas .= '<span class="red-text badge">';
+            //             } else if ($data->state_nama == "PO") {
+            //                 $datas .= '<span class="purple-text badge">';
+            //             } else if ($data->state_nama == "Gudang") {
+            //                 $datas .= '<span class="orange-text badge">';
+            //             } else if ($data->state_nama == "QC") {
+            //                 $datas .= '<span class="yellow-text badge">';
+            //             } else if ($data->state_nama == "Belum Terkirim") {
+            //                 $datas .= '<span class="red-text badge">';
+            //             } else if ($data->state_nama == "Terkirim Sebagian") {
+            //                 $datas .= '<span class="blue-text badge">';
+            //             } else if ($data->state_nama == "Kirim") {
+            //                 $datas .= '<span class="green-text badge">';
+            //             }
+            //             $datas .= ucfirst($data->state_nama) . '</span>';
+            //         }
+            //         return $datas;
+            //     })
+            //     ->rawColumns(['status',  'nama_customer'])
+            //     ->make(true);
         } else if ($parameter == 'no_so') {
             // $val = str_replace("_","/",$value);
             // $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {

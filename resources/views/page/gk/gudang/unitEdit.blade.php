@@ -172,7 +172,7 @@
                                 </div>
                             </div>
                             {{-- col --}}
-                            <div class="col"> <label for="">Status</label>
+                            <div class="col"> <label for="">Tanggal</label>
                                 <div class="card nomor-akn">
                                     <div class="card-body">
                                         <p class="card-text" id="in">Sudah Ditransfer</p>
@@ -475,16 +475,16 @@
             $('.fixidCol').hide()
         }
 
-        // $.ajax({
-        //     url: "/api/gk/noseri/" + id,
-        //     type: "get",
-        //     dataType: "json",
-        //     success: function (res) {
-        //         $('div#nose').text(res.noser);
-        //         $('p#in').text(res.in);
-        //         $('p#out').text(res.out);
-        //     }
-        // })
+        $.ajax({
+            url: "/api/gk/noseri/" + id,
+            type: "get",
+            dataType: "json",
+            success: function (res) {
+                $('div#nose').text(res.noser);
+                $('p#in').text(res.in);
+                $('p#out').text(res.out);
+            }
+        })
 
         $.ajax({
             url: "/api/gk/detailseri",
