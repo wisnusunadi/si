@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes();
+// Auth::routes();
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', function () {
         return view('auth.login');
