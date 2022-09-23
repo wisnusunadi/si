@@ -50,6 +50,8 @@ class RedirectIfAuthenticated
                     return redirect('/gbj/dashboard');
                 } else if ($request->user()->hasRole("28")) {
                     return redirect()->route('kesehatan.dashboard');
+                } else if ($request->user()->hasRole("16")) {
+                    return redirect('/mtc/air/masuk');
                 }
             }
         }

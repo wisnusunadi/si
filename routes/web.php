@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Auth;
 | contains the "web" middleware group. Now create something great!
 |
 */
-Auth::routes();
+// Auth::routes();
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', function () {
         return view('auth.login');
@@ -397,6 +397,21 @@ Route::group(['prefix' => 'as', 'middleware' => ['auth','divisi:asp']], function
     //         Route::view('/show', 'page.dc.laporan.show')->name('dc.coo.laporan.show');
     //     });
     // });
+});
+
+Route::group(['prefix' => 'mtc', 'middleware' => ['auth','divisi:mtc']], function () {
+    Route::group(['prefix' => '/air'], function () {
+        Route::get('/masuk', [App\Http\Controllers\MaintenanceController::class, 'show_air_masuk'])->name('mtc.air.masuk');
+        Route::get('/keluar', [App\Http\Controllers\MaintenanceController::class, 'show_air_keluar'])->name('mtc.air.keluar');
+    });
+
+    Route::group(['prefix' => '/listrik'], function () {
+        Route::group(['prefix' => '/monitoring'], function () {
+            Route::get('/table', [App\Http\Controllers\MaintenanceController::class, 'show_listrik_monitoring_table'])->name('mtc.listrik.monitoring_table');
+            Route::get('/grafik', [App\Http\Controllers\MaintenanceController::class, 'show_listrik_monitoring_grafik'])->name('mtc.listrik.monitoring_grafik');
+        });
+        Route::get('/panel', [App\Http\Controllers\MaintenanceController::class, 'show_listrik_panel'])->name('mtc.listrik.panel');
+    });
 });
 
 Route::group(['prefix' => '/gk', 'middleware' => ['auth','divisi:gk,dirut']], function () {
