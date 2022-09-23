@@ -267,6 +267,7 @@
     $('.d_masuk').on('click', function() {
         console.log('masuk');
     })
+    // chart penggunaan air seminggu
     // Javascript bar chart / barchart
     var ctx = document.getElementById("myBarChart");
     var BarChart = new Chart(ctx, {
@@ -489,125 +490,7 @@
         }
     });
 
-    // $(document).ready(function newData() {
-    //     var gg1 = new JustGage({
-    //         id: "gg1",
-    //         value: 0.00 + 'L/M',
-    //         min: 0,
-    //         max: 20,
-    //         decimals: 2,
-    //         gaugeWidthScale: 0.6,
-    //         customSectors: [{
-    //             color: "#00ff00",
-    //             lo: 0,
-    //             hi: 5
-    //         }, {
-    //             color: "#fc6f03",
-    //             lo: 5,
-    //             hi: 10
-    //         }, {
-    //             color: "#ff0000",
-    //             lo: 10,
-    //             hi: 15
-    //         }, {
-    //             color: "#fc03f0",
-    //             lo: 15,
-    //             hi: 20
-    //         }],
-    //         counter: true
-    //     });
-
-    //     var gg2 = new JustGage({
-    //         id: "gg2",
-    //         value: 0 + 'L/M',
-    //         min: 0,
-    //         max: 20,
-    //         decimals: 2,
-    //         gaugeWidthScale: 0.6,
-    //         customSectors: [{
-    //             color: "#00ff00",
-    //             lo: 0,
-    //             hi: 5
-    //         }, {
-    //             color: "#fc6f03",
-    //             lo: 5,
-    //             hi: 10
-    //         }, {
-    //             color: "#ff0000",
-    //             lo: 10,
-    //             hi: 15
-    //         }, {
-    //             color: "#fc03f0",
-    //             lo: 15,
-    //             hi: 20
-    //         }],
-    //         counter: true
-    //     });
-
-
-    //     //update data
-
-    //     function updateGaugeIn() {
-    //         $.ajax({
-    //             url: "http://192.168.12.97:90/air/rekap_debit_in",
-    //             type: "get",
-    //             success: function(res) {
-    //                 gg1.refresh(res.data2[0].debit);
-
-    //                 for ($i = 0; $i <= 12; $i++) {
-
-
-    //                     if (res.data2[$i].debit != null) {
-
-    //                         LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-
-    //                     } else {
-    //                         LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-    //                     }
-    //                     LineChart.update();
-    //                 }
-    //             }
-    //         })
-    //     }
-
-    //     function updateGaugeOut() {
-    //         $.ajax({
-    //             url: "http://192.168.12.97:90/air/rekap_debit_out",
-    //             type: "get",
-    //             success: function(res) {
-    //                 gg2.refresh(res.data2[0].debit);
-
-    //                 for ($i = 0; $i <= 12; $i++) {
-
-    //                     let debit = res.data2[$i].created_at;
-    //                     let jam = debit.slice(11);
-    //                     if (res.data2[$i].debit != null) {
-    //                         LineChart.data.datasets[1].data[$i] = res.data2[$i].debit;
-    //                         LineChart.data.labels[$i] = jam;
-    //                     } else {
-    //                         LineChart.data.datasets[1].data[$i] = res.data2[$i].debit;
-    //                         LineChart.data.labels[$i] = res.data2[$i].created_at;
-    //                     }
-
-    //                     LineChart.update();
-    //                 }
-    //             }
-    //         })
-    //     }
-
-    //     setInterval(function() {
-    //         updateGaugeIn();
-    //         updateGaugeOut();
-
-    //     }, 1000);
-
-
-
-    // });
-
-    $(document).ready(function newData() {
+    $(document).ready(function () {
         var gg1 = new JustGage({
             id: "gg1",
             value: 0.00 + 'L/M',
@@ -635,40 +518,6 @@
             counter: true
         });
 
-        //update data
-
-        function updateGaugeIn() {
-            $.ajax({
-                url: "http://192.168.12.97:90/air/rekap_debit_in",
-                type: "get",
-                success: function(res) {
-                    gg1.refresh(res.data2[0].debit);
-
-                    for ($i = 0; $i <= 12; $i++) {
-
-
-                        if (res.data2[$i].debit != null) {
-
-                            LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-
-                        } else {
-                            LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-                        }
-                        LineChart.update();
-                    }
-                }
-            })
-        }
-
-        setInterval(function() {
-            updateGaugeIn();
-        }, 1000);
-
-    });
-
-    $(document).ready(function newData2() {
         var gg2 = new JustGage({
             id: "gg2",
             value: 0 + 'L/M',
@@ -696,8 +545,31 @@
             counter: true
         })
 
+       //update data
+        function updateGaugeIn() {
+            $.ajax({
+                url: "http://192.168.12.97:90/air/rekap_debit_in",
+                type: "get",
+                success: function(res) {
+                    gg1.refresh(res.data2[0].debit);
+
+                    for ($i = 0; $i <= 12; $i++) {
 
 
+                        if (res.data2[$i].debit != null) {
+
+                            LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
+
+
+                        } else {
+                            LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
+
+                        }
+                        LineChart.update();
+                    }
+                }
+            })
+        }
 
         function updateGaugeOut() {
             $.ajax({
@@ -725,14 +597,15 @@
         }
 
         setInterval(function() {
+            updateGaugeIn();
             updateGaugeOut();
+            kualitas();
         }, 1000);
+
     });
 
-
-
-    // bar Kondisi Air, pH, TDS, TSS
-    $(document).ready(function Kualitas() {
+    function kualitas()
+    {
         $.ajax({
             url: "http://192.168.12.97:90/air/rekap_kualitas",
             type: "get",
@@ -851,12 +724,8 @@
 
             }
         })
-    })
+    }
 
-    setInterval(function() {
-        Kualitas();
-
-    }, 1000);
 </script>
 
 
