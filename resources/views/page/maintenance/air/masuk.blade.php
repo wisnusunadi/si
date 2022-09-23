@@ -177,22 +177,23 @@
                     <div class="card-header p-0 pt-1">
                         <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active d_keluar" id="custom-tabs-one-home-tab" data-toggle="pill" href="#custom-tabs-one-home" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Pakai</a>
+                                <a class="nav-link active d_keluar" id="custom-tabs-one-home-tab" data-toggle="pill" href="#pakai" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Pakai</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link d_masuk" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#custom-tabs-one-profile" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Masuk</a>
+                                <a class="nav-link d_masuk" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#masuk" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Masuk</a>
                             </li>
                         </ul>
                     </div>
                     <div class="tab-content" id="custom-tabs-one-tabContent">
-                        <div class="tab-pane fade show active" id="custom-tabs-one-home" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
+                        <div class="tab-pane fade show active" id="pakai" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
                             <div class="card-header">
                                 <i class="fas fa-chart-area me-1"></i>
                                 Debit Air (L/M)
                             </div>
                             <div id="gg2" class="gauge2"></div>
                         </div>
-                        <div class="tab-pane fade show in" id="custom-tabs-one-profile" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                        <div class="tab-pane fade show in active" id="masuk" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
+                            
                             <div class="card-header">
                                 <i class="fas fa-chart-area me-1"></i>
                                 Debit Air (L/M)
@@ -264,9 +265,16 @@
 <script src="{{ asset('js/justgage.js') }}"></script>
 <script src="{{ asset('js/raphael-2.1.4.min.js') }}"></script>
 <script type="text/javascript">
-    $('.d_masuk').on('click', function() {
-        console.log('masuk');
+
+var x = document.getElementById("gg1");
+    x.style.display = "none";
+
+    $('.d_masuk').on('click', function() {    
+        x.style.display = "block"
     })
+    
+
+
     // Javascript bar chart / barchart
     var ctx = document.getElementById("myBarChart");
     var BarChart = new Chart(ctx, {
