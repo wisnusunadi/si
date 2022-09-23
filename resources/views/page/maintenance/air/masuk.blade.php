@@ -264,613 +264,9 @@
 <script src="{{ asset('js/justgage.js') }}"></script>
 <script src="{{ asset('js/raphael-2.1.4.min.js') }}"></script>
 <script type="text/javascript">
-    // $('.d_masuk').on('click', function(){
-    //     console.log('masuk');
-    // })
-    // // Javascript bar chart / barchart
-    // var ctx = document.getElementById("myBarChart");
-    // var BarChart = new Chart(ctx, {
-    //     type: 'bar',
-    //     data: {
-    //         labels: [
-    //             ["Senin", ],
-    //             ["Selasa", ],
-    //             ["Rabu", ],
-    //             ["Kamis", ],
-    //             ["Jum'at", ],
-    //             ["Sabtu", ],
-    //             ["Minggu", ]
-    //         ],
-    //         datasets: [{
-    //             label: "Air Digunakan",
-    //             backgroundColor: "rgba(2,117,216,1)",
-    //             borderColor: "rgba(2,117,216,1)",
-    // data: [ ?php
-    //                     for ($i = 0; $i <= 6; $i++) {
-    //                         echo '0' . ',';
-    //                     } ?>],
-    //         }, {
-    //             label: "Air Disimpan",
-    //             backgroundColor: "rgba(255,0,255)",
-    //             borderColor: "rgba(255,0,255)",
-    //             data: [?php
-    //                     for ($i = 6; $i >= 0; $i--) {
-    //                         echo '0' . ',';
-    //                     } ?>],
-    //         }],
-    //     },
-    //     options: {
-
-    //         scales: {
-    //             xAxes: [{
-    //                 time: {
-    //                     unit: 'day'
-    //                 },
-    //                 gridLines: {
-    //                     display: false
-    //                 },
-    //                 ticks: {
-    //                     maxTicksLimit: 6,
-    //                     autoSkip: false
-    //                 }
-    //             }],
-    //             yAxes: [{
-    //                 ticks: {
-    //                     min: 0,
-    //                     max: 50,
-    //                     maxTicksLimit: 5
-    //                 },
-    //                 gridLines: {
-    //                     display: true
-    //                 }
-    //             }],
-    //         },
-    //         legend: {
-    //             display: false
-    //         }
-    //     }
-    // });
-
-    // function UpdateBarVolume() {
-    //     $.ajax({
-    //         url: "http://192.168.12.97:90/air/rekap_volume_in",
-    //         type: "get",
-    //         success: function(res) {
-
-    //             for ($i = 0; $i < 6; $i++) {
-    //                 // console.log(res.data[$i].volume);
-    //                 if (res.data[$i].hari == 'Monday') {
-    //                     BarChart.data.datasets[0].data[0] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Tuesday') {
-    //                     BarChart.data.datasets[0].data[1] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Wednesday') {
-    //                     BarChart.data.datasets[0].data[2] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Thursday') {
-    //                     BarChart.data.datasets[0].data[3] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Friday') {
-    //                     BarChart.data.datasets[0].data[4] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Saturday') {
-    //                     BarChart.data.datasets[0].data[5] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Sunday') {
-    //                     BarChart.data.datasets[0].data[6] = res.data[$i].volume;
-    //                 } else {
-    //                     BarChart.data.datasets[0].data[$i] = "0.0";
-    //                 }
-    //                 BarChart.update();
-    //             }
-
-    //         },
-    //     })
-
-    //     $.ajax({
-    //         url: "http://192.168.12.97:90/air/rekap_volume_out",
-    //         type: "get",
-    //         success: function(res) {
-
-    //             for ($i = 0; $i < 6; $i++) {
-    //                 // console.log(res.data[$i].volume);
-    //                 if (res.data[$i].hari == 'Monday') {
-    //                     BarChart.data.datasets[1].data[0] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Tuesday') {
-    //                     BarChart.data.datasets[1].data[1] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Wednesday') {
-    //                     BarChart.data.datasets[1].data[2] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Thursday') {
-    //                     BarChart.data.datasets[1].data[3] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Friday') {
-    //                     BarChart.data.datasets[1].data[4] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Saturday') {
-    //                     BarChart.data.datasets[1].data[5] = res.data[$i].volume;
-    //                 } else if (res.data[$i].hari == 'Sunday') {
-    //                     BarChart.data.datasets[1].data[6] = res.data[$i].volume;
-    //                 } else {
-    //                     BarChart.data.datasets[1].data[$i] = "0.0";
-    //                 }
-    //                 BarChart.update();
-    //             }
-
-    //         },
-    //     })
-    // }
-
-    // setInterval(function() {
-    //     UpdateBarVolume();
-    // }, 1000);
-
-
-    // //Javascript Gauge 1
-    // var nilaiGauge;
-
-    // //Javascript Penggunaan Hari Ini / Penggunaan Air Hari ini
-    // var ctx = document.getElementById("myAreaChart");
-    // var kosong;
-    // var LineChart = new Chart(ctx, {
-    //     type: 'line',
-    //     data: {
-    //         labels: [?php
-    //                     for ($i = 0; $i <= 5; $i++) {
-    //                         if ($i == NULL) {
-    //                             echo '"' . "Memuat" . '"' . ',';
-    //                         } else {
-    //                             echo '"' . 'Memuat' . '"' . ',';
-    //                         }
-    //                     } ?>],
-    //         datasets: [{
-    //                 label: "Debit Masuk (L/M)",
-    //                 lineTension: 0.3,
-    //                 backgroundColor: "rgba(2,117,216,0.2)",
-    //                 borderColor: "rgba(2,117,216,1)",
-    //                 pointRadius: 5,
-    //                 pointBackgroundColor: "rgba(2,117,216,1)",
-    //                 pointBorderColor: "rgba(255,255,255,0.8)",
-    //                 pointHoverRadius: 5,
-    //                 pointHoverBackgroundColor: "rgba(2,117,216,1)",
-    //                 pointHitRadius: 50,
-    //                 pointBorderWidth: 2,
-    //                 data: [?php for ($i = 0; $i <= 5; $i++) {
-    //                             if ($i == NULL) {
-    //                                 echo "0.0" . ',';
-    //                             } else {
-    //                                 echo "0.0" . ',';
-    //                             }
-    //                         } ?>],
-    //             },
-    //             {
-    //                 label: "Debit Keluar (L/M)",
-    //                 lineTension: 0.3,
-    //                 backgroundColor: "rgba(255,0,255,0.2)",
-    //                 borderColor: "rgba(255,0,255,1)",
-    //                 pointRadius: 5,
-    //                 pointBackgroundColor: "rgba(255,0,255,1)",
-    //                 pointBorderColor: "rgba(255,0,255,0.8)",
-    //                 pointHoverRadius: 5,
-    //                 pointHoverBackgroundColor: "rgba(255,0,255,1)",
-    //                 pointHitRadius: 50,
-    //                 pointBorderWidth: 2,
-    //                 data: [?php for ($i = 6; $i > 0; $i--) {
-    //                             if ($i == NULL) {
-    //                                 echo "0.0" . ',';
-    //                             } else {
-    //                                 echo "0.0" . ',';
-    //                             }
-    //                         } ?>],
-    //             }
-    //         ],
-    //     },
-    //     options: {
-    //         scales: {
-    //             xAxes: [{
-    //                 time: {
-    //                     unit: 'date'
-    //                 },
-    //                 gridLines: {
-    //                     display: false
-    //                 },
-    //                 ticks: {
-    //                     maxTicksLimit: 7
-    //                 }
-    //             }],
-    //             yAxes: [{
-    //                 ticks: {
-    //                     min: 0,
-    //                     max: 20,
-    //                     maxTicksLimit: 5
-
-    //                 },
-    //                 gridLines: {
-    //                     color: "rgba(0, 0, 0, .125)",
-    //                 }
-    //             }],
-
-    //         },
-    //         legend: {
-    //             display: false
-    //         }
-    //     }
-    // });
-
-    // // $(document).ready(function newData() {
-    // //     var gg1 = new JustGage({
-    // //         id: "gg1",
-    // //         value: 0.00 + 'L/M',
-    // //         min: 0,
-    // //         max: 20,
-    // //         decimals: 2,
-    // //         gaugeWidthScale: 0.6,
-    // //         customSectors: [{
-    // //             color: "#00ff00",
-    // //             lo: 0,
-    // //             hi: 5
-    // //         }, {
-    // //             color: "#fc6f03",
-    // //             lo: 5,
-    // //             hi: 10
-    // //         }, {
-    // //             color: "#ff0000",
-    // //             lo: 10,
-    // //             hi: 15
-    // //         }, {
-    // //             color: "#fc03f0",
-    // //             lo: 15,
-    // //             hi: 20
-    // //         }],
-    // //         counter: true
-    // //     });
-
-    // //     var gg2 = new JustGage({
-    // //         id: "gg2",
-    // //         value: 0 + 'L/M',
-    // //         min: 0,
-    // //         max: 20,
-    // //         decimals: 2,
-    // //         gaugeWidthScale: 0.6,
-    // //         customSectors: [{
-    // //             color: "#00ff00",
-    // //             lo: 0,
-    // //             hi: 5
-    // //         }, {
-    // //             color: "#fc6f03",
-    // //             lo: 5,
-    // //             hi: 10
-    // //         }, {
-    // //             color: "#ff0000",
-    // //             lo: 10,
-    // //             hi: 15
-    // //         }, {
-    // //             color: "#fc03f0",
-    // //             lo: 15,
-    // //             hi: 20
-    // //         }],
-    // //         counter: true
-    // //     });
-
-
-    // //     //update data
-
-    // //     function updateGaugeIn() {
-    // //         $.ajax({
-    // //             url: "http://192.168.12.97:90/air/rekap_debit_in",
-    // //             type: "get",
-    // //             success: function(res) {
-    // //                 gg1.refresh(res.data2[0].debit);
-
-    // //                 for ($i = 0; $i <= 12; $i++) {
-
-
-    // //                     if (res.data2[$i].debit != null) {
-
-    // //                         LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-
-    // //                     } else {
-    // //                         LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-    // //                     }
-    // //                     LineChart.update();
-    // //                 }
-    // //             }
-    // //         })
-    // //     }
-
-    // //     function updateGaugeOut() {
-    // //         $.ajax({
-    // //             url: "http://192.168.12.97:90/air/rekap_debit_out",
-    // //             type: "get",
-    // //             success: function(res) {
-    // //                 gg2.refresh(res.data2[0].debit);
-
-    // //                 for ($i = 0; $i <= 12; $i++) {
-
-    // //                     let debit = res.data2[$i].created_at;
-    // //                     let jam = debit.slice(11);
-    // //                     if (res.data2[$i].debit != null) {
-    // //                         LineChart.data.datasets[1].data[$i] = res.data2[$i].debit;
-    // //                         LineChart.data.labels[$i] = jam;
-    // //                     } else {
-    // //                         LineChart.data.datasets[1].data[$i] = res.data2[$i].debit;
-    // //                         LineChart.data.labels[$i] = res.data2[$i].created_at;
-    // //                     }
-
-    // //                     LineChart.update();
-    // //                 }
-    // //             }
-    // //         })
-    // //     }
-
-    // //     setInterval(function() {
-    // //         updateGaugeIn();
-    // //         updateGaugeOut();
-
-    // //     }, 1000);
-
-
-
-    // // });
-
-    // $(document).ready(function newData() {
-    //     var gg1 = new JustGage({
-    //         id: "gg1",
-    //         value: 0.00 + 'L/M',
-    //         min: 0,
-    //         max: 20,
-    //         decimals: 2,
-    //         gaugeWidthScale: 0.6,
-    //         customSectors: [{
-    //             color: "#00ff00",
-    //             lo: 0,
-    //             hi: 5
-    //         }, {
-    //             color: "#fc6f03",
-    //             lo: 5,
-    //             hi: 10
-    //         }, {
-    //             color: "#ff0000",
-    //             lo: 10,
-    //             hi: 15
-    //         }, {
-    //             color: "#fc03f0",
-    //             lo: 15,
-    //             hi: 20
-    //         }],
-    //         counter: true
-    //     });
-
-    //         //update data
-
-    //         function updateGaugeIn() {
-    //     $.ajax({
-    //         url: "http://192.168.12.97:90/air/rekap_debit_in",
-    //         type: "get",
-    //         success: function(res) {
-    //             gg1.refresh(res.data2[0].debit);
-
-    //             for ($i = 0; $i <= 12; $i++) {
-
-
-    //                 if (res.data2[$i].debit != null) {
-
-    //                     LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-
-    //                 } else {
-    //                     LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-    //                 }
-    //                 LineChart.update();
-    //             }
-    //         }
-    //     })
-    // }
-
-    //     setInterval(function() {
-    //         updateGaugeIn();
-    //     }, 1000);
-
-    // });
-
-    // $(document).ready(function newData2() {
-    //     var gg2 = new JustGage({
-    //         id: "gg2",
-    //         value: 0 + 'L/M',
-    //         min: 0,
-    //         max: 20,
-    //         decimals: 2,
-    //         gaugeWidthScale: 0.6,
-    //         customSectors: [{
-    //             color: "#00ff00",
-    //             lo: 0,
-    //             hi: 5
-    //         }, {
-    //             color: "#fc6f03",
-    //             lo: 5,
-    //             hi: 10
-    //         }, {
-    //             color: "#ff0000",
-    //             lo: 10,
-    //             hi: 15
-    //         }, {
-    //             color: "#fc03f0",
-    //             lo: 15,
-    //             hi: 20
-    //         }],
-    //         counter: true
-    //     })}
-
-
-
-
-        // function updateGaugeOut() {
-        //     $.ajax({
-        //         url: "http://192.168.12.97:90/air/rekap_debit_out",
-        //         type: "get",
-        //         success: function(res) {
-        //             gg2.refresh(res.data2[0].debit);
-
-        //             for ($i = 0; $i <= 12; $i++) {
-
-        //                 let debit = res.data2[$i].created_at;
-        //                 let jam = debit.slice(11);
-        //                 if (res.data2 [$i].debit != null) {
-        //                     LineChart.data.datasets[1].data[$i] = res.data2[$i].debit;
-        //                     LineChart.data.labels[$i] = jam;
-        //                 } else {
-        //                     LineChart.data.datasets[1].data[$i] = res.data2[$i].debit;
-        //                     LineChart.data.labels[$i] = res.data2[$i].created_at;
-        //                 }
-
-        //                 LineChart.update();
-        //             }
-        //         }
-        //     })
-        // }
-    //     setInterval(function() {
-    //         updateGaugeOut();
-    //     }, 1000);
-    // });
-
-
-
-    //bar Kondisi Air, pH, TDS, TSS
-    // $(document).ready(function Kualitas() {
-    //     $.ajax({
-    //         url: "http://192.168.12.97:90/air/rekap_kualitas",
-    //         type: "get",
-    //         success: function(res) {
-
-
-    //             var tds = res.data3[0].tds;
-    //             var tss = res.data3[0].tss;
-    //             var ph = res.data3[0].ph;
-
-
-
-    //             // function PhSens() {
-
-    //             var pHmeter = res.data3[0].ph;
-    //             var randPercent = (pHmeter / 14.00) * 100;
-    //             var FloorPhMeter = Math.floor(pHmeter * 100) / 100
-    //             //Generic column color
-    //             var color = '#90A4AE';
-
-    //             if (randPercent <= 100 && randPercent >= 80) {
-    //                 color = '#9e00ff';
-    //             } else if (randPercent < 80 && randPercent >= 53) {
-    //                 color = '#0013ff';
-    //             } else if (randPercent < 53 && randPercent >= 43) {
-    //                 color = '#3aff00';
-    //             } else if (randPercent < 43 && randPercent >= 20) {
-    //                 color = '#fbff00';
-    //             } else if (randPercent < 20 && randPercent >= 0) {
-    //                 color = '#ff0000';
-    //             }
-
-    //             $('.column').css({
-    //                 background: color
-    //             });
-
-    //             $('.column').animate({
-    //                 height: randPercent + '%',
-    //             });
-
-
-    //             $('.percentage').text(FloorPhMeter);
-
-
-    //             // }
-
-    //             // function TSSSens() {
-
-    //             var TSSmeter = res.data3[0].tss;
-    //             var TSSrandPercent = (TSSmeter / 3000) * 100;
-    //             var floorTSS = Math.floor(TSSmeter);
-
-    //             //Generic column color
-    //             var color = '#90A4AE';
-
-    //             if (TSSrandPercent >= 90) {
-    //                 color = '#FF3D00';
-    //             } else if (TSSrandPercent < 90 && TSSrandPercent >= 60) {
-    //                 color = '#FF9800';
-    //             } else if (TSSrandPercent < 60 && TSSrandPercent >= 40) {
-    //                 color = '#FFEB3B';
-    //             } else if (TSSrandPercent < 40 && TSSrandPercent >= 10) {
-    //                 color = '#81C784';
-    //             } else if (TSSrandPercent < 10 && TSSrandPercent >= 0) {
-    //                 color = '#00E676';
-    //             }
-
-    //             $('.TSScolumn').css({
-    //                 background: color
-    //             });
-
-    //             $('.TSScolumn').animate({
-    //                 height: TSSrandPercent + '%',
-    //             });
-
-
-    //             $('.TSSpercentage').text(floorTSS);
-    //             // }
-
-
-    //             // function TDSSens() {
-
-
-
-    //             var TDSmeter = res.data3[0].tds;
-    //             var TDSrandPercent = (TDSmeter / 1000) * 100;
-    //             var floorTDS = Math.floor(TDSmeter);
-
-    //             //Generic column color
-    //             var color = '#90A4AE';
-
-    //             if (TDSrandPercent >= 90) {
-    //                 color = '#FF3D00';
-    //             } else if (TDSrandPercent < 90 && TDSrandPercent >= 60) {
-    //                 color = '#FF9800';
-    //             } else if (TDSrandPercent < 60 && TDSrandPercent >= 45) {
-    //                 color = '#FFEB3B';
-    //             } else if (TDSrandPercent < 45 && TDSrandPercent >= 20) {
-    //                 color = '#81C784';
-    //             } else if (TDSrandPercent < 20 && TDSrandPercent >= 0) {
-    //                 color = '#00E676';
-    //             }
-
-    //             $('.TDScolumn').css({
-    //                 background: color
-    //             });
-
-    //             $('.TDScolumn').animate({
-    //                 height: TDSrandPercent + '%',
-    //             });
-
-
-    //             $('.TDSpercentage').text(floorTDS);
-
-    //             // }
-
-    //         }
-    //     })
-    // })
-
-    // setInterval(function() {
-    //     Kualitas();
-
-    // }, 1000);
-    $(document).ready(function() {
-        // Penampil chart
-        NewData();
-        NewData2();
-        PhSens();
-        TSSSens();
-        TDSSens();
-
-        //Update Chart
-        UpdateBarVolume();
-        updateGaugeIn();
-        updateGaugeOut();
-    });
-  
-
+    $('.d_masuk').on('click', function() {
+        console.log('masuk');
+    })
     // Javascript bar chart / barchart
     var ctx = document.getElementById("myBarChart");
     var BarChart = new Chart(ctx, {
@@ -934,6 +330,73 @@
             }
         }
     });
+
+    function UpdateBarVolume() {
+        $.ajax({
+            url: "http://192.168.12.97:90/air/rekap_volume_in",
+            type: "get",
+            success: function(res) {
+
+                for ($i = 0; $i < 6; $i++) {
+                    // console.log(res.data[$i].volume);
+                    if (res.data[$i].hari == 'Monday') {
+                        BarChart.data.datasets[0].data[0] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Tuesday') {
+                        BarChart.data.datasets[0].data[1] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Wednesday') {
+                        BarChart.data.datasets[0].data[2] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Thursday') {
+                        BarChart.data.datasets[0].data[3] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Friday') {
+                        BarChart.data.datasets[0].data[4] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Saturday') {
+                        BarChart.data.datasets[0].data[5] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Sunday') {
+                        BarChart.data.datasets[0].data[6] = res.data[$i].volume;
+                    } else {
+                        BarChart.data.datasets[0].data[$i] = "0.0";
+                    }
+                    BarChart.update();
+                }
+
+            },
+        })
+
+        $.ajax({
+            url: "http://192.168.12.97:90/air/rekap_volume_out",
+            type: "get",
+            success: function(res) {
+
+                for ($i = 0; $i < 6; $i++) {
+                    // console.log(res.data[$i].volume);
+                    if (res.data[$i].hari == 'Monday') {
+                        BarChart.data.datasets[1].data[0] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Tuesday') {
+                        BarChart.data.datasets[1].data[1] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Wednesday') {
+                        BarChart.data.datasets[1].data[2] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Thursday') {
+                        BarChart.data.datasets[1].data[3] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Friday') {
+                        BarChart.data.datasets[1].data[4] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Saturday') {
+                        BarChart.data.datasets[1].data[5] = res.data[$i].volume;
+                    } else if (res.data[$i].hari == 'Sunday') {
+                        BarChart.data.datasets[1].data[6] = res.data[$i].volume;
+                    } else {
+                        BarChart.data.datasets[1].data[$i] = "0.0";
+                    }
+                    BarChart.update();
+                }
+
+            },
+        })
+    }
+
+    setInterval(function() {
+        UpdateBarVolume();
+    }, 1000);
+
 
     //Javascript Gauge 1
     var nilaiGauge;
@@ -1026,7 +489,125 @@
         }
     });
 
-    function newData() {
+    // $(document).ready(function newData() {
+    //     var gg1 = new JustGage({
+    //         id: "gg1",
+    //         value: 0.00 + 'L/M',
+    //         min: 0,
+    //         max: 20,
+    //         decimals: 2,
+    //         gaugeWidthScale: 0.6,
+    //         customSectors: [{
+    //             color: "#00ff00",
+    //             lo: 0,
+    //             hi: 5
+    //         }, {
+    //             color: "#fc6f03",
+    //             lo: 5,
+    //             hi: 10
+    //         }, {
+    //             color: "#ff0000",
+    //             lo: 10,
+    //             hi: 15
+    //         }, {
+    //             color: "#fc03f0",
+    //             lo: 15,
+    //             hi: 20
+    //         }],
+    //         counter: true
+    //     });
+
+    //     var gg2 = new JustGage({
+    //         id: "gg2",
+    //         value: 0 + 'L/M',
+    //         min: 0,
+    //         max: 20,
+    //         decimals: 2,
+    //         gaugeWidthScale: 0.6,
+    //         customSectors: [{
+    //             color: "#00ff00",
+    //             lo: 0,
+    //             hi: 5
+    //         }, {
+    //             color: "#fc6f03",
+    //             lo: 5,
+    //             hi: 10
+    //         }, {
+    //             color: "#ff0000",
+    //             lo: 10,
+    //             hi: 15
+    //         }, {
+    //             color: "#fc03f0",
+    //             lo: 15,
+    //             hi: 20
+    //         }],
+    //         counter: true
+    //     });
+
+
+    //     //update data
+
+    //     function updateGaugeIn() {
+    //         $.ajax({
+    //             url: "http://192.168.12.97:90/air/rekap_debit_in",
+    //             type: "get",
+    //             success: function(res) {
+    //                 gg1.refresh(res.data2[0].debit);
+
+    //                 for ($i = 0; $i <= 12; $i++) {
+
+
+    //                     if (res.data2[$i].debit != null) {
+
+    //                         LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
+
+
+    //                     } else {
+    //                         LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
+
+    //                     }
+    //                     LineChart.update();
+    //                 }
+    //             }
+    //         })
+    //     }
+
+    //     function updateGaugeOut() {
+    //         $.ajax({
+    //             url: "http://192.168.12.97:90/air/rekap_debit_out",
+    //             type: "get",
+    //             success: function(res) {
+    //                 gg2.refresh(res.data2[0].debit);
+
+    //                 for ($i = 0; $i <= 12; $i++) {
+
+    //                     let debit = res.data2[$i].created_at;
+    //                     let jam = debit.slice(11);
+    //                     if (res.data2[$i].debit != null) {
+    //                         LineChart.data.datasets[1].data[$i] = res.data2[$i].debit;
+    //                         LineChart.data.labels[$i] = jam;
+    //                     } else {
+    //                         LineChart.data.datasets[1].data[$i] = res.data2[$i].debit;
+    //                         LineChart.data.labels[$i] = res.data2[$i].created_at;
+    //                     }
+
+    //                     LineChart.update();
+    //                 }
+    //             }
+    //         })
+    //     }
+
+    //     setInterval(function() {
+    //         updateGaugeIn();
+    //         updateGaugeOut();
+
+    //     }, 1000);
+
+
+
+    // });
+
+    $(document).ready(function newData() {
         var gg1 = new JustGage({
             id: "gg1",
             value: 0.00 + 'L/M',
@@ -1053,7 +634,6 @@
             }],
             counter: true
         });
-        }
 
         //update data
 
@@ -1082,7 +662,13 @@
             })
         }
 
-        function newData2() {
+        setInterval(function() {
+            updateGaugeIn();
+        }, 1000);
+
+    });
+
+    $(document).ready(function newData2() {
         var gg2 = new JustGage({
             id: "gg2",
             value: 0 + 'L/M',
@@ -1108,7 +694,10 @@
                 hi: 20
             }],
             counter: true
-        })}
+        })
+
+
+
 
         function updateGaugeOut() {
             $.ajax({
@@ -1121,7 +710,7 @@
 
                         let debit = res.data2[$i].created_at;
                         let jam = debit.slice(11);
-                        if (res.data2 [$i].debit != null) {
+                        if (res.data2[$i].debit != null) {
                             LineChart.data.datasets[1].data[$i] = res.data2[$i].debit;
                             LineChart.data.labels[$i] = jam;
                         } else {
@@ -1135,7 +724,15 @@
             })
         }
 
-        function Kualitas() {
+        setInterval(function() {
+            updateGaugeOut();
+        }, 1000);
+    });
+
+
+
+    // bar Kondisi Air, pH, TDS, TSS
+    $(document).ready(function Kualitas() {
         $.ajax({
             url: "http://192.168.12.97:90/air/rekap_kualitas",
             type: "get",
@@ -1254,18 +851,12 @@
 
             }
         })
-    }
+    })
 
-    SetInterval(function() {
-            console.log('abcde');
-            UpdateBarVolume();
-            updateGaugeIn();
-            updateGaugeOut();
-            Kualitas();
-        }, 1000);
+    setInterval(function() {
+        Kualitas();
 
-
-
+    }, 1000);
 </script>
 
 
