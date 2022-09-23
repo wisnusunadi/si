@@ -20,7 +20,7 @@
                     <div class="columns">
                         <div class="column">
                             <p>No SO</p>
-                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.so }}</p>
+                            <p class="has-text-weight-bold" v-html="checkdata(detailpenjualanekatalog.so)"></p>
                         </div>
                         <div class="column">
                             <p>Tanggal Buat</p>
@@ -28,21 +28,21 @@
                         </div>
                         <div class="column">
                             <p>No PO</p>
-                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.no_po }}</p>
+                            <p class="has-text-weight-bold" v-html="checkdata(detailpenjualanekatalog.no_po)"></p>
                         </div>
                     </div>
                     <div class="columns">
                         <div class="column">
                             <p>No AKN</p>
-                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.no_paket }}</p>
+                            <p class="has-text-weight-bold" v-html="checkdata(detailpenjualanekatalog.no_paket)"></p>
                         </div>
                         <div class="column">
                             <p>Tanggal Edit</p>
-                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.tgl_edit }}</p>
+                            <p class="has-text-weight-bold" v-html="checkdata(detailpenjualanekatalog.tgl_edit)"></p>
                         </div>
                         <div class="column">
                             <p>Tanggal PO</p>
-                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.tgl_po }}</p>
+                            <p class="has-text-weight-bold" v-html="checkdata(detailpenjualanekatalog.tgl_po)"></p>
                         </div>
                     </div>
                     <div class="columns">
@@ -52,14 +52,11 @@
                         </div>
                         <div class="column">
                             <p>Tanggal Delivery</p>
-                            <p class="has-text-weight-bold"
-                                v-html="checkTanggalDelivery(detailpenjualanekatalog.tgl_kontrak)"></p>
+                            <p class="has-text-weight-bold" v-html="checkTanggalDelivery(detailpenjualanekatalog.tgl_kontrak)"></p>
                         </div>
                         <div class="column">
                             <p>Status</p>
-                            <progress class="progress is-success" :value="$route.params.status"
-                                max="100">{{$route.params.status}}%</progress>
-                            <span><b>{{$route.params.status}}%</b> Selesai</span>
+                            <div v-html="status($route.params.status)"></div>
                         </div>
                     </div>
                 </div>
@@ -82,7 +79,7 @@
                             <DoughnutChart :chartData="chartData" v-if="loadingChart"></DoughnutChart>
                             <div v-else class="is-loading"></div>
                         </div>
-                        <div class="column" :class="[checkChart ? 'is-9' : 'is-12']">
+                        <div class="column" :class="[checkChart ? 'is-6' : 'is-12']">
                             <div class="bd-notification is-primary has-text-centered">
                                 <table class="table is-fullwidth has-text-centered">
                                     <thead>
@@ -130,6 +127,10 @@
                                 </table>
                             </div>
                         </div>
+                        <div class="column is-3" v-if="checkChart">
+                            <CardDetail :detailProdukStok="chartData" v-if="loadingChart"></CardDetail>
+                            <div v-else class="is-loading"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -139,9 +140,11 @@
 <script>
     import axios from 'axios';
     import mix from '../../../emiindo/mixins/mix';
-    import DoughnutChart from '../../components/DoughnutChart';
+    import mix2 from '../../mixins/mix';
+    import DoughnutChart from '../../components/detailpenjualan/DoughnutChart';
+    import CardDetail from '../../components/detailpenjualan/CardDetail';
     export default {
-        mixins: [mix],
+        mixins: [mix, mix2],
         data() {
             return {
                 detailpenjualanekatalog: null,
@@ -151,7 +154,8 @@
             }
         },
         components: {
-            DoughnutChart
+            DoughnutChart,
+            CardDetail
         },
         methods: {
             async getPenjualan() {
@@ -178,16 +182,20 @@
             checkTanggalDelivery(date) {
                 let dateNow = new Date().toISOString().slice(0, 10);
                 let difference = Math.ceil((new Date(date) - new Date(dateNow)) / (1000 * 3600 * 24));
-                if (dateNow < date) {
-                    if (difference > 7) {
-                        return `<div>${date}</div><div><small><i class="fas fa-clock" id="info"></i> ${difference} Hari Lagi</small></div>`;
-                    } else if (difference > 0 && difference <= 7) {
-                        return `<div>${date}</div><div><small><i class="fas fa-exclamation-circle" id="warning"></i> ${difference} Hari Lagi</small></div>`;
+                if(date == null){
+                    return '<span class="has-text-danger">Belum ada tanggal delivery</span>';
+                }else {
+                    if (dateNow < date) {
+                        if (difference > 7) {
+                            return `<div>${date}</div><div><small><i class="fas fa-clock" id="info"></i> ${difference} Hari Lagi</small></div>`;
+                        } else if (difference > 0 && difference <= 7) {
+                            return `<div>${date}</div><div><small><i class="fas fa-exclamation-circle" id="warning"></i> ${difference} Hari Lagi</small></div>`;
+                        } else {
+                            return `<div>${date}</div><div><small><i class="fas fa-exclamation-circle" id="danger"></i> Batas Kontrak Habis</small></div>`;
+                        }
                     } else {
-                        return `<div>${date}</div><div><small><i class="fas fa-exclamation-circle" id="danger"></i> Batas Kontrak Habis</small></div>`;
+                        return `<div class="text-danger">${date}</div><div class="text-danger"><small><i class="fas fa-check-circle" id="success"></i> Sudah Dikirim</small></div>`;
                     }
-                } else {
-                    return `<div class="text-danger">${date}</div><div class="text-danger"><small><i class="fas fa-check-circle" id="success"></i> Sudah Dikirim</small></div>`;
                 }
             },
             totalHrg(detail) {

@@ -2,12 +2,12 @@
     <div>
         <div class="card mt-6">
             <div class="card-header">
-                <div class="card-header-title">Penjualan</div>
+                <div class="card-header-title">E-Katalog</div>
             </div>
             <div class="card-content">
                 <div class="content field columns is-desktop">
                     <div class="column">
-                        <table class="table">
+                        <table class="table ekatalogtable">
                             <thead>
                                 <tr>
                                     <th>No</th>
@@ -35,7 +35,7 @@
                                     <td v-html="checkdata(penjualanekatalog.tgl_kontrak)"></td>
                                     <td>{{ penjualanekatalog.nama_customer }}</td>
                                     <td v-html="status(penjualanekatalog.status_ppic)"></td>
-                                    <td><button class="button is-info is-light is-small" @click="detailekatalog(penjualanekatalog.pesanan.id, penjualanekatalog.status_ppic)">Detail</button></td>
+                                    <td><button class="button is-info is-light is-small" @click="detail(penjualanekatalog.pesanan.id, penjualanekatalog.status_ppic)">Detail</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -47,7 +47,9 @@
 </template>
 <script>
     import $ from "jquery";
+    import mixins from "../../mixins/mix";
     export default {
+        mixins: [mixins],
         props: {
             penjualanekatalogs: {
                 type: Array,
@@ -69,19 +71,6 @@
                         break;
                 }
             },
-            status(status){
-                switch (status) {
-                    case 'batal':
-                        return `<span class="tag is-danger is-light">${status}</span>`
-                    case 'penjualan':
-                        return `<span class="tag is-danger is-light">${status}</span>`
-                    default:
-                        return `
-                        <progress class="progress is-success" value="${status}" max="100">${status}%</progress>
-                        <span><b>${status}%</b> Selesai</span>
-                        `
-                }
-            },
             checkdata(data){
                 if(data == null){
                     return '-'
@@ -89,13 +78,11 @@
                     return data
                 }
             },
-            async detailekatalog(id, status){
-                this.$router.push({ name: 'PenjualanDetail', params: { id: id, jenis: 'ekatalog', status } });
-            }
+
         },
 
         updated() {
-            $('.table').DataTable();
+            $('.ekatalogtable').DataTable();
         }
     }
     </script>

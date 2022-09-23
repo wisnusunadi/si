@@ -1896,12 +1896,14 @@ class PenjualanController extends Controller
                     $data['customer'] = $pesanan->Spb->Customer->nama;
                     $data['customer_alamat'] = $pesanan->Spb->Customer->alamat;
                     $data['customer_provinsi'] = $pesanan->Spb->Customer->Provinsi->nama;
+                    $data['deskripsi'] = $pesanan->Spb->ket;
                 }
 
                 if ($pesanan->Spa) {
                     $data['customer'] = $pesanan->Spa->Customer->nama;
                     $data['customer_alamat'] = $pesanan->Spa->Customer->alamat;
                     $data['customer_provinsi'] = $pesanan->Spa->Customer->Provinsi->nama;
+                    $data['deskripsi'] = $pesanan->Spa->ket;
                 }
 
 
@@ -2714,6 +2716,23 @@ class PenjualanController extends Controller
                                 <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
                             </div>
                             <small class="text-muted">Selesai</small>';
+                        }
+                    }
+                }
+                return $datas;
+            })
+            ->addColumn('status_ppic', function ($data) {
+                $datas = "";
+                $tes = $data->cjumlahprd + $data->cjumlahpart;
+                if ($tes > 0) {
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                    if  ($data->log == "batal") {
+                        $datas = 'batal';
+                    } else  {
+                        if  ($hitung > 0)  {
+                            $datas = $hitung;
+                        }  else  {
+                            $datas = $hitung;
                         }
                     }
                 }
