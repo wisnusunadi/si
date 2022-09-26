@@ -2,29 +2,28 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Alatuji;
-use App\Models\Peminjaman;
-use App\Models\AlatSN;
-use App\Models\Klasifikasi;
-
+use App\Models\inventory\AlatSN;
+use App\Models\inventory\Alatuji;
+use App\Models\inventory\Klasifikasi;
+use App\Models\inventory\Peminjaman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
 use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
-use Storage;
+use Illuminate\Support\Facades\Storage;
 
 class AlatujiController extends Controller
 {
     function gantiNama($date,  $r, $fileNM){
-        
+
         //ambil nama dan extensi file
         $a = $r->file($fileNM)->getClientOriginalName();
-        
+
         //ganti char + menjadi _
         $a = str_replace("+","_",$a);
-        
+
         //ambil extensi file
         $aExt = $r->file($fileNM)->extension();
 
@@ -43,15 +42,15 @@ class AlatujiController extends Controller
                     'ms.nama as kondisi','a.id_alatuji','k.nama_klasifikasi','a.nm_alatuji', 'as2.status_pinjam_id')
                     ->leftJoin(DB::raw('erp_kalibrasi.alatuji a'),'a.id_alatuji','=','as2.alatuji_id')
                     ->leftJoin(DB::raw('erp_kalibrasi.merk s'),'s.id_merk','=','as2.merk_id')
-                    ->leftJoin(DB::raw('erp.m_layout ml'),'ml.id','=','as2.layout_id')
-                    ->leftJoin(DB::raw('erp.m_status ms'),'ms.id','=','as2.kondisi_id')
+                    ->leftJoin(DB::raw('erp_spa.m_layout ml'),'ml.id','=','as2.layout_id')
+                    ->leftJoin(DB::raw('erp_spa.m_status ms'),'ms.id','=','as2.kondisi_id')
                     ->leftJoin(DB::raw('erp_kalibrasi.klasifikasi k'),'k.id_klasifikasi','=','a.klasifikasi_id')
                     ->get();
 
             return DataTables::of($data)
                     ->addIndexColumn()
                     ->editColumn('kondisi_id', function($d){
-                        return $d->kondisi_id == 9 ? 
+                        return $d->kondisi_id == 9 ?
                         '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan">
                         <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-check-circle-fill text-success " viewBox="0 0 16 16">
                         <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
@@ -117,8 +116,8 @@ class AlatujiController extends Controller
     function tambahalat()
     {
         $klasifikasi = DB::table('erp_kalibrasi.klasifikasi')->get();
-        $satuan = DB::table('erp.m_satuan')->whereNotIn('id', [1,2,3])->get();
-        
+        $satuan = DB::table('erp_spa.m_satuan')->whereNotIn('id', [1,2,3])->get();
+
         return view('alatuji.tambah_alat', [
             'klasifikasi' => $klasifikasi,
             'satuan' => $satuan,
@@ -130,7 +129,7 @@ class AlatujiController extends Controller
         $klasifikasi = DB::table('erp_kalibrasi.klasifikasi')->select('nama_klasifikasi', 'id_klasifikasi')->get();
         $nama = DB::table('erp_kalibrasi.alatuji')->select('nm_alatuji', 'id_alatuji')->get();
         $merk = DB::table('erp_kalibrasi.merk')->select('id_merk', 'nama_merk')->get();
-        $lokasi = DB::table('erp.m_layout')->select('id', 'ruang')->whereNotIn('id', [1,2,3,4,5,6,7])->get();
+        $lokasi = DB::table('erp_spa.m_layout')->select('id', 'ruang')->whereNotIn('id', [1,2,3,4,5,6,7])->get();
         $lokasi = $lokasi->unique('ruang');
 
         return view('alatuji.tambah_barang', [
@@ -143,7 +142,7 @@ class AlatujiController extends Controller
 
     function edit_alat($id)
     {
-        $data = 
+        $data =
             DB::table(DB::raw('erp_kalibrasi.alatuji_sn as2'))
             ->select(
                 'as2.serial_number', 'as2.alatuji_id' ,'as2.tgl_masuk',
@@ -156,7 +155,7 @@ class AlatujiController extends Controller
         $nama = DB::table('erp_kalibrasi.alatuji')->select('nm_alatuji', 'id_alatuji')->get();
         $merk = DB::table('erp_kalibrasi.merk')->select('id_merk', 'nama_merk')->get();
         $sn = DB::table('erp_kalibrasi.alatuji_sn')->where('id_serial_number', $id)->select('alatuji_id', 'tgl_masuk', 'serial_number')->first();
-        $lokasi = DB::table('erp.m_layout')->select('id', 'ruang')->whereNotIn('id', [1,2,3,4,5,6,7])->get();
+        $lokasi = DB::table('erp_spa.m_layout')->select('id', 'ruang')->whereNotIn('id', [1,2,3,4,5,6,7])->get();
         $lokasi = $lokasi->unique('ruang');
 
         return view('alatuji.edit_alat', [
@@ -171,7 +170,7 @@ class AlatujiController extends Controller
 
     function store_editalat(Request $request)
     {
-        
+
         //ambil data dokumen alatuji
         $doc_old = DB::table('erp_kalibrasi.alatuji')->select('manual_alatuji', 'sop_alatuji', 'gbr_alatuji')->where('id_alatuji', $request->id_alatuji)->first();
 
@@ -189,7 +188,7 @@ class AlatujiController extends Controller
             'tgl_masuk' => $request->tgl_masuk,
             'kondisi_id' => $request->kondisi,
             'layout_id' => $request->lokasi,
-        ]); 
+        ]);
 
         if($request->has('sop'))
         {
@@ -207,7 +206,7 @@ class AlatujiController extends Controller
             }
 
             // update nama dokumen alatuji
-            alatuji::where('id_alatuji', $request->id_alatuji)->update([
+            Alatuji::where('id_alatuji', $request->id_alatuji)->update([
                 'sop_alatuji' => $sop,
             ]);
 
@@ -231,7 +230,7 @@ class AlatujiController extends Controller
             }
 
             // update nama dokumen alatuji
-            alatuji::where('id_alatuji', $request->id_alatuji)->update([
+            Alatuji::where('id_alatuji', $request->id_alatuji)->update([
                 'manual_alatuji' => $manual,
             ]);
 
@@ -255,7 +254,7 @@ class AlatujiController extends Controller
             }
 
             // update nama dokumen alatuji
-            alatuji::where('id_alatuji', $request->id_alatuji)->update([
+            Alatuji::where('id_alatuji', $request->id_alatuji)->update([
                 'gbr_alatuji' => $gmbr,
             ]);
 
@@ -270,7 +269,7 @@ class AlatujiController extends Controller
             'tgl_edit' => Carbon::now()->format('Y-m-d'),
             'diedit_oleh' => auth()->user()->nama,
         ];
-        
+
         DB::table('erp_spa.tbl_log')->insert([
             'tipe' => 'QC',
             'subjek' => 'Edit data alat uji - '.$request->namaalat,
@@ -283,7 +282,7 @@ class AlatujiController extends Controller
 
     function store_pinjam(Request $request)
     {
-        
+
         $request->validate([
             'serial_number_id' => 'required',
             'tgl_peminjaman' => 'required',
@@ -319,7 +318,7 @@ class AlatujiController extends Controller
             'dipinjam_oleh' => auth()->user()->nama,
             'batas_kembali' => $request->tgl_pengembalian,
         ];
-        
+
         DB::table('erp_spa.tbl_log')->insert([
             'tipe' => 'QC',
             'subjek' => 'Pinjam alat uji - '.$data->nm_alatuji,
@@ -368,7 +367,7 @@ class AlatujiController extends Controller
                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
                             </svg>
                             </div>'
-                            : 
+                            :
                             '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan">
                             <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16">
                             <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
@@ -520,7 +519,7 @@ class AlatujiController extends Controller
     function detail($id, $x = null)
     {
         try{
-            $data = 
+            $data =
             DB::table(DB::raw('erp_kalibrasi.alatuji_sn as2'))
             ->select(
                 DB::raw('concat(a.kd_alatuji,"-",as2.no_urut) as kode_alat'),
@@ -534,15 +533,15 @@ class AlatujiController extends Controller
             ->leftJoin(DB::raw('erp_kalibrasi.alatuji a'),'a.id_alatuji', '=', 'as2.alatuji_id')
             ->leftJoin(DB::raw('erp_kalibrasi.klasifikasi kls'), 'kls.id_klasifikasi', '=', 'a.klasifikasi_id')
             ->leftJoin(DB::raw('erp_kalibrasi.merk supl'), 'supl.id_merk', '=', 'as2.merk_id')
-            ->leftJoin(DB::raw('erp.m_layout ml'),'ml.id','=','as2.layout_id')
-            ->leftJoin(DB::raw('erp.m_status ms'),'ms.id','=','as2.kondisi_id')
+            ->leftJoin(DB::raw('erp_spa.m_layout ml'),'ml.id','=','as2.layout_id')
+            ->leftJoin(DB::raw('erp_spa.m_status ms'),'ms.id','=','as2.kondisi_id')
             ->leftJoin(DB::raw('erp_spa.users u'), 'u.id', '=', 'as2.dipinjam_oleh')
             ->where('as2.id_serial_number', '=', $id)
             ->first();
 
-            $data->kondisi_id == 9 ? 
-            $data->kondisi = '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-check-circle-fill text-success " viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg></div>' 
-            : 
+            $data->kondisi_id == 9 ?
+            $data->kondisi = '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-check-circle-fill text-success " viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg></div>'
+            :
             $data->kondisi = '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg></div>';
 
             function cekDokum($d, $nm, $path)
@@ -576,7 +575,7 @@ class AlatujiController extends Controller
             }else{
                 $data->total_waktu = $data->total_waktu.' Hari';
             }
-            
+
             if($data->total_penggunaan == null){
                 $data->total_penggunaan = 'Belum Pernah Di Pinjam';
             }else{
@@ -607,7 +606,7 @@ class AlatujiController extends Controller
     {
         try {
 
-            $data = 
+            $data =
             DB::table(DB::raw('erp_kalibrasi.peminjaman p'))
             ->select(
                 'p.serial_number_id', 'p.id_peminjaman', 'p.tgl_pinjam', 'p.tgl_batas', 'p.created_at', 'u.nama'
@@ -640,7 +639,7 @@ class AlatujiController extends Controller
         ],[
             'required' => 'kolom :attribute harus di isi'
         ]);
-        
+
         $data = DB::table(DB::raw('erp_kalibrasi.peminjaman p'))->select(
             'as2.serial_number', 'a.nm_alatuji', 'u.nama',
         )
@@ -680,7 +679,7 @@ class AlatujiController extends Controller
             'di_acc_oleh' => auth()->user()->nama,
             'status' => $status,
         ];
-        
+
         DB::table('erp_spa.tbl_log')->insert([
             'tipe' => 'QC',
             'subjek' => 'Konfirmasi peminjaman alat uji - '.$data->nm_alatuji,
@@ -693,7 +692,7 @@ class AlatujiController extends Controller
 
     function store_kembali(Request $request)
     {
-        
+
         $request->validate([
             'peminjaman_kembali_id' => 'required',
             'kondisi_kembali' => 'required',
@@ -759,7 +758,7 @@ class AlatujiController extends Controller
             'dipinjam_oleh' => $data->nama,
             'diterima_oleh' => auth()->user()->nama,
         ];
-        
+
         DB::table('erp_spa.tbl_log')->insert([
             'tipe' => 'QC',
             'subjek' => 'Pengembalian alat uji - '.$data->nm_alatuji,
@@ -772,7 +771,7 @@ class AlatujiController extends Controller
 
     function store_jenisalat(Request $request)
     {
-        
+
         $request->validate([
             'klasifikasi' => 'required',
             'satuan' => 'required',
@@ -782,7 +781,7 @@ class AlatujiController extends Controller
         ],[
             'required' => 'kolom :attribute harus di isi'
         ]);
-        
+
         $manual = null;
         $sop = null;
         $gambar = null;
@@ -843,7 +842,7 @@ class AlatujiController extends Controller
             'kode_alat' => $request->kode_alat,
             'jenis_alat' => $k->nama_klasifikasi,
         ];
-        
+
         DB::table('erp_spa.tbl_log')->insert([
             'tipe' => 'QC',
             'subjek' => 'Penambahan jenis alat uji - '.$request->nama_alat,
@@ -952,7 +951,7 @@ class AlatujiController extends Controller
             'merek_alat' => $merek->nama_merk,
             'tanggal_masuk' => $request->tanggal_masuk
         ];
-        
+
         DB::table('erp_spa.tbl_log')->insert([
             'tipe' => 'QC',
             'subjek' => 'Penambahan Serial Number alat uji - '.$request->nama_alat,
@@ -978,14 +977,14 @@ class AlatujiController extends Controller
         return DataTables::of($data)
             ->addIndexColumn()
             ->editColumn('kondisi_id', function($d){
-                return $d->kondisi_id == 9 ? 
+                return $d->kondisi_id == 9 ?
                 '<i class="fa-solid fa-circle-check text-success"></i>'
                 :
                 '<i class="fa-solid fa-circle-xmark text-danger"></i>'
                 ;
             })
             ->addColumn('aksi', function($d){
-                return 
+                return
                 '<a class="btn btn-sm btn-outline-primary py-0" href="/detail/'.$d->id_serial_number.'/1">
                 Detail
                 </a>';
@@ -1009,14 +1008,14 @@ class AlatujiController extends Controller
         return DataTables::of($data)
             ->addIndexColumn()
             ->editColumn('kondisi_awal', function($d){
-                return $d->kondisi_awal == 9 ? 
+                return $d->kondisi_awal == 9 ?
                 '<i class="fa-solid fa-circle-check text-success"></i>'
                 :
                 '<i class="fa-solid fa-circle-xmark text-danger"></i>'
                 ;
             })
             ->addColumn('aksi', function($d){
-                return 
+                return
                 '<a class="btn btn-sm btn-outline-primary py-0" href="/detail/'.$d->id_serial_number.'/1">
                 Detail
                 </a>';

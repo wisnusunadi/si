@@ -2,9 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Perawatan;
+use App\Models\inventory\AlatSN;
+use App\Models\inventory\Perawatan;
 use Illuminate\Support\Facades\DB;
-use App\Models\AlatSN;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -13,8 +13,8 @@ class PerawatanController extends Controller
     function index($id)
     {
         try {
-            
-            $data = 
+
+            $data =
             DB::table(DB::raw('erp_kalibrasi.alatuji_sn al'))
             ->select(
                 DB::raw('concat(a.kd_alatuji,"-",al.no_urut) as kode_alat'),
@@ -24,7 +24,7 @@ class PerawatanController extends Controller
             ->leftJoin(DB::raw('erp_kalibrasi.perawatan v'), 'v.serial_number_id', '=', 'al.alatuji_id')
             ->where('al.id_serial_number', '=', $id)
             ->first();
-            
+
             $data->status_pinjam_id == 16 ?
             $data->status_pinjam_id = '<span class="badge w-25 bc-success"><span class="text-success">Tersedia</span></span>'
             :
@@ -44,7 +44,7 @@ class PerawatanController extends Controller
             }
 
             $user = DB::table(DB::raw('erp_spa.users'))->select('*')->get();
-            
+
             return view('alatuji.perawatan', [
                 'data' => $data,
                 'id' => $id,
@@ -121,7 +121,7 @@ class PerawatanController extends Controller
             'tgl_perawatan' => $request->tgl_perawatan,
             'pj_dilakukan_oleh' => $pj->nama,
         ];
-        
+
         DB::table('erp_spa.tbl_log')->insert([
             'tipe' => 'QC',
             'subjek' => 'Perawatan alat uji - '.$data->nm_alatuji,

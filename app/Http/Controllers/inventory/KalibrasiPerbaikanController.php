@@ -1,9 +1,8 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Kalibrasi;
-use App\Models\AlatSN;
 
+use App\Models\inventory\AlatSN;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
@@ -13,13 +12,13 @@ use Illuminate\Http\Request;
 class KalibrasiPerbaikanController extends Controller
 {
     function gantiNama($date,  $r, $fileNM){
-        
+
         //ambil nama dan extensi file
         $a = $r->file($fileNM)->getClientOriginalName();
-        
+
         //ganti char + menjadi _
         $a = str_replace("+","_",$a);
-        
+
         //ambil extensi file
         $aExt = $r->file($fileNM)->extension();
 
@@ -32,7 +31,7 @@ class KalibrasiPerbaikanController extends Controller
     {
         try
         {
-            $data = 
+            $data =
             DB::table(DB::raw('erp_kalibrasi.alatuji_sn al'))
             ->select(
                 DB::raw('concat(a.kd_alatuji,"-",al.no_urut) as kode_alat'),
@@ -42,7 +41,7 @@ class KalibrasiPerbaikanController extends Controller
             ->leftJoin(DB::raw('erp_kalibrasi.'.$jenis.' k'), 'k.serial_number_id', '=', 'al.alatuji_id')
             ->where('al.id_serial_number', '=', $id)
             ->first();
-            
+
             $data->status_pinjam_id == 16 ?
             $data->status_pinjam_id = '<span class="badge w-25 bc-success"><span class="text-success">Tersedia</span></span>'
             :
@@ -94,7 +93,7 @@ class KalibrasiPerbaikanController extends Controller
                 ->where('al.id_serial_number', $request->serial_number_id)
                 ->first();
 
-                $pj = DB::table('erp.users')->where('id', $request->operator)->first();
+                $pj = DB::table('erp_spa.users')->where('id', $request->operator)->first();
 
                 //ganti nama gambar
                 $memo = null;
@@ -136,7 +135,7 @@ class KalibrasiPerbaikanController extends Controller
                     'tgl_'.$request->jenis_mt => $request->tanggal_pengajuan,
                     'pj_dilakukan_oleh' => $pj->nama,
                 ];
-                
+
                 DB::table('erp_spa.tbl_log')->insert([
                     'tipe' => 'QC',
                     'subjek' => 'Pengiriman '.$request->jenis_mt.' alat uji External - '.$data->nm_alatuji,
@@ -166,7 +165,7 @@ class KalibrasiPerbaikanController extends Controller
                 ->where('al.id_serial_number', $request->serial_number_id)
                 ->first();
 
-                $pj = DB::table('erp.users')->where('id', $request->operator)->first();
+                $pj = DB::table('erp_spa.users')->where('id', $request->operator)->first();
 
                 // input data
                 DB::table('erp_kalibrasi.'.strtolower($request->jenis_mt))->insert([
@@ -190,7 +189,7 @@ class KalibrasiPerbaikanController extends Controller
                     'tgl_'.$request->jenis_mt => $request->tanggal_pengajuan,
                     'pj_dilakukan_oleh' => $pj->nama,
                 ];
-                
+
                 DB::table('erp_spa.tbl_log')->insert([
                     'tipe' => 'QC',
                     'subjek' => $request->jenis_mt.' alat uji Internal - '.$data->nm_alatuji,
@@ -200,7 +199,7 @@ class KalibrasiPerbaikanController extends Controller
             }
 
             $request->jenis_mt == 'kalibrasi' ? $alertScc = 'kalibSuccess' : $alertScc = 'perbSuccess';
-            
+
             return redirect()->route('detail', ['id' => $request->serial_number_id])->with(['success' => '1',$alertScc => '3']);
 
         // } catch (\Exception $e) {
@@ -215,7 +214,7 @@ class KalibrasiPerbaikanController extends Controller
     {
         try {
 
-            $data = 
+            $data =
             DB::table(DB::raw('erp_kalibrasi.'.$jenis.' k'))
             ->select(
                 'k.serial_number_id', 'k.tgl_kirim', 'k.jenis_id',
@@ -376,7 +375,7 @@ class KalibrasiPerbaikanController extends Controller
 
         //$id = kalibrasi::select('serial_number_id')->where('id_'.$request->jenis, $request->id_mt)->first();
         $id = DB::table('erp_kalibrasi.'.$request->jenis)->select('serial_number_id')->where('id_'.$request->jenis, $request->id_mt)->first();
-        
+
         $gambar = 0;
         if($request->has('sertif_kalibrasi')){
             $request->validate([
@@ -405,11 +404,11 @@ class KalibrasiPerbaikanController extends Controller
             'status_id' => '12',
         ]);
 
-        $alatuji_id = 
+        $alatuji_id =
         DB::table('erp_kalibrasi.'.$request->jenis)
         ->where('id_'.$request->jenis, $request->id_mt)
         ->select('serial_number_id')->first();
-        
+
         AlatSN::find($alatuji_id->serial_number_id)
         ->update(['status_pinjam_id' => '16']);
 
@@ -420,7 +419,7 @@ class KalibrasiPerbaikanController extends Controller
             'tgl_'.$request->jenis => Carbon::now()->format('Y-m-d', 'Asia/Jakarta'),
             'pj_diterima_oleh' => auth()->user()->nama,
         ];
-        
+
         DB::table('erp_spa.tbl_log')->insert([
             'tipe' => 'QC',
             'subjek' => 'Penerimaan '.$request->jenis.' alat uji External - '.$data->nm_alatuji,
@@ -447,7 +446,7 @@ class KalibrasiPerbaikanController extends Controller
     {
         try {
 
-            $data = 
+            $data =
             DB::table(DB::raw('erp_kalibrasi.'.$jenis.' k'))
             ->select(
                 'k.serial_number_id', 'k.tgl_kirim', 'k.tgl_terima','k.jenis_id',
@@ -459,7 +458,7 @@ class KalibrasiPerbaikanController extends Controller
             ->leftJoin(DB::raw('erp_kalibrasi.alatuji_sn sn'), 'sn.id_serial_number', 'k.serial_number_id')
             ->leftJoin(DB::raw('erp_kalibrasi.alatuji a'), 'a.id_alatuji', 'sn.alatuji_id')
             ->leftJoin(DB::raw('erp_kalibrasi.merk s'), 's.id_merk', 'k.merk_id')
-            ->leftJoin(DB::raw('erp.users u'), 'u.id', 'k.pelaksana_id')
+            ->leftJoin(DB::raw('erp_spa.users u'), 'u.id', 'k.pelaksana_id')
             ->where('k.id_'.$jenis, $id)
             ->first();
 

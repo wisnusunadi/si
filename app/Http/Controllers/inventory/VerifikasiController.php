@@ -1,21 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Verifikasi;
 
+use App\Models\inventory\AlatSN;
+use App\Models\inventory\Verifikasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\AlatSN;
 use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 
 class VerifikasiController extends Controller
 {
     function index($id)
-    { 
+    {
         try{
 
-            $data = 
+            $data =
             DB::table(DB::raw('erp_kalibrasi.alatuji_sn al'))
             ->select(
                 DB::raw('concat(a.kd_alatuji,"-",al.no_urut) as kode_alat'),
@@ -25,7 +25,7 @@ class VerifikasiController extends Controller
             ->leftJoin(DB::raw('erp_kalibrasi.verifikasi v'), 'v.serial_number_id', '=', 'al.alatuji_id')
             ->where('al.id_serial_number', '=', $id)
             ->first();
-            
+
             $data->status_pinjam_id == 16 ?
             $data->status_pinjam_id = '<span class="badge w-25 bc-success"><span class="text-success">Tersedia</span></span>'
             :
@@ -48,7 +48,7 @@ class VerifikasiController extends Controller
                 'data' => $data,
                 'id' => $id,
             ]);
-            
+
         } catch (\Exception $e) {
             return response()->json([
                 'error' => true,
@@ -79,8 +79,8 @@ class VerifikasiController extends Controller
             ->leftJoin(DB::raw('erp_kalibrasi.alatuji a'), 'a.id_alatuji', '=', 'al.alatuji_id')
             ->where('al.id_serial_number', $request->serial_number)
             ->first();
-    
-            $pj = DB::table('erp.users')->where('id', $request->operator)->first();
+
+            $pj = DB::table('erp_spa.users')->where('id', $request->operator)->first();
 
             if($request->cekFisik == 10 or $request->cekFungsi == 10)
             {
@@ -90,7 +90,7 @@ class VerifikasiController extends Controller
                     'required' => 'jika not ok, kolom :attribute harus di isi'
                 ]);
             }
-            
+
             $jadwal_perawatan = Carbon::parse($request->tgl_verifikasi)->addMonths(3)->format('Y-m-d');
 
             Verifikasi::create([
@@ -128,7 +128,7 @@ class VerifikasiController extends Controller
                 'tgl_perawatan' => $request->tgl_perawatan,
                 'pj_dilakukan_oleh' => $pj->nama,
             ];
-            
+
             DB::table('erp_spa.tbl_log')->insert([
                 'tipe' => 'QC',
                 'subjek' => 'Verifikasi alat uji - '.$data->nm_alatuji,
@@ -150,7 +150,7 @@ class VerifikasiController extends Controller
     {
         try {
 
-            $data = 
+            $data =
             DB::table(DB::raw('erp_kalibrasi.verifikasi v'))
             ->select(
                 'v.tgl_perawatan', 'v.pengendalian', 'v.hasil_fisik', 'v.hasil_fungsi', 'v.keputusan', 'v.keterangan', 'v.tindak_lanjut'
