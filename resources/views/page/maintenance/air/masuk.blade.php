@@ -61,7 +61,7 @@
     }
 
     .column-wrapper {
-        height: 100px;
+        height: 285px;
         width: 20px;
         background: #CFD8DC;
         transform: rotate(180deg);
@@ -173,47 +173,36 @@
 
         <div class="row">
             <div class="col-2">
-                <div class="card card-primary card-outline card-outline-tabs">
-                    <div class="card-header p-0 pt-1">
-                        <ul class="nav nav-tabs" id="custom-tabs-one-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active d_keluar" id="custom-tabs-one-home-tab" data-toggle="pill" href="#pakai" role="tab" aria-controls="custom-tabs-one-home" aria-selected="true">Pakai</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link d_masuk" id="custom-tabs-one-profile-tab" data-toggle="pill" href="#masuk" role="tab" aria-controls="custom-tabs-one-profile" aria-selected="false">Masuk</a>
-                            </li>
-                        </ul>
+                <div class="row">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-chart-area me-1"></i>
+                            Debit Air Digunakan (L/M)
+                        </div>
+                        <div id="gg2" class="gauge2"></div>
                     </div>
-                    <div class="tab-content" id="custom-tabs-one-tabContent">
-                        <div class="tab-pane fade show active" id="pakai" role="tabpanel" aria-labelledby="custom-tabs-one-home-tab">
-                            <div class="card-header">
-                                <i class="fas fa-chart-area me-1"></i>
-                                Debit Air (L/M)
-                            </div>
-                            <div id="gg2" class="gauge2"></div>
+                </div>
+                <div class="row">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-chart-area me-1"></i>
+                            Debit Air Disimpan (L/M)
                         </div>
-                        <div class="tab-pane fade show in active" id="masuk" role="tabpanel" aria-labelledby="custom-tabs-one-profile-tab">
-                            
-                            <div class="card-header">
-                                <i class="fas fa-chart-area me-1"></i>
-                                Debit Air (L/M)
-                            </div>
-                            <div id="gg1" class="gauge"></div>
-                        </div>
+                        <div id="gg1" class="gauge"></div>
                     </div>
                 </div>
             </div>
 
             <div class="col-7">
-                <div class="card mb-4">
+                <div class="card mb-4" style="height:470px;">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
                         Penggunaan Air Hari Ini (<?php
                                                     setlocale(LC_ALL, 'id-ID');
                                                     echo strftime("%A"); ?>)
                     </div>
-                    <div class="card-body" style="height:223px">
-                        <div class="chart-container"><canvas id="myAreaChart" height="95%"></canvas></div>
+                    <div class="card-body">
+                        <div class="chart-container"><canvas id="myAreaChart" height="200px"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -224,9 +213,10 @@
                         <i class="fas fa-chart-bar me-1"></i>
                         Kondisi Air
                     </div>
-                    <div class="card-body px-0 text-center" style="height:223px">
+                    <div class="card-body px-0 text-center" style="height:421px">
 
                         <div class="outer-wrapper">
+                            pH
                             <div class="column-wrapper">
                                 <div class="column"></div>
                             </div>
@@ -235,19 +225,21 @@
                         </div>
 
                         <div class="outer-wrapper">
+                            TSS
                             <div class="column-wrapper">
                                 <div class="TSScolumn"></div>
                             </div>
                             <div class="TSSpercentage">--</div>
-                            <div class="value">TSS</div>
+                            <div class="value">NTU</div>
                         </div>
 
                         <div class="outer-wrapper">
+                            TDS
                             <div class="column-wrapper">
                                 <div class="TDScolumn"></div>
                             </div>
                             <div class="TDSpercentage">--</div>
-                            <div class="value">TDS</div>
+                            <div class="value">ppm</div>
                         </div>
                     </div>
                 </div>
@@ -265,14 +257,13 @@
 <script src="{{ asset('js/justgage.js') }}"></script>
 <script src="{{ asset('js/raphael-2.1.4.min.js') }}"></script>
 <script type="text/javascript">
+    // var x = document.getElementById("gg1");
+    // x.style.display = "none";
 
-var x = document.getElementById("gg1");
-    x.style.display = "none";
+    // $('.d_masuk').on('click', function() {
+    //     x.style.display = "block"
+    // })
 
-    $('.d_masuk').on('click', function() {    
-        x.style.display = "block"
-    })
-    
 
 
     // Javascript bar chart / barchart
@@ -341,7 +332,7 @@ var x = document.getElementById("gg1");
 
     function UpdateBarVolume() {
         $.ajax({
-            url: "http://192.168.12.97:90/air/rekap_volume_in",
+            url: "http://192.168.1.9:90/air/rekap_volume_in",
             type: "get",
             success: function(res) {
 
@@ -371,7 +362,7 @@ var x = document.getElementById("gg1");
         })
 
         $.ajax({
-            url: "http://192.168.12.97:90/air/rekap_volume_out",
+            url: "http://192.168.1.9:90/air/rekap_volume_out",
             type: "get",
             success: function(res) {
 
@@ -497,125 +488,7 @@ var x = document.getElementById("gg1");
         }
     });
 
-    // $(document).ready(function newData() {
-    //     var gg1 = new JustGage({
-    //         id: "gg1",
-    //         value: 0.00 + 'L/M',
-    //         min: 0,
-    //         max: 20,
-    //         decimals: 2,
-    //         gaugeWidthScale: 0.6,
-    //         customSectors: [{
-    //             color: "#00ff00",
-    //             lo: 0,
-    //             hi: 5
-    //         }, {
-    //             color: "#fc6f03",
-    //             lo: 5,
-    //             hi: 10
-    //         }, {
-    //             color: "#ff0000",
-    //             lo: 10,
-    //             hi: 15
-    //         }, {
-    //             color: "#fc03f0",
-    //             lo: 15,
-    //             hi: 20
-    //         }],
-    //         counter: true
-    //     });
-
-    //     var gg2 = new JustGage({
-    //         id: "gg2",
-    //         value: 0 + 'L/M',
-    //         min: 0,
-    //         max: 20,
-    //         decimals: 2,
-    //         gaugeWidthScale: 0.6,
-    //         customSectors: [{
-    //             color: "#00ff00",
-    //             lo: 0,
-    //             hi: 5
-    //         }, {
-    //             color: "#fc6f03",
-    //             lo: 5,
-    //             hi: 10
-    //         }, {
-    //             color: "#ff0000",
-    //             lo: 10,
-    //             hi: 15
-    //         }, {
-    //             color: "#fc03f0",
-    //             lo: 15,
-    //             hi: 20
-    //         }],
-    //         counter: true
-    //     });
-
-
-    //     //update data
-
-    //     function updateGaugeIn() {
-    //         $.ajax({
-    //             url: "http://192.168.12.97:90/air/rekap_debit_in",
-    //             type: "get",
-    //             success: function(res) {
-    //                 gg1.refresh(res.data2[0].debit);
-
-    //                 for ($i = 0; $i <= 12; $i++) {
-
-
-    //                     if (res.data2[$i].debit != null) {
-
-    //                         LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-
-    //                     } else {
-    //                         LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-    //                     }
-    //                     LineChart.update();
-    //                 }
-    //             }
-    //         })
-    //     }
-
-    //     function updateGaugeOut() {
-    //         $.ajax({
-    //             url: "http://192.168.12.97:90/air/rekap_debit_out",
-    //             type: "get",
-    //             success: function(res) {
-    //                 gg2.refresh(res.data2[0].debit);
-
-    //                 for ($i = 0; $i <= 12; $i++) {
-
-    //                     let debit = res.data2[$i].created_at;
-    //                     let jam = debit.slice(11);
-    //                     if (res.data2[$i].debit != null) {
-    //                         LineChart.data.datasets[1].data[$i] = res.data2[$i].debit;
-    //                         LineChart.data.labels[$i] = jam;
-    //                     } else {
-    //                         LineChart.data.datasets[1].data[$i] = res.data2[$i].debit;
-    //                         LineChart.data.labels[$i] = res.data2[$i].created_at;
-    //                     }
-
-    //                     LineChart.update();
-    //                 }
-    //             }
-    //         })
-    //     }
-
-    //     setInterval(function() {
-    //         updateGaugeIn();
-    //         updateGaugeOut();
-
-    //     }, 1000);
-
-
-
-    // });
-
-    $(document).ready(function newData() {
+    $(document).ready(function() {
         var gg1 = new JustGage({
             id: "gg1",
             value: 0.00 + 'L/M',
@@ -643,40 +516,6 @@ var x = document.getElementById("gg1");
             counter: true
         });
 
-        //update data
-
-        function updateGaugeIn() {
-            $.ajax({
-                url: "http://192.168.12.97:90/air/rekap_debit_in",
-                type: "get",
-                success: function(res) {
-                    gg1.refresh(res.data2[0].debit);
-
-                    for ($i = 0; $i <= 12; $i++) {
-
-
-                        if (res.data2[$i].debit != null) {
-
-                            LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-
-                        } else {
-                            LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
-
-                        }
-                        LineChart.update();
-                    }
-                }
-            })
-        }
-
-        setInterval(function() {
-            updateGaugeIn();
-        }, 1000);
-
-    });
-
-    $(document).ready(function newData2() {
         var gg2 = new JustGage({
             id: "gg2",
             value: 0 + 'L/M',
@@ -704,12 +543,35 @@ var x = document.getElementById("gg1");
             counter: true
         })
 
+        //update data
+        function updateGaugeIn() {
+            $.ajax({
+                url: "http://192.168.1.9:90/air/rekap_debit_in",
+                type: "get",
+                success: function(res) {
+                    gg1.refresh(res.data2[0].debit);
+
+                    for ($i = 0; $i <= 12; $i++) {
 
 
+                        if (res.data2[$i].debit != null) {
+
+                            LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
+
+
+                        } else {
+                            LineChart.data.datasets[0].data[$i] = res.data2[$i].debit;
+
+                        }
+                        LineChart.update();
+                    }
+                }
+            })
+        }
 
         function updateGaugeOut() {
             $.ajax({
-                url: "http://192.168.12.97:90/air/rekap_debit_out",
+                url: "http://192.168.1.9:90/air/rekap_debit_out",
                 type: "get",
                 success: function(res) {
                     gg2.refresh(res.data2[0].debit);
@@ -733,16 +595,16 @@ var x = document.getElementById("gg1");
         }
 
         setInterval(function() {
+            updateGaugeIn();
             updateGaugeOut();
+            kualitas();
         }, 1000);
+
     });
 
-
-
-    // bar Kondisi Air, pH, TDS, TSS
-    $(document).ready(function Kualitas() {
+    function kualitas() {
         $.ajax({
-            url: "http://192.168.12.97:90/air/rekap_kualitas",
+            url: "http://192.168.1.9:90/air/rekap_kualitas",
             type: "get",
             success: function(res) {
 
@@ -751,6 +613,11 @@ var x = document.getElementById("gg1");
                 var tss = res.data3[0].tss;
                 var ph = res.data3[0].ph;
 
+                if (ph > 14.00) {
+                    ph = 14.00;
+                } else if (ph < 0.00) {
+                    ph = 0;
+                }
 
 
                 // function PhSens() {
@@ -859,12 +726,7 @@ var x = document.getElementById("gg1");
 
             }
         })
-    })
-
-    setInterval(function() {
-        Kualitas();
-
-    }, 1000);
+    }
 </script>
 
 
