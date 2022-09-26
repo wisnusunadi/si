@@ -30,41 +30,51 @@
 <div class="container-fluid bg-white text-dark">
     <div class="tab-content" id="pills-tabContent">
         <div class="tab-pane fade show active bg-white text-dark ml-2" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"><h6>Grafik Listrik</h6>
-          <ul class="nav nav-pills mb-3" id="pills-tab-1" role="tablist">
-                <li class="nav-item ml-2">
-                    <a class="nav-link active" id="pills-home-tab-1" data-toggle="pill" href="#pills-home-1" role="tab" aria-controls="pills-home-1" aria-selected="True">Real time</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-home-tab-2" data-toggle="pill" href="#pills-home-2" role="tab" aria-controls="pills-home-2" aria-selected="false">15 Menit</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-home-tab-3" data-toggle="pill" href="#pills-home-3" role="tab" aria-controls="pills-home-3" aria-selected="false">1 Jam</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-home-tab-4" data-toggle="pill" href="#pills-home-4" role="tab" aria-controls="pills-home-4" aria-selected="false">1 Hari</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="pills-home-tab-5" data-toggle="pill" href="#pills-home-5" role="tab" aria-controls="pills-home-5" aria-selected="false">1 Bulan</a>
-                </li>
-          </ul>
+            <div class="d-flex bd-highlight">
+                <div class="flex-grow-1 bd-highlight">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          Pilih Grafik
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                          <a class="dropdown-item filter_grafik active" id="select_c1"  data-value="c1" >Current</a>
+                          <a class="dropdown-item filter_grafik" id="select_vll1"data-value="vll1" >Voltage Line to Line</a>
+                          <a class="dropdown-item filter_grafik" id="select_vln1"data-value="vln1" >Voltage Line to Netral</a>
+                          <a class="dropdown-item filter_grafik" id="select_p1" data-value="p1" >Power</a>
+                          <a class="dropdown-item filter_grafik" id="select_pf1" data-value="pf1">Power faktor</a>
+                          <a class="dropdown-item filter_grafik" id="select_dpf1"data-value="dpf1" >Displacement Power Faktor</a>
+                          <a class="dropdown-item filter_grafik" id="select_f1" data-value="f1">Frequency</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="bd-highlight">
+                    <ul class="nav nav-pills mb-3" id="pills-tab-1" role="tablist">
+                        <li class="nav-item ml-2">
+                            <a class="nav-link active" id="pills-home-tab-1" data-toggle="pill" href="#pills-home-1" role="tab" aria-controls="pills-home-1" aria-selected="True">Real time</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-home-tab-2" data-toggle="pill" href="#pills-home-2" role="tab" aria-controls="pills-home-2" aria-selected="false">15 Menit</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-home-tab-3" data-toggle="pill" href="#pills-home-3" role="tab" aria-controls="pills-home-3" aria-selected="false">1 Jam</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-home-tab-4" data-toggle="pill" href="#pills-home-4" role="tab" aria-controls="pills-home-4" aria-selected="false">1 Hari</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" id="pills-home-tab-5" data-toggle="pill" href="#pills-home-5" role="tab" aria-controls="pills-home-5" aria-selected="false">1 Bulan</a>
+                        </li>
+                  </ul>
+
+
+                </div>
+            </div>
+
         </div>
     </div>
     <div class="tab-content" id="pills-tab-1Content">
         <div class="tab-pane fade show active" id="pills-home-1" role="tabpanel" aria-labelledby="pills-home-1">
-            <div class="dropdown">
-                <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Pilih Grafik
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item filter_grafik active" id="select_c1"  data-value="c1" >Current</a>
-                  <a class="dropdown-item filter_grafik" id="select_vll1"data-value="vll1" >Voltage Line to Line</a>
-                  <a class="dropdown-item filter_grafik" id="select_vln1"data-value="vln1" >Voltage Line to Netral</a>
-                  <a class="dropdown-item filter_grafik" id="select_p1" data-value="p1" >Power</a>
-                  <a class="dropdown-item filter_grafik" id="select_pf1" data-value="pf1">Power faktor</a>
-                  <a class="dropdown-item filter_grafik" id="select_dpf1"data-value="dpf1" >Displacement Power Faktor</a>
-                  <a class="dropdown-item filter_grafik" id="select_f1" data-value="f1">Frequency</a>
-                </div>
-            </div>
+          
 
             <div class="row">
                 <div class="col">
@@ -122,7 +132,8 @@
 
 <script>
 
-    var chartData = {
+    // voltage rs
+    var voltageRSChart = {
     labels: ["S", "M", "T", "W", "T", "F", "S"],
     datasets: [{
         label: 'Voltage r-s',
@@ -136,7 +147,7 @@
     if (chLine) {
         new Chart(chLine, {
         type: 'line',
-        data: chartData,
+        data: voltageRSChart,
         options: {
         scales: {
             yAxes: [{
@@ -151,7 +162,9 @@
         }
         });
     }
-    var chartData = {
+
+    // current
+    var currentChart = {
     labels: ["S", "M", "T", "W", "T", "F", "S"],
     datasets: [{
         label:'current A',
@@ -167,7 +180,7 @@
     if (chLine) {
         new Chart(chLine, {
         type: 'line',
-        data: chartData,
+        data: currentChart,
         options: {
         scales: {
             yAxes: [{
@@ -183,6 +196,13 @@
         });
     }
 
+    $(document).ready(function () {
+        var value = 'c1';
+        $('#c1').hide();
+        hide();
+        $('#'+value).show();
+        $('#select_'+value).addClass('active');
+    }(jQuery));
 
     var gc1 = $('#gc1');
       $('#c1').show();

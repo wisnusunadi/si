@@ -399,7 +399,7 @@ Route::group(['prefix' => 'as', 'middleware' => ['auth','divisi:asp']], function
     // });
 });
 
-Route::group(['prefix' => 'mtc', 'middleware' => ['auth','divisi:mtc']], function () {
+Route::group(['prefix' => 'mtc', 'middleware' => ['auth']], function () {
     Route::group(['prefix' => '/air'], function () {
         Route::get('/masuk', [App\Http\Controllers\MaintenanceController::class, 'show_air_masuk'])->name('mtc.air.masuk');
         Route::get('/keluar', [App\Http\Controllers\MaintenanceController::class, 'show_air_keluar'])->name('mtc.air.keluar');
