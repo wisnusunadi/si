@@ -74,7 +74,7 @@ class GudangController extends Controller
     {
         try {
             $data = GudangBarangJadi::
-            select(DB::raw('concat(p.nama," ",gdg_barang_jadi.nama) as produkk'))
+            select(DB::raw('concat(p.nama," ",gdg_barang_jadi.nama) as produkk'), 'gdg_barang_jadi.id')
             ->leftJoin('produk as p', 'p.id', '=', 'gdg_barang_jadi.produk_id')
             ->addSelect([
                 'count_transfer' => function($query){
@@ -120,9 +120,29 @@ class GudangController extends Controller
                     ->limit(1);
                 }
             ])
-            ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_ekat_nego, 0) + coalesce(count_ekat_draft, 0) + coalesce(count_ekat_po, 0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) > count_transfer')
+            ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) > count_transfer')
+            ->orderBy(DB::raw('concat(p.nama," ",gdg_barang_jadi.nama)'))
             ->get();
-            return $data;
+            $dt = datatables()->of($data)
+                ->addIndexColumn()
+                ->editColumn('permintaan', function($d){
+                    return intval($d->count_ekat_sepakat) + intval($d->count_spa_po) + intval($d->count_spb_po);
+                })
+                ->editColumn('transfer', function($d){
+                    return intval($d->count_transfer);
+                })
+                ->make(true);
+
+            return $dt;
+        } catch (\Exception $e) {
+            return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    function get_detail_rekap_so_produk()
+    {
+        try {
+            //code...
         } catch (\Exception $e) {
             return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
         }
