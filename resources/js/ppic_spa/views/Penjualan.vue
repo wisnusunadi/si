@@ -19,21 +19,25 @@
         </div>
         <ekatalog-vue :penjualanekatalogs="penjualanekatalogs" v-show="tabs == 'ekatalog'" />
         <spa-vue :penjualanspas="penjualanspas" v-show="tabs == 'spa'" />
+        <spb-vue :penjualanspbs="penjualanspbs" v-show="tabs == 'spb'" />
     </div>
 </template>
 <script>
     import axios from 'axios';
     import ekatalogVue from '../components/penjualan/ekatalog.vue';
     import spaVue from '../components/penjualan/spa.vue';
+    import spbVue from '../components/penjualan/spb.vue';
     export default {
         components: {
             ekatalogVue,
-            spaVue
+            spaVue,
+            spbVue,
         },
         data() {
             return {
                 penjualanekatalogs: [],
                 penjualanspas: [],
+                penjualanspbs: [],
                 tabs: 'ekatalog'
             }
         },
@@ -96,6 +100,23 @@
                             }
                         }
                         break;
+
+                    case 'spb':
+                        if(this.penjualanspbs.length == 0){
+                            try {
+                                this.$store.commit('setIsLoading', true);
+                                await axios.post('/penjualan/penjualan/spb/data/semua')
+                                    .then(response => {
+                                        this.penjualanspbs = response.data.data;
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    });
+                                this.$store.commit('setIsLoading', false);
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        }
                     default:
                         break;
                 }

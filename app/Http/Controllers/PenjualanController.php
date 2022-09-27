@@ -2972,6 +2972,23 @@ class PenjualanController extends Controller
                 }
                 return $datas;
             })
+            ->addColumn('status_ppic', function ($data) {
+                $datas = "";
+                $tes = $data->cjumlahprd + $data->cjumlahpart;
+                if ($tes > 0) {
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                    if  ($data->log == "batal") {
+                        $datas = 'batal';
+                    } else  {
+                        if  ($hitung > 0)  {
+                            $datas = $hitung;
+                        }  else  {
+                            $datas = $hitung;
+                        }
+                    }
+                }
+                return $datas;
+            })
             ->addColumn('nopo', function ($data) {
                 if ($data->Pesanan) {
                     return $data->Pesanan->no_po;
