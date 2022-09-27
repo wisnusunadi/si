@@ -34,9 +34,9 @@
                 <div class="flex-grow-1 bd-highlight">
 
                     <select class="js-example-basic-single" id="masuk" name="state">
-                        <option value="AL">METER01</option>
+                        <option value="METER01">METER01</option>
 
-                        <option value="WY">METER02</option>
+                        <option value="METER02">METER02</option>
                       </select>
 
                     <div class="dropdown">
@@ -138,21 +138,14 @@
 
 
 <script>
-
+    let dataAllGrafik = [];
     // voltage rs
-    var voltageRSChart = {
-    labels: ["S", "M", "T", "W", "T", "F", "S"],
-    datasets: [{
-        label: 'Voltage r-s',
-        data: [589, 445, 483, 503, 689, 692, 634],
-    },
-    {   label:'volatage s-t',
-        data: [639, 465, 493, 478, 589, 632, 674],
-    }]
+    let voltageRSChart = {
+    labels: [],
+    datasets: []
     };
     var chLine = document.getElementById("gvll1");
-    if (chLine) {
-        new Chart(chLine, {
+        let voltageChart = new Chart(chLine, {
         type: 'line',
         data: voltageRSChart,
         options: {
@@ -168,7 +161,6 @@
         }
         }
         });
-    }
 
     // current
     var currentChart = {
@@ -207,26 +199,26 @@
     $('.js-example-basic-single').select2();
 });
 
-let dataPanel = [];
-    $.ajax({
-        type:'get',
-        url:'http://localhost:8000/listrik/ambilpanel',
-        success:function(data) {
-            dataPanel.push(data.data)
-            ambilidPanel(data.data)
-            console.log(data.data);
-        }
-    });
+// let dataPanel = [];
+//     $.ajax({
+//         type:'get',
+//         url:'http://localhost:8000/listrik/ambilpanel',
+//         success:function(data) {
+//             dataPanel.push(data.data)
+//             ambilidPanel(data.data)
+//             console.log(data.data);
+//         }
+//     });
 
-    function ambilidPanel(data){
-        let table = $('#masuk').DataTable({
-            data,
-            columns: [
-                $list[$key]['device_id'] = $row['device_id']      
-                [$key++]
-            ],
-        });
-    }
+//     function ambilidPanel(data){
+//         let table = $('#masuk').DataTable({
+//             data,
+//             columns: [
+//                 $list[$key]['device_id'] = $row['device_id']      
+//                 [$key++]
+//             ],
+//         });
+//     }
 
 
 
@@ -237,7 +229,48 @@ let dataPanel = [];
         hide();
         $('#'+value).show();
         $('#select_'+value).addClass('active');
+
+        let pilih_device = $('#masuk').val();
+        getAllGrafik();
     }(jQuery));
+
+    function getAllGrafik() {
+        let pilih_device = $('#masuk').val();
+        $.ajax({
+        type:'get',
+        url:'http://192.168.13.51:8000/listrik/ambilrtvll',
+        success:function(data) {
+            dataAllGrafik.push(data.data);
+            getSpecificGraphVoltage(pilih_device);
+        }
+        });
+    }
+
+    function getSpecificGraphVoltage(device) {
+        console.log("dataallgrafik",dataAllGrafik)
+        let datasets = [];
+        const result = dataAllGrafik[0].filter((item) => item.device === device);
+        const labels = result.map((item) => item.detail);
+        labels.forEach(element => {
+            element.forEach((item) => {
+                datasets.push(item);
+            });
+        });
+        voltageRSChart.labels.push(datasets[0].Date_Time);
+        console.log("dataset",datasets);
+        datasets.forEach((item) => {
+            // console.log(item);
+            if(Object.keys(item) != 'Date_Time'){
+                voltageRSChart.datasets.push({
+                label: Object.keys(item),
+                data: Object.values(item),
+            });
+            }
+        });
+        voltageChart.update();
+        // const test = voltageRSChart.labels = Object.keys(labels[0]);
+        console.log(voltageRSChart);
+    }
 
     var gc1 = $('#gc1');
       $('#c1').show();
