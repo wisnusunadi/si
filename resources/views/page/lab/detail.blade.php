@@ -1,9 +1,14 @@
-@extends('layouts.app')
+@extends('adminlte.page')
+
+@section('title', 'ERP')
+
+@section('content_header')
+<h1 class="m-0 text-dark">Detail Alat Uji</h1>
+@stop
 
 @section('content')
     <script src="https://cdn.jsdelivr.net/npm/jsbarcode@3.11.5/dist/barcodes/JsBarcode.code128.min.js"></script>
     <div class="container-fluid">
-        <h4>Detail Alat Uji</h4>
 
         <!-- Detail Container -->
         <div class="container bg-light p-3">
@@ -12,7 +17,7 @@
                 <!-- gambar -->
                 <div class="col-4">
                     <object data="{{ asset('/storage/gambar/'.$data->gbr_alatuji) }}" type="image/png" class="img-fluid text-center">
-                        <img src="{{ asset('/img/default.png') }}" class="img-fluid text-center" alt="gambar alat uji">
+                        <img src="{{ asset('/storage/gambar/default.png') }}" class="img-fluid text-center" alt="gambar alat uji">
                     </object>
                 </div>
                 <!-- detail -->
@@ -25,7 +30,7 @@
                     <span><strong>{{ $data->desk_alatuji }}</strong></span>
                     <br/>
                     @if(auth()->user()->role == 1)
-                    <a href="/editalat/{{ $id }}" class="btn btn-warning btn-sm mt-3 w-25"><strong>Ubah</strong></a>
+                    <a href="/alatuji/editalat/{{ $id }}" class="btn btn-warning btn-sm mt-3 w-25"><strong>Ubah</strong></a>
                     @endif
                 </div>
             </div>
@@ -34,25 +39,25 @@
             <div class="m-3">
             <div class="card">
                 <div class="card-header">
-                    <ul class="nav nav-tabs card-header-tabs" data-bs-tabs="tabs" id="tabRiwayat">
+                    <ul class="nav nav-tabs card-header-tabs" data-tabs="tabs" id="tabRiwayat">
                         <li class="nav-item">
-                            <a href="#informasi" class="nav-link active" aria-current="true" data-bs-toggle="tab">Informasi</a>
+                            <a href="#informasi" class="nav-link active" aria-current="true" data-toggle="tab">Informasi</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#peminjaman" class="nav-link" data-bs-toggle="tab">Peminjaman</a>
+                            <a href="#peminjaman" class="nav-link" data-toggle="tab">Peminjaman</a>
                         </li>
                         @if(auth()->user()->role == 1)
                         <li class="nav-item">
-                            <a href="#perawatan" class="nav-link" data-bs-toggle="tab">Perawatan</a>
+                            <a href="#perawatan" class="nav-link" data-toggle="tab">Perawatan</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#verifikasi" class="nav-link" data-bs-toggle="tab">Verifikasi</a>
+                            <a href="#verifikasi" class="nav-link" data-toggle="tab">Verifikasi</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#kalibrasi" class="nav-link" data-bs-toggle="tab">Kalibrasi</a>
+                            <a href="#kalibrasi" class="nav-link" data-toggle="tab">Kalibrasi</a>
                         </li>
                         <li class="nav-item">
-                            <a href="#perbaikan" class="nav-link" data-bs-toggle="tab">Perbaikan</a>
+                            <a href="#perbaikan" class="nav-link" data-toggle="tab">Perbaikan</a>
                         </li>
                         @endif
                     </ul>
@@ -116,7 +121,7 @@
                                         </tr>
                                         <tr>
                                             <td>Sertifikasi Kalibrasi</td>
-                                            <td class=""><strong>{{ $data->sert_kalibrasi }}</strong></td>
+                                            <td class=""><strong>{!! $data->sert_kalibrasi !!}</strong></td>
                                         </tr>
                                     </table>
 
@@ -146,7 +151,7 @@
                             <!-- tombol pinjam -->
                             <div class="row mb-3">
                                 <div class="col">
-                                    <button class="btn btn-primary btn-sm float-right px-3"  data-bs-toggle="modal" data-bs-target="#pinjamModal" {{ $data->status_pinjam_id == 16 ? '' : 'DISABLED'}}>
+                                    <button class="btn btn-primary btn-sm float-right px-3"  data-toggle="modal" data-target="#pinjamModal" {{ $data->status_pinjam_id == 16 ? '' : 'DISABLED'}}>
                                         <strong>+ Pinjam</strong>
                                     </button>
                                 </div>
@@ -213,7 +218,7 @@
                             <!-- tombol perawatan -->
                             <div class="row mb-3">
                                 <div class="col">
-                                    <a href="/perawatan/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Perawatan</strong></a>
+                                    <a href="/alatuji/perawatan/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Perawatan</strong></a>
                                 </div>
                             </div>
 
@@ -270,7 +275,7 @@
                             <!-- tombol verifikasi -->
                             <div class="row mb-3">
                                 <div class="col">
-                                    <a href="/verifikasi/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Verifikasi</strong></a>
+                                    <a href="/alatuji/verifikasi/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Verifikasi</strong></a>
                                 </div>
                             </div>
 
@@ -330,7 +335,7 @@
                             <!-- tombol kalibrasi -->
                             <div class="row mb-3">
                                 <div class="col">
-                                    <a href="/mt/kalibrasi/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Kalibrasi</strong></a>
+                                    <a href="/alatuji/mt/kalibrasi/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Kalibrasi</strong></a>
                                 </div>
                             </div>
 
@@ -427,7 +432,7 @@
                             <!-- tombol perbaikan -->
                             <div class="row mb-3">
                                 <div class="col">
-                                    <a href="/mt/perbaikan/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Perbaikan</strong></a>
+                                    <a href="/alatuji/mt/perbaikan/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Perbaikan</strong></a>
                                 </div>
                             </div>
 
@@ -535,7 +540,7 @@
             <div class="modal-content">
 
             <div class="modal-header">
-                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
@@ -548,7 +553,7 @@
                     </strong>    
                 </h4>
 
-                <form action="/store_pinjam" method="post">
+                <form action="/alatuji/store_pinjam" method="post">
                 @csrf
                 <input type="hidden" name="serial_number_id" value="{{$id}}">
 
@@ -610,7 +615,7 @@
 
                 <div class="row float-right">
                     <div class="col-auto">
-                        <span type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">
+                        <span type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
                             Batal
                         </span>
                     </div>
@@ -674,7 +679,7 @@
                             </strong>
                         </div>
 
-                        <form action="/store_konfirmasi" method="POST">
+                        <form action="/alatuji/store_konfirmasi" method="POST">
                         @csrf
                         <input type="hidden" name="peminjaman_konfirm_id" id="peminjaman_konfirm_id" value="">
                         <input type="hidden" name="alatuji_konfirm_id" id="alatuji_konfirm_id" value="">
@@ -744,7 +749,7 @@
 
                         <div class="row float-right">
                             <div class="col-auto">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
                                     <strong>Batal</strong>
                                 </button>
                             </div>
@@ -803,7 +808,7 @@
                     <!-- kolom kanan -->
                     <div class="col-8">
 
-                        <form action="/store_kembali" method="post">
+                        <form action="/alatuji/store_kembali" method="post">
                         @csrf
                         <input type="hidden" name="peminjaman_kembali_id" id="peminjaman_kembali_id" value="">
                         <input type="hidden" name="id_alat_uji" id="id_alat_uji" value="">
@@ -907,7 +912,7 @@
 
                         <div class="row float-right">
                             <div class="col-auto">
-                                <button type="button" class="btn btn-danger" data-bs-dismiss="modal" aria-label="Close">
+                                <button type="button" class="btn btn-danger" data-dismiss="modal" aria-label="Close">
                                     <strong>Batal</strong>
                                 </button>
                             </div>
@@ -993,10 +998,10 @@
                         <div id="mt_data_external_container">
                         <ul class="nav nav-tabs nav-justified mb-3" id="ex1" role="tablist">
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link active" data-bs-toggle="tab" href="#mt_tab_dokumen">Dokumen</a>
+                                <a class="nav-link active" data-toggle="tab" href="#mt_tab_dokumen">Dokumen</a>
                             </li>
                             <li class="nav-item" role="presentation">
-                                <a class="nav-link" data-bs-toggle="tab" href="#mt_tab_hasil">Hasil</a>
+                                <a class="nav-link" data-toggle="tab" href="#mt_tab_hasil">Hasil</a>
                             </li>
                         </ul>
 
@@ -1111,7 +1116,8 @@
 
 
     </div>
-
+@stop
+@section('adminlte_js')
     <script>
 
     $(document).ready(function () {
@@ -1121,7 +1127,7 @@
         @endif
 
         // enable bootstrap tooltip
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-toggle="tooltip"]'))
         var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
             return new bootstrap.Tooltip(tooltipTriggerEl)
         });
@@ -1129,7 +1135,7 @@
         // data tables riwayat peminjaman
         $.ajax({
             type:'GET',
-            url:'{{ url("/api/alatuji/peminjaman_hist") }}'+'/'+"{{$id}}"+'/'+"{{auth()->user()->role}}"+'/'+"{{auth()->user()->id}}",
+            url:'{{ url("/api/inventory/peminjaman_hist") }}'+'/'+"{{$id}}"+'/'+"{{auth()->user()->role}}"+'/'+"{{auth()->user()->id}}",
             success:function(data) {
                 //console.log(data);
             },
@@ -1142,7 +1148,7 @@
             processing: false,
             serverSide: false,
             destroy: false,
-            ajax: "{{ url('/api/alatuji/peminjaman_hist') }}"+'/'+"{{$id}}"+'/'+"{{auth()->user()->role}}"+'/'+"{{auth()->user()->id}}",
+            ajax: "{{ url('/api/inventory/peminjaman_hist') }}"+'/'+"{{$id}}"+'/'+"{{auth()->user()->role}}"+'/'+"{{auth()->user()->id}}",
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'nama', name: 'nama'},
@@ -1161,7 +1167,7 @@
         // data tabel riwayat perawatan
         $.ajax({
             type:'GET',
-            url:'{{ url("/api/alatuji/perawatan_hist") }}'+'/'+"{{$id}}",
+            url:'{{ url("/api/inventory/perawatan_hist") }}'+'/'+"{{$id}}",
             success:function(data) {
                 //console.log(data);
             },
@@ -1174,7 +1180,7 @@
             processing: false,
             serverSide: false,
             destroy: false,
-            ajax: "{{ url('/api/alatuji/perawatan_hist') }}"+'/'+"{{$id}}",
+            ajax: "{{ url('/api/inventory/perawatan_hist') }}"+'/'+"{{$id}}",
             columns: [
                 {data: 'DT_RowIndex', name: 'DT_RowIndex'},
                 {data: 'tgl_perawatan', name: 'tgl_perawatan'},
@@ -1270,11 +1276,11 @@
 
                         if(data.hasil_fisik == 9){
                             $('#mt_data_kondisi_fisik, #mt_data_kondisi_fisik2').append(
-                                '<span id="mt_temp_cek_fisik" data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan"><i class="fa-solid fa-circle-check text-success"></i></span>'
+                                '<span id="mt_temp_cek_fisik" data-toggle="tooltip" data-placement="top" title="Alat Dapat Di Gunakan"><i class="fa-solid fa-circle-check text-success"></i></span>'
                             );
                         }else if(data.hasil_fisik == 10){
                             $('#mt_data_kondisi_fisik, #mt_data_kondisi_fisik2').append(
-                                '<span id="mt_temp_cek_fisik" data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan"><i class="fa-solid fa-circle-xmark text-danger"></i></span>'
+                                '<span id="mt_temp_cek_fisik" data-toggle="tooltip" data-placement="top" title="Alat Tidak Dapat Di Gunakan"><i class="fa-solid fa-circle-xmark text-danger"></i></span>'
                             );
                         }else{
                             $('#mt_data_kondisi_fisik, #mt_data_kondisi_fisik2').append('<span id="mt_temp_cek_fungsi">-</span>');
@@ -1282,11 +1288,11 @@
 
                         if(data.hasil_fungsi == 9){
                             $('#mt_data_kondisi_fungsi, #mt_data_kondisi_fungsi2').append(
-                                '<span id="mt_temp_cek_fungsi" data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan"><i class="fa-solid fa-circle-check text-success"></i></span>'
+                                '<span id="mt_temp_cek_fungsi" data-toggle="tooltip" data-placement="top" title="Alat Dapat Di Gunakan"><i class="fa-solid fa-circle-check text-success"></i></span>'
                             );
                         }else if(data.hasil_fungsi == 10){
                             $('#mt_data_kondisi_fungsi, #mt_data_kondisi_fungsi2').append(
-                                '<span id="mt_temp_cek_fungsi" data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan"><i class="fa-solid fa-circle-xmark text-danger"></i></span>'
+                                '<span id="mt_temp_cek_fungsi" data-toggle="tooltip" data-placement="top" title="Alat Tidak Dapat Di Gunakan"><i class="fa-solid fa-circle-xmark text-danger"></i></span>'
                             );
                         }else{
                             $('#mt_data_kondisi_fungsi, #mt_data_kondisi_fungsi2').append('<span id="mt_temp_cek_fungsi">-</span>');
@@ -1304,7 +1310,7 @@
 
                         if(data.surat_jalan != null){
                             $('#mt_data_suratjalan').append(
-                                '<span id="mt_temp_surat" style="cursor:pointer" class="text-primary" data-bs-toggle="modal" data-bs-target="#gambarModal"><i class="fa-solid fa-file-lines btn-hover"></i> '+data.surat_jalan+'</span>'
+                                '<span id="mt_temp_surat" style="cursor:pointer" class="text-primary" data-toggle="modal" data-target="#gambarModal"><i class="fa-solid fa-file-lines btn-hover"></i> '+data.surat_jalan+'</span>'
                             );
                             $('#mt_data_suratjalan').click(function(){
                                 $('#gambarDokumen').attr('src', '{{url("storage/kalibrasiperbaikan/")}}'+'/'+data.surat_jalan);
@@ -1317,7 +1323,7 @@
 
                         if(data.memo != null){
                             $('#mt_data_memo').append(
-                                '<span id="mt_temp_memo" class="text-primary" style="cursor:pointer" data-bs-toggle="modal" data-bs-target="#gambarModal"><i class="fa-solid fa-file-lines btn-hover"></i> '+data.memo+'</span>'
+                                '<span id="mt_temp_memo" class="text-primary" style="cursor:pointer" data-toggle="modal" data-target="#gambarModal"><i class="fa-solid fa-file-lines btn-hover"></i> '+data.memo+'</span>'
                             );
                             $('#mt_temp_memo').click(function(){
                                 $('#gambarDokumen').attr('src', '{{url("storage/kalibrasiperbaikan/")}}'+'/'+data.memo);
@@ -1433,7 +1439,11 @@
             $("#mt_temp_status").remove();// di panggil di bagian internal & eksternal
             $("#mt_temp_cek_fisik").remove();// <- karena di panggil 2 kali, di hapus 2 kali
             $("#mt_temp_cek_fisik").remove();
+            $("#mt_temp_cek_fisik").remove();
+            $("#mt_temp_cek_fisik").remove();
             $("#mt_temp_cek_fungsi").remove();// <- karena di panggil 2 kali, di hapus 2 kali
+            $("#mt_temp_cek_fungsi").remove();
+            $("#mt_temp_cek_fungsi").remove();
             $("#mt_temp_cek_fungsi").remove();
             $("#mt_temp_surat").remove();
             $("#mt_temp_memo").remove();
@@ -1552,7 +1562,7 @@
     function pinjamData(id){
         $.ajax({
             type:'GET',
-            url:"{{url('/api/alatuji/peminjaman_terima_data/')}}"+'/'+id,
+            url:"{{url('/api/inventory/peminjaman_terima_data/')}}"+'/'+id,
             success:function(data) {
                 $('#konfirmasiModal').modal('show');
                 $('#peminjaman_konfirm_id').val(data.id_peminjaman);
@@ -1570,7 +1580,7 @@
     function dikembalikanData(id){
         $.ajax({
             type:'GET',
-            url:"{{url('/api/alatuji/peminjaman_terima_data/')}}"+'/'+id,
+            url:"{{url('/api/inventory/peminjaman_terima_data/')}}"+'/'+id,
             success:function(data) {
                 $('#terimaModal').modal('show');
                 $('#peminjaman_kembali_id').val(data.id_peminjaman);
@@ -1603,4 +1613,4 @@
     // ambil gambar kalibrasi perawtan end
     </script>
 
-@endsection
+@stop

@@ -1,8 +1,14 @@
-@extends('layouts.app')
+@extends('adminlte.page')
+
+@section('title', 'ERP')
+
+@section('content_header')
+<h1 class="m-0 text-dark">Dashboard</h1>
+@stop
+
 @section('content')
 <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js" integrity="sha256-+8RZJua0aEWg+QVVKg4LEzEEm/8RFez5Tb4JBNiV5xA=" crossorigin="anonymous"></script>
 <div class="container-fluid">
-    <h4>Dashboard</h4>
 
     <div class="container p-3 bg-white">
 
@@ -137,7 +143,7 @@
                                             <div class="card-title fs-2"><strong>{{ json_decode($data)->external }}</strong></div>
                                         </div>
                                         <div class="col d-flex justify-content-center">
-                                            <i class="fa-solid fa-arrow-up-right-from-square fa-3x" aria-hidden="true"></i>
+                                            <i class="fas fa-external-link-alt fa-2x pt-3"></i>
                                         </div>
                                     </div>
                                     <div class="card-text">External</div>
@@ -314,13 +320,14 @@
 
     </div>
 </div>
-
+@stop
+@section('adminlte_js')
 <script>
     var tablePeminjaman = $('#tablePengajuan').DataTable({
         processing: false,
         serverSide: false,
         destroy: false,
-        ajax: "{{ url('/api/alatuji/data_dashboard_permintaan') }}",
+        ajax: "{{ url('/api/inventory/data_dashboard_permintaan') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'nama', name: 'nama'},
@@ -337,7 +344,7 @@
         processing: false,
         serverSide: false,
         destroy: false,
-        ajax: "{{ url('/api/alatuji/data_dashboard_pengembalian') }}",
+        ajax: "{{ url('/api/inventory/data_dashboard_pengembalian') }}",
         columns: [
             {data: 'DT_RowIndex', name: 'DT_RowIndex'},
             {data: 'nama', name: 'nama'},

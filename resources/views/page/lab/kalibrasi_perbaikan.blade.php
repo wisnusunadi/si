@@ -1,9 +1,14 @@
-@extends('layouts.app')
+@extends('adminlte.page')
+
+@section('title', 'ERP')
+
+@section('content_header')
+<h1 class="m-0 text-dark">{{ $jenis }} Alat Uji</h1>
+@stop
 
 @section('content')
 
 <div class="container-fluid">
-    <h4>{{ $jenis }} Alat Uji</h4>
 
     <div class="container p-3 bg-white">
 
@@ -41,7 +46,7 @@
             </div>
         </div>
 
-        <form action="/store_mt" method="post" enctype="multipart/form-data">
+        <form action="/alatuji/store_mt" method="post" enctype="multipart/form-data">
         @csrf
 
         <input type="hidden" name="serial_number_id" value="{{ $id }}">
@@ -119,9 +124,10 @@
                 <div class="row mb-2">
                     <div class="col"><span class="float-right">Operator Pelaksana</span></div>
                     <div class="col">
-                        <select name="operator" class="form-control form-control-sm">
-                            <option {{ old('operator') == '52' ? "selected" : "" }} value="52">admin</option>
-                            <option {{ old('operator') == '54' ? "selected" : "" }} value="54">user</option>
+                        <select name="operator" id="selectOperator" class="form-control form-control-sm">
+                            @foreach($user as $u)
+                            <option value="{{ $u->id }}">{{ $u->nama }}</option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
@@ -255,7 +261,8 @@
     </div>
 
 </div>
-
+@stop
+@section('adminlte_js')
 <script>
     //hide dokumen internal external
     $(document).ready(function(){
@@ -279,6 +286,8 @@
                 $('#externalContainer').hide();
             }
         })
+
+        $('#selectOperator').select2();
     });
 
     // tampilkan modal konfirmasi

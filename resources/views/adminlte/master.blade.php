@@ -35,7 +35,7 @@
 
 
 
-    <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/all.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/font-awesome.6.2.0.all.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/datepicker/datepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/jquery-ui/jquery-ui.css') }}">
 
@@ -80,6 +80,7 @@
     {{-- Configured Scripts --}}
     <script src="{{ asset('native/js/plugin.js') }}"></script>
     <script src="{{ asset('assets/adminlte/dist/js/adminlte.min.js') }}"></script>
+    <script src="{{ asset('assets/fontawesome-free/font-awesome.6.2.0.all.min.js') }}"></script>
     <script type="text/javascript" src="{{ asset('vendor/select2/checkbox/check.js') }}"></script>
     <script src="{{ asset('vendor/select2/js/select2.full.min.js') }}"></script>
     <script src="{{ asset('vendor/sweetalert2/dist/sweetalert2.min.js') }}"></script>

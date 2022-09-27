@@ -1,4 +1,10 @@
-@extends('layouts.app')
+@extends('adminlte.page')
+
+@section('title', 'ERP')
+
+@section('content_header')
+<h1 class="m-0 text-dark">Tambah Jenis Alat Uji</h1>
+@stop
 
 @section('content')
 <style>
@@ -14,11 +20,10 @@
 </style>
 
 <div class="container-fluid">
-    <h4>Tambah Jenis Alat Uji</h4>
 
     <div class="container p-3 bg-white">
 
-        <form action="/store_jenisalat" method="post" enctype="multipart/form-data">
+        <form action="store_jenisalat" method="post" enctype="multipart/form-data">
         @csrf
 
         <!-- card informasi umum -->
@@ -176,7 +181,8 @@
     </div>
 
 </div>
-
+@stop
+@section('adminlte_js')
 <script>
 $(document).ready(function() {
     $('#selectKlasifikasi').select2();

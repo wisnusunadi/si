@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
-use App\Models\Verifikasi;
+namespace App\Http\Controllers\inventory;
+
+use App\Http\Controllers\Controller;
+
+use App\Models\inventory\Verifikasi;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use App\Models\AlatSN;
+use App\Models\inventory\AlatSN;
 use Carbon\Carbon;
 use Yajra\DataTables\DataTables;
 
@@ -44,9 +47,12 @@ class VerifikasiController extends Controller
                 $data->tgl_perawatan = $tgl->tgl_perawatan;
             }
 
-            return view('alatuji.verifikasi', [
+            $user = DB::table(DB::raw('erp_spa.users'))->select('*')->get();
+            
+            return view('page.lab.verifikasi', [
                 'data' => $data,
                 'id' => $id,
+                'user' => $user,
             ]);
             
         } catch (\Exception $e) {
@@ -80,7 +86,7 @@ class VerifikasiController extends Controller
             ->where('al.id_serial_number', $request->serial_number)
             ->first();
     
-            $pj = DB::table('erp.users')->where('id', $request->operator)->first();
+            $pj = DB::table('erp_spa.users')->where('id', $request->operator)->first();
 
             if($request->cekFisik == 10 or $request->cekFungsi == 10)
             {
@@ -118,6 +124,7 @@ class VerifikasiController extends Controller
                 AlatSN::find($request->serial_number)
                 ->update([
                     'kondisi_id' => '9',
+                    'status_pinjam_id' => '16'
                 ]);
             }
 

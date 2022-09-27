@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Controllers;
-
-use App\Models\Perawatan;
+namespace App\Http\Controllers\inventory;
+use App\Http\Controllers\Controller;
+use App\Models\inventory\Perawatan;
 use Illuminate\Support\Facades\DB;
-use App\Models\AlatSN;
+use App\Models\inventory\AlatSN;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 
@@ -45,7 +45,7 @@ class PerawatanController extends Controller
 
             $user = DB::table(DB::raw('erp_spa.users'))->select('*')->get();
             
-            return view('alatuji.perawatan', [
+            return view('page.lab.perawatan', [
                 'data' => $data,
                 'id' => $id,
                 'user' => $user,
@@ -111,6 +111,7 @@ class PerawatanController extends Controller
             AlatSN::find($request->serial_number)
             ->update([
                 'kondisi_id' => '9',
+                'status_pinjam_id' => '16'
             ]);
         }
 
