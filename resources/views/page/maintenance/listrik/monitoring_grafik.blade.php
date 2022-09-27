@@ -109,19 +109,59 @@
                          </div>
                      </div>
                      <div class="container" id="vln1">
-                        vol1
+                     <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="gvln1"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
                      </div>
                      <div class="container" id="p1">
-                        pow1
+                     <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="gp1"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
                      </div>
                      <div class="container" id="pf1">
-                        pf1
+                     <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="gpf1"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
                      </div>
                      <div class="container" id="dpf1">
-                        dpf1
+                     <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="gdpf1"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
                      </div>
                      <div class="container" id="f1">
-                        f1
+                     <div class="row">
+                            <div class="col-12">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <canvas id="gf1"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                         </div>
                      </div>
                 </div>
             </div>
@@ -138,16 +178,16 @@
 
 
 <script>
-    let dataAllGrafik = [];
-    // voltage rs
-    let voltageRSChart = {
+    //grafik vll
+    let datavll = [];
+    let vll = {
     labels: [],
     datasets: []
     };
     var chLine = document.getElementById("gvll1");
-        let voltageChart = new Chart(chLine, {
+        let vllchart = new Chart(chLine, {
         type: 'line',
-        data: voltageRSChart,
+        data: vll,
         options: {
         scales: {
             yAxes: [{
@@ -161,71 +201,10 @@
         }
         }
         });
-
-    // current
-    var currentChart = {
-    labels: ["S", "M", "T", "W", "T", "F", "S"],
-    datasets: [{
-        label:'current A',
-        data: [589, 445, 483, 503, 689, 692, 634],
-    },
-    {
-        label:'Current B',
-        data: [639, 465, 493, 478, 589, 632, 674],
-    }]
-    };
-
-
-
-
-    
-
-    var chLine = document.getElementById("gc1");
-    if (chLine) {
-        new Chart(chLine, {
-        type: 'line',
-        data: currentChart,
-        options: {
-        scales: {
-            yAxes: [{
-            ticks: {
-                beginAtZero: false
-            }
-            }]
-        },
-        legend: {
-            display: false
-        }
-        }
-        });
-    }
-
+        
     $(document).ready(function() {
     $('.js-example-basic-single').select2();
 });
-
-// let dataPanel = [];
-//     $.ajax({
-//         type:'get',
-//         url:'http://localhost:8000/listrik/ambilpanel',
-//         success:function(data) {
-//             dataPanel.push(data.data)
-//             ambilidPanel(data.data)
-//             console.log(data.data);
-//         }
-//     });
-
-//     function ambilidPanel(data){
-//         let table = $('#masuk').DataTable({
-//             data,
-//             columns: [
-//                 $list[$key]['device_id'] = $row['device_id']      
-//                 [$key++]
-//             ],
-//         });
-//     }
-
-
 
 
     $(document).ready(function () {
@@ -236,46 +215,417 @@
         $('#select_'+value).addClass('active');
 
         let pilih_device = $('#masuk').val();
-        getAllGrafik();
+        getvllgrafik();
     }(jQuery));
 
-    function getAllGrafik() {
+    function getvllgrafik() {
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
         url:'http://localhost:8000/listrik/ambilrtvll',
         success:function(data) {
-            dataAllGrafik.push(data.data);
-            getSpecificGraphVoltage(pilih_device);
+            datavll.push(data.data);
+            getspecvll(pilih_device);
         }
         });
     }
-
-    function getSpecificGraphVoltage(device) {
-        console.log("dataallgrafik",dataAllGrafik)
+    
+    function getspecvll(device) {
+        console.log("datavllgrafik",datavll)
+        let labelsChart = [];
         let datasets = [];
-        const result = dataAllGrafik[0].filter((item) => item.device === device);
+        const result = datavll[0].filter((item) => item.device === device);
         const labels = result.map((item) => item.detail);
         labels.forEach(element => {
             element.forEach((item) => {
                 datasets.push(item);
             });
         });
-        voltageRSChart.labels.push(datasets[0].Date_Time);
-        console.log("dataset",datasets);
+        labelsChart.push(Object.values(datasets[0].Date_Time));
+        vll.labels = labelsChart[0];
         datasets.forEach((item) => {
             // console.log(item);
             if(Object.keys(item) != 'Date_Time'){
-                voltageRSChart.datasets.push({
+                vll.datasets.push({
                 label: Object.keys(item),
-                data: Object.values(item),
+                data: Object.values(item)[0],
             });
             }
         });
-        voltageChart.update();
-        // const test = voltageRSChart.labels = Object.keys(labels[0]);
-        console.log(voltageRSChart);
+        vllchart.update();
+        // const test = vll.labels = Object.keys(labels[0]);
+        console.log(vll);
     }
+ //grafik current
+ let datac = [];
+    let c = {
+    labels: [],
+    datasets: []
+    };
+    var chLine = document.getElementById("gc1");
+        let cchart = new Chart(chLine, {
+        type: 'line',
+        data: c,
+        options: {
+        scales: {
+            yAxes: [{
+            ticks: {
+                beginAtZero: false
+            }
+            }]
+        },
+        legend: {
+            display: false
+        }
+        }
+        });
+        
+    $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+
+
+    $(document).ready(function () {
+        let pilih_device = $('#masuk').val();
+        getcgrafik();
+    }(jQuery));
+
+    function getcgrafik() {
+        let pilih_device = $('#masuk').val();
+        $.ajax({
+        type:'get',
+        url:'http://localhost:8000/listrik/ambilrtcurrent',
+        success:function(data) {
+            datac.push(data.data);
+            getspecc(pilih_device);
+        }
+        });
+    }
+    var arrayColor = ['#ff6384',
+            '#36a2eb',
+            '#cc65fe',
+            '#ffce56','#000000'
+        ];
+    function getspecc(device) {
+        console.log("datacgrafik",datac)
+        let labelsChart = [];
+        let datasets = [];
+        const result = datac[0].filter((item) => item.device === device);
+        const labels = result.map((item) => item.detail);
+        labels.forEach(element => {
+            element.forEach((item) => {
+                datasets.push(item);
+            });
+        });
+        labelsChart.push(Object.values(datasets[0].Date_Time));
+        c.labels = labelsChart[0];
+        datasets.forEach((item) => {
+            // console.log(item);
+            if(Object.keys(item) != 'Date_Time'){
+                c.datasets.push({
+                borderColor: arrayColor[Math.floor(Math.random()*arrayColor.length)],
+                label: Object.keys(item),
+                data: Object.values(item)[0],
+            });
+            }
+        });
+        cchart.update();
+        console.log("chart current", c);
+    }
+// grafik vln
+let datavln = [];
+    let vln = {
+    labels: [],
+    datasets: []
+    };
+    var chLine = document.getElementById("gvln1");
+        let vlnchart = new Chart(chLine, {
+        type: 'line',
+        data: vln,
+        options: {
+        scales: {
+            yAxes: [{
+            ticks: {
+                beginAtZero: false
+            }
+            }]
+        },
+        legend: {
+            display: false
+        }
+        }
+        });
+        
+    $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+
+
+    $(document).ready(function () {
+   
+        let pilih_device = $('#masuk').val();
+        getvlngrafik();
+    }(jQuery));
+
+    function getvlngrafik() {
+        let pilih_device = $('#masuk').val();
+        $.ajax({
+        type:'get',
+        url:'http://localhost:8000/listrik/ambilrtvln',
+        success:function(data) {
+            datavln.push(data.data);
+            getspecvln(pilih_device);
+        }
+        });
+    }
+
+    function getspecvln(device) {
+        console.log("datavlngrafik",datavln)
+        let labelsChart = [];
+        let datasets = [];
+        const result = datavln[0].filter((item) => item.device === device);
+        const labels = result.map((item) => item.detail);
+        labels.forEach(element => {
+            element.forEach((item) => {
+                datasets.push(item);
+            });
+        });
+        labelsChart.push(Object.values(datasets[0].Date_Time));
+        vln.labels = labelsChart[0];
+        datasets.forEach((item) => {
+            // console.log(item);
+            if(Object.keys(item) != 'Date_Time'){
+                vln.datasets.push({
+                label: Object.keys(item),
+                data: Object.values(item)[0],
+            });
+            }
+        });
+        vlnchart.update();
+
+        console.log(vln);
+    }
+// grafik power
+let datapower = [];
+    let power = {
+    labels: [],
+    datasets: []
+    };
+    var chLine = document.getElementById("gp1");
+        let powerchart = new Chart(chLine, {
+        type: 'line',
+        data: power,
+        options: {
+        scales: {
+            yAxes: [{
+            ticks: {
+                beginAtZero: false
+            }
+            }]
+        },
+        legend: {
+            display: false
+        }
+        }
+        });
+        
+    $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+
+
+    $(document).ready(function () {
+   
+        let pilih_device = $('#masuk').val();
+        getpowergrafik();
+    }(jQuery));
+
+    function getpowergrafik() {
+        let pilih_device = $('#masuk').val();
+        $.ajax({
+        type:'get',
+        url:'http://localhost:8000/listrik/ambilrtp',
+        success:function(data) {
+            datapower.push(data.data);
+            getspecpower(pilih_device);
+        }
+        });
+    }
+
+    function getspecpower(device) {
+        console.log("datapowergrafik",datavln)
+        let labelsChart = [];
+        let datasets = [];
+        const result = datapower[0].filter((item) => item.device === device);
+        const labels = result.map((item) => item.detail);
+        labels.forEach(element => {
+            element.forEach((item) => {
+                datasets.push(item);
+            });
+        });
+        labelsChart.push(Object.values(datasets[0].Date_Time));
+        power.labels = labelsChart[0];
+        datasets.forEach((item) => {
+            // console.log(item);
+            if(Object.keys(item) != 'Date_Time'){
+                power.datasets.push({
+                label: Object.keys(item),
+                data: Object.values(item)[0],
+            });
+            }
+        });
+        powerchart.update();
+
+        console.log(power);
+    }
+// grafik power faktor
+let datapowerfactor = [];
+    let powerfactor = {
+    labels: [],
+    datasets: []
+    };
+    var chLine = document.getElementById("gpf1");
+        let powerfactorchart = new Chart(chLine, {
+        type: 'line',
+        data: powerfactor,
+        options: {
+        scales: {
+            yAxes: [{
+            ticks: {
+                beginAtZero: false
+            }
+            }]
+        },
+        legend: {
+            display: false
+        }
+        }
+        });
+        
+    $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+
+
+    $(document).ready(function () {
+   
+        let pilih_device = $('#masuk').val();
+        getpowerfactorgrafik();
+    }(jQuery));
+
+    function getpowerfactorgrafik() {
+        let pilih_device = $('#masuk').val();
+        $.ajax({
+        type:'get',
+        url:'http://localhost:8000/listrik/ambilrtpf',
+        success:function(data) {
+            datapowerfactor.push(data.data);
+            getspecpowerfactor(pilih_device);
+        }
+        });
+    }
+
+    function getspecpowerfactor(device) {
+        console.log("datapowerfactorgrafik",datavln)
+        let labelsChart = [];
+        let datasets = [];
+        const result = datapowerfactor[0].filter((item) => item.device === device);
+        const labels = result.map((item) => item.detail);
+        labels.forEach(element => {
+            element.forEach((item) => {
+                datasets.push(item);
+            });
+        });
+        labelsChart.push(Object.values(datasets[0].Date_Time));
+        powerfactor.labels = labelsChart[0];
+        datasets.forEach((item) => {
+            // console.log(item);
+            if(Object.keys(item) != 'Date_Time'){
+                powerfactor.datasets.push({
+                label: Object.keys(item),
+                data: Object.values(item)[0],
+            });
+            }
+        });
+        powerfactorchart.update();
+
+        console.log(powerfactor);
+    }
+// grafik dis power faktor
+let datadpowerfactor = [];
+    let dpowerfactor = {
+    labels: [],
+    datasets: []
+    };
+    var chLine = document.getElementById("gdpf1");
+        let dpowerfactorchart = new Chart(chLine, {
+        type: 'line',
+        data: dpowerfactor,
+        options: {
+        scales: {
+            yAxes: [{
+            ticks: {
+                beginAtZero: false
+            }
+            }]
+        },
+        legend: {
+            display: false
+        }
+        }
+        });
+        
+    $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
+
+
+    $(document).ready(function () {
+   
+        let pilih_device = $('#masuk').val();
+        getdpowerfactorgrafik();
+    }(jQuery));
+
+    function getdpowerfactorgrafik() {
+        let pilih_device = $('#masuk').val();
+        $.ajax({
+        type:'get',
+        url:'http://localhost:8000/listrik/ambilrtdpf',
+        success:function(data) {
+            datadpowerfactor.push(data.data);
+            getspecdpowerfactor(pilih_device);
+        }
+        });
+    }
+
+    function getspecdpowerfactor(device) {
+        console.log("datadpowerfactorgrafik",datavln)
+        let labelsChart = [];
+        let datasets = [];
+        const result = datadpowerfactor[0].filter((item) => item.device === device);
+        const labels = result.map((item) => item.detail);
+        labels.forEach(element => {
+            element.forEach((item) => {
+                datasets.push(item);
+            });
+        });
+        labelsChart.push(Object.values(datasets[0].Date_Time));
+        dpowerfactor.labels = labelsChart[0];
+        datasets.forEach((item) => {
+            // console.log(item);
+            if(Object.keys(item) != 'Date_Time'){
+                dpowerfactor.datasets.push({
+                label: Object.keys(item),
+                data: Object.values(item)[0],
+            });
+            }
+        });
+        dpowerfactorchart.update();
+
+        console.log(dpowerfactor);
+    }
+// grafik frequency
+
 
     var gc1 = $('#gc1');
       $('#c1').show();
