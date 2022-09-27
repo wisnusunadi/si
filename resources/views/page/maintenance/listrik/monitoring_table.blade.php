@@ -184,7 +184,7 @@
                     <table class="table" id="non_real">
                         <thead class="thead-light">
                           <tr>
-                            <th rowspan="2" width="20%" style="vertical-align : middle;text-align:center;"> Date Time</th>
+                            <th rowspan="2" width="20%" style="vertical-align : middle;text-align:center;">Date Time</th>
                             <th colspan="8" style="text-align: center">Avarage/Total</th>
                             <th rowspan="2" width="14%"style="vertical-align : middle;text-align:center;">Frequency</th>
                           </tr>
@@ -230,21 +230,59 @@
 
 @section('adminlte_js')
 <script>
-     var non_real = $('#non_real').DataTable({
-       destroy: true,
-           processing: true
-           ajax: {
-               'url': 'http://192.168.13.162:8000/listrik/data/15m',
-               "dataType": "json"
-           },
-           language: {
-               processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-           },
-           columns: [{
-                   data: 'device_id',
-               }
-           ]
-     });
+    //  var non_real = $('#non_real').DataTable({
+    //    destroy: true,
+    //        processing: true
+    //        ajax: {
+    //            'url': 'http://192.168.13.162:8000/listrik/data/15m',
+    //            "dataType": "json"
+    //        },
+    //        language: {
+    //            processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+    //        },
+    //        columns: [{
+    //                data: 'device_id',
+    //            }
+    //        ]
+    //  });
+
+    //  let data15m = [];
+    // $.ajax({
+    //     type:'get',
+    //     url:'http://localhost:8000/listrik/data/15m',
+    // //    data:'_token = <?php echo csrf_token() ?>',
+    //     success:function(data) {
+    //     //   $("#msg").html(data.msg);
+    //     data15m.push(data.data)
+    //     ambil15m(data.data)
+    //     console.log(data.data);
+    //     }
+    // });
+
+    // function ambil15m(data){
+    //     let table = $('#15m').DataTable({
+    //         data,
+    //         columns: [
+    //             {
+    //                 data: null,
+    //                 render: function (data, type, full, meta) {
+    //                     return  meta.row + 1;
+    //                 }
+    //             },
+    //             {data: 'date_time'},
+    //             {data: 'Frequency'},
+    //             {data: 'Current_Avg'},
+    //             {data: 'Voltage_L_L_Avg'},
+    //             {data: 'Voltage_L_N_Avg'},
+    //             {data: 'Active_Power_Total'},
+    //             {data: 'Rective_Power_Total'},
+    //             {data: 'Apparent_Power_Total'},
+    //             {data: 'Power_Factor_Total'},
+    //             {data: 'Displacement_Power_Factor_Total'},
+
+    //     ]}
+
+    //        )}
 
 
       $('#15m').show();

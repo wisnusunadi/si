@@ -32,6 +32,13 @@
         <div class="tab-pane fade show active bg-white text-dark ml-2" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"><h6>Grafik Listrik</h6>
             <div class="d-flex bd-highlight">
                 <div class="flex-grow-1 bd-highlight">
+
+                    <select class="js-example-basic-single" name="state">
+                        <option value="AL">METER01</option>
+
+                        <option value="WY">METER02</option>
+                      </select>
+
                     <div class="dropdown">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Pilih Grafik
@@ -74,7 +81,7 @@
     </div>
     <div class="tab-content" id="pills-tab-1Content">
         <div class="tab-pane fade show active" id="pills-home-1" role="tabpanel" aria-labelledby="pills-home-1">
-          
+
 
             <div class="row">
                 <div class="col">
@@ -195,6 +202,10 @@
         }
         });
     }
+
+    $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
 
     $(document).ready(function () {
         var value = 'c1';
