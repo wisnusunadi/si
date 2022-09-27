@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Models\inventory\Kalibrasi;
 use App\Models\inventory\AlatSN;
 
-use App\Models\inventory\AlatSN;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
