@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\AlatujiController;
-use App\Http\Controllers\VerifikasiController;
-use App\Http\Controllers\KalibrasiPerbaikanController;
+use App\Http\Controllers\inventory\AlatujiController;
+use App\Http\Controllers\inventory\KalibrasiPerbaikanController;
+use App\Http\Controllers\inventory\VerifikasiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;

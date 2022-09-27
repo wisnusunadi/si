@@ -10,7 +10,7 @@ class Alatuji extends Model
     use HasFactory;
 
     protected $table = 'alatuji';
-    protected $connection = 'inventory';
+    protected $connection = 'erp_kalibrasi';
     protected $fillable = ['klasifikasi_id', 'kd_alatuji', 'nm_alatuji', 'gbr_alatuji', 'desk_alatuji', 'sop_alatuji', 'manual_alatuji', 'stok_alatuji', 'satuan_alatuji', 'created_by'];
 
     function klasifikasi()

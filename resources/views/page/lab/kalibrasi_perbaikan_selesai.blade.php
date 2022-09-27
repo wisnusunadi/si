@@ -1,13 +1,18 @@
-@extends('layouts.app')
+@extends('adminlte.page')
+
+@section('title', 'ERP')
+
+@section('content_header')
+<h1 class="m-0 text-dark">{{ $jenis }} Alat Uji</h1>
+@stop
 
 @section('content')
 
 <div class="container-fluid">
-    <h4>{{ $jenis }} Alat Uji</h4>
 
     <div class="container p-3 bg-white">
 
-        <form action="/store_external" method="post" enctype="multipart/form-data">
+        <form action="/alatuji/store_external" method="post" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="id_mt" value="{{ $id }}">
         <input type="hidden" name="jenis" value="{{ $jenis }}">
@@ -220,7 +225,8 @@
     </div>
 
 </div>
-
+@stop
+@section('adminlte_js')
 <script>
     $(document).ready(function(){
         $('#selectPerusahaan').select2();

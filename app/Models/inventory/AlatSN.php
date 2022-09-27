@@ -10,7 +10,7 @@ class AlatSN extends Model
     use HasFactory;
 
     protected $table = 'alatuji_sn';
-    protected $connection = 'inventory';
+    protected $connection = 'erp_kalibrasi';
     protected $guarded = ['id_serial_number', 'created_at', 'updated_at'];
     protected $primaryKey = 'id_serial_number';
 }

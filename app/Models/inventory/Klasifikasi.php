@@ -10,6 +10,6 @@ class Klasifikasi extends Model
     use HasFactory;
 
     protected $table = 'klasifikasi';
+    protected $connection = 'erp_kalibrasi';
     protected $guarded = 'id_klasifikasi';
-    protected $connection = 'inventory';
 }

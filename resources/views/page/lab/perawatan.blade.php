@@ -1,13 +1,18 @@
-@extends('layouts.app')
+@extends('adminlte.page')
+
+@section('title', 'ERP')
+
+@section('content_header')
+<h1 class="m-0 text-dark">Perawatan Alat Uji</h1>
+@stop
 
 @section('content')
 
 <div class="container-fluid">
-    <h4>Perawatan Alat Uji</h4>
 
     <div class="container p-3 bg-white">
 
-        <form action="/store_perawatan" method="post">
+        <form action="/alatuji/store_perawatan" method="post">
         @csrf
 
         <!-- card info -->
@@ -57,8 +62,7 @@
                 <div class="row mb-2">
                     <div class="col"><span class="float-right">Operator</span></div>
                     <div class="col">
-                        <select name="operator" class="form-control form-control-sm">
-                            <option value="52">admin</option>
+                        <select name="operator" id="selectOperator" class="form-control form-control-sm">
                             @foreach($user as $u)
                             <option value="{{ $u->id }}">{{ $u->nama }}</option>
                             @endforeach
@@ -219,8 +223,10 @@
     </div>
 
 </div>
-
+@stop
+@section('adminlte_js')
 <script>
+$('#selectOperator').select2();
 // tampilkan modal konfirmasi
 $("#btnSubmit").on('click', function(e){
     e.preventDefault();

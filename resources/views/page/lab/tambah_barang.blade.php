@@ -1,24 +1,23 @@
-@extends('layouts.app')
+@extends('adminlte.page')
+
+@section('title', 'ERP')
+
+@section('content_header')
+<h1 class="m-0 text-dark">Tambah Brang Uji</h1>
+@stop
 
 @section('content')
 <style>
 .bc-success{
     background-color:rgba(40, 167, 69, 0.2);
 }
-.border-top-w3{
-    border-top-width:3px!important;
-}
-.border-bottom-w3{
-    border-bottom-width:3px!important;
-}
 </style>
 
 <div class="container-fluid">
-    <h4>Tambah Barang Uji</h4>
 
     <div class="container p-3 bg-white">
 
-        <form action="/store_tambahbarang" method="post" enctype="multipart/form-data">
+        <form action="store_tambahbarang" method="post" enctype="multipart/form-data">
         @csrf
 
         <!-- card informasi umum alat -->
@@ -258,7 +257,8 @@
     </div>
 
 </div>
-
+@stop
+@section('adminlte_js')
 <script>
     $(document).ready(function() {
         $('#selectKlasifikasi').select2();

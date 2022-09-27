@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\inventory;
 
-use App\Models\inventory\AlatSN;
+use App\Http\Controllers\Controller;
+
 use App\Models\inventory\Alatuji;
-use App\Models\inventory\Klasifikasi;
 use App\Models\inventory\Peminjaman;
+use App\Models\inventory\AlatSN;
+use App\Models\inventory\Klasifikasi;
+
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Response;
@@ -30,6 +33,69 @@ class AlatujiController extends Controller
         //hilangkan extensi pada nama full, tambah tanggal, tambah extensi file
         return
         pathinfo($a, PATHINFO_FILENAME).'_'.$date.'.'.$aExt;
+    }
+
+    public function dashboard()
+    {
+        if(auth()->user()->role == 1){
+            function countTglLebih($data, $keys){
+                $a = count($keys);
+                $count = 0;
+                for($i=1;$i<=$a;$i++){
+                    $b = Carbon::createFromFormat('Y-m-d' ,$data[$keys[$i-1]]->jadwal_perawatan);
+                    if($b->lt(Carbon::now())){
+                        $count++;
+                    }
+                }
+                return $count;
+            }
+
+            $total = AlatSN::count();
+            $ter = AlatSN::where('status_pinjam_id', 16)->count();
+            $req = AlatSN::where('status_pinjam_id', 17)->count();
+            $not = AlatSN::where('kondisi_id', 10)->count();
+            $use = AlatSN::where('status_pinjam_id', 15)->count();
+            $ext = AlatSN::where('status_pinjam_id', 14)->count();
+            $mel = DB::table('erp_kalibrasi.peminjaman')->where('tgl_batas', '>', Carbon::now()->format('Y-m-d', 'Asia/Jakarta'))->where('status_id', '15')->count();
+            $ve1 = DB::table('erp_kalibrasi.verifikasi')->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->count();
+            $pe1 = DB::table('erp_kalibrasi.perawatan')->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->count();
+            $ve2 = DB::table('erp_kalibrasi.verifikasi')->whereMonth('jadwal_perawatan', '<', Carbon::now())->whereYear('jadwal_perawatan', '<', Carbon::now())->count();
+            $pe2 = DB::table('erp_kalibrasi.perawatan')->whereMonth('jadwal_perawatan', '<', Carbon::now())->whereYear('jadwal_perawatan', '<', Carbon::now())->count();
+
+            $uniqueIdperawatan = DB::table('erp_kalibrasi.perawatan')->orderBy('tgl_perawatan', 'DESC')->get()->unique('serial_number_id');
+            $uniqueIdverifikasi = DB::table('erp_kalibrasi.verifikasi')->orderBy('tgl_perawatan', 'DESC')->get()->unique('serial_number_id');
+            $uniqueIdPKeys = array_keys($uniqueIdperawatan->toArray());
+            $uniqueIdVKeys = array_keys($uniqueIdverifikasi->toArray());
+            $verifikasiLebih = countTglLebih($uniqueIdverifikasi, $uniqueIdVKeys);
+            $perawatanLebih = countTglLebih($uniqueIdperawatan, $uniqueIdPKeys);
+
+            $totalPeminjaman = array();
+            for($i=1;$i<=12;$i++){
+                $a = Peminjaman::whereMonth('tgl_kembali', date($i))->whereYear('tgl_kembali', date('Y'))->count();
+                array_push($totalPeminjaman, $a);
+            }
+
+            $data = [
+                'total' => $total,
+                'tersedia' => $ter,
+                'permintaan' => $req,
+                'not' => $not,
+                'dipinjam' => $use,
+                'external' => $ext,
+                'batasPinjam' => $mel,
+                'verifikasiNow' => $ve1,
+                'perawatanNow' => $pe1,
+                'verifikasiOld' => $ve2,
+                'perawatanOld' => $pe2,
+                'verifikasiLebih' => $verifikasiLebih,
+                'perawatanLebih' => $perawatanLebih,
+                'total_peminjaman' => $totalPeminjaman
+            ];
+            return view('page.lab.dashboard', [
+                'data' => json_encode($data),
+            ]);
+        }
+        return view('page.lab.dashboard');
     }
 
     function get_data_alatuji()
@@ -93,7 +159,7 @@ class AlatujiController extends Controller
                     })
                     ->editColumn('aksi', function($d){
                         return '
-                        <a class="btn btn-sm btn-outline-primary py-0 w-100" href="/detail/'.$d->id_serial_number.'">
+                        <a class="btn btn-sm btn-outline-primary py-0 w-100" href="/alatuji/detail/'.$d->id_serial_number.'">
                         Detail
                         </a>';
                     })
@@ -118,7 +184,7 @@ class AlatujiController extends Controller
         $klasifikasi = DB::table('erp_kalibrasi.klasifikasi')->get();
         $satuan = DB::table('erp_spa.m_satuan')->whereNotIn('id', [1,2,3])->get();
 
-        return view('alatuji.tambah_alat', [
+        return view('page.lab.tambah_alat', [
             'klasifikasi' => $klasifikasi,
             'satuan' => $satuan,
         ]);
@@ -132,7 +198,7 @@ class AlatujiController extends Controller
         $lokasi = DB::table('erp_spa.m_layout')->select('id', 'ruang')->whereNotIn('id', [1,2,3,4,5,6,7])->get();
         $lokasi = $lokasi->unique('ruang');
 
-        return view('alatuji.tambah_barang', [
+        return view('page.lab.tambah_barang', [
             'klasifikasi' => $klasifikasi,
             'nama' => $nama,
             'merk' => $merk,
@@ -158,7 +224,7 @@ class AlatujiController extends Controller
         $lokasi = DB::table('erp_spa.m_layout')->select('id', 'ruang')->whereNotIn('id', [1,2,3,4,5,6,7])->get();
         $lokasi = $lokasi->unique('ruang');
 
-        return view('alatuji.edit_alat', [
+        return view('page.lab.edit_alat', [
             'data' => $data,
             'klasifikasi' => $klasifikasi,
             'nama' => $nama,
@@ -555,6 +621,7 @@ class AlatujiController extends Controller
             }
             $data->sop_alatuji = cekDokum($data, 'sop_alatuji', 'sop');
             $data->manual_alatuji = cekDokum($data, 'manual_alatuji', 'manual');
+            $data->sert_kalibrasi = cekDokum($data, 'sert_kalibrasi', 'sert_kalibrasi');
 
             $pengguna_terakhir =
             DB::table(DB::raw('erp_kalibrasi.peminjaman p'))
@@ -582,11 +649,7 @@ class AlatujiController extends Controller
                 $data->total_penggunaan = $data->total_penggunaan.' Kali';
             }
 
-            if($data->sert_kalibrasi == null){
-                $data->sert_kalibrasi = 'Dokumen Belum Di Cantumkan';
-            }
-
-            return view('alatuji.detail', [
+            return view('page.lab.detail', [
                 'data' => $data,
                 'id' => $id,
                 'x' => $x,
@@ -649,6 +712,7 @@ class AlatujiController extends Controller
         ->where('p.id_peminjaman', $request->peminjaman_konfirm_id)
         ->first();
 
+        $x = 15;
         if($request->kondisi_peminjaman == 10 or $request->status_peminjaman == 18)
         {
             $request->validate([
@@ -656,7 +720,18 @@ class AlatujiController extends Controller
             ],[
                 'required' => 'kolom :attribute harus di isi jika ditolak / not ok'
             ]);
+
+            // jika di tolak alat OK maka status alat akan menjadi tidak di pinjam
+            // jika di tolak alat NOT OK maka status alat akan menjadi NOT OK
+            if($request->status_peminjaman == 18){
+                $x = 16;
+            }
+            if($request->kondisi_peminjaman == 10){
+                $x = 10;
+            }
         }
+        AlatSN::find($request->alatuji_konfirm_id)
+        ->update(['status_pinjam_id' => $x]);
 
         Peminjaman::where('id_peminjaman', $request->peminjaman_konfirm_id)
         ->update([
@@ -665,9 +740,6 @@ class AlatujiController extends Controller
             'ket_tambahan' => $request->keterangan_konfirmasi,
             'diberikan_oleh' => auth()->user()->id,
         ]);
-
-        AlatSN::find($request->alatuji_konfirm_id)
-        ->update(['status_pinjam_id' => '15']);
 
         // user log
         $status = $request->status_peminjaman == 18 ? 'Ditolak' : 'Dipinjam';
@@ -712,6 +784,7 @@ class AlatujiController extends Controller
         ->where('p.id_peminjaman', $request->peminjaman_kembali_id)
         ->first();
 
+        $x = 16;
         if($request->kondisi_kembali == 10)
         {
             $request->validate([
@@ -719,6 +792,7 @@ class AlatujiController extends Controller
             ],[
                 'required' => 'kolom :attribute harus di isi jika not ok'
             ]);
+            $x = 10;
         }
 
         //update peminjaman
@@ -747,7 +821,7 @@ class AlatujiController extends Controller
         ->update([
             'total_penggunaan' => $total_penggunaan,
             'total_waktu' => $total_waktu,
-            'status_pinjam_id' => '16'
+            'status_pinjam_id' => $x,
         ]);
 
         // user log
@@ -876,10 +950,10 @@ class AlatujiController extends Controller
         }
         if($request->checkmerk == 'tidak'){
             $request->validate([
-                'merkbaru' => 'required|unique:App\Models\Merk,nama_merk',
+                'merkbaru' => 'required|unique:erp_kalibrasi.merk,nama_merk',
             ],[
                 'required' => 'Kolom Merk Baru harus di isi',
-                'unique' => 'Merk '.$request->merkbaru.' telah terdaftar'
+                'unique' => 'Merek '.$request->merkbaru.' telah terdaftar'
             ]);
 
             // daftarkan merk
@@ -893,10 +967,11 @@ class AlatujiController extends Controller
         $sertif = null;
         if($request->has('sert_kalibrasi'))
         {
+            $date = Carbon::now()->format('Y-m-d', 'Asia/Jakarta');
             $request->validate([
                 'sert_kalibrasi' => 'required|image|mimes:jpg,png,jpeg|max:2048',
             ]);
-            $gambar = $this->gantiNama($date, $request,'sert_kalibrasi');
+            $sertif = $this->gantiNama($date, $request,'sert_kalibrasi');
         }
 
         // cek nomor urut serial number alat uji
@@ -916,6 +991,11 @@ class AlatujiController extends Controller
             'status_pinjam_id' => '16',
             'created_by' => auth()->user()->id,
         ]);
+
+        if($request->has('sert_kalibrasi'))
+        {
+            $request->file('sert_kalibrasi')->storeAs('public/sert_kalibrasi/', $sertif);
+        }
 
         // buat barcode
         $alat_new = AlatSN::latest('created_at')->first();
@@ -940,7 +1020,7 @@ class AlatujiController extends Controller
 
         if($request->has('sert_kalibrasi'))
         {
-            $request->file('sert_kalibrasi')->storeAs('public/sert_kalibrasi/', $gambar);
+            $request->file('sert_kalibrasi')->storeAs('public/sert_kalibrasi/', $sertif);
         }
 
         // user log
@@ -985,7 +1065,7 @@ class AlatujiController extends Controller
             })
             ->addColumn('aksi', function($d){
                 return
-                '<a class="btn btn-sm btn-outline-primary py-0" href="/detail/'.$d->id_serial_number.'/1">
+                '<a class="btn btn-sm btn-outline-primary py-0" href="/alatuji/detail/'.$d->id_serial_number.'/1">
                 Detail
                 </a>';
             })
@@ -1016,7 +1096,7 @@ class AlatujiController extends Controller
             })
             ->addColumn('aksi', function($d){
                 return
-                '<a class="btn btn-sm btn-outline-primary py-0" href="/detail/'.$d->id_serial_number.'/1">
+                '<a class="btn btn-sm btn-outline-primary py-0" href="/alatuji/detail/'.$d->id_serial_number.'/1">
                 Detail
                 </a>';
             })

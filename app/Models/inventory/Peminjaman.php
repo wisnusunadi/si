@@ -7,10 +7,8 @@ use Illuminate\Database\Eloquent\Model;
 
 class Peminjaman extends Model
 {
-    use HasFactory;
-
     protected $table = 'peminjaman';
-    protected $connection = 'inventory';
+    protected $connection = 'erp_kalibrasi';
     protected $guarded = ['id_peminjaman', 'created_at', 'updated_at'];
     protected $primaryKey = 'id_peminjaman';
 }

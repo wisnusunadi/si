@@ -1,13 +1,18 @@
-@extends('layouts.app')
+@extends('adminlte.page')
+
+@section('title', 'ERP')
+
+@section('content_header')
+<h1 class="m-0 text-dark">Ubah Data Alat Uji</h1>
+@stop
 
 @section('content')
 
 <div class="container-flu">
-    <h4>Ubah Data Alat Uji</h4>
 
     <div class="container p-3 bg-white">
 
-        <form action="/store_editalat" method="post" enctype="multipart/form-data">
+        <form action="store_editalat" method="post" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="id_alatuji" value="{{$data->alatuji_id}}">
         <input type="hidden" name="id_serial_number" value="{{$data->id_serial_number}}">
@@ -129,6 +134,13 @@
                     <h3 class="card-title">Dokumen Penjunjung</h3>
                 </div>
 
+                @error('sop')
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col alert bc-danger text-danger border border-danger p-1">{{ $message }}</div>
+                    </div>
+                @enderror
+
                 <div class="row mb-2">
                     <div class="col"><span class="float-right">SOP Alat Uji</span></div>
                     <div class="col">
@@ -137,6 +149,13 @@
                         </div>
                     </div>
                 </div>
+
+                @error('manual')
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col alert bc-danger text-danger border border-danger p-1">{{ $message }}</div>
+                    </div>
+                @enderror
 
                 <div class="row mb-2">
                     <div class="col"><span class="float-right">Manual Book</span></div>
@@ -154,6 +173,13 @@
                     </div>
                 </div>
 
+                @error('gambar')
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col alert bc-danger text-danger border border-danger p-1">{{ $message }}</div>
+                    </div>
+                @enderror
+
                 <div class="row mb-2">
                     <div class="col"><span class="float-right">Gambar</span></div>
                     <div class="col">
@@ -169,13 +195,14 @@
                         gambar privew
                     </div>
                 </div>
+                
             </div>
         </div>
 
         <div class="card-body">
             <div class="row float-right">
                 <div class="col-auto">
-                    <a href="/detail/{{$data->id_serial_number}}" class="btn btn-danger float-right">Batal</a>
+                    <a href="/alatuji/detail/{{$data->id_serial_number}}" class="btn btn-danger float-right">Batal</a>
                 </div>
                 <div class="col-auto">
                     <input type="submit" value="Submit" class="btn btn-primary float-right">
@@ -188,6 +215,8 @@
     </div>
 
 </div>
+@stop
+@section('adminlte_js')
 <script>
     $(document).ready(function() {
         $('#selectKlasifikasi').select2();

@@ -1,6 +1,11 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\inventory;
+
+use App\Http\Controllers\Controller;
+
+use App\Models\inventory\Kalibrasi;
+use App\Models\inventory\AlatSN;
 
 use App\Models\inventory\AlatSN;
 use Illuminate\Support\Facades\DB;
@@ -59,10 +64,13 @@ class KalibrasiPerbaikanController extends Controller
                 $data->tgl_kirim = $tgl->tgl_kirim;
             }
 
-            return view('alatuji.kalibrasiPerbaikan', [
+            $user = DB::table(DB::raw('erp_spa.users'))->select('*')->get();
+
+            return view('page.lab.kalibrasi_perbaikan', [
                 'data' => $data,
                 'id' => $id,
                 'jenis' => $jenis,
+                'user' => $user,
             ]);
 
         } catch (\Illuminate\Database\QueryException $e) {
@@ -182,6 +190,22 @@ class KalibrasiPerbaikanController extends Controller
                     'created_by' => auth()->user()->id,
                 ]);
 
+                // update tabel alat uji
+                if($request->cekFungsi == '10' OR $request->cekFisik == '10'){
+                    AlatSN::find($request->serial_number_id)
+                    ->update([
+                        'status_pinjam_id' => '10',
+                        'kondisi_id' => '10',
+                    ]);
+                }
+                if($request->cekFungsi == '9' AND $request->cekFisik == '9'){
+                    AlatSN::find($request->serial_number_id)
+                    ->update([
+                        'kondisi_id' => '9',
+                        'status_pinjam_id' => '16'
+                    ]);
+                }
+
                 // user log
                 $obj = [
                     'alat_uji' => $data->nm_alatuji,
@@ -272,7 +296,7 @@ class KalibrasiPerbaikanController extends Controller
                 <span class="text-success">Selesai</span>
                 </span>'
                 :
-                '<a href="/konfirmasi/'.$jenis.'/'.($jenis == "kalibrasi" ? $d->id_kalibrasi : $d->id_perbaikan).'" class="badge w-100 bg-warning">
+                '<a href="/alatuji/konfirmasi/'.$jenis.'/'.($jenis == "kalibrasi" ? $d->id_kalibrasi : $d->id_perbaikan).'" class="badge w-100 bg-warning">
                 <span class="text-dark">Proses</span>
                 </a>';
             })
@@ -336,7 +360,7 @@ class KalibrasiPerbaikanController extends Controller
 
             $perusahaan = DB::table('erp_kalibrasi.merk')->get();
 
-            return view('alatuji.kalibrasiperbaikanselesai', [
+            return view('page.lab.kalibrasi_perbaikan_selesai', [
                 'data' => $data,
                 'id' => $id,
                 'jenis' => $jenis,
@@ -376,18 +400,18 @@ class KalibrasiPerbaikanController extends Controller
         //$id = kalibrasi::select('serial_number_id')->where('id_'.$request->jenis, $request->id_mt)->first();
         $id = DB::table('erp_kalibrasi.'.$request->jenis)->select('serial_number_id')->where('id_'.$request->jenis, $request->id_mt)->first();
 
-        $gambar = 0;
-        if($request->has('sertif_kalibrasi')){
-            $request->validate([
-                'sertif_kalibrasi' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
-            ]);
-            $gambar = 1;
-            $sertif = $request->file('sertif_kalibrasi')->getClientOriginalName();
-            //$request->file('sertif_kalibrasi')->storeAs('public/img', $sertif);
-        }
-
         if($request->perusahaan == 0){
             $request->perusahaan = null;
+        }
+
+        $sertif = null;
+        if($request->has('sertif_kalibrasi'))
+        {
+            $date = Carbon::now()->format('Y-m-d', 'Asia/Jakarta');
+            $request->validate([
+                'sertif_kalibrasi' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+            ]);
+            $sertif = $this->gantiNama($date, $request,'sertif_kalibrasi');
         }
 
         DB::table('erp_kalibrasi.'.$request->jenis)
@@ -409,8 +433,30 @@ class KalibrasiPerbaikanController extends Controller
         ->where('id_'.$request->jenis, $request->id_mt)
         ->select('serial_number_id')->first();
 
-        AlatSN::find($alatuji_id->serial_number_id)
-        ->update(['status_pinjam_id' => '16']);
+        // update tabel alat uji
+        if($request->cekFungsi == '10' OR $request->cekFisik == '10'){
+            AlatSN::find($alatuji_id->serial_number_id)
+            ->update([
+                'status_pinjam_id' => '10',
+                'kondisi_id' => '10',
+            ]);
+        }
+        if($request->cekFungsi == '9' AND $request->cekFisik == '9'){
+            AlatSN::find($alatuji_id->serial_number_id)
+            ->update([
+                'kondisi_id' => '9',
+                'status_pinjam_id' => '16'
+            ]);
+        }
+
+        if($request->has('sertif_kalibrasi'))
+        {
+            AlatSN::find($alatuji_id->serial_number_id)
+            ->update([
+                'sert_kalibrasi' => $sertif,
+            ]);
+            $request->file('sertif_kalibrasi')->storeAs('public/sert_kalibrasi/', $sertif);
+        }
 
         // user log
         $obj = [
