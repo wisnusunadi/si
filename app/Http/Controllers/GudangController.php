@@ -95,7 +95,8 @@ class GudangController extends Controller
                     ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
                     ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
                     ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
-                    ->whereRaw('pesanan.log_id not in (7) AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status = "sepakat"')
+                    ->whereNotNull('pesanan.so')
+                    ->whereRaw('pesanan.log_id not in (7,10) AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status = "sepakat"')
                     ->limit(1);
                 },
                 'count_spa_po' => function ($query) {
@@ -106,6 +107,7 @@ class GudangController extends Controller
                     ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
                     ->join('spa', 'spa.pesanan_id', '=', 'pesanan.id')
                     ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+                    ->whereNotNull('pesanan.so')
                     ->whereRaw('pesanan.log_id not in (7, 10) AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id')
                     ->limit(1);
                 },'count_spb_po' => function ($query) {
@@ -116,6 +118,7 @@ class GudangController extends Controller
                     ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
                     ->join('spb', 'spb.pesanan_id', '=', 'pesanan.id')
                     ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+                    ->whereNotNull('pesanan.so')
                     ->whereRaw('pesanan.log_id not in (7, 10) AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id')
                     ->limit(1);
                 }
@@ -128,9 +131,17 @@ class GudangController extends Controller
                 ->editColumn('permintaan', function($d){
                     return intval($d->count_ekat_sepakat) + intval($d->count_spa_po) + intval($d->count_spb_po);
                 })
+                ->editColumn('sisa', function($d){
+                    return intval($d->count_ekat_sepakat) + intval($d->count_spa_po) + intval($d->count_spb_po) - intval($d->count_transfer);
+                })
                 ->editColumn('transfer', function($d){
                     return intval($d->count_transfer);
                 })
+                ->editColumn('aksi', function($d){
+                    $a = '<button type="button" data-toggle="modal" data-target="#detailmodal" data-attr="" data-id="' . $d->id . '" class="btn btn-outline-info btn-sm detailBrg"><i class="far fa-eye"></i> Detail</button>';
+                        return $a;
+                })
+                ->rawColumns(['aksi'])
                 ->make(true);
 
             return $dt;
@@ -139,10 +150,103 @@ class GudangController extends Controller
         }
     }
 
-    function get_detail_rekap_so_produk()
+    function get_detail_rekap_so_produk($id)
     {
         try {
-            //code...
+            $data = Pesanan::whereHas('DetailPesanan.DetailPesananProduk.GudangBarangJadi', function ($q) use ($id) {
+                $q->where('id', $id);
+            })->addSelect(['count_pesanan' => function($q) use($id){
+                    $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                    ->from('detail_pesanan')
+                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('gdg_barang_jadi', 'gdg_barang_jadi.produk_id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereRaw('gdg_barang_jadi.id = '.$id.' AND detail_pesanan_produk.gudang_barang_jadi_id = '. $id)
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                    ->limit(1);
+                }, 'count_transfer' => function($q) use($id){
+                    $q->selectRaw('count(t_gbj_noseri.id)')
+                    ->from('t_gbj_noseri')
+                    ->leftjoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->leftjoin('t_gbj', 't_gbj.id', 't_gbj_detail.t_gbj_id')
+                    // ->where('t_gbj_noseri.jenis', '"keluar"')
+                    ->where('t_gbj_detail.gdg_brg_jadi_id', $id)
+                    ->whereColumn('t_gbj.pesanan_id', 'pesanan.id')
+                    ->limit(1);
+                }, 'tgl_kontrak_custom' => function($q){
+                    $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
+                    ->from('ekatalog')
+                    ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
+                    ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
+                    ->limit(1);
+                }
+            ])
+            ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
+            ->whereNotIn('log_id', ['10', '20'])
+            ->whereNotNull('no_po')
+            ->havingRaw('count_pesanan > count_transfer')
+            ->get();
+
+            $dt = datatables()->of($data)
+                    ->addIndexColumn()
+                    ->addColumn('jumlah', function ($data) {
+                        $jumlah = $data->count_pesanan;
+                        return $jumlah;
+                    })
+                    ->addColumn('status', function($data){
+                        $hitung = $data->count_transfer;
+                        return $hitung;
+                    })
+                    ->addColumn('so', function ($data) {
+                        if (!empty($data->so)) {
+                            return $data->so;
+                        } else {
+                            return '-';
+                        }
+                    })
+                    ->addColumn('po', function ($data) {
+                        if (!empty($data->no_po)) {
+                            return $data->no_po;
+                        } else {
+                            return '-';
+                        }
+                    })
+                    ->addColumn('customer', function($data){
+                        if($data->Ekatalog){
+                            if(isset($data->Ekatalog->Customer)){
+                                return $data->Ekatalog->Customer->nama;
+                            }
+                        }else if($data->Spa){
+                            if(isset($data->Spa->Customer)){
+                                return $data->Spa->Customer->nama;
+                            }
+                        }else{
+                            if(isset($data->Spb->Customer)){
+                                return $data->Spb->Customer->nama;
+                            }
+                        }
+                    })
+                    ->addColumn('aksi', function ($data) {
+                        if (isset($data->Ekatalog)) {
+                            if ($data->status != 'draft') {
+                                return  '<a data-toggle="modal" data-target="ekatalog" class="penjualanmodal" data-value="ekatalog"  data-id="' . $data->id . '">
+                                  <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                            </a>';
+                            }
+                        } else if (isset($data->Spa)) {
+                            return  '<a data-toggle="modal" data-target="spa" class="penjualanmodal" data-value="spa"  data-id="' . $data->id . '">
+                                  <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                            </a>';
+                        } else {
+                            return  '<a data-toggle="modal" data-target="spb" class="penjualanmodal" data-value="spb"  data-id="' . $data->id . '">
+                                  <button type="button" class="btn btn-outline-primary btn-sm"><i class="fas fa-eye"></i> Detail</button>
+                            </a>';
+                        }
+                    })
+                    ->rawColumns(['aksi'])
+                    ->make(true);
+
+            return $dt;
         } catch (\Exception $e) {
             return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
         }

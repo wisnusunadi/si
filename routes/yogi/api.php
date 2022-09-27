@@ -32,6 +32,7 @@ Route::prefix('/v2')->group(function() {
         Route::post('detail_riwayat_perubahan_noseri', [GudangController::class, 'detailNoseriHistoryPerubahan'])->middleware('jwt.verify');
         Route::get('header_count_noseri_status/{a}', [GudangController::class, 'headerCountNoseri'])->middleware('jwt.verify');
         Route::get('get_rekap_so_produk', [GudangController::class, 'get_rekap_so_produk']);
+        Route::get('get_detail_rekap_so_produk/{id}', [GudangController::class, 'get_detail_rekap_so_produk']);
 
         Route::post('delete_paket_so', [GudangController::class, 'deleteCekSO']);
         Route::get('template_so/{id}', [GudangController::class, 'download_template_so']);
