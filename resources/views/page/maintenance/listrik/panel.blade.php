@@ -1,3 +1,8 @@
+
+<?php
+header("Access-Control-Allow-Origin: *");
+header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Accept");
+?>
 @extends('adminlte.page')
 
 @section('title', 'ERP')
@@ -46,29 +51,30 @@
                 <form method="post" name="formPanel" id="formPanel">
 
                 <div class="modal-body">
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text" id="inputGroup-sizing-sm">Nama Panel</span>
-                        </div>
-                        <input type="text" name="nm_panel" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-                    </div>
+                    <input type="hidden" name="device_id" id="device_id" value="">
                     <div class="input-group input-group-sm mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Kode Panel</span>
                         </div>
-                        <input type="text" name="kd_panel" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                        <input type="text" name="kd_panel" id="kd_panel" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" require>
+                    </div>
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                          <span class="input-group-text" id="inputGroup-sizing-sm">Nama Panel</span>
+                        </div>
+                        <input type="text" name="nm_panel" id="nm_panel" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                     </div>
                     <div class="input-group input-group-sm mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Posisi Panel</span>
                         </div>
-                        <input type="text" name="posisi" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                        <input type="text" name="posisi" id="posisi" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                     </div>
                     <div class="input-group input-group-sm mb-3">
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="inputGroup-sizing-sm">Lokasi Panel</span>
                         </div>
-                        <input type="text" name="lokasi" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                        <input type="text" name="lokasi" id="lokasi" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -159,22 +165,33 @@
         $('#formPanel').trigger('reset')
         $('#exampleModal').modal('show')
     })
-
+    var ids = '';
     $(document).on('click', '.btnEdit', function () {
+        ids = $(this).data('id')
+
+        $.ajax({
+            type:'get',
+            url:'http://localhost:8000/listrik/ambilpanel?id='+ids,
+            success:function(data) {
+                $('#device_id').val(data.data[0].device_id)
+                $('#kd_panel').val(data.data[0].device_id)
+                $('#kd_panel').prop('readonly', true);
+                $('#nm_panel').val(data.data[0].nm_device)
+                $('#lokasi').val(data.data[0].lokasi)
+                $('#posisi').val(data.data[0].posisi)
+                
+            }
+        });
         $('#exampleModalLabel').html('Ubah Panel')
         $('#exampleModal').modal('show')
-        // let id = $(this).data('id');
-        // dataPanel.filter((item) => {
-        //     if(item.device_id == id){
-        //         console.log(item);
-        //     }
-        // })
     })
 
     $(document).on('click', '.btnHapus', function () {
+        ids = $(this).data('id')
+        // console.log(ids);
         Swal.fire({
             title: 'Are you sure?',
-            text: "You won't be able to revert this!",
+            text: "Delete data " + ids + "!",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -182,11 +199,22 @@
             confirmButtonText: 'Yes, delete it!'
         }).then((result) => {
             if (result.isConfirmed) {
-                Swal.fire(
-                    'Deleted!',
-                    'Your file has been deleted.',
-                    'success'
-                )
+                $.ajax({
+                    type:'delete',
+                    url:'http://localhost:8000/listrik/delpanel',
+                    data: {
+                        kd_panel: ids
+                    },
+                    success:function(data) {
+                        Swal.fire(
+                            'Deleted!',
+                            data.msg,
+                            'success',
+                        ).then(() => {
+                            location.reload()
+                        })
+                    }
+                });
             }
         })
     })
@@ -195,37 +223,41 @@
         e.preventDefault()
         $('#btnSimpan').html('Sending..');
         var formData = new FormData(this);
-        $.ajax({
-            headers: {
-                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
-                },
-            url: "http://localhost:8000/listrik/panel",
-            type: "POST",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: function(data) {
-                console.log(data);
+        
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, save it!'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                    headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                    url: "http://localhost:8000/listrik/panel",
+                    type: "POST",
+                    data: formData,
+                    cache: false,
+                    contentType: false,
+                    processData: false,
+                    success: function(data) {
+                        // console.log(data);
+                        Swal.fire(
+                            'Saved!',
+                            data.msg,
+                            'success',
+                        ).then(() => {
+                            location.reload()
+                        })
+                    }
+                })
+                
             }
         })
-        // Swal.fire({
-        //     title: 'Are you sure?',
-        //     text: "You won't be able to revert this!",
-        //     icon: 'warning',
-        //     showCancelButton: true,
-        //     confirmButtonColor: '#3085d6',
-        //     cancelButtonColor: '#d33',
-        //     confirmButtonText: 'Yes, save it!'
-        // }).then((result) => {
-        //     if (result.isConfirmed) {
-        //         Swal.fire(
-        //             'Deleted!',
-        //             'Your file has been deleted.',
-        //             'success'
-        //         )
-        //     }
-        // })
     });
 
 </script>

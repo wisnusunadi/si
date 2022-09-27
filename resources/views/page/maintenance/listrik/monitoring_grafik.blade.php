@@ -33,7 +33,7 @@
             <div class="d-flex bd-highlight">
                 <div class="flex-grow-1 bd-highlight">
 
-                    <select class="js-example-basic-single" name="state">
+                    <select class="js-example-basic-single" id="masuk" name="state">
                         <option value="AL">METER01</option>
 
                         <option value="WY">METER02</option>
@@ -206,6 +206,30 @@
     $(document).ready(function() {
     $('.js-example-basic-single').select2();
 });
+
+let dataPanel = [];
+    $.ajax({
+        type:'get',
+        url:'http://localhost:8000/listrik/ambilpanel',
+        success:function(data) {
+            dataPanel.push(data.data)
+            ambilidPanel(data.data)
+            console.log(data.data);
+        }
+    });
+
+    function ambilidPanel(data){
+        let table = $('#masuk').DataTable({
+            data,
+            columns: [
+                $list[$key]['device_id'] = $row['device_id']      
+                [$key++]
+            ],
+        });
+    }
+
+
+
 
     $(document).ready(function () {
         var value = 'c1';
