@@ -175,6 +175,11 @@
     }]
     };
 
+
+
+
+    
+
     var chLine = document.getElementById("gc1");
     if (chLine) {
         new Chart(chLine, {
@@ -238,7 +243,7 @@
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://192.168.13.51:8000/listrik/ambilrtvll',
+        url:'http://localhost:8000/listrik/ambilrtvll',
         success:function(data) {
             dataAllGrafik.push(data.data);
             getSpecificGraphVoltage(pilih_device);
