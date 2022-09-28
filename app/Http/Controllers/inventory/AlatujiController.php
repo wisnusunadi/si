@@ -37,7 +37,7 @@ class AlatujiController extends Controller
 
     public function dashboard()
     {
-        if(auth()->user()->role == 1){
+        // if(auth()->user()->role == 1){
             function countTglLebih($data, $keys){
                 $a = count($keys);
                 $count = 0;
@@ -94,8 +94,8 @@ class AlatujiController extends Controller
             return view('page.lab.dashboard', [
                 'data' => json_encode($data),
             ]);
-        }
-        return view('page.lab.dashboard');
+        // }
+        // return view('page.lab.dashboard');
     }
 
     function get_data_alatuji()
