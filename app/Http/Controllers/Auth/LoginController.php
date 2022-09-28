@@ -90,7 +90,7 @@ class LoginController extends Controller
         } else if (auth()->user()->divisi->id == 28) {
             return redirect('/kesehatan/dashboard');
         } else if (auth()->user()->divisi->id == 22) {
-            return redirect('/alatuji/alatuji');
+            return redirect()->route('home');
         } else if (auth()->user()->divisi->id == 16) {
             return redirect('/mtc/air/masuk');
         }

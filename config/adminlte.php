@@ -1061,36 +1061,36 @@ return [
         // alatuji
         [
             'header' => 'Alat Uji',
-            'auth' => [23]
+            'auth' => [22]
         ],
         [
             'text'    => 'Kalibrasi',
             'icon'    => 'fa fa-wrench',
-            'auth' => [23],
+            'auth' => [22],
             'submenu' => [
                 [
                     'icon' => 'fas fa-home',
                     'text' => 'Dashboard',
                     'url'  => '/alatuji/dashboard',
-                    'auth' => [23],
+                    'auth' => [22],
                 ],
                 [
                     'icon' => 'fa fa-wrench',
                     'text' => 'List Alat Uji',
                     'url'  => '/alatuji/alatuji',
-                    'auth' => [23],
+                    'auth' => [22],
                 ],
                 [
                     'icon' => 'fa fa-plus-circle',
                     'text' => 'Tambah Jenis Alat Uji',
                     'url'  => '/alatuji/tambahalat',
-                    'auth' => [23],
+                    'auth' => [22],
                 ],
                 [
                     'icon' => 'fa fa-plus-circle',
                     'text' => 'Tambah Serial Number',
                     'url'  => '/alatuji/tambahbarang',
-                    'auth' => [23],
+                    'auth' => [22],
                 ],
             ],
         ],
