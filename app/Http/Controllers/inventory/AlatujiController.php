@@ -35,20 +35,20 @@ class AlatujiController extends Controller
         pathinfo($a, PATHINFO_FILENAME).'_'.$date.'.'.$aExt;
     }
 
+    function countTglLebih($data, $keys){
+        $a = count($keys);
+        $count = 0;
+        for($i=1;$i<=$a;$i++){
+            $b = Carbon::createFromFormat('Y-m-d' ,$data[$keys[$i-1]]->jadwal_perawatan);
+            if($b->lt(Carbon::now())){
+                $count++;
+            }
+        }
+        return $count;
+    }
+
     public function dashboard()
     {
-        function countTglLebih($data, $keys){
-            $a = count($keys);
-            $count = 0;
-            for($i=1;$i<=$a;$i++){
-                $b = Carbon::createFromFormat('Y-m-d' ,$data[$keys[$i-1]]->jadwal_perawatan);
-                if($b->lt(Carbon::now())){
-                    $count++;
-                }
-            }
-            return $count;
-        }
-
         $total = AlatSN::count();
         $ter = AlatSN::where('status_pinjam_id', 16)->count();
         $req = AlatSN::where('status_pinjam_id', 17)->count();
@@ -65,8 +65,8 @@ class AlatujiController extends Controller
         $uniqueIdverifikasi = DB::table('erp_kalibrasi.verifikasi')->orderBy('tgl_perawatan', 'DESC')->get()->unique('serial_number_id');
         $uniqueIdPKeys = array_keys($uniqueIdperawatan->toArray());
         $uniqueIdVKeys = array_keys($uniqueIdverifikasi->toArray());
-        $verifikasiLebih = countTglLebih($uniqueIdverifikasi, $uniqueIdVKeys);
-        $perawatanLebih = countTglLebih($uniqueIdperawatan, $uniqueIdPKeys);
+        $verifikasiLebih = $this->countTglLebih($uniqueIdverifikasi, $uniqueIdVKeys);
+        $perawatanLebih = $this->countTglLebih($uniqueIdperawatan, $uniqueIdPKeys);
 
         $totalPeminjaman = array();
         for($i=1;$i<=12;$i++){
