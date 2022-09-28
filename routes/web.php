@@ -2,6 +2,7 @@
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\SparepartController;
+use App\Http\Controllers\KualitasAirController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -21,6 +22,7 @@ use App\Http\Controllers\inventory\KalibrasiPerbaikanController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+
 Auth::routes();
 Route::group(['middleware' => 'guest'], function () {
     Route::get('/', function () {
@@ -71,7 +73,7 @@ Route::middleware('auth')->prefix('/manager-teknik')->group(function () {
     Route::view('/{any?}', 'spa.manager_teknik.spa')->middleware('divisi:dirtek');
 });
 
-Route::group(['prefix' => '/gbj', 'middleware' => ['auth','divisi:gbj,mgrgdg,dirut']], function () {
+Route::group(['prefix' => '/gbj', 'middleware' => ['auth', 'divisi:gbj,mgrgdg,dirut']], function () {
     Route::view('/stok/{any?}', 'page.gbj.stok');
     Route::view('/penjualan/{any?}', 'page.gbj.penjualan');
     Route::view('/produk/{any?}', 'page.gbj.produk');
@@ -94,7 +96,7 @@ Route::group(['prefix' => '/gbj', 'middleware' => ['auth','divisi:gbj,mgrgdg,dir
     // Route::view('/manager/produk', 'manager.gbj.produksi');
 });
 
-Route::group(['prefix' => '/produksi', 'middleware' => ['auth','divisi:prd,dirut']], function () {
+Route::group(['prefix' => '/produksi', 'middleware' => ['auth', 'divisi:prd,dirut']], function () {
     Route::view('/dashboard', 'page.produksi.dashboard');
     Route::view('/so', 'page.produksi.so');
     Route::view('/jadwal_perakitan', 'page.produksi.jadwal_perakitan');
@@ -366,7 +368,7 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
     });
 });
 
-Route::group(['prefix' => 'as', 'middleware' => ['auth','divisi:asp']], function () {
+Route::group(['prefix' => 'as', 'middleware' => ['auth', 'divisi:asp']], function () {
 
 
     Route::view('/dashboard', 'page.as.dashboard')->name('as.dashboard');
@@ -403,7 +405,23 @@ Route::group(['prefix' => 'as', 'middleware' => ['auth','divisi:asp']], function
     // });
 });
 
-Route::group(['prefix' => '/gk', 'middleware' => ['auth','divisi:gk,dirut']], function () {
+Route::group(['prefix' => 'mtc', 'middleware' => ['auth', 'divisi:mtc']], function () {
+    Route::group(['prefix' => '/air'], function () {
+        Route::view('/masuk', 'page.maintenance.air.masuk');
+        // Route::get('/masuk', [App\Http\Controllers\MaintenanceController::class, 'show_air_masuk'],)->name('mtc.air.masuk');
+        // Route::get('/keluar', [App\Http\Controllers\MaintenanceController::class, 'show_air_keluar'])->name('mtc.air.keluar');
+    });
+
+    Route::group(['prefix' => '/listrik'], function () {
+        Route::group(['prefix' => '/monitoring'], function () {
+            Route::get('/table', [App\Http\Controllers\MaintenanceController::class, 'show_listrik_monitoring_table'])->name('mtc.listrik.monitoring_table');
+            Route::get('/grafik', [App\Http\Controllers\MaintenanceController::class, 'show_listrik_monitoring_grafik'])->name('mtc.listrik.monitoring_grafik');
+        });
+        Route::get('/panel', [App\Http\Controllers\MaintenanceController::class, 'show_listrik_panel'])->name('mtc.listrik.panel');
+    });
+});
+
+Route::group(['prefix' => '/gk', 'middleware' => ['auth', 'divisi:gk,dirut']], function () {
     Route::view('/dashboard', 'page.gk.dashboard');
     Route::view('/gudang', 'page.gk.gudang.index');
     Route::get('/gudang/sparepart/{id}', [SparepartController::class, 'detail_spr']);

@@ -1560,6 +1560,52 @@ return [
             ],
         ],
 
+        [
+            'text'    => 'AIR',
+            'icon'    => 'fas fa-tint',
+            'auth' => [16],
+            'submenu' => [
+                [
+                    'text' => 'Air Masuk',
+                    'icon' => 'far fa-circle',
+                    'url' => '/mtc/air/masuk',
+                    'auth' => [16],
+                ],
+                [
+                    'text' => 'Air Keluar',
+                    'icon' => 'far fa-circle',
+                    'url' => '/mtc/air/masuk',
+                    'auth' => [16],
+                ],
+            ],
+        ],
+
+        [
+            'text'    => 'LISTRIK',
+            'icon'    => 'fas fa-bolt',
+            'auth' => [16],
+            'submenu' => [
+                [
+                    'text' => 'Data Monitoring',
+                    'icon' => 'far fa-circle',
+                    'url' => '/mtc/listrik/monitoring/table',
+                    'auth' => [16],
+                ],
+                [
+                    'text' => 'Grafik Monitoring',
+                    'icon' => 'far fa-circle',
+                    'url' => '/mtc/listrik/monitoring/grafik',
+                    'auth' => [16],
+                ],
+                [
+                    'text' => 'Panel Listrik',
+                    'icon' => 'far fa-circle',
+                    'url' => '/mtc/listrik/panel',
+                    'auth' => [16],
+                ],
+            ],
+        ],
+
         // [
         //     'text'    => 'After Sales',
         //     'icon'    => 'fas fa-headset',

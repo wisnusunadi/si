@@ -55,8 +55,9 @@ class Divisi
             return redirect('/penjualan/dashboard');
         } else if ($request->user()->hasRole("22")) {
             return redirect('/alatuji/alatuji');
+        } else if ($request->user()->hasRole("16")) {
+            return redirect('/mtc/air/masuk');
         }
-
 
 
     }

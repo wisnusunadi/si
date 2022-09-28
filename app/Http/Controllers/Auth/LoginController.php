@@ -91,6 +91,8 @@ class LoginController extends Controller
             return redirect('/kesehatan/dashboard');
         } else if (auth()->user()->divisi->id == 22) {
             return redirect('/alatuji/alatuji');
+        } else if (auth()->user()->divisi->id == 16) {
+            return redirect('/mtc/air/masuk');
         }
 
         return redirect('/home');
