@@ -420,12 +420,6 @@ Route::group(['prefix' => '/gk', 'middleware' => ['auth','divisi:gk,dirut']], fu
 });
 
 Route::view('/uit', 'page.login_page.index');
-// Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
-//     Route::view('/stok', 'page.gbj.stok_show');
-// });
-// Route::group(['prefix' => '/gbj/manager', 'middleware' => 'auth'], function ()
-// {
-//     Route::view('/produksi', 'manager.gbj.produksi');
-// });
+
 Route::namespace('v2')->group(__DIR__ . '/kesehatan/kesehatan.php');
 Route::namespace('alatuji')->group(__DIR__ . '/inventory/web.php');

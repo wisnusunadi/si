@@ -5,7 +5,6 @@ namespace App\Http\Controllers\inventory;
 use App\Http\Controllers\Controller;
 
 use App\Models\inventory\Kalibrasi;
-use App\Models\inventory\AlatSN;
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Collection;

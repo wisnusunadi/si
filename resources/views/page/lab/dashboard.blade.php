@@ -373,9 +373,14 @@
             }]
         },
         options: {
-            title: {
-                display: true,
-                text: 'Peminjaman Perbulan'
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Jumlah Peminjaman Perbulan'
+                },
+                legend: { 
+                    display: false
+                },
             },
             scales: {
                 y: {
@@ -384,6 +389,7 @@
             }
         }
     });
+    
 </script>
 
 @endsection

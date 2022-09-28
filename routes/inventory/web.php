@@ -61,3 +61,5 @@ Route::group(['prefix' => 'lab'], function () {
 
 
 });
+
+// Alat Uji End
