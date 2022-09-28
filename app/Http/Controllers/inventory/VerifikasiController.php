@@ -5,9 +5,6 @@ namespace App\Http\Controllers\inventory;
 use App\Http\Controllers\Controller;
 
 use App\Models\inventory\Verifikasi;
-
-use App\Models\inventory\AlatSN;
-use App\Models\inventory\Verifikasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Models\inventory\AlatSN;

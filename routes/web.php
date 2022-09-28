@@ -443,7 +443,7 @@ Route::group(['prefix' => 'alatuji', 'middleware' => 'auth'], function () {
     Route::post('/store_pinjam', [AlatujiController::class, 'store_pinjam']);
     
     Route::group(['middleware' => ['role']], function () {
-        Route::get('/', [AlatujiController::class, 'dashboard'])->name('home');
+        Route::get('/dashboard', [AlatujiController::class, 'dashboard'])->name('home');
     
         Route::get('/editalat/{id}', [AlatujiController::class, 'edit_alat']);
         Route::post('/editalat/store_editalat', [AlatujiController::class, 'store_editalat']);

@@ -37,65 +37,62 @@ class AlatujiController extends Controller
 
     public function dashboard()
     {
-        if(auth()->user()->role == 1){
-            function countTglLebih($data, $keys){
-                $a = count($keys);
-                $count = 0;
-                for($i=1;$i<=$a;$i++){
-                    $b = Carbon::createFromFormat('Y-m-d' ,$data[$keys[$i-1]]->jadwal_perawatan);
-                    if($b->lt(Carbon::now())){
-                        $count++;
-                    }
+        function countTglLebih($data, $keys){
+            $a = count($keys);
+            $count = 0;
+            for($i=1;$i<=$a;$i++){
+                $b = Carbon::createFromFormat('Y-m-d' ,$data[$keys[$i-1]]->jadwal_perawatan);
+                if($b->lt(Carbon::now())){
+                    $count++;
                 }
-                return $count;
             }
-
-            $total = AlatSN::count();
-            $ter = AlatSN::where('status_pinjam_id', 16)->count();
-            $req = AlatSN::where('status_pinjam_id', 17)->count();
-            $not = AlatSN::where('kondisi_id', 10)->count();
-            $use = AlatSN::where('status_pinjam_id', 15)->count();
-            $ext = AlatSN::where('status_pinjam_id', 14)->count();
-            $mel = DB::table('erp_kalibrasi.peminjaman')->where('tgl_batas', '>', Carbon::now()->format('Y-m-d', 'Asia/Jakarta'))->where('status_id', '15')->count();
-            $ve1 = DB::table('erp_kalibrasi.verifikasi')->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->count();
-            $pe1 = DB::table('erp_kalibrasi.perawatan')->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->count();
-            $ve2 = DB::table('erp_kalibrasi.verifikasi')->whereMonth('jadwal_perawatan', '<', Carbon::now())->whereYear('jadwal_perawatan', '<', Carbon::now())->count();
-            $pe2 = DB::table('erp_kalibrasi.perawatan')->whereMonth('jadwal_perawatan', '<', Carbon::now())->whereYear('jadwal_perawatan', '<', Carbon::now())->count();
-
-            $uniqueIdperawatan = DB::table('erp_kalibrasi.perawatan')->orderBy('tgl_perawatan', 'DESC')->get()->unique('serial_number_id');
-            $uniqueIdverifikasi = DB::table('erp_kalibrasi.verifikasi')->orderBy('tgl_perawatan', 'DESC')->get()->unique('serial_number_id');
-            $uniqueIdPKeys = array_keys($uniqueIdperawatan->toArray());
-            $uniqueIdVKeys = array_keys($uniqueIdverifikasi->toArray());
-            $verifikasiLebih = countTglLebih($uniqueIdverifikasi, $uniqueIdVKeys);
-            $perawatanLebih = countTglLebih($uniqueIdperawatan, $uniqueIdPKeys);
-
-            $totalPeminjaman = array();
-            for($i=1;$i<=12;$i++){
-                $a = Peminjaman::whereMonth('tgl_kembali', date($i))->whereYear('tgl_kembali', date('Y'))->count();
-                array_push($totalPeminjaman, $a);
-            }
-
-            $data = [
-                'total' => $total,
-                'tersedia' => $ter,
-                'permintaan' => $req,
-                'not' => $not,
-                'dipinjam' => $use,
-                'external' => $ext,
-                'batasPinjam' => $mel,
-                'verifikasiNow' => $ve1,
-                'perawatanNow' => $pe1,
-                'verifikasiOld' => $ve2,
-                'perawatanOld' => $pe2,
-                'verifikasiLebih' => $verifikasiLebih,
-                'perawatanLebih' => $perawatanLebih,
-                'total_peminjaman' => $totalPeminjaman
-            ];
-            return view('page.lab.dashboard', [
-                'data' => json_encode($data),
-            ]);
+            return $count;
         }
-        return view('page.lab.dashboard');
+
+        $total = AlatSN::count();
+        $ter = AlatSN::where('status_pinjam_id', 16)->count();
+        $req = AlatSN::where('status_pinjam_id', 17)->count();
+        $not = AlatSN::where('kondisi_id', 10)->count();
+        $use = AlatSN::where('status_pinjam_id', 15)->count();
+        $ext = AlatSN::where('status_pinjam_id', 14)->count();
+        $mel = DB::table('erp_kalibrasi.peminjaman')->where('tgl_batas', '>', Carbon::now()->format('Y-m-d', 'Asia/Jakarta'))->where('status_id', '15')->count();
+        $ve1 = DB::table('erp_kalibrasi.verifikasi')->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->count();
+        $pe1 = DB::table('erp_kalibrasi.perawatan')->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->count();
+        $ve2 = DB::table('erp_kalibrasi.verifikasi')->whereMonth('jadwal_perawatan', '<', Carbon::now())->whereYear('jadwal_perawatan', '<', Carbon::now())->count();
+        $pe2 = DB::table('erp_kalibrasi.perawatan')->whereMonth('jadwal_perawatan', '<', Carbon::now())->whereYear('jadwal_perawatan', '<', Carbon::now())->count();
+
+        $uniqueIdperawatan = DB::table('erp_kalibrasi.perawatan')->orderBy('tgl_perawatan', 'DESC')->get()->unique('serial_number_id');
+        $uniqueIdverifikasi = DB::table('erp_kalibrasi.verifikasi')->orderBy('tgl_perawatan', 'DESC')->get()->unique('serial_number_id');
+        $uniqueIdPKeys = array_keys($uniqueIdperawatan->toArray());
+        $uniqueIdVKeys = array_keys($uniqueIdverifikasi->toArray());
+        $verifikasiLebih = countTglLebih($uniqueIdverifikasi, $uniqueIdVKeys);
+        $perawatanLebih = countTglLebih($uniqueIdperawatan, $uniqueIdPKeys);
+
+        $totalPeminjaman = array();
+        for($i=1;$i<=12;$i++){
+            $a = Peminjaman::whereMonth('tgl_kembali', date($i))->whereYear('tgl_kembali', date('Y'))->count();
+            array_push($totalPeminjaman, $a);
+        }
+
+        $data = [
+            'total' => $total,
+            'tersedia' => $ter,
+            'permintaan' => $req,
+            'not' => $not,
+            'dipinjam' => $use,
+            'external' => $ext,
+            'batasPinjam' => $mel,
+            'verifikasiNow' => $ve1,
+            'perawatanNow' => $pe1,
+            'verifikasiOld' => $ve2,
+            'perawatanOld' => $pe2,
+            'verifikasiLebih' => $verifikasiLebih,
+            'perawatanLebih' => $perawatanLebih,
+            'total_peminjaman' => $totalPeminjaman
+        ];
+        return view('page.lab.dashboard', [
+            'data' => json_encode($data),
+        ]);
     }
 
     function get_data_alatuji()
