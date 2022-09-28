@@ -1058,18 +1058,18 @@ return [
             'auth' => [23]
         ],
 
-        [
-            'text'    => 'Permintaan',
-            'icon'    => 'fas fa-box-open',
-            'url'  => '/kalibrasi',
-            'auth' => [22],
-        ],
-        [
-            'text'    => 'Sudah Kalibrasi',
-            'icon'    => 'fas fa-box-open',
-            'url'  => '/acc_kalibrasi',
-            'auth' => [22],
-        ],
+        // [
+        //     'text'    => 'Permintaan',
+        //     'icon'    => 'fas fa-box-open',
+        //     'url'  => '/kalibrasi',
+        //     'auth' => [22],
+        // ],
+        // [
+        //     'text'    => 'Sudah Kalibrasi',
+        //     'icon'    => 'fas fa-box-open',
+        //     'url'  => '/acc_kalibrasi',
+        //     'auth' => [22],
+        // ],
         [
             'text' => 'Dashboard',
             'url' => '/gbj/dashboard',
@@ -1557,7 +1557,7 @@ return [
         //LAB
         [
             'text' => 'Dashboard',
-            'icon' => 'far fa-home',
+            'icon' => 'fas fa-home fa-fw',
             'url' => '/lab/dashboard',
             'auth' => [22],
         ],
@@ -1568,7 +1568,7 @@ return [
         [
             'text' => 'Alat Uji',
             'url'  => '/lab/alatuji/show',
-            'icon' => 'fas fa-wrench',
+            'icon' => 'fas fa-wrench fa-fw',
             'auth' => [22]
         ],
 
