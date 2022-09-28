@@ -6,20 +6,21 @@ use App\Http\Controllers\inventory\KalibrasiPerbaikanController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+// Alat Uji
 Route::group(['prefix' => 'alatuji', 'middleware' => 'auth'], function () {
     Route::get('/alatuji', function () {
         return view('page/lab/alatuji');
     })->name('alatuji');
 
-
+    
     Route::get('/detail/{id}/{x?}', [AlatujiController::class, 'detail'])->name('detail');
     Route::get('/doc/{jenis}/{id}', [AlatujiController::class, 'show_document']);
-
+    
     Route::post('/store_pinjam', [AlatujiController::class, 'store_pinjam']);
-
-    Route::group(['middleware' => ['divisi:lab']], function () {
-        Route::get('/', [AlatujiController::class, 'dashboard'])->name('home');
-
+    
+    Route::group(['middleware' => ['role']], function () {
+        Route::get('/dashboard', [AlatujiController::class, 'dashboard'])->name('home');
+    
         Route::get('/editalat/{id}', [AlatujiController::class, 'edit_alat']);
         Route::post('/editalat/store_editalat', [AlatujiController::class, 'store_editalat']);
 
@@ -53,3 +54,5 @@ Route::group(['prefix' => 'alatuji', 'middleware' => 'auth'], function () {
         Route::get('/konfirmasi/{jenis}/{id}', [KalibrasiPerbaikanController::class, 'confirm']);
     });
 });
+
+// Alat Uji End
