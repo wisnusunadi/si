@@ -4,6 +4,10 @@ namespace App\Http\Controllers\inventory;
 
 use App\Http\Controllers\Controller;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> f27f9c9f4dead76b9973d2ac7d4e41ea97c6c4bc
 use App\Models\inventory\Verifikasi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;

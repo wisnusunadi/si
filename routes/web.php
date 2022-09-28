@@ -428,7 +428,9 @@ Route::view('/uit', 'page.login_page.index');
 //     Route::view('/produksi', 'manager.gbj.produksi');
 // });
 Route::namespace('v2')->group(__DIR__ . '/kesehatan/kesehatan.php');
+Route::namespace('alatuji')->group(__DIR__ . '/inventory/web.php');
 
+<<<<<<< HEAD
 
 // Alat Uji
 Route::group(['prefix' => 'alatuji', 'middleware' => 'auth'], function () {
@@ -480,3 +482,5 @@ Route::group(['prefix' => 'alatuji', 'middleware' => 'auth'], function () {
 });
 
 // Alat Uji End
+=======
+>>>>>>> f27f9c9f4dead76b9973d2ac7d4e41ea97c6c4bc
