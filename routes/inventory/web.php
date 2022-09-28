@@ -12,15 +12,15 @@ Route::group(['prefix' => 'alatuji', 'middleware' => 'auth'], function () {
         return view('page/lab/alatuji');
     })->name('alatuji');
 
-    
+
     Route::get('/detail/{id}/{x?}', [AlatujiController::class, 'detail'])->name('detail');
     Route::get('/doc/{jenis}/{id}', [AlatujiController::class, 'show_document']);
-    
+
     Route::post('/store_pinjam', [AlatujiController::class, 'store_pinjam']);
-    
-    Route::group(['middleware' => ['role']], function () {
+
+    Route::group(['middleware' => ['divisi:lab']], function () {
         Route::get('/dashboard', [AlatujiController::class, 'dashboard'])->name('home');
-    
+
         Route::get('/editalat/{id}', [AlatujiController::class, 'edit_alat']);
         Route::post('/editalat/store_editalat', [AlatujiController::class, 'store_editalat']);
 
