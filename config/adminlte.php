@@ -1554,6 +1554,24 @@ return [
             'auth' => [31],
         ],
 
+        //LAB
+        [
+            'text' => 'Dashboard',
+            'icon' => 'far fa-home',
+            'url' => '/lab/dashboard',
+            'auth' => [22],
+        ],
+        [
+            'header' => 'DATA',
+            'auth' => [22]
+        ],
+        [
+            'text' => 'Alat Uji',
+            'url'  => '/lab/alatuji/show',
+            'icon' => 'fas fa-wrench',
+            'auth' => [22]
+        ],
+
     ],
 
     /*

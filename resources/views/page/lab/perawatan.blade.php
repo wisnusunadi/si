@@ -12,12 +12,12 @@
 
     <div class="container p-3 bg-white">
 
-        <form action="/alatuji/store_perawatan" method="post">
+        <form action="{{route('alatuji.perawatan.store')}}" method="post">
         @csrf
 
         <!-- card info -->
         <div class="card border-secondary border-bottom-w3">
-            <div class="card-body"> 
+            <div class="card-body">
 
                 <div class="row">
                     <!-- col gambar -->
@@ -210,7 +210,7 @@
         <div class="card-body">
             <div class="row float-right">
                 <div class="col-auto">
-                    <a href="{{ route('detail', ['id' => $id, 'x' => 2]) }}" class="btn btn-danger float-right">Batal</a>
+                    <a href="{{ route('alatuji.detail', ['id' => $id, 'x' => 2]) }}" class="btn btn-danger float-right">Batal</a>
                 </div>
                 <div class="col-auto">
                     <input type="submit" id="btnSubmit" value="Submit" class="btn btn-primary float-right">
@@ -241,7 +241,7 @@ $("#btnSubmit").on('click', function(e){
         if(a){
             form.submit();
         }
-    }); 
+    });
 });
 </script>
 

@@ -17,7 +17,7 @@
 
     <div class="container p-3 bg-white">
 
-        <form action="store_tambahbarang" method="post" enctype="multipart/form-data">
+        <form action="{{route('alatuji.barang.store')}}" method="post" enctype="multipart/form-data">
         @csrf
 
         <!-- card informasi umum alat -->
@@ -210,7 +210,7 @@
         <!-- card dokumen penunjang -->
         <div class="card border-primary border-top-w3 shadow">
             <div class="card-body">
-                
+
                 <div class="row">
                     <h3 class="card-title">Dokumen Penunjang</h3>
                 </div>

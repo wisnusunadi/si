@@ -223,7 +223,7 @@ class KalibrasiPerbaikanController extends Controller
 
             $request->jenis_mt == 'kalibrasi' ? $alertScc = 'kalibSuccess' : $alertScc = 'perbSuccess';
 
-            return redirect()->route('detail', ['id' => $request->serial_number_id])->with(['success' => '1',$alertScc => '3']);
+            return redirect()->route('alatuji.detail', ['id' => $request->serial_number_id])->with(['success' => '1',$alertScc => '3']);
 
         // } catch (\Exception $e) {
         //     return response()->json([
@@ -295,7 +295,7 @@ class KalibrasiPerbaikanController extends Controller
                 <span class="text-success">Selesai</span>
                 </span>'
                 :
-                '<a href="/alatuji/konfirmasi/'.$jenis.'/'.($jenis == "kalibrasi" ? $d->id_kalibrasi : $d->id_perbaikan).'" class="badge w-100 bg-warning">
+                '<a href="/lab/alatuji/mt/konfirmasi/'.$jenis.'/'.($jenis == "kalibrasi" ? $d->id_kalibrasi : $d->id_perbaikan).'" class="badge w-100 bg-warning">
                 <span class="text-dark">Proses</span>
                 </a>';
             })
@@ -474,7 +474,7 @@ class KalibrasiPerbaikanController extends Controller
 
         $request->jenis == 'kalibrasi' ? $alertScc = 'kalibSuccess' : $alertScc = 'perbSuccess';
 
-        return redirect()->route('detail', ['id' => $id->serial_number_id])->with(['success' => '1' ,$alertScc => '3']);
+        return redirect()->route('alatuji.detail', ['id' => $id->serial_number_id])->with(['success' => '1' ,$alertScc => '3']);
     }
 
     function gambar_show($id, $jenis, $tipe)

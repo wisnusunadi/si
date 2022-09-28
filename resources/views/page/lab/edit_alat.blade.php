@@ -12,11 +12,11 @@
 
     <div class="container p-3 bg-white">
 
-        <form action="store_editalat" method="post" enctype="multipart/form-data">
+        <form action="{{route('alatuji.update')}}" method="post" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="id_alatuji" value="{{$data->alatuji_id}}">
         <input type="hidden" name="id_serial_number" value="{{$data->id_serial_number}}">
-        
+
         <div class="card border-warning" style="border-top-width:3px!important;">
             <div class="card-body">
 
@@ -72,7 +72,7 @@
                             @foreach($merk as $sp)
                             <option value="{{ $sp->id_merk }}" {{ $sp->id_merk == $data->merk_id ? 'SELECTED' : '' }}>{{ $sp->nama_merk }}</option>
                             @endforeach
-                        </select>   
+                        </select>
                     </div>
                 </div>
 
@@ -195,7 +195,7 @@
                         gambar privew
                     </div>
                 </div>
-                
+
             </div>
         </div>
 
