@@ -405,7 +405,7 @@ Route::group(['prefix' => 'as', 'middleware' => ['auth', 'divisi:asp']], functio
     // });
 });
 
-Route::group(['prefix' => 'mtc', 'middleware' => ['auth', 'divisi:mtc']], function () {
+Route::group(['prefix' => 'mtc', 'middleware' => ['auth', 'divisi:mtc,eng']], function () {
     Route::group(['prefix' => '/air'], function () {
         Route::view('/masuk', 'page.maintenance.air.masuk');
         // Route::get('/masuk', [App\Http\Controllers\MaintenanceController::class, 'show_air_masuk'],)->name('mtc.air.masuk');

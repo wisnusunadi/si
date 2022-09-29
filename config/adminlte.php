@@ -1563,19 +1563,19 @@ return [
         [
             'text'    => 'AIR',
             'icon'    => 'fas fa-tint',
-            'auth' => [16],
+            'auth' => [16,10],
             'submenu' => [
                 [
                     'text' => 'Air Masuk',
                     'icon' => 'far fa-circle',
                     'url' => '/mtc/air/masuk',
-                    'auth' => [16],
+                    'auth' => [16,10],
                 ],
                 [
                     'text' => 'Air Keluar',
                     'icon' => 'far fa-circle',
                     'url' => '/mtc/air/masuk',
-                    'auth' => [16],
+                    'auth' => [16,10],
                 ],
             ],
         ],
@@ -1583,25 +1583,25 @@ return [
         [
             'text'    => 'LISTRIK',
             'icon'    => 'fas fa-bolt',
-            'auth' => [16],
+            'auth' => [16,10],
             'submenu' => [
                 [
                     'text' => 'Data Monitoring',
                     'icon' => 'far fa-circle',
                     'url' => '/mtc/listrik/monitoring/table',
-                    'auth' => [16],
+                    'auth' => [16,10],
                 ],
                 [
                     'text' => 'Grafik Monitoring',
                     'icon' => 'far fa-circle',
                     'url' => '/mtc/listrik/monitoring/grafik',
-                    'auth' => [16],
+                    'auth' => [16,10],
                 ],
                 [
                     'text' => 'Panel Listrik',
                     'icon' => 'far fa-circle',
                     'url' => '/mtc/listrik/panel',
-                    'auth' => [16],
+                    'auth' => [16,10],
                 ],
             ],
         ],
