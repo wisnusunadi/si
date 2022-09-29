@@ -148,7 +148,7 @@
                 <th>Sistolik</th>
                 <th>Diastolik</th>
                 <th>Catatan</th>
-                <th></th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -163,15 +163,14 @@
               </tr>
               <tr>
                 <th>No</th>
+                <th>Tgl Cek</th>
                 <th>Pengecekan</th>
-                <th>Tgl Pengecekan</th>
                 <th>Divisi</th>
                 <th>Nama</th>
                 <th>Jenis</th>
                 <th>Hasil</th>
                 <th>Catatan</th>
-                <th>File</th>
-                <th></th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -340,6 +339,114 @@
 @stop
 @section('adminlte_js')
 <script>
+    $(function(){
+        $('#rapid_tabel > tbody').on('click', '#delete', function() {
+            var data_id = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Hapus Data',
+                text: 'Yakin ingin menghapus data ini?',
+                icon: 'warning',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                showCancelButton: true,
+                showCloseButton: true
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/kesehatan/mingguan/rapid/delete/'+data_id,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response['data'] == "success") {
+                                swal.fire(
+                                    'Berhasil',
+                                    'Berhasil melakukan Hapus Data',
+                                    'success'
+                                );
+                                $('#rapid_tabel').DataTable().ajax.reload();
+                                $("#hapusmodal").modal('hide');
+                            } else if (response['data'] == "error") {
+                                swal.fire(
+                                    'Gagal',
+                                    'Data telah digunakan dalam Transaksi Lain',
+                                    'error'
+                                );
+                            } else {
+                                swal.fire(
+                                    'Error',
+                                    'Data telah digunakan dalam Transaksi Lain',
+                                    'warning'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            swal.fire(
+                                'Error',
+                                'Data telah digunakan dalam Transaksi Lain',
+                                'warning'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+        $('#tensi_tabel > tbody').on('click', '#delete', function() {
+            var data_id = $(this).attr('data-id');
+            Swal.fire({
+                title: 'Hapus Data',
+                text: 'Yakin ingin menghapus data ini?',
+                icon: 'warning',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                showCancelButton: true,
+                showCloseButton: true
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: '/kesehatan/mingguan/tensi/delete/'+data_id,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response['data'] == "success") {
+                                swal.fire(
+                                    'Berhasil',
+                                    'Berhasil melakukan Hapus Data',
+                                    'success'
+                                );
+                                $('#tensi_tabel').DataTable().ajax.reload();
+                                $("#hapusmodal").modal('hide');
+                            } else if (response['data'] == "error") {
+                                swal.fire(
+                                    'Gagal',
+                                    'Data telah digunakan dalam Transaksi Lain',
+                                    'error'
+                                );
+                            } else {
+                                swal.fire(
+                                    'Error',
+                                    'Data telah digunakan dalam Transaksi Lain',
+                                    'warning'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            swal.fire(
+                                'Error',
+                                'Data telah digunakan dalam Transaksi Lain',
+                                'warning'
+                            );
+                        }
+                    });
+                }
+            });
+        });
+    })
      $('.select2').select2();
   $('#form').change(function() {
     var form = $(this).val();
@@ -373,7 +480,10 @@
               data: 'hasil'
             },
             {
-              data: 'tgl_cek'
+              data: 'tgl_cek',
+              render: function (data, type, row) {
+                return moment(new Date(data).toString()).format('DD-MM-YYYY');
+              }
             },
             {
               data: 'x'
@@ -434,7 +544,10 @@
               searchable: false
             },
             {
-              data: 'tgl_cek'
+              data: 'tgl_cek',
+              render: function (data, type, row) {
+                return moment(new Date(data).toString()).format('DD-MM-YYYY');
+              }
             },
             {
               data: 'z'
@@ -453,9 +566,6 @@
             },
             {
               data: 'keterangan'
-            },
-            {
-              data: 'cetak'
             },
             {
               data: 'button'

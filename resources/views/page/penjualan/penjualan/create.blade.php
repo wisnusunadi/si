@@ -25,7 +25,7 @@
 
 @section('adminlte_css')
 <style>
-        table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
+    table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection--single {
     height: 100% !important;
     }
     table > tbody > tr > td > .form-group > .select2 > .selection > .select2-selection > .select2-selection__rendered {
@@ -499,7 +499,7 @@
                                                             <div class="card-body">
                                                                 <div class="form-group row">
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Instansi</label>
-                                                                    <div class="col-lg-7 col-md-12 autocomplete">
+                                                                    <div class="col-lg-4 col-md-12 autocomplete">
                                                                         <input type="text" class="form-control col-form-label @error('instansi') is-invalid @enderror" name="instansi" id="instansi" autocomplete="off" />
                                                                         <div class="invalid-feedback" id="msginstansi">
                                                                             @if($errors->has('instansi'))
@@ -521,7 +521,7 @@
                                                                 </div>
                                                                 <div class="form-group row">
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Alamat Instansi</label>
-                                                                    <div class="col-lg-7 col-md-12">
+                                                                    <div class="col-lg-6 col-md-12">
                                                                         <textarea class="form-control col-form-label @error('alamatinstansi') is-invalid @enderror" name="alamatinstansi" id="alamatinstansi"></textarea>
                                                                         <div class="invalid-feedback" id="msgalamatinstansi">
                                                                             @if($errors->has('alamatinstansi'))
@@ -532,7 +532,7 @@
                                                                 </div>
                                                                 <div class="form-group row">
                                                                     <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Provinsi</label>
-                                                                    <div class="col-lg-7 col-md-12">
+                                                                    <div class="col-lg-3 col-md-6">
                                                                         <select name="provinsi" id="provinsi" class="form-control custom-select provinsi @error('provinsi') is-invalid @enderror" style="width: 100%;">
                                                                         </select>
                                                                         <div class="invalid-feedback" id="msgprovinsi">
@@ -1083,7 +1083,7 @@
 
 
         function checkvalidasi() {
-var jenis_array = [];
+            var jenis_array = [];
             $("input[id=jenis_pen]:checked").each(function() {
                 jenis_array.push($(this).val());
             });
@@ -1660,10 +1660,10 @@ var jenis_array = [];
                     $("#provinsi").empty().trigger('change')
                     $('#isi_produk_input').removeClass('hide');
                 }
-                else {
+                 else if ($(this).val() == "negosiasi"){
                     $('#checkbox_nopaket').addClass('hide');
                     $('#isi_nopaket').prop("checked", false);
-                      $('#isi_nopaket').val("true");
+                    $('#isi_nopaket').val("true");
                     $('#no_paket').attr('readonly', false);
                     $("#batas_kontrak").val("");
                     $("#batas_kontrak").attr('disabled', true);
@@ -2049,7 +2049,6 @@ var jenis_array = [];
             //     }
             // });
 
-
             $('.penjualan_produk_id').select2({
                 placeholder: "Pilih Produk",
                 width: 'resolve',
@@ -2261,22 +2260,20 @@ var jenis_array = [];
                                         <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" id="variasi` + index + `` + x + `" data-attr="variasi` + x + `" data-id="` + x + `"></select>
                                         <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
                                       </div>`);
-                        if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
-                            data.push({
-                                id: res[0].produk[x].gudang_barang_jadi[0].id,
-                                text: res[0].produk[x].nama,
-                                jumlah: res[0].produk[x].pivot.jumlah,
-                                qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
-                            });
-                        } else {
-                            for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
-                                data.push({
-                                    id: res[0].produk[x].gudang_barang_jadi[y].id,
-                                    text: res[0].produk[x].gudang_barang_jadi[y].nama,
-                                    jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
-                                });
+                        for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                            var nama_var = "";
+                            if(res[0].produk[x].gudang_barang_jadi[y].nama != ""){
+                                nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
                             }
+                            else {
+                                nama_var = res[0].produk[x].nama;
+                            }
+                            data.push({
+                                id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                text: nama_var,
+                                jumlah: res[0].produk[x].pivot.jumlah,
+                                qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
+                            });
                         }
                         $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
                             placeholder: 'Pilih Variasi',
@@ -2484,23 +2481,30 @@ var jenis_array = [];
                                         <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" id="variasi` + index + `` + x + `" data-attr="variasi` + x + `" data-id="` + x + `"></select>
                                         <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
                                       </div>`);
-                        if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
-                            data.push({
-                                id: res[0].produk[x].gudang_barang_jadi[0].id,
-                                text: res[0].produk[x].nama,
-                                jumlah: res[0].produk[x].pivot.jumlah,
-                                qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
-                            });
-                        } else {
+                        // if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
+                        //     data.push({
+                        //         id: res[0].produk[x].gudang_barang_jadi[0].id,
+                        //         text: res[0].produk[x].nama,
+                        //         jumlah: res[0].produk[x].pivot.jumlah,
+                        //         qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
+                        //     });
+                        // } else {
                             for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                var nama_var = "";
+                                if(res[0].produk[x].gudang_barang_jadi[y].nama != ""){
+                                    nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
+                                }
+                                else if(res[0].produk[x].gudang_barang_jadi[y].nama == ""){
+                                    nama_var = res[0].produk[x].nama;
+                                }
                                 data.push({
                                     id: res[0].produk[x].gudang_barang_jadi[y].id,
-                                    text: res[0].produk[x].gudang_barang_jadi[y].nama,
+                                    text: nama_var,
                                     jumlah: res[0].produk[x].pivot.jumlah,
                                     qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
                                 });
                             }
-                        }
+                        // }
                         $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
                             placeholder: 'Pilih Variasi',
                             data: data,

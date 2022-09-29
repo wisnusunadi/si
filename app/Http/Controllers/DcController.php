@@ -195,10 +195,11 @@ class DcController extends Controller
             ->rawColumns(['laporan'])
             ->make(true);
     }
+
     public function get_data_so_in_process(){
         $data = Pesanan::whereNotNull('no_po')
-        ->has('Ekatalog')
-        ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi'])
+        ->has('DetailPesanan')
+        ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
         ->addSelect(['tgl_kontrak_custom' => function($q){
             $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
             ->from('ekatalog')
@@ -310,6 +311,9 @@ class DcController extends Controller
                             return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak_custom)->format('d-m-Y');
                         }
                     }
+                }
+                else {
+                    return "-";
                 }
             })
             ->addColumn('so', function ($data) {
@@ -427,28 +431,8 @@ class DcController extends Controller
 
 
 
-        $data = Pesanan::whereIn('id', function($q){
-            $q->select('pesanan.id')
-                ->from('pesanan')
-                ->leftjoin('detail_pesanan', 'detail_pesanan.pesanan_id', '=', 'pesanan.id')
-                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
-                ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                ->leftjoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
-                ->where('produk.coo', '=', '1')
-                ->groupBy('pesanan.id')
-                ->havingRaw('count(noseri_logistik.id) > (
-                    select count(noseri_coo.id)
-                    from noseri_coo
-                    left join noseri_logistik on noseri_logistik.id = noseri_coo.noseri_logistik_id
-                    left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
-                    left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-                    left join gdg_barang_jadi on gdg_barang_jadi.id = detail_pesanan_produk.gudang_barang_jadi_id
-                    left join produk on produk.id = gdg_barang_jadi.produk_id AND produk.coo = 1
-                    left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
-                    where detail_pesanan.pesanan_id = pesanan.id)');
-                })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
+        $data = Pesanan::has('DetailPesanan')->
+                with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                     ->addSelect(['tgl_kontrak' => function($q){
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
                       ->from('ekatalog')
@@ -479,7 +463,7 @@ class DcController extends Controller
                     ->where('produk.coo', 1)
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                 }
-                ])->orderBy('tgl_kontrak', 'desc')->doesntHave('SPB')->get();
+                ])->havingRaw('cseri > ccoo')->orderBy('tgl_kontrak', 'desc')->get();
 
         // $data = Pesanan::with('Ekatalog.Customer','Spa.Customer')->DoesntHave('Spb')->whereIn('id', $array_id)->get();
         return datatables()->of($data)
@@ -512,7 +496,7 @@ class DcController extends Controller
                         }
                         else{
                             return  '<div class="text-danger"><b> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</b></div>
-                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> ' . $hari . ' Hari Lagi</small></div>';
+                                <div class="text-danger"><small><i class="fas fa-exclamation-circle"></i> Lebih dari ' . $hari . ' Hari</small></div>';
                         }
                     } else{
                         return Carbon::createFromFormat('Y-m-d', $data->tgl_kontrak)->format('d-m-Y');
@@ -854,6 +838,7 @@ class DcController extends Controller
             ->rawColumns(['button', 'status', 'batas_paket'])
             ->make(true);
     }
+
     public function get_data_detail_so($id)
     {
         //pesanan_id
@@ -977,7 +962,6 @@ class DcController extends Controller
         else{
             $data = NoseriDetailLogistik::where('detail_logistik_id', $id)->has('NoseriCoo')->get();
         }
-
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('checkbox', function ($data) {
@@ -1117,7 +1101,6 @@ class DcController extends Controller
             return view('page.dc.so.detail_ekatalog', ['data' => $data, 'status' => $status]);
         } else {
             $data = Pesanan::find($id);
-
 
             $x = array();
 
@@ -1493,184 +1476,183 @@ class DcController extends Controller
                             ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
                         }
                         ])->orderBy('tgl_kontrak', 'desc')->has('Ekatalog')->count();
+        $lewat_batas = Pesanan::whereIn('id', function($q){
+                    $q->select('pesanan.id')
+                        ->from('pesanan')
+                        ->leftjoin('detail_pesanan', 'detail_pesanan.pesanan_id', '=', 'pesanan.id')
+                        ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
+                        ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                        ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                        ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
+                        ->leftjoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
+                        ->where('produk.coo', '=', '1')
+                        ->groupBy('pesanan.id')
+                        ->havingRaw('count(noseri_logistik.id) > (
+                            select count(noseri_coo.id)
+                            from noseri_coo
+                            left join noseri_logistik on noseri_logistik.id = noseri_coo.noseri_logistik_id
+                            left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
+                            left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
+                            left join gdg_barang_jadi on gdg_barang_jadi.id = detail_pesanan_produk.gudang_barang_jadi_id
+                            left join produk on produk.id = gdg_barang_jadi.produk_id AND produk.coo = 1
+                            left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
+                            where detail_pesanan.pesanan_id = pesanan.id)');
+                        })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
+                            ->addSelect(['tgl_kontrak' => function($q){
+                            $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
+                              ->from('ekatalog')
+                              ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
+                              ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
+                              ->limit(1);
+                        },
+                        'ccoo' => function($q){
+                            $q->selectRaw('count(noseri_coo.id)')
+                            ->from('noseri_coo')
+                            ->leftJoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
+                            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                            ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                            ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                            ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                            ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                            ->where('produk.coo', 1)
+                            ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                        },
+                        'cseri' => function($q){
+                            $q->selectRaw('count(noseri_logistik.id)')
+                            ->from('noseri_logistik')
+                            ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                            ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                            ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                            ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                            ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                            ->where('produk.coo', 1)
+                            ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                        }
+                        ])->orderBy('tgl_kontrak', 'desc')->havingRaw('tgl_kontrak < CURDATE()')->has('Ekatalog')->count();
 
+                $penjualan = Pesanan::addSelect(['cjumlahprd' => function($q){
+                    $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                }, 'cjumlahpart' => function($q){
+                    $q->selectRaw('sum(detail_pesanan_part.jumlah)')
+                    ->from('detail_pesanan_part')
+                    ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                    ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                    ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+                },'clogprd' => function($q){
+                    $q->selectRaw('count(noseri_logistik.id)')
+                       ->from('noseri_logistik')
+                       ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                       ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                       ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                       ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                }, 'clogpart' => function($q){
+                    $q->selectRaw('sum(detail_logistik_part.jumlah)')
+                       ->from('detail_logistik_part')
+                       ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                       ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                       ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
+                       ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+                }])
+                ->whereIn('log_id', ['9'])
+                ->havingRaw('clogprd < cjumlahprd OR clogpart < cjumlahpart')
+                ->has('Ekatalog')
+                ->count();
 
-            $lewat_batas = Pesanan::whereIn('id', function($q){
-                            $q->select('pesanan.id')
-                                ->from('pesanan')
-                                ->leftjoin('detail_pesanan', 'detail_pesanan.pesanan_id', '=', 'pesanan.id')
-                                ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                                ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
-                                ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                                ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.detail_pesanan_produk_id', '=', 'detail_pesanan_produk.id')
-                                ->leftjoin('noseri_logistik', 'noseri_logistik.noseri_detail_pesanan_id', '=', 'noseri_detail_pesanan.id')
-                                ->where('produk.coo', '=', '1')
-                                ->groupBy('pesanan.id')
-                                ->havingRaw('count(noseri_logistik.id) > (
-                                    select count(noseri_coo.id)
-                                    from noseri_coo
-                                    left join noseri_logistik on noseri_logistik.id = noseri_coo.noseri_logistik_id
-                                    left join noseri_detail_pesanan on noseri_detail_pesanan.id = noseri_logistik.noseri_detail_pesanan_id
-                                    left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
-                                    left join gdg_barang_jadi on gdg_barang_jadi.id = detail_pesanan_produk.gudang_barang_jadi_id
-                                    left join produk on produk.id = gdg_barang_jadi.produk_id AND produk.coo = 1
-                                    left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
-                                    where detail_pesanan.pesanan_id = pesanan.id)');
-                                })->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
-                                    ->addSelect(['tgl_kontrak' => function($q){
-                                    $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY))')
-                                      ->from('ekatalog')
-                                      ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
-                                      ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
-                                      ->limit(1);
-                                },
-                                'ccoo' => function($q){
-                                    $q->selectRaw('count(noseri_coo.id)')
-                                    ->from('noseri_coo')
-                                    ->leftJoin('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
-                                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-                                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                                    ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
-                                    ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                                    ->where('produk.coo', 1)
-                                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-                                },
-                                'cseri' => function($q){
-                                    $q->selectRaw('count(noseri_logistik.id)')
-                                    ->from('noseri_logistik')
-                                    ->leftjoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-                                    ->leftjoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                                    ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
-                                    ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                                    ->leftjoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                                    ->where('produk.coo', 1)
-                                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-                                }
-                                ])->orderBy('tgl_kontrak', 'desc')->havingRaw('tgl_kontrak < CURDATE()')->has('Ekatalog')->count();
+                $gudang = Pesanan::addSelect(['jumlah_produk' => function($q){
+                    $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
+                    ->from('detail_pesanan')
+                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
+                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                }, 'jumlah_gudang' => function($q){
+                    $q->selectRaw('count(t_gbj_noseri.id)')
+                    ->from('t_gbj_noseri')
+                    ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
+                }])->whereNotIn('log_id', ['7'])->havingRaw('jumlah_produk > jumlah_gudang')->has('Ekatalog')->count();
 
-                                $penjualan = Pesanan::addSelect(['cjumlahprd' => function($q){
-                                    $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
-                                    ->from('detail_pesanan')
-                                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
-                                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
-                                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-                                }, 'cjumlahpart' => function($q){
-                                    $q->selectRaw('sum(detail_pesanan_part.jumlah)')
-                                    ->from('detail_pesanan_part')
-                                    ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-                                    ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-                                    ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
-                                },'clogprd' => function($q){
-                                    $q->selectRaw('count(noseri_logistik.id)')
-                                       ->from('noseri_logistik')
-                                       ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-                                       ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                                       ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                                       ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-                                }, 'clogpart' => function($q){
-                                    $q->selectRaw('sum(detail_logistik_part.jumlah)')
-                                       ->from('detail_logistik_part')
-                                       ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-                                       ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
-                                       ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
-                                       ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
-                                }])
-                                ->whereIn('log_id', ['9'])
-                                ->havingRaw('clogprd < cjumlahprd OR clogpart < cjumlahpart')
-                                ->has('Ekatalog')
-                                ->count();
+                $qc = Pesanan::whereNotIn('log_id', ['7', '10'])->addSelect(['tgl_kontrak' => function($q){
+                    $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
+                    ->from('ekatalog')
+                    ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
+                    ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
+                    ->limit(1);
+                },
+                'ctfprd' => function($q){
+                    $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
+                    ->from('t_gbj_noseri')
+                    ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
+                },
+                'cqcprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
+                        ->from('noseri_detail_pesanan')
+                        ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->where('noseri_detail_pesanan.status', 'ok')
+                        ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                },
+                'clogprd' => function($q){
+                    $q->selectRaw('coalesce(count(noseri_logistik.id), 0)')
+                       ->from('noseri_logistik')
+                       ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                       ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                       ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                       ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                       ->limit(1);
+                }])->with(['ekatalog.customer.provinsi'])
+                ->havingRaw('(ctfprd > cqcprd AND ctfprd > 0)')
+                ->orderBy('tgl_kontrak', 'asc')
+                ->has('Ekatalog')
+                ->count();
 
-                                $gudang = Pesanan::addSelect(['jumlah_produk' => function($q){
-                                    $q->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
-                                    ->from('detail_pesanan')
-                                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
-                                    ->join('produk', 'produk.id', '=', 'detail_penjualan_produk.produk_id')
-                                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-                                }, 'jumlah_gudang' => function($q){
-                                    $q->selectRaw('count(t_gbj_noseri.id)')
-                                    ->from('t_gbj_noseri')
-                                    ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-                                    ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-                                    ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
-                                }])->whereNotIn('log_id', ['7'])->havingRaw('jumlah_produk > jumlah_gudang')->has('Ekatalog')->count();
-
-                                $qc = Pesanan::whereNotIn('log_id', ['7', '10'])->addSelect(['tgl_kontrak' => function($q){
-                                    $q->selectRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY))')
-                                    ->from('ekatalog')
-                                    ->join('provinsi', 'provinsi.id', '=', 'ekatalog.provinsi_id')
-                                    ->whereColumn('ekatalog.pesanan_id', 'pesanan.id')
-                                    ->limit(1);
-                                },
-                                'ctfprd' => function($q){
-                                    $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
-                                    ->from('t_gbj_noseri')
-                                    ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-                                    ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-                                    ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
-                                },
-                                'cqcprd' => function($q){
-                                    $q->selectRaw('coalesce(count(noseri_detail_pesanan.id), 0)')
-                                        ->from('noseri_detail_pesanan')
-                                        ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                                        ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                                        ->where('noseri_detail_pesanan.status', 'ok')
-                                        ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-                                },
-                                'clogprd' => function($q){
-                                    $q->selectRaw('coalesce(count(noseri_logistik.id), 0)')
-                                       ->from('noseri_logistik')
-                                       ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-                                       ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                                       ->leftJoin('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                                       ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-                                       ->limit(1);
-                                }])->with(['ekatalog.customer.provinsi'])
-                                ->havingRaw('(ctfprd > cqcprd AND ctfprd > 0)')
-                                ->orderBy('tgl_kontrak', 'asc')
-                                ->has('Ekatalog')
-                                ->count();
-
-                                $logistik = Pesanan::addSelect(['cqcprd' => function($q){
-                                    $q->selectRaw('count(noseri_detail_pesanan.id)')
-                                        ->from('noseri_detail_pesanan')
-                                        ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                                        ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                                        ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
-                                        ->join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                                        ->where('noseri_detail_pesanan.status', 'ok')
-                                        ->where('produk.coo', 1)
-                                        ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-                                },
-                                'clogprd' => function($q){
-                                    $q->selectRaw('count(noseri_logistik.id)')
-                                       ->from('noseri_logistik')
-                                       ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-                                       ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                                       ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
-                                       ->join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                                       ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                                       ->where('produk.coo', 1)
-                                       ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-                                       ->limit(1);
-                                },
-                                'ccoo' => function($q){
-                                    $q->selectRaw('count(noseri_coo.id)')
-                                    ->from('noseri_coo')
-                                    ->join('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
-                                    ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-                                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-                                    ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
-                                    ->join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
-                                    ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-                                    ->where('produk.coo', 1)
-                                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
-                                },])
-                                ->havingRaw('cqcprd > 0 AND ((ccoo < clogprd OR clogprd <= 0))')
-                                ->has('Ekatalog')
-                                ->count();
+                $logistik = Pesanan::addSelect(['cqcprd' => function($q){
+                    $q->selectRaw('count(noseri_detail_pesanan.id)')
+                        ->from('noseri_detail_pesanan')
+                        ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                        ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                        ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                        ->join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                        ->where('noseri_detail_pesanan.status', 'ok')
+                        ->where('produk.coo', 1)
+                        ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                },
+                'clogprd' => function($q){
+                    $q->selectRaw('count(noseri_logistik.id)')
+                       ->from('noseri_logistik')
+                       ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                       ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                       ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                       ->join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                       ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                       ->where('produk.coo', 1)
+                       ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
+                       ->limit(1);
+                },
+                'ccoo' => function($q){
+                    $q->selectRaw('count(noseri_coo.id)')
+                    ->from('noseri_coo')
+                    ->join('noseri_logistik', 'noseri_logistik.id', '=', 'noseri_coo.noseri_logistik_id')
+                    ->join('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->join('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'detail_pesanan_produk.gudang_barang_jadi_id')
+                    ->join('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
+                    ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                    ->where('produk.coo', 1)
+                    ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id');
+                },])
+                ->havingRaw('cqcprd > 0 AND ((ccoo < clogprd OR clogprd <= 0))')
+                ->has('Ekatalog')
+                ->count();
         return view('page.dc.dashboard', ['daftar_so' => $daftar_so, 'belum_coo' => $belum_coo, 'lewat_batas' => $lewat_batas, 'penjualan' => $penjualan, 'gudang' => $gudang, 'qc' => $qc, 'logistik' => $logistik]);
     }
+
     public function dashboard_data($value)
     {
         if ($value == 'pengirimansotable') {
@@ -1733,7 +1715,6 @@ class DcController extends Controller
                     return $data->so;
                 })
                 ->addColumn('status', function ($data) {
-
                     if ($data->ccoo <= 0) {
                         return  '<span class="badge red-text">Belum Diproses</span>';
                     } else {
@@ -2241,19 +2222,19 @@ class DcController extends Controller
                 ->make(true);
     }
     //Another
-    public function bulan_romawi($value)
+    static function bulan_romawi($value)
     {
         $bulan =  Carbon::createFromFormat('Y-m-d', $value)->format('m');
         $to = new DcController();
         $x = $to->toRomawi($bulan);
         return $x;
     }
-    public function tahun($value)
+    static function tahun($value)
     {
         $tahun =  Carbon::createFromFormat('Y-m-d', $value)->format('Y');
         return $tahun;
     }
-    public function tgl_footer($value)
+    static function tgl_footer($value)
     {
         $footer = Carbon::createFromFormat('Y-m-d', $value)->isoFormat('D MMMM Y');
         return $footer;

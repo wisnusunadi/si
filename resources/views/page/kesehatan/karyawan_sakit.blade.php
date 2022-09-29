@@ -85,31 +85,68 @@
   <div class="col-lg-12">
     <div class="card">
       <div class="card-body">
-        <div class='table-responsive'>
-          <table id="tabel" class="table table-hover styled-table table-striped">
-            <thead style="text-align: center;">
-              <tr>
-                <th colspan="12">
-                  <a href="/karyawan/sakit/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
-                </th>
-              </tr>
-              <tr>
-                <th style="width:1%">No</th>
-                <th>Tgl</th>
-                <th>Divisi</th>
-                <th>Nama</th>
-                <th>Pemeriksa</th>
-                <th>Analisa</th>
-                <th>Diagnosa</th>
-                <th>Tindak Lanjut</th>
-                <th>Hasil</th>
-                <th></th>
-              </tr>
-            </thead>
-            <tbody style="text-align: center;">
-            </tbody>
-          </table>
+        <div class="row mb-3">
+            <div class="col-9">
+            <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                <li class="nav-item" role="presentation">
+                <a class="nav-link active" id="pills-berobat-tab" data-toggle="pill" href="#pills-berobat" role="tab" aria-controls="pills-berobat" aria-selected="true">Berobat</a>
+                </li>
+                <li class="nav-item" role="presentation">
+                <a class="nav-link" id="pills-sakit-tab" data-toggle="pill" href="#pills-sakit" role="tab" aria-controls="pills-sakit" aria-selected="false">Sakit</a>
+                </li>
+            </ul>
+            </div>
+            <div class="col-3">
+                <a href="/karyawan/sakit/tambah" style="color: white;"><button type="button" class="btn btn-md btn-success btn-sm float-right"><i class="fas fa-plus"></i>&nbsp; Tambah Karyawan Sakit</i></button></a>
+            </div>
         </div>
+
+            <div class="tab-content" id="pills-tabContent">
+                <div class="tab-pane fade show active" id="pills-berobat" role="tabpanel" aria-labelledby="pills-berobat-tab">
+                    <div class='table-responsive'>
+                        <table id="tabel" class="table table-hover styled-table table-striped">
+                            <thead style="text-align: center;">
+                                <tr>
+                                <th style="width:1%">No</th>
+                                <th>Tgl</th>
+                                <th>Divisi</th>
+                                <th>Nama</th>
+                                <th>Pemeriksa</th>
+                                <th>Analisa</th>
+                                <th>Diagnosa</th>
+                                <th>Tindak Lanjut</th>
+                                <th>Hasil</th>
+                                <th></th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-sakit" role="tabpanel" aria-labelledby="pills-sakit-tab">
+                    <div class='table-responsive'>
+                        <table id="tabel_sakit" class="table table-hover styled-table table-striped" style="width:100%">
+                            <thead style="text-align: center;">
+                                <tr>
+                                <th style="width:1%">No</th>
+                                <th>Tgl</th>
+                                <th>Divisi</th>
+                                <th>Nama</th>
+                                <th>Pemeriksa</th>
+                                <th>Analisa</th>
+                                <th>Diagnosa</th>
+                                <th>Tindak Lanjut</th>
+                                <th>Hasil</th>
+                                <th></th>
+                                </tr>
+                            </thead>
+                            <tbody style="text-align: center;">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
       </div>
     </div>
   </div>
@@ -137,6 +174,7 @@
                   <th>Jumlah</th>
                   <th>Aturan</th>
                   <th>Konsumsi</th>
+                  <th></th>
                 </tr>
               </thead>
               <tbody>
@@ -153,6 +191,94 @@
 @section('adminlte_js')
 <script>
   $(function() {
+    $('#tabel > tbody').on('click', '#delete', function() {
+        var data_id = $(this).attr('data-id');
+        Swal.fire({
+            title: 'Hapus Data',
+            text: 'Yakin ingin menghapus data ini?',
+            icon: 'warning',
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+            showCancelButton: true,
+            showCloseButton: true
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                        url: '/karyawan/sakit/delete/' + data_id,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response['data'] == "success") {
+                                swal.fire(
+                                    'Berhasil',
+                                    'Berhasil melakukan Hapus Data',
+                                    'success'
+                                );
+                                $('#tabel_detail').DataTable().ajax.reload();
+                                $("#hapusmodal").modal('hide');
+                            } else if (response['data'] == "error") {
+                                swal.fire(
+                                    'Gagal',
+                                    'Data telah digunakan dalam Transaksi Lain',
+                                    'error'
+                                );
+                            } else {
+                                swal.fire(
+                                    'Error',
+                                    'Data telah digunakan dalam Transaksi Lain',
+                                    'warning'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            swal.fire(
+                                'Error',
+                                'Data telah digunakan dalam Transaksi Lain',
+                                'warning'
+                            );
+                        }
+                    });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire({
+                    title: 'Gagal',
+                    text: 'Gagal menghapus data',
+                    icon: 'error',
+                    showCloseButton: true
+                });
+            }
+        });
+    });
+    $('#tabel_detail_obat > tbody').on('click', '#delete', function() {
+        Swal.fire({
+            title: 'Hapus Data',
+            text: 'Yakin ingin menghapus data ini?',
+            icon: 'warning',
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+            showCancelButton: true,
+            showCloseButton: true
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Berhasil',
+                    text: 'Berhasil menghapus data',
+                    icon: 'success',
+                    showCloseButton: true
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire({
+                    title: 'Gagal',
+                    text: 'Gagal menghapus data',
+                    icon: 'error',
+                    showCloseButton: true
+                });
+            }
+        });
+    });
     var tabel = $('#tabel').DataTable({
       processing: true,
       serverSide: true,
@@ -193,7 +319,8 @@
           data: 'detail_button'
         },
         {
-          data: 'keputusan'
+          data: 'keputusan',
+          visible: false
         },
         {
           data: 'cetak'
@@ -202,6 +329,7 @@
     });
     $('#tabel > tbody').on('click', '#detail_tindakan', function() {
       var rows = tabel.rows($(this).parents('tr')).data();
+      console.log(rows);
       $('.data_detail_head').html(
         rows[0]['tindakan'] + ' : ' + rows[0]['y']
       );
@@ -229,7 +357,10 @@
           },
           {
             data: 'konsumsi',
-          }
+          },
+          {
+            data: 'aksi',
+          },
         ],
       });
       $('#detail_mod').modal('show');
@@ -237,6 +368,54 @@
       // $('input[id="aturan"]').val(rows[0]['d']);
       // $('input[id="konsumsi"]').val(rows[0]['e']);
       // $('input[id="terapi"]').val(rows[0]['f']);
+    });
+
+    var tabel = $('#tabel_sakit').DataTable({
+      processing: true,
+      serverSide: true,
+      language: {
+        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+      },
+      ajax: {
+        'url': '/karyawan/sakit/data',
+        'type': 'POST',
+        'headers': {
+          'X-CSRF-TOKEN': '{{csrf_token()}}'
+        }
+      },
+      columns: [{
+          data: 'DT_RowIndex',
+          orderable: false,
+          searchable: false
+        },
+        {
+          data: 'tgl_cek'
+        },
+        {
+          data: 'x',
+        },
+        {
+          data: 'y',
+        },
+        {
+          data: 'z'
+        },
+        {
+          data: 'analisa'
+        },
+        {
+          data: 'diagnosa'
+        },
+        {
+          data: 'detail_button'
+        },
+        {
+          data: 'keputusan',
+        },
+        {
+          data: 'cetak'
+        }
+      ]
     });
   });
 </script>

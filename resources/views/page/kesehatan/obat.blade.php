@@ -39,6 +39,19 @@
         width: 100%;
     }
 
+    .align-center{
+        text-align: center;
+    }
+    #stok{
+        color: #0d6efd;
+        opacity: 0.6;
+
+    }
+
+    #stok:hover{
+        transition: color 0.5s;
+        opacity: 1;
+    }
     @media screen and (min-width: 1440px) {
 
         body {
@@ -105,13 +118,14 @@
             <thead style="text-align: center;">
               <tr>
                 <th colspan="12">
-                  <a href="/obat/tambah" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
+                  <button type="button" id="btntambahobat" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button>
                 </th>
               </tr>
               <tr>
                 <th>No</th>
                 <th>Nama</th>
                 <th>Stok</th>
+                <th>Aturan Pakai</th>
                 <th>Keterangan</th>
                 <th></th>
               </tr>
@@ -125,14 +139,14 @@
   </div>
 </div>
 <!-- Modal Detail -->
-<div class="modal fade  bd-example-modal-lg" id="riwayat_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog modal-lg" role="document">
+<div class="modal fade  bd-example-modal-xl" id="riwayat_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog modal-xl" role="document">
     <div class="card-body">
-      <form method="post" action="/kesehatan_harian_mingguan_tensi/aksi_ubah">
+      {{-- <form method="post" action="/kesehatan_harian_mingguan_tensi/aksi_ubah">
         {{ csrf_field() }}
-        {{ method_field('PUT')}}
+        {{ method_field('PUT')}} --}}
         <div class="modal-content">
-          <div class="modal-header">
+          <div class="modal-header card-outline card-info">
             <h4 class="modal-title" id="myModalLabel">
               <div class="data_detail_head"></div>
             </h4>
@@ -140,7 +154,7 @@
           </div>
           <div class="modal-body">
             <div class='table-responsive'>
-              <table class="table table-hover styled-table table-striped" width="100%" id="tabel_detail">
+              <table class="table table-hover styled-table table-striped align-center" width="100%" id="tabel_detail" >
                 <thead>
                   <tr>
                     <th>No</th>
@@ -150,6 +164,7 @@
                     <th>Analisa</th>
                     <th>Diagnosa</th>
                     <th>Jumlah</th>
+                    <th></th>
                   </tr>
                 </thead>
                 <tbody>
@@ -158,7 +173,7 @@
             </div>
           </div>
         </div>
-      </form>
+      {{-- </form> --}}
     </div>
   </div>
 </div>
@@ -167,7 +182,7 @@
 <div class="modal fade  bd-example-modal-lg" id="edit_mod" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
-      <div class="modal-header">
+      <div class="modal-header card-outline card-warning">
         <h4 class="modal-title" id="myModalLabel">
           <div class="data_detail_head"></div>
         </h4>
@@ -180,62 +195,71 @@
               <div class="col-lg-12">
                 <form method="post" action="/obat/aksi_ubah">
                   {{ csrf_field() }}
-                  {{method_field('PUT')}}
-                  <div class="card">
-                    <div class="card-header bg-success">
-                      <div class="card-title"><i class="fas fa-plus-circle"></i>&nbsp;Ubah Data</div>
-                    </div>
-                    <div class="card-body">
-                      <div class="col-lg-12">
+                  {{ method_field('PUT') }}
+                  <div class="row">
+                    <div class="col-lg-12">
                         <div class="row">
-                          <div class="col-lg-12">
-                            <div class="form-horizontal">
-                              <input type="text" name="id" class="d-none form-control" id="id" readonly>
-                              <table class="table table-bordered table-striped" id="tabel_vaksin">
-                                <thead>
-                                  <tr>
-                                    <th>Nama</th>
-                                    <th width="25%">Stok</th>
-                                    <th>Keterangan</th>
-                                  </tr>
-                                </thead>
-                                <tbody>
-                                  <tr>
-                                    <td>
-                                      <textarea type="text" class="form-control" name="nama" id="nama"></textarea>
-                                    </td>
-                                    <td>
-                                      <div class="input-group mb-3">
-                                        <input type="text" class="form-control" id="stok" readonly>
-                                        <div class="input-group-append">
-                                          <span class="input-group-text">Pcs</span>
+                            <div class="col-lg-12">
+                                <div class="form-horizontal">
+                                    <input type="text" class="form-control d-none" name="id" placeholder="Masukkan Nama Obat" value="{{ old('id') }}" id="id">
+                                    <div class="form-group row">
+                                        <label for="no_pemeriksaan" class="col-sm-5 col-form-label" style="text-align:right;">Nama Obat</label>
+                                        <div class="col-sm-5">
+                                            <input type="text" class="form-control" name="nama" placeholder="Masukkan Nama Obat" value="{{ old('nama') }}" id="nama">
+                                            <div class="text-danger form-text" id="nama_obat_message">
+
+                                            </div>
                                         </div>
-                                      </div>
-                                    </td>
-                                    <td>
-                                      <textarea type="text" class="form-control" name="keterangan" id="keterangan"></textarea>
-                                    </td>
-                                  </tr>
-                                </tbody>
-                              </table>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="no_pemeriksaan" class="col-sm-5 col-form-label" style="text-align:right;">Stok Obat</label>
+                                        <div class="col-sm-4">
+                                            <div class="input-group">
+                                                <input type="text" class="form-control" id="stok" readonly>
+                                                <div class="input-group-append">
+                                                  <span class="input-group-text">Pcs</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="" class="col-sm-5 col-form-label" style="text-align: right;">Aturan</label>
+                                        <div class="col-sm-7 col-form-label">
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input aturan_obat" type="radio" name="aturan_obat" value="Sebelum Makan">
+                                                <label class="form-check-label">Sebelum Makan</label>
+                                            </div>
+                                            <div class="form-check form-check-inline">
+                                                <input class="form-check-input aturan_obat" type="radio" name="aturan_obat" value="Sesudah Makan">
+                                                <label class="form-check-label">Sesudah Makan</label>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="tanggal" class="col-sm-5 col-form-label" style="text-align:right;">Keterangan</label>
+                                        <div class="col-sm-7">
+                                            <textarea type="text" class="form-control @error('keterangan') is-invalid @enderror" name="keterangan" value="{{old('keterangan')}}" placeholder="Catatan tambahan" style="width:45%;"></textarea>
+                                        </div>
+                                        <span role="alert" id="no_seri-msg"></span>
+                                    </div>
+                                </div>
                             </div>
-                          </div>
                         </div>
-                      </div>
-                    </div>
-                    <div class="card-footer">
-                      <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Ubah Data</button></span>
+                        <div class="row">
+                            <div class="col-6"><button class="btn btn-danger" data-dismiss="modal">Batal</button></div>
+                            <div class="col-6"><button class="btn btn-warning float-right" id="button_tambah">Simpan</button></div>
+                        </div>
                     </div>
                   </div>
+
                 </form>
               </div>
             </div>
           </div>
         </div>
       </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-      </div>
+
     </div>
   </div>
 </div>
@@ -345,10 +369,77 @@
   </div>
 </div>
 <!-- End Modal Detail -->
+
+<div class="modal fade  bd-example-modal-xl" id="tambahmodal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+    <div class="modal-dialog modal-xl" role="document">
+        <div class="modal-content">
+            <div class="modal-header card-outline card-primary">
+                <h4 class="modal-title" id="myModalLabel">
+                    Tambah Obat
+                </h4>
+            </div>
+            <div class="modal-body" id="tambahdata">
+            </div>
+        </div>
+    </div>
+</div>
 @stop
 @section('adminlte_js')
 <script>
   $(function() {
+    $('#tabel > tbody').on('click', '#delete', function() {
+        var data_id = $(this).attr('data-id');
+        Swal.fire({
+            title: 'Hapus Data',
+            text: 'Yakin ingin menghapus data ini?',
+            icon: 'warning',
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+            showCancelButton: true,
+            showCloseButton: true
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                $.ajax({
+                        url: '/obat/delete/'+data_id,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(response) {
+                            if (response['data'] == "success") {
+                                swal.fire(
+                                    'Berhasil',
+                                    'Berhasil melakukan Hapus Data',
+                                    'success'
+                                );
+                                $('#tabel').DataTable().ajax.reload();
+                                $("#hapusmodal").modal('hide');
+                            } else if (response['data'] == "error") {
+                                swal.fire(
+                                    'Gagal',
+                                    'Data telah digunakan dalam Transaksi Lain',
+                                    'error'
+                                );
+                            } else {
+                                swal.fire(
+                                    'Error',
+                                    'Data telah digunakan dalam Transaksi Lain',
+                                    'warning'
+                                );
+                            }
+                        },
+                        error: function(xhr, status, error) {
+                            swal.fire(
+                                'Error',
+                                'Data telah digunakan dalam Transaksi Lain',
+                                'warning'
+                            );
+                        }
+                    });
+            }
+        });
+    });
     $('#tabel_riwayat').DataTable({
 
     });
@@ -378,12 +469,87 @@
           data: 'a'
         },
         {
+            data: null
+        },
+        {
           data: 'keterangan'
         },
         {
           data: 'button'
         }
       ]
+    });
+
+    $(document).on('click', '#btntambahobat', function(){
+                $.ajax({
+                    url: "/obat/tambah",
+                    beforeSend: function() {
+                        $('#loader').show();
+                    },
+                    // return the result
+                    success: function(result) {
+                        $('#tambahmodal').modal("show");
+                        $('#tambahdata').html(result).show();
+                    },
+                    complete: function() {
+                        $('#loader').hide();
+                    },
+                    error: function(jqXHR, testStatus, error) {
+                        console.log(error);
+                        alert("Page cannot open. Error:" + error);
+                        $('#loader').hide();
+                    },
+                    timeout: 8000
+                })
+    });
+
+    $(document).on('keyup change', '#nama_obat', function() {
+        var nama = $(this).val();
+        $.ajax({
+            url: '/obat/cekdata/' + nama,
+            method: "GET",
+            dataType: "json",
+            success: function(data) {
+                if (data.length > 0) {
+                    $('#nama_obat').addClass('is-invalid');
+                    $('#nama_obat_message').html('Data Telah Terpakai');
+                    $('#button_tambah').attr("disabled", true);
+                } else {
+                    $('#nama_obat').removeClass('is-invalid');
+                    $('#nama_obat_message').html('');
+                    $('#button_tambah').attr("disabled", false);
+                }
+            }
+        })
+    });
+
+    $('#tabel_detail > tbody').on('click', '#delete', function() {
+        Swal.fire({
+            title: 'Hapus Data',
+            text: 'Yakin ingin menghapus data ini?',
+            icon: 'warning',
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+            showCancelButton: true,
+            showCloseButton: true
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Berhasil',
+                    text: 'Berhasil menghapus data',
+                    icon: 'success',
+                    showCloseButton: true
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire({
+                    title: 'Gagal',
+                    text: 'Gagal menghapus data',
+                    icon: 'error',
+                    showCloseButton: true
+                });
+            }
+        });
     });
     $('#tabel > tbody').on('click', '#riwayat', function() {
       var rows = tabel.rows($(this).parents('tr')).data();
@@ -420,19 +586,24 @@
           },
           {
             data: 'jum'
+          },
+          {
+            data: 'aksi'
           }
         ],
       });
       $('#riwayat_mod').modal('show');
     })
 
+
     $('#tabel > tbody').on('click', '#edit', function() {
       var rows = tabel.rows($(this).parents('tr')).data();
       $('input[id="id"]').val(rows[0]['id']);
-      $('textarea[id="nama"]').val(rows[0]['nama']);
+      $('input[id="nama"]').val(rows[0]['nama']);
       $('input[id="stok"]').val(rows[0]['stok']);
       $('textarea[id="keterangan"]').val(rows[0]['keterangan']);
       $('#edit_mod').modal('show');
+      $('.modal-title > .data_detail_head').text('Ubah '+rows[0]['nama']);
     })
 
     $('#tabel > tbody').on('click', '#stok', function() {

@@ -1981,6 +1981,17 @@ class GudangController extends Controller
             // $validation->setFormula1('"Item A,Item B,Item C"');
             $produk_val->setSqref('D2:D10000');
 
+            $duplicate = new Conditional();
+            $duplicate->setConditionType(Conditional::CONDITION_DUPLICATES);
+            $duplicate->getStyle()->getFont()->getColor()->setARGB(Color::COLOR_BLACK);
+            $duplicate->getStyle()->getFill()->setFillType(Fill::FILL_SOLID);
+            $duplicate->getStyle()->getFill()->getEndColor()->setARGB(Color::COLOR_YELLOW);
+
+            $conditionalStyles = $spreadsheet->getActiveSheet()->getStyle('E2:E10000')->getConditionalStyles();
+            $conditionalStyles[] = $duplicate;
+
+            $spreadsheet->getActiveSheet()->getStyle('E2:E10000')->setConditionalStyles($conditionalStyles);
+
 
             $spreadsheet->setActiveSheetIndex(1);
             $spreadsheet->getActiveSheet()->setTitle('Master Detail Sales Order');
@@ -2445,30 +2456,158 @@ class GudangController extends Controller
         }
     }
 
-    // function template_tanpa_so()
-    // {
-    //     // spreadsheet
-    //     $spreadsheet = new Spreadsheet();
-    //     $spreadsheet->createSheet();
+    function template_tanpa_so()
+    {
+        try {
+            // spreadsheet
+            $spreadsheet = new Spreadsheet();
+            $spreadsheet->createSheet();
 
-    //     $spreadsheet->setActiveSheetIndex(0);
-    //     $spreadsheet->getActiveSheet()->setTitle('Template');
-    //     $spreadsheet->getActiveSheet()->setCellValue('A1', 'Tujuan');
-    //     $spreadsheet->getActiveSheet()->setCellValue('B1', 'Produk');
-    //     $spreadsheet->getActiveSheet()->setCellValue('C1', 'Noseri');
-    //     $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(30);
-    //     $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(45);
-    //     $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
+            $spreadsheet->setActiveSheetIndex(0);
+            $spreadsheet->getActiveSheet()->setTitle('Template');
+            $spreadsheet->getActiveSheet()->setCellValue('A1', 'Tujuan');
+            $spreadsheet->getActiveSheet()->setCellValue('B1', 'Produk');
+            $spreadsheet->getActiveSheet()->setCellValue('C1', 'Noseri');
+            $spreadsheet->getActiveSheet()->getColumnDimension('A')->setWidth(30);
+            $spreadsheet->getActiveSheet()->getColumnDimension('B')->setWidth(45);
+            $spreadsheet->getActiveSheet()->getColumnDimension('C')->setWidth(20);
 
-    //     $spreadsheet->setActiveSheetIndex(1);
-    //     $spreadsheet->getActiveSheet()->setTitle('Master Tujuan');
-    //     $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
-    //     $spreadsheet->getActiveSheet()->setCellValue('B1', 'Nama');
-    //     $spreadsheet->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+            $tujuan_val = $spreadsheet->getActiveSheet()->getCell('A2')
+                ->getDataValidation();
+            $tujuan_val->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST );
+            $tujuan_val->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_INFORMATION );
+            $tujuan_val->setAllowBlank(false);
+            $tujuan_val->setShowInputMessage(true);
+            $tujuan_val->setShowErrorMessage(true);
+            $tujuan_val->setShowDropDown(true);
+            $tujuan_val->setErrorTitle('Input error');
+            $tujuan_val->setError('Value is not in list.');
+            $tujuan_val->setPromptTitle('Pilih Tujuan');
+            $tujuan_val->setPrompt('Tolong pilih Tujuan yang tersedia.');
 
-    //     $tujuan = Divisi::whereNotIn('id', [1,2,3,4,5,31])->get();
+            $tujuan_val->setFormula1('\'Master Tujuan\'!$B$2:$B$688');
+            $tujuan_val->setSqref('A2:A10000');
 
-    // }
+            $produk_val = $spreadsheet->getActiveSheet()->getCell('B2')
+                ->getDataValidation();
+            $produk_val->setType( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::TYPE_LIST );
+            $produk_val->setErrorStyle( \PhpOffice\PhpSpreadsheet\Cell\DataValidation::STYLE_INFORMATION );
+            $produk_val->setAllowBlank(false);
+            $produk_val->setShowInputMessage(true);
+            $produk_val->setShowErrorMessage(true);
+            $produk_val->setShowDropDown(true);
+            $produk_val->setErrorTitle('Input error');
+            $produk_val->setError('Value is not in list.');
+            $produk_val->setPromptTitle('Pilih Produk');
+            $produk_val->setPrompt('Tolong pilih produk yang tersedia.');
+
+            $produk_val->setFormula1('\'Master Produk\'!$B$2:$B$888');
+            $produk_val->setSqref('B2:B10000');
+
+            $duplicate = new Conditional();
+            $duplicate->setConditionType(Conditional::CONDITION_DUPLICATES);
+            $duplicate->getStyle()->getFont()->getColor()->setARGB(Color::COLOR_BLACK);
+            $duplicate->getStyle()->getFill()->setFillType(Fill::FILL_SOLID);
+            $duplicate->getStyle()->getFill()->getEndColor()->setARGB(Color::COLOR_YELLOW);
+
+            $conditionalStyles = $spreadsheet->getActiveSheet()->getStyle('C2:C10000')->getConditionalStyles();
+            $conditionalStyles[] = $duplicate;
+
+            $spreadsheet->getActiveSheet()->getStyle('C2:C10000')->setConditionalStyles($conditionalStyles);
+
+            $spreadsheet->setActiveSheetIndex(1);
+            $spreadsheet->getActiveSheet()->setTitle('Master Tujuan');
+            $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
+            $spreadsheet->getActiveSheet()->setCellValue('B1', 'Nama');
+            $spreadsheet->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+
+            $tujuan = Divisi::whereNotIn('id', [1,2,3,4,5,31])->get();
+            $noo = 2;
+            foreach($tujuan as $t) {
+                $spreadsheet->getActiveSheet()->setCellValue('A'. $noo, $t->id);
+                $spreadsheet->getActiveSheet()->setCellValue('B'. $noo, $t->nama);
+                $noo++;
+            }
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(2);
+            $spreadsheet->getActiveSheet()->setTitle('Master Produk');
+            $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
+            $spreadsheet->getActiveSheet()->setCellValue('B1', 'Nama Produk');
+            $spreadsheet->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+
+            $produk = DB::table('gdg_barang_jadi as gbj')
+                        ->join('produk as p', 'p.id', '=', 'gbj.produk_id')
+                        ->select('gbj.id', DB::raw('concat(p.nama," ",gbj.nama) as produkk'))
+                        // ->orderBy(DB::raw('concat(p.nama," ",gbj.nama) as produkk'))
+                        ->get();
+
+            $no = 2;
+            foreach($produk as $p) {
+                $spreadsheet->getActiveSheet()->setCellValue('A'. $no, $p->id);
+                $spreadsheet->getActiveSheet()->setCellValue('B'. $no, $p->produkk);
+                $no++;
+            }
+
+            $spreadsheet->createSheet();
+            $spreadsheet->setActiveSheetIndex(3);
+            $spreadsheet->getActiveSheet()->setTitle('Master Noseri');
+            $spreadsheet->getActiveSheet()->setCellValue('A1', 'No');
+            $spreadsheet->getActiveSheet()->setCellValue('B1', 'Nama Produk');
+            $spreadsheet->getActiveSheet()->setCellValue('C1', 'Nomor Seri');
+            $spreadsheet->getActiveSheet()->getColumnDimension('B')->setAutoSize(true);
+            $spreadsheet->getActiveSheet()->getColumnDimension('C')->setAutoSize(true);
+
+            $noseri = DB::table(DB::raw('noseri_barang_jadi tn'))
+                    ->select('tn.id',DB::raw('concat(p.nama," ",gbj.nama) as produkk'),'tn.noseri')
+                    ->leftJoin(DB::raw('gdg_barang_jadi gbj'),'gbj.id','=','tn.gdg_barang_jadi_id')
+                    ->leftJoin(DB::raw('produk p'),'p.id','=','gbj.produk_id')
+                    ->where([
+                        // 'is_rakit' => 0,
+                        'is_aktif' => 1,
+                        'is_ready' => 0,
+                        // 'is_repair' => 0,
+                        'is_change' => 1,
+                        'is_delete' => 0,
+                        // 'log_id' => 13,
+                    ])
+                    ->get();
+
+            $noseri_no = 2;
+            foreach($noseri as $ns) {
+                $spreadsheet->getActiveSheet()->setCellValue('A'. $noseri_no, $ns->id);
+                $spreadsheet->getActiveSheet()->setCellValue('B'. $noseri_no, $ns->produkk);
+                $spreadsheet->getActiveSheet()->setCellValue('C'. $noseri_no, $ns->noseri);
+                $noseri_no++;
+                $no++;
+            }
+
+            header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+                // header('Content-Type: application/vnd.ms-excel');
+            header('Content-Disposition: attachment; filename="Template.xlsx"'); // Set nama file excel nya
+            header('Cache-Control: max-age=0');
+
+            $writer = new Xlsx($spreadsheet);
+            $writer->save('php://output');
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
+
+    function preview_tanpa_so()
+    {
+        try {
+
+        } catch (\Exception $e) {
+            return response()->json([
+                'error' => true,
+                'msg' => $e->getMessage(),
+            ]);
+        }
+    }
 
     // store
     function storeNoseri(Request $request)

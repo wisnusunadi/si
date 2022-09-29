@@ -251,6 +251,7 @@ Route::group(['prefix' => 'qc'], function () {
     });
 });
 
+
 Route::group(['prefix' => 'logistik', 'middleware' => 'auth'], function () {
     Route::group(['middleware' => ['divisi:log']], function () {
         Route::get('/dashboard', [App\Http\Controllers\LogistikController::class, 'dashboard'])->name('logistik.dashboard');

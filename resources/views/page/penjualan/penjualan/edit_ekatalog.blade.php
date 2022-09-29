@@ -523,7 +523,7 @@
                                                                     <div class="form-group row">
                                                                         <label for="" class="col-form-label col-lg-5 col-md-12 labelket">Tanggal Delivery</label>
                                                                         <div class="col-lg-4 col-md-4">
-                                                                            <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" value="{{$e->tgl_kontrak}}" />
+                                                                            <input type="date" class="form-control col-form-label @error('batas_kontrak') is-invalid @enderror" name="batas_kontrak" id="batas_kontrak" value="{{$e->tgl_kontrak}}" @if($e->status != 'sepakat') disabled="true" @endif/>
                                                                             <div class="invalid-feedback" id="msgbatas_kontrak">
                                                                                 @if($errors->has('batas_kontrak'))
                                                                                 {{ $errors->first('batas_kontrak')}}
@@ -950,9 +950,21 @@
                     }
                 });
 
-                if($('input[type="radio"][name="status_akn"]:checked').val() == "sepakat" || $('input[type="radio"][name="status_akn"]:checked').val() == "negosiasi"){
+                if($('input[type="radio"][name="status_akn"]:checked').val() == "sepakat"){
                     if(penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true){
-                        if($('#no_paket').val() != "" && $('#provinsi').val() != null && $('#tgl_buat').val() != "" && $('#tgl_edit').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != ""){
+                        if($('#no_paket').val() != "" && $('#provinsi').val() != null && $('#tgl_buat').val() != "" && $('#tgl_edit').val() != "" && $('#batas_kontrak').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != ""){
+                            $("#btnsimpan").attr('disabled', false);
+                        } else {
+                            $("#btnsimpan").attr('disabled', true);
+                        }
+                    }
+                    else{
+                        $("#btnsimpan").attr('disabled', true);
+                    }
+                }
+                else if($('input[type="radio"][name="status_akn"]:checked').val() == "negosiasi"){
+                    if(penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga == true){
+                        if($('#no_paket').val() != "" && $('#tgl_buat').val() != "" && $('#tgl_edit').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != ""){
                             $("#btnsimpan").attr('disabled', false);
                         } else {
                             $("#btnsimpan").attr('disabled', true);
@@ -1208,7 +1220,7 @@
                         $("#batas_kontrak").attr('disabled', false);
                         $("#provinsi").attr('disabled', false);
                         var $newOption = $("<option selected='selected'></option>").val("11").text("Jawa Timur")
-                    $(".provinsi").append($newOption).trigger('change');
+                        $(".provinsi").append($newOption).trigger('change');
                         if(nopaketubah == false){
                             $('#no_paket').val(nopaketdb);
                         }
@@ -1268,7 +1280,7 @@
                                 numberRowsProduk($("#produktable"));
                             }
                         }
-                    } else {
+                    } else if($(this).val() == "negosiasi") {
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
                         $('#no_paket').attr('readonly', false);
@@ -1288,8 +1300,8 @@
                     }
                 } else {
                     $('#checkbox_nopaket').addClass('hide');
-                        $('#isi_nopaket').prop("checked", false);
-                        $('#no_paket').attr('readonly', false);
+                    $('#isi_nopaket').prop("checked", false);
+                    $('#no_paket').attr('readonly', false);
                     $("#msgstatus").text("Status Harus dipilih");
                     $("#status").addClass('is-invalid');
                     if(nopaketubah == false){
@@ -1405,33 +1417,33 @@
             });
 
             $('#no_urut').on('keyup change', function() {
-                if ($(this).val() != "") {
-                    var values = $(this).val();
-                    $.ajax({
-                        type: 'POST',
-                        dataType: 'JSON',
-                        url: '/api/penjualan/check_no_urut/' + '{{$e->id}}'+'/' + values,
-                        success: function(data) {
-                            if (data > 0) {
+                    if ($(this).val() != "") {
+                        var values = $(this).val();
+                        $.ajax({
+                            type: 'POST',
+                            dataType: 'JSON',
+                            url: '/api/penjualan/check_no_urut/' + '{{$e->id}}'+'/' + values,
+                            success: function(data) {
+                                if (data > 0) {
+                                    $("#msgno_urut").text("No Urut tidak boleh sama");
+                                    $("#no_urut").addClass('is-invalid');
+                                    $('#btntambah').attr("disabled", true);
+                                } else {
+                                    $("#msgno_urut").text("");
+                                    $("#no_urut").removeClass('is-invalid');
+                                }
+                            },
+                            error: function(data) {
                                 $("#msgno_urut").text("No Urut tidak boleh sama");
                                 $("#no_urut").addClass('is-invalid');
                                 $('#btntambah').attr("disabled", true);
-                            } else {
-                                $("#msgno_urut").text("");
-                                $("#no_urut").removeClass('is-invalid');
                             }
-                        },
-                        error: function(data) {
-                            $("#msgno_urut").text("No Urut tidak boleh sama");
-                            $("#no_urut").addClass('is-invalid');
-                            $('#btntambah').attr("disabled", true);
-                        }
-                    });
-                } else if ($(this).val() == "") {
-                    $("#msgno_urut").text("No Urut Harus diisi");
-                    $("#no_urut").addClass('is-invalid');
-                    $('#btntambah').attr("disabled", true);
-                }
+                        });
+                    } else if ($(this).val() == "") {
+                        $("#msgno_urut").text("No Urut Harus diisi");
+                        $("#no_urut").addClass('is-invalid');
+                        $('#btntambah').attr("disabled", true);
+                    }
                 checkvalidasi();
             });
 
@@ -1762,23 +1774,22 @@
                                             <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" id="variasi` + index + `` + x + `" style="width:100%;" data-attr="variasi` + x + `" data-id="` + x + `"></select>
                                             <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
                                         </div>`);
-                                if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
-                                    data.push({
-                                        id: res[0].produk[x].gudang_barang_jadi[0].id,
-                                        text: res[0].produk[x].nama,
-                                        jumlah: res[0].produk[x].pivot.jumlah,
-                                        qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
-                                    });
-                                } else {
-                                    for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
-                                        data.push({
-                                            id: res[0].produk[x].gudang_barang_jadi[y].id,
-                                            text: res[0].produk[x].gudang_barang_jadi[y].nama,
-                                            jumlah: res[0].produk[x].pivot.jumlah,
-                                            qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
-                                        });
-                                    }
-                                }
+                                        for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                            var nama_var = "";
+                                            if(res[0].produk[x].gudang_barang_jadi[y].nama != ""){
+                                                nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
+                                            }
+                                            else {
+                                                nama_var = res[0].produk[x].nama;
+                                            }
+                                            data.push({
+                                                id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                                text: nama_var,
+                                                jumlah: res[0].produk[x].pivot.jumlah,
+                                                qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
+                                            });
+                                        }
+
                                 $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
                                     placeholder: 'Pilih Variasi',
                                     data: data,
@@ -1826,23 +1837,22 @@
                             success: function(res) {
                                 for (var x = 0; x < res[0].produk.length; x++) {
                                     var data = [];
-                                    if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
-                                        data.push({
-                                            id: res[0].produk[x].gudang_barang_jadi[0].id,
-                                            text: res[0].produk[x].nama,
-                                            jumlah: res[0].produk[x].pivot.jumlah,
-                                            qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
-                                        });
-                                    } else {
-                                        for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
-                                            data.push({
-                                                id: res[0].produk[x].gudang_barang_jadi[y].id,
-                                                text: res[0].produk[x].gudang_barang_jadi[y].nama,
-                                                jumlah: res[0].produk[x].pivot.jumlah,
-                                                qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
-                                            });
+                                    for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                        var nama_var = "";
+                                        if(res[0].produk[x].gudang_barang_jadi[y].nama != ""){
+                                            nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
                                         }
+                                        else {
+                                            nama_var = res[0].produk[x].nama;
+                                        }
+                                        data.push({
+                                            id: res[0].produk[x].gudang_barang_jadi[y].id,
+                                            text: nama_var,
+                                            jumlah: res[0].produk[x].pivot.jumlah,
+                                            qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
+                                        });
                                     }
+
                                     $('select[name="variasi[' + w + '][' + x + ']"]').select2({
                                         placeholder: 'Pilih Variasi',
                                         data: data,
@@ -2051,23 +2061,23 @@
                                             <select class="form-control variasi" name="variasi[` + index + `][` + x + `]" style="width:100%;" id="variasi` + index + `` + x + `" data-attr="variasi` + x + `" data-id="` + x + `"></select>
                                             <span class="invalid-feedback d-block ketstok" name="ketstok[` + index + `][` + x + `]" id="ketstok` + index + `` + x + `" data-attr="ketstok` + x + `" data-id="` + x + `"></span>
                                         </div>`);
-                            if (res[0].produk[x].gudang_barang_jadi.length <= 1) {
-                                data.push({
-                                    id: res[0].produk[x].gudang_barang_jadi[0].id,
-                                    text: res[0].produk[x].nama,
-                                    jumlah: res[0].produk[x].pivot.jumlah,
-                                    qt: cek_stok(res[0].produk[x].gudang_barang_jadi[0].id)
-                                });
-                            } else {
+
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi.length; y++) {
+                                    var nama_var = "";
+                                    if(res[0].produk[x].gudang_barang_jadi[y].nama != ""){
+                                        nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
+                                    }
+                                    else {
+                                        nama_var = res[0].produk[x].nama;
+                                    }
                                     data.push({
                                         id: res[0].produk[x].gudang_barang_jadi[y].id,
-                                        text: res[0].produk[x].gudang_barang_jadi[y].nama,
+                                        text: nama_var,
                                         jumlah: res[0].produk[x].pivot.jumlah,
                                         qt: cek_stok(res[0].produk[x].gudang_barang_jadi[y].id)
                                     });
                                 }
-                            }
+
                             $(`select[name="variasi[` + index + `][` + x + `]"]`).select2({
                                 placeholder: 'Pilih Variasi',
                                 data: data,

@@ -92,8 +92,56 @@
                 <form action="/karyawan/masuk/aksi_tambah" method="post">
                     {{ csrf_field() }}
                     <div class="card">
-                        <div class="card-header bg-success">
-                            <div class="card-title"><i class="fas fa-plus-circle"></i>&nbsp;Tambah</div>
+                        <div class="card-header card-primary card-outline">
+                            <h6 class="card-title">Detail Umum</h6>
+                        </div>
+                        <div class="card-body">
+                            <div class="form-horizontal">
+                                <div class="form-group row">
+                                    <label for="tanggal" class="col-sm-5 col-form-label" style="text-align:right;">Tgl Pemeriksaan</label>
+                                    <div class="col-sm-2">
+                                        <input type="date" class="form-control @error('tgl_cek') is-invalid @enderror" name="tgl" value="{{old('tgl_cek')}}"  max="{{ date('Y-m-d') }}" placeholder="Analisa pemeriksaan">
+                                    </div>
+                                    <span role="alert" id="no_seri-msg"></span>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="no_pemeriksaan" class="col-sm-5 col-form-label" style="text-align:right;">Nama</label>
+                                    <div class="col-sm-7">
+                                        <select type="text" class="form-control @error('karyawan_id') is-invalid @enderror select2" name="karyawan_id" style="width:45%;">
+
+                                            @foreach($karyawan as $k)
+                                            <option value="{{$k->id}}">{{$k->nama}}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('karyawan_id'))
+                                        <div class="text-danger">
+                                            {{ $errors->first('karyawan_id')}}
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+                                <div class="form-group row">
+                                    <label for="no_pemeriksaan" class="col-sm-5 col-form-label" style="text-align:right;">Pemeriksa</label>
+                                    <div class="col-sm-7">
+                                        <select type="text" class="form-control @error('pemeriksa_id') is-invalid @enderror select2" name="pemeriksa_id" style="width:45%;">
+
+                                            @foreach($pengecek as $p)
+                                            <option value="{{$p->id}}">{{$p->nama}}</option>
+                                            @endforeach
+                                        </select>
+                                        @if($errors->has('karyawan_id'))
+                                        <div class="text-danger">
+                                            {{ $errors->first('karyawan_id')}}
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header card-outline card-primary">
+                            <h6 class="card-title">Keterangan Tidak Masuk</h6>
                         </div>
                         <div class="card-body">
                             <div class="col-lg-12">
@@ -101,47 +149,8 @@
                                     <div class="col-lg-12">
                                         <div class="form-horizontal">
                                             <div class="form-group row">
-                                                <label for="tanggal" class="col-sm-4 col-form-label" style="text-align:right;">Tgl Pemeriksaan </label>
-                                                <div class="col-sm-8">
-                                                    <input type="date" class="form-control @error('tgl_cek') is-invalid @enderror" name="tgl" value="{{old('tgl_cek')}}" placeholder="Analisa pemeriksaan" style="width:45%;">
-                                                </div>
-                                                <span role="alert" id="no_seri-msg"></span>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="no_pemeriksaan" class="col-sm-4 col-form-label" style="text-align:right;">Nama</label>
-                                                <div class="col-sm-8">
-                                                    <select type="text" class="form-control @error('karyawan_id') is-invalid @enderror select2" name="karyawan_id" style="width:45%;">
-
-                                                        @foreach($karyawan as $k)
-                                                        <option value="{{$k->id}}">{{$k->nama}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if($errors->has('karyawan_id'))
-                                                    <div class="text-danger">
-                                                        {{ $errors->first('karyawan_id')}}
-                                                    </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="no_pemeriksaan" class="col-sm-4 col-form-label" style="text-align:right;">Pemeriksa</label>
-                                                <div class="col-sm-8">
-                                                    <select type="text" class="form-control @error('pemeriksa_id') is-invalid @enderror select2" name="pemeriksa_id" style="width:45%;">
-
-                                                        @foreach($pengecek as $p)
-                                                        <option value="{{$p->id}}">{{$p->nama}}</option>
-                                                        @endforeach
-                                                    </select>
-                                                    @if($errors->has('karyawan_id'))
-                                                    <div class="text-danger">
-                                                        {{ $errors->first('karyawan_id')}}
-                                                    </div>
-                                                    @endif
-                                                </div>
-                                            </div>
-                                            <div class="form-group row">
-                                                <label for="kondisi" class="col-sm-4 col-form-label" style="text-align:right;">Alasan tidak masuk</label>
-                                                <div class="col-sm-8" style="margin-top:7px;">
+                                                <label for="kondisi" class="col-sm-5 col-form-label" style="text-align:right;">Alasan tidak masuk</label>
+                                                <div class="col-sm-7 col-form-label">
                                                     <div class="icheck-success d-inline col-sm-4">
                                                         <input type="radio" name="alasan" value="Cuti">
                                                         <label for="no">
@@ -165,22 +174,22 @@
                                             </div>
                                             <div class="sakit" id="sakit" style="display:none">
                                                 <div class="form-group row">
-                                                    <label for="tanggal" class="col-sm-4 col-form-label" style="text-align:right;">Analisa </label>
-                                                    <div class="col-sm-8">
-                                                        <textarea type="text" class="form-control @error('analisa') is-invalid @enderror" name="analisa" id="analisa" value="{{old('analisa')}}" placeholder="Analisa pemeriksaan" style="width:45%;"></textarea>
+                                                    <label for="tanggal" class="col-sm-5 col-form-label" style="text-align:right;">Analisa </label>
+                                                    <div class="col-sm-7">
+                                                        <textarea type="text" class="form-control @error('analisa') is-invalid @enderror  col-form-label" name="analisa" id="analisa" value="{{old('analisa')}}" placeholder="Analisa pemeriksaan" style="width:45%;"></textarea>
                                                     </div>
                                                     <span role="alert" id="no_seri-msg"></span>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="tanggal" class="col-sm-4 col-form-label" style="text-align:right;">Diagnosa</label>
-                                                    <div class="col-sm-8">
-                                                        <textarea type="text" class="form-control @error('diagnosa') is-invalid @enderror" name="diagnosa" id="diagnosa" value="{{old('diagnosa')}}" placeholder="Diagnosa pemeriksaan" style="width:45%;"></textarea>
+                                                    <label for="tanggal" class="col-sm-5 col-form-label" style="text-align:right;">Diagnosa</label>
+                                                    <div class="col-sm-7">
+                                                        <textarea type="text" class="form-control @error('diagnosa') is-invalid @enderror col-form-label" name="diagnosa" id="diagnosa" value="{{old('diagnosa')}}" placeholder="Diagnosa pemeriksaan" style="width:45%;"></textarea>
                                                     </div>
                                                     <span role="alert" id="no_seri-msg"></span>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="kondisi" class="col-sm-4 col-form-label" style="text-align:right;">Tindak lanjut</label>
-                                                    <div class="col-sm-8" style="margin-top:7px;">
+                                                    <label for="kondisi" class="col-sm-5 col-form-label" style="text-align:right;">Penanganan</label>
+                                                    <div class="col-sm-7 col-form-label">
                                                         <div class="icheck-success d-inline col-sm-4">
                                                             <input type="radio" name="hasil_1" value="Terapi">
                                                             <label for="no">
@@ -198,8 +207,8 @@
                                                 </div>
                                                 <div id="tipe_1" style="display:none">
                                                     <div class="form-group row">
-                                                        <label for="tanggal" class="col-sm-4 col-form-label" style="text-align:right;">Terapi</label>
-                                                        <div class="col-sm-8">
+                                                        <label for="tanggal" class="col-sm-5 col-form-label" style="text-align:right;">Terapi</label>
+                                                        <div class="col-sm-5">
                                                             <textarea type="text" class="form-control @error('terapi') is-invalid @enderror" id="terapi" value="{{old('terapi')}}" placeholder="Terapi yang digunakan" style="width:45%;" name="terapi"></textarea>
                                                         </div>
                                                         <span role="alert" id="no_seri-msg"></span>
@@ -207,18 +216,18 @@
                                                 </div>
                                                 <div id="tipe_2" style="display:none">
                                                     <div class="form-group row">
-                                                        <table class="table table-hover styled-table table-striped col-sm-12" id="obat">
+                                                        <table class="table table-hover styled-table table-striped col-sm-12" id="obat" style="text-align: center;">
                                                             <thead>
                                                                 <tr>
-                                                                    <th>No</th>
-                                                                    <th width="15%">Obat</th>
+                                                                    <th width="3%">No</th>
+                                                                    <th width="19%">Obat</th>
                                                                     <th width="20%">Aturan</th>
-                                                                    <th></th>
-                                                                    <th width="10%">Jumlah</th>
+                                                                    <th width="44%"></th>
+                                                                    <th width="15%">Jumlah</th>
                                                                     <th width="3%"></th>
                                                                 </tr>
                                                             </thead>
-                                                            <tbody style="text-align: center;">
+                                                            <tbody>
                                                                 <tr>
                                                                     <td>1</td>
                                                                     <td>
@@ -249,19 +258,18 @@
                                                                             </label>
                                                                         </div>
                                                                         <div class="form-check form-check-inline">
-                                                                            <input class="form-check-input dosis_obat" type="radio" name="dosis_obat[]" value="2x1">
-                                                                            <label class="form-check-label" for="dosis_obat">
-                                                                                <div class="input-group mb-3">
+                                                                            <input class="form-check-input dosis_obat  col-form-label" type="radio" name="dosis_obat[]" value="2x1">
+
+                                                                                <div class="input-group col-form-label">
                                                                                     <input type="text" class="form-control dosis_obat_custom" name="dosis_obat_custom[]" id="dosis_obat_custom" placeholder="Jumlah obat x hari">
                                                                                     <div class="input-group-append">
                                                                                         <span class="input-group-text">Hari</span>
                                                                                     </div>
                                                                                 </div>
-                                                                            </label>
                                                                         </div>
                                                                     </td>
                                                                     <td class="bottom">
-                                                                        <div class="input-group mb-3">
+                                                                        <div class="input-group">
                                                                             <input type="number" class="form-control jumlah" name="jumlah[]" id="jumlah0" placeholder="Jumlah obat">
                                                                             <div class="input-group-append">
                                                                                 <span class="input-group-text">Pcs</span>
@@ -280,8 +288,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="kondisi" class="col-sm-4 col-form-label" style="text-align:right;">Tindak lanjut</label>
-                                                    <div class="col-sm-8" style="margin-top:7px;">
+                                                    <label for="kondisi" class="col-sm-5 col-form-label" style="text-align:right;">Tindak lanjut</label>
+                                                    <div class="col-sm-7" style="margin-top:7px;">
                                                         <div class="icheck-success d-inline col-sm-4">
                                                             <input type="radio" name="hasil_2" value="Lanjut bekerja">
                                                             <label for="no">
@@ -300,8 +308,8 @@
                                             </div>
                                             <div id="ijin" style="display:none">
                                                 <div class="form-group row">
-                                                    <label for="tanggal" class="col-sm-4 col-form-label" style="text-align:right;">Catatan </label>
-                                                    <div class="col-sm-8">
+                                                    <label for="tanggal" class="col-sm-5 col-form-label" style="text-align:right;">Catatan </label>
+                                                    <div class="col-sm-7">
                                                         <textarea type="text" class="form-control @error('keterangan') is-invalid @enderror" id="keterangan" value="{{old('keterangan')}}" placeholder="Rincian alasan tidak masuk" style="width:45%;" name="keterangan"></textarea>
                                                     </div>
                                                     <span role="alert" id="no_seri-msg"></span>
@@ -411,19 +419,18 @@
                                                                         </label>
                                                                     </div>
                                                                     <div class="form-check form-check-inline">
-                                                                        <input class="form-check-input dosis_obat" type="radio" name="dosis_obat[]" id="custom_radio">
-                                                                        <label class="form-check-label" for="sample">
-                                                                            <div class="input-group mb-3">
+                                                                        <input class="form-check-input dosis_obat col-form-label" type="radio" name="dosis_obat[]" id="custom_radio">
+
+                                                                            <div class="input-group col-form-label">
                                                                                 <input type="text" class="form-control dosis_obat_custom" name="dosis_obat_custom[]" id="dosis_obat_custom" placeholder="Jumlah obat x hari">
                                                                                 <div class="input-group-append">
                                                                                     <span class="input-group-text">Hari</span>
                                                                                 </div>
                                                                             </div>
-                                                                        </label>
                                                                     </div>
                                                                 </td>
                                                                 <td class="bottom">
-                                                                    <div class="input-group mb-3">
+                                                                    <div class="input-group">
                                                                         <input type="number" class="form-control jumlah" name="jumlah[]" id="jumlah0" placeholder="Jumlah obat">
                                                                         <div class="input-group-append">
                                                                             <span class="input-group-text">Pcs</span>

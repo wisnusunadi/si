@@ -39,7 +39,6 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Validator as ValidationValidator;
 use Maatwebsite\Excel\Excel as ExcelExcel;
 use Symfony\Component\Console\Input\Input;
-
 use function PHPUnit\Framework\assertIsNotArray;
 
 class PenjualanController extends Controller
@@ -575,68 +574,6 @@ class PenjualanController extends Controller
                         }
                     }
                 }
-                // if (isset($data->tgl_kontrak)) {
-                //     $tgl_sekarang = Carbon::now()->format('Y-m-d');
-                //     $tgl_parameter = $data->tgl_kontrak;
-
-                //     if (isset($data->Pesanan->so)) {
-                //         if ($data->Pesanan->getJumlahPesanan() == $data->Pesanan->getJumlahKirim()) {
-                //             return Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y');
-                //         } else {
-                //             if ($tgl_sekarang < $tgl_parameter) {
-                //                 $to = Carbon::now();
-                //                 $from = $data->tgl_kontrak;
-                //                 $hari = $to->diffInDays($from);
-                //                 if ($hari > 7) {
-                //                     return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                //                     <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
-                //                 } else if ($hari > 0 && $hari <= 7) {
-                //                     return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                //                     <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
-                //                 } else {
-                //                     return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                //                     <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                //                 }
-                //             } else if ($tgl_sekarang == $tgl_parameter) {
-                //                 return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                //                 <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                //             } else {
-                //                 $to = Carbon::now();
-                //                 $from = $data->tgl_kontrak;
-                //                 $hari = $to->diffInDays($from);
-                //                 return '<div id="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                //                 <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
-                //             }
-                //         }
-                //     } else {
-                //         if ($tgl_sekarang < $tgl_parameter) {
-                //             $to = Carbon::now();
-                //             $from = $data->tgl_kontrak;
-                //             $hari = $to->diffInDays($from);
-                //             if ($hari > 7) {
-                //                 return  '<div> ' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                //                 <div><small><i class="fas fa-clock" id="info"></i> ' . $hari . ' Hari Lagi</small></div>';
-                //             } else if ($hari > 0 && $hari <= 7) {
-                //                 return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                //                 <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ' . $hari . ' Hari Lagi</small></div>';
-                //             } else {
-                //                 return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                //                 <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                //             }
-                //         } else if ($tgl_sekarang == $tgl_parameter) {
-                //             return  '<div>' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                //             <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Batas Kontrak Habis</div>';
-                //         } else {
-                //             $to = Carbon::now();
-                //             $from = $data->tgl_kontrak;
-                //             $hari = $to->diffInDays($from);
-                //             return '<div id="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div>
-                //             <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ' . $hari . ' Hari</div>';
-                //         }
-                //     }
-                // } else {
-                //     return '-';
-                // }
             })
             ->addColumn('so', function ($data) {
                 if ($data->Pesanan) {
@@ -3081,8 +3018,8 @@ class PenjualanController extends Controller
                         <button class="btn btn-outline-primary btn-sm" type="button">
                             <i class="fas fa-eye"></i>
                             Detail
-                            </button>
-                        </a>';
+                        </button>
+                    </a>';
                 }
 
                 return $return;
@@ -4378,21 +4315,12 @@ class PenjualanController extends Controller
         return view('page.penjualan.penjualan.cancel', ['id' => $id, 'data' => $data]);
     }
 
-    public function cancel_spa_spb($id, $jenis)
+    public function cancel_spa_spb(Request $r)
     {
-        if ($jenis == "spa") {
-            $spa = Spa::find($id);
+        if ($r->jenis == "spa") {
+            $spa = Spa::find($r->id);
             $spa->log = "batal";
             $u = $spa->save();
-            if ($u) {
-                return response()->json(['data' => 'success']);
-            } else if (!$u) {
-                return response()->json(['data' => 'error']);
-            }
-        } else if ($jenis == "spb") {
-            $spb = Spb::find($id);
-            $spb->log = "batal";
-            $u = $spb->save();
             if ($u) {
                 return response()->json(['data' => 'success']);
             } else if (!$u) {

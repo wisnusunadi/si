@@ -86,7 +86,7 @@ return [
         'si_21' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST_3', '127.0.0.1'),
+            'host' => env('DB_HOST_3', '192.168.13.2'),
             'port' => env('DB_PORT_3', '3306'),
             'database' => env('DB_DATABASE_3', 'forge'),
             'username' => env('DB_USERNAME_3', 'forge'),
