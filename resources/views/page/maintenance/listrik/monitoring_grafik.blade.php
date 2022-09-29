@@ -201,7 +201,7 @@
         }
         }
         });
-        
+
     $(document).ready(function() {
     $('.js-example-basic-single').select2();
 });
@@ -229,7 +229,13 @@
         }
         });
     }
-    
+    var arrayColor = ['#ff6384',
+            '#36a2eb',
+            '#cc65fe','#a8327d',
+            '#ffce56','#000000','#32a852','#a83632',
+            '#a85932','#98a832','#5da832','#32a851',
+            '#32a89e'
+        ];
     function getspecvll(device) {
         console.log("datavllgrafik",datavll)
         let labelsChart = [];
@@ -243,10 +249,11 @@
         });
         labelsChart.push(Object.values(datasets[0].Date_Time));
         vll.labels = labelsChart[0];
-        datasets.forEach((item) => {
+        datasets.forEach((item,index) => {
             // console.log(item);
             if(Object.keys(item) != 'Date_Time'){
                 vll.datasets.push({
+                borderColor: arrayColor[index],
                 label: Object.keys(item),
                 data: Object.values(item)[0],
             });
@@ -279,7 +286,7 @@
         }
         }
         });
-        
+
     $(document).ready(function() {
     $('.js-example-basic-single').select2();
 });
@@ -303,8 +310,10 @@
     }
     var arrayColor = ['#ff6384',
             '#36a2eb',
-            '#cc65fe',
-            '#ffce56','#000000'
+            '#cc65fe','#a8327d',
+            '#ffce56','#000000','#32a852','#a83632',
+            '#a85932','#98a832','#5da832','#32a851',
+            '#32a89e'
         ];
     function getspecc(device) {
         console.log("datacgrafik",datac)
@@ -319,11 +328,11 @@
         });
         labelsChart.push(Object.values(datasets[0].Date_Time));
         c.labels = labelsChart[0];
-        datasets.forEach((item) => {
+        datasets.forEach((item,index) => {
             // console.log(item);
             if(Object.keys(item) != 'Date_Time'){
                 c.datasets.push({
-                borderColor: arrayColor[Math.floor(Math.random()*arrayColor.length)],
+                borderColor: arrayColor[index],
                 label: Object.keys(item),
                 data: Object.values(item)[0],
             });
@@ -355,14 +364,14 @@ let datavln = [];
         }
         }
         });
-        
+
     $(document).ready(function() {
     $('.js-example-basic-single').select2();
 });
 
 
     $(document).ready(function () {
-   
+
         let pilih_device = $('#masuk').val();
         getvlngrafik();
     }(jQuery));
@@ -378,7 +387,13 @@ let datavln = [];
         }
         });
     }
-
+    var arrayColor = ['#ff6384',
+            '#36a2eb',
+            '#cc65fe','#a8327d',
+            '#ffce56','#000000','#32a852','#a83632',
+            '#a85932','#98a832','#5da832','#32a851',
+            '#32a89e'
+        ];
     function getspecvln(device) {
         console.log("datavlngrafik",datavln)
         let labelsChart = [];
@@ -392,10 +407,11 @@ let datavln = [];
         });
         labelsChart.push(Object.values(datasets[0].Date_Time));
         vln.labels = labelsChart[0];
-        datasets.forEach((item) => {
+        datasets.forEach((item,index) => {
             // console.log(item);
             if(Object.keys(item) != 'Date_Time'){
                 vln.datasets.push({
+                borderColor: arrayColor[index],
                 label: Object.keys(item),
                 data: Object.values(item)[0],
             });
@@ -428,14 +444,14 @@ let datapower = [];
         }
         }
         });
-        
+
     $(document).ready(function() {
     $('.js-example-basic-single').select2();
 });
 
 
     $(document).ready(function () {
-   
+
         let pilih_device = $('#masuk').val();
         getpowergrafik();
     }(jQuery));
@@ -451,7 +467,11 @@ let datapower = [];
         }
         });
     }
-
+    var arrayColor = ['#36a2eb','#cc65fe','#a8327d','#db0d0d',
+            '#ffce56','#000000','#32a852','#a83632','#877878',
+            '#a85932','#98a832','#5da832',,'#6d32a8','#32a851',
+            '#32a89e'
+        ];
     function getspecpower(device) {
         console.log("datapowergrafik",datavln)
         let labelsChart = [];
@@ -465,10 +485,11 @@ let datapower = [];
         });
         labelsChart.push(Object.values(datasets[0].Date_Time));
         power.labels = labelsChart[0];
-        datasets.forEach((item) => {
+        datasets.forEach((item,index) => {
             // console.log(item);
             if(Object.keys(item) != 'Date_Time'){
                 power.datasets.push({
+                borderColor: arrayColor[index],
                 label: Object.keys(item),
                 data: Object.values(item)[0],
             });
@@ -501,14 +522,14 @@ let datapowerfactor = [];
         }
         }
         });
-        
+
     $(document).ready(function() {
     $('.js-example-basic-single').select2();
 });
 
 
     $(document).ready(function () {
-   
+
         let pilih_device = $('#masuk').val();
         getpowerfactorgrafik();
     }(jQuery));
@@ -524,7 +545,13 @@ let datapowerfactor = [];
         }
         });
     }
-
+    var arrayColor = ['#ff6384',
+            '#36a2eb',
+            '#cc65fe','#a8327d',
+            '#ffce56','#000000','#32a852','#a83632',
+            '#a85932','#98a832','#5da832','#32a851',
+            '#32a89e'
+        ];
     function getspecpowerfactor(device) {
         console.log("datapowerfactorgrafik",datavln)
         let labelsChart = [];
@@ -538,10 +565,11 @@ let datapowerfactor = [];
         });
         labelsChart.push(Object.values(datasets[0].Date_Time));
         powerfactor.labels = labelsChart[0];
-        datasets.forEach((item) => {
+        datasets.forEach((item,index) => {
             // console.log(item);
             if(Object.keys(item) != 'Date_Time'){
                 powerfactor.datasets.push({
+                borderColor: arrayColor[index],
                 label: Object.keys(item),
                 data: Object.values(item)[0],
             });
@@ -574,14 +602,14 @@ let datadpowerfactor = [];
         }
         }
         });
-        
+
     $(document).ready(function() {
     $('.js-example-basic-single').select2();
 });
 
 
     $(document).ready(function () {
-   
+
         let pilih_device = $('#masuk').val();
         getdpowerfactorgrafik();
     }(jQuery));
@@ -597,7 +625,13 @@ let datadpowerfactor = [];
         }
         });
     }
-
+    var arrayColor = ['#ff6384',
+            '#36a2eb',
+            '#cc65fe','#a8327d',
+            '#ffce56','#000000','#32a852','#a83632',
+            '#a85932','#98a832','#5da832','#32a851',
+            '#32a89e'
+        ];
     function getspecdpowerfactor(device) {
         console.log("datadpowerfactorgrafik",datavln)
         let labelsChart = [];
@@ -611,10 +645,11 @@ let datadpowerfactor = [];
         });
         labelsChart.push(Object.values(datasets[0].Date_Time));
         dpowerfactor.labels = labelsChart[0];
-        datasets.forEach((item) => {
+        datasets.forEach((item,index) => {
             // console.log(item);
             if(Object.keys(item) != 'Date_Time'){
                 dpowerfactor.datasets.push({
+                borderColor: arrayColor[index],
                 label: Object.keys(item),
                 data: Object.values(item)[0],
             });
@@ -625,8 +660,86 @@ let datadpowerfactor = [];
         console.log(dpowerfactor);
     }
 // grafik frequency
+let datafre = [];
+    let fre = {
+    labels: [],
+    datasets: []
+    };
+    var chLine = document.getElementById("gf1");
+        let frechart = new Chart(chLine, {
+        type: 'line',
+        data: fre,
+        options: {
+        scales: {
+            yAxes: [{
+            ticks: {
+                beginAtZero: false
+            }
+            }]
+        },
+        legend: {
+            display: false
+        }
+        }
+        });
+
+    $(document).ready(function() {
+    $('.js-example-basic-single').select2();
+});
 
 
+    $(document).ready(function () {
+
+        let pilih_device = $('#masuk').val();
+        getfregrafik();
+    }(jQuery));
+
+    function getfregrafik() {
+        let pilih_device = $('#masuk').val();
+        $.ajax({
+        type:'get',
+        url:'http://localhost:8000/listrik/ambilrtf',
+        success:function(data) {
+            datafre.push(data.data);
+            getspecfre(pilih_device);
+        }
+        });
+    }
+    var arrayColor = ['#ff6384',
+            '#36a2eb',
+            '#cc65fe','#a8327d',
+            '#ffce56','#000000','#32a852','#a83632',
+            '#a85932','#98a832','#5da832','#32a851',
+            '#32a89e'
+        ];
+    function getspecfre(device) {
+        console.log("datafregrafik",datavln)
+        let labelsChart = [];
+        let datasets = [];
+        const result = datafre[0].filter((item) => item.device === device);
+        const labels = result.map((item) => item.detail);
+        labels.forEach(element => {
+            element.forEach((item) => {
+                datasets.push(item);
+            });
+        });
+        labelsChart.push(Object.values(datasets[0].Date_Time));
+        fre.labels = labelsChart[0];
+        datasets.forEach((item,index) => {
+            // console.log(item);
+            if(Object.keys(item) != 'Date_Time'){
+                fre.datasets.push({
+                borderColor: arrayColor[index],
+                label: Object.keys(item),
+                data: Object.values(item)[0],
+            });
+            }
+        });
+        frechart.update();
+
+        console.log(fre);
+    }
+// show
     var gc1 = $('#gc1');
       $('#c1').show();
 

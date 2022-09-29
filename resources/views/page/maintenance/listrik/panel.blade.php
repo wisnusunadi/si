@@ -175,11 +175,11 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
             success:function(data) {
                 $('#device_id').val(data.data[0].device_id)
                 $('#kd_panel').val(data.data[0].device_id)
-                $('#kd_panel').prop('readonly', true);
+                //$('#kd_panel').prop('readonly', true);
                 $('#nm_panel').val(data.data[0].nm_device)
                 $('#lokasi').val(data.data[0].lokasi)
                 $('#posisi').val(data.data[0].posisi)
-                
+
             }
         });
         $('#exampleModalLabel').html('Ubah Panel')
@@ -223,7 +223,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
         e.preventDefault()
         $('#btnSimpan').html('Sending..');
         var formData = new FormData(this);
-        
+
         Swal.fire({
             title: 'Are you sure?',
             text: "You won't be able to revert this!",
@@ -255,7 +255,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
                         })
                     }
                 })
-                
+
             }
         })
     });
