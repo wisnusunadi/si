@@ -64,17 +64,17 @@
 
     <div class="tab-content" id="pills-tab-1Content">
         <div class="tab-pane fade show active" id="pills-home-1" role="tabpanel" aria-labelledby="pills-home-1">
-            <div id="accordion1">
-                <div class="card ml-4">
-                    <div class="card-header" id="headingOne">
-                        <h5 class="mb-0">
-                            <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                              METER-01
-                            </button>
-                        </h5>
-                    </div>
 
-                    <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion1">
+            <div class="dropdown">
+                <button class="btn btn-secondary dropdown-toggle" type="button" id="ambil" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  Pilih Panel
+                </button>
+                <div class="dropdown-menu" id="dropdownPanel" aria-labelledby="dropdownMenuButton">
+
+                </div>
+            </div>
+
+
                         <div class="card-body">
                             <div class="row mb-3">
                                 <div class="bc-primary text-primary px-auto py-2 col-3 " role="alert">
@@ -90,7 +90,7 @@
                                       </svg>
                                     Nama
                                 </div>
-                                <div class="bc-warning text-warning px-auto py-2 ml-auto col-1" role="alert">
+                                <div class="bc-warning text-warning px-auto py-2 ml-auto col-1" id="posisi" role="alert">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo" viewBox="0 0 16 16">
                                         <path fill-rule="evenodd" d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z"/>
                                       </svg>
@@ -107,7 +107,7 @@
 
                             </div>
                             <div class="row">
-                                <div class="col-3">
+                                <div class="col-3" id="c">
                                     <div class="bg-secondary">Current A</div>
                                     <div>Current B</div>
                                     <div class="bg-secondary">Current C</div>
@@ -115,7 +115,7 @@
                                     <div class="bg-secondary">Current G</div>
                                     <div>Current Avg</div>
                                 </div>
-                                <div class="col-3">
+                                <div class="col-3" id="vll">
                                     <div class="bg-secondary">Voltage A-B</div>
                                     <div>Voltage B-C</div>
                                     <div class="bg-secondary">Voltage C-A</div>
@@ -163,10 +163,9 @@
                             </div>
 
                         </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+
+
+       </div>
         <div class="tab-pane fade show" id="pills-home-2" role="tabpanel" aria-labelledby="pills-home-2">
             <div class="dropdown">
                 <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -209,15 +208,7 @@
                     </table>
                    </div>
                    </div>
-                   <div class="container" id="1j">
-                    1j
-                   </div>
-                   <div class="container" id="1h">
-                    1h
-                   </div>
-                   <div class="container" id="1b">
-                    1b
-                   </div>
+
             </div>
         </div>
     </div>
@@ -230,6 +221,25 @@
 
 @section('adminlte_js')
 <script>
+    $(document).ready(function () {
+        getpanel();
+    }(jQuery));
+    function getpanel() {
+        $.ajax({
+        type:'get',
+        url:'http://localhost:8000/listrik/ambilpanel',
+        success:function(data) {
+            let x = data.data.length;
+
+            for(a = 1; a<=x; a++){
+                $('#dropdownPanel').append(
+                    '<a class="dropdown-item" href="#">'+data.data[a-1].device_id+'</a>'
+                );
+            }
+        }
+        });
+    }
+
     //  var non_real = $('#non_real').DataTable({
     //    destroy: true,
     //        processing: true
@@ -246,21 +256,9 @@
     //        ]
     //  });
 
-    //  let data15m = [];
-    // $.ajax({
-    //     type:'get',
-    //     url:'http://localhost:8000/listrik/data/15m',
-    // //    data:'_token = <?php echo csrf_token() ?>',
-    //     success:function(data) {
-    //     //   $("#msg").html(data.msg);
-    //     data15m.push(data.data)
-    //     ambil15m(data.data)
-    //     console.log(data.data);
-    //     }
-    // });
 
-    // function ambil15m(data){
-    //     let table = $('#15m').DataTable({
+    // function ambilPanel(data){
+    //     let table = $('#non_real').DataTable({
     //         data,
     //         columns: [
     //             {
@@ -270,19 +268,23 @@
     //                 }
     //             },
     //             {data: 'date_time'},
-    //             {data: 'Frequency'},
     //             {data: 'Current_Avg'},
     //             {data: 'Voltage_L_L_Avg'},
     //             {data: 'Voltage_L_N_Avg'},
     //             {data: 'Active_Power_Total'},
-    //             {data: 'Rective_Power_Total'},
+    //             {data: 'Reactive_Power_Total'},
     //             {data: 'Apparent_Power_Total'},
     //             {data: 'Power_Factor_Total'},
     //             {data: 'Displacement_Power_Factor_Total'},
+    //             {data: 'Frequency'},
+    //             {
+    //                 data: null,
+    //                 render: function ( data, type, full, meta )
+    //             }
+    //         ],
+    //     });
+    // }
 
-    //     ]}
-
-    //        )}
 
 
       $('#15m').show();
@@ -298,13 +300,24 @@
      $('#1h').hide();
      $('#1b').hide();
     }
+
      $(".filter_waktu").click(function(){
         var value = $(this).attr('data-value');
-        $("#15m_filter").removeClass('active');
-        $('#15m').hide();
-        hide();
-        $('#'+value).show();
-        $('#'+value+"_filter").addClass('active');
+        console.log(value);
+        $.ajax({
+            type:'get',
+            url:'http://localhost:8000/listrik/data/' + value,
+            success:function(data) {
+                // dataPanel.push(data.data)
+                // ambilPanel(data.data)
+                console.log(data);
+            }
+        });
+        // $("#15m_filter").removeClass('active');
+        // $('#15m').hide();
+        // hide();
+        // $('#'+value).show();
+        // $('#'+value+"_filter").addClass('active');
     });
 
 

@@ -329,7 +329,7 @@
         labelsChart.push(Object.values(datasets[0].Date_Time));
         c.labels = labelsChart[0];
         datasets.forEach((item,index) => {
-            // console.log(item);
+
             if(Object.keys(item) != 'Date_Time'){
                 c.datasets.push({
                 borderColor: arrayColor[index],
@@ -486,7 +486,7 @@ let datapower = [];
         labelsChart.push(Object.values(datasets[0].Date_Time));
         power.labels = labelsChart[0];
         datasets.forEach((item,index) => {
-            // console.log(item);
+            console.log(arrayColor[index]+' '+Object.keys(item));
             if(Object.keys(item) != 'Date_Time'){
                 power.datasets.push({
                 borderColor: arrayColor[index],
