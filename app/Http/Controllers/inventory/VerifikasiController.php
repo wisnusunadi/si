@@ -141,7 +141,7 @@ class VerifikasiController extends Controller
                 'user_id' => auth()->user()->id,
             ]);
 
-            return redirect()->route('detail', ['id' => $request->serial_number])->with(['success' => '1','verifSuccess' => '2']);
+            return redirect()->route('alatuji.detail', ['id' => $request->serial_number])->with(['success' => '1','verifSuccess' => '2']);
 
         // } catch (\Exception $e) {
         //     return response()->json([

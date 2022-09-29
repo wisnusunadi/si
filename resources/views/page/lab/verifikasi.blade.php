@@ -11,10 +11,10 @@
 <div class="container-fluid">
 
     <div class="container p-3 bg-white">
-        
+
         <!-- card info -->
         <div class="card border-secondary border-bottom-w3">
-            <div class="card-body"> 
+            <div class="card-body">
 
                 <div class="row">
                     <!-- col gambar -->
@@ -35,7 +35,7 @@
                         <p class="mb-0 mt-3">Status</p>
                         {!! $data->status_pinjam_id !!}
                     </div>
-                    
+
                     <!-- col perawatan terakhir -->
                     <div class="col-4">
                         <p class="mb-0 mt-3">Verifikasi Terakhir</p>
@@ -47,7 +47,7 @@
         </div>
 
         <!-- card verifikasi -->
-        <form action='/alatuji/store_verifikasi' method="post">
+        <form action="{{route('alatuji.verifikasi.store')}}" method="post">
         @csrf
 
         <div class="card border-primary border-top-w3">
@@ -200,7 +200,7 @@
         <div class="card-body">
             <div class="row float-right">
                 <div class="col-auto">
-                    <a href="{{ route('detail', ['id' => $id, 'x' => 3]) }}" class="btn btn-danger float-right">Batal</a>
+                    <a href="{{ route('alatuji.detail', ['id' => $id, 'x' => 3]) }}" class="btn btn-danger float-right">Batal</a>
                 </div>
                 <div class="col-auto">
                     <input type="submit" id="btnSubmit" class="btn btn-primary float-right" value="simpan">
@@ -222,7 +222,7 @@ $(document).ready(function(){
     $("#btnSubmit").on('click', function(e){
         e.preventDefault();
         var form = $(this).parents('form');
-        
+
         Swal.fire({
             title: 'Data Akan Di Catat',
             text: 'Pastikan data yang anda masukan sudah benar',
@@ -232,7 +232,7 @@ $(document).ready(function(){
             if(a){
                 form.submit();
             }
-        }); 
+        });
     });
 
     // cek tindak lanjut

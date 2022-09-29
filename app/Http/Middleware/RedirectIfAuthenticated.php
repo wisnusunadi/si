@@ -53,7 +53,7 @@ class RedirectIfAuthenticated
                 } else if ($request->user()->hasRole("16") || $request->user()->hasRole("10")) {
                     return redirect('/mtc/air/masuk');
                 } else if ($request->user()->hasRole("22")) {
-                    return redirect('/alatuji/dashboard');
+                    return redirect('/lab/dashboard');
                 }
             }
         }

@@ -156,7 +156,7 @@ class AlatujiController extends Controller
                     })
                     ->editColumn('aksi', function($d){
                         return '
-                        <a class="btn btn-sm btn-outline-primary py-0 w-100" href="/alatuji/detail/'.$d->id_serial_number.'">
+                        <a class="btn btn-sm btn-outline-primary py-0 w-100" href="/lab/alatuji/detail/'.$d->id_serial_number.'">
                         Detail
                         </a>';
                     })
@@ -389,7 +389,7 @@ class AlatujiController extends Controller
             'user_id' => auth()->user()->id,
         ]);
 
-        return redirect()->route('detail', ['id' => $request->serial_number_id])->with(['success' => '1','pinjamSuccess' => '0']);
+        return redirect()->route('alatuji.detail', ['id' => $request->serial_number_id])->with(['success' => '1','pinjamSuccess' => '0']);
     }
 
     function peminjaman_hist($id, $role, $uid)

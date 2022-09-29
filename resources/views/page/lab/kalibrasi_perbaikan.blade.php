@@ -14,7 +14,7 @@
 
         <!-- card info -->
         <div class="card border-secondary border-bottom-w3">
-            <div class="card-body"> 
+            <div class="card-body">
 
                 <div class="row">
                     <!-- gambar -->
@@ -46,7 +46,7 @@
             </div>
         </div>
 
-        <form action="/alatuji/store_mt" method="post" enctype="multipart/form-data">
+        <form action="{{route('alatuji.mt.store')}}" method="post" enctype="multipart/form-data">
         @csrf
 
         <input type="hidden" name="serial_number_id" value="{{ $id }}">
@@ -248,7 +248,7 @@
         <div class="card-body">
             <div class="row float-right">
                 <div class="col-auto">
-                    <a href="{{ route('detail', ['id' => $id, $jenis == 'kalibrasi' ? '4' : '5']) }}" class="btn btn-danger float-right">Batal</a>
+                    <a href="{{ route('alatuji.detail', ['id' => $id, $jenis == 'kalibrasi' ? '4' : '5']) }}" class="btn btn-danger float-right">Batal</a>
                 </div>
                 <div class="col-auto">
                     <input type="submit" id="btnSubmit" value="Simpan" class="btn btn-primary float-right">
@@ -273,7 +273,7 @@
         @else
             $('#externalContainer').hide();
         @endif
-        
+
         $("input[name$='dilakukan']").click(function(){
             if($("#external").is(":checked"))
             {
@@ -304,7 +304,7 @@
             if(a){
                 form.submit();
             }
-        }); 
+        });
     });
 </script>
 @endsection

@@ -30,7 +30,7 @@
                     <span><strong>{{ $data->desk_alatuji }}</strong></span>
                     <br/>
                     @if(auth()->user()->role == 1)
-                    <a href="/alatuji/editalat/{{ $id }}" class="btn btn-warning btn-sm mt-3 w-25"><strong>Ubah</strong></a>
+                    <a href="{{route('alatuji.edit', ['id' => $id])}}" class="btn btn-warning btn-sm mt-3 w-25"><strong>Ubah</strong></a>
                     @endif
                 </div>
             </div>
@@ -117,7 +117,7 @@
                                         </tr>
                                         <tr>
                                             <td>Manual Book</td>
-                                            <td><strong>{!! $data->manual_alatuji !!}</strong></td>                                            
+                                            <td><strong>{!! $data->manual_alatuji !!}</strong></td>
                                         </tr>
                                         <tr>
                                             <td>Sertifikasi Kalibrasi</td>
@@ -204,7 +204,7 @@
                                             </span>
                                         </td>
                                     </tr> -->
-                                    
+
                                 </tbody>
                             </table>
                             </div>
@@ -218,7 +218,7 @@
                             <!-- tombol perawatan -->
                             <div class="row mb-3">
                                 <div class="col">
-                                    <a href="/alatuji/perawatan/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Perawatan</strong></a>
+                                    <a href="{{route('alatuji.perawatan.detail', ['id' => $id])}}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Perawatan</strong></a>
                                 </div>
                             </div>
 
@@ -275,7 +275,7 @@
                             <!-- tombol verifikasi -->
                             <div class="row mb-3">
                                 <div class="col">
-                                    <a href="/alatuji/verifikasi/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Verifikasi</strong></a>
+                                    <a href="{{route('alatuji.verifikasi.detail', ['id' => $id])}}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Verifikasi</strong></a>
                                 </div>
                             </div>
 
@@ -335,7 +335,7 @@
                             <!-- tombol kalibrasi -->
                             <div class="row mb-3">
                                 <div class="col">
-                                    <a href="/alatuji/mt/kalibrasi/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Kalibrasi</strong></a>
+                                    <a href="{{route('alatuji.mt.create', ['jenis' => 'Kalibrasi', 'id' => $id])}}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Kalibrasi</strong></a>
                                 </div>
                             </div>
 
@@ -432,7 +432,7 @@
                             <!-- tombol perbaikan -->
                             <div class="row mb-3">
                                 <div class="col">
-                                    <a href="/alatuji/mt/perbaikan/{{ $id }}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Perbaikan</strong></a>
+                                    <a href="{{route('alatuji.mt.create', ['jenis' => 'Perbaikan', 'id' => $id])}}" class="btn btn-primary btn-sm float-right px-3"><strong>+ Perbaikan</strong></a>
                                 </div>
                             </div>
 
@@ -550,10 +550,10 @@
                 <h4 class="modal-title" id="pinjamModalLabel">
                     <strong>
                         Ajukan Peminjaman
-                    </strong>    
+                    </strong>
                 </h4>
 
-                <form action="/alatuji/store_pinjam" method="post">
+                <form action="/lab/alatuji/store_pinjam" method="post">
                 @csrf
                 <input type="hidden" name="serial_number_id" value="{{$id}}">
 
@@ -566,7 +566,7 @@
 
                             <p class="mb-0 mt-3">Nama Peminjam</p>
                             <span><strong>{{auth()->user()->nama}}</strong></span>
-                            
+
                             <p class="mb-0 mt-3">Tanggal Pengajuan</p>
                             <span><strong>{{date('d M Y')}}</strong></span>
                          </div>
@@ -639,7 +639,7 @@
                 <h4 class="modal-title">
                     <strong>
                         Konfirmasi Peminjaman
-                    </strong>    
+                    </strong>
                 </h4>
 
                 <div class="row mt-3">
@@ -652,7 +652,7 @@
 
                             <p class="mb-0 mt-3">Nama Peminjam</p>
                             <span><strong id="modal_display_terima_peminjam"></strong></span>
-                            
+
                             <p class="mb-0 mt-3">Tanggal Pengajuan</p>
                             <span><strong id="modal_display_terima_tgl1">01 September 2022</strong></span>
 
@@ -679,7 +679,7 @@
                             </strong>
                         </div>
 
-                        <form action="/alatuji/store_konfirmasi" method="POST">
+                        <form action="{{route('alatuji.pinjam.konfirmasi')}}" method="POST">
                         @csrf
                         <input type="hidden" name="peminjaman_konfirm_id" id="peminjaman_konfirm_id" value="">
                         <input type="hidden" name="alatuji_konfirm_id" id="alatuji_konfirm_id" value="">
@@ -785,7 +785,7 @@
                 </h4>
 
                 <div class="row mt-3">
-                    
+
                     <!-- kolom kiri -->
                     <div class="col-4">
                         <div class="card border-success border-top-w3">
@@ -808,7 +808,7 @@
                     <!-- kolom kanan -->
                     <div class="col-8">
 
-                        <form action="/alatuji/store_kembali" method="post">
+                        <form action="{{route('alatuji.pinjam.kembali')}}" method="post">
                         @csrf
                         <input type="hidden" name="peminjaman_kembali_id" id="peminjaman_kembali_id" value="">
                         <input type="hidden" name="id_alat_uji" id="id_alat_uji" value="">
@@ -938,7 +938,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-body" id="MTModalBody">
-                
+
                 <h4 class="modal-title">
                     <strong id="jenis_judul">
                         <!-- judul -->
@@ -1093,7 +1093,7 @@
                             </table>
                         </div>
                         <!-- informasi detail kalibrasi perbaikan end -->
-                        
+
                     </div>
                 </div>
 
@@ -1205,7 +1205,7 @@
             error: function (request, status, error) {
                 alert(request.responseText);
             }
-        
+
         });
 
         var tableVerifikasi = $('#tabelVerifikasi').DataTable({
@@ -1270,7 +1270,7 @@
                     }else{
                         $('#mt_data_status, #mt_data_status2').append(
                             //'<span class="badge px-3 bc-warning" id="mt_temp_status"><span class="text-dark">Proses</span></span>'
-                            '<a href="/konfirmasi/'+j+'/'+id+'" id="mt_temp_status" class="badge px-3 bg-warning"><span class="text-dark">Proses</span></a>'
+                            '<a href="/lab/alatuji/mt/konfirmasi/'+j+'/'+id+'" id="mt_temp_status" class="badge px-3 bg-warning"><span class="text-dark">Proses</span></a>'
                         );
                     }
 
@@ -1466,9 +1466,9 @@
         @if(session()->has('perbSuccess'))
                 $('#tabRiwayat a[href="#perbaikan"]').tab('show');
         @endif
-        // 
+        //
         // tampilkan alert input data berhasil
-        // 
+        //
         @if(session()->has('success'))
             Swal.fire({
                 title: 'Berhasil',

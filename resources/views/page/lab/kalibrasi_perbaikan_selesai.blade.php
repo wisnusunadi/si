@@ -12,14 +12,14 @@
 
     <div class="container p-3 bg-white">
 
-        <form action="/alatuji/store_external" method="post" enctype="multipart/form-data">
+        <form action="{{route('alatuji.mt.external.store')}}" method="post" enctype="multipart/form-data">
         @csrf
         <input type="hidden" name="id_mt" value="{{ $id }}">
         <input type="hidden" name="jenis" value="{{ $jenis }}">
-        
+
         <!-- card info -->
         <div class="card border-secondary border-bottom-w3">
-            <div class="card-body"> 
+            <div class="card-body">
 
                 <div class="row">
                     <!-- gambar -->
@@ -56,7 +56,7 @@
         <!-- card penerimaan -->
         <div class="card border-warning border-top-w3">
             <div class="card-body">
-                
+
                 <div class="row">
                     <h3 class="card-title">Penerimaan {{ $jenis }}</h3>
                 </div>

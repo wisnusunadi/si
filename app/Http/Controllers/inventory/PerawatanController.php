@@ -130,7 +130,7 @@ class PerawatanController extends Controller
             'user_id' => auth()->user()->id,
         ]);
 
-        return redirect()->route('detail', ['id' => $request->serial_number])->with(['success' => '2','perawatanSuccess' => '1']);
+        return redirect()->route('alatuji.detail', ['id' => $request->serial_number])->with(['success' => '2','perawatanSuccess' => '1']);
 
     }
 }

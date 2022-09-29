@@ -1071,85 +1071,45 @@ return [
                 [
                     'icon' => 'fas fa-home',
                     'text' => 'Dashboard',
-                    'url'  => '/alatuji/dashboard',
+                    'url'  => '/lab/dashboard',
                     'auth' => [22],
                 ],
                 [
                     'icon' => 'fa fa-wrench',
                     'text' => 'List Alat Uji',
-                    'url'  => '/alatuji/alatuji',
+                    'url'  => '/lab/alatuji/show',
                     'auth' => [22],
                 ],
                 [
                     'icon' => 'fa fa-plus-circle',
                     'text' => 'Tambah Jenis Alat Uji',
-                    'url'  => '/alatuji/tambahalat',
+                    'url'  => '/lab/alatuji/create',
                     'auth' => [22],
                 ],
                 [
                     'icon' => 'fa fa-plus-circle',
                     'text' => 'Tambah Serial Number',
-                    'url'  => '/alatuji/tambahbarang',
+                    'url'  => '/lab/alatuji/barang/create',
                     'auth' => [22],
                 ],
             ],
         ],
 
-        [
-            'text'    => 'Permintaan',
-            'icon'    => 'fas fa-box-open',
-            'url'  => '/kalibrasi',
-            'auth' => [22],
-        ],
-        [
-            'text'    => 'Sudah Kalibrasi',
-            'icon'    => 'fas fa-box-open',
-            'url'  => '/acc_kalibrasi',
-            'auth' => [22],
-        ],
-        [
-            'text' => 'Dashboard',
-            'url' => '/gbj/dashboard',
-            'icon' => 'fas fa-layer-group',
-            'auth' => [31, 13],
-        ],
         // [
-        //     'header' => 'Produksi',
-        //     'auth' => [13]
+        //     'text'    => 'Permintaan',
+        //     'icon'    => 'fas fa-box-open',
+        //     'url'  => '/kalibrasi',
+        //     'auth' => [22],
         // ],
         // [
-        //     'text' => 'BPPB',
-        //     'url' => '/bppb',
-        //     'icon' => 'fas fa-circle',
-        //     'auth' => [13],
+        //     'text'    => 'Sudah Kalibrasi',
+        //     'icon'    => 'fas fa-box-open',
+        //     'url'  => '/acc_kalibrasi',
+        //     'auth' => [22],
         // ],
-        [
-            'header' => 'Stok',
-            'auth' => [13]
-        ],
-        // GBJ
-        [
-            'text' => 'Produk',
-            'url' => '/gbj/produk',
-            'icon' => 'fas fa-boxes',
-            'auth' => [13],
-        ],
-
-        // [
-        //     'text' => 'Stok',
-        //     'url' => '/gbj/stok',
-        //     'icon' => 'fas fa-circle',
-        //     'auth' => [13],
-        // ],
-        [
-            'text' => 'Riwayat Transaksi',
-            'url' => '/gbj/tp',
-            'icon' => 'fas fa-history',
-            'auth' => [13],
-        ],
 
         [
-            'header' => 'Penerimaan',
+            'header' => 'Data',
             'auth' => [13]
         ],
         [
