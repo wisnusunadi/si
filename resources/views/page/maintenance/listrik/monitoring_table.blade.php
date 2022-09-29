@@ -20,6 +20,15 @@
 
 @section('adminlte_css')
 <style>
+    td.dt-control {
+        background: url("/assets/image/logo/plus.png") no-repeat center center;
+        cursor: pointer;
+        background-size: 15px 15px;
+    }
+    tr.shown td.dt-control {
+        background: url("/assets/image/logo/minus.png") no-repeat center center;
+        background-size: 15px 15px;
+    }
 
 .bc-success{
     background-color:rgba(40, 167, 69, 0.2) !important;
@@ -199,11 +208,6 @@
                           </tr>
                         </thead>
                          <tbody>
-                          <tr>
-
-
-
-                          </tr>
                         </tbody>
                     </table>
                    </div>
@@ -255,8 +259,6 @@
     //            }
     //        ]
     //  });
-
-
     // function ambilPanel(data){
     //     let table = $('#non_real').DataTable({
     //         data,
@@ -296,9 +298,6 @@
         $("#1h_filter").removeClass('active');
         $("#1b_filter").removeClass('active');
 
-     $('#1j').hide();
-     $('#1h').hide();
-     $('#1b').hide();
     }
 
      $(".filter_waktu").click(function(){
@@ -310,16 +309,123 @@
             success:function(data) {
                 // dataPanel.push(data.data)
                 // ambilPanel(data.data)
-                console.log(data);
+                $('#non_real').DataTable().ajax.url('http://localhost:8000/listrik/data/' + value).load();
             }
         });
-        // $("#15m_filter").removeClass('active');
-        // $('#15m').hide();
-        // hide();
-        // $('#'+value).show();
-        // $('#'+value+"_filter").addClass('active');
+        $("#15m_filter").removeClass('active');
+
+        hide();
+
+        $('#'+value+"_filter").addClass('active');
+
+    });
+
+    $(function() {
+        $('#non_real').DataTable({
+            processing: true,
+            serverSide: false,
+            language: {
+                processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+            },
+            ajax: {
+                'dataType': 'json',
+
+                'url': 'http://localhost:8000/listrik/data/15m',
+            },
+            columns: [{
+                    data: 'date_time',
+                    orderable: false,
+                    searchable: false
+                },
+                {
+                    data: 'Current_Avg'
+                },
+                {
+                    data: 'Voltage_L_L_Avg'
+                },
+                {
+                    data: 'Voltage_L_N_Avg'
+                },
+                {
+                    data: 'Active_Power_Total'
+                },
+                {
+                    data: 'Reactive_Power_Total'
+                },
+                {
+                    data: 'Apparent_Power_Total'
+                },
+                {
+                    data: 'Power_Factor_Total'
+                },
+                {
+                    data: 'Displacement_Power_Factor_Total'
+                },
+                {
+                    data: 'Frequency'
+                }
+            ],
+        });
     });
 
 
+    function format(d) {
+    // `d` is the original data object for the row
+    return (
+        '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+        '<tr>' +
+        '<td>Full name:</td>' +
+        '<td>' +
+        d.name +
+        '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>Extension number:</td>' +
+        '<td>' +
+        d.extn +
+        '</td>' +
+        '</tr>' +
+        '<tr>' +
+        '<td>Extra info:</td>' +
+        '<td>And any further details here (images etc)...</td>' +
+        '</tr>' +
+        '</table>'
+    );
+}
+
+$(document).ready(function () {
+    var table = $('#example').DataTable({
+        ajax: '../ajax/data/objects.txt',
+        columns: [
+            {
+                className: 'dt-control',
+                orderable: false,
+                data: null,
+                defaultContent: '',
+            },
+            { data: 'name' },
+            { data: 'position' },
+            { data: 'office' },
+            { data: 'salary' },
+        ],
+        order: [[1, 'asc']],
+    });
+
+    // Add event listener for opening and closing details
+    $('#example tbody').on('click', 'td.dt-control', function () {
+        var tr = $(this).closest('tr');
+        var row = table.row(tr);
+
+        if (row.child.isShown()) {
+            // This row is already open - close it
+            row.child.hide();
+            tr.removeClass('shown');
+        } else {
+            // Open this row
+            row.child(format(row.data())).show();
+            tr.addClass('shown');
+        }
+    });
+});
 </script>
 @stop

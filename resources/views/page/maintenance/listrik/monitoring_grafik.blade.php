@@ -57,19 +57,19 @@
                 <div class="bd-highlight">
                     <ul class="nav nav-pills mb-3" id="pills-tab-1" role="tablist">
                         <li class="nav-item ml-2">
-                            <a class="nav-link active" id="pills-home-tab-1" data-toggle="pill" href="#pills-home-1" role="tab" aria-controls="pills-home-1" aria-selected="True">Real time</a>
+                            <a class="nav-link active" id="pills-home-tab_1" data-toggle="pill" href="#pills-home-1" role="tab" aria-controls="pills-home-1" aria-selected="True">Real time</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-home-tab-2" data-toggle="pill" href="#pills-home-2" role="tab" aria-controls="pills-home-2" aria-selected="false">15 Menit</a>
+                            <a class="nav-link" id="pills-home-tab_2" data-toggle="pill" href="#pills-home-2" role="tab" aria-controls="pills-home-2" aria-selected="false">15 Menit</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-home-tab-3" data-toggle="pill" href="#pills-home-3" role="tab" aria-controls="pills-home-3" aria-selected="false">1 Jam</a>
+                            <a class="nav-link" id="pills-home-tab_3" data-toggle="pill" href="#pills-home-3" role="tab" aria-controls="pills-home-3" aria-selected="false">1 Jam</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-home-tab-4" data-toggle="pill" href="#pills-home-4" role="tab" aria-controls="pills-home-4" aria-selected="false">1 Hari</a>
+                            <a class="nav-link" id="pills-home-tab_4" data-toggle="pill" href="#pills-home-4" role="tab" aria-controls="pills-home-4" aria-selected="false">1 Hari</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" id="pills-home-tab-5" data-toggle="pill" href="#pills-home-5" role="tab" aria-controls="pills-home-5" aria-selected="false">1 Bulan</a>
+                            <a class="nav-link" id="pills-home-tab_5" data-toggle="pill" href="#pills-home-5" role="tab" aria-controls="pills-home-5" aria-selected="false">1 Bulan</a>
                         </li>
                   </ul>
 
