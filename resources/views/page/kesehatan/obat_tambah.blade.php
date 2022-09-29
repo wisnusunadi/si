@@ -35,6 +35,19 @@
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="form-group row">
+                                                <label for="" class="col-sm-5 col-form-label" style="text-align: right;">Aturan</label>
+                                                <div class="col-sm-7 col-form-label">
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input aturan_obat" type="radio" name="aturan_obat" value="Sebelum Makan">
+                                                        <label class="form-check-label">Sebelum Makan</label>
+                                                    </div>
+                                                    <div class="form-check form-check-inline">
+                                                        <input class="form-check-input aturan_obat" type="radio" name="aturan_obat" value="Sesudah Makan">
+                                                        <label class="form-check-label">Sesudah Makan</label>
+                                                    </div>
+                                                </div>
+                                            </div>
 
                                             <div class="form-group row">
                                                 <label for="tanggal" class="col-sm-5 col-form-label" style="text-align:right;">Keterangan</label>

@@ -27,6 +27,7 @@
                 Data gagal ditambahkan
             </div>
             @endif
+            
             <div class="col-lg-12">
                 <div class="card">
                     <div class="card-header bg-success">

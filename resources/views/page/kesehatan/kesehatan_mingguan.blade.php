@@ -148,7 +148,7 @@
                 <th>Sistolik</th>
                 <th>Diastolik</th>
                 <th>Catatan</th>
-                <th></th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -163,15 +163,14 @@
               </tr>
               <tr>
                 <th>No</th>
+                <th>Tgl Cek</th>
                 <th>Pengecekan</th>
-                <th>Tgl Pengecekan</th>
                 <th>Divisi</th>
                 <th>Nama</th>
                 <th>Jenis</th>
                 <th>Hasil</th>
                 <th>Catatan</th>
-                <th>File</th>
-                <th></th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -340,6 +339,64 @@
 @stop
 @section('adminlte_js')
 <script>
+    $(function(){
+        $('#rapid_tabel > tbody').on('click', '#delete', function() {
+            Swal.fire({
+                title: 'Hapus Data',
+                text: 'Yakin ingin menghapus data ini?',
+                icon: 'warning',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                showCancelButton: true,
+                showCloseButton: true
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Berhasil',
+                        text: 'Berhasil menghapus data',
+                        icon: 'success',
+                        showCloseButton: true
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        title: 'Gagal',
+                        text: 'Gagal menghapus data',
+                        icon: 'error',
+                        showCloseButton: true
+                    });
+                }
+            });
+        });
+        $('#tensi_tabel > tbody').on('click', '#delete', function() {
+            Swal.fire({
+                title: 'Hapus Data',
+                text: 'Yakin ingin menghapus data ini?',
+                icon: 'warning',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                showCancelButton: true,
+                showCloseButton: true
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Berhasil',
+                        text: 'Berhasil menghapus data',
+                        icon: 'success',
+                        showCloseButton: true
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        title: 'Gagal',
+                        text: 'Gagal menghapus data',
+                        icon: 'error',
+                        showCloseButton: true
+                    });
+                }
+            });
+        });
+    })
      $('.select2').select2();
   $('#form').change(function() {
     var form = $(this).val();
@@ -373,7 +430,10 @@
               data: 'hasil'
             },
             {
-              data: 'tgl_cek'
+              data: 'tgl_cek',
+              render: function (data, type, row) {
+                return moment(new Date(data).toString()).format('DD-MM-YYYY');
+              }
             },
             {
               data: 'x'
@@ -434,7 +494,10 @@
               searchable: false
             },
             {
-              data: 'tgl_cek'
+              data: 'tgl_cek',
+              render: function (data, type, row) {
+                return moment(new Date(data).toString()).format('DD-MM-YYYY');
+              }
             },
             {
               data: 'z'
@@ -453,9 +516,6 @@
             },
             {
               data: 'keterangan'
-            },
-            {
-              data: 'cetak'
             },
             {
               data: 'button'

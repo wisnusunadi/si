@@ -107,7 +107,7 @@
             <label for="no_pemeriksaan" class="col-sm-4 col-form-label" style="text-align:right;">Data</label>
             <div class="col-sm-8">
               <select type="text" class="form-control @error('form') is-invalid @enderror select2" name="form" style="width:45%;" id="form">
-                <option value="0">Pilih Data</option>
+                <option value=""></option>
                 <option value="berat">Berat Badan</option>
                 <option value="gcu">GCU (Glucose, Cholesterol, Uric ACID)</option>
               </select>
@@ -142,7 +142,7 @@
               </tr> -->
               <tr>
                 <th>No</th>
-                <th>Tgl Pengecekan</th>
+                <th>Tgl Cek</th>
                 <th>Divisi</th>
                 <th>Nama</th>
                 <th>Berat</th>
@@ -213,7 +213,7 @@
                   <th></th>
                 </tr>
                 <tr>
-                  <th>Tgl Pengecekan</th>
+                  <th>Tgl Cek</th>
                   <th>Berat</th>
                   <th>Fat</th>
                   <th>Tbw</th>
@@ -314,7 +314,7 @@
                   <th colspan="4">Pengukuran GCU (Glucose, Cholesterol, Uric ACID)</th>
                 </tr>
                 <tr>
-                  <th>Tgl Pengecekan</th>
+                  <th>Tgl Cek</th>
                   <th>Glucose</th>
                   <th>Cholesterol</th>
                   <th>Uric Acid</th>
@@ -370,6 +370,66 @@
 @stop
 @section('adminlte_js')
 <script>
+
+    $(function(){
+        $('#berat_tabel > tbody').on('click', '#delete', function() {
+            Swal.fire({
+                title: 'Hapus Data',
+                text: 'Yakin ingin menghapus data ini?',
+                icon: 'warning',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                showCancelButton: true,
+                showCloseButton: true
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Berhasil',
+                        text: 'Berhasil menghapus data',
+                        icon: 'success',
+                        showCloseButton: true
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        title: 'Gagal',
+                        text: 'Gagal menghapus data',
+                        icon: 'error',
+                        showCloseButton: true
+                    });
+                }
+            });
+        });
+
+        $('#gcu_tabel > tbody').on('click', '#delete', function() {
+            Swal.fire({
+                title: 'Hapus Data',
+                text: 'Yakin ingin menghapus data ini?',
+                icon: 'warning',
+                confirmButtonText: 'Ya',
+                cancelButtonText: 'Tidak',
+                showCancelButton: true,
+                showCloseButton: true
+            })
+            .then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Berhasil',
+                        text: 'Berhasil menghapus data',
+                        icon: 'success',
+                        showCloseButton: true
+                    });
+                } else if (result.dismiss === Swal.DismissReason.cancel) {
+                    Swal.fire({
+                        title: 'Gagal',
+                        text: 'Gagal menghapus data',
+                        icon: 'error',
+                        showCloseButton: true
+                    });
+                }
+            });
+        });
+    })
   $('#form').change(function() {
     var form = $(this).val();
     if (form == 'berat') {
@@ -398,47 +458,63 @@
               searchable: false
             },
             {
-              data: 'tgl_cek'
+              data: 'tgl_cek',
+              searchable: true,
+              render: function (data, type, row) {
+                return moment(new Date(data).toString()).format('DD-MM-YYYY');
+              }
             },
             {
               data: 'x',
               searchable: true
             },
             {
-              data: 'y'
+              data: 'y',
+              searchable: true,
             },
             {
-              data: 'z'
+              data: 'z',
+              searchable: true,
             },
             {
-              data: 'l'
+              data: 'l',
+              searchable: true,
             },
             {
-              data: 'k'
+              data: 'k',
+              searchable: true,
             },
             {
-              data: 'o'
+              data: 'o',
+              searchable: true,
             },
             {
-              data: 't'
+              data: 't',
+              searchable: true,
             },
             {
-              data: 'ka'
+              data: 'ka',
+              searchable: true,
             },
             {
-              data: 'suhu_k'
+              data: 'suhu_k',
+              searchable: true,
             },
             {
-              data: 'sp'
+              data: 'sp',
+              searchable: true,
             },
             {
-              data: 'pr'
+              data: 'pr',
+              searchable: true,
             },
             {
-              data: 'sis'
+              data: 'sis',
+              searchable: true,
             },
             {
-              data: 'dias'
+              data: 'dias',
+              searchable: true,
             },
             {
               data: 'button'
@@ -494,7 +570,10 @@
               searchable: false
             },
             {
-              data: 'tgl_cek'
+              data: 'tgl_cek',
+              render: function (data, type, row) {
+                return moment(new Date(data).toString()).format('DD-MM-YYYY');
+              }
             },
             {
               data: 'x'
@@ -585,6 +664,9 @@
 
     }
   });
-  $('.select2').select2();
+  $('.select2').select2({
+    allowClear: true,
+    placeholder: 'Pilih Data'
+  });
 </script>
 @endsection
