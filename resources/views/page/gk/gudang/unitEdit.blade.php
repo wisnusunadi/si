@@ -513,6 +513,7 @@
     })
 
     $('body').on('submit', '#myForm', function (e) {
+
         e.preventDefault();
         var actionType = $('#btnSave').val();
         $('#btnSave').html('Sending..');
@@ -524,51 +525,78 @@
             showConfirmButton: false
         });
         var formData = new FormData(this);
-        $.ajax({
-            type: 'POST',
-            url: "/api/v2/gk/checkSeriNew",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: (data) => {
-                if (data.status == 'success') {
-                    $.ajax({
-                        type: 'POST',
-                        url: "/api/gk/ubahunit",
-                        data: formData,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        success: (data) => {
-                            // console.log(data);
-                            $('#myForm').trigger('reset');
-                            $('.changeStatus').modal('hide');
-                            $('#btnSave').html('Kirim');
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: data.msg,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                            $('.table_edit_sparepart').DataTable().ajax.reload();
-                            // location.reload();
-                        },
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Error',
-                        text: data.msg,
-                        icon: 'error',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    $('#btnSave').html('Save Changes');
-                    $('#btnSave').attr('disabled', false);
+        if (status == 1) {
+            $.ajax({
+                type: 'POST',
+                url: "/api/v2/gk/checkSeriNew",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (data) => {
+                    if (data.status == 'success') {
+                        $.ajax({
+                            type: 'POST',
+                            url: "/api/gk/ubahunit",
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: (data) => {
+                                // console.log(data);
+                                $('#myForm').trigger('reset');
+                                $('.changeStatus').modal('hide');
+                                $('#btnSave').html('Kirim');
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: data.msg,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                $('.table_edit_sparepart').DataTable().ajax.reload();
+                                // location.reload();
+                            },
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: data.msg,
+                            icon: 'error',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        $('#btnSave').html('Save Changes');
+                        $('#btnSave').attr('disabled', false);
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: "/api/gk/ubahunit",
+                data: formData,
+                cache:false,
+                contentType: false,
+                processData: false,
+                success: (data) => {
+                    // console.log(data);
+                    $('#myForm').trigger('reset');
+                    $('.changeStatus').modal('hide');
+                    $('#btnSave').html('Kirim');
+                    Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: data.msg,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    $('.table_edit_sparepart').DataTable().ajax.reload();
+                    location.reload();
+                }
+            });
+        }
+
 
     })
 
