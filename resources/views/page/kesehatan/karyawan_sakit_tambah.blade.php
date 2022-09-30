@@ -537,6 +537,56 @@
                 select_data();
             }
         });
+        $("#analisa").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        url: "/api/ekatalog/all_satuan",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.satuan,
+                                    id: el.id
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
+
+
+            $("#diagnosa").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        url: "/api/ekatalog/all_satuan",
+                        data: {
+                            term: request.term
+                        },
+                        success: function(data) {
+
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.satuan,
+                                    id: el.id
+                                };
+                            });
+                            response(transformed);
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                }
+            });
     });
 
 </script>
