@@ -28,11 +28,11 @@ export default {
             }
         })
         .then((response) => {
-          this.$store.commit("setJadwal", response.data);
+          this.$store.commit("setJadwal", response.data.data);
+      this.$store.commit("setIsLoading", false);
         });
       this.$store.commit("setStatus", "pelaksanaan");
 
-      this.$store.commit("setIsLoading", false);
     },
 
     checkToken(){

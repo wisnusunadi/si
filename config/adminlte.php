@@ -778,7 +778,7 @@ return [
         ],
         [
             'header' => 'PRODUKSI',
-            'auth' => [17, 10, 16]
+            'auth' => [17]
         ],
         // [
         //     'text'    => 'Jadwal Kerja Produksi',
@@ -839,18 +839,18 @@ return [
             'url'  => '/produksi/riwayat_transfer',
             'auth' => [17],
         ],
-        [
-            'text'    => 'Perakitan',
-            'icon'    => 'fas fa-cogs',
-            'url'  => '/perakitan/mtc',
-            'auth' => [16],
-        ],
-        [
-            'text'    => 'Perakitan',
-            'icon'    => 'fas fa-cogs',
-            'url'  => '/perakitan/eng',
-            'auth' => [10],
-        ],
+        // [
+        //     'text'    => 'Perakitan',
+        //     'icon'    => 'fas fa-cogs',
+        //     'url'  => '/perakitan/mtc',
+        //     'auth' => [16],
+        // ],
+        // [
+        //     'text'    => 'Perakitan',
+        //     'icon'    => 'fas fa-cogs',
+        //     'url'  => '/perakitan/eng',
+        //     'auth' => [10],
+        // ],
         // [
         //     'text'    => 'Pengujian',
         //     'icon'    => 'fab fa-searchengin',
@@ -864,24 +864,24 @@ return [
         //         ],
         //     ],
         // ],
-        [
-            'text' => 'Pengujian',
-            'icon' => 'fab fa-searchengin',
-            'url'  => '/pengujian/mtc',
-            'auth' => [16],
-        ],
-        [
-            'text' => 'Pengujian',
-            'icon' => 'fab fa-searchengin',
-            'url'  => '/pengujian/eng',
-            'auth' => [10],
-        ],
-        [
-            'text' => 'Pengemasan',
-            'icon' => 'fas fa-box-open',
-            'url'  => '/pengemasan/mtc',
-            'auth' => [16],
-        ],
+        // [
+        //     'text' => 'Pengujian',
+        //     'icon' => 'fab fa-searchengin',
+        //     'url'  => '/pengujian/mtc',
+        //     'auth' => [16],
+        // ],
+        // [
+        //     'text' => 'Pengujian',
+        //     'icon' => 'fab fa-searchengin',
+        //     'url'  => '/pengujian/eng',
+        //     'auth' => [10],
+        // ],
+        // [
+        //     'text' => 'Pengemasan',
+        //     'icon' => 'fas fa-box-open',
+        //     'url'  => '/pengemasan/mtc',
+        //     'auth' => [16],
+        // ],
         // [
         //     'text' => 'Pengemasan',
         //     'icon' => 'fas fa-box-open',
@@ -901,12 +901,12 @@ return [
         //         ],
         //     ],
         // ],
-        [
-            'text'    => 'Pengemasan',
-            'icon'    => 'fas fa-box-open',
-            'url'  => '/pengemasan/eng',
-            'auth' => [10],
-        ],
+        // [
+        //     'text'    => 'Pengemasan',
+        //     'icon'    => 'fas fa-box-open',
+        //     'url'  => '/pengemasan/eng',
+        //     'auth' => [10],
+        // ],
         // [
         //     'text'    => 'Perbaikan',
         //     'icon'    => 'fas fa-wrench',
@@ -1058,61 +1058,58 @@ return [
             'auth' => [23]
         ],
 
+        // alatuji
         [
-            'text'    => 'Permintaan',
-            'icon'    => 'fas fa-box-open',
-            'url'  => '/kalibrasi',
+            'header' => 'Alat Uji',
+            'auth' => [22]
+        ],
+        [
+            'text'    => 'Kalibrasi',
+            'icon'    => 'fa fa-wrench',
             'auth' => [22],
-        ],
-        [
-            'text'    => 'Sudah Kalibrasi',
-            'icon'    => 'fas fa-box-open',
-            'url'  => '/acc_kalibrasi',
-            'auth' => [22],
-        ],
-        [
-            'text' => 'Dashboard',
-            'url' => '/gbj/dashboard',
-            'icon' => 'fas fa-layer-group',
-            'auth' => [31, 13],
-        ],
-        // [
-        //     'header' => 'Produksi',
-        //     'auth' => [13]
-        // ],
-        // [
-        //     'text' => 'BPPB',
-        //     'url' => '/bppb',
-        //     'icon' => 'fas fa-circle',
-        //     'auth' => [13],
-        // ],
-        [
-            'header' => 'Stok',
-            'auth' => [13]
-        ],
-        // GBJ
-        [
-            'text' => 'Produk',
-            'url' => '/gbj/produk',
-            'icon' => 'fas fa-boxes',
-            'auth' => [13],
+            'submenu' => [
+                [
+                    'icon' => 'fas fa-home',
+                    'text' => 'Dashboard',
+                    'url'  => '/lab/dashboard',
+                    'auth' => [22],
+                ],
+                [
+                    'icon' => 'fa fa-wrench',
+                    'text' => 'List Alat Uji',
+                    'url'  => '/lab/alatuji/show',
+                    'auth' => [22],
+                ],
+                [
+                    'icon' => 'fa fa-plus-circle',
+                    'text' => 'Tambah Jenis Alat Uji',
+                    'url'  => '/lab/alatuji/create',
+                    'auth' => [22],
+                ],
+                [
+                    'icon' => 'fa fa-plus-circle',
+                    'text' => 'Tambah Serial Number',
+                    'url'  => '/lab/alatuji/barang/create',
+                    'auth' => [22],
+                ],
+            ],
         ],
 
         // [
-        //     'text' => 'Stok',
-        //     'url' => '/gbj/stok',
-        //     'icon' => 'fas fa-circle',
-        //     'auth' => [13],
+        //     'text'    => 'Permintaan',
+        //     'icon'    => 'fas fa-box-open',
+        //     'url'  => '/kalibrasi',
+        //     'auth' => [22],
         // ],
-        [
-            'text' => 'Riwayat Transaksi',
-            'url' => '/gbj/tp',
-            'icon' => 'fas fa-history',
-            'auth' => [13],
-        ],
+        // [
+        //     'text'    => 'Sudah Kalibrasi',
+        //     'icon'    => 'fas fa-box-open',
+        //     'url'  => '/acc_kalibrasi',
+        //     'auth' => [22],
+        // ],
 
         [
-            'header' => 'Penerimaan',
+            'header' => 'Data',
             'auth' => [13]
         ],
         [
@@ -1524,47 +1521,52 @@ return [
         ],
 
         [
+            'header' => 'Maintenance',
+            'auth' => [16,10]
+        ],
+
+        [
             'text'    => 'AIR',
             'icon'    => 'fas fa-tint',
-            'auth' => [16],
+            'auth' => [16,10],
             'submenu' => [
                 [
                     'text' => 'Air Masuk',
                     'icon' => 'far fa-circle',
                     'url' => '/mtc/air/masuk',
-                    'auth' => [16],
+                    'auth' => [16,10],
                 ],
-                [
-                    'text' => 'Air Keluar',
-                    'icon' => 'far fa-circle',
-                    'url' => '/mtc/air/masuk',
-                    'auth' => [16],
-                ],
+                // [
+                //     'text' => 'Air Keluar',
+                //     'icon' => 'far fa-circle',
+                //     'url' => '/mtc/air/masuk',
+                //     'auth' => [16,10],
+                // ],
             ],
         ],
 
         [
             'text'    => 'LISTRIK',
             'icon'    => 'fas fa-bolt',
-            'auth' => [16],
+            'auth' => [16,10],
             'submenu' => [
                 [
                     'text' => 'Data Monitoring',
                     'icon' => 'far fa-circle',
                     'url' => '/mtc/listrik/monitoring/table',
-                    'auth' => [16],
+                    'auth' => [16,10],
                 ],
                 [
                     'text' => 'Grafik Monitoring',
                     'icon' => 'far fa-circle',
                     'url' => '/mtc/listrik/monitoring/grafik',
-                    'auth' => [16],
+                    'auth' => [16,10],
                 ],
                 [
                     'text' => 'Panel Listrik',
                     'icon' => 'far fa-circle',
                     'url' => '/mtc/listrik/panel',
-                    'auth' => [16],
+                    'auth' => [16,10],
                 ],
             ],
         ],
