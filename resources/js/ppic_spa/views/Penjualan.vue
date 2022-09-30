@@ -17,9 +17,10 @@
                 </li>
             </ul>
         </div>
-        <ekatalog-vue :penjualanekatalogs="penjualanekatalogs" v-show="tabs == 'ekatalog'" />
-        <spa-vue :penjualanspas="penjualanspas" v-show="tabs == 'spa'" />
-        <spb-vue :penjualanspbs="penjualanspbs" v-show="tabs == 'spb'" />
+        <ekatalog-vue :penjualanekatalogs="penjualanekatalogs" :jenis="tabs" v-show="tabs == 'ekatalog'" />
+        <spa-vue :penjualanspas="penjualanspas" :jenis="tabs" v-show="tabs == 'spa'" />
+        <spb-vue :penjualanspbs="penjualanspbs" :jenis="tabs" v-show="tabs == 'spb'" />
+        <penjualan-vue :penjualans="penjualans" :jenis="tabs" v-show="tabs == 'penjualan'" />
     </div>
 </template>
 <script>
@@ -27,17 +28,20 @@
     import ekatalogVue from '../components/penjualan/ekatalog.vue';
     import spaVue from '../components/penjualan/spa.vue';
     import spbVue from '../components/penjualan/spb.vue';
+    import penjualanVue from '../components/penjualan/penjualan.vue';
     export default {
         components: {
             ekatalogVue,
             spaVue,
             spbVue,
+            penjualanVue
         },
         data() {
             return {
                 penjualanekatalogs: [],
                 penjualanspas: [],
                 penjualanspbs: [],
+                penjualans: [],
                 tabs: 'ekatalog'
             }
         },
@@ -108,6 +112,23 @@
                                 await axios.post('/penjualan/penjualan/spb/data/semua')
                                     .then(response => {
                                         this.penjualanspbs = response.data.data;
+                                    })
+                                    .catch(error => {
+                                        console.log(error);
+                                    });
+                                this.$store.commit('setIsLoading', false);
+                            } catch (error) {
+                                console.log(error);
+                            }
+                        }
+
+                    case 'penjualan':
+                        if(this.penjualans.length == 0){
+                            try {
+                                this.$store.commit('setIsLoading', true);
+                                await axios.post('/api/penjualan/penjualan/data/semua/semua')
+                                    .then(response => {
+                                        this.penjualans = response.data.data;
                                     })
                                     .catch(error => {
                                         console.log(error);

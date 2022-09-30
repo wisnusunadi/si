@@ -16,7 +16,7 @@
                 <div class="card-header-title">Informasi</div>
             </div>
             <div class="card-content">
-                <div class="content">
+                <div class="content" v-if="$route.params.jenis == 'ekatalog'">
                     <div class="columns">
                         <div class="column">
                             <p>No SO</p>
@@ -24,15 +24,15 @@
                         </div>
                         <div class="column">
                             <p>Tanggal Buat</p>
-                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.tgl_buat }}</p>
+                            <p class="has-text-weight-bold">{{ checkdata(detailpenjualanekatalog.tgl_buat) }}</p>
                         </div>
                         <div class="column">
                             <p>No PO</p>
                             <p class="has-text-weight-bold" v-html="checkdata(detailpenjualanekatalog.no_po)"></p>
                         </div>
                     </div>
-                    <div class="columns">
-                        <div class="column">
+                    <div class="columns" >
+                        <div class="column" >
                             <p>No AKN</p>
                             <p class="has-text-weight-bold" v-html="checkdata(detailpenjualanekatalog.no_paket)"></p>
                         </div>
@@ -48,11 +48,33 @@
                     <div class="columns">
                         <div class="column">
                             <p>No Urut</p>
-                            <p class="has-text-weight-bold">{{ detailpenjualanekatalog.no_urut }}</p>
+                            <p class="has-text-weight-bold">{{ checkdata(detailpenjualanekatalog.no_urut) }}</p>
                         </div>
                         <div class="column">
                             <p>Tanggal Delivery</p>
                             <p class="has-text-weight-bold" v-html="checkTanggalDelivery(detailpenjualanekatalog.tgl_kontrak)"></p>
+                        </div>
+                        <div class="column">
+                            <p>Status</p>
+                            <div v-html="status($route.params.status)"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="content" v-else>
+                    <div class="columns">
+                        <div class="column">
+                            <p>No SO</p>
+                            <p class="has-text-weight-bold" v-html="checkdata(detailpenjualanekatalog.so)"></p>
+                        </div>
+                        <div class="column">
+                            <p>No PO</p>
+                            <p class="has-text-weight-bold" v-html="checkdata(detailpenjualanekatalog.no_po)"></p>
+                        </div>
+                    </div>
+                    <div class="columns" >
+                        <div class="column">
+                            <p>Tanggal PO</p>
+                            <p class="has-text-weight-bold" v-html="checkdata(detailpenjualanekatalog.tgl_po)"></p>
                         </div>
                         <div class="column">
                             <p>Status</p>
@@ -96,9 +118,10 @@
                                         <template v-for="(paket, id) in detailpenjualanekatalog.detail_pesanan">
                                             <tr>
                                                 <td>{{ id + 1 }}</td>
-                                                <td>{{ paket.nama_paket }} <button
+                                                <td>{{ paket.nama_paket }} 
+                                                    <button v-if="paket.jenis != 'jasa'"
                                                         class="button is-primary is-small is-rounded is-outlined"
-                                                        @click="showChart(paket.id, 'paket')"><i
+                                                        @click="showChart(paket.id, paket.jenis)"><i
                                                             class="fas fa-eye"></i></button></td>
                                                 <td>{{ paket.jumlah }}</td>
                                                 <td>Rp. {{ formatRupiah(paket.harga) }}</td>
@@ -111,7 +134,7 @@
                                                 <td></td>
                                                 <td>{{ detail.nama_produk }} <button
                                                         class="button is-primary is-small is-rounded is-outlined"
-                                                        @click="showChart(detail.id, 'variasi')"><i
+                                                        @click="showChart(detail.id, detail.jenis)"><i
                                                             class="fas fa-eye"></i></button></td>
                                                 <td>{{ detail.jumlah }}</td>
                                             </tr>
@@ -161,20 +184,12 @@
             async getPenjualan() {
                 try {
                     let id = this.$route.params.id;
-                    let jenis = this.$route.params.jenis;
                     this.$store.commit('setIsLoading', true);
-                    switch (jenis) {
-                        case 'ekatalog':
-                            await axios.get('/penjualan/penjualan/detail/ekatalog_ppic/' + id)
-                                .then(response => {
-                                    this.detailpenjualanekatalog = response.data.data;
-                                    this.$store.commit('setIsLoading', false);
-                                })
-                            break;
-
-                        default:
-                            break;
-                    }
+                    await axios.get('/penjualan/penjualan/detail/ekatalog_ppic/' + id)
+                    .then(response => {
+                        this.detailpenjualanekatalog = response.data.data;
+                        this.$store.commit('setIsLoading', false);
+                    })
                 } catch (error) {
                     console.log(error);
                 }

@@ -2,7 +2,7 @@
     <div>
         <div class="card mt-6">
             <div class="card-header">
-                <div class="card-header-title">E-Katalog</div>
+                <div class="card-header-title is-uppercase">{{ jenis }}</div>
             </div>
             <div class="card-content">
                 <div class="content field columns is-desktop">
@@ -35,7 +35,7 @@
                                     <td v-html="checkdata(penjualanekatalog.tgl_kontrak)"></td>
                                     <td>{{ penjualanekatalog.nama_customer }}</td>
                                     <td v-html="status(penjualanekatalog.status_ppic)"></td>
-                                    <td><button class="button is-info is-light is-small" @click="detail(penjualanekatalog.pesanan.id, penjualanekatalog.status_ppic)">Detail</button></td>
+                                    <td><button class="button is-info is-light is-small" @click="detail(penjualanekatalog.pesanan.id, jenis, penjualanekatalog.status_ppic)">Detail</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -54,35 +54,17 @@
             penjualanekatalogs: {
                 type: Array,
                 required: true
+            },
+            jenis: {
+                type: String,
+                required: true
             }
-        },
-        methods: {
-            akn(akn, status){
-                switch (status) {
-                    case 'batal':
-                        return `${akn}<br> <span class="tag is-danger is-light">${status}</span>`
-                    case 'negosiasi':
-                        return `${akn}<br> <span class="tag is-warning is-light">${status}</span>`
-                    case 'draft':
-                        return `${akn}<br> <span class="tag is-info is-light">${status}</span>`
-                    case 'sepakat':
-                        return `${akn}<br> <span class="tag is-success is-light">${status}</span>`
-                    default:
-                        break;
-                }
-            },
-            checkdata(data){
-                if(data == null){
-                    return '-'
-                }else{
-                    return data
-                }
-            },
-
         },
 
         updated() {
-            $('.ekatalogtable').DataTable();
+            if (this.penjualanekatalogs.length > 0) {
+                $('.ekatalogtable').DataTable();
+            }
         }
     }
     </script>

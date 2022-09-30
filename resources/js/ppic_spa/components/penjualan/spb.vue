@@ -1,9 +1,8 @@
 <template>
     <div>
-        <div>
         <div class="card mt-6">
             <div class="card-header">
-                <div class="card-header-title">E-Katalog</div>
+                <div class="card-header-title is-uppercase">{{ jenis }}</div>
             </div>
             <div class="card-content">
                 <div class="content field columns is-desktop">
@@ -28,7 +27,7 @@
                                     <td>{{ penjualanspb.tglpo }}</td>
                                     <td>{{ penjualanspb.nama_customer }}</td>
                                     <td v-html="status(penjualanspb.status_ppic)"></td>
-                                    <td><button class="button is-info is-light is-small"  @click="detail(penjualanspb.pesanan.id, penjualanspb.status_ppic)" >Detail</button></td>
+                                    <td><button class="button is-info is-light is-small"  @click="detail(penjualanspb.pesanan.id, jenis, penjualanspb.status_ppic)" >Detail</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -36,7 +35,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -49,10 +47,16 @@ export default {
         penjualanspbs: {
             type: Array,
             required: true
+        },
+        jenis: {
+            type: String,
+            required: true
         }
     },
     updated() {
-        $('.spbtable').DataTable();
+        if(this.penjualanspbs.length > 0) {
+            $('.spbtable').DataTable();
+        }
     }
 }
 </script>

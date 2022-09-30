@@ -498,6 +498,9 @@ class PenjualanController extends Controller
         }
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('jenis_ppic', function ($data) {
+                return strtolower($data->getTable());
+            })
             ->addColumn('jenis', function ($data) {
                 $name = $data->getTable();
                 if ($name == 'ekatalog') {
@@ -534,6 +537,23 @@ class PenjualanController extends Controller
 
                     return $datas;
                     // return $data->no_paket;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('no_paket_ppic', function ($data) {
+                if (isset($data->no_paket)) {
+                    $datas = '';
+                    $datas .= $data->no_paket;
+                    return $datas;
+                    // return $data->no_paket;
+                } else {
+                    return '-';
+                }
+            })
+            ->addColumn('status_paket', function ($data) {
+                if (isset($data->status)) {
+                    return strtolower($data->status);
                 } else {
                     return '-';
                 }
@@ -750,6 +770,53 @@ class PenjualanController extends Controller
                 //     $datas .= '<small class="text-muted"><i>Tidak Tersedia</i></small>';
                 // }
                 // return $datas;
+            })
+            ->addColumn('status_ppic', function ($data) {
+                $name = $data->getTable();
+                $progress = "";
+                $tes = $data->cjumlahprd + $data->cjumlahpart;
+                if  ($tes > 0)  {
+                    $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                    if  ($hitung > 0)  {
+                        $progress = $hitung;
+                    }  else  {
+                        $progress = $hitung;
+                    }
+                }
+
+                if  ($name == "ekatalog")  {
+                    if  ($data->status == "batal" && ($data->Pesanan->log_id != "7"))  {
+                        return 'batal';
+                    }  else  {
+                        if ($data->Pesanan->log_id == "7") {
+                            return strtolower($data->Pesanan->State->nama);
+                        } else {
+                            return $progress;
+                        }
+                    }
+                } else if ($name == "spa") {
+                    if ($data->log == "batal") {
+
+                        return 'batal';
+                    }  else  {
+                        if ($data->Pesanan->log_id == "7") {
+                            return strtolower($data->Pesanan->State->nama);
+                        } else {
+                            return $progress;
+                        }
+                    }
+                } else if ($name == "spb") {
+                    if ($data->log == "batal") {
+
+                        return 'batal';
+                    }  else  {
+                        if ($data->Pesanan->log_id == "7") {
+                            return strtolower($data->Pesanan->State->nama);
+                        } else {
+                            return $progress;
+                        }
+                    }
+                }
             })
             ->addColumn('button', function ($data) {
                 $name =  $data->getTable();
@@ -1909,11 +1976,18 @@ class PenjualanController extends Controller
 
                 if ($pesanan->DetailPesananPart) {
                     foreach ($pesanan->DetailPesananPart  as $key_detail => $detailpart) {
-                        $data['detail_pesanan_part'][$key_detail] = array(
+                        if(strpos($detailpart->Sparepart->kode, 'JASA') === false){
+                            $jenis = 'part';
+                        }else{
+                            $jenis = 'jasa';
+                        }
+                        $data['detail_pesanan'][$key_detail] = array(
                             'id' => $detailpart->id,
-                            'nama_part' => $detailpart->Sparepart->nama,
+                            'nama_paket' => $detailpart->Sparepart->nama,
                             'jumlah' => $detailpart->jumlah,
                             'harga' => $detailpart->harga,
+                            'jenis' => $jenis,
+                    
                         );
                     }
                 }
@@ -1928,6 +2002,7 @@ class PenjualanController extends Controller
                             'jumlah' => $detail->jumlah,
                             'harga' => $detail->harga,
                             'ongkir' => $detail->ongkir,
+                            'jenis' => 'paket',
                             'detail_produk' => array()
                         );
 
@@ -1942,6 +2017,7 @@ class PenjualanController extends Controller
                             $data['detail_pesanan'][$key_detail]['detail_produk'][$key_detailp] = array(
                                 'id' => $detailp->id,
                                 'nama_produk' => $nama_produk,
+                                'jenis' => 'variasi',
                                 'jumlah' => $detailp->getJumlahPesanan(),
 
                             );

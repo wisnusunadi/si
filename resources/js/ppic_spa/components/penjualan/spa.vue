@@ -1,9 +1,8 @@
 <template>
     <div>
-        <div>
         <div class="card mt-6">
             <div class="card-header">
-                <div class="card-header-title">E-Katalog</div>
+                <div class="card-header-title is-uppercase">{{ jenis }}</div>
             </div>
             <div class="card-content">
                 <div class="content field columns is-desktop">
@@ -28,7 +27,7 @@
                                     <td>{{ penjualanspa.tglpo }}</td>
                                     <td>{{ penjualanspa.nama_customer }}</td>
                                     <td v-html="status(penjualanspa.status_ppic)"></td>
-                                    <td><button class="button is-info is-light is-small"  @click="detail(penjualanspa.pesanan.id, penjualanspa.status_ppic)" >Detail</button></td>
+                                    <td><button class="button is-info is-light is-small"  @click="detail(penjualanspa.pesanan.id, jenis, penjualanspa.status_ppic)" >Detail</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -36,7 +35,6 @@
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </template>
 
@@ -49,10 +47,16 @@ export default {
         penjualanspas: {
             type: Array,
             required: true
+        },
+        jenis: {
+            type: String,
+            required: true
         }
     },
     updated() {
-        $('.spatable').DataTable();
+        if(this.penjualanspas.length > 0) {
+            $('.spatable').DataTable();
+        }
     }
 }
 </script>

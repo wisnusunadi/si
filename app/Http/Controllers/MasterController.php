@@ -1519,6 +1519,7 @@ class MasterController extends Controller
             $data['qc'] =  $detail_pesanan->count_gudang - $detail_pesanan->count_qc_ok ;
             $data['log'] =  $detail_pesanan->count_qc_ok -  $detail_pesanan->count_log + $detail_pesanan->count_belum_kirim;
             $data['kir'] =  $detail_pesanan->count_kirim;
+            $data['detail']['jenis'] = 'paket';
 
 
 
@@ -1588,6 +1589,7 @@ class MasterController extends Controller
             $data['detail']['count_log'] = $detail_pesanan_produk->count_log;
             $data['detail']['count_qc_nok'] =  $detail_pesanan_produk->count_qc_nok;
             $data['detail']['count_qc_ok'] = $detail_pesanan_produk->count_qc_ok;
+            $data['detail']['jenis'] = 'variasi';
             $data['gudang'] = $detail_pesanan_produk->count_jumlah - $detail_pesanan_produk->count_gudang ;
             $data['qc'] =  $detail_pesanan_produk->count_gudang - $detail_pesanan_produk->count_qc_ok;
             $data['log'] =  $detail_pesanan_produk->count_qc_ok -  $detail_pesanan_produk->count_log + $detail_pesanan_produk->count_belum_kirim;
@@ -1635,10 +1637,11 @@ class MasterController extends Controller
             $data['detail']['count_log'] = $detail_pesanan_part->count_log;
             $data['detail']['count_qc_nok'] =  $detail_pesanan_part->count_qc_nok;
             $data['detail']['count_qc_ok'] =  $detail_pesanan_part->count_qc_ok;
+            $data['detail']['jenis'] = 'part';
             $data['gudang'] = 0 ;
-            $data['qc'] =   $detail_pesanan_part->jumlah - $detail_pesanan_part->count_qc_ok;
-            $data['log'] = $detail_pesanan_part->count_qc_ok - $detail_pesanan_part->count_log + $detail_pesanan_part->count_belum_kirim ;
-            $data['kir'] =   $detail_pesanan_part->count_kirim ;
+            $data['qc'] =   intval($detail_pesanan_part->jumlah - $detail_pesanan_part->count_qc_ok);
+            $data['log'] = intval($detail_pesanan_part->count_qc_ok - $detail_pesanan_part->count_log + $detail_pesanan_part->count_belum_kirim) ;
+            $data['kir'] =   intval($detail_pesanan_part->count_kirim) ;
             echo json_encode($data);
         }
     }

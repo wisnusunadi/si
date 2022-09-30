@@ -21,8 +21,29 @@ export default {
                 return data
             }
         },
-        async detail(id, status){
-            this.$router.push({ name: 'PenjualanDetail', params: { id: id, jenis: 'ekatalog', status } });
-        }
+        async detail(id, jenis, status){
+            this.$router.push({ name: 'PenjualanDetail', params: { id, jenis, status } });
+        },
+        akn(akn, status){
+            switch (status) {
+                case 'batal':
+                    return `${akn}<br> <span class="tag is-danger is-light">${status}</span>`
+                case 'negosiasi':
+                    return `${akn}<br> <span class="tag is-warning is-light">${status}</span>`
+                case 'draft':
+                    return `${akn}<br> <span class="tag is-info is-light">${status}</span>`
+                case 'sepakat':
+                    return `${akn}<br> <span class="tag is-success is-light">${status}</span>`
+                default:
+                    break;
+            }
+        },
+        checkdata(data){
+            if(data == null){
+                return '-'
+            }else{
+                return data
+            }
+        },
     },
 }
