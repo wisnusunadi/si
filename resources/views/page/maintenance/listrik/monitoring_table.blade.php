@@ -192,7 +192,7 @@
                     <table class="table" id="non_real">
                         <thead class="thead-light">
                           <tr>
-                            <th rowspan="2" width="20%" style="vertical-align : middle;text-align:center;">Date Time</th>
+                            <th rowspan="2" colspan="2" width="20%" style="vertical-align : middle;text-align:center;">Date Time</th>
                             <th colspan="8" style="text-align: center">Avarage/Total</th>
                             <th rowspan="2" width="14%"style="vertical-align : middle;text-align:center;">Frequency</th>
                           </tr>
@@ -244,51 +244,6 @@
         });
     }
 
-    //  var non_real = $('#non_real').DataTable({
-    //    destroy: true,
-    //        processing: true
-    //        ajax: {
-    //            'url': 'http://192.168.13.162:8000/listrik/data/15m',
-    //            "dataType": "json"
-    //        },
-    //        language: {
-    //            processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-    //        },
-    //        columns: [{
-    //                data: 'device_id',
-    //            }
-    //        ]
-    //  });
-    // function ambilPanel(data){
-    //     let table = $('#non_real').DataTable({
-    //         data,
-    //         columns: [
-    //             {
-    //                 data: null,
-    //                 render: function (data, type, full, meta) {
-    //                     return  meta.row + 1;
-    //                 }
-    //             },
-    //             {data: 'date_time'},
-    //             {data: 'Current_Avg'},
-    //             {data: 'Voltage_L_L_Avg'},
-    //             {data: 'Voltage_L_N_Avg'},
-    //             {data: 'Active_Power_Total'},
-    //             {data: 'Reactive_Power_Total'},
-    //             {data: 'Apparent_Power_Total'},
-    //             {data: 'Power_Factor_Total'},
-    //             {data: 'Displacement_Power_Factor_Total'},
-    //             {data: 'Frequency'},
-    //             {
-    //                 data: null,
-    //                 render: function ( data, type, full, meta )
-    //             }
-    //         ],
-    //     });
-    // }
-
-
-
       $('#15m').show();
       $("#15m_filter").addClass('active');
 
@@ -307,8 +262,6 @@
             type:'get',
             url:'http://localhost:8000/listrik/data/' + value,
             success:function(data) {
-                // dataPanel.push(data.data)
-                // ambilPanel(data.data)
                 $('#non_real').DataTable().ajax.url('http://localhost:8000/listrik/data/' + value).load();
             }
         });
@@ -320,8 +273,42 @@
 
     });
 
+    function buka(d) {
+
+    // `d` is the original data object for the row
+    return (
+        '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+        '<tr>' +
+        '<td>Current A:</td>' +
+        '<td>15</td>'+
+        '<td>Current B:</td>' +
+        '<td>15</td>'+
+        '<td>Current C:</td>' +
+        '<td>15</td>' +
+        '<td>Current N:</td>' +
+        '<td>15</td>'+
+        '<td>Current G:</td>' +
+        '</tr>' +
+
+        '<tr>' +
+        '<td>Current B:</td>' +
+        '<td>15</td>'+
+        '<td>Voltage A-B:</td>' +
+        '<td>15</td>' +
+        '<td>Voltage A-N:</td>' +
+        '<td>15</td>'+
+
+        '</tr>' +
+        // '<th'+
+        // '<td>Current A:</td>' +
+        // '<td>15</td>'+
+        // '</th>'+
+        '</table>'
+    );
+}
+
     $(function() {
-        $('#non_real').DataTable({
+        var tableNonReal = $('#non_real').DataTable({
             processing: true,
             serverSide: false,
             language: {
@@ -332,10 +319,15 @@
 
                 'url': 'http://localhost:8000/listrik/data/15m',
             },
-            columns: [{
+            columns: [
+                {
+                className: 'dt-control',
+                orderable: false,
+                defaultContent: '',
+                },
+                {
                     data: 'date_time',
-                    orderable: false,
-                    searchable: false
+                    searchable: true
                 },
                 {
                     data: 'Current_Avg'
@@ -365,56 +357,12 @@
                     data: 'Frequency'
                 }
             ],
+            order: [[1, 'desc']],
         });
-    });
-
-
-    function format(d) {
-    // `d` is the original data object for the row
-    return (
-        '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-        '<tr>' +
-        '<td>Full name:</td>' +
-        '<td>' +
-        d.name +
-        '</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Extension number:</td>' +
-        '<td>' +
-        d.extn +
-        '</td>' +
-        '</tr>' +
-        '<tr>' +
-        '<td>Extra info:</td>' +
-        '<td>And any further details here (images etc)...</td>' +
-        '</tr>' +
-        '</table>'
-    );
-}
-
-$(document).ready(function () {
-    var table = $('#example').DataTable({
-        ajax: '../ajax/data/objects.txt',
-        columns: [
-            {
-                className: 'dt-control',
-                orderable: false,
-                data: null,
-                defaultContent: '',
-            },
-            { data: 'name' },
-            { data: 'position' },
-            { data: 'office' },
-            { data: 'salary' },
-        ],
-        order: [[1, 'asc']],
-    });
-
-    // Add event listener for opening and closing details
-    $('#example tbody').on('click', 'td.dt-control', function () {
+        // Add event listener for opening and closing details
+    $('#non_real tbody').on('click', 'td.dt-control', function () {
         var tr = $(this).closest('tr');
-        var row = table.row(tr);
+        var row = tableNonReal.row(tr);
 
         if (row.child.isShown()) {
             // This row is already open - close it
@@ -422,10 +370,15 @@ $(document).ready(function () {
             tr.removeClass('shown');
         } else {
             // Open this row
-            row.child(format(row.data())).show();
+            row.child(buka(row.data())).show();
             tr.addClass('shown');
         }
     });
-});
+    });
+
+
+
+
+
 </script>
 @stop
