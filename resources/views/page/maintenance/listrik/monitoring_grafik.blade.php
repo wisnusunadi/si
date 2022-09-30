@@ -81,7 +81,12 @@
     </div>
     <div class="tab-content" id="pills-tab-1Content">
         <div class="tab-pane fade show active" id="pills-home-1" role="tabpanel" aria-labelledby="pills-home-1">
-
+            {{-- <div class="row">
+                <div class="col-12">
+                    <div class="title-rt"></div>
+                    <canvas id="grafik_rt"></canvas>
+                </div>
+            </div> --}}
 
             <div class="row">
                 <div class="col">
@@ -166,6 +171,63 @@
                 </div>
             </div>
         </div>
+        <div class="tab-pane fade" id="pills-home-2" role="tabpanel" aria-labelledby="pills-home-2">
+            <div class="row m-3">
+                <div class="col-12">
+                    <div class="container">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="title-15m"></div>
+                                <canvas id="grafik_15m"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-home-3" role="tabpanel" aria-labelledby="pills-home-3">
+            <div class="row m-3">
+                <div class="col-12">
+                    <div class="container">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="title-1j"></div>
+                                <canvas id="grafik_1j"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-home-4" role="tabpanel" aria-labelledby="pills-home-4">
+            <div class="row m-3">
+                <div class="col-12">
+                    <div class="container">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="title-1h"></div>
+                                <canvas id="grafik_1h"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade" id="pills-home-5" role="tabpanel" aria-labelledby="pills-home-5">
+            <div class="row m-3">
+                <div class="col-12">
+                    <div class="container">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="title-1b"></div>
+                                <canvas id="grafik_1b"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
 
 
@@ -178,6 +240,7 @@
 
 
 <script>
+
     //grafik vll
     let datavll = [];
     let vll = {
@@ -203,8 +266,8 @@
         });
 
     $(document).ready(function() {
-    $('.js-example-basic-single').select2();
-});
+        $('.js-example-basic-single').select2();
+    });
 
 
     $(document).ready(function () {
@@ -263,33 +326,33 @@
         // const test = vll.labels = Object.keys(labels[0]);
         console.log(vll);
     }
- //grafik current
- let datac = [];
-    let c = {
-    labels: [],
-    datasets: []
-    };
-    var chLine = document.getElementById("gc1");
-        let cchart = new Chart(chLine, {
-        type: 'line',
-        data: c,
-        options: {
-        scales: {
-            yAxes: [{
-            ticks: {
-                beginAtZero: false
+    //grafik current
+    let datac = [];
+        let c = {
+        labels: [],
+        datasets: []
+        };
+        var chLine = document.getElementById("gc1");
+            let cchart = new Chart(chLine, {
+            type: 'line',
+            data: c,
+            options: {
+            scales: {
+                yAxes: [{
+                ticks: {
+                    beginAtZero: false
+                }
+                }]
+            },
+            legend: {
+                display: false
             }
-            }]
-        },
-        legend: {
-            display: false
-        }
-        }
-        });
+            }
+            });
 
-    $(document).ready(function() {
-    $('.js-example-basic-single').select2();
-});
+        $(document).ready(function() {
+        $('.js-example-basic-single').select2();
+    });
 
 
     $(document).ready(function () {
@@ -341,33 +404,33 @@
         cchart.update();
         console.log("chart current", c);
     }
-// grafik vln
-let datavln = [];
-    let vln = {
-    labels: [],
-    datasets: []
-    };
-    var chLine = document.getElementById("gvln1");
-        let vlnchart = new Chart(chLine, {
-        type: 'line',
-        data: vln,
-        options: {
-        scales: {
-            yAxes: [{
-            ticks: {
-                beginAtZero: false
+    // grafik vln
+    let datavln = [];
+        let vln = {
+        labels: [],
+        datasets: []
+        };
+        var chLine = document.getElementById("gvln1");
+            let vlnchart = new Chart(chLine, {
+            type: 'line',
+            data: vln,
+            options: {
+            scales: {
+                yAxes: [{
+                ticks: {
+                    beginAtZero: false
+                }
+                }]
+            },
+            legend: {
+                display: false
             }
-            }]
-        },
-        legend: {
-            display: false
-        }
-        }
-        });
+            }
+            });
 
-    $(document).ready(function() {
-    $('.js-example-basic-single').select2();
-});
+        $(document).ready(function() {
+        $('.js-example-basic-single').select2();
+    });
 
 
     $(document).ready(function () {
@@ -422,39 +485,38 @@ let datavln = [];
         console.log(vln);
     }
 // grafik power
-let datapower = [];
-    let power = {
-    labels: [],
-    datasets: []
-    };
-    var chLine = document.getElementById("gp1");
-        let powerchart = new Chart(chLine, {
-        type: 'line',
-        data: power,
-        options: {
-        scales: {
-            yAxes: [{
-            ticks: {
-                beginAtZero: false
+    let datapower = [];
+        let power = {
+        labels: [],
+        datasets: []
+        };
+        var chLine = document.getElementById("gp1");
+            let powerchart = new Chart(chLine, {
+            type: 'line',
+            data: power,
+            options: {
+            scales: {
+                yAxes: [{
+                ticks: {
+                    beginAtZero: false
+                }
+                }]
+            },
+            legend: {
+                display: false
             }
-            }]
-        },
-        legend: {
-            display: false
-        }
-        }
-        });
+            }
+            });
 
-    $(document).ready(function() {
-    $('.js-example-basic-single').select2();
-});
+        $(document).ready(function() {
+        $('.js-example-basic-single').select2();
+    });
 
 
     $(document).ready(function () {
-
         let pilih_device = $('#masuk').val();
         getpowergrafik();
-    }(jQuery));
+    }(jQuery) );
 
     function getpowergrafik() {
         let pilih_device = $('#masuk').val();
@@ -467,6 +529,7 @@ let datapower = [];
         }
         });
     }
+
     var arrayColor = ['#36a2eb','#cc65fe','#a8327d','#db0d0d',
             '#ffce56','#000000','#32a852','#a83632','#877878',
             '#a85932','#98a832','#5da832',,'#6d32a8','#32a851',
@@ -768,5 +831,222 @@ let datafre = [];
     });
 
 
+</script>
+
+<script>
+    $(function(){
+        // $('#masuk').select2();
+        var grafik = "";
+        var current_select = "rt";
+        var current_grafik = "c1";
+        var current_text = "CURRENT";
+        var arrayColor = ['#ff6384',
+            '#36a2eb',
+            '#cc65fe','#a8327d',
+            '#ffce56','#000000','#32a852','#a83632',
+            '#a85932','#98a832','#5da832','#32a851',
+            '#32a89e'
+        ];
+
+        var array_data = [];
+        var data_grafik = {
+            labels: [],
+            datasets: []
+        };
+
+
+        var grafik_rt = document.getElementById("grafik_rt");
+        let thechart_rt = new Chart(grafik_rt, {
+            type: 'line',
+            data: data_grafik,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                },
+            }
+        });
+
+        var grafik_15m = document.getElementById("grafik_15m");
+        let thechart_15m = new Chart(grafik_15m, {
+            type: 'line',
+            data: data_grafik,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                },
+            }
+        });
+
+        var grafik_1j = document.getElementById("grafik_1j");
+        let thechart_1j = new Chart(grafik_1j, {
+            type: 'line',
+            data: data_grafik,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                },
+            }
+        });
+
+        var grafik_1h = document.getElementById("grafik_1h");
+        let thechart_1h = new Chart(grafik_1h, {
+            type: 'line',
+            data: data_grafik,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                },
+            }
+        });
+
+        var grafik_1b = document.getElementById("grafik_1b");
+        let thechart_1b = new Chart(grafik_1b, {
+            type: 'line',
+            data: data_grafik,
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: false
+                        }
+                    }]
+                },
+                legend: {
+                    display: false
+                },
+            }
+        });
+
+        function getgrafikdata(current_grafik, current_select, selected_chart) {
+            var aspek = "";
+            array_data = [];
+            data_grafik.labels.length = 0;
+            data_grafik.datasets.length = 0;
+            if(current_grafik == "c1"){
+                aspek = "current";
+            }else if(current_grafik == "vll1"){
+                aspek = "vll";
+            }else if(current_grafik == "vln1"){
+                aspek = "vln";
+            }else if(current_grafik == "p1"){
+                aspek = "p";
+            }else if(current_grafik == "pf1"){
+                aspek = "pf";
+            }else if(current_grafik == "dpf1"){
+                aspek = "dpf";
+            }else if(current_grafik == "f1"){
+                aspek = "f";
+            }
+            console.log(aspek);
+            $.ajax({
+                type:'get',
+                url:'http://localhost:8000/listrik/ambil'+current_select+aspek,
+                success:function(data) {
+                    array_data.push(data.data);
+                    console.log(array_data)
+                    getspecdata($('#masuk').val(), selected_chart);
+                }
+            });
+        }
+
+        function getspecdata(device, selected_chart) {
+            let labelsChart = [];
+            let datasets = [];
+            const result = array_data[0].filter((item) => item.device === device);
+            const labels = result.map((item) => item.detail);
+            labels.forEach(element => {
+                element.forEach((item) => {
+                    datasets.push(item);
+                });
+            });
+            labelsChart.push(Object.values(datasets[0].Date_Time));
+            data_grafik.labels = labelsChart[0];
+            datasets.forEach((item,index) => {
+                if(Object.keys(item) != 'Date_Time'){
+                    data_grafik.datasets.push({
+                    borderColor: arrayColor[index],
+                    label: Object.keys(item),
+                    data: Object.values(item)[0],
+                });
+                }
+            });
+            selected_chart.update();
+        }
+
+        getgrafikdata(current_grafik, current_select, thechart_rt);
+
+        $(document).on('click', '#pills-home-tab_1', function(){
+            current_select = "rt";
+            getgrafikdata(current_grafik, current_select, thechart_rt);
+        });
+
+        $(document).on('click', '#pills-home-tab_2', function(){
+            current_select = "15m";
+            getgrafikdata(current_grafik, current_select, thechart_15m);
+        });
+
+        $(document).on('click', '#pills-home-tab_3', function(){
+            current_select = "1j";
+            getgrafikdata(current_grafik, current_select, thechart_1j);
+        });
+
+        $(document).on('click', '#pills-home-tab_4', function(){
+            current_select = "1h";
+            getgrafikdata(current_grafik, current_select, thechart_1h);
+        });
+
+        $(document).on('click', '#pills-home-tab_5', function(){
+            current_select = "1b";
+            getgrafikdata(current_grafik, current_select, thechart_1b);
+        });
+
+        $(document).on('click', '.dropdown-item', function(){
+            current_grafik = $(this).attr('data-value');
+            if(current_select == "rt"){
+                getgrafikdata(current_grafik, current_select, thechart_rt);
+            }
+            else if(current_select == "15m"){
+                getgrafikdata(current_grafik, current_select, thechart_15m);
+            }
+            else if(current_select == "1j"){
+                getgrafikdata(current_grafik, current_select, thechart_1j);
+            }
+            else if(current_select == "1h"){
+                getgrafikdata(current_grafik, current_select, thechart_1h);
+            }
+            else if(current_select == "1b"){
+                getgrafikdata(current_grafik, current_select, thechart_1b);
+            }
+        });
+
+    });
 </script>
 @stop
