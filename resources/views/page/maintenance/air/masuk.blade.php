@@ -202,7 +202,7 @@
                                                     echo strftime("%A"); ?>)
                     </div>
                     <div class="card-body">
-                        <div class="chart-container"><canvas id="myAreaChart" height="200px"></canvas></div>
+                        <div class="chart-container"><canvas id="myAreaChart" height="125px"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -332,7 +332,7 @@
 
     function UpdateBarVolume() {
         $.ajax({
-            url: "http://192.168.1.9:90/air/rekap_volume_in",
+            url: "http://localhost:81/air/rekap_volume_in",
             type: "get",
             success: function(res) {
 
@@ -362,7 +362,7 @@
         })
 
         $.ajax({
-            url: "http://192.168.1.9:90/air/rekap_volume_out",
+            url: "http://localhost:81/air/rekap_volume_out",
             type: "get",
             success: function(res) {
 
@@ -546,7 +546,7 @@
         //update data
         function updateGaugeIn() {
             $.ajax({
-                url: "http://192.168.1.9:90/air/rekap_debit_in",
+                url: "http://localhost:81/air/rekap_debit_in",
                 type: "get",
                 success: function(res) {
                     gg1.refresh(res.data2[0].debit);
@@ -571,7 +571,7 @@
 
         function updateGaugeOut() {
             $.ajax({
-                url: "http://192.168.1.9:90/air/rekap_debit_out",
+                url: "http://localhost:81/air/rekap_debit_out",
                 type: "get",
                 success: function(res) {
                     gg2.refresh(res.data2[0].debit);
@@ -604,7 +604,7 @@
 
     function kualitas() {
         $.ajax({
-            url: "http://192.168.1.9:90/air/rekap_kualitas",
+            url: "http://localhost:81/air/rekap_kualitas",
             type: "get",
             success: function(res) {
 

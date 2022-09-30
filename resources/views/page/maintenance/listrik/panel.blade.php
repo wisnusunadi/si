@@ -128,7 +128,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
     let dataPanel = [];
     $.ajax({
         type:'get',
-        url:'http://localhost:8000/listrik/ambilpanel',
+        url:'http://localhost:81/listrik/ambilpanel',
         success:function(data) {
             dataPanel.push(data.data)
             ambilPanel(data.data)
@@ -168,10 +168,11 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
     var ids = '';
     $(document).on('click', '.btnEdit', function () {
         ids = $(this).data('id')
+        nm = $(this).parent().prev().prev().prev().html()
 
         $.ajax({
             type:'get',
-            url:'http://localhost:8000/listrik/ambilpanel?id='+ids,
+            url:'http://localhost:81/listrik/ambilpanel?id='+ids,
             success:function(data) {
                 $('#device_id').val(data.data[0].device_id)
                 $('#kd_panel').val(data.data[0].device_id)
@@ -182,7 +183,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 
             }
         });
-        $('#exampleModalLabel').html('Ubah Panel')
+        $('#exampleModalLabel').html('Ubah Panel ' +nm)
         $('#exampleModal').modal('show')
     })
 
@@ -201,7 +202,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
             if (result.isConfirmed) {
                 $.ajax({
                     type:'delete',
-                    url:'http://localhost:8000/listrik/delpanel',
+                    url:'http://localhost:81/listrik/delpanel',
                     data: {
                         kd_panel: ids
                     },
@@ -238,7 +239,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
                     headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                    url: "http://localhost:8000/listrik/panel",
+                    url: "http://localhost:81/listrik/panel",
                     type: "POST",
                     data: formData,
                     cache: false,
