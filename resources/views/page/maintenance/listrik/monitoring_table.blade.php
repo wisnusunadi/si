@@ -145,7 +145,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-3">
-                                    <div class="bg-secondary">Rective Power A</div>
+                                    <div class="bg-secondary "><a class="col-auto">Rective Power A</a><b class="col-auto" id="r1">51</b></div>
                                     <div>Rective Power B</div>
                                     <div class="bg-secondary">Rective Power C</div>
                                     <div>Rective Power Total</div>
