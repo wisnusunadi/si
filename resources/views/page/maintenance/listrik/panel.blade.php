@@ -30,6 +30,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 
 @section('content')
 <section class="content">
+    
     <div class="container-fluid"><h2>Data Panel</h2>
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-toggle="modal" id="btnCreate">
