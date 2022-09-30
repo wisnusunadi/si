@@ -778,7 +778,7 @@ return [
         ],
         [
             'header' => 'PRODUKSI',
-            'auth' => [17, 10, 16]
+            'auth' => [17]
         ],
         // [
         //     'text'    => 'Jadwal Kerja Produksi',
@@ -839,18 +839,18 @@ return [
             'url'  => '/produksi/riwayat_transfer',
             'auth' => [17],
         ],
-        [
-            'text'    => 'Perakitan',
-            'icon'    => 'fas fa-cogs',
-            'url'  => '/perakitan/mtc',
-            'auth' => [16],
-        ],
-        [
-            'text'    => 'Perakitan',
-            'icon'    => 'fas fa-cogs',
-            'url'  => '/perakitan/eng',
-            'auth' => [10],
-        ],
+        // [
+        //     'text'    => 'Perakitan',
+        //     'icon'    => 'fas fa-cogs',
+        //     'url'  => '/perakitan/mtc',
+        //     'auth' => [16],
+        // ],
+        // [
+        //     'text'    => 'Perakitan',
+        //     'icon'    => 'fas fa-cogs',
+        //     'url'  => '/perakitan/eng',
+        //     'auth' => [10],
+        // ],
         // [
         //     'text'    => 'Pengujian',
         //     'icon'    => 'fab fa-searchengin',
@@ -864,24 +864,24 @@ return [
         //         ],
         //     ],
         // ],
-        [
-            'text' => 'Pengujian',
-            'icon' => 'fab fa-searchengin',
-            'url'  => '/pengujian/mtc',
-            'auth' => [16],
-        ],
-        [
-            'text' => 'Pengujian',
-            'icon' => 'fab fa-searchengin',
-            'url'  => '/pengujian/eng',
-            'auth' => [10],
-        ],
-        [
-            'text' => 'Pengemasan',
-            'icon' => 'fas fa-box-open',
-            'url'  => '/pengemasan/mtc',
-            'auth' => [16],
-        ],
+        // [
+        //     'text' => 'Pengujian',
+        //     'icon' => 'fab fa-searchengin',
+        //     'url'  => '/pengujian/mtc',
+        //     'auth' => [16],
+        // ],
+        // [
+        //     'text' => 'Pengujian',
+        //     'icon' => 'fab fa-searchengin',
+        //     'url'  => '/pengujian/eng',
+        //     'auth' => [10],
+        // ],
+        // [
+        //     'text' => 'Pengemasan',
+        //     'icon' => 'fas fa-box-open',
+        //     'url'  => '/pengemasan/mtc',
+        //     'auth' => [16],
+        // ],
         // [
         //     'text' => 'Pengemasan',
         //     'icon' => 'fas fa-box-open',
@@ -901,12 +901,12 @@ return [
         //         ],
         //     ],
         // ],
-        [
-            'text'    => 'Pengemasan',
-            'icon'    => 'fas fa-box-open',
-            'url'  => '/pengemasan/eng',
-            'auth' => [10],
-        ],
+        // [
+        //     'text'    => 'Pengemasan',
+        //     'icon'    => 'fas fa-box-open',
+        //     'url'  => '/pengemasan/eng',
+        //     'auth' => [10],
+        // ],
         // [
         //     'text'    => 'Perbaikan',
         //     'icon'    => 'fas fa-wrench',
@@ -1521,6 +1521,11 @@ return [
         ],
 
         [
+            'header' => 'Maintenance',
+            'auth' => [16,10]
+        ],
+
+        [
             'text'    => 'AIR',
             'icon'    => 'fas fa-tint',
             'auth' => [16,10],
@@ -1531,12 +1536,12 @@ return [
                     'url' => '/mtc/air/masuk',
                     'auth' => [16,10],
                 ],
-                [
-                    'text' => 'Air Keluar',
-                    'icon' => 'far fa-circle',
-                    'url' => '/mtc/air/masuk',
-                    'auth' => [16,10],
-                ],
+                // [
+                //     'text' => 'Air Keluar',
+                //     'icon' => 'far fa-circle',
+                //     'url' => '/mtc/air/masuk',
+                //     'auth' => [16,10],
+                // ],
             ],
         ],
 
