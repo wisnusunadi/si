@@ -2035,6 +2035,8 @@ class KesehatanController extends Controller
 
     public function kesehatan_riwayat_penyakit_aksi_tambah(Request $request)
     {
+
+
         $this->validate(
             $request,
             [
@@ -2057,10 +2059,11 @@ class KesehatanController extends Controller
                 'keterangan' => $request->keterangan[$i],
             ]);
         }
+
         if ($riwayat_penyakit) {
-            return redirect()->back()->with('success', "Berhasil menambahkan data");
+            return response()->json(['data' => 'success', 'msg' => 'Data berhasil di hapus']);
         } else {
-            return redirect()->back()->with('error', "Gagal menambahkan data");
+            return response()->json(['data' => 'error', 'msg' => 'Hapus Gagal, periksa kembali']);
         }
     }
 

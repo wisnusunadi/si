@@ -362,7 +362,6 @@
                             <div class="form-group">
                                 <label for="jenis">Jenis Penyakit</label>
                                 <select class="form-control select2 jenis" style="width:100%" name="jenis_form" id="jenis_form" placeholder="Pilih jenis penyakit">
-                                    <option value=""></option>
                                     <option value="Penyakit saat ini">Penyakit saat ini</option>
                                     <option value="Penyakit lama">Penyakit lama</option>
                                     <option value="Penyakit keluarga">Penyakit keluarga</option>
@@ -395,7 +394,7 @@
                 </div>
                 <div class="col-md-12 col-lg-8">
                     <div class="card card-outline card-info">
-                        <form method="post" action="/kesehatan/riwayat_penyakit/aksi_tambah">
+                        <form method="post" action="/kesehatan/riwayat_penyakit/aksi_tambah" id="penyakit_form">
                         @csrf
                         <div class="card-header"><b class="card-title">Draft Daftar Penyakit</b></div>
                         <div class="card-body">
@@ -700,7 +699,7 @@
       $('.data_detail_head').html(
         rows[0]['karyawan']['nama']
       );
-      $('input[id="id"]').val(rows[0]['karyawan_id']);
+      $('input[id="fk_karyawan_id"]').val(rows[0]['karyawan_id']);
       $('#tabel_detail_penyakit').DataTable({
         processing: true,
         destroy: true,
@@ -816,25 +815,33 @@
       });
     }
 
-    $(document).on('click', '#btnreset_penyakit', function(){
+    function resetpenyakit(){
         $('#nama_form').val('');
         $('#jenis_form').val('');
         $('input[type="radio"][name="kriteria_form"]').prop('checked', false);
         $('#keterangan_form').val('');
         $('.jenis').select2();
+    }
+    $(document).on('click', '#btnreset_penyakit', function(){
+        resetpenyakit();
     });
 
     $('#tambahitem_penyakit').click(function(e) {
+
       var nama_form = $('#nama_form').val();
       var jenis_form = $('#jenis_form').val();
       var kriteria_form = $('input[name="kriteria_form"]:checked').val();
       var keterangan_form = $('#keterangan_form').val();
-      var kriteria_exp = (kriteria_form == '0' ? 'Tidak Menular' : 'Menular');
+      //var kriteria_exp = (kriteria_form == '0' ? 'Tidak Menular' : 'Menular');
+        if(kriteria_form == 0){
+            var kriteria_exp =  'Tidak Menular';
+        }else if(kriteria_form == 1){
+            var kriteria_exp = 'Menular';
+        }else{
+            var kriteria_exp = '';
+        }
 
-      $('#nama_form').val('');
-      $('#jenis_form').val('');
-      $('input[type="radio"][name="kriteria_form"]').prop('checked', false);
-      $('#keterangan_form').val('');
+
 
       var data = `<tr>
             <td>1</td>
@@ -846,25 +853,100 @@
                 <i class="fas fa-minus text-danger" id="closetable_penyakit"></i>
             </td>
         </tr>`;
-      if($('#tabel_penyakit > tbody > tr > td > .nama').length <= 0){
+
+        if(nama_form != '' && kriteria_exp != ""){
+          $('#nama_form').val('');
+      //$('#jenis_form').val('');
+      $('input[type="radio"][name="kriteria_form"]').prop('checked', false);
+      $('#keterangan_form').val('');
+        if($('#tabel_penyakit > tbody > tr > td > .nama').length <= 0){
         $('#tabel_penyakit > tbody > tr').remove();
         $('#tabel_penyakit tbody').append(data);
-      }else{
+
+    }else{
         $('#tabel_penyakit tbody tr:last').after(data);
       }
 
       numberRow_penyakit($("#tabel_penyakit"));
+        }else{
+                             swal.fire(
+                                'Gagal',
+                                'Lengkapi form',
+                                'warning'
+                            );
+        }
+
     });
     $('#tabel_penyakit').on('click', '#closetable_penyakit', function(e) {
 
       $(this).closest('tr').remove();
-      numberRow_vaksin($("#tabel_penyakit"));
+      numberRow_penyakit($("#tabel_penyakit"));
       if($('#tabel_penyakit > tbody > tr').length <= 0){
         $('#tabel_penyakit tbody').append('<tr><td colspan="6">Data tidak tersedia</td></tr>');
       }
 
     });
     $('.select2').select2();
+
+
+    $('#tambah_mod_penyakit').on('hidden.bs.modal', function () {
+        resetpenyakit();
+        $("#tabel_penyakit > tbody").empty();
+        numberRow_penyakit($("#tabel_penyakit"));
+        $('#tabel_penyakit tbody').append('<tr><td colspan="6">Data tidak tersedia</td></tr>');
+
+    });
+
+    $(document).on('submit', '#penyakit_form', function(e) {
+        $('#button_tambah').attr('disabled', true);
+            e.preventDefault();
+
+            var $form = $(this);
+            var $inputs = $form.find("input, select, button, textarea");
+            var serializedData = $form.serialize();
+
+            var action = $(this).attr('action');
+            $.ajax({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                },
+                type: "POST",
+                url: action,
+                data: serializedData,
+                dataType: 'JSON',
+                success: function(response) {
+                    if (response['data'] == "success") {
+                        $("#tabel_penyakit > tbody").empty();
+                        numberRow_penyakit($("#tabel_penyakit"));
+                        $('#tabel_penyakit tbody').append('<tr><td colspan="6">Data tidak tersedia</td></tr>');
+
+                                swal.fire(
+                                    'Berhasil',
+                                    'Data berhasil diupdate',
+                                    'success'
+                                );
+
+
+
+                            }  else {
+                                swal.fire(
+                                    'Error',
+                                    'Data gagal di update',
+                                    'warning'
+                                );
+                            }
+                },
+                error: function(xhr, status, error) {
+                    swal.fire(
+                                'Gagal',
+                                'Lengkapi form',
+                                'warning'
+                            );
+                }
+            });
+            return false;
+    });
+
   });
 </script>
 @endsection
