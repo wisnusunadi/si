@@ -15,7 +15,7 @@ Route::group(['prefix' => '/kesehatan'], function (){
         Route::post('/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_data']);
         Route::post('/vaksin/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_vaksin']);
         Route::post('/penyakit/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_riwayat_penyakit']);
-        Route::get('/data/{id}',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_data_detail']);
+             Route::get('/data/{id}',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_data_detail']);
         //});
         Route::get('/vaksin/chart/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'chart_vaksin']);
         Route::get('/berat/chart/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'chart_berat_tahun']);
@@ -25,6 +25,8 @@ Route::group(['prefix' => '/kesehatan'], function (){
 
         Route::group(['prefix' => '/riwayat_penyakit'], function (){
             Route::post('/aksi_tambah', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_riwayat_penyakit_aksi_tambah']);
+         //   Route::get('/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'riwayat_penyakit_data']);
+
         });
 
 

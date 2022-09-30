@@ -30,6 +30,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 
 @section('content')
 <section class="content">
+
     <div class="container-fluid"><h2>Data Panel</h2>
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-toggle="modal" id="btnCreate">
@@ -168,6 +169,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
     var ids = '';
     $(document).on('click', '.btnEdit', function () {
         ids = $(this).data('id')
+        nm = $(this).parent().prev().prev().prev().html()
 
         $.ajax({
             type:'get',
@@ -182,7 +184,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 
             }
         });
-        $('#exampleModalLabel').html('Ubah Panel')
+        $('#exampleModalLabel').html('Ubah Panel ' +nm)
         $('#exampleModal').modal('show')
     })
 
