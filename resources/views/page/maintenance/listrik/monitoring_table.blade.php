@@ -168,22 +168,115 @@
                             <div class="bg-secondary">Frequency</div>
                         </div>
                         <div class="col-3">
-                            <div class="bg-secondary">Apparent Power A</div>
-                            <div>Apparent Power B</div>
-                            <div class="bg-secondary">Apparent Power C</div>
-                            <div>Apparent Power Total</div>
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Apparent Power A</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_apparent_a">10</div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Apparent Power B</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_apparent_b">10</div>
+                                </div>
+                            </div>
+
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Apparent Power C</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_apparent_c">10</div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Apparent Power Total</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_apparent_total">10</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-3">
-                            <div class="bg-secondary">Power Factor A</div>
-                            <div>Power Factor B</div>
-                            <div class="bg-secondary">Power Factor C</div>
-                            <div>Power Factor Total</div>
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Power Factor A</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary">10</div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Power Factor B</div>
+                                </div>
+                                <div class="col-3">
+                                    <div>10</div>
+                                </div>
+                            </div>
+
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Power Factor C</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary">10</div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Power Factor Total</div>
+                                </div>
+                                <div class="col-3">
+                                    <div>10</div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-3">
-                            <div class="bg-secondary">Displacement Power Factor A</div>
-                            <div>Displacement Power Factor B</div>
-                            <div class="bg-secondary">Displacement Power Factor C</div>
-                            <div>Displacement Power Factor Total</div>
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Displacement Power Factor A</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary">10</div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Displacement Power Factor B</div>
+                                </div>
+                                <div class="col-3">
+                                    <div>10</div>
+                                </div>
+                            </div>
+
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Displacement Power Factor C</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary">10</div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Displacement Power Factor Total</div>
+                                </div>
+                                <div class="col-3">
+                                    <div>10</div>
+                                </div>
+                            </div>
                         </div>
                     </div>
 
@@ -261,14 +354,31 @@
             success: function (data) {
                 let x = data.data.length;
 
-                for (a = 1; a <= x; a++) {
+                for (a = 0; a < x; a++) {
                     $('#dropdownPanel').append(
-                        '<a class="dropdown-item" href="#">' + data.data[a - 1].device_id + '</a>'
+                        '<a class="dropdown-item filter_device" data-value="'+ data.data[a].device_id +'" id="'+ data.data[a].device_id +'">' + data.data[a].device_id + '</a>'
                     );
                 }
+
+                $('.filter_device').click(function(){
+                    var value = $(this).data('value');
+                    console.log(value);
+                    $.ajax({
+                        type: 'get',
+                        url: 'http://localhost:81/listrik/ambilraw?device_id='+value,
+                        success: function(data) {
+                            $('#val_apparent_a').html(data.data.Apparent_Power_A)
+                            $('#val_apparent_b').html(data.data.Apparent_Power_B)
+                            $('#val_apparent_c').html(data.data.Apparent_Power_C)
+                            $('#val_apparent_total').html(data.data.Apparent_Power_Total)
+                            console.log(data.data);
+                        }
+                    })
+                })
             }
         });
     }
+
 
     $('#15m').show();
     $("#15m_filter").addClass('active');
