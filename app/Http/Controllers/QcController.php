@@ -15,9 +15,13 @@ use App\Models\NoseriBarangJadi;
 use App\Models\NoseriDetailPesanan;
 use App\Models\NoseriTGbj;
 use App\Models\OutgoingPesananPart;
+use App\Models\PenjualanProduk;
 use App\Models\Pesanan;
+use App\Models\Produk;
 use App\Models\Spa;
+use App\Models\Sparepart;
 use App\Models\Spb;
+use App\Models\SystemLog;
 use App\Models\TFProduksi;
 use Illuminate\Http\Request;
 use Illuminate\Support\Arr;
@@ -2327,6 +2331,16 @@ class QcController extends Controller
                         $bool = false;
                         $bools = false;
                     }
+                    $obj = [
+                        'pesanan_so' => Pesanan::find(DetailPesanan::find(DetailPesananProduk::find($data->detail->detail_pesanan_produk_id)->detail_pesanan_id)->pesanan_id)->so,
+                        'pesanan_so' => Pesanan::find(DetailPesanan::find(DetailPesananProduk::find($data->detail->detail_pesanan_produk_id)->detail_pesanan_id)->pesanan_id)->no_po,
+                        'paket' => PenjualanProduk::find(DetailPesanan::find(DetailPesananProduk::find($data->detail->detail_pesanan_produk_id)->detail_pesanan_id)->penjualan_produk_id)->nama,
+                        'produk' => Produk::find(GudangBarangJadi::find(DetailPesananProduk::find($data->detail->detail_pesanan_produk_id)->gudang_barang_jadi_id)->produk_id)->nama.' '.GudangBarangJadi::find(DetailPesananProduk::find($data->detail->detail_pesanan_produk_id)->gudang_barang_jadi_id)->nama,
+                        'jumlah' => count($request->noseri_id),
+                        'noseri' => NoseriBarangJadi::whereIn('id', NoseriTGbj::whereIn('id', $request->noseri_id)->get()->pluck('noseri_id'))->get()->pluck('noseri'),
+                        'status' => $request->cek,
+                        'tgl_uji' => $request->tanggal_uji,
+                    ];
                 } else {
                     $NoseriDetailPesanan = NoseriDetailPesanan::find($check->id);
                     $NoseriDetailPesanan->status = $request->cek;
@@ -2338,6 +2352,12 @@ class QcController extends Controller
                     }
                 }
             }
+            SystemLog::create([
+                'tipe' => 'QC',
+                'subjek' => 'Pengujian Produk',
+                'response' => json_encode($obj),
+                'user_id' => $request->user_idd,
+            ]);
         } else if ($jenis == "part") {
             $data = OutgoingPesananPart::create([
                 'detail_pesanan_part_id' => $produk_id,
@@ -2350,6 +2370,22 @@ class QcController extends Controller
                 $bool = false;
                 $bools = false;
             }
+
+            $obj = [
+                'dpp_id' => $produk_id,
+                'part' => Sparepart::find(DetailPesananPart::find($produk_id)->m_sparepart_id)->nama,
+                'kode_part' => Sparepart::find(DetailPesananPart::find($produk_id)->m_sparepart_id)->kode,
+                'tanggal_uji' => $request->tanggal_uji,
+                'jumlah_ok' => $request->jumlah_ok,
+                'jumlah_nok' => $request->jumlah_nok
+            ];
+
+            SystemLog::create([
+                'tipe' => 'QC',
+                'subjek' => 'Pengujian Sparepart',
+                'response' => json_encode($obj),
+                'user_id' => $request->user_id,
+            ]);
         }
 
         if ($bool == true) {

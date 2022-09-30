@@ -172,7 +172,7 @@
                                 </div>
                             </div>
                             {{-- col --}}
-                            <div class="col"> <label for="">Status</label>
+                            <div class="col"> <label for="">Tanggal</label>
                                 <div class="card nomor-akn">
                                     <div class="card-body">
                                         <p class="card-text" id="in">Sudah Ditransfer</p>
@@ -215,6 +215,10 @@
                                 {{-- <select name="noseri_fix" class="form-control fixid">
                             </select> --}}
                             </div>
+                            <div class="form-group">
+                                <label for="">Kerusakan</label>
+                                <textarea name="remark" id="remark" cols="5" rows="5" class="form-control"></textarea>
+                              </div>
                             <div class="form-group">
                                 <label for="">Perbaikan</label>
                                 <textarea name="perbaikan" id="perbaikan" cols="5" rows="5"
@@ -471,16 +475,16 @@
             $('.fixidCol').hide()
         }
 
-        // $.ajax({
-        //     url: "/api/gk/noseri/" + id,
-        //     type: "get",
-        //     dataType: "json",
-        //     success: function (res) {
-        //         $('div#nose').text(res.noser);
-        //         $('p#in').text(res.in);
-        //         $('p#out').text(res.out);
-        //     }
-        // })
+        $.ajax({
+            url: "/api/gk/noseri/" + id,
+            type: "get",
+            dataType: "json",
+            success: function (res) {
+                $('div#nose').text(res.noser);
+                $('p#in').text(res.in);
+                $('p#out').text(res.out);
+            }
+        })
 
         $.ajax({
             url: "/api/gk/detailseri",
@@ -496,7 +500,7 @@
                 $('#layout_id').select2().trigger('change');
                 $('.varian').val(res.hasiljadi);
                 $('.varian').select2().trigger('change');
-                // $('.fixid').val(res.noseri);
+                $('.fixid').val(res.noseri);
                 // $('.fixid').select2().trigger('change');
                 $('#tk_kerusakan').val(res.tingkat);
                 $('#tk_kerusakan').select2().trigger('change');
@@ -509,6 +513,7 @@
     })
 
     $('body').on('submit', '#myForm', function (e) {
+
         e.preventDefault();
         var actionType = $('#btnSave').val();
         $('#btnSave').html('Sending..');
@@ -520,51 +525,78 @@
             showConfirmButton: false
         });
         var formData = new FormData(this);
-        $.ajax({
-            type: 'POST',
-            url: "/api/v2/gk/checkSeriNew",
-            data: formData,
-            cache: false,
-            contentType: false,
-            processData: false,
-            success: (data) => {
-                if (data.status == 'success') {
-                    $.ajax({
-                        type: 'POST',
-                        url: "/api/gk/ubahunit",
-                        data: formData,
-                        cache: false,
-                        contentType: false,
-                        processData: false,
-                        success: (data) => {
-                            // console.log(data);
-                            $('#myForm').trigger('reset');
-                            $('.changeStatus').modal('hide');
-                            $('#btnSave').html('Kirim');
-                            Swal.fire({
-                                position: 'center',
-                                icon: 'success',
-                                title: data.msg,
-                                showConfirmButton: false,
-                                timer: 1500
-                            });
-                            // $('.table_edit_sparepart').DataTable().ajax.reload();
-                            // location.reload();
-                        },
-                    });
-                } else {
-                    Swal.fire({
-                        title: 'Error',
-                        text: data.msg,
-                        icon: 'error',
-                        showConfirmButton: false,
-                        timer: 1500
-                    });
-                    $('#btnSave').html('Save Changes');
-                    $('#btnSave').attr('disabled', false);
+        if (status == 1) {
+            $.ajax({
+                type: 'POST',
+                url: "/api/v2/gk/checkSeriNew",
+                data: formData,
+                cache: false,
+                contentType: false,
+                processData: false,
+                success: (data) => {
+                    if (data.status == 'success') {
+                        $.ajax({
+                            type: 'POST',
+                            url: "/api/gk/ubahunit",
+                            data: formData,
+                            cache: false,
+                            contentType: false,
+                            processData: false,
+                            success: (data) => {
+                                // console.log(data);
+                                $('#myForm').trigger('reset');
+                                $('.changeStatus').modal('hide');
+                                $('#btnSave').html('Kirim');
+                                Swal.fire({
+                                    position: 'center',
+                                    icon: 'success',
+                                    title: data.msg,
+                                    showConfirmButton: false,
+                                    timer: 1500
+                                });
+                                $('.table_edit_sparepart').DataTable().ajax.reload();
+                                // location.reload();
+                            },
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            text: data.msg,
+                            icon: 'error',
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                        $('#btnSave').html('Save Changes');
+                        $('#btnSave').attr('disabled', false);
+                    }
                 }
-            }
-        })
+            })
+        } else {
+            $.ajax({
+                type: 'POST',
+                url: "/api/gk/ubahunit",
+                data: formData,
+                cache:false,
+                contentType: false,
+                processData: false,
+                success: (data) => {
+                    // console.log(data);
+                    $('#myForm').trigger('reset');
+                    $('.changeStatus').modal('hide');
+                    $('#btnSave').html('Kirim');
+                    Swal.fire({
+                            position: 'center',
+                            icon: 'success',
+                            title: data.msg,
+                            showConfirmButton: false,
+                            timer: 1500
+                        });
+                    $('.table_edit_sparepart').DataTable().ajax.reload();
+                    location.reload();
+                }
+            });
+        }
+
 
     })
 

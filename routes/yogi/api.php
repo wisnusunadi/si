@@ -38,6 +38,8 @@ Route::prefix('/v2')->group(function() {
         Route::post('preview-so', [GudangController::class, 'preview_so']);
         Route::post('store-sodb', [GudangController::class, 'store_so_to_db']);
 
+        Route::get('template_nonso', [GudangController::class, 'template_tanpa_so']);
+
         Route::post('so_batal', [GudangController::class, 'get_so_batal']);
         Route::post('proses_so_batal', [GudangController::class, 'proses_so_batal']);
     });
