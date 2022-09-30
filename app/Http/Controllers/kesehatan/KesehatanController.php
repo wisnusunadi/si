@@ -26,7 +26,10 @@ class KesehatanController extends Controller
 {
     public function kesehatan()
     {
-        return view('page.kesehatan.kesehatan');
+        $karyawan = Karyawan::orderBy('nama', 'ASC')
+            ->has('Kesehatan_awal')
+            ->get();
+        return view('page.kesehatan.kesehatan', ['karyawan' => $karyawan]);
     }
 
     public function klinik_diagnosa_detail()
@@ -420,7 +423,10 @@ class KesehatanController extends Controller
     }
     public function kesehatan_mingguan()
     {
-        return view('page.kesehatan.kesehatan_mingguan');
+        $karyawan = Karyawan::orderBy('nama', 'ASC')
+            ->has('Kesehatan_awal')
+            ->get();
+        return view('page.kesehatan.kesehatan_mingguan', ['karyawan' => $karyawan]);
     }
     public function kesehatan_mingguan_tensi_data()
     {
@@ -1206,7 +1212,10 @@ class KesehatanController extends Controller
     }
     public function kesehatan_bulanan()
     {
-        return view('page.kesehatan.kesehatan_bulanan');
+        $karyawan = Karyawan::orderBy('nama', 'ASC')
+            ->has('Kesehatan_awal')
+            ->get();
+        return view('page.kesehatan.kesehatan_bulanan', ['karyawan' => $karyawan]);
     }
 
 
