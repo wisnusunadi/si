@@ -7,11 +7,10 @@
             <div class="card-content">
                 <div class="content field columns is-desktop">
                     <div class="column">
-                        <table class="table ekatalogtable">
+                        <table class="table penjualantable">
                             <thead>
                                 <tr>
                                     <th>No</th>
-                                    <th>No Urut</th>
                                     <th>Nomor SO</th>
                                     <th>Nomor AKN</th>
                                     <th>Nomor PO</th>
@@ -24,18 +23,17 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <tr v-for="(penjualanekatalog, idx) in penjualanekatalogs" :key="idx">
+                                <tr v-for="(penjualan, idx) in penjualans" :key="idx">
                                     <td>{{ idx+1 }}</td>
-                                    <td>{{ penjualanekatalog.no_urut }}</td>
-                                    <td>{{ penjualanekatalog.so }}</td>
-                                    <td v-html="checkdata(akn(penjualanekatalog.no_paket_ppic, penjualanekatalog.status_ppic))"></td>
-                                    <td>{{ penjualanekatalog.nopo }}</td>
-                                    <td>{{ penjualanekatalog.tgl_buat }}</td>
-                                    <td>{{ checkdata(penjualanekatalog.tgl_edit) }}</td>
-                                    <td v-html="checkdata(penjualanekatalog.tgl_kontrak)"></td>
-                                    <td>{{ penjualanekatalog.nama_customer }}</td>
-                                    <td v-html="status(penjualanekatalog.status_ppic)"></td>
-                                    <td><button class="button is-info is-light is-small" @click="detail(penjualanekatalog.pesanan.id, jenis, penjualanekatalog.status_ppic)">Detail</button></td>
+                                    <td>{{ penjualan.so }}</td>
+                                    <td v-html="checkdata(akn(penjualan.no_paket_ppic, penjualan.status_paket))"></td>
+                                    <td>{{ penjualan.nopo }}</td>
+                                    <td>{{ penjualan.tgl_buat }}</td>
+                                    <td>{{ checkdata(penjualan.tgl_edit) }}</td>
+                                    <td v-html="checkdata(penjualan.tgl_kontrak)"></td>
+                                    <td>{{ penjualan.nama_customer }}</td>
+                                    <td v-html="status(penjualan.status_ppic)"></td>
+                                    <td><button class="button is-info is-light is-small" @click="detail(penjualan.pesanan.id, penjualan.jenis_ppic, penjualan.status_ppic)">Detail</button></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -51,7 +49,7 @@
     export default {
         mixins: [mixins],
         props: {
-            penjualanekatalogs: {
+            penjualans: {
                 type: Array,
                 required: true
             },
@@ -62,8 +60,8 @@
         },
 
         updated() {
-            if (this.penjualanekatalogs.length > 0) {
-                $('.ekatalogtable').DataTable();
+            if(this.penjualans.length > 0){
+                $('.penjualantable').DataTable();
             }
         }
     }
