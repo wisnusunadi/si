@@ -965,19 +965,18 @@ let datafre = [];
             }else if(current_grafik == "f1"){
                 aspek = "f";
             }
-            console.log(aspek);
             $.ajax({
                 type:'get',
                 url:'http://localhost:8000/listrik/ambil'+current_select+aspek,
                 success:function(data) {
                     array_data.push(data.data);
-                    console.log(array_data)
                     getspecdata($('#masuk').val(), selected_chart);
                 }
             });
         }
 
         function getspecdata(device, selected_chart) {
+            console.log(device+" "+$('#masuk').val());
             let labelsChart = [];
             let datasets = [];
             const result = array_data[0].filter((item) => item.device === device);
@@ -1030,6 +1029,24 @@ let datafre = [];
 
         $(document).on('click', '.dropdown-item', function(){
             current_grafik = $(this).attr('data-value');
+            if(current_select == "rt"){
+                getgrafikdata(current_grafik, current_select, thechart_rt);
+            }
+            else if(current_select == "15m"){
+                getgrafikdata(current_grafik, current_select, thechart_15m);
+            }
+            else if(current_select == "1j"){
+                getgrafikdata(current_grafik, current_select, thechart_1j);
+            }
+            else if(current_select == "1h"){
+                getgrafikdata(current_grafik, current_select, thechart_1h);
+            }
+            else if(current_select == "1b"){
+                getgrafikdata(current_grafik, current_select, thechart_1b);
+            }
+        });
+
+        $(document).on('change keyup', '#masuk', function(){
             if(current_select == "rt"){
                 getgrafikdata(current_grafik, current_select, thechart_rt);
             }
