@@ -26,8 +26,27 @@ class KesehatanController extends Controller
 {
     public function kesehatan()
     {
-        return view('page.kesehatan.kesehatan');
+        $karyawan = Karyawan::orderBy('nama', 'ASC')
+            ->has('Kesehatan_awal')
+            ->get();
+        return view('page.kesehatan.kesehatan', ['karyawan' => $karyawan]);
     }
+
+    public function klinik_diagnosa_detail()
+    {
+        return view('page.kesehatan.diagnosa_detail');
+    }
+
+    public function klinik_obat_detail()
+    {
+        return view('page.kesehatan.obat_detail');
+    }
+
+    public function klinik_sakit_detail()
+    {
+        return view('page.kesehatan.sakit_detail');
+    }
+
     public function kesehatan_data()
     {
         $data = Kesehatan_awal::with(['Karyawan.Vaksin_karyawan', 'Karyawan.Berat_karyawan', 'Karyawan.Divisi'])->get();
@@ -68,12 +87,24 @@ class KesehatanController extends Controller
             })
             ->addColumn('vaksin_detail', function ($data) {
                 if ($data->Karyawan->Vaksin_karyawan->isEmpty()) {
-                    $status = 'Belum Vaksin';
+                    $status = '<span class="badge red-text">Belum Vaksin</span>';
                 } else {
-                    $status = 'Sudah Vaksin';
+                    $status = '<span class="badge green-text">Sudah Vaksin</span>';
                 }
-                $btn = '' . $status . '<br><div class="inline-flex"><button type="button" id="vaksin_detail" class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
-                return $btn;
+                // $btn = '' . $status . '<br><div class="inline-flex"><button type="button" id="vaksin_detail" class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
+                return $status;
+            })
+            ->editColumn('status_mata', function ($data) {
+                if ($data->status_mata == "Defisensi") {
+                    $status = '<span class="badge red-text">'.$data->status_mata.'</span>';
+                } else if($data->status_mata == "Abnormal"){
+                    $status = '<span class="badge yellow-text">'.$data->status_mata.'</span>';
+                }
+                else {
+                    $status = '<span class="badge green-text">'.$data->status_mata.'</span>';
+                }
+                // $btn = '' . $status . '<br><div class="inline-flex"><button type="button" id="vaksin_detail" class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
+                return $status;
             })
             ->addColumn('detail', function ($s) {
                 $btn = '<a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"  title="Klik untuk melihat detail Kesehatan">';
@@ -81,9 +112,11 @@ class KesehatanController extends Controller
 
                 $btn .= '<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">';
                 $btn .= '<button class="btn btn-block dropdown-item" type="button" id="penyakit" ><i class="fa fa-edit" aria-hidden="true"></i>&nbsp;Riwayat Penyakit</span></button>';
+                $btn .= '<button class="btn btn-block dropdown-item" type="button" id="vaksin_detail" ><i class="fa fa-eye" aria-hidden="true"></i>&nbsp;Riwayat Vaksin</span></button>';
+                $btn .= '</div>';
                 return $btn;
             })
-            ->rawColumns(['berat_kg', 'vaksin_detail', 'detail'])
+            ->rawColumns(['berat_kg', 'vaksin_detail', 'detail', 'status_mata'])
             ->make(true);
     }
     public function kesehatan_tambah()
@@ -248,6 +281,10 @@ class KesehatanController extends Controller
         $data = Vaksin_karyawan::where('karyawan_id', $karyawan_id);
         return datatables()->of($data)
             ->addIndexColumn()
+            ->addColumn('aksi', function($data){
+                return '<i class="fas fa-trash text-danger" id="delete"></i>';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
 
@@ -263,6 +300,10 @@ class KesehatanController extends Controller
                     return ' Penyakit menular';
                 }
             })
+            ->addColumn('aksi', function($data){
+                return '<i class="fas fa-trash text-danger" id="delete"></i>';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
     public function kesehatan_detail()
@@ -307,6 +348,10 @@ class KesehatanController extends Controller
             ->addColumn('bmi', function ($data) {
                 return  $data->berat / (($data->karyawan->kesehatan_awal->tinggi / 100) * ($data->karyawan->kesehatan_awal->tinggi / 100));
             })
+            ->addColumn('aksi', function($data){
+                return '<i class="fas fa-trash text-danger" id="delete"></i>';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
     public function obat_detail_data_karyawan($karyawan_id)
@@ -317,7 +362,7 @@ class KesehatanController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl_cek', function ($data) {
-                return $data->Karyawan_sakit->tgl_cek;
+                return Carbon::createFromFormat('Y-m-d', $data->Karyawan_sakit->tgl_cek)->format('d-m-Y');
             })
             ->addColumn('diag', function ($data) {
                 return $data->Karyawan_sakit->diagnosa;
@@ -328,6 +373,10 @@ class KesehatanController extends Controller
             ->addColumn('jumlah_obat', function ($data) {
                 return $data->jumlah . ' pcs';
             })
+            ->addColumn('aksi', function($data){
+                return '<i class="fas fa-trash text-danger" id="delete"></i>';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
     public function kesehatan_data_detail($karyawan_id)
@@ -373,7 +422,10 @@ class KesehatanController extends Controller
     }
     public function kesehatan_mingguan()
     {
-        return view('page.kesehatan.kesehatan_mingguan');
+        $karyawan = Karyawan::orderBy('nama', 'ASC')
+            ->has('Kesehatan_awal')
+            ->get();
+        return view('page.kesehatan.kesehatan_mingguan', ['karyawan' => $karyawan]);
     }
     public function kesehatan_mingguan_tensi_data()
     {
@@ -412,7 +464,10 @@ class KesehatanController extends Controller
                 return $data->diastolik . ' mmHg';
             })
             ->addColumn('button', function ($data) {
-                $btn = '<div class="inline-flex"><button type="button" id="edit_tensi" class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-edit"></i></button></div>';
+                $btn = '<div class="btn-group">';
+                $btn .= '<span><button type="button" id="edit_tensi" class="btn btn-sm btn-warning mr-1"><i class="fas fa-edit"></i> Ubah</button></span>';
+                $btn .= '<span><button type="button" id="delete" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</button></span>';
+                $btn .= '</div>';
                 return $btn;
             })
             ->rawColumns(['button', 'hasil', 'y'])
@@ -433,15 +488,17 @@ class KesehatanController extends Controller
                 return $data->pemeriksa->nama;
             })
             ->addColumn('button', function ($data) {
-                $btn = '<div class="inline-flex"><button type="button" id="edit_rapid"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-edit"></i></button></div>';
-                return $btn;
-            })
-            ->addColumn('cetak', function ($data) {
+                $btn = '<div class="btn-group">';
                 if ($data->file == NULL) {
-                    $btn = '<a  class="disabled"  aria-disabled="true"><button type="button" class="btn btn-block btn-warning karyawan-img-small disabled" style="border-radius:50%;" ><i class="fas fa-file"></i></button></a>';
+                    $btn .= '<span><button type="button" class="btn btn-sm btn-secondary mr-1" disabled="true"><i class="fas fa-file"></i> Cetak</button></span>';
                 } else {
-                    $btn = '<a href="url(assets/public/file/kesehatan_rapid/a.pdf)"  target="_break"><button type="button" class="btn btn-block btn-warning karyawan-img-small " style="border-radius:50%;" ><i class="fas fa-file"></i></button></a>';
+                    $btn .= '<a href="url(assets/public/file/kesehatan_rapid/a.pdf)" target="_break"><button type="button" class="btn btn-sm btn-info mr-1"><i class="fas fa-file"></i> Cetak</button></a>';
                 }
+
+                $btn .= '<span><button type="button" id="edit_rapid" class="btn btn-sm btn-warning mr-1"><i class="fas fa-edit"></i> Ubah</button></span>
+                        <span><button type="button" id="delete" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</button></span>
+                    </div>';
+
                 return $btn;
             })
             ->rawColumns(['button', 'cetak'])
@@ -567,6 +624,10 @@ class KesehatanController extends Controller
             ->addColumn('dias', function ($data) {
                 return $data->diastolik . ' mmHg';
             })
+            ->addColumn('aksi', function($data){
+                return '<i class="fas fa-trash text-danger" id="delete"></i>';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
     public function kesehatan_mingguan_rapid_detail_data($karyawan_id)
@@ -577,6 +638,10 @@ class KesehatanController extends Controller
             ->addColumn('z', function ($data) {
                 return $data->pemeriksa->nama;
             })
+            ->addColumn('aksi', function($data){
+                return '<i class="fas fa-trash text-danger" id="delete"></i>';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
     public function kesehatan_mingguan_tensi_detail_data_karyawan($karyawan_id)
@@ -605,17 +670,27 @@ class KesehatanController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('a', function ($data) {
+
+                $x = "";
                 if ($data->stok <= 1) {
-                    $x = $data->stok . ' Pc';
+                    $x = $data->stok.' Pc';
                 } else {
-                    $x =  $data->stok . ' Pcs';
+                    $x =  $data->stok.' Pcs';
                 }
-                $btn = $x . '<br><div class="inline-flex"><button type="button" id="stok"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-sync" aria-hidden="true"></i></button></div>';
+                $btn = $x.'<i class="fas fa-sync m-1 stok" aria-hidden="true"></i>';
+                // $btn = $x . '<br><div class="inline-flex"><button type="button" id="stok"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-sync" aria-hidden="true"></i></button></div>';
+
                 return $btn;
             })
             ->addColumn('button', function ($data) {
-                $btn = '<div class="inline-flex"><button type="button" id="riwayat"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
-                $btn = $btn . '<div class="inline-flex"><button type="button" id="edit" class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-edit"></i></button></div>';
+                $btn = '<div class="btn-toolbar d-flex justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
+                <button type="button" id="riwayat"  class="btn btn-sm btn-outline-primary btn-sm m-1"><i class="fas fa-eye"></i> Riwayat Pakai</button>
+                <button type="button" id="edit" class="btn btn-sm btn-warning btn-sm m-1"><i class="fas fa-edit"></i> Ubah</button>
+                <button type="button" id="delete" class="btn btn-sm btn-danger btn-sm m-1"><i class="fas fa-trash"></i> Hapus</button>
+                </div>';
+
+                // $btn = '<div class="inline-flex"><button type="button" id="riwayat"  class="btn btn-block btn-primary btn-sm" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
+                // $btn = $btn . '<div class="inline-flex"><button type="button" id="edit" class="btn btn-block btn-success btn-sm" style="border-radius:50%;" ><i class="fas fa-edit"></i></button></div>';
                 return $btn;
             })
             ->rawColumns(['button', 'detail_button', 'a'])
@@ -634,6 +709,10 @@ class KesehatanController extends Controller
                 }
                 return $x;
             })
+            ->addColumn('aksi', function($data){
+                return '<button type="button" id="delete" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</button>';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
     public function obat_detail_data($id)
@@ -642,7 +721,7 @@ class KesehatanController extends Controller
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('tgl', function ($data) {
-                return $data->karyawan_sakit->tgl_cek;
+                return Carbon::createFromFormat('Y-m-d', $data->Karyawan_sakit->tgl_cek)->format('d-m-Y');
             })
             ->addColumn('div', function ($data) {
                 return $data->karyawan_sakit->karyawan->divisi->nama;
@@ -659,6 +738,10 @@ class KesehatanController extends Controller
             ->addColumn('jum', function ($data) {
                 return $data->jumlah;
             })
+            ->addColumn('aksi', function($data){
+                return '<i class="fas fa-trash text-danger" id="delete"></i>';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
     public function obat_cekdata($nama)
@@ -752,6 +835,9 @@ class KesehatanController extends Controller
         $data = Karyawan_sakit::with(['Karyawan.Divisi', 'Pemeriksa'])->orderBy('tgl_cek', 'DESC')->get();
         return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('tgl_cek', function($data){
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_cek)->format('d-m-Y');
+            })
             ->addColumn('x', function ($data) {
                 return $data->Karyawan->Divisi->nama;
             })
@@ -790,19 +876,50 @@ class KesehatanController extends Controller
                 }
             })
             ->addColumn('detail_button', function ($data) {
-                $btn = $data->tindakan;
-                $btn = $btn . '<br><div class="inline-flex"><button type="button" id="detail_tindakan"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-eye"></i></button></div>';
-                return  $btn;
+                $btn = '';
+                if($data->tindakan == "Terapi"){
+                    $btn = '<span class="badge yellow-text">';
+                }
+                else{
+                    $btn = '<span class="badge red-text">';
+                }
+                $btn .= $data->tindakan.'</span>';
+
+                return $btn;
+                // $btn = $data->tindakan;
+                // $btn = $btn . '<br><div class="inline-flex"><button type="button" id="detail_tindakan"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-eye"></i></button></div>';
+                // return  $btn;
+
+            })
+            ->editColumn('keputusan', function ($data) {
+                $btn = '';
+                if($data->keputusan == "Lanjut bekerja"){
+                    $btn = '<span class="badge green-text">';
+                }
+                else{
+                    $btn = '<span class="badge red-text">';
+                }
+                $btn .= $data->keputusan.'</span>';
+
+                return $btn;
             })
             ->addColumn('button', function () {
+
                 $btn = '<div class="inline-flex"><button type="button" id="edit_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
                 return $btn;
             })
             ->addColumn('cetak', function ($data) {
-                $btn = '<div class="inline-flex"><a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" id="cetak_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-print"></i></button></a></div>';
+
+                $btn = '<div class="btn-group">
+                <span><button type="button" id="detail_tindakan"  class="btn btn-xs btn-outline-info m-1"><i class="fas fa-eye"></i> Penanganan</button></span>';
+                if($data->keputusan == 'Dipulangkan'){
+                    $btn .= '<a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" class="btn btn-xs btn-warning m-1" id="cetak_gcu"><i class="fas fa-print"></i> Cetak</button></a>';
+                }
+                $btn .= '<span><button type="button" id="delete" class="btn btn-xs btn-danger m-1"><i class="fas fa-trash"></i> Hapus</button></span></div>';
+                // $btn = '<div class="inline-flex"><a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" id="cetak_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-print"></i></button></a></div>';
                 return $btn;
             })
-            ->rawColumns(['button', 'detail_button', 'cetak'])
+            ->rawColumns(['button', 'detail_button', 'cetak', 'keputusan'])
             ->make(true);
     }
     public function karyawan_sakit_tambah()
@@ -911,6 +1028,9 @@ class KesehatanController extends Controller
         $data = Karyawan_masuk::with(['Karyawan.Divisi', 'Pemeriksa'])->orderBy('tgl_cek', 'DESC');
         return datatables()->of($data)
             ->addIndexColumn()
+            ->editColumn('tgl_cek', function($data){
+                return Carbon::createFromFormat('Y-m-d', $data->tgl_cek)->format('d-m-Y');
+            })
             ->addColumn('x', function ($data) {
                 return $data->Karyawan->Divisi->nama;
             })
@@ -921,13 +1041,15 @@ class KesehatanController extends Controller
                 return $data->Pemeriksa->nama;
             })
             ->addColumn('button', function ($data) {
+                $btn = '<div class="btn-group">';
                 if ($data->alasan == "Sakit") {
-                    $btn = '<div class="inline-flex"><button type="button" id="riwayat"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
-                    return $btn;
+                    $btn .= '<span class="m-1"><button type="button" id="riwayat" class="btn btn-block btn-outline-primary btn-sm"><i class="fa fa-eye" aria-hidden="true"></i> Detail</button></span>';
                 } else {
-                    $btn = '<div class="inline-flex"><button type="button"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" disabled><i class="fa fa-eye" aria-hidden="true"></i></button></div>';
-                    return $btn;
+                    $btn .= '<span class="m-1"><button type="button"  class="btn btn-block btn-light btn-sm" disabled><i class="fa fa-eye" aria-hidden="true"></i> Detail</button></span>';
+
                 }
+                $btn .= '<span class="m-1"><button type="button" id="delete" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</button></span></div>';
+                return $btn;
             })
             ->rawColumns(['button'])
             ->make(true);
@@ -1026,11 +1148,18 @@ class KesehatanController extends Controller
             ->addColumn('y', function ($data) {
                 return $data->karyawan->nama;
             })
+            ->addColumn('aksi', function($data){
+                return '<button type="button" id="delete" class="btn btn-sm btn-danger"><i class="fas fa-trash"></i> Hapus</button>';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
     public function kesehatan_bulanan()
     {
-        return view('page.kesehatan.kesehatan_bulanan');
+        $karyawan = Karyawan::orderBy('nama', 'ASC')
+            ->has('Kesehatan_awal')
+            ->get();
+        return view('page.kesehatan.kesehatan_bulanan', ['karyawan' => $karyawan]);
     }
     public function kesehatan_bulanan_gcu_data()
     {
@@ -1066,7 +1195,8 @@ class KesehatanController extends Controller
                 }
             })
             ->addColumn('button', function ($data) {
-                $btn = '<div class="inline-flex"><button type="button" id="edit_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-edit"></i></button></div>';
+                $btn = '<div class="btn-group"><span><button type="button" id="edit_gcu"  class="btn btn-xs btn-warning m-1"><i class="fas fa-edit"></i> Ubah</button></span>
+                <span><button type="button" id="delete" class="btn btn-xs btn-danger m-1"><i class="fas fa-trash"></i> Hapus</button></span></div>';
                 return $btn;
             })
             ->rawColumns(['button'])
@@ -1138,7 +1268,9 @@ class KesehatanController extends Controller
                 return $data->pr . ' bpm';
             })
             ->addColumn('button', function ($data) {
-                $btn = '<div class="inline-flex"><button type="button" id="edit_berat"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-edit"></i></button></div>';
+                $btn = '<div class="btn-group">
+                <span><button type="button" id="edit_berat" class="btn btn-xs btn-warning m-1"><i class="fas fa-edit"></i> Ubah</button></span>
+                <span><button type="button" id="delete" class="btn btn-xs btn-danger m-1"><i class="fas fa-trash"></i> Hapus</button></span></div>';
                 return $btn;
             })
             ->rawColumns(['button'])
@@ -1323,6 +1455,10 @@ class KesehatanController extends Controller
                     return '0 %';
                 }
             })
+            ->addColumn('aksi', function($data){
+                return '<i class="fas fa-trash text-danger" id="delete"></i>';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
 

@@ -6,6 +6,11 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::group(['prefix' => '/kesehatan'], function (){
+    Route::group(['prefix' => '/klinik'], function (){
+        Route::get('/obat_detail', [App\Http\Controllers\kesehatan\KesehatanController::class, 'klinik_obat_detail']);
+        Route::get('/diagnosa_detail', [App\Http\Controllers\kesehatan\KesehatanController::class, 'klinik_diagnosa_detail']);
+        Route::get('/sakit_detail', [App\Http\Controllers\kesehatan\KesehatanController::class, 'klinik_sakit_detail']);
+    });
   //  Route::group(['middleware' => ['divisi:kes']], function () {
         Route::view('/dashboard', 'page.kesehatan.dashboard')->name('kesehatan.dashboard');
         Route::get('/', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan']);

@@ -101,7 +101,7 @@
                 <th>Pemeriksa</th>
                 <th>Alasan</th>
                 <th>Catatan</th>
-                <th></th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody style="text-align: center;">
@@ -134,6 +134,7 @@
                   <th>Diagnosa</th>
                   <th>Tindak Lanjut</th>
                   <th>Hasil</th>
+                  <th>Aksi</th>
                 </tr>
               </thead>
               <tbody>
@@ -191,6 +192,34 @@
         }
       ]
     });
+    $('#tabel > tbody').on('click', '#delete', function() {
+        Swal.fire({
+            title: 'Hapus Data',
+            text: 'Yakin ingin menghapus data ini?',
+            icon: 'warning',
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+            showCancelButton: true,
+            showCloseButton: true
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Berhasil',
+                    text: 'Berhasil menghapus data',
+                    icon: 'success',
+                    showCloseButton: true
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire({
+                    title: 'Gagal',
+                    text: 'Gagal menghapus data',
+                    icon: 'error',
+                    showCloseButton: true
+                });
+            }
+        });
+    });
     $('#tabel > tbody').on('click', '#riwayat', function() {
       var rows = tabel.rows($(this).parents('tr')).data();
       $('.data_detail_head').html(
@@ -212,9 +241,40 @@
           data: 'tindakan'
         }, {
           data: 'keputusan'
+        }, {
+          data: 'aksi'
         }],
       });
       $('#riwayat_mod').modal('show');
+    });
+
+    $('#tabel_detail > tbody').on('click', '#delete', function() {
+        Swal.fire({
+            title: 'Hapus Data',
+            text: 'Yakin ingin menghapus data ini?',
+            icon: 'warning',
+            confirmButtonText: 'Ya',
+            cancelButtonText: 'Tidak',
+            showCancelButton: true,
+            showCloseButton: true
+        })
+        .then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire({
+                    title: 'Berhasil',
+                    text: 'Berhasil menghapus data',
+                    icon: 'success',
+                    showCloseButton: true
+                });
+            } else if (result.dismiss === Swal.DismissReason.cancel) {
+                Swal.fire({
+                    title: 'Gagal',
+                    text: 'Gagal menghapus data',
+                    icon: 'error',
+                    showCloseButton: true
+                });
+            }
+        });
     });
   });
 </script>

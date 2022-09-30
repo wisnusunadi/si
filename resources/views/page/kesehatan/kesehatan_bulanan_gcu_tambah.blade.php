@@ -41,6 +41,14 @@
         width: 100%;
     }
 
+    .align-center{
+        text-align: center;
+    }
+
+    .align-right{
+        text-align: right;
+    }
+
     @media screen and (min-width: 1440px) {
 
         body {
@@ -101,84 +109,116 @@
         </div>
         @endif
         <div class="card">
-            <div class="card-header  bg-success">
-                <div class="card-title"><i class="fas fa-plus-circle"></i>&nbsp;Pemeriksaan GCU (Glucose, Cholesterol, Uric ACID)</div>
+            <div class="card-header">
+                <h6 class="card-title"></h6>
             </div>
-            <form action="/kesehatan/bulanan/gcu/aksi_tambah" method="post" enctype="multipart/form-data">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-12">
+                        <h5 class="mb-3">Informasi Umum</h5>
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label for="tgl_cek_form" class="col-lg-4 col-form-label align-right">Tanggal</label>
+                                <div class="col-lg-3">
+                                    <input type="date" class="form-control tgl_cek_form col-form-label" name="tgl_cek_form" id="tgl_cek_form">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="tgl_cek_form" class="col-lg-4 col-form-label align-right">Nama Karyawan</label>
+                                <div class="col-lg-4">
+                                    <select class="form-control select2" style="width:100%" name="karyawan_id_form" id="karyawan_id_form">
+                                        <option value=""></option>
+                                        @foreach($karyawan as $k)
+                                        <option value="{{$k->id}}">{{$k->nama}}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-horizontal">
+                            <div class="form-group row">
+                                <label for="glukosa_form" class="col-lg-4 col-md-12 col-form-label align-right">Hasil Cek GCU</label>
+                                <div class="col-lg-6 col-md-12">
+                                    <div class="row">
+                                        <div class="input-group col-lg-4">
+                                            <input type="text" class="form-control glukosa_form" name="glukosa_form" id="glukosa_form" placeholder="Glucose">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">mg/dl</span>
+                                            </div>
+                                        </div>
+                                        <div class="input-group col-lg-4">
+                                            <input type="text" class="form-control kolestrol_form" name="kolestrol_form" id="kolestrol_form" placeholder="Cholestrol">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">mg/dl</span>
+                                            </div>
+                                        </div>
+                                        <div class="input-group col-lg-4">
+                                            <input type="text" class="form-control asam_urat_form" name="asam_urat_form" id="asam_urat_form" placeholder="Uric ACID">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text">mg/dl</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label for="keterangan_form" class="col-lg-4 col-form-label align-right">Catatan</label>
+                                <div class="col-lg-4">
+                                    <textarea type="text" class="form-control keterangan_form" name="keterangan_form" id="keterangan_form"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-warning btn-sm" id="btnreset">Reset Form</button>
+                <button type="button" class="btn btn-secondary btn-sm float-right" id="tambahitem">Tambahkan Ke Draf</button>
+            </div>
+        </div>
+        <form action="/kesehatan/bulanan/gcu/aksi_tambah" method="post" enctype="multipart/form-data">
+            {{ csrf_field() }}
+        <div class="card">
+            <div class="card-header">
+                <div class="card-title">Draf Pemeriksaan GCU (Glucose, Cholesterol, Uric ACID)</div>
+            </div>
+
 
                 <div class="card-body">
                     <div class="table-responsive">
-                        {{ csrf_field() }}
-                        <table class="table  table-striped table-hover" id="tabel_gcu" style="width:110%">
-                            <thead style="text-align: center;">
+                        <table class="table table-striped table-hover align-center" id="tabel_gcu">
+                            <thead>
                                 <tr>
                                     <th>No</th>
                                     <th>Tanggal</th>
-                                    <th width="20%">Nama</th>
-                                    <th width="10%">Glucose</th>
-                                    <th width="10%">Cholesterol</th>
-                                    <th width="10%">Uric Acid</th>
+                                    <th>Nama</th>
+                                    <th>Glucose</th>
+                                    <th>Cholesterol</th>
+                                    <th>Uric Acid</th>
                                     <th>Catatan</th>
-                                    <th></th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
-                            <tbody style="text-align: center;">
+                            <tbody>
                                 <tr>
-                                    <td>1</td>
-                                    <td><input type="date" class="form-control tgl_cek" name="tgl_cek[]"></td>
-                                    <td><select class="form-control select2 karyawan_id" style="width:100%" name="karyawan_id[]">
-                                            <option value="">Pilih Karyawan</option>
-                                            @foreach($karyawan as $k)
-                                            <option value="{{$k->id}}">{{$k->nama}}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control glukosa" name="glukosa[]">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">mg/dl</span>
-                                            </div>
-                                        </div>
-                                        <small id="glukosa_status" class="form-text text-muted"></small>
-                                    </td>
-                                    <td>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control kolesterol" name="kolesterol[]">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">mg/dl</span>
-                                            </div>
-                                        </div>
-                                        <small id="kolesterol_status" class="form-text text-muted"></small>
-                                    </td>
-                                    <td>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control asam_urat" name="asam_urat[]">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">mg/dl</span>
-                                            </div>
-                                        </div>
-                                        <small id="asam_urat_status" class="form-text text-muted"></small>
-                                    </td>
-                                    <td>
-                                        <textarea type="text" class="form-control keterangan" name="keterangan[]"></textarea>
-                                    </td>
-                                    <td>
-                                        <button name="add" type="button" id="tambahitem" class="btn btn-success"><i class="nav-icon fas fa-plus-circle"></i></button>
-                                    </td>
+                                    <td colspan="8">Data Belum Tersedia</td>
                                 </tr>
                             </tbody>
                         </table>
-
-
                     </div>
                 </div>
                 <div class="card-footer">
                     <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan/bulanan"><i class="fas fa-times"></i>&nbsp;Batal</a></span>
                     <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                 </div>
-            </form>
+
         </div>
+    </form>
     </div>
 </div>
 @endsection
@@ -209,64 +249,53 @@
                 $(el).find('.keterangan').attr('name', 'keterangan[' + j + ']');
 
 
-                $('.karyawan_id').select2();
+                $('.select2').select2({allowClear: true, placeholder: 'Pilih Karyawan'});
             });
         }
 
         $('#tambahitem').click(function(e) {
-            var data = `     <tr>
-            <td>1</td>
-                                    <td><input type="date" class="form-control tgl_cek" name="tgl_cek[]"></td>
-                                    <td><select class="form-control select2 karyawan_id" style="width:100%" name="karyawan_id[]">
-                                            <option value="">Pilih Karyawan</option>
-                                            @foreach($karyawan as $k)
-                                            <option value="{{$k->id}}">{{$k->nama}}</option>
-                                            @endforeach
-                                        </select>
-                                    </td>
-                                    <td>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control glukosa" name="glukosa[]">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">mg/dl</span>
-                                            </div>
-                                        </div>
-                                        <small id="glukosa_status" class="form-text text-muted"></small>
-                                    </td>
-                                    <td>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control kolesterol" name="kolesterol[]">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">mg/dl</span>
-                                            </div>
-                                        </div>
-                                        <small id="kolesterol_status" class="form-text text-muted"></small>
-                                    </td>
-                                    <td>
-                                        <div class="input-group mb-3">
-                                            <input type="text" class="form-control asam_urat" name="asam_urat[]">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text">mg/dl</span>
-                                            </div>
-                                        </div>
-                                        <small id="asam_urat_status" class="form-text text-muted"></small>
-                                    </td>
-                                    <td>
-                                        <textarea type="text" class="form-control keterangan" name="keterangan[]"></textarea>
-                                    </td>
-                                <td>
-                                <button type="button" class="btn btn-danger karyawan-img-small" style="border-radius:50%;" id="closetable"><i class="fas fa-times-circle"></i></button>
-                                                                   </td>
-                            </tr>`;
-            $('#tabel_gcu tr:last').after(data);
+            var tgl_cek_form = $('#tgl_cek_form').val();
+            var karyawan_id_form = $('#karyawan_id_form').val();
+            var karyawan_id_text = $('#karyawan_id_form option:selected').text();
+            var glukosa_form = $('#glukosa_form').val();
+            var kolestrol_form = $('#kolestrol_form').val();
+            var asam_urat_form = $('#asam_urat_form').val();
+            var keterangan_form = $('#keterangan_form').val();
+
+            $('#tgl_cek_form').val('');
+            $('#karyawan_id_form').val('');
+            $('#glukosa_form').val('');
+            $('#kolestrol_form').val('');
+            $('#asam_urat_form').val('');
+            $('#keterangan_form').val('');
+
+            var data = `<tr>
+                <td>1</td>
+                <td><input type="date" class="form-control d-none tgl_cek" name="tgl_cek[]" value="`+tgl_cek_form+`">`+tgl_cek_form+`</td>
+                <td><input type="date" class="form-control d-none karyawan_id" name="karyawan_id[]" value="`+karyawan_id_form+`">`+karyawan_id_text+`</td>
+                <td><input type="text" class="form-control d-none glukosa" name="glukosa[]" value="`+glukosa_form+`">`+glukosa_form+`</td>
+                <td><input type="text" class="form-control d-none kolesterol" name="kolesterol[]" value="`+kolestrol_form+`">`+kolestrol_form+`</td>
+                <td><input type="text" class="form-control d-none asam_urat" name="asam_urat[]" value="`+asam_urat_form+`">`+asam_urat_form+`</td>
+                <td><textarea type="text" class="form-control d-none keterangan" name="keterangan[]" value="`+keterangan_form+`"></textarea>`+keterangan_form+`</td>
+                <td><i class="fas fa-times text-danger" id="closetable"></i></td>
+            </tr>`;
+            if($('#tabel_gcu > tbody > tr > td > .tgl_cek').length <= 0){
+                $('#tabel_gcu > tbody > tr').remove();
+                $('#tabel_gcu tbody').append(data);
+            }else{
+                $('#tabel_gcu tbody tr:last').after(data);
+            }
             numberRows($("#tabel_gcu"));
         });
         $('#tabel_gcu').on('click', '#closetable', function(e) {
             $(this).closest('tr').remove();
             numberRows($("#tabel_gcu"));
+            if($('#tabel_gcu > tbody > tr').length <= 0){
+                $('#tabel_gcu tbody').append('<tr><td colspan="16">Data Belum Tersedia</td></tr>');
+            }
         });
 
     })
-    $('.select2').select2();
+    $('.select2').select2({allowClear: true, placeholder: 'Pilih Karyawan'});
 </script>
 @endsection
