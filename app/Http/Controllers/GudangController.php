@@ -124,6 +124,7 @@ class GudangController extends Controller
                 }
             ])
             ->has('DetailPesananProduk')
+            ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) != 0')
             // ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) > count_transfer')
             ->orderBy(DB::raw('concat(p.nama," ",gdg_barang_jadi.nama)'))
 
