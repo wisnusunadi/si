@@ -641,23 +641,24 @@
             '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
             '<tr>' +
             '<td>Current A:</td>' +
-            '<td>15</td>' +
+            '<td>'+d.Current_A+'</td>' +
             '<td>Current B:</td>' +
-            '<td>15</td>' +
+            '<td>'+d.Current_B+'</td>' +
             '<td>Current C:</td>' +
-            '<td>15</td>' +
+            '<td>'+d.Current_C+'</td>' +
             '<td>Current N:</td>' +
-            '<td>15</td>' +
+            '<td>'+d.Current_N+'</td>' +
             '<td>Current G:</td>' +
+            '<td>'+d.Current_G+'</td>' +
             '</tr>' +
 
             '<tr>' +
             '<td>Current B:</td>' +
-            '<td>15</td>' +
+            '<td>-</td>' +
             '<td>Voltage A-B:</td>' +
-            '<td>15</td>' +
+            '<td>'+d.Voltage_A_B+'</td>' +
             '<td>Voltage A-N:</td>' +
-            '<td>15</td>' +
+            '<td>'+d.Voltage_A_N+'</td>' +
 
             '</tr>' +
             // '<th'+
