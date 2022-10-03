@@ -37,9 +37,9 @@
                         <option value="METER01">METER01</option>
 
                         <option value="METER02">METER02</option>
-                      </select>
+                    </select>
 
-                    <div class="dropdown">
+                    <div class="dropdown my-2">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Pilih Grafik
                         </button>
@@ -81,14 +81,20 @@
     </div>
     <div class="tab-content" id="pills-tab-1Content">
         <div class="tab-pane fade show active" id="pills-home-1" role="tabpanel" aria-labelledby="pills-home-1">
-            {{-- <div class="row">
-                <div class="col-12">
-                    <div class="title-rt"></div>
-                    <canvas id="grafik_rt"></canvas>
-                </div>
-            </div> --}}
-
             <div class="row">
+                <div class="col-12">
+                    <div class="container">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="title-rt"></div>
+                                <canvas id="grafik_rt"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- <div class="row">
                 <div class="col">
                     <div class="container" id="vll1">
                         <div class="row">
@@ -169,7 +175,7 @@
                          </div>
                      </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
         <div class="tab-pane fade" id="pills-home-2" role="tabpanel" aria-labelledby="pills-home-2">
             <div class="row m-3">
@@ -239,7 +245,7 @@
 @section('adminlte_js')
 
 
-<script>
+{{-- <script>
 
     //grafik vll
     let datavll = [];
@@ -831,11 +837,11 @@ let datafre = [];
     });
 
 
-</script>
+</script> --}}
 
 <script>
     $(function(){
-        // $('#masuk').select2();
+        $('#masuk').select2();
         var grafik = "";
         var current_select = "rt";
         var current_grafik = "c1";
