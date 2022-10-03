@@ -56,17 +56,12 @@ class AlatujiController extends Controller
         $use = AlatSN::where('status_pinjam_id', 15)->count();
         $ext = AlatSN::where('status_pinjam_id', 14)->count();
         $mel = DB::table('erp_kalibrasi.peminjaman')->where('tgl_batas', '>', Carbon::now()->format('Y-m-d', 'Asia/Jakarta'))->where('status_id', '15')->count();
-        $ve1 = DB::table('erp_kalibrasi.verifikasi')->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->count();
-        $pe1 = DB::table('erp_kalibrasi.perawatan')->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->count();
-        $ve2 = DB::table('erp_kalibrasi.verifikasi')->whereMonth('jadwal_perawatan', '<', Carbon::now())->whereYear('jadwal_perawatan', '<', Carbon::now())->count();
-        $pe2 = DB::table('erp_kalibrasi.perawatan')->whereMonth('jadwal_perawatan', '<', Carbon::now())->whereYear('jadwal_perawatan', '<', Carbon::now())->count();
-
-        $uniqueIdperawatan = DB::table('erp_kalibrasi.perawatan')->orderBy('tgl_perawatan', 'DESC')->get()->unique('serial_number_id');
-        $uniqueIdverifikasi = DB::table('erp_kalibrasi.verifikasi')->orderBy('tgl_perawatan', 'DESC')->get()->unique('serial_number_id');
-        $uniqueIdPKeys = array_keys($uniqueIdperawatan->toArray());
-        $uniqueIdVKeys = array_keys($uniqueIdverifikasi->toArray());
-        $verifikasiLebih = $this->countTglLebih($uniqueIdverifikasi, $uniqueIdVKeys);
-        $perawatanLebih = $this->countTglLebih($uniqueIdperawatan, $uniqueIdPKeys);
+        $ve1 = DB::table('erp_kalibrasi.verifikasi')->select(DB::raw('count(DISTINCT serial_number_id) as total'))->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->get();
+        $pe1 = DB::table('erp_kalibrasi.perawatan')->select(DB::raw('count(DISTINCT serial_number_id) as total'))->whereMonth('jadwal_perawatan', Carbon::now()->month)->whereYear('jadwal_perawatan', Carbon::now()->year)->get();
+        $ve2 = DB::table('erp_kalibrasi.verifikasi')->select(DB::raw('count(DISTINCT serial_number_id) as total'))->where('jadwal_perawatan', '<', Carbon::now()->format('Y-m'))->get();
+        $pe2 = DB::table('erp_kalibrasi.perawatan')->select(DB::raw('count(DISTINCT serial_number_id) as total'))->where('jadwal_perawatan', '<', Carbon::now()->format('Y-m'))->get();
+        $ve3 = DB::table('erp_kalibrasi.verifikasi')->select(DB::raw('count(DISTINCT serial_number_id) as total'))->where('jadwal_perawatan', '>=', Carbon::now()->addMonth(1)->format('Y-m'))->where('jadwal_perawatan', '<=', Carbon::now()->addMonth(2)->format('Y-m'))->get();
+        $pe3 = DB::table('erp_kalibrasi.perawatan')->select(DB::raw('count(DISTINCT serial_number_id) as total'))->where('jadwal_perawatan', '>=', Carbon::now()->addMonth(1)->format('Y-m'))->where('jadwal_perawatan', '<=', Carbon::now()->addMonth(2)->format('Y-m'))->get();
 
         $totalPeminjaman = array();
         for($i=1;$i<=12;$i++){
@@ -82,13 +77,13 @@ class AlatujiController extends Controller
             'dipinjam' => $use,
             'external' => $ext,
             'batasPinjam' => $mel,
-            'verifikasiNow' => $ve1,
-            'perawatanNow' => $pe1,
-            'verifikasiOld' => $ve2,
-            'perawatanOld' => $pe2,
-            'verifikasiLebih' => $verifikasiLebih,
-            'perawatanLebih' => $perawatanLebih,
-            'total_peminjaman' => $totalPeminjaman
+            'verifikasiNow' => $ve1[0]->total,
+            'perawatanNow' => $pe1[0]->total,
+            'verifikasiOld' => $ve2[0]->total,
+            'perawatanOld' => $pe2[0]->total,
+            'verifikasiNext' => $ve3[0]->total,
+            'perawatanNext' => $pe3[0]->total,
+            'total_peminjaman' => $totalPeminjaman,
         ];
         return view('page.lab.dashboard', [
             'data' => json_encode($data),
@@ -115,15 +110,11 @@ class AlatujiController extends Controller
                     ->editColumn('kondisi_id', function($d){
                         return $d->kondisi_id == 9 ?
                         '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-check-circle-fill text-success " viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                        </svg>
+                        <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
                         </div>'
                         :
                         '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
-                        </svg>
+                        <i class="fa fa-times-circle text-danger fa-lg" aria-hidden="true"></i>
                         </div>';
                     })
                     ->editColumn('status', function($d){
@@ -426,15 +417,11 @@ class AlatujiController extends Controller
                         return $d->kondisi_awal != null ? (
                             $d->kondisi_awal == 9 ?
                             '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-check-circle-fill text-success " viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                            </svg>
+                            <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
                             </div>'
                             :
                             '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
-                            </svg>
+                            <i class="fa fa-times-circle text-danger fa-lg" aria-hidden="true"></i>
                             </div>'
                         ):'-';
                     })
@@ -442,15 +429,11 @@ class AlatujiController extends Controller
                         return $d->kondisi_akhir != null ? (
                             $d->kondisi_akhir == 9 ?
                             '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-check-circle-fill text-success " viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                            </svg>
+                            <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
                             </div>'
                             :
                             '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
-                            </svg>
+                            <i class="fa fa-times-circle text-danger fa-lg" aria-hidden="true"></i>
                             </div>'
                         ):'-';
                     })
@@ -541,29 +524,21 @@ class AlatujiController extends Controller
             ->editColumn('hasil_fisik', function($d){
                 return $d->hasil_fisik == 9 ?
                 '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan">
-                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-check-circle-fill text-success " viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                </svg>
+                <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
                 </div>'
                 :
                 '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan">
-                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
-                </svg>
+                <i class="fa fa-times-circle text-danger fa-lg" aria-hidden="true"></i>
                 </div>';
             })
             ->editColumn('hasil_fungsi', function($d){
                 return $d->hasil_fungsi == 9 ?
                 '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan">
-                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-check-circle-fill text-success " viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/>
-                </svg>
+                <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
                 </div>'
                 :
                 '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan">
-                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/>
-                </svg>
+                <i class="fa fa-times-circle text-danger fa-lg" aria-hidden="true"></i>
                 </div>';
             })
             ->addColumn('operator', 'nama_operator')
@@ -603,9 +578,13 @@ class AlatujiController extends Controller
             ->first();
 
             $data->kondisi_id == 9 ?
-            $data->kondisi = '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-check-circle-fill text-success " viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z"/></svg></div>'
+            $data->kondisi = '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan">
+                            <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
+                            </div>'
             :
-            $data->kondisi = '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan"><svg xmlns="http://www.w3.org/2000/svg" width="21" height="21" fill="currentColor" class="bi bi-x-circle-fill text-danger" viewBox="0 0 16 16"><path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293 5.354 4.646z"/></svg></div>';
+            $data->kondisi = '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan">
+                                <i class="fa fa-times-circle text-danger fa-lg" aria-hidden="true"></i>
+                                </div>';
 
             function cekDokum($d, $nm, $path)
             {
@@ -1062,9 +1041,9 @@ class AlatujiController extends Controller
             })
             ->addColumn('aksi', function($d){
                 return
-                '<a class="btn btn-sm btn-outline-primary py-0" href="/alatuji/detail/'.$d->id_serial_number.'/1">
-                Detail
-                </a>';
+                '<button onclick="pinjamData('.$d->id_peminjaman.')" class="btn badge w-100 bg-warning">
+                <span class="text-dark">Konfirmasi</span>
+                </button>';
             })
             ->rawColumns(['kondisi_id', 'aksi'])
             ->make(true);
@@ -1093,11 +1072,119 @@ class AlatujiController extends Controller
             })
             ->addColumn('aksi', function($d){
                 return
-                '<a class="btn btn-sm btn-outline-primary py-0" href="/alatuji/detail/'.$d->id_serial_number.'/1">
+                '<button onclick="dikembalikanData('.$d->id_peminjaman.')" class="badge w-100 bg-success">
+                <span class="text-white">Sedang Dipinjam</span>
+                </button>';
+            })
+            ->rawColumns(['kondisi_awal', 'aksi'])
+            ->make(true);
+    }
+
+    function get_data_dashboard_mt_sekarang($x){
+        $a = 2;
+        $x == 'p' ? $a = 2 : $a = 3;
+        $x == 'p' ? $x = 'perawatan' : $x = 'verifikasi';
+        $data = DB::table(DB::raw('erp_kalibrasi.'.$x.' p'))
+        ->select(
+            DB::raw('MAX(p.id_'.$x.') as id_perawatan'),
+            DB::raw('MAX(p.jadwal_perawatan) as jadwal_perawatan'),
+            'a.nm_alatuji', 'as2.serial_number', 'p.tgl_perawatan', 'as2.id_serial_number')
+        ->groupBy('serial_number_id')
+        ->leftJoin(DB::raw('erp_kalibrasi.alatuji_sn as2'), 'as2.id_serial_number', '=', 'p.serial_number_id')
+        ->leftJoin(DB::raw('erp_kalibrasi.alatuji a'), 'a.id_alatuji', '=', 'as2.alatuji_id')
+        ->whereMonth('p.jadwal_perawatan', Carbon::now()->month)
+        ->whereYear('p.jadwal_perawatan', Carbon::now()->year)->get();
+
+        return
+        DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('detail', function($d) use($a){
+                return
+                '<a class="btn btn-sm btn-outline-primary py-0" href="'.route("alatuji.detail", ["id"=>$d->id_serial_number, "x"=>$a]).'">
                 Detail
                 </a>';
             })
-            ->rawColumns(['kondisi_awal', 'aksi'])
+            ->rawColumns(['detail'])
+            ->make(true);
+    }
+
+    function get_data_dashboard_mt_terlewati($x){
+        $a = 2;
+        $x == 'p' ? $a = 2 : $a = 3;
+        $x == 'p' ? $x='perawatan' : $x='verifikasi';
+        $data = DB::table(DB::raw('erp_kalibrasi.'.$x.' p'))
+        ->select(
+            DB::raw('MAX(id_'.$x.') as id_perawatan'),
+            DB::raw('MAX(jadwal_perawatan) as jadwal_perawatan'),
+            'a.nm_alatuji', 'as2.serial_number', 'p.tgl_perawatan', 'p.jadwal_perawatan', 'as2.id_serial_number')
+        ->groupBy('serial_number_id')
+        ->leftJoin(DB::raw('erp_kalibrasi.alatuji_sn as2'), 'as2.id_serial_number', '=', 'p.serial_number_id')
+        ->leftJoin(DB::raw('erp_kalibrasi.alatuji a'), 'a.id_alatuji', '=', 'as2.alatuji_id')
+        ->where('p.jadwal_perawatan', '<', Carbon::now()->format('Y-m'))
+        ->get();
+        return
+        DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('detail', function($d) use($a){
+                return
+                '<a class="btn btn-sm btn-outline-primary py-0" href="'.route("alatuji.detail", ["id"=>$d->id_serial_number, "x"=>$a]).'">
+                Detail
+                </a>';
+            })
+            ->rawColumns(['detail'])
+            ->make(true);
+    }
+
+    function get_data_dashboard_mt_reminder($x){
+        $a = 2;
+        $x == 'p' ? $a = 2 : $a = 3;
+        $x == 'p' ? $x='perawatan' : $x='verifikasi';
+
+        $d1 =
+        DB::table('erp_kalibrasi.verifikasi')
+        ->select(DB::raw('count(DISTINCT serial_number_id) as total'))
+        ->where('jadwal_perawatan', '>=', Carbon::now()->addMonth(1)->format('Y-m'))
+        ->where('jadwal_perawatan', '<=', Carbon::now()->addMonth(2)->format('Y-m'))
+        ->get();
+
+        $get_data = DB::table(DB::raw('erp_kalibrasi.'.$x.' p'))
+        ->select(
+            DB::raw('MAX(p.id_'.$x.') as id_perawatan'),
+            DB::raw('MAX(p.jadwal_perawatan) as jadwal_perawatan'),
+            'p.id_'.$x, 'a.nm_alatuji', 'as2.serial_number', 'p.tgl_perawatan', 'as2.id_serial_number')
+        ->groupBy('serial_number_id')
+        ->leftJoin(DB::raw('erp_kalibrasi.alatuji_sn as2'), 'as2.id_serial_number', '=', 'p.serial_number_id')
+        ->leftJoin(DB::raw('erp_kalibrasi.alatuji a'), 'a.id_alatuji', '=', 'as2.alatuji_id')
+        ->where('p.jadwal_perawatan', '>=', Carbon::now()->addMonth(1)->format('Y-m'))
+        ->where('p.jadwal_perawatan', '<=', Carbon::now()->addMonth(2)->format('Y-m'))
+        ->get();
+        $data = collect([]);
+        foreach($get_data as $y){
+            $data->push([
+                'id_perawatan' => $y->id_perawatan,
+                'jadwal_perawatan' => $y->jadwal_perawatan,
+                'nm_alatuji' => $y->nm_alatuji,
+                'serial_number' => $y->serial_number,
+                'tgl_perawatan' => $y->tgl_perawatan,
+                'id_serial_number' => $y->id_serial_number
+            ]);
+            if($x == 'perawatan'){
+                $data->last() + array('id_perawatan' => $y->id_perawatan);
+            }else{
+                $data->last() + array('id_verifikasi' => $y->id_verifikasi);
+            }
+        }
+
+        return
+        DataTables::of($data)
+            ->addIndexColumn()
+            ->addColumn('detail', function($d) use($a){
+                return
+                '<a class="btn btn-sm btn-outline-primary py-0" href="'.route("alatuji.detail", ["id"=>$d['id_serial_number'], "x"=>$a]).'">
+                Detail
+                </a>';
+            })
+            ->rawColumns(['detail'])
             ->make(true);
     }
 

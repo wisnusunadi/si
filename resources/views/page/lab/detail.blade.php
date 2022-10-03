@@ -553,7 +553,7 @@
                     </strong>
                 </h4>
 
-                <form action="/lab/alatuji/store_pinjam" method="post">
+                <form action="{{ route('alatuji.pinjam.store') }}" method="post">
                 @csrf
                 <input type="hidden" name="serial_number_id" value="{{$id}}">
 
@@ -1466,9 +1466,8 @@
         @if(session()->has('perbSuccess'))
                 $('#tabRiwayat a[href="#perbaikan"]').tab('show');
         @endif
-        //
+        
         // tampilkan alert input data berhasil
-        //
         @if(session()->has('success'))
             Swal.fire({
                 title: 'Berhasil',

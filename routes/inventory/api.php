@@ -19,6 +19,9 @@ Route::prefix('/inventory')->group(function() {
     Route::get('peminjaman_terima_data/{id}', [AlatujiController::class, 'peminjaman_terima_data']);
     Route::get('data_dashboard_permintaan', [AlatujiController::class, 'get_data_dashboard_permintaan']);
     Route::get('data_dashboard_pengembalian', [AlatujiController::class, 'get_data_dashboard_pengembailan']);
+    Route::get('data_dashboard_mt_sekarang/{x}', [AlatujiController::class, 'get_data_dashboard_mt_sekarang']);
+    Route::get('data_dashboard_mt_terlewati/{x}', [AlatujiController::class, 'get_data_dashboard_mt_terlewati']);
+    Route::get('data_dashboard_mt_reminder/{x}', [AlatujiController::class, 'get_data_dashboard_mt_reminder']);
 });
 
 Route::prefix('/verifikasi')->group(function(){
@@ -29,8 +32,4 @@ Route::prefix('/kalibrasiperbaikan')->group(function(){
     Route::get('maintenance_hist/{id}/{x}', [KalibrasiPerbaikanController::class, 'maintenance_hist']);
     Route::get('/gambar_show/{id}/{jenis}/{tipe}', [KalibrasiPerbaikanController::class, 'gambar_show']);
     Route::get('/data_show/{id}/{jenis}', [KalibrasiPerbaikanController:: class, 'data_show']);
-});
-
-Route::prefix('test1ng')->group(function(){
-    Route::get('storageLink', function(){return Storage::get('/public/img/memo.jpeg');});
 });

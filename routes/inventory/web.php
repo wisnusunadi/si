@@ -34,7 +34,7 @@ Route::group(['prefix' => 'lab'], function () {
             });
             Route::group(['prefix' => 'perawatan'], function () {
                 Route::get('/detail/{id}', [PerawatanController::class, 'index'])->name('alatuji.perawatan.detail');
-                Route::get('/store', [PerawatanController::class, 'store'])->name('alatuji.perawatan.store');
+                Route::post('/store', [PerawatanController::class, 'store'])->name('alatuji.perawatan.store');
             });
 
             Route::group(['prefix' => 'verifikasi'], function () {

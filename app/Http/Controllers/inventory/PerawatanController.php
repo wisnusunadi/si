@@ -59,7 +59,7 @@ class PerawatanController extends Controller
         }
     }
 
-    function store_perawatan(Request $request)
+    function store(Request $request)
     {
         $request->validate([
             'serial_number' => 'required',
