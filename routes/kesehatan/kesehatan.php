@@ -107,7 +107,7 @@ Route::group(['prefix' => '/karyawan'], function () {
     Route::group(['prefix' => '/sakit'], function () {
         Route::get('/', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_sakit']);
         Route::get('/cetak/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_sakit_cetak']);
-        Route::post('/data', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_sakit_data']);
+        Route::post('/data/{value}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_sakit_data']);
         Route::get('/tambah', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_sakit_tambah']);
         Route::get('/obat/data/', [App\Http\Controllers\kesehatan\KesehatanController::class, 'obat_data']);
         Route::get('/obat/detail/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'obat_data_detail']);

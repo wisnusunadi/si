@@ -867,9 +867,14 @@ class KesehatanController extends Controller
     {
         return view('page.kesehatan.karyawan_sakit');
     }
-    public function karyawan_sakit_data()
+    public function karyawan_sakit_data($value)
     {
-        $data = Karyawan_sakit::with(['Karyawan.Divisi', 'Pemeriksa'])->orderBy('tgl_cek', 'DESC')->get();
+        if ($value == 'berobat') {
+            $data = Karyawan_sakit::with(['Karyawan.Divisi', 'Pemeriksa'])->where('keputusan', 'Lanjut bekerja')->orderBy('tgl_cek', 'DESC')->get();
+        } else {
+            $data = Karyawan_sakit::with(['Karyawan.Divisi', 'Pemeriksa'])->where('keputusan', 'Dipulangkan')->orderBy('tgl_cek', 'DESC')->get();
+        }
+
         return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('tgl_cek', function ($data) {
