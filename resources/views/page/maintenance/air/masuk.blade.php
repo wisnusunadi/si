@@ -30,7 +30,7 @@
     svg {
 
         position: absolute;
-        height:auto;    
+        height: auto;
         margin: 0;
         padding: 0;
         border: 0;
@@ -174,9 +174,9 @@
 
         </div>
 
-        <div class="row">   
+        <div class="row">
             <div class="col-2">
-                <div class="card card-primary card-outline card-outline-tabs">
+                <div class="card h-90 card-primary card-outline card-outline-tabs">
                     <div class="card-header p-0 border-bottom-0">
                         <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
                             <li class="nav-item">
@@ -189,7 +189,7 @@
                     </div>
 
                     <div class="tab-content" id="custom-tabs-four-tabContent">
-                        <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab" style = "height:215px">
+                        <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab" style="height:215px">
 
                             <div class="card-header">
                                 <i class="fas fa-chart-area me-1"></i>
@@ -198,7 +198,7 @@
                             <div id="gg2" class="gauge2"></div>
                         </div>
 
-                        <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab" style = "height:215px">
+                        <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab" style="height:215px">
 
                             <div class="card-header">
                                 <i class="fas fa-chart-area me-1"></i>
@@ -216,21 +216,21 @@
 
 
             <div class="col-7">
-                <div class="card mb-4" style="min-height:239px;height:auto">
+                <div class="card h-90 mb-4" style="min-height:239px;height:auto">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
                         Penggunaan Air Hari Ini (<?php
                                                     setlocale(LC_ALL, 'id-ID');
                                                     echo strftime("%A"); ?>)
                     </div>
-                    <div class="card-body" style ="height:auto;" >
-                        <div class="chart-container"><canvas id="myAreaChart" min height = "90px" height="auto"></canvas></div>
+                    <div class="card-body" style="height:auto;">
+                        <div class="chart-container"><canvas id="myAreaChart" min height="90px" height="auto"></canvas></div>
                     </div>
                 </div>
             </div>
 
             <div class="col-3">
-                <div class="card mb-4">
+                <div class="card h-90 mb-4">
                     <div class="card-header">
                         <i class="fas fa-chart-bar me-1"></i>
                         Kondisi Air
@@ -754,4 +754,4 @@
 </script>
 
 
-@stop   
+@stop
