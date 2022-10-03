@@ -719,6 +719,10 @@ class KesehatanController extends Controller
 
                 return $btn;
             })
+            ->addColumn('aturan', function ($data) {
+                return $data->aturan;
+            })
+
             ->addColumn('button', function ($data) {
                 $btn = '<div class="btn-toolbar d-flex justify-content-center" role="toolbar" aria-label="Toolbar with button groups">
                 <button type="button" id="riwayat"  class="btn btn-sm btn-outline-primary btn-sm m-1"><i class="fas fa-eye"></i> Riwayat Pakai</button>
@@ -792,14 +796,17 @@ class KesehatanController extends Controller
             $request,
             [
                 'nama' => 'required|unique:kesehatan.obats',
+                'aturan_obat' => 'required',
             ],
             [
                 'nama.required' => 'Nama obat harus di isi',
                 'nama.unique' => 'Nama obat harus sudah pernah di input',
+                'aturan_obat.required' => 'Aturan harus di isi',
             ]
         );
         $obat = Obat::create([
             'nama' => $request->nama,
+            'aturan' => $request->aturan_obat,
             'stok' => 0,
             'keterangan' => $request->keterangan
         ]);
@@ -845,6 +852,7 @@ class KesehatanController extends Controller
         $obat = Obat::find($id);
         $obat->nama = $request->nama;
         $obat->keterangan = $request->keterangan;
+        $obat->aturan = $request->aturan_obat;
         $obat->save();
         if ($obat) {
             return redirect()->back()->with('success', 'Berhasil menambahkan data');
@@ -1424,24 +1432,6 @@ class KesehatanController extends Controller
     }
     public function kesehatan_bulanan_gcu_aksi_tambah(Request $request)
     {
-        $this->validate(
-            $request,
-            [
-                'tgl_cek.*' => 'required',
-                'karyawan_id.*' => 'required',
-                'glukosa.*' => 'required',
-                'kolesterol.*' => 'required',
-                'asam_urat.*' => 'required',
-            ],
-            [
-                'tgl_cek.required' => 'Tanggal pengecekan harus dipilih',
-                'karyawan_id.required' => 'Karyawan harus di isi',
-                'glukosa.required' => 'Glukosa harus di isi',
-                'kolesterol.required' => 'Kolesterol harus di isi',
-                'asam_urat.required' => 'Asam urat harus di isi',
-            ]
-        );
-
         for ($i = 0; $i < count($request->karyawan_id); $i++) {
             $gcu_karyawan = gcu_karyawan::create([
                 'karyawan_id' => $request->karyawan_id[$i],

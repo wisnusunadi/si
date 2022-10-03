@@ -190,14 +190,12 @@
                         Draf</button>
                 </div>
             </div>
-            <form action="/kesehatan/bulanan/gcu/aksi_tambah" method="post" enctype="multipart/form-data">
-                {{ csrf_field() }}
+            <form action="/kesehatan/bulanan/gcu/aksi_tambah" method="post">
+                @csrf
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">Draf Pemeriksaan GCU (Glucose, Cholesterol, Uric ACID)</div>
                     </div>
-
-
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-hover align-center" id="tabel_gcu">
@@ -224,8 +222,8 @@
                     <div class="card-footer">
                         <span class="float-left"><a class="btn btn-danger rounded-pill" href="/kesehatan/bulanan"><i
                                     class="fas fa-times"></i>&nbsp;Batal</a></span>
-                        <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"><i
-                                    class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
+                        <span class="float-right"><button class="btn btn-success rounded-pill" id="button_tambah"
+                                type="submit"><i class="fas fa-plus"></i>&nbsp;Tambah Data</button></span>
                     </div>
 
                 </div>
@@ -273,28 +271,13 @@
                 var asam_urat_form = $('#asam_urat_form').val();
                 var keterangan_form = $('#keterangan_form').val();
 
-                if (tgl_cek_form != '' && berat_form != '') {
-
-                } else {
-                    swal.fire(
-                        'Gagal',
-                        'Lengkapi form',
-                        'warning'
-                    );
-                }
-                $('#tgl_cek_form').val('');
-                $('#karyawan_id_form').val('');
-                $('#glukosa_form').val('');
-                $('#kolestrol_form').val('');
-                $('#asam_urat_form').val('');
-                $('#keterangan_form').val('');
-
                 var data = `<tr>
                 <td>1</td>
                 <td><input type="date" class="form-control d-none tgl_cek" name="tgl_cek[]" value="` + tgl_cek_form +
                     `">` + tgl_cek_form + `</td>
-                <td><input type="date" class="form-control d-none karyawan_id" name="karyawan_id[]" value="` +
-                    karyawan_id_form + `">` + karyawan_id_text + `</td>
+                <td><input type="text" class="form-control d-none karyawan_id" name="karyawan_id[]" value="` +
+                    karyawan_id_form +
+                    `">` + karyawan_id_text + `</td>
                 <td><input type="text" class="form-control d-none glukosa" name="glukosa[]" value="` + glukosa_form +
                     `">` + glukosa_form + `</td>
                 <td><input type="text" class="form-control d-none kolesterol" name="kolesterol[]" value="` +
@@ -305,13 +288,34 @@
                     keterangan_form + `"></textarea>` + keterangan_form + `</td>
                 <td><i class="fas fa-times text-danger" id="closetable"></i></td>
             </tr>`;
-                if ($('#tabel_gcu > tbody > tr > td > .tgl_cek').length <= 0) {
-                    $('#tabel_gcu > tbody > tr').remove();
-                    $('#tabel_gcu tbody').append(data);
+
+                if (tgl_cek_form != '' && glukosa_form != '' && kolestrol_form !=
+                    '' && asam_urat_form != '') {
+
+                    $('#tgl_cek_form').val('');
+                    //$('#karyawan_id_form').val('');
+                    $('#glukosa_form').val('');
+                    $('#kolestrol_form').val('');
+                    $('#asam_urat_form').val('');
+                    $('#keterangan_form').val('');
+
+                    if ($('#tabel_gcu > tbody > tr > td > .tgl_cek').length <= 0) {
+                        $('#tabel_gcu > tbody > tr').remove();
+                        $('#tabel_gcu tbody').append(data);
+                    } else {
+                        $('#tabel_gcu tbody tr:last').after(data);
+                    }
+                    numberRows($("#tabel_gcu"));
+
+
                 } else {
-                    $('#tabel_gcu tbody tr:last').after(data);
+                    swal.fire(
+                        'Gagal',
+                        'Lengkapi form',
+                        'warning'
+                    );
                 }
-                numberRows($("#tabel_gcu"));
+
             });
             $('#tabel_gcu').on('click', '#closetable', function(e) {
                 $(this).closest('tr').remove();
