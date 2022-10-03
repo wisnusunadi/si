@@ -30,6 +30,7 @@
     svg {
 
         position: absolute;
+        height:auto;    
         margin: 0;
         padding: 0;
         border: 0;
@@ -61,7 +62,9 @@
     }
 
     .column-wrapper {
-        height: 57px;
+        min-height: 69px;
+        max-height: 200px;
+        height: 69px;
         width: 20px;
         background: #CFD8DC;
         transform: rotate(180deg);
@@ -171,28 +174,7 @@
 
         </div>
 
-        <div class="row">
-            <!-- <div class="col-2">
-                <div class="row">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-chart-area me-1"></i>
-                            Debit Air Digunakan (L/M)
-                        </div>
-                        <div id="gg2" class="gauge2"></div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="card mb-4">
-                        <div class="card-header">
-                            <i class="fas fa-chart-area me-1"></i>
-                            Debit Air Disimpan (L/M)
-                        </div>
-                        <div id="gg1" class="gauge"></div>
-                    </div>
-                </div>
-            </div> -->
-
+        <div class="row">   
             <div class="col-2">
                 <div class="card card-primary card-outline card-outline-tabs">
                     <div class="card-header p-0 border-bottom-0">
@@ -207,7 +189,7 @@
                     </div>
 
                     <div class="tab-content" id="custom-tabs-four-tabContent">
-                        <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+                        <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab" style = "height:215px">
 
                             <div class="card-header">
                                 <i class="fas fa-chart-area me-1"></i>
@@ -216,7 +198,7 @@
                             <div id="gg2" class="gauge2"></div>
                         </div>
 
-                        <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
+                        <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab" style = "height:215px">
 
                             <div class="card-header">
                                 <i class="fas fa-chart-area me-1"></i>
@@ -234,15 +216,15 @@
 
 
             <div class="col-7">
-                <div class="card mb-4" style="height:239px;">
+                <div class="card mb-4" style="min-height:239px;height:auto">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
                         Penggunaan Air Hari Ini (<?php
                                                     setlocale(LC_ALL, 'id-ID');
                                                     echo strftime("%A"); ?>)
                     </div>
-                    <div class="card-body">
-                        <div class="chart-container"><canvas id="myAreaChart" height="90px"></canvas></div>
+                    <div class="card-body" style ="height:auto;" >
+                        <div class="chart-container"><canvas id="myAreaChart" min height = "90px" height="auto"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -253,7 +235,7 @@
                         <i class="fas fa-chart-bar me-1"></i>
                         Kondisi Air
                     </div>
-                    <div class="card-body px-0 text-center" style="height:190px">
+                    <div class="card-body px-0 text-center">
 
                         <div class="outer-wrapper">
                             pH
