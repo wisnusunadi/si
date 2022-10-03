@@ -133,39 +133,218 @@
                     </div>
                     <div class="row">
                         <div class="col-3" id="c">
-                            <div class="bg-secondary">Current A</div>
-                            <div>Current B</div>
-                            <div class="bg-secondary">Current C</div>
-                            <div>Current N</div>
-                            <div class="bg-secondary">Current G</div>
-                            <div>Current Avg</div>
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Current A</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_current_a"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Current B</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_current_b"></div>
+                                </div>
+                            </div>
+
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Current C</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_current_c"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Current N</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_current_n"></div>
+                                </div>
+                            </div>
+
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Current G</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_current_g"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Current Avg</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_current_avg"></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-3" id="vll">
-                            <div class="bg-secondary">Voltage A-B</div>
-                            <div>Voltage B-C</div>
-                            <div class="bg-secondary">Voltage C-A</div>
-                            <div>Voltage L-l Avg</div>
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Voltage A-B</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_voltage_ab"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Voltage B-C</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_voltage_bc"></div>
+                                </div>
+                            </div>
+
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Voltage C-A</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_voltage_ca"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Voltage L-l Avg</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_voltage_avg"></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-3">
-                            <div class="bg-secondary">Voltage A-N</div>
-                            <div>Voltage B-N</div>
-                            <div class="bg-secondary">Voltage C-N</div>
-                            <div>Voltage L-N Avg</div>
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Voltage A-N</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_voltage_an"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Voltage B-N</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_voltage_bn"></div>
+                                </div>
+                            </div>
+
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Voltage C-N</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_voltage_cn"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Voltage L-N Avg</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_voltage_avg1"></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-3">
-                            <div class="bg-secondary">Active Power A</div>
-                            <div>Active Power B</div>
-                            <div class="bg-secondary">Active Power C</div>
-                            <div>Active Power Total</div>
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Active Power A</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_ap_a"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Active Power B</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_ap_b"></div>
+                                </div>
+                            </div>
+
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Active Power C</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_ap_c"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Active Power Total</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_ap_total"></div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-3">
-                            <div class="bg-secondary">Rective Power A</div>
-                            <div>Rective Power B</div>
-                            <div class="bg-secondary">Rective Power C</div>
-                            <div>Rective Power Total</div>
-                            <div class="bg-secondary">Frequency</div>
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Rective Power A</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_rp_a"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Rective Power B</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_rp_b"></div>
+                                </div>
+                            </div>
+
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Rective Power C</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_rp_c"></div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-9">
+                                    <div>Rective Power Total</div>
+                                </div>
+                                <div class="col-3">
+                                    <div id="val_rp_total"></div>
+                                </div>
+                            </div>
+
+                            <div class="row bg-secondary">
+                                <div class="col-9">
+                                    <div class="bg-secondary">Frequency</div>
+                                </div>
+                                <div class="col-3">
+                                    <div class="bg-secondary" id="val_freq"></div>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-3">
                             <div class="row bg-secondary">
@@ -173,7 +352,7 @@
                                     <div class="bg-secondary">Apparent Power A</div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="bg-secondary" id="val_apparent_a">10</div>
+                                    <div class="bg-secondary" id="val_apparent_a"></div>
                                 </div>
                             </div>
 
@@ -182,7 +361,7 @@
                                     <div>Apparent Power B</div>
                                 </div>
                                 <div class="col-3">
-                                    <div id="val_apparent_b">10</div>
+                                    <div id="val_apparent_b"></div>
                                 </div>
                             </div>
 
@@ -191,7 +370,7 @@
                                     <div class="bg-secondary">Apparent Power C</div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="bg-secondary" id="val_apparent_c">10</div>
+                                    <div class="bg-secondary" id="val_apparent_c"></div>
                                 </div>
                             </div>
 
@@ -200,7 +379,7 @@
                                     <div>Apparent Power Total</div>
                                 </div>
                                 <div class="col-3">
-                                    <div id="val_apparent_total">10</div>
+                                    <div id="val_apparent_total"></div>
                                 </div>
                             </div>
                         </div>
@@ -210,7 +389,7 @@
                                     <div class="bg-secondary">Power Factor A</div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="bg-secondary">10</div>
+                                    <div class="bg-secondary" id="val_pf_a"></div>
                                 </div>
                             </div>
 
@@ -219,7 +398,7 @@
                                     <div>Power Factor B</div>
                                 </div>
                                 <div class="col-3">
-                                    <div>10</div>
+                                    <div id="val_pf_b"></div>
                                 </div>
                             </div>
 
@@ -228,7 +407,7 @@
                                     <div class="bg-secondary">Power Factor C</div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="bg-secondary">10</div>
+                                    <div class="bg-secondary" id="val_pf_c"></div>
                                 </div>
                             </div>
 
@@ -237,7 +416,7 @@
                                     <div>Power Factor Total</div>
                                 </div>
                                 <div class="col-3">
-                                    <div>10</div>
+                                    <div id="val_pf_total"></div>
                                 </div>
                             </div>
                         </div>
@@ -247,7 +426,7 @@
                                     <div class="bg-secondary">Displacement Power Factor A</div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="bg-secondary">10</div>
+                                    <div class="bg-secondary" id="val_dpf_a"></div>
                                 </div>
                             </div>
 
@@ -256,7 +435,7 @@
                                     <div>Displacement Power Factor B</div>
                                 </div>
                                 <div class="col-3">
-                                    <div>10</div>
+                                    <div id="val_dpf_b"></div>
                                 </div>
                             </div>
 
@@ -265,7 +444,7 @@
                                     <div class="bg-secondary">Displacement Power Factor C</div>
                                 </div>
                                 <div class="col-3">
-                                    <div class="bg-secondary">10</div>
+                                    <div class="bg-secondary" id="val_dpf_c"></div>
                                 </div>
                             </div>
 
@@ -274,7 +453,7 @@
                                     <div>Displacement Power Factor Total</div>
                                 </div>
                                 <div class="col-3">
-                                    <div>10</div>
+                                    <div id="val_dpf_total"></div>
                                 </div>
                             </div>
                         </div>
@@ -372,6 +551,44 @@
                             $('#device_posisi').html(data.data.posisi)
                             $('#device_lokasi').html(data.data.lokasi)
                             $('#device_name').html(data.data.device)
+
+                            $('#val_voltage_ab').html(data.data.Voltage_A_B)
+                            $('#val_voltage_bc').html(data.data.Voltage_B_C)
+                            $('#val_voltage_ca').html(data.data.Voltage_C_A)
+                            $('#val_voltage_avg').html(data.data.Voltage_L_L_Avg)
+                            $('#val_voltage_an').html(data.data.Voltage_A_N)
+                            $('#val_voltage_bn').html(data.data.Voltage_B_N)
+                            $('#val_voltage_cn').html(data.data.Voltage_C_N)
+                            $('#val_voltage_avg1').html(data.data.Voltage_L_N_Avg)
+
+                            $('#val_pf_a').html(data.data.Power_Factor_A)
+                            $('#val_pf_b').html(data.data.Power_Factor_B)
+                            $('#val_pf_c').html(data.data.Power_Factor_C)
+                            $('#val_pf_total').html(data.data.Power_Factor_Total)
+
+                            $('#val_dpf_a').html(data.data.Displacement_Power_Factor_A)
+                            $('#val_dpf_b').html(data.data.Displacement_Power_Factor_B)
+                            $('#val_dpf_c').html(data.data.Displacement_Power_Factor_C)
+                            $('#val_dpf_total').html(data.data.Displacement_Power_Factor_Total)
+
+                            $('#val_rp_a').html(data.data.Reactive_Power_A)
+                            $('#val_rp_b').html(data.data.Reactive_Power_B)
+                            $('#val_rp_c').html(data.data.Reactive_Power_C)
+                            $('#val_rp_total').html(data.data.Reactive_Power_Total)
+                            $('#val_freq').html(data.data.Frequency)
+
+                            $('#val_ap_a').html(data.data.Active_Power_A)
+                            $('#val_ap_b').html(data.data.Active_Power_B)
+                            $('#val_ap_c').html(data.data.Active_Power_C)
+                            $('#val_ap_total').html(data.data.Active_Power_Total)
+
+                            $('#val_current_a').html(data.data.Current_A)
+                            $('#val_current_b').html(data.data.Current_B)
+                            $('#val_current_c').html(data.data.Current_C)
+                            $('#val_current_n').html(data.data.Current_N)
+                            $('#val_current_g').html(data.data.Current_G)
+                            $('#val_current_avg').html(data.data.Current_Avg)
+
                             $('#val_apparent_a').html(data.data.Apparent_Power_A)
                             $('#val_apparent_b').html(data.data.Apparent_Power_B)
                             $('#val_apparent_c').html(data.data.Apparent_Power_C)
