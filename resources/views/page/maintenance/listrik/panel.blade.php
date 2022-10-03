@@ -30,7 +30,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 
 @section('content')
 <section class="content">
-    
+
     <div class="container-fluid"><h2>Data Panel</h2>
         <!-- Button trigger modal -->
         <button type="button" class="btn btn-primary" data-toggle="modal" id="btnCreate">
@@ -129,7 +129,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
     let dataPanel = [];
     $.ajax({
         type:'get',
-        url:'http://localhost:81/listrik/ambilpanel',
+        url:'http://localhost:8000/listrik/ambilpanel',
         success:function(data) {
             dataPanel.push(data.data)
             ambilPanel(data.data)
@@ -173,7 +173,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 
         $.ajax({
             type:'get',
-            url:'http://localhost:81/listrik/ambilpanel?id='+ids,
+            url:'http://localhost:8000/listrik/ambilpanel?id='+ids,
             success:function(data) {
                 $('#device_id').val(data.data[0].device_id)
                 $('#kd_panel').val(data.data[0].device_id)
@@ -203,7 +203,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
             if (result.isConfirmed) {
                 $.ajax({
                     type:'delete',
-                    url:'http://localhost:81/listrik/delpanel',
+                    url:'http://localhost:8000/listrik/delpanel',
                     data: {
                         kd_panel: ids
                     },
@@ -240,7 +240,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
                     headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                    url: "http://localhost:81/listrik/panel",
+                    url: "http://localhost:8000/listrik/panel",
                     type: "POST",
                     data: formData,
                     cache: false,

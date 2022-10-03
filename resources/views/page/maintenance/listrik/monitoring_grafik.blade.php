@@ -37,9 +37,9 @@
                         <option value="METER01">METER01</option>
 
                         <option value="METER02">METER02</option>
-                      </select>
+                    </select>
 
-                    <div class="dropdown">
+                    <div class="dropdown my-2">
                         <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                           Pilih Grafik
                         </button>
@@ -81,14 +81,20 @@
     </div>
     <div class="tab-content" id="pills-tab-1Content">
         <div class="tab-pane fade show active" id="pills-home-1" role="tabpanel" aria-labelledby="pills-home-1">
-            {{-- <div class="row">
-                <div class="col-12">
-                    <div class="title-rt"></div>
-                    <canvas id="grafik_rt"></canvas>
-                </div>
-            </div> --}}
-
             <div class="row">
+                <div class="col-12">
+                    <div class="container">
+                        <div class="card">
+                            <div class="card-body">
+                                <div class="title-rt"></div>
+                                <canvas id="grafik_rt"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            {{-- <div class="row">
                 <div class="col">
                     <div class="container" id="vll1">
                         <div class="row">
@@ -169,7 +175,7 @@
                          </div>
                      </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
         <div class="tab-pane fade" id="pills-home-2" role="tabpanel" aria-labelledby="pills-home-2">
             <div class="row m-3">
@@ -239,7 +245,7 @@
 @section('adminlte_js')
 
 
-<script>
+{{-- <script>
 
     //grafik vll
     let datavll = [];
@@ -285,7 +291,7 @@
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:81/listrik/ambilrtvll',
+        url:'http://localhost:8000/listrik/ambilrtvll',
         success:function(data) {
             datavll.push(data.data);
             getspecvll(pilih_device);
@@ -364,7 +370,7 @@
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:81/listrik/ambilrtcurrent',
+        url:'http://localhost:8000/listrik/ambilrtcurrent',
         success:function(data) {
             datac.push(data.data);
             getspecc(pilih_device);
@@ -443,7 +449,7 @@
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:81/listrik/ambilrtvln',
+        url:'http://localhost:8000/listrik/ambilrtvln',
         success:function(data) {
             datavln.push(data.data);
             getspecvln(pilih_device);
@@ -522,7 +528,7 @@
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:81/listrik/ambilrtp',
+        url:'http://localhost:8000/listrik/ambilrtp',
         success:function(data) {
             datapower.push(data.data);
             getspecpower(pilih_device);
@@ -601,7 +607,7 @@ let datapowerfactor = [];
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:81/listrik/ambilrtpf',
+        url:'http://localhost:8000/listrik/ambilrtpf',
         success:function(data) {
             datapowerfactor.push(data.data);
             getspecpowerfactor(pilih_device);
@@ -681,7 +687,7 @@ let datadpowerfactor = [];
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:81/listrik/ambilrtdpf',
+        url:'http://localhost:8000/listrik/ambilrtdpf',
         success:function(data) {
             datadpowerfactor.push(data.data);
             getspecdpowerfactor(pilih_device);
@@ -761,7 +767,7 @@ let datafre = [];
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:81/listrik/ambilrtf',
+        url:'http://localhost:8000/listrik/ambilrtf',
         success:function(data) {
             datafre.push(data.data);
             getspecfre(pilih_device);
@@ -831,11 +837,11 @@ let datafre = [];
     });
 
 
-</script>
+</script> --}}
 
 <script>
     $(function(){
-        // $('#masuk').select2();
+        $('#masuk').select2();
         var grafik = "";
         var current_select = "rt";
         var current_grafik = "c1";
@@ -965,19 +971,18 @@ let datafre = [];
             }else if(current_grafik == "f1"){
                 aspek = "f";
             }
-            console.log(aspek);
             $.ajax({
                 type:'get',
-                url:'http://localhost:81/listrik/ambil'+current_select+aspek,
+                url:'http://localhost:8000/listrik/ambil'+current_select+aspek,
                 success:function(data) {
                     array_data.push(data.data);
-                    console.log(array_data)
                     getspecdata($('#masuk').val(), selected_chart);
                 }
             });
         }
 
         function getspecdata(device, selected_chart) {
+            console.log(device+" "+$('#masuk').val());
             let labelsChart = [];
             let datasets = [];
             const result = array_data[0].filter((item) => item.device === device);
@@ -1030,6 +1035,24 @@ let datafre = [];
 
         $(document).on('click', '.dropdown-item', function(){
             current_grafik = $(this).attr('data-value');
+            if(current_select == "rt"){
+                getgrafikdata(current_grafik, current_select, thechart_rt);
+            }
+            else if(current_select == "15m"){
+                getgrafikdata(current_grafik, current_select, thechart_15m);
+            }
+            else if(current_select == "1j"){
+                getgrafikdata(current_grafik, current_select, thechart_1j);
+            }
+            else if(current_select == "1h"){
+                getgrafikdata(current_grafik, current_select, thechart_1h);
+            }
+            else if(current_select == "1b"){
+                getgrafikdata(current_grafik, current_select, thechart_1b);
+            }
+        });
+
+        $(document).on('change keyup', '#masuk', function(){
             if(current_select == "rt"){
                 getgrafikdata(current_grafik, current_select, thechart_rt);
             }

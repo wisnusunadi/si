@@ -58,7 +58,346 @@
 @section('content')
 <section class="content">
     <div class="container-fluid bg-white text-dark">
-        <div class="tab-content" id="pills-tabContent">
+        <div class="card">
+            <div class="card-body">
+                <ul class="nav nav-pills mb-3" id="pills-tab-1" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link active" id="pills-home-tab-1" data-toggle="pill" href="#pills-home-1"
+                            role="tab" aria-controls="pills-home-1" aria-selected="true">Real time</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="pills-home-tab-2" data-toggle="pill" href="#pills-home-2" role="tab"
+                            aria-controls="pills-home-2" aria-selected="false">Non Real Time</a>
+                    </li>
+                </ul>
+                <div class="tab-content" id="pills-tab-1Content">
+                    <div class="tab-pane fade show active" id="pills-home-1" role="tabpanel" aria-labelledby="pills-home-1">
+                        <div class="row my-1">
+                            <div class="col-12">
+                                <div class="dropdown">
+                                    <button class="btn btn-secondary dropdown-toggle" type="button" id="ambil" data-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">
+                                        Pilih Panel
+                                    </button>
+                                    <div class="dropdown-menu" id="dropdownPanel" aria-labelledby="dropdownMenuButton">
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row my-3">
+                            <div class="bc-primary text-primary px-auto py-2 col-3 " role="alert">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar3" viewBox="0 0 16 16">
+                                    <path d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z"/>
+                                    <path d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+                                  </svg>
+                                  Waktu : <span id="timestamp"></span>
+                            </div>
+                            <div class="bc-success text-success px-auto py-2 ml-auto col-2" role="alert">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-lightning-fill" viewBox="0 0 16 16">
+                                    <path d="M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641l2.5-8.5z"/>
+                                  </svg>
+                                  Nama : <span id="device_name"></span>
+                            </div>
+                            <div class="bc-warning text-warning px-auto py-2 ml-auto col-1" id="posisi" role="alert">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-geo" viewBox="0 0 16 16">
+                                    <path fill-rule="evenodd" d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z"/>
+                                  </svg>
+                                  Posisi : <span id="device_posisi"></span>
+                            </div>
+                            <div class="bg-info text-info px-auto py-2 ml-auto col-2" role="alert">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-joystick" viewBox="0 0 16 16">
+                                    <path d="M10 2a2 2 0 0 1-1.5 1.937v5.087c.863.083 1.5.377 1.5.726 0 .414-.895.75-2 .75s-2-.336-2-.75c0-.35.637-.643 1.5-.726V3.937A2 2 0 1 1 10 2z"/>
+                                    <path d="M0 9.665v1.717a1 1 0 0 0 .553.894l6.553 3.277a2 2 0 0 0 1.788 0l6.553-3.277a1 1 0 0 0 .553-.894V9.665c0-.1-.06-.19-.152-.23L9.5 6.715v.993l5.227 2.178a.125.125 0 0 1 .001.23l-5.94 2.546a2 2 0 0 1-1.576 0l-5.94-2.546a.125.125 0 0 1 .001-.23L6.5 7.708l-.013-.988L.152 9.435a.25.25 0 0 0-.152.23z"/>
+                                  </svg>
+                                  Lokasi : <span id="device_lokasi"></span>
+                            </div>
+                        </div>
+                        <div class="row my-1">
+                            <div class="col-3" id="c">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Current A</div>
+                                        <div class="col-4" id="val_current_a">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Current B</div>
+                                        <div class="col-4" id="val_current_b">value</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Current C</div>
+                                        <div class="col-4" id="val_current_c">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Current N</div>
+                                        <div class="col-4" id="val_current_n">value</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Current G</div>
+                                        <div class="col-4" id="val_current_g">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Current Avg</div>
+                                        <div class="col-4" id="val_current_avg">value</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3" id="vll">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage A-B</div>
+                                        <div class="col-4" id="val_voltage_ab">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage B-C</div>
+                                        <div class="col-4" id="val_voltage_bc">value</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage C-A</div>
+                                        <div class="col-4" id="val_voltage_ca">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage L-l Avg</div>
+                                        <div class="col-4" id="val_voltage_avg">value</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage A-N</div>
+                                        <div class="col-4" id="val_voltage_an">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage B-N</div>
+                                        <div class="col-4" id="val_voltage_bn">value</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage C-N</div>
+                                        <div class="col-4" id="val_voltage_cn">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage L-N Avg</div>
+                                        <div class="col-4" id="val_voltage_avg1">value</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Active Power A</div>
+                                        <div class="col-4" id="val_ap_a">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Active Power B</div>
+                                        <div class="col-4" id="val_ap_b">value</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Active Power C</div>
+                                        <div class="col-4" id="val_ap_c">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Active Power Total</div>
+                                        <div class="col-4" id="val_ap_total">value</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-3">
+                                <div class="bg-secondary ">
+                                    <div class="row my-1">
+                                        <div class="col-8">Reactive Power A</div>
+                                        <div class="col-4" id="val_rp_a">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Reactive Power B</div>
+                                        <div class="col-4" id="val_rp_b">value</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Reactive Power C</div>
+                                        <div class="col-4" id="val_rp_c">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Reactive Power Total</div>
+                                        <div class="col-4" id="val_rp_total">value</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Frequency</div>
+                                        <div class="col-4" id="val_freq">value</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Apparent Power A</div>
+                                        <div class="col-4" id="val_apparent_a">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Apparent Power B</div>
+                                        <div class="col-4" id="val_apparent_b">value</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Apparent Power C</div>
+                                        <div class="col-4" id="val_apparent_c">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Apparent Power Total</div>
+                                        <div class="col-4" id="val_apparent_total">value</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Power Factor A</div>
+                                        <div class="col-4" id="val_pf_a">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Power Factor B</div>
+                                        <div class="col-4" id="val_pf_b">value</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Power Factor C</div>
+                                        <div class="col-4" id="val_pf_c">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Power Factor Total</div>
+                                        <div class="col-4" id="val_pf_total">value</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Displacement Power Factor A</div>
+                                        <div class="col-4" id="val_dpf_a">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Displacement Power Factor B</div>
+                                        <div class="col-4" id="val_dpf_b">value</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Displacement Power Factor C</div>
+                                        <div class="col-4" id="val_dpf_c">value</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Displacement Power Factor Total</div>
+                                        <div class="col-4" id="val_dpf_total">value</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-home-2" role="tabpanel" aria-labelledby="pills-home-2">
+                        <div class="dropdown">
+                            <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                Waktu
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item filter_waktu" id="15m_filter" data-value="15m">15 Menit</a>
+                                <a class="dropdown-item filter_waktu" id="1j_filter" data-value="1j">1 Jam</a>
+                                <a class="dropdown-item filter_waktu" id="1h_filter" data-value="1h">1 Hari</a>
+                                <a class="dropdown-item filter_waktu" id="1b_filter" data-value="1b">1 Bulan</a>
+                            </div>
+
+                            <div id="15m" class="my-3">
+                                <div class="table-responsive">
+                                    <table class="table" id="non_real">
+                                        <thead class="thead-light">
+                                            <tr>
+                                                <th rowspan="2" colspan="2" width="20%"
+                                                    style="vertical-align : middle;text-align:center;">Date Time</th>
+                                                <th colspan="8" style="text-align: center">Avarage/Total</th>
+                                                <th rowspan="2" style="vertical-align : middle;text-align:center;">
+                                                    Frequency</th>
+                                            </tr>
+                                            <tr>
+                                                <th scope="col"  style="vertical-align : middle;text-align:center;">
+                                                    Current(avg)</th>
+                                                <th scope="col"  style="vertical-align : middle;text-align:center;">
+                                                    Volatage L-L(avg)</th>
+                                                <th scope="col"  style="vertical-align : middle;text-align:center;">
+                                                    Volatage L-N (avg)</th>
+                                                <th scope="col"  style="text-align: center">Active Power (total) </th>
+                                                <th scope="col"  style="text-align: center">Reactive Power (total)
+                                                </th>
+                                                <th scope="col"  style="text-align: center">Apparent Power (total)
+                                                </th>
+                                                <th scope="col"  style="text-align: center">Power Factor (total)</th>
+                                                <th scope="col"  style="text-align: center">Displacement Power Factor
+                                                    (total)</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{-- <div class="tab-content" id="pills-tabContent">
             <div class="tab-pane fade show active bg-white text-dark ml-2" id="pills-home" role="tabpanel"
                 aria-labelledby="pills-home-tab">
                 <h3>Data Record Listrik</h3>
@@ -73,446 +412,10 @@
                     </li>
                 </ul>
             </div>
-        </div>
+        </div> --}}
 
 
-        <div class="tab-content" id="pills-tab-1Content">
-            <div class="tab-pane fade show active" id="pills-home-1" role="tabpanel" aria-labelledby="pills-home-1">
 
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="ambil" data-toggle="dropdown"
-                        aria-haspopup="true" aria-expanded="false">
-                        Pilih Panel
-                    </button>
-                    <div class="dropdown-menu" id="dropdownPanel" aria-labelledby="dropdownMenuButton">
-
-                    </div>
-                </div>
-
-
-                <div class="card-body">
-                    <div class="row mb-3">
-                        <div class="bc-primary text-primary px-auto py-2 col-3 " role="alert">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-calendar3" viewBox="0 0 16 16">
-                                <path
-                                    d="M14 0H2a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2zM1 3.857C1 3.384 1.448 3 2 3h12c.552 0 1 .384 1 .857v10.286c0 .473-.448.857-1 .857H2c-.552 0-1-.384-1-.857V3.857z" />
-                                <path
-                                    d="M6.5 7a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-9 3a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm3 0a1 1 0 1 0 0-2 1 1 0 0 0 0 2z" />
-                            </svg>
-                            Waktu : <span id="timestamp"></span>
-                        </div>
-                        <div class="bc-success text-success px-auto py-2 ml-auto col-2" role="alert">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-lightning-fill" viewBox="0 0 16 16">
-                                <path
-                                    d="M5.52.359A.5.5 0 0 1 6 0h4a.5.5 0 0 1 .474.658L8.694 6H12.5a.5.5 0 0 1 .395.807l-7 9a.5.5 0 0 1-.873-.454L6.823 9.5H3.5a.5.5 0 0 1-.48-.641l2.5-8.5z" />
-                            </svg>
-                            Nama : <span id="device_name"></span>
-                        </div>
-                        <div class="bc-warning text-warning px-auto py-2 ml-auto col-1" id="posisi" role="alert">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-geo" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd"
-                                    d="M8 1a3 3 0 1 0 0 6 3 3 0 0 0 0-6zM4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999zm2.493 8.574a.5.5 0 0 1-.411.575c-.712.118-1.28.295-1.655.493a1.319 1.319 0 0 0-.37.265.301.301 0 0 0-.057.09V14l.002.008a.147.147 0 0 0 .016.033.617.617 0 0 0 .145.15c.165.13.435.27.813.395.751.25 1.82.414 3.024.414s2.273-.163 3.024-.414c.378-.126.648-.265.813-.395a.619.619 0 0 0 .146-.15.148.148 0 0 0 .015-.033L12 14v-.004a.301.301 0 0 0-.057-.09 1.318 1.318 0 0 0-.37-.264c-.376-.198-.943-.375-1.655-.493a.5.5 0 1 1 .164-.986c.77.127 1.452.328 1.957.594C12.5 13 13 13.4 13 14c0 .426-.26.752-.544.977-.29.228-.68.413-1.116.558-.878.293-2.059.465-3.34.465-1.281 0-2.462-.172-3.34-.465-.436-.145-.826-.33-1.116-.558C3.26 14.752 3 14.426 3 14c0-.599.5-1 .961-1.243.505-.266 1.187-.467 1.957-.594a.5.5 0 0 1 .575.411z" />
-                            </svg>
-                            Posisi : <span id="device_posisi"></span>
-                        </div>
-                        <div class="bg-info text-info px-auto py-2 ml-auto col-2" role="alert">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                                class="bi bi-joystick" viewBox="0 0 16 16">
-                                <path
-                                    d="M10 2a2 2 0 0 1-1.5 1.937v5.087c.863.083 1.5.377 1.5.726 0 .414-.895.75-2 .75s-2-.336-2-.75c0-.35.637-.643 1.5-.726V3.937A2 2 0 1 1 10 2z" />
-                                <path
-                                    d="M0 9.665v1.717a1 1 0 0 0 .553.894l6.553 3.277a2 2 0 0 0 1.788 0l6.553-3.277a1 1 0 0 0 .553-.894V9.665c0-.1-.06-.19-.152-.23L9.5 6.715v.993l5.227 2.178a.125.125 0 0 1 .001.23l-5.94 2.546a2 2 0 0 1-1.576 0l-5.94-2.546a.125.125 0 0 1 .001-.23L6.5 7.708l-.013-.988L.152 9.435a.25.25 0 0 0-.152.23z" />
-                            </svg>
-                            Lokasi : <span id="device_lokasi"></span>
-                        </div>
-
-
-                    </div>
-                    <div class="row">
-                        <div class="col-3" id="c">
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Current A</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_current_a"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Current B</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_current_b"></div>
-                                </div>
-                            </div>
-
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Current C</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_current_c"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Current N</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_current_n"></div>
-                                </div>
-                            </div>
-
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Current G</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_current_g"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Current Avg</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_current_avg"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3" id="vll">
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Voltage A-B</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_voltage_ab"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Voltage B-C</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_voltage_bc"></div>
-                                </div>
-                            </div>
-
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Voltage C-A</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_voltage_ca"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Voltage L-l Avg</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_voltage_avg"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Voltage A-N</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_voltage_an"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Voltage B-N</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_voltage_bn"></div>
-                                </div>
-                            </div>
-
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Voltage C-N</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_voltage_cn"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Voltage L-N Avg</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_voltage_avg1"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Active Power A</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_ap_a"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Active Power B</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_ap_b"></div>
-                                </div>
-                            </div>
-
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Active Power C</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_ap_c"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Active Power Total</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_ap_total"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-3">
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Rective Power A</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_rp_a"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Rective Power B</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_rp_b"></div>
-                                </div>
-                            </div>
-
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Rective Power C</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_rp_c"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Rective Power Total</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_rp_total"></div>
-                                </div>
-                            </div>
-
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Frequency</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_freq"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Apparent Power A</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_apparent_a"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Apparent Power B</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_apparent_b"></div>
-                                </div>
-                            </div>
-
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Apparent Power C</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_apparent_c"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Apparent Power Total</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_apparent_total"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Power Factor A</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_pf_a"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Power Factor B</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_pf_b"></div>
-                                </div>
-                            </div>
-
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Power Factor C</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_pf_c"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Power Factor Total</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_pf_total"></div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-3">
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Displacement Power Factor A</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_dpf_a"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Displacement Power Factor B</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_dpf_b"></div>
-                                </div>
-                            </div>
-
-                            <div class="row bg-secondary">
-                                <div class="col-9">
-                                    <div class="bg-secondary">Displacement Power Factor C</div>
-                                </div>
-                                <div class="col-3">
-                                    <div class="bg-secondary" id="val_dpf_c"></div>
-                                </div>
-                            </div>
-
-                            <div class="row">
-                                <div class="col-9">
-                                    <div>Displacement Power Factor Total</div>
-                                </div>
-                                <div class="col-3">
-                                    <div id="val_dpf_total"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-
-
-            </div>
-            <div class="tab-pane fade show" id="pills-home-2" role="tabpanel" aria-labelledby="pills-home-2">
-                <div class="dropdown">
-                    <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Waktu
-                    </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item filter_waktu" id="15m_filter" data-value="15m">15 Menit</a>
-                        <a class="dropdown-item filter_waktu" id="1j_filter" data-value="1j">1 Jam</a>
-                        <a class="dropdown-item filter_waktu" id="1h_filter" data-value="1h">1 Hari</a>
-                        <a class="dropdown-item filter_waktu" id="1b_filter" data-value="1b">1 Bulan</a>
-                    </div>
-
-                    <div class="container" id="15m" text-align: center>
-                        <div class="table-responsive">
-                            <table class="table" id="non_real">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th rowspan="2" colspan="2" width="20%"
-                                            style="vertical-align : middle;text-align:center;">Date Time</th>
-                                        <th colspan="8" style="text-align: center">Avarage/Total</th>
-                                        <th rowspan="2" style="vertical-align : middle;text-align:center;">
-                                            Frequency</th>
-                                    </tr>
-                                    <tr>
-                                        <th scope="col"  style="vertical-align : middle;text-align:center;">
-                                            Current(avg)</th>
-                                        <th scope="col"  style="vertical-align : middle;text-align:center;">
-                                            Volatage L-L(avg)</th>
-                                        <th scope="col"  style="vertical-align : middle;text-align:center;">
-                                            Volatage L-N (avg)</th>
-                                        <th scope="col"  style="text-align: center">Active Power (total) </th>
-                                        <th scope="col"  style="text-align: center">Reactive Power (total)
-                                        </th>
-                                        <th scope="col"  style="text-align: center">Apparent Power (total)
-                                        </th>
-                                        <th scope="col"  style="text-align: center">Power Factor (total)</th>
-                                        <th scope="col"  style="text-align: center">Displacement Power Factor
-                                            (total)</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
 
         {{-- ---------------- --}}
     </div>
@@ -638,34 +541,264 @@
 
         // `d` is the original data object for the row
         return (
-            '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
-            '<tr>' +
-            '<td>Current A:</td>' +
-            '<td>'+d.Current_A+'</td>' +
-            '<td>Current B:</td>' +
-            '<td>'+d.Current_B+'</td>' +
-            '<td>Current C:</td>' +
-            '<td>'+d.Current_C+'</td>' +
-            '<td>Current N:</td>' +
-            '<td>'+d.Current_N+'</td>' +
-            '<td>Current G:</td>' +
-            '<td>'+d.Current_G+'</td>' +
-            '</tr>' +
+            `<div class="row my-1">
+                            <div class="col-3" id="c">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Current A</div>
+                                        <div class="col-4">`+d.Current_A+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Current B</div>
+                                        <div class="col-4">`+d.Current_B+`</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Current C</div>
+                                        <div class="col-4">`+d.Current_C+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Current N</div>
+                                        <div class="col-4">`+d.Current_N+`</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Current G</div>
+                                        <div class="col-4">`+d.Current_G+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Current Avg</div>
+                                        <div class="col-4">`+d.Current_Avg+`</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3" id="vll">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage A-B</div>
+                                        <div class="col-4">`+d.Voltage_A_B+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage B-C</div>
+                                        <div class="col-4">`+d.Voltage_B_C+`</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage C-A</div>
+                                        <div class="col-4">`+d.Voltage_C_A+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage L-l Avg</div>
+                                        <div class="col-4">`+d.Voltage_L_L_Avg+`</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage A-N</div>
+                                        <div class="col-4">`+d.Voltage_A_N+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage B-N</div>
+                                        <div class="col-4">`+d.Voltage_B_N+`</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage C-N</div>
+                                        <div class="col-4">`+d.Voltage_C_N+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Voltage L-N Avg</div>
+                                        <div class="col-4">`+d.Voltage_L_N_Avg+`</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Active Power A</div>
+                                        <div class="col-4">`+d.Active_Power_A+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Active Power B</div>
+                                        <div class="col-4">`+d.Active_Power_B+`</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Active Power C</div>
+                                        <div class="col-4">`+d.Active_Power_C+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Active Power Total</div>
+                                        <div class="col-4">`+d.Active_Power_Total+`</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row my-2">
+                            <div class="col-3">
+                                <div class="bg-secondary ">
+                                    <div class="row my-1">
+                                        <div class="col-8">Reactive Power A</div>
+                                        <div class="col-4">`+d.Reactive_Power_A+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Reactive Power B</div>
+                                        <div class="col-4">`+d.Reactive_Power_B+`</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Reactive Power C</div>
+                                        <div class="col-4">`+d.Reactive_Power_C+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Reactive Power Total</div>
+                                        <div class="col-4">`+d.Reactive_Power_Total+`</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Frequency</div>
+                                        <div class="col-4">`+d.Frequency+`</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Apparent Power A</div>
+                                        <div class="col-4">`+d.Apparent_Power_A+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Apparent Power B</div>
+                                        <div class="col-4">`+d.Apparent_Power_B+`</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Apparent Power C</div>
+                                        <div class="col-4">`+d.Apparent_Power_C+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Apparent Power Total</div>
+                                        <div class="col-4">`+d.Apparent_Power_Total+`</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Power Factor A</div>
+                                        <div class="col-4">`+d.Power_Factor_A+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Power Factor B</div>
+                                        <div class="col-4">`+d.Power_Factor_B+`</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Power Factor C</div>
+                                        <div class="col-4">`+d.Power_Factor_C+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Power Factor Total</div>
+                                        <div class="col-4">`+d.Power_Factor_Total+`</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-3">
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Displacement Power Factor A</div>
+                                        <div class="col-4">`+d.Displacement_Power_Factor_A+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Displacement Power Factor B</div>
+                                        <div class="col-4">`+d.Displacement_Power_Factor_B+`</div>
+                                    </div>
+                                </div>
+                                <div class="bg-secondary">
+                                    <div class="row my-1">
+                                        <div class="col-8">Displacement Power Factor C</div>
+                                        <div class="col-4">`+d.Displacement_Power_Factor_C+`</div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="row my-1">
+                                        <div class="col-8">Displacement Power Factor Total</div>
+                                        <div class="col-4">`+d.Displacement_Power_Factor_Total+`</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>`
 
-            '<tr>' +
-            '<td>Current B:</td>' +
-            '<td>-</td>' +
-            '<td>Voltage A-B:</td>' +
-            '<td>'+d.Voltage_A_B+'</td>' +
-            '<td>Voltage A-N:</td>' +
-            '<td>'+d.Voltage_A_N+'</td>' +
-
-            '</tr>' +
-            // '<th'+
+            // '<table cellpadding="5" cellspacing="0" border="0" style="padding-left:50px;">' +
+            // '<tr>' +
             // '<td>Current A:</td>' +
-            // '<td>15</td>'+
-            // '</th>'+
-            '</table>'
+            // '<td>15</td>' +
+            // '<td>Current B:</td>' +
+            // '<td>15</td>' +
+            // '<td>Current C:</td>' +
+            // '<td>15</td>' +
+            // '<td>Current N:</td>' +
+            // '<td>15</td>' +
+            // '<td>Current G:</td>' +
+            // '</tr>' +
+
+            // '<tr>' +
+            // '<td>Current B:</td>' +
+            // '<td>15</td>' +
+            // '<td>Voltage A-B:</td>' +
+            // '<td>15</td>' +
+            // '<td>Voltage A-N:</td>' +
+            // '<td>15</td>' +
+
+            // '</tr>' +
+            // // '<th'+
+            // // '<td>Current A:</td>' +
+            // // '<td>15</td>'+
+            // // '</th>'+
+            // '</table>'
         );
     }
 
