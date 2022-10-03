@@ -29,7 +29,6 @@
 
     svg {
 
-        position: absolute;
         height: auto;
         margin: 0;
         padding: 0;
@@ -55,16 +54,15 @@
     /* Style TDS TSS PH Meter */
     .outer-wrapper {
         display: inline-block;
-        margin: 0px 0px;
-        padding: 0px 0px;
+        margin: auto auto;
+        padding: auto auto;
         background: #eee;
         min-width: 40px;
     }
 
     .column-wrapper {
-        min-height: 69px;
-        max-height: 200px;
-        height: 69px;
+    
+        height : 90px;
         width: 20px;
         background: #CFD8DC;
         transform: rotate(180deg);
@@ -77,7 +75,7 @@
   display: block;
   bottom: 0; */
         width: 20px;
-        height: 0%;
+        height: 100%;
         background: #90A4AE;
         /* transfrom: -moz-translateY(-10px); */
     }
@@ -103,7 +101,7 @@
   display: block;
   bottom: 0; */
         width: 20px;
-        height: 0%;
+        height: 100%;
         background: #90A4AE;
         /* transfrom: -moz-translateY(-10px); */
     }
@@ -129,7 +127,7 @@
   display: block;
   bottom: 0; */
         width: 20px;
-        height: 0%;
+        height: 100%;
         background: #90A4AE;
         /* transfrom: -moz-translateY(-10px); */
     }
@@ -152,127 +150,126 @@
 @stop
 
 @section('content')
-<section class="content">
-    <div class="container-fluid">
+<!-- <section class="content">
+    <div class="container-fluid"> -->
+<div class="row">
 
-        <div class="row">
+    <div class="col-sm-12 col-lg-12">
+        <div class="card">
+            <div class="card-header">
+                <i class="fas fa-chart-bar me-1"></i>
+                Total Penggunaan Air Satu Minggu (L) <br>
+                <?php
+                echo date("d F Y", strtotime('monday this week')), " - ";
+                echo date("d F Y", strtotime('sunday this week'));
+                ?>
 
-            <div class="col-xl">
-                <div class="card mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-chart-bar me-1"></i>
-                        Total Penggunaan Air Satu Minggu (L) <br>
-                        <?php
-                        echo date("d F Y", strtotime('monday this week')), " - ";
-                        echo date("d F Y", strtotime('sunday this week'));
-                        ?>
-
-                    </div>
-                    <div class="card-body"><canvas id="myBarChart" width="100%" height="25%"></canvas></div>
-                </div>
             </div>
+            <div class="card-body"><canvas id="myBarChart" width="100%" height="25%"></canvas></div>
+        </div>
+    </div>
 
+</div>
+
+<div class="row card-deck">
+    <!-- <div class="col-sm-12"> -->
+    <div class="card card-primary card-outline card-outline-tabs col-lg-2">
+        <div class="card-header p-0 border-bottom-0">
+            <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                <li class="nav-item">
+                    <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Pakai</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Masuk</a>
+                </li>
+            </ul>
         </div>
 
-        <div class="row">
-            <div class="col-2">
-                <div class="card h-90 card-primary card-outline card-outline-tabs">
-                    <div class="card-header p-0 border-bottom-0">
-                        <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
-                            <li class="nav-item">
-                                <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Pakai</a>
-                            </li>
-                            <li class="nav-item">
-                                <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Masuk</a>
-                            </li>
-                        </ul>
-                    </div>
+        <div class="tab-content" id="custom-tabs-four-tabContent">
+            <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab" style="height:215px">
 
-                    <div class="tab-content" id="custom-tabs-four-tabContent">
-                        <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab" style="height:215px">
-
-                            <div class="card-header">
-                                <i class="fas fa-chart-area me-1"></i>
-                                Air Dipakai (L/M)
-                            </div>
-                            <div id="gg2" class="gauge2"></div>
-                        </div>
-
-                        <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab" style="height:215px">
-
-                            <div class="card-header">
-                                <i class="fas fa-chart-area me-1"></i>
-                                Air Disimpan (L/M)
-                            </div>
-                            <div id="gg1" class="gauge"></div>
-
-                        </div>
-
-                    </div>
-
+                <div class="card-header">
+                    <i class="fas fa-chart-area me-1"></i>
+                    Air Dipakai (L/M)
                 </div>
+                <div id="gg2" class="gauge2"></div>
             </div>
 
+            <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab" style="height:215px">
 
-
-            <div class="col-7">
-                <div class="card h-90 mb-4" style="min-height:239px;height:auto">
-                    <div class="card-header">
-                        <i class="fas fa-chart-area me-1"></i>
-                        Penggunaan Air Hari Ini (<?php
-                                                    setlocale(LC_ALL, 'id-ID');
-                                                    echo strftime("%A"); ?>)
-                    </div>
-                    <div class="card-body" style="height:auto;">
-                        <div class="chart-container"><canvas id="myAreaChart" min height="90px" height="auto"></canvas></div>
-                    </div>
+                <div class="card-header">
+                    <i class="fas fa-chart-area me-1"></i>
+                    Air Disimpan (L/M)
                 </div>
+                <div id="gg1" class="gauge"></div>
+
             </div>
 
-            <div class="col-3">
-                <div class="card h-90 mb-4">
-                    <div class="card-header">
-                        <i class="fas fa-chart-bar me-1"></i>
-                        Kondisi Air
-                    </div>
-                    <div class="card-body px-0 text-center">
-
-                        <div class="outer-wrapper">
-                            pH
-                            <div class="column-wrapper">
-                                <div class="column"></div>
-                            </div>
-                            <div class="percentage">--</div>
-                            <div class="value">pH</div>
-                        </div>
-
-                        <div class="outer-wrapper">
-                            TSS
-                            <div class="column-wrapper">
-                                <div class="TSScolumn"></div>
-                            </div>
-                            <div class="TSSpercentage">--</div>
-                            <div class="value">NTU</div>
-                        </div>
-
-                        <div class="outer-wrapper">
-                            TDS
-                            <div class="column-wrapper">
-                                <div class="TDScolumn"></div>
-                            </div>
-                            <div class="TDSpercentage">--</div>
-                            <div class="value">ppm</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div>
+    <!-- </div> -->
 
 
-</section>
-@stop
+
+    <!-- <div class="col-sm-12"> -->
+    <div class="card col-lg-7" style="min-height:239px;">
+        <div class="card-header">
+            <i class="fas fa-chart-area me-1"></i>
+            Penggunaan Air Hari Ini (<?php
+                                        setlocale(LC_ALL, 'id-ID');
+                                        echo strftime("%A"); ?>)
+        </div>
+        <div class="card-body" style="height:auto;">
+            <div class="chart-container"><canvas id="myAreaChart" min height="110px" height="auto"></canvas></div>
+        </div>
+    </div>
+    <!-- </div> -->
+
+    <!-- <div class="col-sm-12"> -->
+    <div class="card col-lg-3">
+        <div class="card-header">
+            <i class="fas fa-chart-bar me-1"></i>
+            Kondisi Air
+        </div>
+        <div class="card-body px-0 text-center">
+
+            <div class="outer-wrapper">
+                pH
+                <div class="column-wrapper">
+                    <div class="column"></div>
+                </div>
+                <div class="percentage">--</div>
+                <div class="value">pH</div>
+            </div>
+
+            <div class="outer-wrapper">
+                TSS
+                <div class="column-wrapper">
+                    <div class="TSScolumn"></div>
+                </div>
+                <div class="TSSpercentage">--</div>
+                <div class="value">NTU</div>
+            </div>
+
+            <div class="outer-wrapper">
+                TDS
+                <div class="column-wrapper">
+                    <div class="TDScolumn"></div>
+                </div>
+                <div class="TDSpercentage">--</div>
+                <div class="value">ppm</div>
+            </div>
+        </div>
+    </div>
+    <!-- </div> -->
+</div>
+
+<!-- </div>
+
+
+</section> -->
+@endsection
 
 @section('adminlte_js')
 
@@ -286,7 +283,8 @@
     //     x.style.display = "block"
     // })
 
-
+    var clientHeight = $('.column-wrapper')[0].style.height;
+    console.log(clientHeight);
 
     // Javascript bar chart / barchart
     var ctx = document.getElementById("myBarChart");
@@ -706,6 +704,7 @@
                 $('.TSScolumn').animate({
                     height: TSSrandPercent + '%',
                 });
+                console.log(TSSrandPercent)
 
 
                 $('.TSSpercentage').text(floorTSS);
