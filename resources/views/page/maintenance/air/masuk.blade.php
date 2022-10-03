@@ -61,8 +61,8 @@
     }
 
     .column-wrapper {
-    
-        height : 90px;
+
+        height: 90px;
         width: 20px;
         background: #CFD8DC;
         transform: rotate(180deg);
@@ -352,7 +352,7 @@
 
     function UpdateBarVolume() {
         $.ajax({
-            url: "http://192.168.12.153:90/air/rekap_volume_in",
+            url: "http://192.168.13.2:85/air/rekap_volume_in",
             type: "get",
             success: function(res) {
 
@@ -382,7 +382,7 @@
         })
 
         $.ajax({
-            url: "http://192.168.12.153:90/air/rekap_volume_out",
+            url: "http://192.168.13.2:85/air/rekap_volume_out",
             type: "get",
             success: function(res) {
 
@@ -568,7 +568,7 @@
         //update data
         function updateGaugeIn() {
             $.ajax({
-                url: "http://192.168.12.153:90/air/rekap_debit_in",
+                url: "http://192.168.13.2:85/air/rekap_debit_in",
                 type: "get",
                 success: function(res) {
                     gg1.refresh(res.data2[0].debit);
@@ -593,7 +593,7 @@
 
         function updateGaugeOut() {
             $.ajax({
-                url: "http://192.168.12.153:90/air/rekap_debit_out",
+                url: "http://192.168.13.2:85/air/rekap_debit_out",
                 type: "get",
                 success: function(res) {
                     gg2.refresh(res.data2[0].debit);
@@ -626,7 +626,7 @@
 
     function kualitas() {
         $.ajax({
-            url: "http://192.168.12.153:90/air/rekap_kualitas",
+            url: "http://192.168.13.2:85/air/rekap_kualitas",
             type: "get",
             success: function(res) {
 
