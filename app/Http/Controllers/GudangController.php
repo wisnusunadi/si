@@ -123,8 +123,10 @@ class GudangController extends Controller
                     ->limit(1);
                 }
             ])
-            ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) > count_transfer')
+            ->has('DetailPesananProduk')
+            // ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) > count_transfer')
             ->orderBy(DB::raw('concat(p.nama," ",gdg_barang_jadi.nama)'))
+
             ->get();
             $dt = datatables()->of($data)
                 ->addIndexColumn()
@@ -184,7 +186,7 @@ class GudangController extends Controller
             ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
             ->whereNotIn('log_id', ['10', '20'])
             ->whereNotNull('no_po')
-            ->havingRaw('count_pesanan > count_transfer')
+            // ->havingRaw('count_pesanan > count_transfer')
             ->get();
 
             $dt = datatables()->of($data)
