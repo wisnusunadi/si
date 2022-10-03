@@ -127,7 +127,7 @@
                                 <div class="col-sm-8">
                                     <select type="text" class="form-control @error('form') is-invalid @enderror select2"
                                         name="form" style="width:45%;" id="form">
-                                        <option value=""></option>
+                                        <option value="">Pilih Data</option>
                                         <option value="berat">Berat Badan</option>
                                         <option value="gcu">GCU (Glucose, Cholesterol, Uric ACID)</option>
                                     </select>

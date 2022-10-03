@@ -190,14 +190,12 @@
                         Draf</button>
                 </div>
             </div>
-            <form action="/kesehatan/bulanan/gcu/aksi_tambah" method="post" enctype="multipart/form-data">
-                {{ csrf_field() }}
+            <form action="/kesehatan/bulanan/gcu/aksi_tambah" method="post">
+                @csrf
                 <div class="card">
                     <div class="card-header">
                         <div class="card-title">Draf Pemeriksaan GCU (Glucose, Cholesterol, Uric ACID)</div>
                     </div>
-
-
                     <div class="card-body">
                         <div class="table-responsive">
                             <table class="table table-striped table-hover align-center" id="tabel_gcu">
