@@ -23,9 +23,9 @@
 
 @section('adminlte_css')
 <style>
-    element.gauge {
+    /* element.gauge {
         top: -45px;
-    }
+    } */
 
     svg {
 
@@ -61,7 +61,7 @@
     }
 
     .column-wrapper {
-        height: 285px;
+        height: 57px;
         width: 20px;
         background: #CFD8DC;
         transform: rotate(180deg);
@@ -172,7 +172,7 @@
         </div>
 
         <div class="row">
-            <div class="col-2">
+            <!-- <div class="col-2">
                 <div class="row">
                     <div class="card mb-4">
                         <div class="card-header">
@@ -191,10 +191,50 @@
                         <div id="gg1" class="gauge"></div>
                     </div>
                 </div>
+            </div> -->
+
+            <div class="col-2">
+                <div class="card card-primary card-outline card-outline-tabs">
+                    <div class="card-header p-0 border-bottom-0">
+                        <ul class="nav nav-tabs" id="custom-tabs-four-tab" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link active" id="custom-tabs-four-home-tab" data-toggle="pill" href="#custom-tabs-four-home" role="tab" aria-controls="custom-tabs-four-home" aria-selected="true">Pakai</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="custom-tabs-four-profile-tab" data-toggle="pill" href="#custom-tabs-four-profile" role="tab" aria-controls="custom-tabs-four-profile" aria-selected="false">Masuk</a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <div class="tab-content" id="custom-tabs-four-tabContent">
+                        <div class="tab-pane fade show active" id="custom-tabs-four-home" role="tabpanel" aria-labelledby="custom-tabs-four-home-tab">
+
+                            <div class="card-header">
+                                <i class="fas fa-chart-area me-1"></i>
+                                Air Dipakai (L/M)
+                            </div>
+                            <div id="gg2" class="gauge2"></div>
+                        </div>
+
+                        <div class="tab-pane fade" id="custom-tabs-four-profile" role="tabpanel" aria-labelledby="custom-tabs-four-profile-tab">
+
+                            <div class="card-header">
+                                <i class="fas fa-chart-area me-1"></i>
+                                Air Disimpan (L/M)
+                            </div>
+                            <div id="gg1" class="gauge"></div>
+
+                        </div>
+
+                    </div>
+
+                </div>
             </div>
 
+
+
             <div class="col-7">
-                <div class="card mb-4" style="height:470px;">
+                <div class="card mb-4" style="height:239px;">
                     <div class="card-header">
                         <i class="fas fa-chart-area me-1"></i>
                         Penggunaan Air Hari Ini (<?php
@@ -202,7 +242,7 @@
                                                     echo strftime("%A"); ?>)
                     </div>
                     <div class="card-body">
-                        <div class="chart-container"><canvas id="myAreaChart" height="200px"></canvas></div>
+                        <div class="chart-container"><canvas id="myAreaChart" height="90px"></canvas></div>
                     </div>
                 </div>
             </div>
@@ -213,7 +253,7 @@
                         <i class="fas fa-chart-bar me-1"></i>
                         Kondisi Air
                     </div>
-                    <div class="card-body px-0 text-center" style="height:421px">
+                    <div class="card-body px-0 text-center" style="height:190px">
 
                         <div class="outer-wrapper">
                             pH
@@ -332,7 +372,7 @@
 
     function UpdateBarVolume() {
         $.ajax({
-            url: "http://192.168.1.9:90/air/rekap_volume_in",
+            url: "http://192.168.12.97:90/air/rekap_volume_in",
             type: "get",
             success: function(res) {
 
@@ -362,7 +402,7 @@
         })
 
         $.ajax({
-            url: "http://192.168.1.9:90/air/rekap_volume_out",
+            url: "http://192.168.12.97:90/air/rekap_volume_out",
             type: "get",
             success: function(res) {
 
@@ -496,6 +536,7 @@
             max: 20,
             decimals: 2,
             gaugeWidthScale: 0.6,
+            relativeGaugeSize: true,
             customSectors: [{
                 color: "#00ff00",
                 lo: 0,
@@ -523,6 +564,7 @@
             max: 20,
             decimals: 2,
             gaugeWidthScale: 0.6,
+            relativeGaugeSize: true,
             customSectors: [{
                 color: "#00ff00",
                 lo: 0,
@@ -546,7 +588,7 @@
         //update data
         function updateGaugeIn() {
             $.ajax({
-                url: "http://192.168.1.9:90/air/rekap_debit_in",
+                url: "http://192.168.12.97:90/air/rekap_debit_in",
                 type: "get",
                 success: function(res) {
                     gg1.refresh(res.data2[0].debit);
@@ -571,7 +613,7 @@
 
         function updateGaugeOut() {
             $.ajax({
-                url: "http://192.168.1.9:90/air/rekap_debit_out",
+                url: "http://192.168.12.97:90/air/rekap_debit_out",
                 type: "get",
                 success: function(res) {
                     gg2.refresh(res.data2[0].debit);
@@ -604,7 +646,7 @@
 
     function kualitas() {
         $.ajax({
-            url: "http://192.168.1.9:90/air/rekap_kualitas",
+            url: "http://192.168.12.97:90/air/rekap_kualitas",
             type: "get",
             success: function(res) {
 
