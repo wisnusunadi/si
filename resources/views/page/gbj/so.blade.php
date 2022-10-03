@@ -1131,7 +1131,8 @@
                 processing: "<span class='fa-stack fa-md'>\n\
                                         <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
                                 </span>&emsp;Mohon Tunggu ...",
-            }
+            },
+            "order": [[ 5, 'asc' ]]
         })
         $('#viewDetailBrg').modal('show')
     })
