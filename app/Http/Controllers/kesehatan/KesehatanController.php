@@ -2187,15 +2187,16 @@ class KesehatanController extends Controller
         return response()->json('');
     }
 
-    // public function riwayat_penyakit_data(Request $request)
-    // {
-    //   $riwayat_penyakit = Riwayat_penyakit::where('nama', 'LIKE', '%' . $request->term . '%')->groupby('nama')->get();
+    public function riwayat_penyakit_data(Request $request)
+    {
+      $riwayat_penyakit = Riwayat_penyakit::where('nama', 'LIKE', '%' . $request->term . '%')->groupby('nama')->get();
     //   $data = array();
     //   foreach($riwayat_penyakit as $r){
     //     $data[] = $r->nama;
     //   }
-    //   return response()->json($data);
-    // }
+      return json_encode($riwayat_penyakit);
+
+    }
 
 
 
