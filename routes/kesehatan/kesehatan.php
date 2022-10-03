@@ -6,6 +6,8 @@ use Illuminate\Support\Facades\Auth;
 
 
 Route::group(['prefix' => '/kesehatan'], function () {
+
+
     Route::group(['prefix' => '/klinik'], function () {
         Route::get('/obat_detail', [App\Http\Controllers\kesehatan\KesehatanController::class, 'klinik_obat_detail']);
         Route::get('/diagnosa_detail', [App\Http\Controllers\kesehatan\KesehatanController::class, 'klinik_diagnosa_detail']);
@@ -23,7 +25,6 @@ Route::group(['prefix' => '/kesehatan'], function () {
     Route::get('/data/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'kesehatan_data_detail']);
     //});
 
-    Route::get('/berat/chart/data', [App\Http\Controllers\kesehatan\KesehatanController::class, 'chart_berat_tahun']);
     Route::group(['prefix' => '/vaksin'], function () {
         Route::post('/aksi_tambah', [App\Http\Controllers\kesehatan\KesehatanController::class, 'kesehatan_vaksin_aksi_tambah']);
         Route::get('/chart/data', [App\Http\Controllers\kesehatan\KesehatanController::class, 'chart_vaksin']);
@@ -113,6 +114,9 @@ Route::group(['prefix' => '/karyawan'], function () {
         Route::get('/obat/detail/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'obat_data_detail']);
         Route::post('/aksi_tambah', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_sakit_aksi_tambah']);
         Route::delete('/delete/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_sakit_aksi_delete']);
+        Route::get('/penyakit/top', [App\Http\Controllers\kesehatan\KesehatanController::class, 'penyakit_top']);
+        Route::get('/obat/top', [App\Http\Controllers\kesehatan\KesehatanController::class, 'obat_top']);
+        Route::get('/person/top', [App\Http\Controllers\kesehatan\KesehatanController::class, 'person_top']);
     });
     Route::group(['prefix' => '/masuk'], function () {
         // //Karyawan Masuk
@@ -122,6 +126,7 @@ Route::group(['prefix' => '/karyawan'], function () {
         Route::post('/aksi_tambah', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_masuk_aksi_tambah']);
         Route::get('/detail/data/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_masuk_detail_data']);
         Route::delete('/delete/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_masuk_aksi_delete']);
+        Route::get('/chart_absen', [App\Http\Controllers\kesehatan\KesehatanController::class, 'chart_absen']);
     });
 });
 

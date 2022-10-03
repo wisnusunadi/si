@@ -21,6 +21,7 @@ use App\Models\kesehatan\Vaksin_karyawan;
 use PDF;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class KesehatanController extends Controller
 {
@@ -2110,69 +2111,7 @@ class KesehatanController extends Controller
         }
         return response()->json($data);
     }
-    public function chart_berat_tahun()
-    {
-        //     $data = array();
-        //     $jan = Karyawan::has('Kesehatan_awal')
-        //     ->with('Berat_karyawan',function($q){
-        //         $q->whereMonth('tgl_cek', '1');
-        //         $q->whereYear('tgl_cek', '2022');
-        //     })->get();
 
-
-        //     $obesitas = 0;
-        //     $normal = 0;
-        //     $kurang = 0;
-
-        //     $bulan = ['jan','feb','mar','apr','mei','jun','jul','agu','sept','okt','nov','des'];
-
-
-        //     // for ($i=0;$i<=11;$i++){
-        //     //     $data[$bulan[$i]] =array() ;
-
-        //     //       $data[$bulan[$i]][0]['obesitas'] = 'x';
-        //     //       $data[$bulan[$i]][1]['normal'] = 'x';
-        //     //       $data[$bulan[$i]][2]['kurang'] = 'x';
-        //     // }
-
-        //       // $data[$bulan[0]];
-        //       foreach($jan as $j){
-        //         $data[$bulan[0]]['obesitas'] = $j->id;
-        //         // if ($k->Berat_karyawan->last()){
-        //         //     $bmi = $k->Berat_karyawan->last()->berat  / (($k->Kesehatan_awal->tinggi / 100) * ($k->Kesehatan_awal->tinggi / 100)) ;
-        //         //     if($bmi >= 25){
-        //         //         $data[$bulan[0]][0]['obesitas'] = $obesitas+1;
-        //         //     }else if($bmi >= 18.5 || $bmi <= 24.9){
-        //         //         $data[$bulan[0]][1]['normal'] =  $normal ++;
-        //         //     }else if($bmi >= 18.5 || $bmi < 18.59){
-        //         //         $data[$bulan[0]][2]['kurang']=  $kurang +1;
-        //         //     }
-        //         //  }
-        //         }
-        //     // $obesitas = 0;
-        //     // $normal = 0;
-        //     // $kurang = 0;
-        //     // // foreach($karyawan as $k){
-        //     // //     if ($k->Berat_karyawan->last()){
-        //     // //         $bmi = $k->Berat_karyawan->last()->berat  / (($k->Kesehatan_awal->tinggi / 100) * ($k->Kesehatan_awal->tinggi / 100)) ;
-        //     // //         if($bmi >= 25){
-        //     // //             $data['obesitas'] = $obesitas++;
-        //     // //         }elseif($bmi >= 18.5 || $bmi >= 24.9){
-        //     // //             $data['normal'] =  $normal++;
-        //     // //         }else{
-        //     // //             $data['kurang'] =  $kurang++;
-        //     // //         }
-        //     // //     }else{
-        //     // //         $data['obesitas'] = 0;
-        //     // //         $data['normal'] = 0;
-        //     // //         $data['kurang'] = 0;
-        //     // //     }
-        //     // // }
-        //     // $data_jan = Berat_karyawan::whereBetween('tgl_cek', ["2022-01-01", "2022-12-31"])->get();
-        //     // $data_feb = Berat_karyawan::whereBetween('tgl_cek', ["2022-01-01", "2022-12-31"])->get();
-        //      return response()->json($data);
-        return response()->json('');
-    }
 
     // public function riwayat_penyakit_data(Request $request)
     // {
@@ -2185,5 +2124,110 @@ class KesehatanController extends Controller
     // }
 
 
+    public function chart_absen()
+    {
+        $now = Carbon::now();
+        $tgl_awal = 2022 . "-01-01";
+        $tgl_akhir = 2022 . "-12-31";
 
+        $ijin_data = Karyawan_masuk::whereBetween('tgl_cek', [$tgl_awal, $tgl_akhir])
+            ->where('alasan', 'Ijin')
+            ->select('tgl_cek')
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->tgl_cek)->format('m');
+            });
+
+        $cuti_data = Karyawan_masuk::whereBetween('tgl_cek', [$tgl_awal, $tgl_akhir])
+            ->where('alasan', 'Cuti')
+            ->select('tgl_cek')
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->tgl_cek)->format('m');
+            });
+
+        $sakit_data = Karyawan_masuk::whereBetween('tgl_cek', [$tgl_awal, $tgl_akhir])
+            ->where('alasan', 'Sakit')
+            ->select('tgl_cek')
+            ->get()
+            ->groupBy(function ($date) {
+                return Carbon::parse($date->tgl_cek)->format('m');
+            });
+
+        $data = [];
+        foreach ($ijin_data as $key => $value) {
+            $ijin_count[(int)  $key] = count($value);
+        }
+        foreach ($cuti_data as $key => $value) {
+            $cuti_count[(int)  $key] = count($value);
+        }
+        foreach ($sakit_data as $key => $value) {
+            $sakit_count[(int)  $key] = count($value);
+        }
+
+
+        for ($i = 1; $i <= 12; $i++) {
+            if (!empty($ijin_count[$i])) {
+                $data[$i]['ijin'] = $ijin_count[$i];
+            } else {
+                $data[$i]['ijin'] = 0;
+            }
+            if (!empty($cuti_count[$i])) {
+                $data[$i]['cuti'] = $cuti_count[$i];
+            } else {
+                $data[$i]['cuti'] = 0;
+            }
+            if (!empty($sakit_count[$i])) {
+                $data[$i]['sakit'] = $sakit_count[$i];
+            } else {
+                $data[$i]['sakit'] = 0;
+            }
+            $data[$i];
+        }
+
+        return response()->json($data);
+    }
+
+    public function penyakit_top()
+    {
+
+
+        $data =   Karyawan_sakit::select('diagnosa', DB::raw('count(*) as jumlah'))
+            ->groupBy('diagnosa')
+            ->where('diagnosa', '!=', 'null')
+            ->whereMonth('tgl_cek', '01')
+            ->whereYear('tgl_cek', 2022)
+            ->orderBy('jumlah', 'DESC')
+            ->get();
+        return response()->json($data);
+    }
+
+    public function obat_top()
+    {
+
+
+        $data =   Detail_obat::select('obats.nama', DB::raw('count(*) as jumlah'))
+            ->leftJoin('obats', 'obats.id', '=', 'detail_obats.obat_id')
+            ->leftJoin('karyawan_sakits', 'karyawan_sakits.id', '=', 'detail_obats.karyawan_sakit_id')
+            ->groupBy('obat_id')
+            ->whereMonth('tgl_cek', '01')
+            ->whereYear('tgl_cek', 2022)
+            ->orderBy('jumlah', 'DESC')
+            ->get();
+        return response()->json($data);
+    }
+
+    public function person_top()
+    {
+
+
+        $data =   Karyawan_sakit::select('karyawans.nama', DB::raw('count(*) as jumlah'))
+            ->leftJoin('karyawans', 'karyawans.id', '=', 'karyawan_sakits.karyawan_id')
+            ->groupBy('karyawan_id')
+            ->whereMonth('tgl_cek', '01')
+            ->whereYear('tgl_cek', 2022)
+            ->orderBy('jumlah', 'DESC')
+            ->get();
+        return response()->json($data);
+    }
 }
