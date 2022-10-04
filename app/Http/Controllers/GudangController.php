@@ -106,9 +106,9 @@ class GudangController extends Controller
                     ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
                     ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
                     ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
-                    // ->whereNotNull('pesanan.so')
+                    ->whereNotNull('pesanan.so')
                     ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
-                    ->whereRaw('pesanan.log_id not in ("7", "10") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status != "batal"')
+                    ->whereRaw('pesanan.log_id not in ("7", "10","20") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status != "batal"')
                     ->limit(1);
                 },
                 'count_ekat_nego' => function ($query) {
@@ -119,17 +119,8 @@ class GudangController extends Controller
                     ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
                     ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
                     ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+                    ->whereNotNull('pesanan.so')
                     ->whereRaw('pesanan.log_id in ("7") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status = "negosiasi"')
-                    ->limit(1);
-                },'count_ekat_batal' => function ($query) {
-                    $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
-                    ->from('detail_pesanan')
-                    ->join('detail_pesanan_produk', 'detail_pesanan_produk.detail_pesanan_id', '=', 'detail_pesanan.id')
-                    ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
-                    ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
-                    ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
-                    ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
-                    ->whereRaw('pesanan.log_id in ("7") AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status = "batal"')
                     ->limit(1);
                 },'count_ekat_draft' => function ($query) {
                     $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
@@ -139,6 +130,7 @@ class GudangController extends Controller
                     ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
                     ->join('ekatalog', 'ekatalog.pesanan_id', '=', 'pesanan.id')
                     ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
+                    ->whereNotNull('pesanan.so')
                     ->whereRaw('pesanan.log_id in ("7")  AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id AND ekatalog.status = "draft"')
                     ->limit(1);
                 },
@@ -151,7 +143,7 @@ class GudangController extends Controller
                     ->join('spa', 'spa.pesanan_id', '=', 'pesanan.id')
                     ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
                     ->whereNotNull('pesanan.so')
-                    ->whereRaw('pesanan.log_id not in (7, 10) AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id')
+                    ->whereRaw('pesanan.log_id not in (7, 10,20) AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id')
                     ->limit(1);
                 },'count_spb_po' => function ($query) {
                     $query->selectRaw('sum(detail_pesanan.jumlah * detail_penjualan_produk.jumlah)')
@@ -162,25 +154,25 @@ class GudangController extends Controller
                     ->join('spb', 'spb.pesanan_id', '=', 'pesanan.id')
                     ->whereColumn('detail_pesanan_produk.gudang_barang_jadi_id', 'gdg_barang_jadi.id')
                     ->whereNotNull('pesanan.so')
-                    ->whereRaw('pesanan.log_id not in (7, 10) AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id')
+                    ->whereRaw('pesanan.log_id not in (7, 10,20) AND detail_penjualan_produk.produk_id = gdg_barang_jadi.produk_id')
                     ->limit(1);
                 }
             ])
-            // ->has('DetailPesananProduk')
+            ->has('DetailPesananProduk')
             // ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_ekat_po,0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) != 0')
             // ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_ekat_po,0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) > count_transfer')
-            ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_ekat_nego, 0) + coalesce(count_ekat_draft, 0) + coalesce(count_ekat_po, 0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) > count_transfer')
+            ->havingRaw('(coalesce(count_ekat_sepakat, 0) + coalesce(count_ekat_nego, 0) + coalesce(count_ekat_draft, 0) + coalesce(count_ekat_po, 0) + coalesce(count_spa_po, 0) + coalesce(count_spb_po, 0)) != 0')
             ->orderBy(DB::raw('concat(p.nama," ",gdg_barang_jadi.nama)'))
             ->get();
 
             $dt = datatables()->of($data)
                 ->addIndexColumn()
                 ->editColumn('permintaan', function($d){
-                    $minta = $d->count_ekat_sepakat + $d->count_ekat_po + $d->count_spa_po + $d->count_spb_po;
+                    $minta = intval($d->count_ekat_sepakat) + intval($d->count_ekat_po) + intval($d->count_ekat_nego) + intval($d->count_ekat_draft) + intval($d->count_spa_po) + intval($d->count_spb_po);
                     return $minta;
                 })
                 ->editColumn('sisa', function($d){
-                    $minta = intval($d->count_ekat_sepakat) + intval($d->count_ekat_po) + intval($d->count_spa_po) + intval($d->count_spb_po);
+                    $minta = intval($d->count_ekat_sepakat) + intval($d->count_ekat_po) + intval($d->count_ekat_nego) + intval($d->count_ekat_draft) + intval($d->count_spa_po) + intval($d->count_spb_po);
                     $tf = intval($d->count_transfer);
                     return $minta - $tf;
                 })
@@ -212,8 +204,8 @@ class GudangController extends Controller
                     ->join('detail_penjualan_produk', 'detail_penjualan_produk.penjualan_produk_id', '=', 'detail_pesanan.penjualan_produk_id')
                     ->join('gdg_barang_jadi', 'gdg_barang_jadi.produk_id', '=', 'detail_penjualan_produk.produk_id')
                     ->whereRaw('gdg_barang_jadi.id = '.$id.' AND detail_pesanan_produk.gudang_barang_jadi_id = '. $id)
+                    // ->whereNotNull('pesanan.no_po')
                     ->whereColumn('detail_pesanan.pesanan_id', 'pesanan.id')
-                    ->whereNotNull('pesanan.so')
                     ->limit(1);
                 }, 'count_transfer' => function($q) use($id){
                     $q->selectRaw('count(t_gbj_noseri.id)')
@@ -234,8 +226,8 @@ class GudangController extends Controller
             ])
             ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
             ->whereNotIn('log_id', ['10', '20'])
-            ->whereNotNull('so')
-            ->havingRaw('count_pesanan > count_transfer')
+            ->whereNotNull('pesanan.so')
+            // ->havingRaw('count_pesanan > count_transfer')
             ->get();
 
             $dt = datatables()->of($data)

@@ -372,25 +372,59 @@
         </button> --}}
     </div>
     <div class="modal-body">
-        <table class="table table-striped" id="reakpdetail-produk">
-            <thead>
-                <tr align="center">
-                    <th rowspan="2" style="vertical-align : middle;text-align:center;">No</th>
-                    <th colspan="2">Nomor</th>
-                    <th rowspan="2" style="vertical-align : middle;text-align:center;">Customer</th>
-                    <th colspan="2">Jumlah</th>
-                    <th rowspan="2" style="vertical-align : middle;text-align:center;">Aksi</th>
-                </tr>
-                <tr align="center">
-                    <th>Sales Order</th>
-                    <th>Purchase Order</th>
-                    <th>Pesanan</th>
-                    <th>Terkirim</th>
-                </tr>
-            </thead>
-            <tbody>
-            </tbody>
-        </table>
+        <div class="card">
+            <div class="card-header">
+                <div class="row row-cols-3">
+                    {{-- col --}}
+                    <div class="col"> <label for="">Total Permintaan</label>
+                        <div class="card nomor-so">
+                            <div class="card-body">
+                                <span id="total_tf"></span>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- col --}}
+                    <div class="col"> <label for="">Belum Terpenuhi</label>
+                        <div class="card nomor-akn">
+                            <div class="card-body">
+                                <span id="belum_tf"></span>
+                            </div>
+                        </div>
+                    </div>
+                    {{-- col --}}
+                    <div class="col"> <label for="">Sudah Terpenuhi</label>
+                        <div class="card nomor-po">
+                            <div class="card-body">
+                                <span id="sudah_tf"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card-body">
+                <table class="table table-striped" id="reakpdetail-produk">
+                    <thead>
+                        <tr align="center">
+                            <th rowspan="2" style="vertical-align : middle;text-align:center;">No</th>
+                            <th colspan="2">Nomor</th>
+                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Customer</th>
+                            <th colspan="2">Jumlah</th>
+                            <th rowspan="2" style="vertical-align : middle;text-align:center;">Aksi</th>
+                        </tr>
+                        <tr align="center">
+                            <th>Sales Order</th>
+                            <th>Purchase Order</th>
+                            <th>Pesanan</th>
+                            <th>Terkirim</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
     </div>
     <div class="modal-footer">
         <button type="button" class="btn btn-secondary close1">Close</button>
@@ -1102,7 +1136,13 @@
     $(document).on('click', '.detailBrg', function(e) {
         idd = $(this).data('id')
         prd = $(this).parent().prev().prev().prev().prev().text()
+        all = $(this).parent().prev().prev().prev().text()
+        done = $(this).parent().prev().text()
+        undone = $(this).parent().prev().prev().text()
         $('#titlebrg').html(prd)
+        $('#total_tf').html(all + ' Unit')
+        $('#belum_tf').html(undone + ' Unit')
+        $('#sudah_tf').html(done + ' Unit')
         // console.log(prd);
         $('#reakpdetail-produk').DataTable({
             destroy: true,
