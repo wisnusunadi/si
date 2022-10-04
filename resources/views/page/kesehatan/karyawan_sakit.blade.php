@@ -225,22 +225,33 @@
                                         </div>
                                         <div class="row">
                                             <div class="col-12">
-                                                <div class="table-responsive">
-                                                    <table class="table table-hover styled-table table-striped" width="100%"
-                                                    id="tabel_detail_obat">
-                                                        <thead>
-                                                            <tr>
-                                                                <th>No</th>
-                                                                <th>Nama</th>
-                                                                <th>Jumlah</th>
-                                                                <th>Aturan</th>
-                                                                <th>Konsumsi</th>
-                                                                <th></th>
-                                                            </tr>
-                                                        </thead>
-                                                        <tbody>
-                                                        </tbody>
-                                                    </table>
+                                                <div class="card" id="detail_obat">
+                                                    <div class="card-header">
+                                                        <h6 class="card-title">Obat</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover styled-table table-striped" width="100%"
+                                                            id="tabel_detail_obat">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>No</th>
+                                                                        <th>Nama</th>
+                                                                        <th>Jumlah</th>
+                                                                        <th>Aturan</th>
+                                                                        <th>Konsumsi</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="callout callout-info" height="100%" id="detail_terapi">
+                                                    <h6>Terapi</h6>
+                                                    <div id="terapi" class="font-weight-bold"></div>
                                                 </div>
                                             </div>
                                         </div>
@@ -399,7 +410,7 @@
             $('#tabel_obat > tbody').on('click', '#detail_tindakan', function() {
                 var rows = tabel_obat.rows($(this).parents('tr')).data();
                 $('.data_detail_head').html(
-                    rows[0]['tindakan'] + ' : ' + rows[0]['y']
+                    "Karyawan Berobat"
                 );
                 var diagnosa = rows[0]['diagnosa'] != null ? rows[0]['diagnosa'] : '<i>Tidak Ada Diagnosa</i>';
                 var analisa = rows[0]['analisa'] != null ? rows[0]['analisa'] : '<i>Tidak Ada Analisa</i>';
@@ -409,36 +420,45 @@
                 $('#divisi').html(rows[0]['x']);
                 $('#pemeriksa').html(rows[0]['z']);
                 $('#tanggal').html(rows[0]['tgl_cek']);
-                $('#tabel_detail_obat').DataTable({
-                    processing: true,
-                    destroy: true,
-                    serverSide: false,
-                    language: {
-                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                    },
-                    ajax: '/karyawan/sakit/obat/detail/' + rows[0]['id'],
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            orderable: false,
-                            searchable: false
+                if(rows[0]['tindakan'] == "Pengobatan"){
+                    $('#detail_obat').removeClass('d-none');
+                    $('#detail_terapi').addClass('d-none');
+                    $('#tabel_detail_obat').DataTable({
+                        processing: true,
+                        destroy: true,
+                        serverSide: false,
+                        language: {
+                            processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                         },
-                        {
-                            data: 'x',
-                        },
-                        {
-                            data: 'jumlah',
-                        },
-                        {
-                            data: 'aturan',
-                        },
-                        {
-                            data: 'konsumsi',
-                        },
-                        {
-                            data: 'aksi',
-                        },
-                    ],
-                });
+                        ajax: '/karyawan/sakit/obat/detail/' + rows[0]['id'],
+                        columns: [{
+                                data: 'DT_RowIndex',
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                data: 'x',
+                            },
+                            {
+                                data: 'jumlah',
+                            },
+                            {
+                                data: 'aturan',
+                            },
+                            {
+                                data: 'konsumsi',
+                            },
+                            {
+                                data: 'aksi',
+                            },
+                        ],
+                    });
+                }else{
+                    $('#detail_obat').addClass('d-none');
+                    $('#detail_terapi').removeClass('d-none');
+                    $('#terapi').html(rows[0]['terapi']);
+                }
+
                 $('#detail_mod').modal('show');
                 // $('input[id="nama_obat"]').val(rows[0]['o']);
                 // $('input[id="aturan"]').val(rows[0]['d']);
@@ -556,9 +576,9 @@
             });
             $('#tabel_sakit > tbody').on('click', '#detail_tindakan', function() {
                 var rows = tabel_sakit.rows($(this).parents('tr')).data();
-                console.log(rows);
+                var keputusan = rows[0]['tindakan'] == "Lanjut Bekerja" ? 'Karyawan Berobat' : 'Karyawan Sakit';
                 $('.data_detail_head').html(
-                    rows[0]['tindakan'] + ' : ' + rows[0]['y']
+                    "Karyawan Sakit"
                 );
                 var diagnosa = rows[0]['diagnosa'] != null ? rows[0]['diagnosa'] : '<i>Tidak Ada Diagnosa</i>';
                 var analisa = rows[0]['analisa'] != null ? rows[0]['analisa'] : '<i>Tidak Ada Analisa</i>'

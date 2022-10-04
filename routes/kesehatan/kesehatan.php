@@ -35,9 +35,13 @@ Route::group(['prefix' => '/kesehatan'], function () {
     Route::group(['prefix' => '/riwayat_penyakit'], function () {
         Route::post('/aksi_tambah', [App\Http\Controllers\kesehatan\KesehatanController::class, 'kesehatan_riwayat_penyakit_aksi_tambah']);
         Route::delete('/delete/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'kesehatan_riwayat_penyakit_aksi_hapus']);
-        //   Route::get('/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'riwayat_penyakit_data']);
-
+        Route::get('/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'riwayat_penyakit_data']);
     });
+
+    Route::group(['prefix' => '/riwayat_analisa'], function () {
+        Route::get('/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'riwayat_analisa_data']);
+    });
+
 
 
     Route::group(['prefix' => '/laporan'], function () {

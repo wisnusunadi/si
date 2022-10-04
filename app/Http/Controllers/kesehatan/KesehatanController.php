@@ -2128,6 +2128,17 @@ class KesehatanController extends Controller
 
     }
 
+    public function riwayat_analisa_data(Request $request)
+    {
+      $data = Karyawan_sakit::where('analisa', 'LIKE', '%' . $request->term . '%')->groupby('analisa')->get();
+    //   $data = array();
+    //   foreach($riwayat_penyakit as $r){
+    //     $data[] = $r->nama;
+    //   }
+      return json_encode($data);
+
+    }
+
 
     public function chart_absen()
     {
