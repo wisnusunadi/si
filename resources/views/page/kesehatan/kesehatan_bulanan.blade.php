@@ -474,7 +474,7 @@
     <div class="modal fade  bd-example-modal-lg" id="detail_mod_gcu" tabindex="-1" role="dialog"
         aria-labelledby="myModalLabel">
         <div class="modal-dialog modal-lg" role="document">
-            <form method="post" action="/kesehatan/bulanan/gcu/aksi_ubah">
+            <form method="post" action="/kesehatan/bulanan/gcu/aksi_ubah" id>
                 {{ csrf_field() }}
                 {{ method_field('PUT') }}
                 <div class="modal-content">

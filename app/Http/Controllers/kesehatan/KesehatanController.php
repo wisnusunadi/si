@@ -960,7 +960,7 @@ class KesehatanController extends Controller
             ->addColumn('cetak', function ($data) {
 
                 $btn = '<div class="btn-group">
-                <span><button type="button" id="detail_tindakan"  class="btn btn-xs btn-outline-info m-1"><i class="fas fa-eye"></i> Penanganan</button></span>';
+                <span><button type="button" id="detail_tindakan"  class="btn btn-xs btn-outline-info m-1"><i class="fas fa-eye"></i> Detail</button></span>';
                 if ($data->keputusan == 'Dipulangkan') {
                     $btn .= '<a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" class="btn btn-xs btn-warning m-1" id="cetak_gcu"><i class="fas fa-print"></i> Cetak</button></a>';
                 }
@@ -1007,6 +1007,10 @@ class KesehatanController extends Controller
                 }
                 return $x;
             })
+            ->addColumn('aksi', function($data){
+                return '<i class="fas fa-trash text-danger" id="delete" data-id="'.$data->id.'"></i>';
+            })
+            ->rawColumns(['aksi'])
             ->make(true);
     }
     public function karyawan_sakit_aksi_tambah(Request $request)
@@ -1095,7 +1099,7 @@ class KesehatanController extends Controller
     }
     public function karyawan_masuk_data()
     {
-        $data = Karyawan_masuk::with(['Karyawan.Divisi', 'Pemeriksa'])->orderBy('tgl_cek', 'DESC');
+        $data = Karyawan_masuk::with(['Karyawan.Divisi', 'Pemeriksa', 'Karyawan_sakit'])->orderBy('tgl_cek', 'DESC');
         return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('tgl_cek', function ($data) {
@@ -2113,15 +2117,27 @@ class KesehatanController extends Controller
     }
 
 
-    // public function riwayat_penyakit_data(Request $request)
-    // {
-    //   $riwayat_penyakit = Riwayat_penyakit::where('nama', 'LIKE', '%' . $request->term . '%')->groupby('nama')->get();
+    public function riwayat_penyakit_data(Request $request)
+    {
+      $riwayat_penyakit = Riwayat_penyakit::where('nama', 'LIKE', '%' . $request->term . '%')->groupby('nama')->get();
     //   $data = array();
     //   foreach($riwayat_penyakit as $r){
     //     $data[] = $r->nama;
     //   }
-    //   return response()->json($data);
-    // }
+      return json_encode($riwayat_penyakit);
+
+    }
+
+    public function riwayat_analisa_data(Request $request)
+    {
+      $data = Karyawan_sakit::where('analisa', 'LIKE', '%' . $request->term . '%')->groupby('analisa')->get();
+    //   $data = array();
+    //   foreach($riwayat_penyakit as $r){
+    //     $data[] = $r->nama;
+    //   }
+      return json_encode($data);
+
+    }
 
 
     public function chart_absen()

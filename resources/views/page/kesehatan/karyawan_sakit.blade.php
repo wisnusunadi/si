@@ -18,6 +18,17 @@
 @stop
 @section('adminlte_css')
     <style>
+        .equal{
+            display: flex;
+            display: -webkit-flex;
+            flex-wrap: wrap;
+        }
+        .minimizechar {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 20ch !important;
+        }
         table {
             border-collapse: collapse;
             empty-cells: show;
@@ -112,7 +123,7 @@
                         <div class="tab-pane fade show active" id="pills-berobat" role="tabpanel"
                             aria-labelledby="pills-berobat-tab">
                             <div class='table-responsive'>
-                                <table id="tabel" class="table table-hover styled-table table-striped">
+                                <table id="tabel_obat" class="table table-hover styled-table table-striped" width="100%">
                                     <thead style="text-align: center;">
                                         <tr>
                                             <th style="width:1%">No</th>
@@ -135,7 +146,7 @@
                         <div class="tab-pane fade" id="pills-sakit" role="tabpanel" aria-labelledby="pills-sakit-tab">
                             <div class='table-responsive'>
                                 <table id="tabel_sakit" class="table table-hover styled-table table-striped"
-                                    style="width:100%">
+                                    width="100%">
                                     <thead style="text-align: center;">
                                         <tr>
                                             <th style="width:1%">No</th>
@@ -177,21 +188,76 @@
                                     aria-hidden="true">&times;</span></button>
                         </div>
                         <div class="modal-body">
-                            <table class="table table-hover styled-table table-striped" width="100%"
-                                id="tabel_detail_obat">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Nama</th>
-                                        <th>Jumlah</th>
-                                        <th>Aturan</th>
-                                        <th>Konsumsi</th>
-                                        <th></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
+                            <div class="row">
+                                <div class="col-lg-3">
+                                    <div class="card">
+
+                                        <div class="card-body">
+                                        <dl>
+                                        <dt>Nama Pasien</dt>
+                                        <dd id="pasien"></dd>
+                                        <dt>Divisi</dt>
+                                        <dd id="divisi"></dd>
+                                        <dt>Tanggal</dt>
+                                        <dd id="tanggal"></dd>
+                                        <dt>Pemeriksa</dt>
+                                        <dd id="pemeriksa"></dd>
+                                        </dl>
+                                        </div>
+
+                                        </div>
+                                </div>
+                                <div class="col-lg-9">
+
+                                        <div class="row equal">
+                                        <div class="col-6">
+                                            <div class="callout callout-warning" height="100%">
+                                                <h6>Analisa</h6>
+                                                <div id="analisa" class="font-weight-bold"></div>
+                                            </div>
+                                        </div>
+                                            <div class="col-6">
+                                            <div class="callout callout-danger" height="100%">
+                                                <h6>Diagnosa</h6>
+                                                <div id="diagnosa" class="font-weight-bold"></div>
+                                            </div>
+                                        </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-12">
+                                                <div class="card" id="detail_obat">
+                                                    <div class="card-header">
+                                                        <h6 class="card-title">Obat</h6>
+                                                    </div>
+                                                    <div class="card-body">
+                                                        <div class="table-responsive">
+                                                            <table class="table table-hover styled-table table-striped" width="100%"
+                                                            id="tabel_detail_obat">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th>No</th>
+                                                                        <th>Nama</th>
+                                                                        <th>Jumlah</th>
+                                                                        <th>Aturan</th>
+                                                                        <th>Konsumsi</th>
+                                                                        <th></th>
+                                                                    </tr>
+                                                                </thead>
+                                                                <tbody>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="callout callout-info" height="100%" id="detail_terapi">
+                                                    <h6>Terapi</h6>
+                                                    <div id="terapi" class="font-weight-bold"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </form>
@@ -203,7 +269,7 @@
 @section('adminlte_js')
     <script>
         $(function() {
-            $('#tabel > tbody').on('click', '#delete', function() {
+            $('#tabel_obat > tbody').on('click', '#delete', function() {
                 var data_id = $(this).attr('data-id');
                 Swal.fire({
                         title: 'Hapus Data',
@@ -291,7 +357,7 @@
                         }
                     });
             });
-            var tabel = $('#tabel').DataTable({
+            var tabel_obat = $('#tabel_obat').DataTable({
                 processing: true,
                 serverSide: true,
                 language: {
@@ -322,10 +388,12 @@
                         data: 'z'
                     },
                     {
-                        data: 'analisa'
+                        data: 'analisa',
+                        className: 'minimizechar'
                     },
                     {
-                        data: 'diagnosa'
+                        data: 'diagnosa',
+                        className: 'minimizechar'
                     },
                     {
                         data: 'detail_button'
@@ -339,50 +407,125 @@
                     }
                 ]
             });
-            $('#tabel > tbody').on('click', '#detail_tindakan', function() {
-                var rows = tabel.rows($(this).parents('tr')).data();
-                console.log(rows);
+            $('#tabel_obat > tbody').on('click', '#detail_tindakan', function() {
+                var rows = tabel_obat.rows($(this).parents('tr')).data();
                 $('.data_detail_head').html(
-                    rows[0]['tindakan'] + ' : ' + rows[0]['y']
+                    "Karyawan Berobat"
                 );
-                $('#tabel_detail_obat').DataTable({
-                    processing: true,
-                    destroy: true,
-                    serverSide: false,
-                    language: {
-                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                    },
-                    ajax: '/karyawan/sakit/obat/detail/' + rows[0]['id'],
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            orderable: false,
-                            searchable: false
+                var diagnosa = rows[0]['diagnosa'] != null ? rows[0]['diagnosa'] : '<i>Tidak Ada Diagnosa</i>';
+                var analisa = rows[0]['analisa'] != null ? rows[0]['analisa'] : '<i>Tidak Ada Analisa</i>';
+                $('#analisa').html(analisa);
+                $('#diagnosa').html(diagnosa);
+                $('#pasien').html(rows[0]['y']);
+                $('#divisi').html(rows[0]['x']);
+                $('#pemeriksa').html(rows[0]['z']);
+                $('#tanggal').html(rows[0]['tgl_cek']);
+                if(rows[0]['tindakan'] == "Pengobatan"){
+                    $('#detail_obat').removeClass('d-none');
+                    $('#detail_terapi').addClass('d-none');
+                    $('#tabel_detail_obat').DataTable({
+                        processing: true,
+                        destroy: true,
+                        serverSide: false,
+                        language: {
+                            processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                         },
-                        {
-                            data: 'x',
-                        },
-                        {
-                            data: 'jumlah',
-                        },
-                        {
-                            data: 'aturan',
-                        },
-                        {
-                            data: 'konsumsi',
-                        },
-                        {
-                            data: 'aksi',
-                        },
-                    ],
-                });
+                        ajax: '/karyawan/sakit/obat/detail/' + rows[0]['id'],
+                        columns: [{
+                                data: 'DT_RowIndex',
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                data: 'x',
+                            },
+                            {
+                                data: 'jumlah',
+                            },
+                            {
+                                data: 'aturan',
+                            },
+                            {
+                                data: 'konsumsi',
+                            },
+                            {
+                                data: 'aksi',
+                            },
+                        ],
+                    });
+                }else{
+                    $('#detail_obat').addClass('d-none');
+                    $('#detail_terapi').removeClass('d-none');
+                    $('#terapi').html(rows[0]['terapi']);
+                }
+
                 $('#detail_mod').modal('show');
                 // $('input[id="nama_obat"]').val(rows[0]['o']);
                 // $('input[id="aturan"]').val(rows[0]['d']);
                 // $('input[id="konsumsi"]').val(rows[0]['e']);
                 // $('input[id="terapi"]').val(rows[0]['f']);
             });
-
-            var tabel = $('#tabel_sakit').DataTable({
+            $('#tabel_sakit > tbody').on('click', '#delete', function() {
+                var data_id = $(this).attr('data-id');
+                Swal.fire({
+                        title: 'Hapus Data',
+                        text: 'Yakin ingin menghapus data ini?',
+                        icon: 'warning',
+                        confirmButtonText: 'Ya',
+                        cancelButtonText: 'Tidak',
+                        showCancelButton: true,
+                        showCloseButton: true
+                    })
+                    .then((result) => {
+                        if (result.isConfirmed) {
+                            $.ajax({
+                                url: '/karyawan/sakit/delete/' + data_id,
+                                type: 'DELETE',
+                                headers: {
+                                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                                },
+                                success: function(response) {
+                                    if (response['data'] == "success") {
+                                        swal.fire(
+                                            'Berhasil',
+                                            'Berhasil melakukan Hapus Data',
+                                            'success'
+                                        );
+                                        $('#tabel_detail').DataTable().ajax.reload();
+                                        $("#hapusmodal").modal('hide');
+                                    } else if (response['data'] == "error") {
+                                        swal.fire(
+                                            'Gagal',
+                                            'Data telah digunakan dalam Transaksi Lain',
+                                            'error'
+                                        );
+                                    } else {
+                                        swal.fire(
+                                            'Error',
+                                            'Data telah digunakan dalam Transaksi Lain',
+                                            'warning'
+                                        );
+                                    }
+                                },
+                                error: function(xhr, status, error) {
+                                    swal.fire(
+                                        'Error',
+                                        'Data telah digunakan dalam Transaksi Lain',
+                                        'warning'
+                                    );
+                                }
+                            });
+                        } else if (result.dismiss === Swal.DismissReason.cancel) {
+                            Swal.fire({
+                                title: 'Gagal',
+                                text: 'Gagal menghapus data',
+                                icon: 'error',
+                                showCloseButton: true
+                            });
+                        }
+                    });
+            });
+            var tabel_sakit = $('#tabel_sakit').DataTable({
                 processing: true,
                 serverSide: true,
                 language: {
@@ -413,10 +556,12 @@
                         data: 'z'
                     },
                     {
-                        data: 'analisa'
+                        data: 'analisa',
+                        className: 'minimizechar'
                     },
                     {
-                        data: 'diagnosa'
+                        data: 'diagnosa',
+                        className: 'minimizechar'
                     },
                     {
                         data: 'detail_button'
@@ -428,6 +573,64 @@
                         data: 'cetak'
                     }
                 ]
+            });
+            $('#tabel_sakit > tbody').on('click', '#detail_tindakan', function() {
+                var rows = tabel_sakit.rows($(this).parents('tr')).data();
+                var keputusan = rows[0]['tindakan'] == "Lanjut Bekerja" ? 'Karyawan Berobat' : 'Karyawan Sakit';
+                $('.data_detail_head').html(
+                    "Karyawan Sakit"
+                );
+                var diagnosa = rows[0]['diagnosa'] != null ? rows[0]['diagnosa'] : '<i>Tidak Ada Diagnosa</i>';
+                var analisa = rows[0]['analisa'] != null ? rows[0]['analisa'] : '<i>Tidak Ada Analisa</i>'
+                $('#analisa').html(analisa);
+                $('#diagnosa').html(diagnosa);
+                $('#pasien').html(rows[0]['y']);
+                $('#divisi').html(rows[0]['x']);
+                $('#pemeriksa').html(rows[0]['z']);
+                $('#tanggal').html(rows[0]['tgl_cek']);
+                if(rows[0]['tindakan'] == "Pengobatan"){
+                    $('#detail_obat').removeClass('d-none');
+                    $('#detail_terapi').addClass('d-none');
+                    $('#tabel_detail_obat').DataTable({
+                        processing: true,
+                        destroy: true,
+                        serverSide: false,
+                        language: {
+                            processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                        },
+                        ajax: '/karyawan/sakit/obat/detail/' + rows[0]['id'],
+                        columns: [{
+                                data: 'DT_RowIndex',
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                data: 'x',
+                            },
+                            {
+                                data: 'jumlah',
+                            },
+                            {
+                                data: 'aturan',
+                            },
+                            {
+                                data: 'konsumsi',
+                            },
+                            {
+                                data: 'aksi',
+                            },
+                        ],
+                    });
+                }else{
+                    $('#detail_obat').addClass('d-none');
+                    $('#detail_terapi').removeClass('d-none');
+                    $('#terapi').html(rows[0]['terapi']);
+                }
+                $('#detail_mod').modal('show');
+                // $('input[id="nama_obat"]').val(rows[0]['o']);
+                // $('input[id="aturan"]').val(rows[0]['d']);
+                // $('input[id="konsumsi"]').val(rows[0]['e']);
+                // $('input[id="terapi"]').val(rows[0]['f']);
             });
         });
     </script>

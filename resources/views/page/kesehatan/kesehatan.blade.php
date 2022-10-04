@@ -510,10 +510,8 @@
                                             </div>
                                         </div>
                                         <div class="card-footer">
-                                            <button class="btn btn-sm btn-danger" id="btnbatal"
-                                                data-dismiss="modal">Batal</button>
-                                            <button class="btn btn-primary float-right" id="button_tambah"
-                                                type="submit">Simpan Data</button></span>
+                                            <button class="btn btn-sm btn-danger" id="btnbatal" data-dismiss="modal">Batal</button>
+                                            <button class="btn btn-primary float-right" id="button_tambah" type="submit" disabled="true">Simpan Data</button>
                                         </div>
                                     </div>
                                 </form>
@@ -662,10 +660,8 @@
                                             </div>
                                         </div>
                                         <div class="card-footer">
-                                            <button class="btn btn-sm btn-danger" id="btnbatal"
-                                                data-dismiss="modal">Batal</button>
-                                            <button class="btn btn-primary float-right" id="button_tambah"
-                                                type="submit">Simpan Data</button></span>
+                                            <button class="btn btn-sm btn-danger" id="btnbatal" data-dismiss="modal">Batal</button>
+                                            <button class="btn btn-primary float-right" id="button_tambah_penyakit" type="submit" disabled="true">Simpan Data</button></span>
                                         </div>
                                     </form>
                                 </div>
@@ -1021,59 +1017,63 @@
                     placeholder: 'Pilih Urutan Vaksin'
                 });
             })
-            $('#tambahitem_vaksin').click(function(e) {
-                var date_form = $('#date_form').val();
-                var dosis_form = $('#dosis_form').val();
-                var ket_form = $('#ket_form').val();
 
-                const day = new Date(date_form).getDate();
-                const month = (new Date(date_form).getMonth() + 1).toString().padStart(2, "0");
-                const year = new Date(date_form).getFullYear();
-
-                const date_format = day + "-" + month + "-" + year;
-
-                var data = `  <tr>
-            <td>1</td>
-            <td>` + date_format + `<input type="date" class="form-control date d-none" name="date[]" value="` +
-                    date_form + `"></td>
-            <td>` + dosis_form + `<input type="text" class="form-control dosis_table d-none" name="dosis[]" value="` +
-                    dosis_form + `"></td>
-            <td>` + ket_form + `<input type="text" class="form-control ket_table d-none" name="ket[]" value="` +
-                    ket_form + `"></td>
-            <td><i class="fas fa-minus text-danger" id="closetable_vaksin"></i></td>
-        </tr>`;
-
-                if (date_form != '' && ket_form != '') {
-                    $('#date_form').val('');
-                    $('#dosis_form').val('');
-                    $('#ket_form').val('');
-                    if ($('#tabel_vaksin > tbody > tr > td > .date').length <= 0) {
-                        $('#tabel_vaksin > tbody > tr').remove();
-                        $('#tabel_vaksin tbody').append(data);
-                    } else {
-                        $('#tabel_vaksin tbody tr:last').after(data);
+            function validasiform(array){
+                for(var i=0; i < array.length; i++){
+                    if(array[i] == '' || array[i] == null){
+                        return false;
+                        break;
                     }
-                    numberRow_vaksin($("#tabel_vaksin"));
-                } else {
-                    swal.fire(
-                        'Gagal',
-                        'Lengkapi form',
-                        'warning'
-                    );
-
                 }
+            }
+            $('#tambahitem_vaksin').click(function(e) {
+        var date_form = $('#date_form').val();
+        var dosis_form = $('#dosis_form').val();
+        var ket_form = $('#ket_form').val();
 
+        var validasi_form = validasiform([date_form, dosis_form, ket_form]);
+        if(validasi_form == false){
+            swal.fire(
+                'Gagal',
+                'Lengkapi form',
+                'warning'
+            );
+        }else{
+            const day = new Date(date_form).getDate();
+            const month = (new Date(date_form).getMonth() + 1).toString().padStart(2,"0");
+            const year = new Date(date_form).getFullYear();
 
-            });
+            const date_format = day+"-"+month+"-"+year;
+            $('#date_form').val('');
+            $('#dosis_form').val('');
+            $('#ket_form').val('');
+            var data = `  <tr>
+                <td>1</td>
+                <td>`+date_format+`<input type="date" class="form-control date d-none" name="date[]" value="`+date_form+`"></td>
+                <td>`+dosis_form+`<input type="text" class="form-control dosis_table d-none" name="dosis[]" value="`+dosis_form+`"></td>
+                <td>`+ket_form+`<input type="text" class="form-control ket_table d-none" name="ket[]" value="`+ket_form+`"></td>
+                <td><i class="fas fa-minus text-danger" id="closetable_vaksin"></i></td>
+            </tr>`;
 
-            $('#tabel_vaksin').on('click', '#closetable_vaksin', function(e) {
-                $(this).closest('tr').remove();
-                numberRow_vaksin($("#tabel_vaksin"));
-                if ($('#tabel_vaksin > tbody > tr').length <= 0) {
-                    $('#tabel_vaksin tbody').append(
-                        '<tr><td colspan="5">Belum Ada Data Ditambahkan</td></tr>');
-                }
-            });
+            if($('#tabel_vaksin > tbody > tr > td > .date').length <= 0){
+                $('#tabel_vaksin > tbody > tr').remove();
+                $('#tabel_vaksin tbody').append(data);
+            }else{
+                $('#tabel_vaksin tbody tr:last').after(data);
+            }
+            $('#button_tambah').attr('disabled', false);
+            numberRow_vaksin($("#tabel_vaksin"));
+        }
+    });
+
+    $('#tabel_vaksin').on('click', '#closetable_vaksin', function(e) {
+        $(this).closest('tr').remove();
+        numberRow_vaksin($("#tabel_vaksin"));
+        if($('#tabel_vaksin > tbody > tr').length <= 0){
+            $('#button_tambah').attr('disabled', true);
+            $('#tabel_vaksin tbody').append('<tr><td colspan="5">Belum Ada Data Ditambahkan</td></tr>');
+        }
+    });
 
             function numberRow_penyakit($t) {
                 var c = 0 - 1;
@@ -1085,7 +1085,7 @@
                     $(el).find('.keterangan').attr('name', 'keterangan[' + j + ']');
                     $(el).find('.kriteria').attr('name', 'kriteria[' + j + ']');
                     // $(el).find('input[type="radio"]').attr('name', 'kriteria[' + j + ']');
-                    $('.jenis').select2();
+                    $('.jenis').select2({allowClear: true, placeholder: 'Pilih Jenis Penyakit'});
                 });
             }
 
@@ -1093,7 +1093,7 @@
                 $('#nama_form').val('');
                 $('input[type="radio"][name="kriteria_form"]').prop('checked', false);
                 $('#keterangan_form').val('');
-                $('.jenis').select2();
+                $('.jenis').select2({allowClear: true, placeholder: 'Pilih Jenis Penyakit'});
             }
             $(document).on('click', '#btnreset_penyakit', function() {
                 resetpenyakit();
@@ -1116,51 +1116,45 @@
 
 
 
-                var data = `<tr>
-            <td>1</td>
-            <td>` + nama_form + `<input type="text" class="form-control d-none nama" name="nama[]" id="nama" value="` +
-                    nama_form + `"></td>
-            <td>` + jenis_form +
-                    `<input type="text" class="form-control d-none jenis_table" name="jenis[]" id="jenis" value="` +
-                    jenis_form + `"></td>
-            <td>` + kriteria_exp +
-                    `<input type="text" class="form-control d-none kriteria" name="kriteria[]" id="kriteria" value="` +
-                    kriteria_form + `"></td>
-            <td>` + keterangan_form +
-                    `<input type="text" class="form-control d-none keterangan" name="keterangan[]" id ="kriteria" value="` +
-                    keterangan_form + `"></td>
-            <td>
-                <i class="fas fa-minus text-danger" id="closetable_penyakit"></i>
-            </td>
-        </tr>`;
-
-                if (nama_form != '' && kriteria_exp != "") {
-                    $('#nama_form').val('');
-                    $('input[type="radio"][name="kriteria_form"]').prop('checked', false);
-                    $('#keterangan_form').val('');
-                    if ($('#tabel_penyakit > tbody > tr > td > .nama').length <= 0) {
-                        $('#tabel_penyakit > tbody > tr').remove();
-                        $('#tabel_penyakit tbody').append(data);
-
-                    } else {
-                        $('#tabel_penyakit tbody tr:last').after(data);
-                    }
-
-                    numberRow_penyakit($("#tabel_penyakit"));
-                } else {
+                var validasi_form = validasiform([nama_form, jenis_form, kriteria_form]);
+                if(validasi_form == false){
                     swal.fire(
                         'Gagal',
                         'Lengkapi form',
                         'warning'
                     );
+                }else{
+                    $('#nama_form').val('');
+                    $('#jenis_form').val('');
+                    $('input[type="radio"][name="kriteria_form"]').prop('checked', false);
+                    $('#keterangan_form').val('');
+                    var data = `<tr>
+                            <td>1</td>
+                            <td>`+nama_form+`<input type="text" class="form-control d-none nama" name="nama[]" id="nama" value="`+nama_form+`"></td>
+                            <td>`+jenis_form+`<input type="text" class="form-control d-none jenis_table" name="jenis[]" id="jenis" value="`+jenis_form+`"></td>
+                            <td>`+kriteria_exp+`<input type="text" class="form-control d-none kriteria" name="kriteria[]" id="kriteria" value="`+kriteria_form+`"></td>
+                            <td>`+keterangan_form+`<input type="text" class="form-control d-none keterangan" name="keterangan[]" id ="kriteria" value="`+keterangan_form+`"></td>
+                            <td>
+                                <i class="fas fa-minus text-danger" id="closetable_penyakit"></i>
+                            </td>
+                        </tr>`;
+                    if($('#tabel_penyakit > tbody > tr > td > .nama').length <= 0){
+                        $('#tabel_penyakit > tbody > tr').remove();
+                        $('#tabel_penyakit tbody').append(data);
+                    }else{
+                        $('#tabel_penyakit tbody tr:last').after(data);
+                    }
+                    $('#button_tambah_penyakit').attr('disabled', false);
+                    numberRow_penyakit($("#tabel_penyakit"));
+
                 }
 
             });
             $('#tabel_penyakit').on('click', '#closetable_penyakit', function(e) {
-
                 $(this).closest('tr').remove();
-                numberRow_penyakit($("#tabel_penyakit"));
-                if ($('#tabel_penyakit > tbody > tr').length <= 0) {
+                numberRow_vaksin($("#tabel_penyakit"));
+                if($('#tabel_penyakit > tbody > tr').length <= 0){
+                    $('#button_tambah_penyakit').attr('disabled', true);
                     $('#tabel_penyakit tbody').append('<tr><td colspan="6">Data tidak tersedia</td></tr>');
                 }
 
@@ -1184,7 +1178,7 @@
             });
 
             $(document).on('submit', '#penyakit_form', function(e) {
-                $('#button_tambah').attr('disabled', true);
+                $('#button_tambah_penyakit').attr('disabled', true);
                 e.preventDefault();
 
                 var $form = $(this);
