@@ -1099,7 +1099,7 @@ class KesehatanController extends Controller
     }
     public function karyawan_masuk_data()
     {
-        $data = Karyawan_masuk::with(['Karyawan.Divisi', 'Pemeriksa'])->orderBy('tgl_cek', 'DESC');
+        $data = Karyawan_masuk::with(['Karyawan.Divisi', 'Pemeriksa', 'Karyawan_sakit'])->orderBy('tgl_cek', 'DESC');
         return datatables()->of($data)
             ->addIndexColumn()
             ->editColumn('tgl_cek', function ($data) {

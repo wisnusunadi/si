@@ -588,36 +588,44 @@
                 $('#divisi').html(rows[0]['x']);
                 $('#pemeriksa').html(rows[0]['z']);
                 $('#tanggal').html(rows[0]['tgl_cek']);
-                $('#tabel_detail_obat').DataTable({
-                    processing: true,
-                    destroy: true,
-                    serverSide: false,
-                    language: {
-                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                    },
-                    ajax: '/karyawan/sakit/obat/detail/' + rows[0]['id'],
-                    columns: [{
-                            data: 'DT_RowIndex',
-                            orderable: false,
-                            searchable: false
+                if(rows[0]['tindakan'] == "Pengobatan"){
+                    $('#detail_obat').removeClass('d-none');
+                    $('#detail_terapi').addClass('d-none');
+                    $('#tabel_detail_obat').DataTable({
+                        processing: true,
+                        destroy: true,
+                        serverSide: false,
+                        language: {
+                            processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                         },
-                        {
-                            data: 'x',
-                        },
-                        {
-                            data: 'jumlah',
-                        },
-                        {
-                            data: 'aturan',
-                        },
-                        {
-                            data: 'konsumsi',
-                        },
-                        {
-                            data: 'aksi',
-                        },
-                    ],
-                });
+                        ajax: '/karyawan/sakit/obat/detail/' + rows[0]['id'],
+                        columns: [{
+                                data: 'DT_RowIndex',
+                                orderable: false,
+                                searchable: false
+                            },
+                            {
+                                data: 'x',
+                            },
+                            {
+                                data: 'jumlah',
+                            },
+                            {
+                                data: 'aturan',
+                            },
+                            {
+                                data: 'konsumsi',
+                            },
+                            {
+                                data: 'aksi',
+                            },
+                        ],
+                    });
+                }else{
+                    $('#detail_obat').addClass('d-none');
+                    $('#detail_terapi').removeClass('d-none');
+                    $('#terapi').html(rows[0]['terapi']);
+                }
                 $('#detail_mod').modal('show');
                 // $('input[id="nama_obat"]').val(rows[0]['o']);
                 // $('input[id="aturan"]').val(rows[0]['d']);
