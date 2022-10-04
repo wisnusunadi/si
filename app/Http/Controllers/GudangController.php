@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\GBJExportSPB;
 use App\Exports\ImportNoseri;
+use App\Exports\NonsoExport;
 use App\Exports\NoseriGudangExport;
 use App\Exports\SpbExport;
 use App\Models\DetailEkatalog;
@@ -908,6 +909,73 @@ class GudangController extends Controller
         $data = GudangBarangJadi::with('produk')->where('id', $id)->get();
         $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
         return view('page.gbj.tp.show', compact('data', 'data1', 'header'));
+    }
+
+    function getNonSODone()
+    {
+        try {
+            $data = TFProduksi::
+                    leftJoin('divisi as p', 'p.id', '=', 't_gbj.ke')
+                    ->leftJoin('t_gbj_detail as tgd', 'tgd.t_gbj_id', '=', 't_gbj.id')
+                    ->leftJoin('gdg_barang_jadi as gbj', 'gbj.id', '=', 'tgd.gdg_brg_jadi_id')
+                    ->leftJoin('produk as pp', 'pp.id', '=', 'gbj.produk_id')
+                    ->where([
+                        ['t_gbj.jenis', '=', 'keluar'],
+                        // ['t_gbj.status_id', '=', 2],
+                    ])->whereNull('t_gbj.pesanan_id')
+                    ->selectRaw('t_gbj.id, tgd.gdg_brg_jadi_id,
+                                concat(pp.nama," ",gbj.nama) as produkk, sum(tgd.qty) as qty')
+                    ->groupBy('gbj.id')
+                    ->orderByRaw('concat(pp.nama," ",gbj.nama)')
+                    ->get();
+            $dt = datatables()->of($data)
+                ->addIndexColumn()
+                // ->editColumn('tgl_keluar', function($d){
+                //     return Carbon::parse($d->tgl_keluar)->isoFormat('D MMM YYYY');
+                // })
+                ->editColumn('qty', function($d){
+                    return $d->qty.' Unit';
+                })
+                ->editColumn('aksi', function($d){
+                    return '<a href="export_nonso/'.$d->gdg_brg_jadi_id.'">
+                            <button class="btn btn-outline-primary"><i class="fas fa-eye"></i> Detail</button>
+                        </a>';
+                })
+                ->rawColumns(['aksi'])
+                ->make(true);
+
+            return $dt;
+        } catch (\Exception $e) {
+            return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    function exportNonso($id)
+    {
+        try {
+            return Excel::download(new NonsoExport($id), 'File.xlsx');
+            // $data = TFProduksiDetail::
+            //         leftJoin('t_gbj as tg', 't_gbj_detail.t_gbj_id', '=', 'tg.id')
+            //         ->leftJoin('divisi as p', 'p.id', '=', 'tg.ke')
+            //         ->leftJoin('gdg_barang_jadi as gbj', 'gbj.id', '=', 't_gbj_detail.gdg_brg_jadi_id')
+            //         ->leftJoin('produk as pp', 'pp.id', '=', 'gbj.produk_id')
+            //         ->where([
+            //             ['tg.jenis', '=', 'keluar'],
+            //             // ['t_gbj.status_id', '=', 2],
+            //         ])->whereNull('tg.pesanan_id')
+            //         ->selectRaw('p.nama as nm_divisi, tg.tgl_keluar, tg.deskripsi, tg.id as tgdid, t_gbj_detail.id,
+            //                     concat(pp.nama," ",gbj.nama) as produkk, t_gbj_detail.qty')
+            //         ->where("t_gbj_detail.gdg_brg_jadi_id", "=", $id)
+            //         ->with(['noseri.seri'])
+            //         ->get();
+            // return response()->json([
+            //     'error' => false,
+            //     'data' => $data,
+            //     // 'seri' => $noseri,
+            // ]);
+        } catch (\Exception $e) {
+            return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
+        }
     }
 
     function get_data_waiting_approve(Request $request) {
