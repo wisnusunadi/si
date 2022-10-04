@@ -2262,23 +2262,41 @@ class KesehatanController extends Controller
 
 
 
-    public function penyakit_top_detail()
+    public function penyakit_top_detail($month, $year, $data_sakit)
     {
         $now = Carbon::now();
-        $data =   Karyawan_sakit::select('karyawans.nama','karyawan_sakits.tgl_cek','obats.nama as nama_obat')
-            ->leftJoin('karyawans', 'karyawans.id', '=', 'karyawan_sakits.karyawan_id')
-            ->Join('detail_obats', 'detail_obats.karyawan_sakit_id', '=', 'karyawan_sakits.id')
-            ->Join('obats', 'obats.id', '=', 'detail_obats.obat_id')
-            ->where('diagnosa', 'Cephalgia')
-            ->whereMonth('tgl_cek', 3)
-            ->whereYear('tgl_cek',  $now->year)
+        $karyawan_sakit =   Karyawan_sakit::with(['Detail_obat.Obat','Karyawan'])
+            // ->leftJoin('karyawans', 'karyawans.id', '=', 'karyawan_sakits.karyawan_id')
+            // ->leftJoin('detail_obats', 'detail_obats.karyawan_sakit_id', '=', 'karyawan_sakits.id')
+            // ->leftJoin('obats', 'obats.id', '=', 'detail_obats.obat_id')
+            ->where('diagnosa', $data_sakit)
+            ->whereMonth('tgl_cek', $month)
+            ->whereYear('tgl_cek',  $year)
+          //  ->groupBy('detail_obats.karyawan_sakit_id')
             ->get();
-        $header = date("F", mktime(0, 0, 0, 3, 1));
+
+        foreach ($karyawan_sakit as $key => $k ){
+            $data[$key]['nama']= $k->Karyawan->nama;
+            $data[$key]['tgl_cek']= $k->tgl_cek;
+            $data[$key]['nama_obat']= '';
+            if(count($k->Detail_obat) > 0){
+                $x = array();
+                foreach ($k->Detail_obat as $o) {
+                    $x[] = $o->Obat->nama;
+                }
+
+
+                $data[$key]['nama_obat']=  implode(', ', $x);
+            }
+
+
+        }
+        $header = date("F", mktime(0, 0, 0, $month, 1));
         return response()->json([
             'header' => array(
-                'bulan' => $header . ' ' . $now->year,
+                'bulan' => $header . ' ' . $year,
                 'jumlah' => count($data),
-                'nama' => 'Cephalgia'
+                'nama' => $data_sakit
             ),
             'data' => $data
         ]);

@@ -452,7 +452,129 @@
 @section('adminlte_js')
     <script>
         $(document).ready(function() {
+            var bulan_select="";
+            $('#karyawan_obat_table').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/karyawan/sakit/obat/top/' + {{ now()->month }},
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    "processData": true,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'nama',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'jumlah',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'detail',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, ]
+            });
+
+
+
+            var kary_diagnosa_table = $('#karyawan_diagnosa_table').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/karyawan/sakit/penyakit/top/' + {{ now()->month }},
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    "processData": true,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'diagnosa',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'jumlah',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'detail',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, ]
+            });
+
+
+            $('#karyawan_sakit_table').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/karyawan/sakit/person/top/' + {{ now()->month }},
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    "processData": true,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'nama',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'jumlah',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'detail',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, ]
+            });
             $("#karyawan_diagnosa_table > tbody").on('click', '#karyawan_diagnosa_modal', function() {
+                var rows = kary_diagnosa_table.rows($(this).parents('tr')).data();
+                var bulan_sakit = bulan_select;
                 $.ajax({
                     url: "/kesehatan/klinik/diagnosa_detail",
                     beforeSend: function() {
@@ -463,7 +585,16 @@
                         $('#detailmodal').modal('show');
                         $('#modal-label').text('Diagnosa');
                         $("#detaildata").html(result).show();
-                        $('#table_diagnosa').DataTable();
+                        $.ajax({
+                            type: "get",
+                            url: "/karyawan/sakit/penyakit/top/detail/"+bulan_sakit+"/2022/"+rows[0]['diagnosa'],
+                            success: function (data) {
+                                $('#bulan').html(data.header.bulan);
+                                $('#diagnosa').html(data.header.nama);
+                                $('#jumlah').html(data.header.jumlah);
+                                diagnosa_table(data.data)
+                            }
+                        });
                     },
                     complete: function() {
                         $('#loader').hide();
@@ -477,6 +608,40 @@
                 })
 
             });
+
+
+
+            function diagnosa_table(data){
+                var diagnosatable = $('#table_diagnosa').DataTable({
+                    data: data,
+                    columns: [
+                        { data: null },
+
+                        { data: 'tgl_cek',
+                          render: function(data, type, row) {
+                                return moment(new Date(data).toString()).format(
+                                    'DD-MM-YYYY');
+                            }
+                        },
+                        { data: 'nama' },
+                        { data: 'nama_obat' },
+                    ],
+                    columnDefs : [
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 0
+                        },
+                    ],
+                    order: [[2, 'asc']],
+                });
+
+                diagnosatable.on('order.dt search.dt', function () {
+                    diagnosatable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
 
             $("#karyawan_obat_table > tbody").on('click', '#karyawan_obat_modal', function() {
                 $.ajax({
@@ -566,6 +731,7 @@
             // update the value randomly
 
             $('.bulan_kunjungan').click(function() {
+                bulan_select = $(this).attr('value');
                 var bulan_id = $(this).attr('value');
                 $('.bulan_kunjungan').removeClass('active');
                 $('#klinik' + bulan_id).addClass('active');
@@ -585,125 +751,7 @@
                     bulan_id).load();
 
             });
-            $('#karyawan_obat_table').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/karyawan/sakit/obat/top/' + {{ now()->month }},
-                    "dataType": "json",
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    "processData": true,
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'nama',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'jumlah',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'detail',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, ]
-            });
 
-
-
-            $('#karyawan_diagnosa_table').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/karyawan/sakit/penyakit/top/' + {{ now()->month }},
-                    "dataType": "json",
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    "processData": true,
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'diagnosa',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'jumlah',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'detail',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, ]
-            });
-
-
-            $('#karyawan_sakit_table').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/karyawan/sakit/person/top/' + {{ now()->month }},
-                    "dataType": "json",
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    "processData": true,
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'nama',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'jumlah',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'detail',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, ]
-            });
             $.ajax({
                 url: "/karyawan/masuk/chart_absen",
                 method: "GET",

@@ -6,7 +6,7 @@
                     <span class="info-box-icon"><i class="fas fa-calendar"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">Bulan</span>
-                        <span class="info-box-number"></span>
+                        <span class="info-box-number" id="bulan"></span>
                     </div>
                 </div>
             </div>
@@ -15,7 +15,7 @@
                     <span class="info-box-icon"><i class="fas fa-stethoscope"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">Nama Diagnosa</span>
-                        <span class="info-box-number">ISPA</span>
+                        <span class="info-box-number" id="diagnosa"></span>
                     </div>
                 </div>
             </div>
@@ -24,7 +24,7 @@
                     <span class="info-box-icon"><i class="fas fa-clipboard-list"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">Jumlah</span>
-                        <span class="info-box-number">50</span>
+                        <span class="info-box-number" id="jumlah"></span>
                     </div>
                 </div>
             </div>
@@ -34,7 +34,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="table-responsive">
-                    <table class="table table-hover table-striped" id="table_diagnosa">
+                    <table class="table table-hover table-striped" id="table_diagnosa" width="100%">
                         <thead>
                             <tr>
                                 <th>No</th>
