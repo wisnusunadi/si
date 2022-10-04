@@ -21,8 +21,8 @@
         }
 
         /* #justgage2 > svg > path {
-                                                width: 100% !important;
-                                            } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: 100% !important;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
 
         .foo {
             border-radius: 50%;
@@ -201,9 +201,11 @@
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <span class="sr-only">Toggle Dropdown</span>
                                             </button>
-                                            <div class="dropdown-menu">
+                                            <div class="dropdown-menu ">
                                                 @for ($i = now()->month; $i >= 1; $i--)
-                                                    <a class="dropdown-item" href="#" value="{{ $i }}">
+                                                    <button
+                                                        class="dropdown-item bulan_kunjungan @if ($i == now()->month) active @endif"
+                                                        id="klinik{{ $i }}" value="{{ $i }}">
                                                         @if ($i == '1')
                                                             Januari
                                                         @elseif ($i == '2')
@@ -229,7 +231,7 @@
                                                         @else
                                                             Desember
                                                         @endif
-                                                    </a>
+                                                    </button>
                                                 @endfor
 
                                                 {{-- <a class="dropdown-item" href="#">{{ now()->year - 1 }}</a>
@@ -273,7 +275,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
+                                                            {{-- <tr>
                                                                 <td>1</td>
                                                                 <td>ISPA</td>
                                                                 <td>50 pegawai</td>
@@ -290,7 +292,7 @@
                                                                         class="btn btn-outline-primary btn-sm"
                                                                         id="karyawan_diagnosa_modal"><i
                                                                             class="fas fa-eye"></i> Detail</button></td>
-                                                            </tr>
+                                                            </tr> --}}
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -300,7 +302,7 @@
                                                 <div id="justgage2"></div>
                                                 <div class="table-responsive">
                                                     <table class="table table-hover table-striped"
-                                                        style="text-align:center;" id="karyawan_obat_table">
+                                                        style="text-align:center;width:100%" id="karyawan_obat_table">
                                                         <thead class="bg-secondary">
                                                             <tr>
                                                                 <th>No</th>
@@ -310,7 +312,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
+                                                            {{-- <tr>
                                                                 <td>1</td>
                                                                 <td>ANASTAN</td>
                                                                 <td>50 pcs</td>
@@ -327,7 +329,7 @@
                                                                         class="btn btn-outline-primary btn-sm"
                                                                         id="karyawan_obat_modal"><i class="fas fa-eye"></i>
                                                                         Detail</button></td>
-                                                            </tr>
+                                                            </tr> --}}
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -353,7 +355,9 @@
                                             </button>
                                             <div class="dropdown-menu">
                                                 @for ($i = now()->month; $i >= 1; $i--)
-                                                    <a class="dropdown-item" href="#" value="{{ $i }}">
+                                                    <button
+                                                        class="dropdown-item bulan_sakit @if ($i == now()->month) active @endif"
+                                                        id="sakit{{ $i }}" value="{{ $i }}">
                                                         @if ($i == '1')
                                                             Januari
                                                         @elseif ($i == '2')
@@ -379,9 +383,8 @@
                                                         @else
                                                             Desember
                                                         @endif
-                                                    </a>
+                                                    </button>
                                                 @endfor
-
                                                 {{-- <a class="dropdown-item" href="#">{{ now()->year - 1 }}</a>
                                         <a class="dropdown-item" href="#">{{ now()->year - 2 }}</a>
                                         <a class="dropdown-item" href="#">{{ now()->year - 3 }}</a>
@@ -404,7 +407,7 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            <tr>
+                                            {{-- <tr>
                                                 <td>1</td>
                                                 <td>Sumaiyah</td>
                                                 <td>20</td>
@@ -419,7 +422,7 @@
                                                 <td><button type="button" class="btn btn-outline-primary btn-sm"
                                                         id="karyawan_sakit_modal"><i class="fas fa-eye"></i>
                                                         Detail</button></td>
-                                            </tr>
+                                            </tr> --}}
                                         </tbody>
                                     </table>
                                 </div>
@@ -562,10 +565,145 @@
             // });
             // update the value randomly
 
+            $('.bulan_kunjungan').click(function() {
+                var bulan_id = $(this).attr('value');
+                $('.bulan_kunjungan').removeClass('active');
+                $('#klinik' + bulan_id).addClass('active');
+                $('#karyawan_diagnosa_table').DataTable().ajax.url('/karyawan/sakit/penyakit/top/' +
+                    bulan_id).load();
+                $('#karyawan_obat_table').DataTable().ajax.url('/karyawan/sakit/obat/top/' +
+                    bulan_id).load();
 
-            $('#karyawan_obat_table').DataTable();
-            $('#karyawan_diagnosa_table').DataTable();
-            $('#karyawan_sakit_table').DataTable();
+            });
+
+            $('.bulan_sakit').click(function() {
+                var bulan_id = $(this).attr('value');
+                $('.bulan_sakit').removeClass('active');
+                $('#sakit' + bulan_id).addClass('active');
+
+                $('#karyawan_sakit_table').DataTable().ajax.url('/karyawan/sakit/person/top/' +
+                    bulan_id).load();
+
+            });
+            $('#karyawan_obat_table').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/karyawan/sakit/obat/top/' + {{ now()->month }},
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    "processData": true,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'nama',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'jumlah',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'detail',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, ]
+            });
+
+
+
+            $('#karyawan_diagnosa_table').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/karyawan/sakit/penyakit/top/' + {{ now()->month }},
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    "processData": true,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'diagnosa',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'jumlah',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'detail',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, ]
+            });
+
+
+            $('#karyawan_sakit_table').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/karyawan/sakit/person/top/' + {{ now()->month }},
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    "processData": true,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'nama',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'jumlah',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'detail',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, ]
+            });
             $.ajax({
                 url: "/karyawan/masuk/chart_absen",
                 method: "GET",
@@ -605,9 +743,12 @@
                                     label: "Sakit",
                                     backgroundColor: "#dc3545",
                                     data: [data[1].sakit, data[2].sakit, data[3]
-                                        .sakit, data[4].sakit, data[5].sakit, data[6]
-                                        .sakit, data[7].sakit, data[8].sakit, data[9]
-                                        .sakit, data[10].sakit, data[11].sakit, data[
+                                        .sakit, data[4].sakit, data[5].sakit, data[
+                                            6]
+                                        .sakit, data[7].sakit, data[8].sakit, data[
+                                            9]
+                                        .sakit, data[10].sakit, data[11].sakit,
+                                        data[
                                             12].sakit
                                     ],
                                     borderColor: '#FFDADA',
@@ -655,7 +796,8 @@
                                 ],
                                 datasets: [{
                                     label: 'Vaksinasi',
-                                    data: [10, data.tahap_1, data.tahap_2, data
+                                    data: [10, data.tahap_1, data.tahap_2,
+                                        data
                                         .tahap_3
                                     ],
                                     backgroundColor: [

@@ -6,18 +6,18 @@
                     <span class="info-box-icon"><i class="fas fa-calendar"></i></span>
                     <div class="info-box-content">
                         <span class="info-box-text">Bulan</span>
-                        <span class="info-box-number">September 2022</span>
+                        <span class="info-box-number"></span>
                     </div>
                 </div>
             </div>
             <div class="col-4">
-            <div class="info-box bg-gradient-success">
-                <span class="info-box-icon"><i class="fas fa-stethoscope"></i></span>
-                <div class="info-box-content">
-                    <span class="info-box-text">Nama Diagnosa</span>
-                    <span class="info-box-number">ISPA</span>
+                <div class="info-box bg-gradient-success">
+                    <span class="info-box-icon"><i class="fas fa-stethoscope"></i></span>
+                    <div class="info-box-content">
+                        <span class="info-box-text">Nama Diagnosa</span>
+                        <span class="info-box-number">ISPA</span>
+                    </div>
                 </div>
-            </div>
             </div>
             <div class="col-4">
                 <div class="info-box bg-gradient-warning">
@@ -44,7 +44,7 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            {{-- <tr>
                                 <td>1</td>
                                 <td>09-02-2022</td>
                                 <td>Sulastri</td>
@@ -55,7 +55,7 @@
                                 <td>09-02-2022</td>
                                 <td>Sumaiyah</td>
                                 <td>Enervon-C</td>
-                            </tr>
+                            </tr> --}}
                         </tbody>
                     </table>
                 </div>

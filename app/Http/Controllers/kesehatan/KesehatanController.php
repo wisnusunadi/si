@@ -2188,46 +2188,108 @@ class KesehatanController extends Controller
         return response()->json($data);
     }
 
-    public function penyakit_top()
+    public function penyakit_top($id)
     {
 
-
+        $now = Carbon::now();
         $data =   Karyawan_sakit::select('diagnosa', DB::raw('count(*) as jumlah'))
             ->groupBy('diagnosa')
             ->where('diagnosa', '!=', 'null')
-            ->whereMonth('tgl_cek', '01')
-            ->whereYear('tgl_cek', 2022)
+            ->whereMonth('tgl_cek', $id)
+            ->whereYear('tgl_cek',  $now->year)
             ->orderBy('jumlah', 'DESC')
             ->get();
-        return response()->json($data);
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jumlah', function ($data) {
+                return $data->jumlah . ' pegawai';
+            })
+            ->addColumn('detail', function ($data) {
+
+                return  '<button class="btn btn-outline-primary btn-sm"  id="karyawan_diagnosa_modal" type="button"><i
+                     class="fas fa-eye"></i> Detail</button>
+                </a>';
+            })
+            ->rawColumns(['detail'])
+            ->make(true);
     }
 
-    public function obat_top()
+    public function obat_top($id)
     {
-
-
+        $now = Carbon::now();
         $data =   Detail_obat::select('obats.nama', DB::raw('count(*) as jumlah'))
             ->leftJoin('obats', 'obats.id', '=', 'detail_obats.obat_id')
             ->leftJoin('karyawan_sakits', 'karyawan_sakits.id', '=', 'detail_obats.karyawan_sakit_id')
             ->groupBy('obat_id')
-            ->whereMonth('tgl_cek', '01')
-            ->whereYear('tgl_cek', 2022)
+            ->whereMonth('tgl_cek', $id)
+            ->whereYear('tgl_cek',  $now->year)
             ->orderBy('jumlah', 'DESC')
             ->get();
-        return response()->json($data);
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jumlah', function ($data) {
+                return $data->jumlah . ' pcs';
+            })
+            ->addColumn('detail', function ($data) {
+
+                return  '<button class="btn btn-outline-primary btn-sm"  id="karyawan_obat_modal" type="button"><i
+                     class="fas fa-eye"></i> Detail</button>
+                </a>';
+            })
+            ->rawColumns(['detail'])
+            ->make(true);
+
+        // return response()->json($data);
     }
 
-    public function person_top()
-    {
 
+
+    public function penyakit_top_detail()
+    {
+        $now = Carbon::now();
+        $data =   Karyawan_sakit::select('karyawans.nama')
+            ->leftJoin('karyawans', 'karyawans.id', '=', 'karyawan_sakits.karyawan_id')
+            ->where('diagnosa', 'Cephalgia')
+            ->whereMonth('tgl_cek', 3)
+            ->whereYear('tgl_cek',  $now->year)
+            ->get();
+        $header = date("F", mktime(0, 0, 0, 12, 1));
+        return response()->json([
+            'header' => array(
+                'bulan' => $header . ' ' . $now->year,
+                'jumlah' => count($data),
+                'nama' => 'Cephalgia'
+            ),
+            'data' => $data
+        ]);
+    }
+    public function person_top($id)
+    {
+        $now = Carbon::now();
 
         $data =   Karyawan_sakit::select('karyawans.nama', DB::raw('count(*) as jumlah'))
             ->leftJoin('karyawans', 'karyawans.id', '=', 'karyawan_sakits.karyawan_id')
             ->groupBy('karyawan_id')
-            ->whereMonth('tgl_cek', '01')
-            ->whereYear('tgl_cek', 2022)
+            ->whereMonth('tgl_cek', $id)
+            ->whereYear('tgl_cek', $now->year)
             ->orderBy('jumlah', 'DESC')
             ->get();
-        return response()->json($data);
+
+        return datatables()->of($data)
+            ->addIndexColumn()
+            ->addColumn('jumlah', function ($data) {
+                return $data->jumlah;
+            })
+            ->addColumn('detail', function ($data) {
+
+                return  '<button class="btn btn-outline-primary btn-sm"  id="karyawan_sakit_modal" type="button"><i
+                     class="fas fa-eye"></i> Detail</button>
+                </a>';
+            })
+            ->rawColumns(['detail'])
+            ->make(true);
+        // return response()->json($data);
     }
 }

@@ -114,9 +114,10 @@ Route::group(['prefix' => '/karyawan'], function () {
         Route::get('/obat/detail/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'obat_data_detail']);
         Route::post('/aksi_tambah', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_sakit_aksi_tambah']);
         Route::delete('/delete/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'karyawan_sakit_aksi_delete']);
-        Route::get('/penyakit/top', [App\Http\Controllers\kesehatan\KesehatanController::class, 'penyakit_top']);
-        Route::get('/obat/top', [App\Http\Controllers\kesehatan\KesehatanController::class, 'obat_top']);
-        Route::get('/person/top', [App\Http\Controllers\kesehatan\KesehatanController::class, 'person_top']);
+        Route::post('/penyakit/top/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'penyakit_top']);
+        Route::post('/obat/top/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'obat_top']);
+        Route::get('/penyakit/top/detail', [App\Http\Controllers\kesehatan\KesehatanController::class, 'penyakit_top_detail']);
+        Route::post('/person/top/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'person_top']);
     });
     Route::group(['prefix' => '/masuk'], function () {
         // //Karyawan Masuk
