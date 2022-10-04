@@ -812,6 +812,7 @@ class PenjualanController extends Controller
                 ->leftJoin('customer as c_spb',  'c_spb.id',  '=',  'spb.customer_id')
                 ->leftJoin('m_state',  'm_state.id',  '=',  'pesanan.log_id')
                 ->where('no_po', 'LIKE', '%' . $val . '%')
+                ->groupby('pesanan.no_po')
                 ->get();
 
             $data = $si_ekat21->merge($si_ekat20)->merge($si_spa21)->merge($si_spa20)->merge($si_spb21)->merge($si_spb20)->merge($spa);

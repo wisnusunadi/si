@@ -2265,13 +2265,15 @@ class KesehatanController extends Controller
     public function penyakit_top_detail()
     {
         $now = Carbon::now();
-        $data =   Karyawan_sakit::select('karyawans.nama')
+        $data =   Karyawan_sakit::select('karyawans.nama','karyawan_sakits.tgl_cek','obats.nama as nama_obat')
             ->leftJoin('karyawans', 'karyawans.id', '=', 'karyawan_sakits.karyawan_id')
+            ->Join('detail_obats', 'detail_obats.karyawan_sakit_id', '=', 'karyawan_sakits.id')
+            ->Join('obats', 'obats.id', '=', 'detail_obats.obat_id')
             ->where('diagnosa', 'Cephalgia')
             ->whereMonth('tgl_cek', 3)
             ->whereYear('tgl_cek',  $now->year)
             ->get();
-        $header = date("F", mktime(0, 0, 0, 12, 1));
+        $header = date("F", mktime(0, 0, 0, 3, 1));
         return response()->json([
             'header' => array(
                 'bulan' => $header . ' ' . $now->year,
