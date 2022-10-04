@@ -953,26 +953,21 @@ class GudangController extends Controller
     function exportNonso($id)
     {
         try {
-            return Excel::download(new NonsoExport($id), 'File.xlsx');
-            // $data = TFProduksiDetail::
-            //         leftJoin('t_gbj as tg', 't_gbj_detail.t_gbj_id', '=', 'tg.id')
-            //         ->leftJoin('divisi as p', 'p.id', '=', 'tg.ke')
-            //         ->leftJoin('gdg_barang_jadi as gbj', 'gbj.id', '=', 't_gbj_detail.gdg_brg_jadi_id')
-            //         ->leftJoin('produk as pp', 'pp.id', '=', 'gbj.produk_id')
-            //         ->where([
-            //             ['tg.jenis', '=', 'keluar'],
-            //             // ['t_gbj.status_id', '=', 2],
-            //         ])->whereNull('tg.pesanan_id')
-            //         ->selectRaw('p.nama as nm_divisi, tg.tgl_keluar, tg.deskripsi, tg.id as tgdid, t_gbj_detail.id,
-            //                     concat(pp.nama," ",gbj.nama) as produkk, t_gbj_detail.qty')
-            //         ->where("t_gbj_detail.gdg_brg_jadi_id", "=", $id)
-            //         ->with(['noseri.seri'])
-            //         ->get();
-            // return response()->json([
-            //     'error' => false,
-            //     'data' => $data,
-            //     // 'seri' => $noseri,
-            // ]);
+            $data = TFProduksiDetail::
+                    leftJoin('t_gbj as tg', 't_gbj_detail.t_gbj_id', '=', 'tg.id')
+                    ->leftJoin('divisi as p', 'p.id', '=', 'tg.ke')
+                    ->leftJoin('gdg_barang_jadi as gbj', 'gbj.id', '=', 't_gbj_detail.gdg_brg_jadi_id')
+                    ->leftJoin('produk as pp', 'pp.id', '=', 'gbj.produk_id')
+                    ->where([
+                        ['tg.jenis', '=', 'keluar'],
+                    ])->whereNull('tg.pesanan_id')
+                    ->selectRaw('p.nama as nm_divisi, tg.tgl_keluar, tg.deskripsi, tg.id as tgdid, t_gbj_detail.id,
+                                concat(pp.nama," ",gbj.nama) as produkk, t_gbj_detail.qty')
+                    ->where("t_gbj_detail.gdg_brg_jadi_id", "=", $id)
+                    ->first();
+
+            return Excel::download(new NonsoExport($id), 'Laporan Tanpa SO'.$data->produkk.'.xlsx');
+
         } catch (\Exception $e) {
             return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
         }

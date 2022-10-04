@@ -30,7 +30,12 @@
             $i++;
         @endphp
         <td align="left">{{ $i }}.</td>
-        <td>{{ $r->seri->noseri }}</td>
+        @if (isset($r->seri->noseri))
+            <td>{{ $r->seri->noseri }}</td>
+        @else
+            <td>-</td>
+        @endif
+        {{-- <td>{{ $r->seri->noseri }}</td> --}}
         @if ($i % 5 == 0)
             </tr><tr>
         @endif
