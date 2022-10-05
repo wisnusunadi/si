@@ -48,13 +48,13 @@
             text-align: center;
         }
 
-        .stok {
+        #stok_obat_edit {
             color: #0d6efd;
             opacity: 0.6;
 
         }
 
-        .stok:hover {
+        #stok_obat_edit:hover {
             transition: color 0.5s;
             opacity: 1;
         }
@@ -100,7 +100,7 @@
 @section('content')
     <div class="row">
         <div class="col-lg-12">
-            @if (session()->has('success'))
+            {{-- @if (session()->has('success'))
                 <div class="alert alert-success alert-dismissible">
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
@@ -114,7 +114,7 @@
                     </button>
                     Data gagal ditambahkan
                 </div>
-            @endif
+            @endif --}}
             <div class="card">
                 <div class="card-body">
                     <div class='table-responsive'>
@@ -203,7 +203,7 @@
                         <div class="row">
                             <div class="col-lg-12">
                                 <div class="col-lg-12">
-                                    <form method="post" action="/obat/aksi_ubah">
+                                    <form method="post" action="/obat/aksi_ubah"  id="form_ubah_obat">
                                         {{ csrf_field() }}
                                         {{ method_field('PUT') }}
                                         <div class="row">
@@ -215,12 +215,12 @@
                                                                 placeholder="Masukkan Nama Obat" value="{{ old('id') }}"
                                                                 id="id">
                                                             <div class="form-group row">
-                                                                <label for="no_pemeriksaan" class="col-sm-5 col-form-label"
+                                                                <label for="no_pemeriksaan" class="col-lg-4 col-sm-12 col-form-label"
                                                                     style="text-align:right;">Nama Obat</label>
-                                                                <div class="col-sm-5">
+                                                                <div class="col-sm-7 col-lg-5">
                                                                     <input type="text" class="form-control"
                                                                         name="nama" placeholder="Masukkan Nama Obat"
-                                                                        value="{{ old('nama') }}" id="nama">
+                                                                        value="{{ old('nama') }}" id="nama_obat">
                                                                     <div class="text-danger form-text"
                                                                         id="nama_obat_message">
 
@@ -229,9 +229,9 @@
                                                             </div>
                                                             <div class="form-group row">
                                                                 <label for="no_pemeriksaan"
-                                                                    class="col-sm-5 col-form-label"
+                                                                    class="col-sm-12 col-lg-4 col-form-label"
                                                                     style="text-align:right;">Stok Obat</label>
-                                                                <div class="col-sm-4">
+                                                                <div class="col-sm-4 col-lg-3">
                                                                     <div class="input-group">
                                                                         <input type="text" class="form-control"
                                                                             id="stok" readonly>
@@ -242,9 +242,9 @@
                                                                 </div>
                                                             </div>
                                                             <div class="form-group row">
-                                                                <label for="" class="col-sm-5 col-form-label"
+                                                                <label for="" class="col-sm-12 col-lg-4 col-form-label"
                                                                     style="text-align: right;">Aturan</label>
-                                                                <div class="col-sm-7 col-form-label">
+                                                                <div class="col-sm-8 col-lg-7 col-form-label">
                                                                     <div class="form-check form-check-inline">
                                                                         <input class="form-check-input aturan_obat"
                                                                             type="radio" name="aturan_obat"
@@ -263,11 +263,11 @@
                                                             </div>
 
                                                             <div class="form-group row">
-                                                                <label for="tanggal" class="col-sm-5 col-form-label"
+                                                                <label for="tanggal" class="col-sm-12 col-lg-4 col-form-label"
                                                                     style="text-align:right;">Keterangan</label>
-                                                                <div class="col-sm-7">
+                                                                <div class="col-sm-6 col-lg-5">
                                                                     <textarea type="text" class="form-control @error('keterangan') is-invalid @enderror" name="keterangan"
-                                                                        value="{{ old('keterangan') }}" placeholder="Catatan tambahan" style="width:45%;"></textarea>
+                                                                        value="{{ old('keterangan') }}" placeholder="Catatan tambahan"></textarea>
                                                                 </div>
                                                                 <span role="alert" id="no_seri-msg"></span>
                                                             </div>
@@ -278,11 +278,10 @@
                                                     <div class="col-6"><button class="btn btn-danger"
                                                             data-dismiss="modal">Batal</button></div>
                                                     <div class="col-6"><button class="btn btn-warning float-right"
-                                                            id="button_tambah">Simpan</button></div>
+                                                            id="button_ubah" disabled="true">Simpan</button></div>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </form>
                                 </div>
                             </div>
@@ -309,7 +308,7 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col-lg-7 col-md-12">
-                            <form method="post" action="/obat/stok/aksi_tambah">
+                            <form method="post" action="/obat/stok/aksi_tambah" id="form_stok_obat">
                                 {{ csrf_field() }}
                                 <div class="card card-outline card-warning">
                                     <div class="card-header">
@@ -327,8 +326,7 @@
                                         <div class="form-group">
                                             <label for="stok">Stok</label>
                                             <div class="input-group" style="width:50%;">
-                                                <input type="number" class="form-control" id="stok"
-                                                    name="stok">
+                                                <input type="number" class="form-control" id="stok_pembelian" name="stok">
                                                 <div class="input-group-append">
                                                     <span class="input-group-text">Pcs</span>
                                                 </div>
@@ -341,7 +339,7 @@
                                     </div>
                                     <div class="card-footer">
                                         <button class="btn btn-danger" data-dismiss="modal">Batal</button>
-                                        <button class="btn btn-warning float-right" id="button_tambah">Simpan</button>
+                                        <button class="btn btn-warning float-right" id="button_tambah_stok">Simpan</button>
                                     </div>
                                 </div>
                             </form>
@@ -470,7 +468,44 @@
 @stop
 @section('adminlte_js')
     <script>
+            @if(Session::has('error'))
+            Swal.fire({
+                title: 'Gagal',
+                text: "{{ Session::get('error') }}",
+                icon: 'error',
+            });
+            @endif
+            @if(Session::has('success'))
+            Swal.fire({
+                title: 'Berhasil',
+                text: "{{ Session::get('success') }}",
+                icon: 'success',
+            });
+            @endif
         $(function() {
+            $(document).on('keyup change', '#form_stok_obat', function(){
+                if($('#tgl_pembelian').val() != "" && $('#stok_pembelian').val() != ""){
+                    $('#button_tambah_stok').attr('disabled', false);
+                }else{
+                    $('#button_tambah_stok').attr('disabled', true);
+                }
+            });
+            $(document).on('keyup change', '#form_ubah_obat', function(){
+                if($(this).find('#nama_obat').val() != "" && $(this).find('input[name="aturan_obat"][type="radio"]:checked').val() != ""){
+                    $('#button_ubah').attr('disabled', false);
+                }else{
+                    $('#button_ubah').attr('disabled', true);
+                }
+            });
+
+            $(document).on('keyup change', '#form_tambah_obat', function(){
+
+                if($(this).find('#nama_obat_tambah').val() != ""  && !$(this).find('#nama_obat_tambah').hasClass('is-invalid') && $(this).find('input[name="aturan_obat"][type="radio"]:checked').val() != ""){
+                    $('#button_tambah').attr('disabled', false);
+                }else{
+                    $('#button_tambah').attr('disabled', true);
+                }
+            });
             $('#tabel > tbody').on('click', '#delete', function() {
                 var data_id = $(this).attr('data-id');
                 Swal.fire({
@@ -587,7 +622,7 @@
                 })
             });
 
-            $(document).on('keyup change', '#nama_obat', function() {
+            $(document).on('keyup change', '#nama_obat_tambah', function() {
                 var nama = $(this).val();
                 $.ajax({
                     url: '/obat/cekdata/' + nama,
@@ -595,12 +630,12 @@
                     dataType: "json",
                     success: function(data) {
                         if (data.length > 0) {
-                            $('#nama_obat').addClass('is-invalid');
-                            $('#nama_obat_message').html('Data Telah Terpakai');
+                            $('#nama_obat_tambah').addClass('is-invalid');
+                            $('#nama_obat_tambah_message').html('Data Telah Terpakai');
                             $('#button_tambah').attr("disabled", true);
                         } else {
-                            $('#nama_obat').removeClass('is-invalid');
-                            $('#nama_obat_message').html('');
+                            $('#nama_obat_tambah').removeClass('is-invalid');
+                            $('#nama_obat_tambah_message').html('');
                             $('#button_tambah').attr("disabled", false);
                         }
                     }
@@ -683,7 +718,8 @@
             $('#tabel > tbody').on('click', '#edit', function() {
                 var rows = tabel.rows($(this).parents('tr')).data();
                 $('input[id="id"]').val(rows[0]['id']);
-                $('input[id="nama"]').val(rows[0]['nama']);
+                $('input[id="nama_obat"]').val(rows[0]['nama']);
+                $('input[type="radio"][name="aturan"][value="'+rows[0]['aturan']+'"]').attr('checked', true);
                 $('input[id="stok"]').val(rows[0]['stok']);
 
                 $('input:radio[name="aturan_obat"][value="' + rows[0]['aturan'] + '"]').attr('checked',
@@ -694,7 +730,7 @@
                 $('.modal-title > .data_detail_head').text('Ubah ' + rows[0]['nama']);
             })
 
-            $('#tabel > tbody').on('click', '#stok', function() {
+            $('#tabel > tbody').on('click', '#stok_obat_edit', function() {
                 var rows = tabel.rows($(this).parents('tr')).data();
                 $('.data_detail_head').html(
                     'Stok ' + rows[0]['nama']
@@ -736,7 +772,7 @@
                     ],
                 });
 
-
+                $('#button_tambah_stok').attr('disabled', true);
                 $('#obat_mod').modal('show');
             })
         });

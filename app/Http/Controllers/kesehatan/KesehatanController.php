@@ -715,7 +715,7 @@ class KesehatanController extends Controller
                 } else {
                     $x =  $data->stok . ' Pcs';
                 }
-                $btn = $x . '<i class="fas fa-sync m-1" id="stok" aria-hidden="true"></i>';
+                $btn = $x . '<i class="fas fa-sync m-1" id="stok_obat_edit" aria-hidden="true"></i>';
                 // $btn = $x . '<br><div class="inline-flex"><button type="button" id="stok"  class="btn btn-block btn-primary karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-sync" aria-hidden="true"></i></button></div>';
 
                 return $btn;
