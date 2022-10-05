@@ -312,24 +312,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {{-- <tr>
-                                                                <td>1</td>
-                                                                <td>ANASTAN</td>
-                                                                <td>50 pcs</td>
-                                                                <td><button type="button"
-                                                                        class="btn btn-outline-primary btn-sm"
-                                                                        id="karyawan_obat_modal"><i class="fas fa-eye"></i>
-                                                                        Detail</button></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>2</td>
-                                                                <td>IMURAN</td>
-                                                                <td>42 pcs</td>
-                                                                <td><button type="button"
-                                                                        class="btn btn-outline-primary btn-sm"
-                                                                        id="karyawan_obat_modal"><i class="fas fa-eye"></i>
-                                                                        Detail</button></td>
-                                                            </tr> --}}
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -346,6 +328,18 @@
                                 <div class="row mb-3">
                                     <h4 class="col-6">Karyawan Sakit {{ now()->year }}</h4>
                                     <div class="col-6">
+                                        <div class="btn-group">
+                                            <button type="button" class="btn bg-olive dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="true"> Tahun
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu" role="menu" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start">
+                                                <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year }}">{{ now()->year }}</a>
+                                                <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year - 1 }}">{{ now()->year - 1 }}</a>
+                                                <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year - 2 }}">{{ now()->year - 2 }}</a>
+                                                <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year - 3 }}">{{ now()->year - 3 }}</a>
+                                                <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year - 4 }}">{{ now()->year - 4 }}</a>
+                                            </div>
+                                        </div>
                                         <div class="btn-group float-right">
                                             <button type="button" class="btn btn-outline-info">Pilih Bulan</button>
                                             <button type="button"
