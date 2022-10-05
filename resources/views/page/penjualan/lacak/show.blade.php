@@ -391,7 +391,10 @@
                             className: 'nowraps align-center'
                         }, {
                             data: 'tgl_po',
-                            className: 'nowraps align-center'
+                            className: 'nowraps align-center',
+                            render: function (data, type, row){
+                                return moment(new Date(data).toString()).format('DD-MM-YYYY');
+                            }
                         }, {
                             data: null,
                             className: 'nowraps align-center',
@@ -495,6 +498,14 @@
             }
 
             function akn(data){
+                var d = new Date();
+                var month = d.getMonth()+1;
+                var day = d.getDate();
+
+                var output = d.getFullYear() + '-' +
+                    (month<10 ? '0' : '') + month + '-' +
+                    (day<10 ? '0' : '') + day;
+
                 var akntable = $('#noakntable').DataTable({
                     destroy: true,
                     processing: true,
@@ -530,14 +541,31 @@
                         },
                         {
                             data: 'tgl_buat',
-                            className: 'nowraps align-center'
+                            className: 'nowraps align-center',
+                            render: function(data, type, row){
+                                return moment(new Date(data).toString()).format('DD-MM-YYYY')
+                            }
                         },
                         {
                             data: null,
                             className: 'nowraps align-center',
                             render: function(data, type, row){
                                 if (row.tgl_kontrak_custom != null) {
-                                    return row.tgl_kontrak_custom
+                                    if(row.pesanan.state.nama == "Kirim"){
+                                        return moment(new Date(row.tgl_kontrak_custom).toString()).format('DD-MM-YYYY');
+                                    } else {
+                                        var hari = (new Date(row.tgl_kontrak_custom) - new Date(output)) / (1000 * 3600 * 24);
+                                        if (hari > 7) {
+                                            return  `<div>`+ moment(new Date(row.tgl_kontrak_custom).toString()).format('DD-MM-YYYY') + `</div>
+                                            <div><small><i class="fas fa-clock" id="info"></i> `+ hari+ ` Hari Lagi</small></div>`;
+                                        } else if (hari > 0 && hari <= 7) {
+                                            return  `<div id="warning">`+ moment(new Date(row.tgl_kontrak_custom).toString()).format('DD-MM-YYYY') + `</div>
+                                            <div><small><i class="fas fa-exclamation-circle" id="warning"></i> `+ hari + ` Hari Lagi</small></div>`;
+                                        } else {
+                                            return  `<div class="text-danger font-weight-bold">` + moment(new Date(row.tgl_kontrak_custom).toString()).format('DD-MM-YYYY') + `</div>
+                                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi `+Math.abs(hari)+` Hari</div>`;
+                                        }
+                                    }
                                 }  else {
                                     return  '-';
                                 }

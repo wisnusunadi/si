@@ -328,11 +328,11 @@
                                 <div class="row mb-3">
                                     <h4 class="col-6">Karyawan Sakit {{ now()->year }}</h4>
                                     <div class="col-6">
-                                        <div class="btn-group">
+                                        <div class="btn-group float-right px-2">
                                             <button type="button" class="btn bg-olive dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="true"> Tahun
                                             <span class="sr-only">Toggle Dropdown</span>
                                             </button>
-                                            <div class="dropdown-menu" role="menu" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start">
+                                            <div class="dropdown-menu dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start">
                                                 <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year }}">{{ now()->year }}</a>
                                                 <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year - 1 }}">{{ now()->year - 1 }}</a>
                                                 <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year - 2 }}">{{ now()->year - 2 }}</a>
@@ -340,14 +340,14 @@
                                                 <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year - 4 }}">{{ now()->year - 4 }}</a>
                                             </div>
                                         </div>
-                                        <div class="btn-group float-right">
+                                        <div class="btn-group mx-3 float-right">
                                             <button type="button" class="btn btn-outline-info">Pilih Bulan</button>
                                             <button type="button"
                                                 class="btn btn-outline-info dropdown-toggle dropdown-toggle-split"
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <span class="sr-only">Toggle Dropdown</span>
                                             </button>
-                                            <div class="dropdown-menu">
+                                            <div class="dropdown-menu dropdown-menu-end">
                                                 @for ($i = now()->month; $i >= 1; $i--)
                                                     <button
                                                         class="dropdown-item bulan_sakit @if ($i == now()->month) active @endif"
