@@ -21,8 +21,8 @@
         }
 
         /* #justgage2 > svg > path {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                width: 100% !important;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: 100% !important;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
 
         .foo {
             border-radius: 50%;
@@ -455,6 +455,7 @@
     <script>
         $(document).ready(function() {
             var bulan_select = "";
+            var bulan_sakit_select = "";
             var obat_table = $('#karyawan_obat_table').DataTable({
                 destroy: true,
                 processing: true,
@@ -536,7 +537,7 @@
             });
 
 
-            $('#karyawan_sakit_table').DataTable({
+            var karywan_sakit_table = $('#karyawan_sakit_table').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
@@ -615,6 +616,50 @@
 
 
 
+
+            function sakit_table(data) {
+                var tablesakit = $('#table_sakit').DataTable({
+                    data: data,
+                    columns: [{
+                            data: null
+                        },
+
+                        {
+                            data: 'tgl_cek',
+                            render: function(data, type, row) {
+                                return moment(new Date(data).toString()).format(
+                                    'DD-MM-YYYY');
+                            }
+                        },
+                        {
+                            data: 'nama_obat'
+                        },
+                        {
+                            data: 'diagnosa'
+                        },
+                        {
+                            data: 'tindakan'
+                        },
+                    ],
+                    columnDefs: [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }, ],
+                    order: [
+                        [2, 'asc']
+                    ],
+                });
+
+                tablesakit.on('order.dt search.dt', function() {
+                    tablesakit.column(0, {
+                        search: 'applied',
+                        order: 'applied'
+                    }).nodes().each(function(cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
 
             function diagnosa_table(data) {
                 var diagnosatable = $('#table_diagnosa').DataTable({
@@ -737,6 +782,9 @@
             }
 
             $("#karyawan_sakit_table > tbody").on('click', '#karyawan_sakit_modal', function() {
+                var rows = karywan_sakit_table.rows($(this).parents('tr')).data();
+                var bulan_sakit = bulan_sakit_select;
+
                 $.ajax({
                     url: "/kesehatan/klinik/sakit_detail",
                     beforeSend: function() {
@@ -747,7 +795,20 @@
                         $('#detailmodal').modal('show');
                         $('#modal-label').text('Karyawan Sakit');
                         $("#detaildata").html(result).show();
-                        $('#table_sakit').DataTable();
+                        // $('#table_sakit').DataTable();
+                        $.ajax({
+                            type: "get",
+                            url: "/karyawan/sakit/person/top/detail/" + bulan_sakit +
+                                "/2022/" + rows[0]['karyawan_id'],
+                            success: function(data) {
+
+                                $('#bulan').html(data.header.bulan);
+                                $('#nama').html(data.header.nama);
+                                $('#jumlah').html(data.header.jumlah);
+                                sakit_table(data.data)
+
+                            }
+                        });
                     },
                     complete: function() {
                         $('#loader').hide();
@@ -811,6 +872,7 @@
             });
 
             $('.bulan_sakit').click(function() {
+                bulan_sakit_select = $(this).attr('value');
                 var bulan_id = $(this).attr('value');
                 $('.bulan_sakit').removeClass('active');
                 $('#sakit' + bulan_id).addClass('active');

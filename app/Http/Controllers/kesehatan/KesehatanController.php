@@ -2325,11 +2325,46 @@ class KesehatanController extends Controller
             'data' => $data
         ]);
     }
+    public function person_top_detail($month, $year, $data_sakit)
+    {
+        $karyawan_sakit = Karyawan_sakit::with(['Detail_obat.Obat'])
+            ->where('karyawan_id', $data_sakit)
+            ->whereMonth('tgl_cek', $month)
+            ->whereYear('tgl_cek',  $year)
+            ->get();
+        $karyawan = Karyawan::find($data_sakit);
+
+        foreach ($karyawan_sakit as $key => $k) {
+            $data[$key]['tgl_cek'] = $k->tgl_cek;
+            $data[$key]['diagnosa'] = $k->diagnosa;
+            $data[$key]['tindakan'] = $k->tindakan;
+            $data[$key]['nama_obat'] = '';
+            if (count($k->Detail_obat) > 0) {
+                $x = array();
+                foreach ($k->Detail_obat as $o) {
+                    $x[] = $o->Obat->nama;
+                }
+
+
+                $data[$key]['nama_obat'] =  implode(', ', $x);
+            }
+        }
+
+        $header = date("F", mktime(0, 0, 0, $month, 1));
+        return response()->json([
+            'header' => array(
+                'bulan' => $header . ' ' . $year,
+                'jumlah' => count($data),
+                'nama' => $karyawan->nama
+            ),
+            'data' => $data
+        ]);
+    }
     public function person_top($id)
     {
         $now = Carbon::now();
 
-        $data =   Karyawan_sakit::select('karyawans.nama', DB::raw('count(*) as jumlah'))
+        $data =   Karyawan_sakit::select('karyawans.id as karyawan_id', 'karyawans.nama', DB::raw('count(*) as jumlah'))
             ->leftJoin('karyawans', 'karyawans.id', '=', 'karyawan_sakits.karyawan_id')
             ->groupBy('karyawan_id')
             ->whereMonth('tgl_cek', $id)

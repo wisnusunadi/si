@@ -123,6 +123,7 @@ Route::group(['prefix' => '/karyawan'], function () {
         Route::get('/penyakit/top/detail/{month}/{year}/{sakit}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'penyakit_top_detail']);
         Route::post('/person/top/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'person_top']);
         Route::get('/obat/top/detail/{month}/{year}/{sakit}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'obat_top_detail']);
+        Route::get('/person/top/detail/{month}/{year}/{sakit}', [App\Http\Controllers\kesehatan\KesehatanController::class, 'person_top_detail']);
     });
     Route::group(['prefix' => '/masuk'], function () {
         // //Karyawan Masuk
