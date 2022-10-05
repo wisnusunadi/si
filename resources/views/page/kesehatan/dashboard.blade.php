@@ -312,24 +312,6 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            {{-- <tr>
-                                                                <td>1</td>
-                                                                <td>ANASTAN</td>
-                                                                <td>50 pcs</td>
-                                                                <td><button type="button"
-                                                                        class="btn btn-outline-primary btn-sm"
-                                                                        id="karyawan_obat_modal"><i class="fas fa-eye"></i>
-                                                                        Detail</button></td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td>2</td>
-                                                                <td>IMURAN</td>
-                                                                <td>42 pcs</td>
-                                                                <td><button type="button"
-                                                                        class="btn btn-outline-primary btn-sm"
-                                                                        id="karyawan_obat_modal"><i class="fas fa-eye"></i>
-                                                                        Detail</button></td>
-                                                            </tr> --}}
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -346,14 +328,26 @@
                                 <div class="row mb-3">
                                     <h4 class="col-6">Karyawan Sakit {{ now()->year }}</h4>
                                     <div class="col-6">
-                                        <div class="btn-group float-right">
+                                        <div class="btn-group float-right px-2">
+                                            <button type="button" class="btn bg-olive dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="true"> Tahun
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <div class="dropdown-menu dropdown-menu-right" role="menu" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start">
+                                                <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year }}">{{ now()->year }}</a>
+                                                <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year - 1 }}">{{ now()->year - 1 }}</a>
+                                                <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year - 2 }}">{{ now()->year - 2 }}</a>
+                                                <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year - 3 }}">{{ now()->year - 3 }}</a>
+                                                <a class="dropdown-item tahun_sakit" href="#" value="{{ now()->year - 4 }}">{{ now()->year - 4 }}</a>
+                                            </div>
+                                        </div>
+                                        <div class="btn-group mx-3 float-right">
                                             <button type="button" class="btn btn-outline-info">Pilih Bulan</button>
                                             <button type="button"
                                                 class="btn btn-outline-info dropdown-toggle dropdown-toggle-split"
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <span class="sr-only">Toggle Dropdown</span>
                                             </button>
-                                            <div class="dropdown-menu">
+                                            <div class="dropdown-menu dropdown-menu-end">
                                                 @for ($i = now()->month; $i >= 1; $i--)
                                                     <button
                                                         class="dropdown-item bulan_sakit @if ($i == now()->month) active @endif"
@@ -452,7 +446,129 @@
 @section('adminlte_js')
     <script>
         $(document).ready(function() {
+            var bulan_select="";
+            $('#karyawan_obat_table').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/karyawan/sakit/obat/top/' + {{ now()->month }},
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    "processData": true,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'nama',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'jumlah',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'detail',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, ]
+            });
+
+
+
+            var kary_diagnosa_table = $('#karyawan_diagnosa_table').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/karyawan/sakit/penyakit/top/' + {{ now()->month }},
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    "processData": true,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'diagnosa',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'jumlah',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'detail',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, ]
+            });
+
+
+            $('#karyawan_sakit_table').DataTable({
+                destroy: true,
+                processing: true,
+                serverSide: true,
+                ajax: {
+                    'url': '/karyawan/sakit/person/top/' + {{ now()->month }},
+                    "dataType": "json",
+                    'type': 'POST',
+                    'headers': {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    "processData": true,
+                },
+                language: {
+                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                },
+                columns: [{
+                    data: 'DT_RowIndex',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'nama',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'jumlah',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, {
+                    data: 'detail',
+                    className: 'align-center nowrap-text',
+                    orderable: false,
+                    searchable: false
+                }, ]
+            });
             $("#karyawan_diagnosa_table > tbody").on('click', '#karyawan_diagnosa_modal', function() {
+                var rows = kary_diagnosa_table.rows($(this).parents('tr')).data();
+                var bulan_sakit = bulan_select;
                 $.ajax({
                     url: "/kesehatan/klinik/diagnosa_detail",
                     beforeSend: function() {
@@ -463,7 +579,16 @@
                         $('#detailmodal').modal('show');
                         $('#modal-label').text('Diagnosa');
                         $("#detaildata").html(result).show();
-                        $('#table_diagnosa').DataTable();
+                        $.ajax({
+                            type: "get",
+                            url: "/karyawan/sakit/penyakit/top/detail/"+bulan_sakit+"/2022/"+rows[0]['diagnosa'],
+                            success: function (data) {
+                                $('#bulan').html(data.header.bulan);
+                                $('#diagnosa').html(data.header.nama);
+                                $('#jumlah').html(data.header.jumlah);
+                                diagnosa_table(data.data)
+                            }
+                        });
                     },
                     complete: function() {
                         $('#loader').hide();
@@ -477,6 +602,40 @@
                 })
 
             });
+
+
+
+            function diagnosa_table(data){
+                var diagnosatable = $('#table_diagnosa').DataTable({
+                    data: data,
+                    columns: [
+                        { data: null },
+
+                        { data: 'tgl_cek',
+                          render: function(data, type, row) {
+                                return moment(new Date(data).toString()).format(
+                                    'DD-MM-YYYY');
+                            }
+                        },
+                        { data: 'nama' },
+                        { data: 'nama_obat' },
+                    ],
+                    columnDefs : [
+                        {
+                            "searchable": false,
+                            "orderable": false,
+                            "targets": 0
+                        },
+                    ],
+                    order: [[2, 'asc']],
+                });
+
+                diagnosatable.on('order.dt search.dt', function () {
+                    diagnosatable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
 
             $("#karyawan_obat_table > tbody").on('click', '#karyawan_obat_modal', function() {
                 $.ajax({
@@ -566,6 +725,7 @@
             // update the value randomly
 
             $('.bulan_kunjungan').click(function() {
+                bulan_select = $(this).attr('value');
                 var bulan_id = $(this).attr('value');
                 $('.bulan_kunjungan').removeClass('active');
                 $('#klinik' + bulan_id).addClass('active');
@@ -585,125 +745,7 @@
                     bulan_id).load();
 
             });
-            $('#karyawan_obat_table').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/karyawan/sakit/obat/top/' + {{ now()->month }},
-                    "dataType": "json",
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    "processData": true,
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'nama',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'jumlah',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'detail',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, ]
-            });
 
-
-
-            $('#karyawan_diagnosa_table').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/karyawan/sakit/penyakit/top/' + {{ now()->month }},
-                    "dataType": "json",
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    "processData": true,
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'diagnosa',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'jumlah',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'detail',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, ]
-            });
-
-
-            $('#karyawan_sakit_table').DataTable({
-                destroy: true,
-                processing: true,
-                serverSide: true,
-                ajax: {
-                    'url': '/karyawan/sakit/person/top/' + {{ now()->month }},
-                    "dataType": "json",
-                    'type': 'POST',
-                    'headers': {
-                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                    },
-                    "processData": true,
-                },
-                language: {
-                    processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
-                },
-                columns: [{
-                    data: 'DT_RowIndex',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'nama',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'jumlah',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, {
-                    data: 'detail',
-                    className: 'align-center nowrap-text',
-                    orderable: false,
-                    searchable: false
-                }, ]
-            });
             $.ajax({
                 url: "/karyawan/masuk/chart_absen",
                 method: "GET",

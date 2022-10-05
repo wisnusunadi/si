@@ -694,7 +694,7 @@
                 $('.modal-title > .data_detail_head').text('Ubah ' + rows[0]['nama']);
             })
 
-            $('#tabel > tbody').on('click', '.stok', function() {
+            $('#tabel > tbody').on('click', '#stok', function() {
                 var rows = tabel.rows($(this).parents('tr')).data();
                 $('.data_detail_head').html(
                     'Stok ' + rows[0]['nama']
