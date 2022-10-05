@@ -910,10 +910,7 @@
                         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
                     columns: [{
-                            data: 'DT_RowIndex',
-                            orderable: false,
-                            searchable: false,
-                            className: 'nowraps align-center'
+                            data: null,
                         },
                         {
                             data: 'po',
