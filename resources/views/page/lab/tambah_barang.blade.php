@@ -70,6 +70,7 @@
 
             </div>
         </div>
+        <!-- card informasi umum alat end -->
 
         <!-- card informasi detail alat -->
         <div class="card border-primary border-top-w3 shadow">
@@ -113,6 +114,7 @@
                             </div>
                         </div>
 
+                        <div id="col_merkAda">
                         <select class="form-control form-control-sm" name="merk" id="selectMerk">
                             <option value="" disabled hidden {{ (old('merk') == null ? 'SELECTED' : '') }} >Pilih merk</option>
                             <option value="0">Tidak di ketahui</option>
@@ -120,9 +122,12 @@
                             <option value="{{ $sp->id_merk }}" {{ (old('merk') == $sp->id_merk ? "SELECTED" : '') }}>{{ $sp->nama_merk }}</option>
                             @endforeach
                         </select>
+                        </div>
 
+                        <div id="col_merkTidak">
                         <input class="form-control mt-2" type="text" name="merkbaru" placeholder="Merk Baru" value="{{ old('merkbaru') }}" id="merkbaru">
                         <small><small class="text-muted">Nama Merk Case Sensitive</small></small>
+                        </div>
                     </div>
                 </div>
 
@@ -138,6 +143,30 @@
                     <div class="col"><span class="float-right">Serial Number</span></div>
                     <div class="col">
                         <input class="form-control" type="text" name="serial_number" value="{{ old('serial_number') }}" id="">
+                    </div>
+                </div>
+
+                <div class="row mb-2">
+                    <div class="col"><span class="float-right">Nomor Urut</span></div>
+                    <div class="col">
+                        <div class="row">
+                            <div class="col-4">
+                                <input class="form-control" type="number" name="nomor_urut" id="form_nourut" value="{{ old('nomor_urut') }}" id="">
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input type="radio" name="cek_no_urut" id="cek_nourut_otomatis" class="form-check-input" value="otomatis" {{ old('cek_no_urut') == null ? 'checked' : (old('cek_no_urut') == 'otomatis' ? 'checked' : '') }}>
+                                    <label class="form-check-label" for="cek_nourut_otomatis">Otomatis</label>
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-check">
+                                    <input type="radio" name="cek_no_urut" id="cek_notrut_manual" class="form-check-input" value="manual" {{ old('cek_no_urut') == 'manual' ? 'checked' : ''}}>
+                                    <label class="form-check-label" for="cek_notrut_manual">Manual</label>
+                                </div>
+                            </div>
+                        </div>
+                        <small class="text-muted">Nomor Urut akan di tampilkan dari nilai terbesar +1</small>
                     </div>
                 </div>
 
@@ -206,6 +235,7 @@
 
             </div>
         </div>
+        <!-- card informasi detail alat end -->
 
         <!-- card dokumen penunjang -->
         <div class="card border-primary border-top-w3 shadow">
@@ -240,6 +270,7 @@
 
             </div>
         </div>
+        <!-- card dokumen penunjang end -->
 
         <div class="card-body">
             <div class="row float-right">
@@ -264,15 +295,50 @@
         $('#selectKlasifikasi').select2();
         $('#selectNama').select2();
         $('#selectMerk').select2();
+
+        // get data nomor urut
+
+        $('#selectNama').change(function(){
+            var x = $('#selectNama').val();
+            console.log(x);
+            $.ajax({
+                type:'GET',
+                url:'{{ url("/api/inventory/get_data_no_urut") }}'+'/'+x,
+                success:function(data) {
+                    showNoUrut(data);
+                }
+            });
+        })
+
+
+        function showNoUrut(data){
+            console.log(data);
+            // bagian nomor urut manual & otomatis
+            @if(old('cek_no_urut') == null OR old('cek_no_urut') == 'otomatis')
+                $("#form_nourut").attr('readonly', true);
+                $('#form_nourut').val(data);
+            @endif
+            @if(old('cek_no_urut') == 'manual')
+                $("#form_nourut").prop( "readonly", false );
+                $('#form_nourut').attr("placeholder", data);
+            @endif
+
+        }
+
+        // get data nomor urut end
     });
 
     @if(old('checkmerk') == null OR old('checkmerk') == 'ada')
-    $( "#merkbaru" ).prop( "disabled", true );
-    $( "#selectMerk" ).prop( "disabled", false );
+        $( "#merkbaru" ).prop( "disabled", true );
+        $( "#selectMerk" ).prop( "disabled", false );
+        $('#col_merkAda').show();
+        $('#col_merkTidak').hide();
     @endif
     @if(old('checkmerk') == 'tidak')
-    $( "#merkbaru" ).prop( "disabled", false );
-    $( "#selectMerk" ).prop( "disabled", true );
+        $( "#merkbaru" ).prop( "disabled", false );
+        $( "#selectMerk" ).prop( "disabled", true );
+        $('#col_merkAda').hide();
+        $('#col_merkTidak').show();
     @endif
 
     $("input[name$='checkmerk']").click(function(){
@@ -280,11 +346,26 @@
         {
             $( "#selectMerk" ).prop( "disabled", false );
             $( "#merkbaru" ).prop( "disabled", true );
+            $('#col_merkTidak').hide();
+            $('#col_merkAda').show();
         }
         if($("#merktidak").is(":checked"))
         {
             $( "#selectMerk" ).prop( "disabled", true );
             $( "#merkbaru" ).prop( "disabled", false );
+            $('#col_merkAda').hide();
+            $('#col_merkTidak').show();
+        }
+    });
+
+    $("input[name$='cek_no_urut']").click(function(){
+        if($("#cek_nourut_otomatis").is(":checked"))
+        {
+            $("#form_nourut").prop( "readonly", true );
+        }
+        if($("#cek_notrut_manual").is(":checked"))
+        {
+            $("#form_nourut").prop( "readonly", false );
         }
     });
 

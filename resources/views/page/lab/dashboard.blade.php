@@ -98,7 +98,10 @@ table tbody tr td i{
                                     <div class="icon">
                                         <i class="fa-regular fa-circle-xmark" aria-hidden="true"></i>
                                     </div>
-                                </div>    
+                                    <div class="overlay">
+                                        <div class="btn btn-primary" data-toggle="modal" data-target="#notOkModal">Detail</div>
+                                    </div>
+                                </div>
                             </div>
                             <!-- info not ok end -->
                             <!-- col kiri alat uji end -->
@@ -207,8 +210,8 @@ table tbody tr td i{
                                         </div>
                                     </div>
                                     <div class="icon">
-                                        <i class="fa-solid fa-calendar-xmark" aria-hidden="true"></i>
-                                    </div>
+                                        <i class="fas fa-calendar-plus" aria-hidden="true"></i>
+                                    </div>  
                                     <div class="overlay">
                                         <div class="btn btn-primary" data-toggle="modal" data-target="#model_mt_berikutnya">Detail</div>
                                     </div>
@@ -900,6 +903,39 @@ table tbody tr td i{
 </div>
 <!-- modal terima barang end -->
 
+<!-- modal alat uji not ok -->
+<div class="modal fade" id="notOkModal" tabindex="-1" aria-labelledby="alatNotOkModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+        <div class="modal-body">
+
+            <h4 class="modal-title">
+                <strong>
+                    Not OK
+                </strong>
+            </h4>
+
+            <table class="table table-stripped table-sm border text-center w-100" id="tabel_data_alat_not_ok">
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Nama Alat uji</th>
+                        <th>SN</th>
+                        <th>Kondisi</th>
+                        <th>Halaman</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                </tbody>
+            </table>
+
+        </div>
+        </div>
+    </div>
+</div>
+<!-- modal alat uji not ok end -->
+
 <!-- modal section end -->
 @stop
 @section('adminlte_js')
@@ -1096,6 +1132,24 @@ $(document).ready(function () {
             {data: 'detail', name: 'detail'},
         ],
         order:[[5, 'asc']]
+    });
+
+    var tabelAlatNotOk = $('#tabel_data_alat_not_ok').DataTable({
+        processing: true,
+        serverSide: true,
+        destroy: false,
+        // ajax: "{{url('/api/inventory/data_dashboard_mt_reminder/')}}",
+        ajax: "{{url('/api/inventory/get_data_not_ok')}}",
+        language: {
+            processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+        },
+        columns: [
+            {data: 'DT_RowIndex', name: 'DT_RowIndex'},
+            {data: 'nm_alatuji', name: 'Nama'},
+            {data: 'serial_number', name: 'SN'},
+            {data: 'kondisi_id', name: 'kondisi'},
+            {data: 'detail', name: 'detail'},
+        ]
     });
 
     // modal konfirmasi peminjaman hide field keterangan

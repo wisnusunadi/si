@@ -84,6 +84,13 @@
                 </div>
 
                 <div class="row mb-2">
+                    <div class="col"><span class="float-right">Nomor urut</span></div>
+                    <div class="col">
+                        <input class="form-control" type="number" name="noUrut" id="" value="{{ (int)$data->no_urut }}">
+                    </div>
+                </div>
+
+                <div class="row mb-2">
                     <div class="col"><span class="float-right">Tanggal Masuk</span></div>
                     <div class="col">
                         <input type="date" name="tgl_masuk" id="" value="{{$sn->tgl_masuk}}">
@@ -202,7 +209,7 @@
         <div class="card-body">
             <div class="row float-right">
                 <div class="col-auto">
-                    <a href="/alatuji/detail/{{$data->id_serial_number}}" class="btn btn-danger float-right">Batal</a>
+                    <a href="{{ route('alatuji.perawatan.detail', ['id' => $data->id_serial_number]) }}" class="btn btn-danger float-right">Batal</a>
                 </div>
                 <div class="col-auto">
                     <input type="submit" value="Submit" class="btn btn-primary float-right">

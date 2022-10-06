@@ -16,6 +16,7 @@ use Yajra\DataTables\DataTables;
 use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
+use Maatwebsite\Excel\Concerns\ToArray;
 
 class AlatujiController extends Controller
 {
@@ -157,6 +158,12 @@ class AlatujiController extends Controller
                     ->editColumn('manual_alatuji', function($d){
                         return $d->manual_alatuji !=null ? $d->manual_alatuji : 'Dokumen Belum di Cantumkan';
                     })
+                    ->editColumn('nama_klasifikasi', function($d){
+                        return $d->nama_klasifikasi.' - klasifikasi';
+                    })
+                    ->editColumn('nm_alatuji', function($d){
+                        return $d->nm_alatuji.' - nama';
+                    })
                     ->rawColumns(['kondisi_id', 'status', 'aksi'])
                     ->make(true);
         } catch (\Exception $e) {
@@ -170,7 +177,7 @@ class AlatujiController extends Controller
     function tambahalat()
     {
         $klasifikasi = DB::table('erp_kalibrasi.klasifikasi')->get();
-        $satuan = DB::table('erp_spa.m_satuan')->whereNotIn('id', [1,2,3])->get();
+        $satuan = DB::table('erp.m_satuan')->whereNotIn('id', [1,2,3])->get();
 
         return view('page.lab.tambah_alat', [
             'klasifikasi' => $klasifikasi,
@@ -190,8 +197,18 @@ class AlatujiController extends Controller
             'klasifikasi' => $klasifikasi,
             'nama' => $nama,
             'merk' => $merk,
-            'lokasi' => $lokasi
+            'lokasi' => $lokasi,
         ]);
+    }
+
+    function get_data_no_urut($alatuji_id){
+        // cek nomor urut serial number alat uji
+        $nourut = AlatSN::where('alatuji_id', $alatuji_id)->get();
+        $nourut = $nourut->map(function($item, $key) {
+            return (int)$item->no_urut;
+        });
+        return
+        $nourut->isNotEmpty() ? max($nourut->toArray()) : 1;
     }
 
     function edit_alat($id)
@@ -201,7 +218,7 @@ class AlatujiController extends Controller
             ->select(
                 'as2.serial_number', 'as2.alatuji_id' ,'as2.tgl_masuk',
                 'as2.merk_id', 'as2.id_serial_number', 'as2.layout_id',
-                'a.desk_alatuji', 'a.klasifikasi_id')
+                'as2.no_urut', 'a.desk_alatuji', 'a.klasifikasi_id')
             ->leftJoin(DB::raw('erp_kalibrasi.alatuji a'),'a.id_alatuji','=','as2.alatuji_id')
             ->where('as2.id_serial_number', $id)->first();
 
@@ -218,7 +235,7 @@ class AlatujiController extends Controller
             'nama' => $nama,
             'merk' => $merk,
             'sn' => $sn,
-            'lokasi' => $lokasi
+            'lokasi' => $lokasi,
         ]);
     }
 
@@ -235,6 +252,11 @@ class AlatujiController extends Controller
             'desk_alatuji' => $request->fungsi,
         ]);
 
+        //format no urut
+        if($request->noUrut < 10){
+            $request->noUrut = '0'.$request->noUrut;
+        }
+
         // update alatuji_sn
         DB::table('erp_kalibrasi.alatuji_sn')->where('id_serial_number', $request->id_serial_number)->update([
             'merk_id' => $request->merk,
@@ -242,6 +264,7 @@ class AlatujiController extends Controller
             'tgl_masuk' => $request->tgl_masuk,
             'kondisi_id' => $request->kondisi,
             'layout_id' => $request->lokasi,
+            'no_urut' => $request->noUrut
         ]);
 
         if($request->has('sop'))
@@ -357,6 +380,7 @@ class AlatujiController extends Controller
             'tgl_pinjam'        => $request->tgl_peminjaman,
             'tgl_batas'         => $request->tgl_pengembalian,
             'status_id'         => '17',
+            'penanggung_jawab'  => $request->pj,
             'peminjam_id'       => auth()->user()->id,
             'created_by'        => auth()->user()->id,
         ]);
@@ -391,7 +415,7 @@ class AlatujiController extends Controller
             if($role == 1){
                 $data = DB::table(DB::raw('erp_kalibrasi.peminjaman p'))
                         ->select(
-                            'u.nama', 'p.ket_tambahan', 'p.kondisi_awal',
+                            'u.nama', 'p.ket_tambahan', 'p.kondisi_awal', 'p.penanggung_jawab',
                             'p.kondisi_akhir', 'p.created_at', 'p.tgl_pinjam',
                             'p.tgl_kembali', 'p.tgl_batas', 'p.status_id', 'p.id_peminjaman'
                         )
@@ -456,6 +480,9 @@ class AlatujiController extends Controller
                         return $d->tgl_batas != null ?
                         Carbon::parse($d->tgl_batas)->format('d-m-Y')
                         :'-';
+                    })
+                    ->editColumn('nama', function($d){
+                        return $d->penanggung_jawab == null ? $d->nama : $d->penanggung_jawab;
                     })
                     ->editColumn('status_id', function($d) use($role){
                         if($d->status_id == 17){
@@ -648,7 +675,10 @@ class AlatujiController extends Controller
             $data =
             DB::table(DB::raw('erp_kalibrasi.peminjaman p'))
             ->select(
-                'p.serial_number_id', 'p.id_peminjaman', 'p.tgl_pinjam', 'p.tgl_batas', 'p.created_at', 'u.nama'
+                'p.serial_number_id', 'p.id_peminjaman',
+                'p.tgl_pinjam', 'p.tgl_batas',
+                'p.created_at', 'u.nama',
+                'p.penanggung_jawab',
             )
             ->leftJoin(DB::raw('erp_spa.users u'), 'u.id', 'p.peminjam_id')
             ->where('p.id_peminjaman', $id)
@@ -657,6 +687,7 @@ class AlatujiController extends Controller
             $data->tgl_pinjam = Carbon::parse($data->tgl_pinjam)->format('d M Y');
             $data->tgl_batas = Carbon::parse($data->tgl_batas)->format('d M Y');
             $data->created_at = Carbon::parse($data->created_at)->format('d M Y');
+            $data->nama = $data->penanggung_jawab == null ? $data->nama : $data->penanggung_jawab;
 
             return Response::json($data);
 
@@ -1188,4 +1219,53 @@ class AlatujiController extends Controller
             ->make(true);
     }
 
+
+    function get_data_not_ok(){
+        $a = 
+        DB::table(DB::raw('erp_kalibrasi.alatuji_sn a2'))
+        ->select(
+            'a2.serial_number', 'a.nm_alatuji', 'a2.kondisi_id', 'a2.id_serial_number'
+        )
+        ->where('a2.kondisi_id', 10)
+        ->leftJoin(DB::raw('erp_kalibrasi.alatuji a'), 'a.id_alatuji', 'a2.alatuji_id')
+        ->get();
+
+        return
+        DataTables::of($a)
+        ->addIndexColumn()
+        ->editColumn('kondisi_id', function($d){
+            return $d->kondisi_id == 9 ?
+            '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan">
+            <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
+            </div>'
+            :
+            '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Tidak Dapat Di Gunakan">
+            <i class="fa fa-times-circle text-danger fa-lg" aria-hidden="true"></i>
+            </div>';
+        })
+        ->addColumn('detail', function($d){
+            return
+            '<a class="btn btn-sm btn-outline-primary py-0" href="'.route("alatuji.detail", ["id"=>$d->id_serial_number]).'">
+            Detail
+            </a>';
+        })
+        ->rawColumns(['detail', 'kondisi_id'])
+        ->make(true);
+    }
+
+    function get_data_autocomplete(){
+        $data = 
+        DB::table(DB::raw('erp_kalibrasi.peminjaman p'))
+        ->select('p.penanggung_jawab')
+        ->groupBy('p.penanggung_jawab')
+        ->get();
+
+        $test = $data->map(function($item, $key){
+            return $item->penanggung_jawab;
+        });
+
+        return $test;
+    }
+
 }
+
