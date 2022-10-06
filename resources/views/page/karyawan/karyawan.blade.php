@@ -105,11 +105,13 @@
         <div class='table-responsive'>
           <table id="tabel" class="table table-hover">
             <thead style="text-align: center;">
+              @if(Auth::user()->divisi_id == "28")
               <tr>
                 <th colspan="14">
                   <a href="/karyawan/create" style="color: white;"><button type="button" class="btn btn-block btn-success btn-sm" style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button></a>
                 </th>
               </tr>
+              @endif
               <tr>
                 <th>No</th>
                 <th>Divisi</th>
@@ -268,6 +270,7 @@
 @section('adminlte_js')
 <script>
   $(function() {
+    var divisi = "{{Auth::user()->divisi_id}}";
     var tabel = $('#tabel').DataTable({
       processing: true,
       serverSide: true,
@@ -312,17 +315,14 @@
         },
         {
           data: 'button',
+          visible: divisi == '28' ? true : false
         },
-        {
-          data: 'jabatan',
-          visible:false
-        }
       ]
     });
 
     $('#tabel > tbody').on('click', '#delete', function() {
         var data_id = $(this).attr('data-id');
-     Swal.fire({
+        Swal.fire({
             title: 'Hapus Data',
             text: 'Yakin ingin menghapus data ini?',
             icon: 'warning',

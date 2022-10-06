@@ -120,12 +120,14 @@
                     <div class='table-responsive'>
                         <table id="tabel" class="table table-hover styled-table table-striped">
                             <thead style="text-align: center;">
+                                @if(Auth::user()->divisi_id == "28")
                                 <tr>
                                     <th colspan="12">
                                         <button type="button" id="btntambahobat" class="btn btn-block btn-success btn-sm"
                                             style="width: 200px;"><i class="fas fa-plus"></i> &nbsp; Tambah</i></button>
                                     </th>
                                 </tr>
+                                @endif
                                 <tr>
                                     <th>No</th>
                                     <th>Nama</th>
@@ -483,6 +485,7 @@
             });
             @endif
         $(function() {
+            var divisi_id = '{{Auth::user()->divisi_id}}';
             $(document).on('keyup change', '#form_stok_obat', function(){
                 if($('#tgl_pembelian').val() != "" && $('#stok_pembelian').val() != ""){
                     $('#button_tambah_stok').attr('disabled', false);
@@ -707,7 +710,8 @@
                             data: 'jum'
                         },
                         {
-                            data: 'aksi'
+                            data: 'aksi',
+                            visible: divisi_id == '28' ? true : false
                         }
                     ],
                 });

@@ -128,6 +128,7 @@
                                         <table id="tabel"
                                             class="table table-hover styled-table table-striped align-center">
                                             <thead>
+                                                @if(Auth::user()->divisi_id == "28")
                                                 <tr>
                                                     <th colspan="14">
                                                         <a href="/kesehatan/tambah" style="color: white;"><button
@@ -136,6 +137,7 @@
                                                                 Tambah</i></button></a>
                                                     </th>
                                                 </tr>
+                                                @endif
                                                 <tr>
                                                     <th>No</th>
                                                     <th>Divisi</th>
@@ -398,6 +400,7 @@
                         <table class="table table-hover styled-table table-striped align-center" width="100%"
                             id="tabel_detail">
                             <thead>
+                                @if(Auth::user()->divisi_id == "28")
                                 <tr>
                                     <th colspan="12">
                                         <button type="button" class="btn btn-block btn-success btn-sm"
@@ -406,6 +409,7 @@
                                             Data</i></button>
                                     </th>
                                 </tr>
+                                @endif
                                 <tr>
                                     <th>No</th>
                                     <th>Tgl</th>
@@ -541,6 +545,7 @@
                         <table class="table table-hover styled-table table-striped align-center" width="100%"
                             id="tabel_detail_penyakit">
                             <thead>
+                                @if(Auth::user()->divisi_id == "28")
                                 <tr>
                                     <th colspan="12">
                                         <button type="button" class="btn btn-block btn-success btn-sm"
@@ -549,6 +554,7 @@
                                             Data</i></button>
                                     </th>
                                 </tr>
+                                @endif
                                 <tr>
                                     <th>No</th>
                                     <th>Nama Penyakit</th>
@@ -677,6 +683,7 @@
 @stop
 @section('adminlte_js')
     <script>
+        var divisi_id = '{{Auth::user()->divisi_id}}';
         $(function() {
             $('#tabel_detail_penyakit > tbody').on('click', '#delete', function() {
                 var data_id = $(this).attr('data-id');
@@ -876,7 +883,8 @@
                         //     data: 'keterangan'
                         //   },
                         {
-                            data: 'aksi'
+                            data: 'aksi',
+                            visible: divisi_id == '28' ? true : false
                         },
                     ],
                 });
@@ -975,7 +983,8 @@
                             data: 'keterangan'
                         },
                         {
-                            data: 'aksi'
+                            data: 'aksi',
+                            visible: divisi_id == '28' ? true : false
                         },
                     ],
                 });
@@ -1278,6 +1287,7 @@
         });
     </script>
     <script>
+
         $(function() {
             $('#tabel_berat_data > tbody').on('click', '#delete', function() {
                 Swal.fire({
@@ -1356,7 +1366,8 @@
                         data: 'keterangan'
                     },
                     {
-                        data: 'aksi'
+                        data: 'aksi',
+                        visible: divisi_id == '28' ? true : false
                     }
                 ]
             });
@@ -1420,7 +1431,8 @@
                         data: 'tahap'
                     },
                     {
-                        data: 'aksi'
+                        data: 'aksi',
+                        visible: divisi_id == '28' ? true : false
                     }
                 ],
             });
@@ -1486,7 +1498,8 @@
                         data: 'keterangan'
                     },
                     {
-                        data: 'aksi'
+                        data: 'aksi',
+                        visible: divisi_id == '28' ? true : false
                     }
                 ],
             });
@@ -1552,7 +1565,8 @@
                         orderable: false,
                         searchable: false
                     }, {
-                        data: 'aksi'
+                        data: 'aksi',
+                        visible: divisi_id == '28' ? true : false
                     }
 
                 ],
