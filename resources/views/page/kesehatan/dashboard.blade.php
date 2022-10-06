@@ -197,11 +197,11 @@
                                         <div class="btn-group float-right">
                                             <button type="button" class="btn btn-outline-info">Pilih Bulan</button>
                                             <button type="button"
-                                                class="btn btn-outline-info dropdown-toggle dropdown-toggle-split"
+                                                class="btn btn-outline-info dropdown-toggle dropdown-toggle-split" data-display="static"
                                                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                 <span class="sr-only">Toggle Dropdown</span>
                                             </button>
-                                            <div class="dropdown-menu ">
+                                            <div class="dropdown-menu dropdown-menu-right">
                                                 @for ($i = now()->month; $i >= 1; $i--)
                                                     <button
                                                         class="dropdown-item bulan_kunjungan @if ($i == now()->month) active @endif"
@@ -328,7 +328,7 @@
                                 <div class="row mb-3">
                                     <h4 class="col-6">Karyawan Sakit {{ now()->year }}</h4>
                                     <div class="col-6">
-                                        <div class="btn-group float-right px-2">
+                                        {{-- <div class="btn-group float-right px-2">
                                             <button type="button" class="btn bg-olive dropdown-toggle dropdown-icon" data-toggle="dropdown" data-display="static" aria-expanded="false" id="tahun_sakit"> Tahun
                                             <span class="sr-only">Toggle Dropdown</span>
                                             </button>
@@ -339,12 +339,10 @@
                                                 <li role="presentation"><a class="dropdown-item tahun_sakit" role="menuitem" tabindex="-1" value="{{ now()->year - 3 }}">{{ now()->year - 3 }}</a></li>
                                                 <li role="presentation"><a class="dropdown-item tahun_sakit" role="menuitem" tabindex="-1" value="{{ now()->year - 4 }}">{{ now()->year - 4 }}</a></li>
                                             </ul>
-                                        </div>
+                                        </div> --}}
                                         <div class="btn-group mx-3 float-right">
                                             <button type="button" class="btn btn-outline-info">Pilih Bulan</button>
-                                            <button type="button"
-                                                class="btn btn-outline-info dropdown-toggle dropdown-toggle-split"
-                                                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <button type="button" class="btn btn-outline-info dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
                                                 <span class="sr-only">Toggle Dropdown</span>
                                             </button>
                                             <div class="dropdown-menu dropdown-menu-right">
