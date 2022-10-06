@@ -1064,35 +1064,28 @@ return [
             'auth' => [22]
         ],
         [
-            'text'    => 'Kalibrasi',
-            'icon'    => 'fa fa-wrench',
+            'icon' => 'fas fa-home',
+            'text' => 'Dashboard',
+            'url'  => '/lab/dashboard',
             'auth' => [22],
-            'submenu' => [
-                [
-                    'icon' => 'fas fa-home',
-                    'text' => 'Dashboard',
-                    'url'  => '/lab/dashboard',
-                    'auth' => [22],
-                ],
-                [
-                    'icon' => 'fa fa-wrench',
-                    'text' => 'List Alat Uji',
-                    'url'  => '/lab/alatuji/show',
-                    'auth' => [22],
-                ],
-                [
-                    'icon' => 'fa fa-plus-circle',
-                    'text' => 'Tambah Jenis Alat Uji',
-                    'url'  => '/lab/alatuji/create',
-                    'auth' => [22],
-                ],
-                [
-                    'icon' => 'fa fa-plus-circle',
-                    'text' => 'Tambah Serial Number',
-                    'url'  => '/lab/alatuji/barang/create',
-                    'auth' => [22],
-                ],
-            ],
+        ],
+        [
+            'icon' => 'fa fa-wrench',
+            'text' => 'List Alat Uji',
+            'url'  => '/lab/alatuji/show',
+            'auth' => [22],
+        ],
+        [
+            'icon' => 'fa fa-plus-circle',
+            'text' => 'Tambah Jenis Alat Uji',
+            'url'  => '/lab/alatuji/create',
+            'auth' => [22],
+        ],
+        [
+            'icon' => 'fa fa-plus-circle',
+            'text' => 'Tambah Serial Number',
+            'url'  => '/lab/alatuji/barang/create',
+            'auth' => [22],
         ],
 
         // [

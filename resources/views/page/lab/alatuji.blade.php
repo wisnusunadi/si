@@ -7,7 +7,7 @@
 @stop
 
 @section('content')
-
+    <script src="https://cdn.datatables.net/rowgroup/1.2.0/css/rowGroup.dataTables.min.css"></script>
     <div class="container-fluid">
         <div class="container bg-white p-3">
 
@@ -203,6 +203,7 @@
     </div>
 @stop
 @section('adminlte_js')
+    <script src="https://cdn.datatables.net/rowgroup/1.2.0/js/dataTables.rowGroup.min.js"></script>
     <script>
     $(document).ready(function(){
         // emable bootstrap tooltip
@@ -244,12 +245,20 @@
             ],
             order: [[0, 'asc']],
             rowGroup: {
-                dataSrc: ['nama_klasifikasi','nm_alatuji']
-            },
-            columnDefs: [{
-                targets: [8,9],
-                visible: false,
-            }],
+                dataSrc: ['nama_klasifikasi', 'nm_alatuji'],
+                startRender: function(rows, group) {
+                    var namaCek = new RegExp('- nama*');
+                    if(namaCek.test(group) == true){
+                        group = group.replace(' - nama','');
+                        group = $('<tr class="group group-start"><td  class="bc-primary" style="color:#27445C;" colspan="11"><strong>' + group + '</strong></td></tr>');
+                    }else{
+                        group = group.replace(' - klasifikasi', '');
+                        group = $('<tr class="group group-start"><td class="text-white" style="background-color:#27445C;" colspan="11"><strong>' + group + '</strong></td></tr>');
+                    }
+                    return group;
+                }
+                
+            }
         });
 
     });
