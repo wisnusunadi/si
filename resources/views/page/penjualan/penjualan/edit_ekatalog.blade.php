@@ -644,7 +644,7 @@
                                                             <table class="table" style="text-align: center;" id="produktable">
                                                                 <thead>
                                                                     <tr>
-                                                                        <th colspan="7">
+                                                                        <th colspan="8">
                                                                             <button type="button" class="btn btn-primary float-right" id="addrowproduk">
                                                                                 <i class="fas fa-plus"></i>
                                                                                 Produk
@@ -652,13 +652,14 @@
                                                                         </th>
                                                                     </tr>
                                                                     <tr>
-                                                                        <th width="5%">No</th>
+                                                                        <th width="2%">No</th>
                                                                         <th width="35%">Nama Paket</th>
                                                                         <th width="10%">Jumlah</th>
+                                                                        <th width="6%">Stok Distributor</th>
                                                                         <th width="15%">Harga</th>
                                                                         <th width="15%">Ongkir</th>
                                                                         <th width="15%">Subtotal</th>
-                                                                        <th width="5%">Aksi</th>
+                                                                        <th width="2%">Aksi</th>
                                                                     </tr>
                                                                 </thead>
 
@@ -713,6 +714,11 @@
                                                                             </div>
                                                                         </td>
                                                                         <td>
+                                                                            <div class="form-check col-form-label">
+                                                                                <input type="checkbox" class="form-check-input stok_dist" id="stok_dist" name="stok_dist[]" value="1">
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
                                                                             <div class="form-group d-flex justify-content-center">
 
                                                                                 <input type="text" class="form-control produk_harga" name="produk_harga[{{$produkpenjualan}}]" id="produk_harga{{$produkpenjualan}}" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="{{number_format($f->harga,0,',','.')}}" />
@@ -757,6 +763,11 @@
 
                                                                                 </div>
                                                                                 <small id="produk_ketersediaan"></small>
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
+                                                                            <div class="form-check col-form-label">
+                                                                                <input type="checkbox" class="form-check-input stok_dist" id="stok_dist" name="stok_dist[]" value="1">
                                                                             </div>
                                                                         </td>
                                                                         <td>
@@ -806,6 +817,11 @@
                                                                             </div>
                                                                         </td>
                                                                         <td>
+                                                                            <div class="form-check col-form-label">
+                                                                                <input type="checkbox" class="form-check-input stok_dist" id="stok_dist" name="stok_dist[]" value="1">
+                                                                            </div>
+                                                                        </td>
+                                                                        <td>
                                                                             <div class="form-group d-flex justify-content-center">
 
                                                                                 <input type="text" class="form-control produk_harga" name="produk_harga[0]" id="produk_harga0" placeholder="Masukkan Harga" style="width:100%;" aria-describedby="prdhrg" value="" />
@@ -832,8 +848,8 @@
                                                                 </tbody>
                                                                 <tfoot>
                                                                     <tr>
-                                                                        <th colspan="5" style="text-align:right;">Total Harga</th>
-                                                                        <th id="totalhargaprd" class="align-right">Rp.
+                                                                        <th colspan="6" style="text-align:right;">Total Harga</th>
+                                                                        <th colspan="2" id="totalhargaprd" class="align-right">Rp.
                                                                             @if(isset($e->pesanan))
                                                                             @if(isset($e->pesanan->detailpesanan))
                                                                             <?php $x = 0;
@@ -1675,6 +1691,11 @@
                                 <input type="number" class="form-control produk_jumlah" aria-label="produk_satuan" name="produk_jumlah[]" id="produk_jumlah" style="width:100%;">
                             </div>
                             <small id="produk_ketersediaan"></small>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-check col-form-label">
+                            <input type="checkbox" class="form-check-input stok_dist" id="stok_dist" name="stok_dist[]" value="1">
                         </div>
                     </td>
                     <td>
