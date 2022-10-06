@@ -1514,54 +1514,45 @@ return [
         ],
 
         [
-            'header' => 'Maintenance',
+            'header' => 'AIR',
             'auth' => [16,10]
         ],
 
         [
-            'text'    => 'AIR',
-            'icon'    => 'fas fa-tint',
+            'text'    => 'Grafik Air',
+            'icon'    => 'fas fa-tint fa-fw',
             'auth' => [16,10],
-            'submenu' => [
-                [
-                    'text' => 'Air Masuk',
-                    'icon' => 'far fa-circle',
-                    'url' => '/mtc/air/masuk',
-                    'auth' => [16,10],
-                ],
+            'url' => '/mtc/air/masuk',
                 // [
                 //     'text' => 'Air Keluar',
                 //     'icon' => 'far fa-circle',
                 //     'url' => '/mtc/air/masuk',
                 //     'auth' => [16,10],
                 // ],
-            ],
         ],
 
         [
-            'text'    => 'LISTRIK',
-            'icon'    => 'fas fa-bolt',
+            'header' => 'LISTRIK',
+            'auth' => [16,10]
+        ],
+
+        [
+            'text' => 'Panel Listrik',
+            'icon' => 'fas fa-bolt fa-fw',
+            'url' => '/mtc/listrik/panel',
             'auth' => [16,10],
-            'submenu' => [
-                [
-                    'text' => 'Data Monitoring',
-                    'icon' => 'far fa-circle',
-                    'url' => '/mtc/listrik/monitoring/table',
-                    'auth' => [16,10],
-                ],
-                [
-                    'text' => 'Grafik Monitoring',
-                    'icon' => 'far fa-circle',
-                    'url' => '/mtc/listrik/monitoring/grafik',
-                    'auth' => [16,10],
-                ],
-                [
-                    'text' => 'Panel Listrik',
-                    'icon' => 'far fa-circle',
-                    'url' => '/mtc/listrik/panel',
-                    'auth' => [16,10],
-                ],
-            ],
+        ],
+        [
+            'text' => 'Data Monitoring',
+            'icon' => 'fas fa-database fa-fw',
+            'url' => '/mtc/listrik/monitoring/table',
+            'auth' => [16,10],
+        ],
+        [
+            'text' => 'Grafik Monitoring',
+            'icon' => 'far fa-chart-bar fa-fw',
+            'url' => '/mtc/listrik/monitoring/grafik',
+            'auth' => [16,10],
         ],
 
         // [

@@ -57,7 +57,7 @@
 
 @section('content')
 <section class="content">
-    <div class="container-fluid bg-white text-dark">
+    <div class="container-fluid">
         <div class="card">
             <div class="card-body">
                 <ul class="nav nav-pills mb-3" id="pills-tab-1" role="tablist">

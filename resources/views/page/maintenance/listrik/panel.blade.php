@@ -31,90 +31,96 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 @section('content')
 <section class="content">
 
-    <div class="container-fluid"><h2>Data Panel</h2>
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary" data-toggle="modal" id="btnCreate">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
-                <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
-              </svg>Tambah
-          </button>
-
-          <!-- Modal -->
-          <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog" role="document">
-              <div class="modal-content">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="exampleModalLabel">Tambah Panel</h5>
-                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                  </button>
-                </div>
-                <form method="post" name="formPanel" id="formPanel">
-
-                <div class="modal-body">
-                    <input type="hidden" name="device_id" id="device_id" value="">
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroup-sizing-sm">Kode Panel</span>
-                        </div>
-                        <input type="text" name="kd_panel" id="kd_panel" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" require>
-                    </div>
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                          <span class="input-group-text" id="inputGroup-sizing-sm">Nama Panel</span>
-                        </div>
-                        <input type="text" name="nm_panel" id="nm_panel" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-                    </div>
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroup-sizing-sm">Posisi Panel</span>
-                        </div>
-                        <input type="text" name="posisi" id="posisi" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-                    </div>
-                    <div class="input-group input-group-sm mb-3">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroup-sizing-sm">Lokasi Panel</span>
-                        </div>
-                        <input type="text" name="lokasi" id="lokasi" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
-                    </div>
-                </div>
-                <div class="modal-footer">
-                  <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
-                  <button type="submit" class="btn btn-primary" id="btnSimpan">Simpan</button>
-                </div>
-                </form>
-              </div>
-            </div>
-          </div>
-
-
-          <div class="card-body">
-            <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
-                <div class="row"><div class="col-sm-12 col-md-6">
-                    <div class="dt-buttons btn-group flex-wrap">
-                        <span class="dt-down-arrow"></span>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="container-fluid">
         <div class="row">
-            <div class="col-sm-12">
-                <table id="tablePanel" class="table table-striped" >
-            <thead>
-            <tr>
-                <th >No</th>
-                <th >Nama Panel</th>
-                <th >Kode Panel</th>
-                <th >Posisi</th>
-                <th >Lokasi</th>
-                <th >Aksi</th>
-            </tr>
-            </thead>
-            <tbody>
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
 
-        </tbody>
 
-            </table>
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn btn-primary" data-toggle="modal" id="btnCreate">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+                        </svg>Tambah
+                    </button>
+
+                    <!-- Modal -->
+                    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">Tambah Panel</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                            <form method="post" name="formPanel" id="formPanel">
+
+                            <div class="modal-body">
+                                <input type="hidden" name="device_id" id="device_id" value="">
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Kode Panel</span>
+                                    </div>
+                                    <input type="text" name="kd_panel" id="kd_panel" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm" require>
+                                </div>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                    <span class="input-group-text" id="inputGroup-sizing-sm">Nama Panel</span>
+                                    </div>
+                                    <input type="text" name="nm_panel" id="nm_panel" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Posisi Panel</span>
+                                    </div>
+                                    <input type="text" name="posisi" id="posisi" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                                <div class="input-group input-group-sm mb-3">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text" id="inputGroup-sizing-sm">Lokasi Panel</span>
+                                    </div>
+                                    <input type="text" name="lokasi" id="lokasi" class="form-control" aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Batal</button>
+                            <button type="submit" class="btn btn-primary" id="btnSimpan">Simpan</button>
+                            </div>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div id="example1_wrapper" class="dataTables_wrapper dt-bootstrap4">
+                            <div class="row"><div class="col-sm-12 col-md-6">
+                                <div class="dt-buttons btn-group flex-wrap">
+                                    <span class="dt-down-arrow"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-12">
+                        <table id="tablePanel" class="table table-striped" >
+                            <thead>
+                            <tr>
+                                <th >No</th>
+                                <th >Nama Panel</th>
+                                <th >Kode Panel</th>
+                                <th >Posisi</th>
+                                <th >Lokasi</th>
+                                <th >Aksi</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>

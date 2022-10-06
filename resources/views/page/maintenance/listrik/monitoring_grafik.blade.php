@@ -27,9 +27,13 @@
 @section('content')
 <section class="content">
 
-<div class="container-fluid bg-white text-dark">
-    <div class="tab-content" id="pills-tabContent">
-        <div class="tab-pane fade show active bg-white text-dark ml-2" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab"><h6>Grafik Listrik</h6>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+
+
             <div class="d-flex bd-highlight">
                 <div class="flex-grow-1 bd-highlight">
 
@@ -71,171 +75,171 @@
                         <li class="nav-item">
                             <a class="nav-link" id="pills-home-tab_5" data-toggle="pill" href="#pills-home-5" role="tab" aria-controls="pills-home-5" aria-selected="false">1 Bulan</a>
                         </li>
-                  </ul>
-
-
+                    </ul>
                 </div>
             </div>
+            <div class="tab-content" id="pills-tab-1Content">
+                <div class="tab-pane fade show active" id="pills-home-1" role="tabpanel" aria-labelledby="pills-home-1">
+                    <div class="row">
+                        <div class="col-12">
+                            <div class="container">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="title-rt"></div>
+                                        <canvas id="grafik_rt"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    {{-- <div class="row">
+                        <div class="col">
+                            <div class="container" id="vll1">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <canvas id="gvll1"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                            </div>
+
+                             <div class="container" id="c1">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <canvas id="gc1"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                             </div>
+                             <div class="container" id="vln1">
+                             <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <canvas id="gvln1"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                             </div>
+                             <div class="container" id="p1">
+                             <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <canvas id="gp1"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                             </div>
+                             <div class="container" id="pf1">
+                             <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <canvas id="gpf1"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                             </div>
+                             <div class="container" id="dpf1">
+                             <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <canvas id="gdpf1"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                             </div>
+                             <div class="container" id="f1">
+                             <div class="row">
+                                    <div class="col-12">
+                                        <div class="card">
+                                            <div class="card-body">
+                                                <canvas id="gf1"></canvas>
+                                            </div>
+                                        </div>
+                                    </div>
+                                 </div>
+                             </div>
+                        </div>
+                    </div> --}}
+                </div>
+                <div class="tab-pane fade" id="pills-home-2" role="tabpanel" aria-labelledby="pills-home-2">
+                    <div class="row m-3">
+                        <div class="col-12">
+                            <div class="container">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="title-15m"></div>
+                                        <canvas id="grafik_15m"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-home-3" role="tabpanel" aria-labelledby="pills-home-3">
+                    <div class="row m-3">
+                        <div class="col-12">
+                            <div class="container">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="title-1j"></div>
+                                        <canvas id="grafik_1j"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-home-4" role="tabpanel" aria-labelledby="pills-home-4">
+                    <div class="row m-3">
+                        <div class="col-12">
+                            <div class="container">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="title-1h"></div>
+                                        <canvas id="grafik_1h"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="pills-home-5" role="tabpanel" aria-labelledby="pills-home-5">
+                    <div class="row m-3">
+                        <div class="col-12">
+                            <div class="container">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div class="title-1b"></div>
+                                        <canvas id="grafik_1b"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
 
         </div>
     </div>
-    <div class="tab-content" id="pills-tab-1Content">
-        <div class="tab-pane fade show active" id="pills-home-1" role="tabpanel" aria-labelledby="pills-home-1">
-            <div class="row">
-                <div class="col-12">
-                    <div class="container">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="title-rt"></div>
-                                <canvas id="grafik_rt"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {{-- <div class="row">
-                <div class="col">
-                    <div class="container" id="vll1">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="gvll1"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                         </div>
-                    </div>
-
-                     <div class="container" id="c1">
-                        <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="gc1"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                         </div>
-                     </div>
-                     <div class="container" id="vln1">
-                     <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="gvln1"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                         </div>
-                     </div>
-                     <div class="container" id="p1">
-                     <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="gp1"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                         </div>
-                     </div>
-                     <div class="container" id="pf1">
-                     <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="gpf1"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                         </div>
-                     </div>
-                     <div class="container" id="dpf1">
-                     <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="gdpf1"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                         </div>
-                     </div>
-                     <div class="container" id="f1">
-                     <div class="row">
-                            <div class="col-12">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <canvas id="gf1"></canvas>
-                                    </div>
-                                </div>
-                            </div>
-                         </div>
-                     </div>
-                </div>
-            </div> --}}
-        </div>
-        <div class="tab-pane fade" id="pills-home-2" role="tabpanel" aria-labelledby="pills-home-2">
-            <div class="row m-3">
-                <div class="col-12">
-                    <div class="container">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="title-15m"></div>
-                                <canvas id="grafik_15m"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="pills-home-3" role="tabpanel" aria-labelledby="pills-home-3">
-            <div class="row m-3">
-                <div class="col-12">
-                    <div class="container">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="title-1j"></div>
-                                <canvas id="grafik_1j"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="pills-home-4" role="tabpanel" aria-labelledby="pills-home-4">
-            <div class="row m-3">
-                <div class="col-12">
-                    <div class="container">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="title-1h"></div>
-                                <canvas id="grafik_1h"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="tab-pane fade" id="pills-home-5" role="tabpanel" aria-labelledby="pills-home-5">
-            <div class="row m-3">
-                <div class="col-12">
-                    <div class="container">
-                        <div class="card">
-                            <div class="card-body">
-                                <div class="title-1b"></div>
-                                <canvas id="grafik_1b"></canvas>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-    </div>
-
+</div>
+</div>
 
 {{--  --}}
 </div>
