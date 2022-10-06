@@ -129,7 +129,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
     let dataPanel = [];
     $.ajax({
         type:'get',
-        url:'http://localhost:8000/listrik/ambilpanel',
+        url:'http://192.168.13.2:85/listrik/ambilpanel',
         success:function(data) {
             dataPanel.push(data.data)
             ambilPanel(data.data)
@@ -173,7 +173,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
 
         $.ajax({
             type:'get',
-            url:'http://localhost:8000/listrik/ambilpanel?id='+ids,
+            url:'http://192.168.13.2:85/listrik/ambilpanel?id='+ids,
             success:function(data) {
                 $('#device_id').val(data.data[0].device_id)
                 $('#kd_panel').val(data.data[0].device_id)
@@ -203,7 +203,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
             if (result.isConfirmed) {
                 $.ajax({
                     type:'delete',
-                    url:'http://localhost:8000/listrik/delpanel',
+                    url:'http://192.168.13.2:85/listrik/delpanel',
                     data: {
                         kd_panel: ids
                     },
@@ -240,7 +240,7 @@ header("Access-Control-Allow-Headers: Origin, X-Requested-With, Content-Type, Ac
                     headers: {
                             'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                         },
-                    url: "http://localhost:8000/listrik/panel",
+                    url: "http://192.168.13.2:85/listrik/panel",
                     type: "POST",
                     data: formData,
                     cache: false,
