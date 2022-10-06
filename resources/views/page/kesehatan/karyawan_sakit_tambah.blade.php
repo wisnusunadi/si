@@ -495,11 +495,12 @@
                 templateResult: function(data) {
                         var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.stok + `">` + data.stok + `</span></div>`);
                         return $span;
-                    },
-                    templateSelection: function(data) {
-                        var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.stok + `">` + data.stok + `</span></div>`);
-                        return $span;
                     }
+                    // ,
+                    // templateSelection: function(data) {
+                    //     var $span = $(`<div><span class="col-form-label">` + data.text + `</span><span class="badge blue-text float-right col-form-label stok" data-id="` + data.stok + `">` + data.stok + `</span></div>`);
+                    //     return $span;
+                    // }
             });
         }
 

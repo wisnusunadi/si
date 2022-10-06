@@ -1007,8 +1007,8 @@ class KesehatanController extends Controller
                 }
                 return $x;
             })
-            ->addColumn('aksi', function($data){
-                return '<i class="fas fa-trash text-danger" id="delete" data-id="'.$data->id.'"></i>';
+            ->addColumn('aksi', function ($data) {
+                return '<i class="fas fa-trash text-danger" id="delete" data-id="' . $data->id . '"></i>';
             })
             ->rawColumns(['aksi'])
             ->make(true);
@@ -2119,24 +2119,22 @@ class KesehatanController extends Controller
 
     public function riwayat_penyakit_data(Request $request)
     {
-      $riwayat_penyakit = Riwayat_penyakit::where('nama', 'LIKE', '%' . $request->term . '%')->groupby('nama')->get();
-    //   $data = array();
-    //   foreach($riwayat_penyakit as $r){
-    //     $data[] = $r->nama;
-    //   }
-      return json_encode($riwayat_penyakit);
-
+        $riwayat_penyakit = Riwayat_penyakit::where('nama', 'LIKE', '%' . $request->term . '%')->groupby('nama')->get();
+        //   $data = array();
+        //   foreach($riwayat_penyakit as $r){
+        //     $data[] = $r->nama;
+        //   }
+        return json_encode($riwayat_penyakit);
     }
 
     public function riwayat_analisa_data(Request $request)
     {
-      $data = Karyawan_sakit::where('analisa', 'LIKE', '%' . $request->term . '%')->groupby('analisa')->get();
-    //   $data = array();
-    //   foreach($riwayat_penyakit as $r){
-    //     $data[] = $r->nama;
-    //   }
-      return json_encode($data);
-
+        $data = Karyawan_sakit::where('analisa', 'LIKE', '%' . $request->term . '%')->groupby('analisa')->get();
+        //   $data = array();
+        //   foreach($riwayat_penyakit as $r){
+        //     $data[] = $r->nama;
+        //   }
+        return json_encode($data);
     }
 
 
@@ -2231,10 +2229,38 @@ class KesehatanController extends Controller
             ->make(true);
     }
 
+    public function obat_top_detail($month, $year, $data_obat)
+    {
+
+        $detail_obat = Detail_obat::whereHas('Karyawan_sakit', function ($q) use ($month, $year) {
+            $q->whereMonth('tgl_cek', $month);
+            $q->whereYear('tgl_cek',  $year);
+        })
+            ->where('obat_id', $data_obat)
+            ->get();
+        $obat = Obat::find($data_obat);
+
+
+        foreach ($detail_obat as $key => $d) {
+            $data[$key]['nama'] = $d->karyawan_sakit->Karyawan->nama;
+            $data[$key]['tgl_cek'] = $d->karyawan_sakit->tgl_cek;
+            $data[$key]['diagnosa'] = $d->karyawan_sakit->diagnosa;
+        }
+
+        $header = date("F", mktime(0, 0, 0, $month, 1));
+        return response()->json([
+            'header' => array(
+                'bulan' => $header . ' ' .  $year,
+                'jumlah' => count($detail_obat),
+                'nama' => $obat->nama
+            ),
+            'data' => $data
+        ]);
+    }
     public function obat_top($id)
     {
         $now = Carbon::now();
-        $data =   Detail_obat::select('obats.nama', DB::raw('count(*) as jumlah'))
+        $data =   Detail_obat::select('obats.id as obat_id', 'obats.nama', DB::raw('count(*) as jumlah'))
             ->leftJoin('obats', 'obats.id', '=', 'detail_obats.obat_id')
             ->leftJoin('karyawan_sakits', 'karyawan_sakits.id', '=', 'detail_obats.karyawan_sakit_id')
             ->groupBy('obat_id')
@@ -2265,31 +2291,29 @@ class KesehatanController extends Controller
     public function penyakit_top_detail($month, $year, $data_sakit)
     {
         $now = Carbon::now();
-        $karyawan_sakit =   Karyawan_sakit::with(['Detail_obat.Obat','Karyawan'])
+        $karyawan_sakit =   Karyawan_sakit::with(['Detail_obat.Obat', 'Karyawan'])
             // ->leftJoin('karyawans', 'karyawans.id', '=', 'karyawan_sakits.karyawan_id')
             // ->leftJoin('detail_obats', 'detail_obats.karyawan_sakit_id', '=', 'karyawan_sakits.id')
             // ->leftJoin('obats', 'obats.id', '=', 'detail_obats.obat_id')
             ->where('diagnosa', $data_sakit)
             ->whereMonth('tgl_cek', $month)
             ->whereYear('tgl_cek',  $year)
-          //  ->groupBy('detail_obats.karyawan_sakit_id')
+            //  ->groupBy('detail_obats.karyawan_sakit_id')
             ->get();
 
-        foreach ($karyawan_sakit as $key => $k ){
-            $data[$key]['nama']= $k->Karyawan->nama;
-            $data[$key]['tgl_cek']= $k->tgl_cek;
-            $data[$key]['nama_obat']= '';
-            if(count($k->Detail_obat) > 0){
+        foreach ($karyawan_sakit as $key => $k) {
+            $data[$key]['nama'] = $k->Karyawan->nama;
+            $data[$key]['tgl_cek'] = $k->tgl_cek;
+            $data[$key]['nama_obat'] = '';
+            if (count($k->Detail_obat) > 0) {
                 $x = array();
                 foreach ($k->Detail_obat as $o) {
                     $x[] = $o->Obat->nama;
                 }
 
 
-                $data[$key]['nama_obat']=  implode(', ', $x);
+                $data[$key]['nama_obat'] =  implode(', ', $x);
             }
-
-
         }
         $header = date("F", mktime(0, 0, 0, $month, 1));
         return response()->json([
@@ -2301,11 +2325,46 @@ class KesehatanController extends Controller
             'data' => $data
         ]);
     }
+    public function person_top_detail($month, $year, $data_sakit)
+    {
+        $karyawan_sakit = Karyawan_sakit::with(['Detail_obat.Obat'])
+            ->where('karyawan_id', $data_sakit)
+            ->whereMonth('tgl_cek', $month)
+            ->whereYear('tgl_cek',  $year)
+            ->get();
+        $karyawan = Karyawan::find($data_sakit);
+
+        foreach ($karyawan_sakit as $key => $k) {
+            $data[$key]['tgl_cek'] = $k->tgl_cek;
+            $data[$key]['diagnosa'] = $k->diagnosa;
+            $data[$key]['tindakan'] = $k->tindakan;
+            $data[$key]['nama_obat'] = '';
+            if (count($k->Detail_obat) > 0) {
+                $x = array();
+                foreach ($k->Detail_obat as $o) {
+                    $x[] = $o->Obat->nama;
+                }
+
+
+                $data[$key]['nama_obat'] =  implode(', ', $x);
+            }
+        }
+
+        $header = date("F", mktime(0, 0, 0, $month, 1));
+        return response()->json([
+            'header' => array(
+                'bulan' => $header . ' ' . $year,
+                'jumlah' => count($data),
+                'nama' => $karyawan->nama
+            ),
+            'data' => $data
+        ]);
+    }
     public function person_top($id)
     {
         $now = Carbon::now();
 
-        $data =   Karyawan_sakit::select('karyawans.nama', DB::raw('count(*) as jumlah'))
+        $data =   Karyawan_sakit::select('karyawans.id as karyawan_id', 'karyawans.nama', DB::raw('count(*) as jumlah'))
             ->leftJoin('karyawans', 'karyawans.id', '=', 'karyawan_sakits.karyawan_id')
             ->groupBy('karyawan_id')
             ->whereMonth('tgl_cek', $id)

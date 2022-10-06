@@ -21,8 +21,8 @@
         }
 
         /* #justgage2 > svg > path {
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: 100% !important;
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        width: 100% !important;
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    } */
 
         .foo {
             border-radius: 50%;
@@ -329,10 +329,10 @@
                                     <h4 class="col-6">Karyawan Sakit {{ now()->year }}</h4>
                                     <div class="col-6">
                                         <div class="btn-group float-right px-2">
-                                            <button type="button" class="btn bg-olive dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="true" id="tahun_sakit"> Tahun
+                                            <button type="button" class="btn bg-olive dropdown-toggle dropdown-icon" data-toggle="dropdown" data-display="static" aria-expanded="false" id="tahun_sakit"> Tahun
                                             <span class="sr-only">Toggle Dropdown</span>
                                             </button>
-                                            <ul class="dropdown-menu dropdown-menu-right" role="menu"  aria-labelledby="tahun_sakit" style="position: absolute; transform: translate3d(68px, 38px, 0px); top: 0px; left: 0px; will-change: transform;" x-placement="bottom-start">
+                                            <ul class="dropdown-menu dropdown-menu-right" role="menu"  aria-labelledby="tahun_sakit">
                                                 <li role="presentation"><a class="dropdown-item tahun_sakit active" role="menuitem" tabindex="-1" value="{{ now()->year }}">{{ now()->year }}</a></li>
                                                 <li role="presentation"><a class="dropdown-item tahun_sakit" role="menuitem" tabindex="-1" value="{{ now()->year - 1 }}">{{ now()->year - 1 }}</a></li>
                                                 <li role="presentation"><a class="dropdown-item tahun_sakit" role="menuitem" tabindex="-1" value="{{ now()->year - 2 }}">{{ now()->year - 2 }}</a></li>
@@ -446,8 +446,9 @@
 @section('adminlte_js')
     <script>
         $(document).ready(function() {
-            var bulan_select="";
-            $('#karyawan_obat_table').DataTable({
+            var bulan_select = "";
+            var bulan_sakit_select = "";
+            var obat_table = $('#karyawan_obat_table').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
@@ -528,7 +529,7 @@
             });
 
 
-            $('#karyawan_sakit_table').DataTable({
+            var karywan_sakit_table = $('#karyawan_sakit_table').DataTable({
                 destroy: true,
                 processing: true,
                 serverSide: true,
@@ -581,8 +582,9 @@
                         $("#detaildata").html(result).show();
                         $.ajax({
                             type: "get",
-                            url: "/karyawan/sakit/penyakit/top/detail/"+bulan_sakit+"/2022/"+rows[0]['diagnosa'],
-                            success: function (data) {
+                            url: "/karyawan/sakit/penyakit/top/detail/" + bulan_sakit +
+                                "/2022/" + rows[0]['diagnosa'],
+                            success: function(data) {
                                 $('#bulan').html(data.header.bulan);
                                 $('#diagnosa').html(data.header.nama);
                                 $('#jumlah').html(data.header.jumlah);
@@ -605,39 +607,96 @@
 
 
 
-            function diagnosa_table(data){
-                var diagnosatable = $('#table_diagnosa').DataTable({
-                    data: data,
-                    columns: [
-                        { data: null },
 
-                        { data: 'tgl_cek',
-                          render: function(data, type, row) {
+
+            function sakit_table(data) {
+                var tablesakit = $('#table_sakit').DataTable({
+                    data: data,
+                    columns: [{
+                            data: null
+                        },
+
+                        {
+                            data: 'tgl_cek',
+                            render: function(data, type, row) {
                                 return moment(new Date(data).toString()).format(
                                     'DD-MM-YYYY');
                             }
                         },
-                        { data: 'nama' },
-                        { data: 'nama_obat' },
-                    ],
-                    columnDefs : [
                         {
-                            "searchable": false,
-                            "orderable": false,
-                            "targets": 0
+                            data: 'nama_obat'
+                        },
+                        {
+                            data: 'diagnosa'
+                        },
+                        {
+                            data: 'tindakan'
                         },
                     ],
-                    order: [[2, 'asc']],
+                    columnDefs: [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }, ],
+                    order: [
+                        [2, 'asc']
+                    ],
                 });
 
-                diagnosatable.on('order.dt search.dt', function () {
-                    diagnosatable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                tablesakit.on('order.dt search.dt', function() {
+                    tablesakit.column(0, {
+                        search: 'applied',
+                        order: 'applied'
+                    }).nodes().each(function(cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
+
+            function diagnosa_table(data) {
+                var diagnosatable = $('#table_diagnosa').DataTable({
+                    data: data,
+                    columns: [{
+                            data: null
+                        },
+
+                        {
+                            data: 'tgl_cek',
+                            render: function(data, type, row) {
+                                return moment(new Date(data).toString()).format(
+                                    'DD-MM-YYYY');
+                            }
+                        },
+                        {
+                            data: 'nama'
+                        },
+                        {
+                            data: 'nama_obat'
+                        },
+                    ],
+                    columnDefs: [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }, ],
+                    order: [
+                        [2, 'asc']
+                    ],
+                });
+
+                diagnosatable.on('order.dt search.dt', function() {
+                    diagnosatable.column(0, {
+                        search: 'applied',
+                        order: 'applied'
+                    }).nodes().each(function(cell, i) {
                         cell.innerHTML = i + 1;
                     });
                 }).draw();
             }
 
             $("#karyawan_obat_table > tbody").on('click', '#karyawan_obat_modal', function() {
+                var rows = obat_table.rows($(this).parents('tr')).data();
+                var bulan_sakit = bulan_select;
                 $.ajax({
                     url: "/kesehatan/klinik/obat_detail",
                     beforeSend: function() {
@@ -648,7 +707,18 @@
                         $('#detailmodal').modal('show');
                         $('#modal-label').text('Obat');
                         $("#detaildata").html(result).show();
-                        $('#table_obat').DataTable();
+                        $.ajax({
+                            type: "get",
+                            url: "/karyawan/sakit/obat/top/detail/" + bulan_sakit +
+                                "/2022/" + rows[0]['obat_id'],
+                            success: function(data) {
+                                $('#bulan').html(data.header.bulan);
+                                $('#obat').html(data.header.nama);
+                                $('#jumlah').html(data.header.jumlah);
+                                obat_tables(data.data)
+
+                            }
+                        });
                     },
                     complete: function() {
                         $('#loader').hide();
@@ -662,7 +732,51 @@
                 });
             });
 
+            function obat_tables(data) {
+                var obattable = $('#table_obat').DataTable({
+                    data: data,
+                    columns: [{
+                            data: null
+                        },
+
+                        {
+                            data: 'tgl_cek',
+                            render: function(data, type, row) {
+                                return moment(new Date(data).toString()).format(
+                                    'DD-MM-YYYY');
+                            }
+                        },
+                        {
+                            data: 'nama'
+                        },
+                        {
+                            data: 'diagnosa'
+                        },
+                    ],
+                    columnDefs: [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }, ],
+                    order: [
+                        [2, 'asc']
+                    ],
+                });
+
+                obattable.on('order.dt search.dt', function() {
+                    obattable.column(0, {
+                        search: 'applied',
+                        order: 'applied'
+                    }).nodes().each(function(cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
+
             $("#karyawan_sakit_table > tbody").on('click', '#karyawan_sakit_modal', function() {
+                var rows = karywan_sakit_table.rows($(this).parents('tr')).data();
+                var bulan_sakit = bulan_sakit_select;
+
                 $.ajax({
                     url: "/kesehatan/klinik/sakit_detail",
                     beforeSend: function() {
@@ -673,7 +787,20 @@
                         $('#detailmodal').modal('show');
                         $('#modal-label').text('Karyawan Sakit');
                         $("#detaildata").html(result).show();
-                        $('#table_sakit').DataTable();
+                        // $('#table_sakit').DataTable();
+                        $.ajax({
+                            type: "get",
+                            url: "/karyawan/sakit/person/top/detail/" + bulan_sakit +
+                                "/2022/" + rows[0]['karyawan_id'],
+                            success: function(data) {
+
+                                $('#bulan').html(data.header.bulan);
+                                $('#nama').html(data.header.nama);
+                                $('#jumlah').html(data.header.jumlah);
+                                sakit_table(data.data)
+
+                            }
+                        });
                     },
                     complete: function() {
                         $('#loader').hide();
@@ -737,6 +864,7 @@
             });
 
             $('.bulan_sakit').click(function() {
+                bulan_sakit_select = $(this).attr('value');
                 var bulan_id = $(this).attr('value');
                 $('.bulan_sakit').removeClass('active');
                 $('#sakit' + bulan_id).addClass('active');
