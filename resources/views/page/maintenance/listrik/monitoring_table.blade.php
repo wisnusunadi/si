@@ -432,7 +432,7 @@
     function getpanel() {
         $.ajax({
             type: 'get',
-            url: 'http://localhost:81/listrik/ambilpanel',
+            url: 'http://localhost:8000/listrik/ambilpanel',
             success: function (data) {
                 let x = data.data.length;
 
@@ -447,7 +447,7 @@
                     console.log(value);
                     $.ajax({
                         type: 'get',
-                        url: 'http://localhost:81/listrik/ambilraw?device_id='+value,
+                        url: 'http://localhost:8000/listrik/ambilraw?device_id='+value,
                         success: function(data) {
 
                             $('#timestamp').html(data.data.Date_Time)
@@ -522,10 +522,10 @@
         console.log(value);
         $.ajax({
             type: 'get',
-            url: 'http://localhost:81/listrik/data/' + value,
+            url: 'http://localhost:8000/listrik/data/' + value,
             success: function (data) {
                 // console.log(data);
-                $('#non_real').DataTable().ajax.url('http://localhost:81/listrik/data/' + value)
+                $('#non_real').DataTable().ajax.url('http://localhost:8000/listrik/data/' + value)
                     .load();
             }
         });
@@ -812,7 +812,7 @@
             ajax: {
                 'dataType': 'json',
 
-                'url': 'http://localhost:81/listrik/data/15m',
+                'url': 'http://localhost:8000/listrik/data/15m',
             },
             columns: [{
                     className: 'dt-control',
@@ -871,6 +871,7 @@
             }
         });
     });
+
 
 </script>
 @stop

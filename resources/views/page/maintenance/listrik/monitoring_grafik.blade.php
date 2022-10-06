@@ -34,9 +34,9 @@
                 <div class="flex-grow-1 bd-highlight">
 
                     <select class="js-example-basic-single" id="masuk" name="state">
-                        <option value="METER01">METER01</option>
+                        <option selected>pilih panel</option>
 
-                        <option value="METER02">METER02</option>
+
                     </select>
 
                     <div class="dropdown my-2">
@@ -840,8 +840,21 @@ let datafre = [];
 </script> --}}
 
 <script>
+    function getpanel() {
+        $.ajax({
+            type: 'get',
+            url: 'http://localhost:8000/listrik/ambilpanel',
+            success: function (data) {
+                let x = data.data.length;
+
+                for (a = 0; a < x; a++) {
+                    $('#masuk').append(
+                        '<option  value="'+ data.data[a].device_id +'" id="'+ data.data[a].device_id +'">' + data.data[a].device_id + '</option>'
+                    );
+                }}})}
     $(function(){
         $('#masuk').select2();
+        getpanel();
         var grafik = "";
         var current_select = "rt";
         var current_grafik = "c1";
