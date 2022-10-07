@@ -26,6 +26,11 @@ class TFProduksiDetail extends Model
         return $this->hasMany(NoseriTGbj::class, 't_gbj_detail_id');
     }
 
+    function seri1()
+    {
+        return $this->has(NoseriTGbj::class, 't_gbj_detail_id');
+    }
+
     function noseri()
     {
         return $this->hasMany(NoseriTGbj::class, 't_gbj_detail_id');
