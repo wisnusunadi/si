@@ -1315,6 +1315,7 @@
                                                                                                 <li slot="list-footer"
                                                                                                     class="pagination">
                                                                                                     <button
+                                                                                                    type="button"
                                                                                                         class="btn btn-secondary"
                                                                                                         :disabled="
                                                                                                             !hasPrevPage
@@ -1325,6 +1326,7 @@
                                                                                                         Prev
                                                                                                     </button>
                                                                                                     <button
+                                                                                                    type="button"
                                                                                                         class="btn btn-primary"
                                                                                                         :disabled="
                                                                                                             !hasNextPage
