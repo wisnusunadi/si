@@ -71,6 +71,10 @@
                         <a href="#salesorder" class="nav-link" id="salesorder-tab" data-toggle="tab" role="tab"
                             aria-controls="salesorder" aria-selected="true">Per Sales Order</a>
                     </li>
+                    <li class="nav-item" role="presentation">
+                        <a href="#nonsalesorder" class="nav-link" id="nonsalesorder-tab" data-toggle="tab" role="tab"
+                            aria-controls="nonsalesorder" aria-selected="true">Non Sales Order</a>
+                    </li>
                 </ul>
                 <div class="tab-content card" id="myTabContent">
                     <div class="tab-pane fade show active card-body" id="semua-produk" role="tabpanel"
@@ -222,6 +226,53 @@
                                                 <th>Customer</th>
                                                 <th>Batas Transfer</th>
                                                 <th>Status</th>
+                                                <th>Aksi</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade card-body" id="nonsalesorder" role="tabpanel" aria-labelledby="nonsalesorder-tab">
+                        {{-- <div class="row">
+                            <div class="col-sm-12">
+                                <div class="row align-items-center">
+                                    <div class="col-lg-9 col-xl-8">
+                                        <div class="row align-items-center">
+                                            <div class="col-md-4 my-2 my-md-0">
+                                                <div class="input-icon">
+                                                    <input type="text" class="form-control" placeholder="Cari..."
+                                                        id="gudang-salesorder-search">
+                                                    <span>
+                                                        <i class="flaticon2-search-1 text-muted"></i>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 my-2 my-md-0">
+                                                <div class="d-flex align-items-center">
+                                                    <label class="mr-3 mb-0 d-none d-md-block" for="">Batas Transfer</label>
+                                                    <input type="text" name="" id="daterange1" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div> --}}
+                        <div class="row mt-2">
+                            <div class="col-lg-12">
+                                <div class="table-nonsalesorder">
+                                    <table class="table table-bordered" id="non-salesorder">
+                                        <thead>
+                                            <tr>
+                                                <th>No</th>
+                                                {{-- <th>Tanggal Keluar</th> --}}
+                                                {{-- <th>Divisi</th> --}}
+                                                <th>Produk</th>
+                                                <th>Jumlah</th>
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -611,6 +662,35 @@
             $.fn.dataTable.ext.search.splice($.fn.dataTable.ext.search.indexOf(DateFilterFunction3, 1));
             soTable.draw();
         });
+
+        // non so
+    $('#non-salesorder').DataTable({
+        destroy: true,
+        processing: true,
+        responsive: true,
+        autoWidth: false,
+        lengthChange: false,
+        ordering: false,
+        ajax: {
+            url: "/api/v2/gbj/show_nonso",
+        },
+        columns:[
+            {data: 'DT_RowIndex'},
+            {data: 'produkk'},
+            {data: 'qty'},
+            {data: 'aksi'},
+            // {data: function(data){
+            //     return `<td><a href="export_nonso/`+data.deskripsi+`">
+            //                 <button class="btn btn-outline-primary"><i class="fas fa-eye"></i> Detail</button>
+            //             </a></td>`
+            // }},
+        ],
+        language: {
+            processing: "<span class='fa-stack fa-md'>\n\
+                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                </span>&emsp;Mohon Tunggu ...",
+        }
+    })
 
 </script>
 @stop
