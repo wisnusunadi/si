@@ -760,7 +760,7 @@ class GudangController extends Controller
             })
             ->addColumn('action', function ($d) {
                 return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
-                <button class="btn btn-info"><i
+                <button class="btn btn-outline-info"><i
                 class="far fa-eye"></i> Detail</button>
                         </a>';
             })
