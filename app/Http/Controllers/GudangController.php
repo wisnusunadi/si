@@ -662,7 +662,7 @@ class GudangController extends Controller
                 return '-';
             })
             ->addColumn('action', function ($d) {
-                return '<a class="btn btn-info" href="' . url('gbj/tp/' . $d->id . '') . '"><i
+                return '<a class="btn btn-outline-primary" href="' . url('gbj/tp/' . $d->id . '') . '"><i
                         class="far fa-eye"></i> Detail</a>';
             })
             ->rawColumns(['action'])
@@ -760,7 +760,7 @@ class GudangController extends Controller
             })
             ->addColumn('action', function ($d) {
                 return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
-                <button class="btn btn-outline-info"><i
+                <button class="btn btn-outline-primary"><i
                 class="far fa-eye"></i> Detail</button>
                         </a>';
             })
