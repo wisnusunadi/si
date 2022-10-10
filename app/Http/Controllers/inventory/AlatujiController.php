@@ -177,7 +177,7 @@ class AlatujiController extends Controller
     function tambahalat()
     {
         $klasifikasi = DB::table('erp_kalibrasi.klasifikasi')->get();
-        $satuan = DB::table('erp.m_satuan')->whereNotIn('id', [1,2,3])->get();
+        $satuan = DB::table('erp_spa.m_satuan')->whereNotIn('id', [1,2,3])->get();
 
         return view('page.lab.tambah_alat', [
             'klasifikasi' => $klasifikasi,
@@ -1221,7 +1221,7 @@ class AlatujiController extends Controller
 
 
     function get_data_not_ok(){
-        $a = 
+        $a =
         DB::table(DB::raw('erp_kalibrasi.alatuji_sn a2'))
         ->select(
             'a2.serial_number', 'a.nm_alatuji', 'a2.kondisi_id', 'a2.id_serial_number'
@@ -1254,7 +1254,7 @@ class AlatujiController extends Controller
     }
 
     function get_data_autocomplete(){
-        $data = 
+        $data =
         DB::table(DB::raw('erp_kalibrasi.peminjaman p'))
         ->select('p.penanggung_jawab')
         ->groupBy('p.penanggung_jawab')
