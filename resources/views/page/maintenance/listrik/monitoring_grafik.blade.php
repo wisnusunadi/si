@@ -295,7 +295,7 @@
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:8000/listrik/ambilrtvll',
+        url:'http://192.168.13.2:85/listrik/ambilrtvll',
         success:function(data) {
             datavll.push(data.data);
             getspecvll(pilih_device);
@@ -374,7 +374,7 @@
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:8000/listrik/ambilrtcurrent',
+        url:'http://192.168.13.2:85/listrik/ambilrtcurrent',
         success:function(data) {
             datac.push(data.data);
             getspecc(pilih_device);
@@ -453,7 +453,7 @@
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:8000/listrik/ambilrtvln',
+        url:'http://192.168.13.2:85/listrik/ambilrtvln',
         success:function(data) {
             datavln.push(data.data);
             getspecvln(pilih_device);
@@ -532,7 +532,7 @@
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:8000/listrik/ambilrtp',
+        url:'http://192.168.13.2:85/listrik/ambilrtp',
         success:function(data) {
             datapower.push(data.data);
             getspecpower(pilih_device);
@@ -611,7 +611,7 @@ let datapowerfactor = [];
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:8000/listrik/ambilrtpf',
+        url:'http://192.168.13.2:85/listrik/ambilrtpf',
         success:function(data) {
             datapowerfactor.push(data.data);
             getspecpowerfactor(pilih_device);
@@ -691,7 +691,7 @@ let datadpowerfactor = [];
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:8000/listrik/ambilrtdpf',
+        url:'http://192.168.13.2:85/listrik/ambilrtdpf',
         success:function(data) {
             datadpowerfactor.push(data.data);
             getspecdpowerfactor(pilih_device);
@@ -771,7 +771,7 @@ let datafre = [];
         let pilih_device = $('#masuk').val();
         $.ajax({
         type:'get',
-        url:'http://localhost:8000/listrik/ambilrtf',
+        url:'http://192.168.13.2:85/listrik/ambilrtf',
         success:function(data) {
             datafre.push(data.data);
             getspecfre(pilih_device);
@@ -977,7 +977,7 @@ let datafre = [];
             }
             $.ajax({
                 type:'get',
-                url:'http://localhost:8000/listrik/ambil'+current_select+aspek,
+                url:'http://192.168.13.2:85/listrik/ambil'+current_select+aspek,
                 success:function(data) {
                     array_data.push(data.data);
                     getspecdata($('#masuk').val(), selected_chart);
