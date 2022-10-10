@@ -130,7 +130,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-sm-4">
+                            {{-- <div class="col-sm-4">
                                 <div class="card">
                                     <div class="card-body">
                                         <p class="card-text">Keterangan Kolom <b>Dari/Ke:</b></p>
@@ -142,7 +142,7 @@
                                         </p>
                                     </div>
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                         <div class="row">
                             <div class="col-lg-12">
@@ -151,14 +151,14 @@
                                         <thead>
                                             <tr>
                                                 <th>Tanggal Masuk</th>
-                                                <th>Tanggal Keluar</th>
-                                                <th>Dari/Ke</th>
-                                                <th>Tujuan</th>
-                                                <th>Nomor SO</th>
-                                                <th>Nomor PO</th>
+                                                {{-- <th>Tanggal Keluar</th> --}}
+                                                <th>Dari</th>
+                                                {{-- <th>Tujuan</th> --}}
+                                                {{-- <th>Nomor SO</th> --}}
+                                                {{-- <th>Nomor PO</th> --}}
                                                 <th>Produk</th>
                                                 <th>Jumlah</th>
-                                                <th>Status</th>
+                                                {{-- <th>Status</th> --}}
                                                 <th>Aksi</th>
                                             </tr>
                                         </thead>
@@ -448,20 +448,21 @@
         autoWidth: false,
         deferRender: true,
         searching: false,
+        ordering: false,
         ajax: {
             url: "/api/transaksi/all",
             // type: "post",
         },
         columns: [
             { data: 'date_in', name: 'date_in'},
-            { data: 'date_out', name: 'date_out'},
+            // { data: 'date_out', name: 'date_out'},
             { data: 'divisi', name: 'divisi'},
-            { data: 'tujuan', name: 'tujuan'},
-            { data: 'so', name: 'so'},
-            { data: 'po', name: 'po'},
+            // { data: 'tujuan', name: 'tujuan'},
+            // { data: 'so', name: 'so'},
+            // { data: 'po', name: 'po'},
             { data: 'product', name: 'product'},
             { data: 'jumlah', name: 'jumlah'},
-            {data: 'logs'},
+            // {data: 'logs'},
             { data: 'action', name: 'action'},
         ],
         dom: 'Bfrtip',
@@ -520,7 +521,7 @@
 
         $("#divisi").on("change", function () {
             console.log($(this).val());
-            $dTable.columns(2).search($(this).val()).draw();
+            $dTable.columns(1).search($(this).val()).draw();
         });
 
         $("#kt_datatable_search_query").on("keyup", function () {

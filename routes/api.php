@@ -608,3 +608,4 @@ Route::get('/get_stok_pesanan', [MasterController::class, 'get_stok_pesanan']);
 Route::get('testingJson', [GudangController::class, 'dataTesting']);
 
 Route::namespace('v2')->group(__DIR__ . '/yogi/api.php');
+Route::namespace('inventory')->group(__DIR__ . '/inventory/api.php');
