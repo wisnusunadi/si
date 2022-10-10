@@ -1,11 +1,16 @@
 <?php
-
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\SparepartController;
+use App\Http\Controllers\KualitasAirController;
 use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+
+use App\Http\Controllers\inventory\AlatujiController;
+use App\Http\Controllers\inventory\PerawatanController;
+use App\Http\Controllers\inventory\VerifikasiController;
+use App\Http\Controllers\inventory\KalibrasiPerbaikanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -401,6 +406,22 @@ Route::group(['prefix' => 'as', 'middleware' => ['auth', 'divisi:asp']], functio
     // });
 });
 
+Route::group(['prefix' => 'mtc', 'middleware' => ['auth', 'divisi:mtc,eng']], function () {
+    Route::group(['prefix' => '/air'], function () {
+        Route::view('/masuk', 'page.maintenance.air.masuk');
+        // Route::get('/masuk', [App\Http\Controllers\MaintenanceController::class, 'show_air_masuk'],)->name('mtc.air.masuk');
+        // Route::get('/keluar', [App\Http\Controllers\MaintenanceController::class, 'show_air_keluar'])->name('mtc.air.keluar');
+    });
+
+    Route::group(['prefix' => '/listrik'], function () {
+        Route::group(['prefix' => '/monitoring'], function () {
+            Route::get('/table', [App\Http\Controllers\MaintenanceController::class, 'show_listrik_monitoring_table'])->name('mtc.listrik.monitoring_table');
+            Route::get('/grafik', [App\Http\Controllers\MaintenanceController::class, 'show_listrik_monitoring_grafik'])->name('mtc.listrik.monitoring_grafik');
+        });
+        Route::get('/panel', [App\Http\Controllers\MaintenanceController::class, 'show_listrik_panel'])->name('mtc.listrik.panel');
+    });
+});
+
 Route::group(['prefix' => '/gk', 'middleware' => ['auth', 'divisi:gk,dirut']], function () {
     Route::view('/dashboard', 'page.gk.dashboard');
     Route::view('/gudang', 'page.gk.gudang.index');
@@ -418,11 +439,6 @@ Route::group(['prefix' => '/gk', 'middleware' => ['auth', 'divisi:gk,dirut']], f
 });
 
 Route::view('/uit', 'page.login_page.index');
-// Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
-//     Route::view('/stok', 'page.gbj.stok_show');
-// });
-// Route::group(['prefix' => '/gbj/manager', 'middleware' => 'auth'], function ()
-// {
-//     Route::view('/produksi', 'manager.gbj.produksi');
-// });
+
 Route::namespace('v2')->group(__DIR__ . '/kesehatan/kesehatan.php');
+Route::namespace('alatuji')->group(__DIR__ . '/inventory/web.php');
