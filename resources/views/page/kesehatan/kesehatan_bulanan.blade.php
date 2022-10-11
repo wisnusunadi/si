@@ -607,7 +607,7 @@
 @section('adminlte_js')
     <script>
         $(function() {
-            $('#berat_tabel > tbody').on('click', '#delete', function() {
+            $('#berat_tabel_data > tbody').on('click', '#delete', function() {
                 var data_id = $(this).attr('data-id');
                 Swal.fire({
                         title: 'Hapus Data',
@@ -633,7 +633,7 @@
                                             'Berhasil melakukan Hapus Data',
                                             'success'
                                         );
-                                        $('#berat_tabel').DataTable().ajax.reload();
+                                        $('#berat_tabel_data').DataTable().ajax.reload();
                                         $("#hapusmodal").modal('hide');
                                     } else if (response['data'] == "error") {
                                         swal.fire(
@@ -661,7 +661,7 @@
                     });
             });
 
-            $('#gcu_tabel > tbody').on('click', '#delete', function() {
+            $('#gcu_tabel_data > tbody').on('click', '#delete', function() {
                 var data_id = $(this).attr('data-id');
                 Swal.fire({
                         title: 'Hapus Data',
@@ -687,7 +687,7 @@
                                             'Berhasil melakukan Hapus Data',
                                             'success'
                                         );
-                                        $('#gcu_tabel').DataTable().ajax.reload();
+                                        $('#gcu_tabel_data').DataTable().ajax.reload();
                                         $("#hapusmodal").modal('hide');
                                     } else if (response['data'] == "error") {
                                         swal.fire(

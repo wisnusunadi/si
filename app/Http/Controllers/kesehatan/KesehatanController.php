@@ -350,7 +350,7 @@ class KesehatanController extends Controller
                 return  $data->berat / (($data->karyawan->kesehatan_awal->tinggi / 100) * ($data->karyawan->kesehatan_awal->tinggi / 100));
             })
             ->addColumn('aksi', function ($data) {
-                return '<i class="fas fa-trash text-danger" id="delete"></i>';
+                return ' <button type="button" id="delete" class="btn btn-xs btn-danger m-1" data-id="' . $data->id . '"><i class="fas fa-trash"></i> Hapus</button>';
             })
             ->rawColumns(['aksi'])
             ->make(true);
