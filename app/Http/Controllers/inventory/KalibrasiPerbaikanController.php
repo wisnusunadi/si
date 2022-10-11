@@ -100,8 +100,6 @@ class KalibrasiPerbaikanController extends Controller
                 ->where('al.id_serial_number', $request->serial_number_id)
                 ->first();
 
-                $pj = DB::table('erp_spa.users')->where('id', $request->operator)->first();
-
                 //ganti nama gambar
                 $memo = null;
                 $surat_jalan = null;
@@ -140,7 +138,7 @@ class KalibrasiPerbaikanController extends Controller
                     'alat_uji' => $data->nm_alatuji,
                     'serial_num' => $data->serial_number,
                     'tgl_'.$request->jenis_mt => $request->tanggal_pengajuan,
-                    'pj_dilakukan_oleh' => $pj->nama,
+                    'pj_dilakukan_oleh' => auth()->user()->nama,
                 ];
 
                 DB::table('erp_spa.tbl_log')->insert([

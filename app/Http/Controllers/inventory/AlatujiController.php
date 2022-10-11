@@ -17,6 +17,7 @@ use Carbon\Carbon;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Storage;
 use Maatwebsite\Excel\Concerns\ToArray;
+use Illuminate\Validation\ValidationException;
 
 class AlatujiController extends Controller
 {
@@ -244,6 +245,22 @@ class AlatujiController extends Controller
 
         //ambil data dokumen alatuji
         $doc_old = DB::table('erp_kalibrasi.alatuji')->select('manual_alatuji', 'sop_alatuji', 'gbr_alatuji')->where('id_alatuji', $request->id_alatuji)->first();
+        
+        // cek apakah nmor seri telah terdaftar
+        // jika data old = data new -> tidak keluar peringatan
+        // jika data old =/= data new -> cek serial number & update
+        $SN_old = AlatSN::where('id_serial_number', $request->id_serial_number)->first();
+        if($SN_old->serial_number != $request->serialNM){
+            //data old =/= new
+            $cek_sn = AlatSN::
+            where('alatuji_id', $request->id_alatuji)
+            ->where('merk_id', $request->merk)
+            ->where('serial_number', $request->serialNM)
+            ->count();
+            if($cek_sn >= 1){
+                throw ValidationException::withMessages(['serialNM' => 'Serial Number telah Terdaftar']);
+            }
+        }
 
         // update alatuji
         DB::table('erp_kalibrasi.alatuji')->where('id_alatuji', $request->id_alatuji)->update([
@@ -856,12 +873,16 @@ class AlatujiController extends Controller
         $request->validate([
             'klasifikasi' => 'required',
             'satuan' => 'required',
-            'nama_alat' => 'required',
+            'nama_alat' => 'required|unique:erp_kalibrasi.alatuji,nm_alatuji',
             'fungsi_alat' => 'required',
-            'kode_alat' => 'required',
+            'kode_alat' => 'required|unique:erp_kalibrasi.alatuji,kd_alatuji',
         ],[
-            'required' => 'kolom :attribute harus di isi'
+            'required' => 'kolom :attribute harus di isi',
+            'unique' => ':attribute telah terdaftar'
         ]);
+
+        // cek jika data dari nama alat uji sudah ada pada database
+
 
         $manual = null;
         $sop = null;
@@ -969,6 +990,16 @@ class AlatujiController extends Controller
                 'created_by' => auth()->user()->id,
             ]);
             $request->merk = DB::table('erp_kalibrasi.merk')->select('id_merk')->latest('created_at')->first()->id_merk;
+        }
+
+        // cek apakah nmor seri telah terdaftar
+        $cek_sn = AlatSN::
+        where('alatuji_id', $request->nama)
+        ->where('merk_id', $request->merk)
+        ->where('serial_number', $request->serial_number)
+        ->count();
+        if($cek_sn >= 1){
+            throw ValidationException::withMessages(['serial_number' => 'Serial Number telah Terdaftar']);
         }
 
         $sertif = null;

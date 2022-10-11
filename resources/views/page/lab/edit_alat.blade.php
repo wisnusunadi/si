@@ -76,6 +76,12 @@
                     </div>
                 </div>
 
+                @error('serialNM')
+                    <div class="row mb-0">
+                        <div class="col"></div>
+                        <div class="col alert bc-danger text-danger border border-danger p-1">{{ $message }}</div>
+                    </div>
+                @enderror
                 <div class="row mb-2">
                     <div class="col"><span class="float-right">Serial Number</span></div>
                     <div class="col">

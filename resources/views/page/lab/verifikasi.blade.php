@@ -20,7 +20,7 @@
                     <!-- col gambar -->
                     <div class="col-4">
                         <object data="{{ asset('/storage/gambar/'.$data->gbr_alatuji) }}" type="image/png" class="img-fluid text-center">
-                            <img src="{{ asset('/img/default.png') }}" class="img-fluid text-center" alt="gambar alat uji">
+                            <img src="{{ asset('/storage/gambar/default.png') }}" class="img-fluid text-center" alt="gambar alat uji">
                         </object>
                     </div>
 

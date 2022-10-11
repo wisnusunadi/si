@@ -258,7 +258,11 @@
                     return group;
                 }
                 
-            }
+            },
+            columnDefs: [{
+                targets: [8,9],
+                visible: false,
+            }],
         });
 
     });

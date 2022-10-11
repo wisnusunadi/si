@@ -89,7 +89,7 @@
                 </div>
 
                 <div class="row mb-2">
-                    <div class="col"><span class="float-right">Jenis Kalibrasi</span></div>
+                    <div class="col"><span class="float-right">Jenis {{ $jenis }}</span></div>
                     <div class="col">
                         <div class="row">
                             <div class="col-auto">
@@ -121,10 +121,18 @@
                     <h3 class="card-title">Hasil {{ $jenis }} Internal</h3>
                 </div>
 
+                @error('operator')
+                    <div class="row mb-0">
+                        <div class="col"></div>
+                        <div class="col alert bc-danger text-danger border border-danger p-1">{{ $message }}</div>
+                    </div>
+                @enderror
+
                 <div class="row mb-2">
                     <div class="col"><span class="float-right">Operator Pelaksana</span></div>
                     <div class="col">
                         <select name="operator" id="selectOperator" class="form-control form-control-sm">
+                            <option></option>
                             @foreach($user as $u)
                             <option value="{{ $u->id }}">{{ $u->nama }}</option>
                             @endforeach
@@ -208,7 +216,7 @@
                     <h3 class="card-title">Dokumen {{ $jenis }} External</h3>
                 </div>
 
-                @error('surat')
+                @error('surat_jalan')
                     <div class="row mb-0">
                         <div class="col"></div>
                         <div class="col alert bc-danger text-danger border border-danger p-1">{{ $message }}</div>
@@ -287,7 +295,9 @@
             }
         })
 
-        $('#selectOperator').select2();
+        $('#selectOperator').select2({
+            placeholder: "Pilih Penanggung Jawab"
+        });
     });
 
     // tampilkan modal konfirmasi

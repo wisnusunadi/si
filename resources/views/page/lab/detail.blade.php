@@ -775,13 +775,13 @@
                                     <div class="row">
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="status_peminjaman" id="konfirmasi_terima" value="15" checked="">
+                                                <input class="form-check-input" type="radio" name="status_peminjaman" id="konfirmasi_terima" value="15" {{ old('status_peminjaman') == null ? 'checked' : (old('status_peminjaman') == 15 ? 'checked' : '') }}>
                                                 <label class="form-check-label" for="konfirmasi_terima">Terima</label>
                                             </div>
                                         </div>
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="status_peminjaman" id="konfirmasi_tolak" value="18">
+                                                <input class="form-check-input" type="radio" name="status_peminjaman" id="konfirmasi_tolak" value="18" {{ old('status_peminjaman') == 18 ? 'checked' : '' }}>
                                                 <label class="form-check-label" for="konfirmasi_tolak">Tolak</label>
                                             </div>
                                         </div>
@@ -795,7 +795,7 @@
                                     <div class="row">
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="kondisi_peminjaman" id="konfirmasi_ok" value="9" {{ old('kondisi_peminjaman') == 9 ? 'checked' : '' }}>
+                                                <input class="form-check-input" type="radio" name="kondisi_peminjaman" id="konfirmasi_ok" value="9" {{ old('status_peminjaman') == null ? 'checked' : (old('kondisi_peminjaman') == 9 ? 'checked' : '') }}>
                                                 <label class="form-check-label" for="konfirmasi_ok">OK</label>
                                             </div>
                                         </div>
@@ -957,7 +957,7 @@
                                     <div class="row">
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="kondisi_kembali" id="kondisiOK" value="9" {{ old('kondisi_kembali') == 9 ? 'checked' : '' }}>
+                                                <input class="form-check-input" type="radio" name="kondisi_kembali" id="kondisiOK" value="9" {{ old('kondisi_kembali') == null ? 'checked' : (old('kondisi_kembali') == 9 ? 'checked' : '') }}>
                                                 <label class="form-check-label" for="kondisiOK">OK</label>
                                             </div>
                                         </div>
