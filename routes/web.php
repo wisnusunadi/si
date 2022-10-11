@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\SparepartController;
@@ -8,6 +7,10 @@ use GuzzleHttp\Middleware;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 
+use App\Http\Controllers\inventory\AlatujiController;
+use App\Http\Controllers\inventory\PerawatanController;
+use App\Http\Controllers\inventory\VerifikasiController;
+use App\Http\Controllers\inventory\KalibrasiPerbaikanController;
 
 /*
 |--------------------------------------------------------------------------
@@ -87,6 +90,7 @@ Route::group(['prefix' => '/gbj', 'middleware' => ['auth', 'divisi:gbj,mgrgdg,di
         Route::get('/{id}', [GudangController::class, 'getDetailHistory1']);
     });
     Route::get('/data', [GudangController::class, 'get_data_barang_jadi']);
+    Route::get('/export_nonso/{id}', [GudangController::class, 'exportNonso'])->name('gbj.nonso');
     Route::get('/export_spb/{id}', [GudangController::class, 'exportSpb'])->name('gbj.spb');
     Route::get('/export_noseri', [GudangController::class, 'export_noseri_gudang'])->name('gbj.noseri');
 
@@ -173,13 +177,14 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
     });
 
     Route::group(['prefix' => '/penjualan'], function () {
-        Route::group(['middleware' => ['divisi:dc,jual,asp,dirut,qc,log']], function () {
+        Route::group(['middleware' => ['divisi:dc,jual,asp,dirut,qc,log,ppic']], function () {
             Route::get('/detail/ekatalog/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog'])->name('penjualan.penjualan.detail.ekatalog');
+            Route::get('/detail/ekatalog_ppic/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_ekatalog_ppic']);
             Route::get('/detail/spa/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spa'])->name('penjualan.penjualan.detail.spa');
             Route::get('/detail/spb/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_detail_spb'])->name('penjualan.penjualan.detail.spb');
         });
 
-        Route::group(['middleware' => ['divisi:jual,dirut']], function () {
+        Route::group(['middleware' => ['divisi:jual,dirut,ppic']], function () {
             Route::view('/show', 'page.penjualan.penjualan.show')->name('penjualan.penjualan.show');
             Route::post('/ekatalog/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
             Route::post('/spa/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
@@ -347,9 +352,9 @@ Route::group(['prefix' => 'dc', 'middleware' => 'auth'], function () {
     Route::group(['prefix' => '/coo'], function () {
         Route::group(['middleware' => ['divisi:dc,dirut']], function () {
             Route::view('/show', 'page.dc.coo.show')->name('dc.coo.show');
-            Route::get('/pdf/so/{id}/{value}/{jenis}', [App\Http\Controllers\DcController::class, 'pdf_semua_so_coo'])->name('dc.coo.semua.so.pdf');
-            Route::get('/pdf/semua/{id}/{value}/{jenis}', [App\Http\Controllers\DcController::class, 'pdf_semua_coo'])->name('dc.coo.semua.pdf');
-            Route::get('/pdf/{id}/{value}/{jenis}', [App\Http\Controllers\DcController::class, 'pdf_seri_coo'])->name('dc.seri.coo.pdf');
+            Route::get('/pdf/so/{id}/{value}/{jenis}/{stamp}', [App\Http\Controllers\DcController::class, 'pdf_semua_so_coo'])->name('dc.coo.semua.so.pdf');
+            Route::get('/pdf/semua/{id}/{value}/{jenis}/{stamp}', [App\Http\Controllers\DcController::class, 'pdf_semua_coo'])->name('dc.coo.semua.pdf');
+            Route::get('/pdf/{id}/{value}/{jenis}/{stamp}', [App\Http\Controllers\DcController::class, 'pdf_seri_coo'])->name('dc.seri.coo.pdf');
         });
         Route::group(['middleware' => ['divisi:dc']], function () {
             Route::view('/detail/{id}', 'page.dc.coo.detail')->name('dc.coo.detail');
@@ -401,14 +406,11 @@ Route::group(['prefix' => 'as', 'middleware' => ['auth', 'divisi:asp']], functio
     // });
 });
 
-Route::group(['prefix' => 'mtc'], function () {
+Route::group(['prefix' => 'mtc', 'middleware' => ['auth', 'divisi:mtc,eng']], function () {
     Route::group(['prefix' => '/air'], function () {
-        Route::get('/masuk', [App\Http\Controllers\MaintenanceController::class, 'show_air_masuk'],)->name('mtc.air.masuk');
-        Route::get('/keluar', [App\Http\Controllers\MaintenanceController::class, 'show_air_keluar'])->name('mtc.air.keluar');
-        // Route::get('/rekap_debit', 'KualitasAirController@getDebit');
-        // Route::get('/rekap_volume', 'KualitasAirController@getVolume');
-        // Route::get('/rekap_kualitas', 'KualitasAirController@getKualitas');
-
+        Route::view('/masuk', 'page.maintenance.air.masuk');
+        // Route::get('/masuk', [App\Http\Controllers\MaintenanceController::class, 'show_air_masuk'],)->name('mtc.air.masuk');
+        // Route::get('/keluar', [App\Http\Controllers\MaintenanceController::class, 'show_air_keluar'])->name('mtc.air.keluar');
     });
 
     Route::group(['prefix' => '/listrik'], function () {
@@ -437,11 +439,6 @@ Route::group(['prefix' => '/gk', 'middleware' => ['auth', 'divisi:gk,dirut']], f
 });
 
 Route::view('/uit', 'page.login_page.index');
-// Route::group(['prefix' => '/gbj', 'middleware' => 'auth'], function () {
-//     Route::view('/stok', 'page.gbj.stok_show');
-// });
-// Route::group(['prefix' => '/gbj/manager', 'middleware' => 'auth'], function ()
-// {
-//     Route::view('/produksi', 'manager.gbj.produksi');
-// });
+
 Route::namespace('v2')->group(__DIR__ . '/kesehatan/kesehatan.php');
+Route::namespace('lab')->group(__DIR__ . '/inventory/web.php');

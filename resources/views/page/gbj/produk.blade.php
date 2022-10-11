@@ -36,11 +36,11 @@
                                         </button>
                                     </span>
 
-                                    {{-- <span class="float-left mr-1">
+                                    <span class="float-left mr-1">
                                         <a href="{{ route('gbj.noseri') }}" class="btn btn-outline-secondary" id="btnExportNoseri">
                                             <i class="fas fa-download"></i>&nbsp;Noseri
                                         </a>
-                                    </span> --}}
+                                    </span>
                                 @endif
                                 </div>
                             </div>

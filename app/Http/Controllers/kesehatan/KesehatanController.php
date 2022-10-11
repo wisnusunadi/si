@@ -30,7 +30,7 @@ class KesehatanController extends Controller
     }
     public function kesehatan_data()
     {
-        $data = Kesehatan_awal::with(['Karyawan.Vaksin_karyawan','Karyawan.Berat_karyawan','Karyawan.Divisi'])->get();
+        $data = Kesehatan_awal::with(['Karyawan.Vaksin_karyawan', 'Karyawan.Berat_karyawan', 'Karyawan.Divisi'])->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('divisi', function ($data) {
@@ -40,17 +40,17 @@ class KesehatanController extends Controller
                 return $data->Karyawan->nama;
             })
             ->addColumn('berat_kg', function ($data) {
-                if($data->Karyawan->Berat_karyawan->last()){
-                    return $data->Karyawan->Berat_karyawan->last()->berat.' Kg';
-                }else{
+                if ($data->Karyawan->Berat_karyawan->last()) {
+                    return $data->Karyawan->Berat_karyawan->last()->berat . ' Kg';
+                } else {
                     return '-';
                 }
             })
             ->addColumn('tinggi_cm', function ($data) {
-               return $data->tinggi . ' Cm';
+                return $data->tinggi . ' Cm';
             })
             ->addColumn('bmi', function ($data) {
-              return $data->berat / (($data->tinggi / 100) * ($data->tinggi / 100));
+                return $data->berat / (($data->tinggi / 100) * ($data->tinggi / 100));
             })
             ->addColumn('suhu_k', function ($data) {
                 return $data->suhu . ' °C';
@@ -359,15 +359,15 @@ class KesehatanController extends Controller
             $mata_kanan = 'Normal (kanan)';
         }
         $data = array();
-         $data['nama'] =  $kesehatan_awal->Karyawan->nama;
-         $data['divisi'] =  $kesehatan_awal->Karyawan->Divisi->nama;
+        $data['nama'] =  $kesehatan_awal->Karyawan->nama;
+        $data['divisi'] =  $kesehatan_awal->Karyawan->Divisi->nama;
         $data['jenis'] =  $jenis;
-        $data['tinggi'] =  $kesehatan_awal->tinggi.' cm';
+        $data['tinggi'] =  $kesehatan_awal->tinggi . ' cm';
         $data['status_mata'] =  $kesehatan_awal->status_mata;
         $data['status_vaksin'] =  $status;
         $data['mata_kiri'] =  $mata_kiri;
         $data['mata_kanan'] =  $mata_kanan;
-        $data['umur'] =  Carbon::parse($kesehatan_awal->Karyawan->tgllahir)->age.' Tahun';
+        $data['umur'] =  Carbon::parse($kesehatan_awal->Karyawan->tgllahir)->age . ' Tahun';
 
         echo json_encode($data);
     }
@@ -380,7 +380,7 @@ class KesehatanController extends Controller
         $data = Kesehatan_mingguan_tensi::with('karyawan')
             ->orderBy('tgl_cek', 'DESC');
 
-      return datatables()->of($data)
+        return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('x', function ($data) {
                 return $data->karyawan->divisi->nama;
@@ -458,8 +458,7 @@ class KesehatanController extends Controller
     }
     public function kesehatan_mingguan_tensi_tambah()
     {
-        $pengecek = Karyawan::where('divisi_id', '28')
-            ->get();
+        $pengecek = Karyawan::where('divisi_id', '28')->get();
         $karyawan = Karyawan::all();
         $divisi = Divisi::all();
         return view('page.kesehatan.kesehatan_mingguan_tensi_tambah', ['divisi' => $divisi, 'pengecek' => $pengecek, 'karyawan' => $karyawan]);
@@ -744,23 +743,23 @@ class KesehatanController extends Controller
         $data = Obat::where('nama', 'LIKE', '%' . $request->input('term', '') . '%')->where('id', $id)->get();
         echo json_encode($data);
     }
-     public function karyawan_sakit()
+    public function karyawan_sakit()
     {
         return view('page.kesehatan.karyawan_sakit');
     }
     public function karyawan_sakit_data()
     {
-        $data = Karyawan_sakit::with(['Karyawan.Divisi'])->orderBy('tgl_cek', 'DESC')->get();
+        $data = Karyawan_sakit::with(['Karyawan.Divisi', 'Pemeriksa'])->orderBy('tgl_cek', 'DESC')->get();
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('x', function ($data) {
                 return $data->Karyawan->Divisi->nama;
             })
             ->addColumn('y', function ($data) {
-            return $data->Karyawan->nama;
+                return $data->Karyawan->nama;
             })
             ->addColumn('z', function ($data) {
-                return $data->pemeriksa->nama;
+                return $data->Pemeriksa->nama;
             })
             ->addColumn('o', function ($data) {
                 if ($data->obat_id != NULL) {
@@ -899,7 +898,8 @@ class KesehatanController extends Controller
         $dateOfBirth = $karyawan_sakit->karyawan->tgllahir;
         $umur = Carbon::parse($dateOfBirth)->age;
         $carbon = Carbon::now();
-        $pdf = PDF::loadView('page.kesehatan.surat_sakit', ['karyawan_sakit' => $karyawan_sakit, 'umur' => $umur, 'carbon' => $carbon])->setPaper('A5', 'Landscape');
+        $footer = Carbon::createFromFormat('Y-m-d', $karyawan_sakit->tgl_cek)->isoFormat('D MMMM Y');
+        $pdf = PDF::loadView('page.kesehatan.surat_sakit', ['karyawan_sakit' => $karyawan_sakit, 'umur' => $umur, 'carbon' => $carbon, 'footer' => $footer])->setPaper('A5', 'Landscape');
         return $pdf->stream('');
     }
     public function karyawan_masuk()
@@ -908,17 +908,17 @@ class KesehatanController extends Controller
     }
     public function karyawan_masuk_data()
     {
-        $data = Karyawan_masuk::orderBy('tgl_cek', 'DESC');
+        $data = Karyawan_masuk::with(['Karyawan.Divisi', 'Pemeriksa'])->orderBy('tgl_cek', 'DESC');
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('x', function ($data) {
-                return $data->karyawan->divisi->nama;
+                return $data->Karyawan->Divisi->nama;
             })
             ->addColumn('y', function ($data) {
-                return $data->karyawan->nama;
+                return $data->Karyawan->nama;
             })
             ->addColumn('z', function ($data) {
-                return $data->pemeriksa->nama;
+                return $data->Pemeriksa->nama;
             })
             ->addColumn('button', function ($data) {
                 if ($data->alasan == "Sakit") {
@@ -1034,13 +1034,13 @@ class KesehatanController extends Controller
     }
     public function kesehatan_bulanan_gcu_data()
     {
-        $data = Gcu_karyawan::with('karyawan')
+        $data = Gcu_karyawan::with('Karyawan.Divisi')
             ->orderBy('tgl_cek', 'DESC');
 
-            return datatables()->of($data)
+        return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('x', function ($data) {
-                return $data->karyawan->divisi->nama;
+                return $data->Karyawan->Divisi->nama;
             })
             ->addColumn('glu', function ($data) {
                 if ($data->glukosa != NULL) {
@@ -1074,15 +1074,15 @@ class KesehatanController extends Controller
     }
     public function kesehatan_bulanan_berat_data()
     {
-        $data = berat_karyawan::orderBy('tgl_cek', 'DESC');
+        $data = berat_karyawan::with(['Karyawan.Divisi'])->orderBy('tgl_cek', 'DESC');
 
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('x', function ($data) {
-                return $data->karyawan->divisi->nama;
+                return $data->Karyawan->Divisi->nama;
             })
             ->addColumn('y', function ($data) {
-                return $data->karyawan->nama;
+                return $data->Karyawan->nama;
             })
             ->addColumn('z', function ($data) {
                 return $data->berat . ' Kg';
@@ -1340,21 +1340,21 @@ class KesehatanController extends Controller
     public function laporan_mingguan_data($filter_mingguan, $filter, $id, $start, $end)
     {
         if ($filter == 'divisi' && $filter_mingguan == 'tensi') {
-            $data = kesehatan_mingguan_tensi::wherehas('karyawan', function ($divisi) use ($id) {
+            $data = kesehatan_mingguan_tensi::with(['Karyawan.Divisi'])->wherehas('karyawan', function ($divisi) use ($id) {
                 $divisi->where('divisi_id', $id);
             })
                 ->orderBy('tgl_cek', 'DESC')
                 ->whereBetween('tgl_cek', [$start, $end]);
-                return datatables()->of($data)
+            return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('x', function ($data) {
-                    return $data->karyawan->divisi->nama;
+                    return $data->Karyawan->Divisi->nama;
                 })
                 ->addColumn('y', function ($data) {
                     if ((($data->sistolik) - ($data->diastolik)) < 30) {
-                        return $data->karyawan->nama . '<br><span class="badge bg-danger"><i class="fas fa-exclamation"></i> perlu tindakan lanjut</span>';
+                        return $data->Karyawan->nama . '<br><span class="badge bg-danger"><i class="fas fa-exclamation"></i> perlu tindakan lanjut</span>';
                     } else {
-                        return $data->karyawan->nama;
+                        return $data->Karyawan->nama;
                     }
                 })
                 ->addColumn('hasil', function ($data) {
@@ -1379,20 +1379,20 @@ class KesehatanController extends Controller
                 ->rawColumns(['hasil', 'y'])
                 ->make(true);
         } else if ($filter == 'karyawan' && $filter_mingguan == 'tensi') {
-            $data = kesehatan_mingguan_tensi::with('karyawan')
+            $data = kesehatan_mingguan_tensi::with(['Karyawan.Divisi'])
                 ->orderBy('tgl_cek', 'DESC')
                 ->where('karyawan_id', $id)
                 ->whereBetween('tgl_cek', [$start, $end]);
-                return datatables()->of($data)
+            return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('x', function ($data) {
-                    return $data->karyawan->divisi->nama;
+                    return $data->Karyawan->Divisi->nama;
                 })
                 ->addColumn('y', function ($data) {
                     if ((($data->sistolik) - ($data->diastolik)) < 30) {
-                        return $data->karyawan->nama . '<br><span class="badge bg-danger"><i class="fas fa-exclamation"></i> perlu tindakan lanjut</span>';
+                        return $data->Karyawan->nama . '<br><span class="badge bg-danger"><i class="fas fa-exclamation"></i> perlu tindakan lanjut</span>';
                     } else {
-                        return $data->karyawan->nama;
+                        return $data->Karyawan->nama;
                     }
                 })
                 ->addColumn('hasil', function ($data) {
@@ -1417,48 +1417,48 @@ class KesehatanController extends Controller
                 ->rawColumns(['hasil', 'y'])
                 ->make(true);
         } else if ($filter == 'karyawan' && $filter_mingguan == 'rapid') {
-            $data = kesehatan_mingguan_rapid::with('karyawan')
+            $data = kesehatan_mingguan_rapid::with(['Karyawan.Divisi'])
                 ->orderBy('tgl_cek', 'DESC')
                 ->where('karyawan_id', $id)
                 ->whereBetween('tgl_cek', [$start, $end]);
-                return datatables()->of($data)
+            return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('x', function ($data) {
-                    return $data->karyawan->divisi->nama;
+                    return $data->Karyawan->Divisi->nama;
                 })
                 ->addColumn('z', function ($data) {
                     return $data->pemeriksa->nama;
                 })
                 ->addColumn('yy', function ($data) {
-                    return $data->karyawan->nama;
+                    return $data->Karyawan->nama;
                 })
                 ->make(true);
         } else if ($filter == 'divisi' && $filter_mingguan == 'rapid') {
-            $data = kesehatan_mingguan_rapid::wherehas('karyawan', function ($divisi) use ($id) {
+            $data = kesehatan_mingguan_rapid::with(['Karyawan.Divisi', 'Pemeriksa'])->wherehas('karyawan', function ($divisi) use ($id) {
                 $divisi->where('divisi_id', $id);
             })
                 ->orderBy('tgl_cek', 'DESC')
                 ->whereBetween('tgl_cek', [$start, $end]);
-                return datatables()->of($data)
+            return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('x', function ($data) {
-                    return $data->karyawan->divisi->nama;
+                    return $data->Karyawan->Divisi->nama;
                 })
                 ->addColumn('z', function ($data) {
-                    return $data->pemeriksa->nama;
+                    return $data->Pemeriksa->nama;
                 })
                 ->make(true);
         } else if ($filter == 'x' && $filter_mingguan = 'y') {
-            $data = kesehatan_mingguan_rapid::with('karyawan')
+            $data = kesehatan_mingguan_rapid::with(['Karyawan.Divisi'])
                 ->orderBy('tgl_cek', 'DESC')
                 ->where('karyawan_id', 0);
-                return datatables()->of($data)
+            return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('x', function ($data) {
-                    return $data->karyawan->divisi->nama;
+                    return $data->Karyawan->Divisi->nama;
                 })
                 ->addColumn('yy', function ($data) {
-                    return $data->karyawan->nama;
+                    return $data->Karyawan->nama;
                 })
                 ->addColumn('hasil', function ($data) {
                     if ($data->sistolik < 130 && $data->diastolik < 85) {
@@ -1495,19 +1495,19 @@ class KesehatanController extends Controller
     public function laporan_bulanan_data($filter_bulanan, $filter, $id, $start, $end)
     {
         if ($filter == 'divisi' && $filter_bulanan == 'gcu') {
-            $data = gcu_karyawan::wherehas('karyawan', function ($divisi) use ($id) {
+            $data = gcu_karyawan::with(['Karyawan.Divisi'])->wherehas('karyawan', function ($divisi) use ($id) {
                 $divisi->where('divisi_id', $id);
             })
                 ->orderBy('tgl_cek', 'DESC')
                 ->whereBetween('tgl_cek', [$start, $end]);
 
-                return datatables()->of($data)
+            return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('x', function ($data) {
-                    return $data->karyawan->divisi->nama;
+                    return $data->Karyawan->Divisi->nama;
                 })
                 ->addColumn('xx', function ($data) {
-                    return $data->karyawan->nama;
+                    return $data->Karyawan->nama;
                 })
                 ->addColumn('glu', function ($data) {
                     if ($data->glukosa != NULL) {
@@ -1534,18 +1534,18 @@ class KesehatanController extends Controller
                 })
                 ->make(true);
         } else if ($filter == 'karyawan' && $filter_bulanan == 'gcu') {
-            $data = gcu_karyawan::with('karyawan')
+            $data = gcu_karyawan::with(['Karyawan.Divisi'])
                 ->where('karyawan_id', $id)
                 ->orderBy('tgl_cek', 'DESC')
                 ->whereBetween('tgl_cek', [$start, $end]);
 
-                return datatables()->of($data)
+            return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('x', function ($data) {
-                    return $data->karyawan->divisi->nama;
+                    return $data->Karyawan->divisi->nama;
                 })
                 ->addColumn('xx', function ($data) {
-                    return $data->karyawan->nama;
+                    return $data->Karyawan->nama;
                 })
                 ->addColumn('glu', function ($data) {
                     if ($data->glukosa != NULL) {
@@ -1572,17 +1572,17 @@ class KesehatanController extends Controller
                 })
                 ->make(true);
         } else if ($filter == 'karyawan' && $filter_bulanan == 'berat') {
-            $data = berat_karyawan::with('karyawan')
+            $data = berat_karyawan::with(['Karyawan.Divisi'])
                 ->where('karyawan_id', $id)
                 ->orderBy('tgl_cek', 'DESC')
                 ->whereBetween('tgl_cek', [$start, $end]);
-                return datatables()->of($data)
+            return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('x', function ($data) {
-                    return $data->karyawan->divisi->nama;
+                    return $data->Karyawan->Divisi->nama;
                 })
                 ->addColumn('y', function ($data) {
-                    return $data->karyawan->nama;
+                    return $data->Karyawan->nama;
                 })
                 ->addColumn('z', function ($data) {
                     return $data->berat . ' Kg';
@@ -1623,14 +1623,14 @@ class KesehatanController extends Controller
                     }
                 })
                 ->addColumn('ti', function ($data) {
-                    return $data->karyawan->kesehatan_awal->tinggi . ' Cm';
+                    return $data->Karyawan->kesehatan_awal->tinggi . ' Cm';
                 })
                 ->addColumn('bmi', function ($data) {
-                    return  $data->berat / (($data->karyawan->kesehatan_awal->tinggi / 100) * ($data->karyawan->kesehatan_awal->tinggi / 100));
+                    return  $data->berat / (($data->Karyawan->kesehatan_awal->tinggi / 100) * ($data->Karyawan->kesehatan_awal->tinggi / 100));
                 })
                 ->make(true);
         } else if ($filter == 'divisi' && $filter_bulanan == 'berat') {
-            $data = berat_karyawan::wherehas('karyawan', function ($divisi) use ($id) {
+            $data = berat_karyawan::with(['Karyawan.Divisi'])->wherehas('karyawan', function ($divisi) use ($id) {
                 $divisi->where('divisi_id', $id);
             })
                 ->orderBy('tgl_cek', 'DESC')
@@ -1638,10 +1638,10 @@ class KesehatanController extends Controller
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('x', function ($data) {
-                    return $data->karyawan->divisi->nama;
+                    return $data->Karyawan->Divisi->nama;
                 })
                 ->addColumn('y', function ($data) {
-                    return $data->karyawan->nama;
+                    return $data->Karyawan->nama;
                 })
                 ->addColumn('z', function ($data) {
                     return $data->berat . ' Kg';
@@ -1682,21 +1682,21 @@ class KesehatanController extends Controller
                     }
                 })
                 ->addColumn('ti', function ($data) {
-                    return $data->karyawan->kesehatan_awal->tinggi . ' Cm';
+                    return $data->Karyawan->kesehatan_awal->tinggi . ' Cm';
                 })
                 ->addColumn('bmi', function ($data) {
-                    return  $data->berat / (($data->karyawan->kesehatan_awal->tinggi / 100) * ($data->karyawan->kesehatan_awal->tinggi / 100));
+                    return  $data->berat / (($data->Karyawan->kesehatan_awal->tinggi / 100) * ($data->Karyawan->Kesehatan_awal->tinggi / 100));
                 })
                 ->make(true);
         } else if ($filter == 'x' && $filter_bulanan = 'y') {
-            $data = gcu_karyawan::with('karyawan')
+            $data = gcu_karyawan::with('Karyawan')
                 ->orderBy('tgl_cek', 'DESC')
                 ->where('karyawan_id', 0);
 
             return datatables()->of($data)
                 ->addIndexColumn()
                 ->addColumn('x', function ($data) {
-                    return $data->karyawan->nama;
+                    return $data->Karyawan->nama;
                 })
                 ->addColumn('glu', function ($data) {
                     if ($data->glukosa != NULL) {
@@ -1739,22 +1739,22 @@ class KesehatanController extends Controller
                 ->orderBy('tgl_cek', 'DESC')
                 ->whereBetween('tgl_cek', [$start, $end]);
         } else if ($filter == 'karyawan') {
-            $data = kesehatan_tahunan::with('karyawan')
+            $data = kesehatan_tahunan::with('Karyawan.Divisi')
                 ->orderBy('tgl_cek', 'DESC')
                 ->where('karyawan_id', $id)
                 ->whereBetween('tgl_cek', [$start, $end]);
         } else {
-            $data = kesehatan_tahunan::with('karyawan')
+            $data = kesehatan_tahunan::with('Karyawan.Divisi')
                 ->orderBy('tgl_cek', 'DESC')
                 ->where('karyawan_id', 0);
         }
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('x', function ($data) {
-                return $data->karyawan->divisi->nama;
+                return $data->Karyawan->divisi->nama;
             })
             ->addColumn('y', function ($data) {
-                return $data->karyawan->nama;
+                return $data->Karyawan->nama;
             })
             ->addColumn('z', function ($data) {
                 return $data->pemeriksa->nama;
@@ -1853,5 +1853,107 @@ class KesehatanController extends Controller
             return redirect()->back()->with('error', "Gagal menambahkan data");
         }
     }
+
+    public function chart_vaksin()
+    {
+        $data = array();
+
+        $tahap_1 = 0;
+        $tahap_2 = 0;
+        $tahap_3 = 0;
+
+        $karyawan = Karyawan::with('Vaksin_karyawan')->get();
+
+        foreach ($karyawan as $k) {
+            if ($k->Vaksin_karyawan->last()) {
+
+                if ($k->Vaksin_karyawan->last()->tahap == 1) {
+                    $data['tahap_1'] = $tahap_1++;
+                }
+                if ($k->Vaksin_karyawan->last()->tahap == 2) {
+                    $data['tahap_2'] = $tahap_2++;
+                }
+                if ($k->Vaksin_karyawan->last()->tahap == 3) {
+                    $data['tahap_3'] = $tahap_3++;
+                }
+            }
+        }
+        return response()->json($data);
+    }
+    public function chart_berat_tahun()
+    {
+        //     $data = array();
+        //     $jan = Karyawan::has('Kesehatan_awal')
+        //     ->with('Berat_karyawan',function($q){
+        //         $q->whereMonth('tgl_cek', '1');
+        //         $q->whereYear('tgl_cek', '2022');
+        //     })->get();
+
+
+        //     $obesitas = 0;
+        //     $normal = 0;
+        //     $kurang = 0;
+
+        //     $bulan = ['jan','feb','mar','apr','mei','jun','jul','agu','sept','okt','nov','des'];
+
+
+        //     // for ($i=0;$i<=11;$i++){
+        //     //     $data[$bulan[$i]] =array() ;
+
+        //     //       $data[$bulan[$i]][0]['obesitas'] = 'x';
+        //     //       $data[$bulan[$i]][1]['normal'] = 'x';
+        //     //       $data[$bulan[$i]][2]['kurang'] = 'x';
+        //     // }
+
+        //       // $data[$bulan[0]];
+        //       foreach($jan as $j){
+        //         $data[$bulan[0]]['obesitas'] = $j->id;
+        //         // if ($k->Berat_karyawan->last()){
+        //         //     $bmi = $k->Berat_karyawan->last()->berat  / (($k->Kesehatan_awal->tinggi / 100) * ($k->Kesehatan_awal->tinggi / 100)) ;
+        //         //     if($bmi >= 25){
+        //         //         $data[$bulan[0]][0]['obesitas'] = $obesitas+1;
+        //         //     }else if($bmi >= 18.5 || $bmi <= 24.9){
+        //         //         $data[$bulan[0]][1]['normal'] =  $normal ++;
+        //         //     }else if($bmi >= 18.5 || $bmi < 18.59){
+        //         //         $data[$bulan[0]][2]['kurang']=  $kurang +1;
+        //         //     }
+        //         //  }
+        //         }
+        //     // $obesitas = 0;
+        //     // $normal = 0;
+        //     // $kurang = 0;
+        //     // // foreach($karyawan as $k){
+        //     // //     if ($k->Berat_karyawan->last()){
+        //     // //         $bmi = $k->Berat_karyawan->last()->berat  / (($k->Kesehatan_awal->tinggi / 100) * ($k->Kesehatan_awal->tinggi / 100)) ;
+        //     // //         if($bmi >= 25){
+        //     // //             $data['obesitas'] = $obesitas++;
+        //     // //         }elseif($bmi >= 18.5 || $bmi >= 24.9){
+        //     // //             $data['normal'] =  $normal++;
+        //     // //         }else{
+        //     // //             $data['kurang'] =  $kurang++;
+        //     // //         }
+        //     // //     }else{
+        //     // //         $data['obesitas'] = 0;
+        //     // //         $data['normal'] = 0;
+        //     // //         $data['kurang'] = 0;
+        //     // //     }
+        //     // // }
+        //     // $data_jan = Berat_karyawan::whereBetween('tgl_cek', ["2022-01-01", "2022-12-31"])->get();
+        //     // $data_feb = Berat_karyawan::whereBetween('tgl_cek', ["2022-01-01", "2022-12-31"])->get();
+        //      return response()->json($data);
+        return response()->json('');
+    }
+
+    // public function riwayat_penyakit_data(Request $request)
+    // {
+    //   $riwayat_penyakit = Riwayat_penyakit::where('nama', 'LIKE', '%' . $request->term . '%')->groupby('nama')->get();
+    //   $data = array();
+    //   foreach($riwayat_penyakit as $r){
+    //     $data[] = $r->nama;
+    //   }
+    //   return response()->json($data);
+    // }
+
+
 
 }

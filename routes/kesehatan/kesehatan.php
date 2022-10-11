@@ -15,15 +15,18 @@ Route::group(['prefix' => '/kesehatan'], function (){
         Route::post('/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_data']);
         Route::post('/vaksin/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_vaksin']);
         Route::post('/penyakit/{id}', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_riwayat_penyakit']);
-        Route::get('/data/{id}',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_data_detail']);
+             Route::get('/data/{id}',[App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_data_detail']);
         //});
-
+        Route::get('/vaksin/chart/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'chart_vaksin']);
+        Route::get('/berat/chart/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'chart_berat_tahun']);
         Route::group(['prefix' => '/vaksin'], function (){
             Route::post('/aksi_tambah/2', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_vaksin_aksi_tambah']);
         });
 
         Route::group(['prefix' => '/riwayat_penyakit'], function (){
             Route::post('/aksi_tambah', [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_riwayat_penyakit_aksi_tambah']);
+         //   Route::get('/data', [App\Http\Controllers\kesehatan\KesehatanController::class,'riwayat_penyakit_data']);
+
         });
 
 
@@ -51,7 +54,7 @@ Route::group(['prefix' => '/kesehatan'], function (){
         Route::post('/berat/data',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_berat_data']);
         Route::get('/detail',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_detail']);
         Route::post('/berat/detail/{karyawan_id}',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_berat_detail_data']);
-        Route::get('/gcu/detail/{karyawan_id}',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_detail_data']);
+        Route::post('/gcu/detail/{karyawan_id}',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_gcu_detail_data']);
         Route::get('/detail/data/{karyawan_id}',  [App\Http\Controllers\kesehatan\KesehatanController::class,'kesehatan_bulanan_detail_data_karyawan']);
         });
 

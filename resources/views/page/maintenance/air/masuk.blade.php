@@ -371,7 +371,7 @@
     // fungsi untuk melakukan pengambilan data berapa banyak volume yang disimpan di dalam tandon hari ini
     function UpdateBarVolume() {
         $.ajax({
-            url: "http://192.168.13.2:85/air/rekap_volume_in",
+            url: "http://localhost:81/air/rekap_volume_in",
             type: "get",
             success: function(res) {
 
