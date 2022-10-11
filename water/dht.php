@@ -20,7 +20,7 @@ class dht1
     function connect()
     {
         $this->link = mysqli_connect('localhost', 'root', '') or die('Cannot connect to the DB');
-        mysqli_select_db($this->link, 'water_monitoring') or die('Cannot select the DB');
+        mysqli_select_db($this->link, 'erp_device') or die('Cannot select the DB');
     }
 
     function storeInDB($volume, $debit, $mikro)
@@ -49,7 +49,7 @@ class dht2
     function connect()
     {
         $this->link2 = mysqli_connect('localhost', 'root', '') or die('Cannot connect to the DB');
-        mysqli_select_db($this->link2, 'water_monitoring') or die('Cannot select the DB');
+        mysqli_select_db($this->link2, 'erp_device') or die('Cannot select the DB');
     }
 
     function storeInDB($volume2, $debit2, $mikro)
@@ -101,7 +101,7 @@ array_push($CurrentIn, $FetchMasukNow['volume']);
 array_push($CurrentOut, $FetchKeluarNow['volume']);
 array_push($StatusMikro, $FetchStatus['mikro']);
 
-// Update Backup Volume Air keluar Tandon dan dikonsumsi 
+// Update Backup Volume Air keluar Tandon dan dikonsumsi
 if ($FetchHariNowOut == null) {
     mysqli_query($koneksitest, "INSERT into tbl_volume_harian (hari, volume, arah) values ('$Today', '$CurrentOut[0]', 'keluar')");
     echo "tidak ada data masuk 1";

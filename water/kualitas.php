@@ -7,7 +7,7 @@ include './_database/config.php';
 //Upload 1
 class dht1
 {
-    public $link = '';ss
+    public $link = '';
     function __construct($tds, $tss, $ph)
     {
         $this->connect();
@@ -17,7 +17,7 @@ class dht1
     function connect()
     {
         $this->link = mysqli_connect('localhost', 'root', '') or die('Cannot connect to the DB');
-        mysqli_select_db($this->link, 'water_monitoring') or die('Cannot select the DB');
+        mysqli_select_db($this->link, 'erp_device') or die('Cannot select the DB');
     }
 
     function storeInDB($tds, $tss, $ph)
