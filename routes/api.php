@@ -130,7 +130,7 @@ Route::prefix('/penjualan')->group(function () {
         Route::post('produk/detail/{id}', [App\Http\Controllers\PenjualanController::class, 'get_data_pesanan_detail']);
     });
     Route::prefix('/lacak')->group(function () {
-        Route::post('data/{parameter}/{value}', [App\Http\Controllers\PenjualanController::class, 'get_lacak_penjualan']);
+        Route::post('/data/{parameter}/{value}', [App\Http\Controllers\PenjualanController::class, 'get_lacak_penjualan']);
     });
 
     Route::group(['prefix' => '/rencana'], function () {
@@ -578,7 +578,6 @@ Route::prefix('/dc')->group(function () {
         Route::put('update_tgl_kirim_coo/{value}', [App\Http\Controllers\DcController::class, 'update_tgl_kirim_coo']);
         Route::post('data/{value}', [App\Http\Controllers\DcController::class, 'get_data_so']);
         Route::post('selesai/{value}', [App\Http\Controllers\DcController::class, 'get_data_so_selesai']);
-
         Route::post('detail/{id}', [App\Http\Controllers\DcController::class, 'get_data_detail_so']);
         Route::post('detail/seri/{id}/{jenis}', [App\Http\Controllers\DcController::class, 'get_data_detail_seri_so']);
         Route::post('detail/seri/select/{id}/{value}', [App\Http\Controllers\DcController::class, 'get_data_detail_select_seri_so']);
@@ -604,7 +603,17 @@ Route::prefix('/as')->group(function () {
 Route::group(['prefix' => 'direksi', 'middleware' => 'auth'], function () {
     Route::get('dashboard', [App\Http\Controllers\DireksiController::class, 'dashboard']);
 });
+
+Route::prefix('/manager')->group(function () {
+    Route::prefix('/qc')->group(function () {
+        Route::post('belum_uji', [App\Http\Controllers\PpicController::class, 'qc_outgoing_belum_uji']);
+        Route::post('selesai_uji', [App\Http\Controllers\PpicController::class, 'qc_outgoing_selesai_uji']);
+    });
+
+    Route::get('pesanan/{id}', [App\Http\Controllers\PpicController::class, 'pesanan']);
+});
 Route::get('/get_stok_pesanan', [MasterController::class, 'get_stok_pesanan']);
+
 Route::get('testingJson', [GudangController::class, 'dataTesting']);
 
 Route::namespace('v2')->group(__DIR__ . '/yogi/api.php');

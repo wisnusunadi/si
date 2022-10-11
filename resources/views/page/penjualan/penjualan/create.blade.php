@@ -125,13 +125,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                        .row {
-                                            font-size: 12px;
-                                        }
+                                            .row {
+                                                font-size: 12px;
+                                            }
 
-                                        h4 {
-                                            font-size: 20px;
-                                        } */
+                                            h4 {
+                                                font-size: 20px;
+                                            } */
             body {
                 font-size: 12px;
             }
@@ -148,13 +148,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                        .row {
-                                            font-size: 12px;
-                                        }
+                                            .row {
+                                                font-size: 12px;
+                                            }
 
-                                        h4 {
-                                            font-size: 20px;
-                                        } */
+                                            h4 {
+                                                font-size: 20px;
+                                            } */
             section {
                 font-size: 12px;
             }

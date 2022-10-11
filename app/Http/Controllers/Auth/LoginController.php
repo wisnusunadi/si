@@ -44,25 +44,26 @@ class LoginController extends Controller
         $this->middleware('guest')->except('logout');
     }
 
-    function username() {
+    function username()
+    {
         return 'username';
     }
 
- //   protected function sendLoginResponse(Request $request)
-  //  {
-        // $user = User::where('username', $request->username)->firstOrFail();
-        // $token = $user->createToken('auth_token')->plainTextToken;
+    //   protected function sendLoginResponse(Request $request)
+    //  {
+    // $user = User::where('username', $request->username)->firstOrFail();
+    // $token = $user->createToken('auth_token')->plainTextToken;
 
-        // $user = User::where('username', $request->username)->firstOrFail();
-        // $user->createToken('auth_token')->accessToken;
-
-
-
-      //  return response()->json(compact('token'));
+    // $user = User::where('username', $request->username)->firstOrFail();
+    // $user->createToken('auth_token')->accessToken;
 
 
-      //  return $this->authenticated();
-  //  }
+
+    //  return response()->json(compact('token'));
+
+
+    //  return $this->authenticated();
+    //  }
 
 
     public function authenticated()
@@ -97,6 +98,4 @@ class LoginController extends Controller
 
         return redirect('/home');
     }
-
-
 }
