@@ -90,6 +90,7 @@ Route::group(['prefix' => '/gbj', 'middleware' => ['auth', 'divisi:gbj,mgrgdg,di
         Route::get('/{id}', [GudangController::class, 'getDetailHistory1']);
     });
     Route::get('/data', [GudangController::class, 'get_data_barang_jadi']);
+    Route::get('/export_nonso/{id}', [GudangController::class, 'exportNonso'])->name('gbj.nonso');
     Route::get('/export_spb/{id}', [GudangController::class, 'exportSpb'])->name('gbj.spb');
     Route::get('/export_noseri', [GudangController::class, 'export_noseri_gudang'])->name('gbj.noseri');
 
@@ -440,4 +441,4 @@ Route::group(['prefix' => '/gk', 'middleware' => ['auth', 'divisi:gk,dirut']], f
 Route::view('/uit', 'page.login_page.index');
 
 Route::namespace('v2')->group(__DIR__ . '/kesehatan/kesehatan.php');
-Route::namespace('alatuji')->group(__DIR__ . '/inventory/web.php');
+Route::namespace('lab')->group(__DIR__ . '/inventory/web.php');

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\GBJExportSPB;
 use App\Exports\ImportNoseri;
+use App\Exports\NonsoExport;
 use App\Exports\NoseriGudangExport;
 use App\Exports\SpbExport;
 use App\Models\DetailEkatalog;
@@ -661,7 +662,7 @@ class GudangController extends Controller
                 return '-';
             })
             ->addColumn('action', function ($d) {
-                return '<a class="btn btn-info" href="' . url('gbj/tp/' . $d->id . '') . '"><i
+                return '<a class="btn btn-outline-primary" href="' . url('gbj/tp/' . $d->id . '') . '"><i
                         class="far fa-eye"></i> Detail</a>';
             })
             ->rawColumns(['action'])
@@ -685,45 +686,48 @@ class GudangController extends Controller
                 ->leftjoin('m_state as stt', 'stt.id', '=', 'p.log_id')
                 ->leftjoin('divisi as d', 'd.id', '=', 'h.dari')
                 ->leftjoin('divisi as dd', 'd.id', '=', 'h.ke')
-                ->select('p.so', 'p.no_po', 'p.log_id', 'h.tgl_masuk', 'h.tgl_keluar', 'h.jenis', 'h.deskripsi', 't_gbj_detail.qty', 'stt.nama', 'd.nama as dari', 'dd.nama as ke', DB::raw('concat(prd.nama, " ", g.nama) as produkk'), 't_gbj_detail.id')
+                // ->select('p.so', 'p.no_po', 'p.log_id', 'h.tgl_masuk', 'h.tgl_keluar', 'h.jenis', 'h.deskripsi', 't_gbj_detail.qty', 'stt.nama', 'd.nama as dari', 'dd.nama as ke', DB::raw('concat(prd.nama, " ", g.nama) as produkk'), 't_gbj_detail.id')
+                ->select('h.tgl_masuk', 'h.jenis', 't_gbj_detail.qty', 'd.nama as dari', DB::raw('concat(prd.nama, " ", g.nama) as produkk'), 't_gbj_detail.id')
+                ->where('h.jenis', '=', 'masuk')
+                ->orderByDesc('h.tgl_masuk')
                 ->get();
         $g = datatables()->of($data1)
             ->addIndexColumn()
-            ->addColumn('so', function ($d) {
-                if (isset($d->so)) {
-                    return $d->so;
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('po', function ($d) {
-                if (isset($d->no_po)) {
-                    return $d->no_po;
-                } else {
-                    return '-';
-                }
-            })
-            ->addColumn('logs', function($d) {
-                if (isset($d->so)) {
-                    if ($d->log_id == 9) {
-                        $ax = "<span class='badge badge-pill badge-secondary'>".$d->nama."</span>";
-                    } else if ($d->log_id == 6) {
-                        $ax = "<span class='badge badge-pill badge-warning'>".$d->nama."</span>";
-                    } elseif ($d->log_id == 8) {
-                        $ax = "<span class='badge badge-pill badge-info'>".$d->nama."</span>";
-                    } elseif ($d->log_id == 11) {
-                        $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
-                    } elseif ($d->log_id == 10) {
-                        $ax = "<span class='badge badge-pill badge-success'>".$d->nama."</span>";
-                    } else {
-                        $ax = "<span class='badge badge-pill badge-danger'>".$d->nama."</span>";
-                    }
+            // ->addColumn('so', function ($d) {
+            //     if (isset($d->so)) {
+            //         return $d->so;
+            //     } else {
+            //         return '-';
+            //     }
+            // })
+            // ->addColumn('po', function ($d) {
+            //     if (isset($d->no_po)) {
+            //         return $d->no_po;
+            //     } else {
+            //         return '-';
+            //     }
+            // })
+            // ->addColumn('logs', function($d) {
+            //     if (isset($d->so)) {
+            //         if ($d->log_id == 9) {
+            //             $ax = "<span class='badge badge-pill badge-secondary'>".$d->nama."</span>";
+            //         } else if ($d->log_id == 6) {
+            //             $ax = "<span class='badge badge-pill badge-warning'>".$d->nama."</span>";
+            //         } elseif ($d->log_id == 8) {
+            //             $ax = "<span class='badge badge-pill badge-info'>".$d->nama."</span>";
+            //         } elseif ($d->log_id == 11) {
+            //             $ax = "<span class='badge badge-pill badge-dark'>Logistik</span>";
+            //         } elseif ($d->log_id == 10) {
+            //             $ax = "<span class='badge badge-pill badge-success'>".$d->nama."</span>";
+            //         } else {
+            //             $ax = "<span class='badge badge-pill badge-danger'>".$d->nama."</span>";
+            //         }
 
-                    return $ax;
-                } else {
-                    return '-';
-                }
-            })
+            //         return $ax;
+            //     } else {
+            //         return '-';
+            //     }
+            // })
             ->addColumn('date_in', function ($d) {
                 if (isset($d->tgl_masuk)) {
                     return Carbon::parse($d->tgl_masuk)->isoFormat('D MMMM Y');
@@ -731,23 +735,23 @@ class GudangController extends Controller
                     return "-";
                 }
             })
-            ->addColumn('date_out', function ($d) {
-                if (isset($d->tgl_keluar)) {
-                    return Carbon::parse($d->tgl_keluar)->isoFormat('D MMMM Y');
-                } else {
-                    return "-";
-                }
-            })
+            // ->addColumn('date_out', function ($d) {
+            //     if (isset($d->tgl_keluar)) {
+            //         return Carbon::parse($d->tgl_keluar)->isoFormat('D MMMM Y');
+            //     } else {
+            //         return "-";
+            //     }
+            // })
             ->addColumn('divisi', function ($d) {
-                if ($d->jenis == 'keluar') {
-                    return '<span class="badge badge-info">' . $d->ke . '</span>';
-                } else {
+                // if ($d->jenis == 'keluar') {
+                //     return '<span class="badge badge-info">' . $d->ke . '</span>';
+                // } else {
                     return '<span class="badge badge-success">' . $d->dari . '</span>';
-                }
+                // }
             })
-            ->addColumn('tujuan', function ($d) {
-                return $d->deskripsi;
-            })
+            // ->addColumn('tujuan', function ($d) {
+            //     return $d->deskripsi;
+            // })
             ->addColumn('jumlah', function ($d) {
                 return $d->qty.' Unit';
             })
@@ -756,7 +760,7 @@ class GudangController extends Controller
             })
             ->addColumn('action', function ($d) {
                 return '<a data-toggle="modal" data-target="#editmodal" class="editmodal" data-attr=""  data-id="' . $d->id . '">
-                <button class="btn btn-info"><i
+                <button class="btn btn-outline-primary"><i
                 class="far fa-eye"></i> Detail</button>
                         </a>';
             })
@@ -908,6 +912,68 @@ class GudangController extends Controller
         $data = GudangBarangJadi::with('produk')->where('id', $id)->get();
         $data1 = TFProduksiDetail::with('header', 'produk', 'noseri')->where('gdg_brg_jadi_id', $id)->get();
         return view('page.gbj.tp.show', compact('data', 'data1', 'header'));
+    }
+
+    function getNonSODone()
+    {
+        try {
+            $data = TFProduksi::
+                    leftJoin('divisi as p', 'p.id', '=', 't_gbj.ke')
+                    ->leftJoin('t_gbj_detail as tgd', 'tgd.t_gbj_id', '=', 't_gbj.id')
+                    ->leftJoin('gdg_barang_jadi as gbj', 'gbj.id', '=', 'tgd.gdg_brg_jadi_id')
+                    ->leftJoin('produk as pp', 'pp.id', '=', 'gbj.produk_id')
+                    ->where([
+                        ['t_gbj.jenis', '=', 'keluar'],
+                        // ['t_gbj.status_id', '=', 2],
+                    ])->whereNull('t_gbj.pesanan_id')
+                    ->selectRaw('t_gbj.id, tgd.gdg_brg_jadi_id,
+                                concat(pp.nama," ",gbj.nama) as produkk, sum(tgd.qty) as qty')
+                    ->groupBy('gbj.id')
+                    ->orderByRaw('concat(pp.nama," ",gbj.nama)')
+                    ->get();
+            $dt = datatables()->of($data)
+                ->addIndexColumn()
+                // ->editColumn('tgl_keluar', function($d){
+                //     return Carbon::parse($d->tgl_keluar)->isoFormat('D MMM YYYY');
+                // })
+                ->editColumn('qty', function($d){
+                    return $d->qty.' Unit';
+                })
+                ->editColumn('aksi', function($d){
+                    return '<a href="export_nonso/'.$d->gdg_brg_jadi_id.'">
+                            <button class="btn btn-outline-primary"><i class="fas fa-eye"></i> Cetak</button>
+                        </a>';
+                })
+                ->rawColumns(['aksi'])
+                ->make(true);
+
+            return $dt;
+        } catch (\Exception $e) {
+            return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
+        }
+    }
+
+    function exportNonso($id)
+    {
+        try {
+            $data = TFProduksiDetail::
+                    leftJoin('t_gbj as tg', 't_gbj_detail.t_gbj_id', '=', 'tg.id')
+                    ->leftJoin('divisi as p', 'p.id', '=', 'tg.ke')
+                    ->leftJoin('gdg_barang_jadi as gbj', 'gbj.id', '=', 't_gbj_detail.gdg_brg_jadi_id')
+                    ->leftJoin('produk as pp', 'pp.id', '=', 'gbj.produk_id')
+                    ->where([
+                        ['tg.jenis', '=', 'keluar'],
+                    ])->whereNull('tg.pesanan_id')
+                    ->selectRaw('p.nama as nm_divisi, tg.tgl_keluar, tg.deskripsi, tg.id as tgdid, t_gbj_detail.id,
+                                concat(pp.nama," ",gbj.nama) as produkk, t_gbj_detail.qty')
+                    ->where("t_gbj_detail.gdg_brg_jadi_id", "=", $id)
+                    ->first();
+
+            return Excel::download(new NonsoExport($id), 'Laporan Tanpa SO '.$data->produkk.'.xlsx');
+
+        } catch (\Exception $e) {
+            return response()->json(['error'=> true, 'msg' => $e->getMessage()]);
+        }
     }
 
     function get_data_waiting_approve(Request $request) {
