@@ -9,7 +9,7 @@
 @section('content')
     <style>
         .ui-autocomplete-input {
-        /* border: none; 
+        /* border: none;
         font-size: 14px;
         width: 300px;
         height: 24px;
@@ -1566,7 +1566,7 @@
         @if(session()->has('perbSuccess'))
                 $('#tabRiwayat a[href="#perbaikan"]').tab('show');
         @endif
-        
+
         // tampilkan alert input data berhasil
         @if(session()->has('success'))
             Swal.fire({
