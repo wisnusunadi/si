@@ -130,29 +130,56 @@
                     <h3 class="card-title">Dokumen Penunjang</h3>
                 </div>
 
+                @error('gambar')
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col">
+                            <div class="alert bc-danger text-danger border border-danger py-0 mb-0 mt-1">{{ $message }}</div>
+                        </div>
+                    </div>
+                @enderror
                 <div class="row mb-2">
                     <div class="col"><span class="float-right">Gambar</span></div>
                     <div class="col">
                         <div class="form-group">
                             <input type="file" name="gambar" class="form-control-file">
+                            <small class="text-muted">Gambar berupa jpg/jpeg/png maksimal 2mb</small>
                         </div>
                     </div>
                 </div>
 
+                @error('manual_book')
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col">
+                            <div class="alert bc-danger text-danger border border-danger py-0 mb-0 mt-1">{{ $message }}</div>
+                        </div>
+                    </div>
+                @enderror
                 <div class="row mb-2">
                     <div class="col"><span class="float-right">Manual Book</span></div>
                     <div class="col">
                         <div class="form-group">
                             <input type="file" name="manual_book" class="form-control-file">
+                            <small class="text-muted">Dokumen berupa pdf maksimal 10mb</small>
                         </div>
                     </div>
                 </div>
 
+                @error('sop')
+                    <div class="row">
+                        <div class="col"></div>
+                        <div class="col">
+                            <div class="alert bc-danger text-danger border border-danger py-0 mb-0 mt-1">{{ $message }}</div>
+                        </div>
+                    </div>
+                @enderror
                 <div class="row mb-2">
                     <div class="col"><span class="float-right">SOP</span></div>
                     <div class="col">
                         <div class="form-group">
                             <input type="file" name="sop" class="form-control-file">
+                            <small class="text-muted">Gambar berupa jpg/jpeg/png maksimal 2mb</small>
                         </div>
                     </div>
                 </div>
