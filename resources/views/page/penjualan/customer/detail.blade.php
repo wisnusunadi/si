@@ -104,10 +104,6 @@
         background-color: #d4edda;
         border-color: #c3e6cb;
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> dd058260e517c3328df4d9c0883f45f986a3133c
     li.list-group-item {
         border: 0 none;
     }
@@ -206,10 +202,6 @@
         .labelinfo{
             text-align: center;
         }
-<<<<<<< HEAD
-
-=======
->>>>>>> dd058260e517c3328df4d9c0883f45f986a3133c
         .overflowcard {
             max-height: 500px;
             width: auto;
