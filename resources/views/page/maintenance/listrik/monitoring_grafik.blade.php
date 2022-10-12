@@ -840,6 +840,35 @@ let datafre = [];
 </script> --}}
 
 <script>
+    var gc1 = $('#gc1');
+      $('#c1').show();
+
+      function hide(){
+        $("#select_c1").removeClass('active');
+        $("#select_vll1").removeClass('active');
+        $("#select_vln1").removeClass('active');
+        $("#select_p1").removeClass('active');
+        $("#select_pf1").removeClass('active');
+        $("#select_dpf1").removeClass('active');
+        $("#select_f1").removeClass('active');
+
+     $('#vll1').hide();
+     $('#vln1').hide();
+     $('#p1').hide();
+     $('#pf1').hide();
+     $('#dpf1').hide();
+     $('#f1').hide();
+    }
+    $(".filter_grafik").click(function(){
+        var value = $(this).attr('data-value');
+        $('#c1').hide();
+        hide();
+        $('#'+value).show();
+        $('#select_'+value).addClass('active');
+    });
+
+
+
     function getpanel() {
         $.ajax({
             type: 'get',
