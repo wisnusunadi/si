@@ -876,7 +876,7 @@ let datafre = [];
     function getpanel() {
         $.ajax({
             type: 'get',
-            url: 'http://localhost:8000/listrik/ambilpanel',
+            url: 'http://192.168.13.2:85/listrik/ambilpanel',
             success: function (data) {
                 let x = data.data.length;
 
