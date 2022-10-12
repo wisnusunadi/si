@@ -3797,7 +3797,7 @@ class PenjualanController extends Controller
 
         $ekatalog = Ekatalog::find($id);
 
-        if ($request->status_akn == 'draft') {
+        if ($request->status_akn == 'draft' ||  $request->status_akn == 'batal') {
             if ($request->no_paket == '') {
                 $c_akn = NULL;
             } else {
