@@ -684,7 +684,7 @@ table tbody tr td i{
                                 <div class="row">
                                     <div class="col-auto">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="kondisi_peminjaman" id="konfirmasi_ok" value="9" {{ old('kondisi_peminjaman') == 9 ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="kondisi_peminjaman" id="konfirmasi_ok" value="9" {{ old('kondisi_peminjaman') == null ? 'checked' : (old('kondisi_peminjaman') == 9 ? 'checked' : '') }}>
                                             <label class="form-check-label" for="konfirmasi_ok">OK</label>
                                         </div>
                                     </div>
@@ -846,7 +846,7 @@ table tbody tr td i{
                                 <div class="row">
                                     <div class="col-auto">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="radio" name="kondisi_kembali" id="kondisiOK" value="9" {{ old('kondisi_kembali') == 9 ? 'checked' : '' }}>
+                                            <input class="form-check-input" type="radio" name="kondisi_kembali" id="kondisiOK" value="9" {{ old('kondisi_kembali') == null ? 'checked' : (old('kondisi_kembali') == 9 ? 'checked' : '') }}>
                                             <label class="form-check-label" for="kondisiOK">OK</label>
                                         </div>
                                     </div>

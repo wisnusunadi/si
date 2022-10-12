@@ -47,9 +47,9 @@ class KalibrasiPerbaikanController extends Controller
             ->first();
 
             $data->status_pinjam_id == 16 ?
-            $data->status_pinjam_id = '<span class="badge w-25 bc-success"><span class="text-success">Tersedia</span></span>'
+            $data->status_pinjam_id = '<span class="badge bc-success"><span class="text-success">Tersedia</span></span>'
             :
-            $data->status_pinjam_id = '<span class="badge w-25 bc-danger"><span class="text-danger">Tidak Tersedia</span></span>';
+            $data->status_pinjam_id = '<span class="badge bc-danger"><span class="text-danger">Tidak Tersedia</span></span>';
 
             $tgl = DB::table(DB::raw('erp_kalibrasi.'.$jenis.' k'))
             ->select('tgl_kirim')

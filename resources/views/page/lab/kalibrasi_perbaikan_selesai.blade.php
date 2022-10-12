@@ -201,6 +201,7 @@
                     <div class="col">
                         <div class="form-group">
                             <input type="file" name="sertif_kalibrasi" class="form-control-file">
+                            <small class="text-muted">File Berupa Gambar, Maksimal 2MB</small>
                         </div>
                     </div>
                 </div>

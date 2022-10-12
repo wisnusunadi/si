@@ -215,7 +215,7 @@
         <div class="card-body">
             <div class="row float-right">
                 <div class="col-auto">
-                    <a href="{{ route('alatuji.perawatan.detail', ['id' => $data->id_serial_number]) }}" class="btn btn-danger float-right">Batal</a>
+                    <a href="{{ route('alatuji.detail', ['id' => $data->id_serial_number]) }}" class="btn btn-danger float-right">Batal</a>
                 </div>
                 <div class="col-auto">
                     <input type="submit" value="Submit" class="btn btn-primary float-right">

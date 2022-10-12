@@ -795,7 +795,7 @@
                                     <div class="row">
                                         <div class="col-auto">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="radio" name="kondisi_peminjaman" id="konfirmasi_ok" value="9" {{ old('status_peminjaman') == null ? 'checked' : (old('kondisi_peminjaman') == 9 ? 'checked' : '') }}>
+                                                <input class="form-check-input" type="radio" name="kondisi_peminjaman" id="konfirmasi_ok" value="9" {{ old('kondisi_peminjaman') == null ? 'checked' : (old('kondisi_peminjaman') == 9 ? 'checked' : '') }}>
                                                 <label class="form-check-label" for="konfirmasi_ok">OK</label>
                                             </div>
                                         </div>

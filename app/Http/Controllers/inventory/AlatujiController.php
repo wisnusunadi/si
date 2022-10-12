@@ -755,7 +755,10 @@ class AlatujiController extends Controller
             }
         }
         AlatSN::find($request->alatuji_konfirm_id)
-        ->update(['status_pinjam_id' => $x]);
+        ->update([
+            'status_pinjam_id' => $x,
+            'kondisi_id' => $x
+        ]);
 
         Peminjaman::where('id_peminjaman', $request->peminjaman_konfirm_id)
         ->update([
@@ -846,6 +849,7 @@ class AlatujiController extends Controller
             'total_penggunaan' => $total_penggunaan,
             'total_waktu' => $total_waktu,
             'status_pinjam_id' => $x,
+            'kondisi_id' => $x
         ]);
 
         // user log
