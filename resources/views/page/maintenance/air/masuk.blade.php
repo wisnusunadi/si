@@ -273,15 +273,19 @@
 
 @section('adminlte_js')
 
-<script src="{{ asset('js/justgage.js') }}"></script>
-<script src="{{ asset('js/raphael-2.1.4.min.js') }}"></script>
-<script type="text/javascript">
-    // var x = document.getElementById("gg1");
-    // x.style.display = "none";
 
-    // $('.d_masuk').on('click', function() {
-    //     x.style.display = "block"
-    // })
+<script>
+$(document).ready(function() {
+    var table = $('#example').DataTable({
+        "columnDefs": [
+            { "visible": false, "targets": 2 }
+        ],
+        "order": [[ 2, 'asc' ]],
+        "displayLength": 25,
+        "drawCallback": function ( settings ) {
+            var api = this.api();
+            var rows = api.rows( {page:'tempek'} ).nodes();
+            var last=null;
 
     var clientHeight = $('.column-wrapper')[0].style.height;
     console.log(clientHeight);
@@ -348,7 +352,7 @@
                 display: false
             }
         }
-    });
+    } );
 
     function UpdateBarVolume() {
         $.ajax({
