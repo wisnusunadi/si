@@ -184,10 +184,10 @@
                     </div>
                 </div>
 
-                <div class="row mb-2">
+                <!-- <div class="row mb-2">
                     <div class="col"><span class="float-right">Barcode</span></div>
                     <div class="col">barcode</div>
-                </div>
+                </div> -->
 
             </div>
         </div>

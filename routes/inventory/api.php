@@ -23,7 +23,8 @@ Route::prefix('/inventory')->group(function() {
     Route::get('data_dashboard_mt_terlewati/{x}', [AlatujiController::class, 'get_data_dashboard_mt_terlewati']);
     Route::get('data_dashboard_mt_reminder/{x}', [AlatujiController::class, 'get_data_dashboard_mt_reminder']);
     Route::get('get_data_no_urut/{x}', [AlatujiController::class, 'get_data_no_urut']);
-    Route::get('get_data_autocomplete', [AlatujiController::class, 'get_data_autocomplete']);
+    Route::get('get_data_pj', [AlatujiController::class, 'get_data_pj']);
+    Route::get('get_data_tipe', [AlatujiController::class, 'get_data_tipe']);
     route::get('get_data_not_ok', [AlatujiController::class, 'get_data_not_ok']);
 });
 
