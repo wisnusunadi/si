@@ -524,10 +524,25 @@ class Pesanan extends Model
         return $data;
     }
 
+    public function DetailPesananUniqueDsb()
+    {
+        $id = $this->id;
+        $produk = DetailPesananDsb::groupby('penjualan_produk_id')->where('pesanan_id', $id)->orderBy('pesanan_id', 'DESC')->get();
+        $part = DetailPesananPart::groupby('m_sparepart_id')->where('pesanan_id', $id)->orderBy('pesanan_id', 'DESC')->get();
+        $data = $produk->merge($part);
+        return $data;
+    }
+
     public function getJumlahPesananUnique($id_penjualan_produk)
     {
         $id = $this->id;
         $data = DetailPesanan::groupby('penjualan_produk_id')->where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->sum('jumlah');
+        return $data;
+    }
+    public function getJumlahPesananUniqueDsb($id_penjualan_produk)
+    {
+        $id = $this->id;
+        $data = DetailPesananDsb::groupby('penjualan_produk_id')->where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->sum('jumlah');
         return $data;
     }
     public function getJumlahPartUnique($id_penjualan_produk)
@@ -540,6 +555,16 @@ class Pesanan extends Model
     {
         $id = $this->id;
         $data = DetailPesanan::where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->get();
+        $total = 0;
+        foreach ($data as $d) {
+            $total += $d->harga * $d->jumlah;
+        }
+        return $total;
+    }
+    public function getTotalPesananUniqueDsb($id_penjualan_produk)
+    {
+        $id = $this->id;
+        $data = DetailPesananDsb::where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->get();
         $total = 0;
         foreach ($data as $d) {
             $total += $d->harga * $d->jumlah;
@@ -560,6 +585,12 @@ class Pesanan extends Model
     {
         $id = $this->id;
         $data = DetailPesanan::groupby('penjualan_produk_id')->where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->sum('ongkir');
+        return $data;
+    }
+    public function getOngkirPesananUniqueDsb($id_penjualan_produk)
+    {
+        $id = $this->id;
+        $data = DetailPesananDsb::groupby('penjualan_produk_id')->where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->sum('ongkir');
         return $data;
     }
     public function getSuratJalanProduk($id_penjualan_produk)

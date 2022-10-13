@@ -9,6 +9,7 @@ use App\Models\DetailEkatalog;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananPart;
 use App\Models\DetailPesananProduk;
+use App\Models\DetailPesananProdukDsb;
 use App\Models\DetailRencanaPenjualan;
 use App\Models\DetailSpa;
 use App\Models\DetailSpb;
@@ -2364,13 +2365,22 @@ class PenjualanController extends Controller
     }
     public function get_data_paket_pesanan_ekat($id)
     {
-        $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($id) {
+        $produk = DetailPesananProduk::whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($id) {
             $q->where('id', $id);
         })->get();
+        $produk_dsb = DetailPesananProdukDsb::whereHas('DetailPesananDsb.Pesanan.Ekatalog', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->get();
+        $data = $produk->merge($produk_dsb);
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('paket_produk', function ($data) {
-                return $data->DetailPesanan->PenjualanProduk->nama . ' (' . $data->DetailPesanan->jumlah . ' unit)';
+                if ($data->DetailPesanan) {
+                    return $data->DetailPesanan->PenjualanProduk->nama . ' (' . $data->DetailPesanan->jumlah . ' unit)';
+                } else {
+                    return $data->DetailPesananDsb->PenjualanProduk->nama . ' (' . $data->DetailPesananDsb->jumlah . ' unit)' . ' <span class="badge info-text">Stok
+                    distributor</span>';
+                }
             })
             ->addColumn('nama_produk', function ($data) {
                 return $data->GudangBarangJadi->Produk->nama . ' ' . $data->GudangBarangJadi->nama;
