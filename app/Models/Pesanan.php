@@ -527,9 +527,8 @@ class Pesanan extends Model
     public function DetailPesananUniqueDsb()
     {
         $id = $this->id;
-        $produk = DetailPesananDsb::groupby('penjualan_produk_id')->where('pesanan_id', $id)->orderBy('pesanan_id', 'DESC')->get();
-        $part = DetailPesananPart::groupby('m_sparepart_id')->where('pesanan_id', $id)->orderBy('pesanan_id', 'DESC')->get();
-        $data = $produk->merge($part);
+        $data = DetailPesananDsb::groupby('penjualan_produk_id')->where('pesanan_id', $id)->orderBy('pesanan_id', 'DESC')->get();
+
         return $data;
     }
 
