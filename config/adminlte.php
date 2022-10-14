@@ -1110,6 +1110,46 @@ return [
         //     'url'  => '/acc_kalibrasi',
         //     'auth' => [22],
         // ],
+        [
+            'text' => 'Dashboard',
+            'url' => '/gbj/dashboard',
+            'icon' => 'fas fa-layer-group',
+            'auth' => [31, 13],
+        ],
+        // [
+        //     'header' => 'Produksi',
+        //     'auth' => [13]
+        // ],
+        // [
+        //     'text' => 'BPPB',
+        //     'url' => '/bppb',
+        //     'icon' => 'fas fa-circle',
+        //     'auth' => [13],
+        // ],
+        [
+            'header' => 'Stok',
+            'auth' => [13]
+        ],
+        // GBJ
+        [
+            'text' => 'Produk',
+            'url' => '/gbj/produk',
+            'icon' => 'fas fa-boxes',
+            'auth' => [13],
+        ],
+
+        // [
+        //     'text' => 'Stok',
+        //     'url' => '/gbj/stok',
+        //     'icon' => 'fas fa-circle',
+        //     'auth' => [13],
+        // ],
+        [
+            'text' => 'Riwayat Transaksi',
+            'url' => '/gbj/tp',
+            'icon' => 'fas fa-history',
+            'auth' => [13],
+        ],
 
         [
             'text' => 'Dashboard',
