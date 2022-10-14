@@ -1183,8 +1183,8 @@
         function autoComp(data){
             //hapus value jika ada yang null
             for(let i = 0; i<data.length;i++){
-                if ( data[i] == null) { 
-                    data.splice(i, 1); 
+                if ( data[i] == null) {
+                    data.splice(i, 1);
                 }
             }
             console.log(data);
@@ -1498,7 +1498,7 @@
         @if(session()->has('perbSuccess'))
                 $('#tabRiwayat a[href="#perbaikan"]').tab('show');
         @endif
-        
+
         // tampilkan alert input data berhasil
         @if(session()->has('success'))
             Swal.fire({
