@@ -94,13 +94,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                        .row {
-                                            font-size: 12px;
-                                        }
+                                                .row {
+                                                    font-size: 12px;
+                                                }
 
-                                        h4 {
-                                            font-size: 20px;
-                                        } */
+                                                h4 {
+                                                    font-size: 20px;
+                                                } */
             body {
                 font-size: 12px;
             }
@@ -121,13 +121,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                        .row {
-                                            font-size: 12px;
-                                        }
+                                                .row {
+                                                    font-size: 12px;
+                                                }
 
-                                        h4 {
-                                            font-size: 20px;
-                                        } */
+                                                h4 {
+                                                    font-size: 20px;
+                                                } */
             body {
                 font-size: 12px;
             }
@@ -464,7 +464,7 @@
                                                                 role="tabpanel" aria-labelledby="pills-penjualan-tab">
                                                                 <div class="card removeshadow">
                                                                     <div class="card-body">
-                                                                        @if ($e->status == 'draft')
+                                                                        @if ($e->status == 'draft' || $e->status == 'batal')
                                                                             <div class="form-group row">
                                                                                 <label for=""
                                                                                     class="col-form-label col-lg-5 col-md-12 labelket">No
@@ -488,9 +488,9 @@
                                                                                         class="form-control col-form-label @error('no_paket') is-invalid @enderror"
                                                                                         name="no_paket" id="no_paket"
                                                                                         aria-label="ket_no_paket"
-                                                                                        @if ($e->status == 'draft' && $e->no_paket == '') readonly="true" @endif
+                                                                                        @if (($e->status == 'draft' || $e->status == 'batal') && $e->no_paket == '') readonly="true" @endif
                                                                                         @if ($e->no_paket != '') value="{{ str_replace(['AK1-', 'FKS-'], '', $e->no_paket) }}" @endif />
-                                                                                    <div class="input-group-append  @if ($e->status != 'draft') hide @endif"
+                                                                                    <div class="input-group-append  @if ($e->status == 'sepakat' && $e->status == 'negosisasi' ) hide @endif"
                                                                                         id="checkbox_nopaket">
                                                                                         <span class="input-group-text">
                                                                                             <div
@@ -539,9 +539,9 @@
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
                                                                             <div class="col-lg-5 col-md-12 col-form-label">
                                                                                 <!-- <div class="form-check form-check-inline">
-                                                                                                                <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                                                                                <label class="form-check-label" for="status_akn4">Draft</label>
-                                                                                                            </div> -->
+                                                                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                                                                        <label class="form-check-label" for="status_akn4">Draft</label>
+                                                                                                                    </div> -->
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input"
                                                                                         type="radio" name="status_akn"

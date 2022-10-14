@@ -299,7 +299,7 @@
 
                                                                         </td>
                                                                         <td>
-                                                                            12
+                                                                            {{ $l->getJumlahPesanan() }}
                                                                         </td>
                                                                     </tr>
                                                                 @endforeach
