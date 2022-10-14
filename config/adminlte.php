@@ -1110,13 +1110,22 @@ return [
         //     'url'  => '/acc_kalibrasi',
         //     'auth' => [22],
         // ],
-
         [
             'text' => 'Dashboard',
             'url' => '/gbj/dashboard',
             'icon' => 'fas fa-layer-group',
             'auth' => [31, 13],
         ],
+        // [
+        //     'header' => 'Produksi',
+        //     'auth' => [13]
+        // ],
+        // [
+        //     'text' => 'BPPB',
+        //     'url' => '/bppb',
+        //     'icon' => 'fas fa-circle',
+        //     'auth' => [13],
+        // ],
         // [
         //     'header' => 'Produksi',
         //     'auth' => [13]
