@@ -94,13 +94,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                .row {
-                                                    font-size: 12px;
-                                                }
+                                                                                                                                                                                                                                                                            .row {
+                                                                                                                                                                                                                                                                                font-size: 12px;
+                                                                                                                                                                                                                                                                            }
 
-                                                h4 {
-                                                    font-size: 20px;
-                                                } */
+                                                                                                                                                                                                                                                                            h4 {
+                                                                                                                                                                                                                                                                                font-size: 20px;
+                                                                                                                                                                                                                                                                            } */
             body {
                 font-size: 12px;
             }
@@ -121,13 +121,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                .row {
-                                                    font-size: 12px;
-                                                }
+                                                                                                                                                                                                                                                                            .row {
+                                                                                                                                                                                                                                                                                font-size: 12px;
+                                                                                                                                                                                                                                                                            }
 
-                                                h4 {
-                                                    font-size: 20px;
-                                                } */
+                                                                                                                                                                                                                                                                            h4 {
+                                                                                                                                                                                                                                                                                font-size: 20px;
+                                                                                                                                                                                                                                                                            } */
             body {
                 font-size: 12px;
             }
@@ -464,66 +464,68 @@
                                                                 role="tabpanel" aria-labelledby="pills-penjualan-tab">
                                                                 <div class="card removeshadow">
                                                                     <div class="card-body">
-                                                                        @if ($e->status == 'draft' || $e->status == 'batal')
-                                                                            <div class="form-group row">
-                                                                                <label for=""
-                                                                                    class="col-form-label col-lg-5 col-md-12 labelket">No
-                                                                                    Paket</label>
-                                                                                <div
-                                                                                    class="col-lg-5 col-md-12 input-group">
-                                                                                    <div class="input-group-prepend">
-                                                                                        <select
-                                                                                            class="form-control jenis_paket"
-                                                                                            name="jenis_paket"
-                                                                                            id="jenis_paket">
-                                                                                            <option value="AK1-"
-                                                                                                @if (strpos($e->no_paket, 'AK1-') !== false) selected @endif>
-                                                                                                AK1-</option>
-                                                                                            <option value="FKS-"
-                                                                                                @if (strpos($e->no_paket, 'FKS-') !== false) selected @endif>
-                                                                                                FKS-</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                    <input type="text"
-                                                                                        class="form-control col-form-label @error('no_paket') is-invalid @enderror"
-                                                                                        name="no_paket" id="no_paket"
-                                                                                        aria-label="ket_no_paket"
-                                                                                        @if (($e->status == 'draft' || $e->status == 'batal') && $e->no_paket == '') readonly="true" @endif
-                                                                                        @if ($e->no_paket != '') value="{{ str_replace(['AK1-', 'FKS-'], '', $e->no_paket) }}" @endif />
-                                                                                    <div class="input-group-append  @if ($e->status == 'sepakat' && $e->status == 'negosisasi' ) hide @endif"
-                                                                                        id="checkbox_nopaket">
-                                                                                        <span class="input-group-text">
-                                                                                            <div
-                                                                                                class="form-check form-check-inline">
-                                                                                                <input
-                                                                                                    class="form-check-input"
-                                                                                                    type="checkbox"
-                                                                                                    name="isi_nopaket"
-                                                                                                    id="isi_nopaket"
-                                                                                                    value="true"
-                                                                                                    @if ($e->no_paket != '') checked @endif />
-                                                                                                <label
-                                                                                                    class="form-check-label"
-                                                                                                    for="isi_nopaket"></label>
-                                                                                            </div>
-                                                                                        </span>
-                                                                                    </div>
-                                                                                    <div class="invalid-feedback"
-                                                                                        id="msgno_paket">
-                                                                                        @if ($errors->has('no_paket'))
-                                                                                            {{ $errors->first('no_paket') }}
-                                                                                        @endif
-                                                                                    </div>
+                                                                        {{-- @if ($e->status == 'draft' || $e->status == 'batal') --}}
+                                                                        <div class="form-group row">
+                                                                            <label for=""
+                                                                                class="col-form-label col-lg-5 col-md-12 labelket">No
+                                                                                Paket</label>
+                                                                            <div class="col-lg-5 col-md-12 input-group">
+                                                                                <div class="input-group-prepend">
+                                                                                    <select
+                                                                                        class="form-control jenis_paket"
+                                                                                        name="jenis_paket"
+                                                                                        id="jenis_paket">
+                                                                                        <option value="AK1-"
+                                                                                            @if (strpos($e->no_paket, 'AK1-') !== false) selected @endif>
+                                                                                            AK1-</option>
+                                                                                        <option value="FKS-"
+                                                                                            @if (strpos($e->no_paket, 'FKS-') !== false) selected @endif>
+                                                                                            FKS-</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <input type="text"
+                                                                                    class="form-control col-form-label @error('no_paket') is-invalid @enderror"
+                                                                                    name="no_paket" id="no_paket"
+                                                                                    aria-label="ket_no_paket"
+                                                                                    @if ($e->status == 'draft' || $e->status == 'batal') @if ($e->no_paket == '')
+                                                                                    readonly @endif
+                                                                                @elseif ($e->status == 'sepakat' || $e->status == 'negosiasi')
+                                                                                readonly @else readonly @endif
+                                                                                @if ($e->no_paket != '') value="{{ str_replace(['AK1-', 'FKS-'], '', $e->no_paket) }}" @endif
+                                                                                />
+                                                                                <div class="input-group-append
+                                                                                    @if ($e->status == 'sepakat' || $e->status == 'negosiasi') hide @endif "
+                                                                                    id="checkbox_nopaket">
+                                                                                    <span class="input-group-text">
+                                                                                        <div
+                                                                                            class="form-check form-check-inline">
+                                                                                            <input class="form-check-input"
+                                                                                                type="checkbox"
+                                                                                                name="isi_nopaket"
+                                                                                                id="isi_nopaket"
+                                                                                                value="true"
+                                                                                                @if ($e->no_paket != '') checked @endif />
+                                                                                            <label class="form-check-label"
+                                                                                                for="isi_nopaket"></label>
+                                                                                        </div>
+                                                                                    </span>
+                                                                                </div>
+                                                                                <div class="invalid-feedback"
+                                                                                    id="msgno_paket">
+                                                                                    @if ($errors->has('no_paket'))
+                                                                                        {{ $errors->first('no_paket') }}
+                                                                                    @endif
                                                                                 </div>
                                                                             </div>
-                                                                        @endif
+                                                                        </div>
+                                                                        {{-- @endif --}}
                                                                         <div class="form-group row">
                                                                             <label for=""
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">No
                                                                                 Urut</label>
                                                                             <div class="col-lg-2 col-md-4">
                                                                                 <input type="number"
-                                                                                    class="form-control col-form-label @error('no_urut') is-invalid @enderror"
+                                                                                    class="form-control col-form-label   "
                                                                                     name="no_urut" id="no_urut"
                                                                                     value="{{ $e->no_urut }}" />
                                                                                 <div class="invalid-feedback"
@@ -534,14 +536,15 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+
                                                                         <div class="form-group row">
                                                                             <label for=""
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
                                                                             <div class="col-lg-5 col-md-12 col-form-label">
                                                                                 <!-- <div class="form-check form-check-inline">
-                                                                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                                                                                        <label class="form-check-label" for="status_akn4">Draft</label>
-                                                                                                                    </div> -->
+                                                                                                                                                                                                                                                                                                                                                    <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                                                                                                                                                                                                                                                                                                    <label class="form-check-label" for="status_akn4">Draft</label>
+                                                                                                                                                                                                                                                                                                                                                </div> -->
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input"
                                                                                         type="radio" name="status_akn"
@@ -1533,7 +1536,7 @@
                     if ($(this).val() == "sepakat") {
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
-                        $('#no_paket').attr('readonly', false);
+                        $('#no_paket').attr('readonly', true);
                         $("#dataproduk").removeClass("hide");
                         $("#batas_kontrak").attr('disabled', false);
                         $("#provinsi").attr('disabled', false);
@@ -1545,17 +1548,26 @@
                         }
                         if (jum_produk <= 0) {
                             $("#produktable tbody").empty();
-                            $('#produktable tbody').append(trproduktable());
+                            $('#produktablve tbody').append(trproduktable());
                         }
                         numberRowsProduk($("#produktable"));
                     } else if ($(this).val() == "draft" || $(this).val() == "batal") {
                         $('#isi_produk_input').removeClass('hide');
                         $('#checkbox_nopaket').removeClass('hide');
-                        $('#no_paket').val("");
-                        $('#no_paket').attr('readonly', true);
+                        // $('#no_paket').val("");
+                        // $('#no_paket').attr('readonly', true);
                         $("#batas_kontrak").attr('disabled', true);
                         $("#provinsi").attr('disabled', true);
-                        $("#provinsi").empty().trigger('change')
+                        $("#provinsi").empty().trigger('change');
+
+                        if ($('#no_paket').val() != '') {
+                            $('#no_paket').attr('readonly', false);
+                            $('#isi_nopaket').prop("checked", true);
+                        } else {
+                            $('#no_paket').attr('readonly', true);
+                        }
+
+
                         if (jum_produk <= 0) {
                             $('input[type="checkbox"][name="isi_produk"]').attr('checked', false);
                             $("#produktable tbody").empty();
@@ -1570,7 +1582,7 @@
                     } else if ($(this).val() == "negosiasi") {
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
-                        $('#no_paket').attr('readonly', false);
+                        $('#no_paket').attr('readonly', true);
                         $("#batas_kontrak").val("");
                         $("#batas_kontrak").attr('disabled', true);
                         $("#dataproduk").removeClass("hide");

@@ -3796,6 +3796,8 @@ class PenjualanController extends Controller
     }
     public function update_ekatalog(Request $request, $id)
     {
+        //dd($request->no_urut);
+
         echo json_encode($request->all());
         if ($request->namadistributor == 'belum') {
             $c_id = '484';
@@ -3818,6 +3820,7 @@ class PenjualanController extends Controller
         } else {
             $akn = $ekatalog->no_paket;
         }
+
 
         $poid = $ekatalog->pesanan_id;
         $ekatalog->customer_id = $c_id;
