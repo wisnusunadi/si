@@ -8,6 +8,7 @@ use App\Models\inventory\Alatuji;
 use App\Models\inventory\Peminjaman;
 use App\Models\inventory\AlatSN;
 use App\Models\inventory\Klasifikasi;
+use App\Models\inventory\Target;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -71,6 +72,92 @@ class AlatujiController extends Controller
             array_push($totalPeminjaman, $a);
         }
 
+        //target
+        $target = 
+        DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
+        ->whereMonth('p.created_at', date('m'))->whereYear('p.created_at', date('Y'))
+        ->where('p.user_id', auth()->user()->id)
+        ->first();
+        
+        $progress = null;
+        if($target != null){
+            $progress = $target->progres;
+        }
+
+        $persenProgress = '';
+        if($target != null){
+            $persenProgress = round(($target->progres/$target->target)*100, 0);
+        }
+
+        //cek bulan tahun, untuk target satu bulan
+        $targetSekarang =
+        DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
+        ->where('p.user_id', auth()->user()->id)
+        ->latest('p.created_at')
+        ->first();
+
+        $targetInput = 0;
+        if($targetSekarang != null)
+        {
+            $targetSekarang = $targetSekarang->created_at;
+            $target_b = date('m', strtotime($targetSekarang));
+            $target_t = date('Y', strtotime($targetSekarang));
+            
+            //cek tahun
+            if($target_t == date('Y')){
+                //cek bulan
+                if($target_b == date('m')){
+                    $targetInput = 1;
+                }
+            }
+        }
+
+        $targetLamaCari = 
+        DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
+        ->where('p.user_id', auth()->user()->id)
+        ->whereMonth('p.created_at', '<', date('m'))
+        ->get();
+
+        $targetLama = null;
+        if($targetLamaCari->isNotEmpty())
+        {
+            $targetLamaTargetTotal = 0;
+            $targetLamaProgressTotal = 0;
+            $targetLamaPersen = 0;
+            foreach($targetLamaCari as $row){
+                if($row->target > $row->progress){
+                    $targetLamaTargetTotal = $targetLamaTargetTotal + $row->target;
+                    $targetLamaProgressTotal = $targetLamaProgressTotal + $row->progress;
+                }
+            }
+
+            if($targetLamaTargetTotal != 0 ){
+                $targetLamaPersen = round(($targetLamaProgressTotal/$targetLamaTargetTotal)*100, 0);
+            }
+            
+            $targetLama = array($targetLamaTargetTotal, $targetLamaProgressTotal, $targetLamaPersen);
+        }
+
+        //ambil data untuk chart target bulanan
+        $targetPerbulan = array();
+        $progressPerbulan = array();
+        for($i=1;$i<=12;$i++){
+            $a = 
+            DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
+            ->whereMonth('p.created_at', date($i))
+            ->whereYear('p.created_at', date('Y'))
+            ->get();
+            $b = 0;
+            $c = 0;
+            foreach($a as $a){
+            $b = $b + $a->target;
+            $c = $c + $a->progres;
+            }
+            array_push($targetPerbulan, $b);
+            array_push($progressPerbulan, $c);
+        }
+        //target end
+
         $data = [
             'total' => $total,
             'tersedia' => $ter,
@@ -86,7 +173,16 @@ class AlatujiController extends Controller
             'verifikasiNext' => $ve3[0]->total,
             'perawatanNext' => $pe3[0]->total,
             'total_peminjaman' => $totalPeminjaman,
+            'target' => $target,
+            'persenProgress' => $persenProgress,
+            'progress' => $progress,
+            'targetInput' => $targetInput,
+            'targetLama' => $targetLama,
+            'targetdebug' => $targetLamaCari,
+            'targetPerbulan' => $targetPerbulan,
+            'progressPerbulan' => $progressPerbulan,
         ];
+        
         return view('page.lab.dashboard', [
             'data' => json_encode($data),
         ]);
@@ -188,7 +284,8 @@ class AlatujiController extends Controller
 
     function tambahbarang()
     {
-        $klasifikasi = DB::table('erp_kalibrasi.klasifikasi')->select('nama_klasifikasi', 'id_klasifikasi')->get();
+        $klasifikasi = DB::table('erp_kalibrasi.klasifikasi')->get();
+        $satuan = DB::table('erp_spa.m_satuan')->whereNotIn('id', [1,2,3])->get();
         $nama = DB::table('erp_kalibrasi.alatuji')->select('nm_alatuji', 'id_alatuji')->get();
         $merk = DB::table('erp_kalibrasi.merk')->select('id_merk', 'nama_merk')->get();
         $lokasi = DB::table('erp_spa.m_layout')->select('id', 'ruang')->whereNotIn('id', [1,2,3,4,5,6,7])->get();
@@ -199,6 +296,7 @@ class AlatujiController extends Controller
             'nama' => $nama,
             'merk' => $merk,
             'lokasi' => $lokasi,
+            'satuan' => $satuan,
         ]);
     }
 
@@ -209,7 +307,7 @@ class AlatujiController extends Controller
             return (int)$item->no_urut;
         });
         return
-        $nourut->isNotEmpty() ? max($nourut->toArray()) : 1;
+        $nourut->isNotEmpty() ? max($nourut->toArray())+1 : 1;
     }
 
     function edit_alat($id)
@@ -218,10 +316,12 @@ class AlatujiController extends Controller
             DB::table(DB::raw('erp_kalibrasi.alatuji_sn as2'))
             ->select(
                 'as2.serial_number', 'as2.alatuji_id' ,'as2.tgl_masuk',
-                'as2.merk_id', 'as2.id_serial_number', 'as2.layout_id',
-                'as2.no_urut', 'a.desk_alatuji', 'a.klasifikasi_id', 'as2.tipe')
+                'as2.merk_id', 'as2.id_serial_number', 'as2.layout_id', 'a.satuan_alatuji',
+                'as2.no_urut', 'a.desk_alatuji', 'a.klasifikasi_id', 'as2.tipe', 'a.kd_alatuji')
             ->leftJoin(DB::raw('erp_kalibrasi.alatuji a'),'a.id_alatuji','=','as2.alatuji_id')
             ->where('as2.id_serial_number', $id)->first();
+        
+        $satuan = DB::table('erp_spa.m_satuan')->whereNotIn('id', [1,2,3])->get();
 
         $klasifikasi = DB::table('erp_kalibrasi.klasifikasi')->select('nama_klasifikasi', 'id_klasifikasi')->get();
         $nama = DB::table('erp_kalibrasi.alatuji')->select('nm_alatuji', 'id_alatuji')->get();
@@ -237,12 +337,12 @@ class AlatujiController extends Controller
             'merk' => $merk,
             'sn' => $sn,
             'lokasi' => $lokasi,
+            'satuan' => $satuan
         ]);
     }
 
     function store_editalat(Request $request)
     {
-
         //ambil data dokumen alatuji
         $doc_old = DB::table('erp_kalibrasi.alatuji')->select('manual_alatuji', 'sop_alatuji', 'gbr_alatuji')->where('id_alatuji', $request->id_alatuji)->first();
         
@@ -251,14 +351,28 @@ class AlatujiController extends Controller
         // jika data old =/= data new -> cek serial number & update
         $SN_old = AlatSN::where('id_serial_number', $request->id_serial_number)->first();
         if($SN_old->serial_number != $request->serialNM){
-            //data old =/= new
-            $cek_sn = AlatSN::
+            $request->validate([
+                'serialNM' => 'required',
+                'serialNM' => 'required|unique:erp_kalibrasi.alatuji_sn,serial_number',
+            ],[
+                'unique' => 'Serial Number telah Terdaftar'
+            ]);
+        }
+
+
+        //format no urut
+        if($request->noUrut < 10){
+            $request->noUrut = '0'.$request->noUrut;
+        }
+
+        // cek apakah nomor urut telah ada
+        if($SN_old->no_urut != $request->noUrut){
+            $cek_nomor_urut = AlatSN::
             where('alatuji_id', $request->id_alatuji)
-            ->where('merk_id', $request->merk)
-            ->where('serial_number', $request->serialNM)
+            ->where('no_urut', $request->noUrut)
             ->count();
-            if($cek_sn >= 1){
-                throw ValidationException::withMessages(['serialNM' => 'Serial Number telah Terdaftar']);
+            if($cek_nomor_urut >= 1){
+                throw ValidationException::withMessages(['noUrut' => 'Nomor Urut telah Terdaftar']);
             }
         }
 
@@ -267,12 +381,9 @@ class AlatujiController extends Controller
             'klasifikasi_id'   => $request->klasifikasi,
             'nm_alatuji'     => $request->namaalat,
             'desk_alatuji' => $request->fungsi,
+            'satuan_alatuji' => $request->satuan,
+            'kd_alatuji' => $request->kode_alat,
         ]);
-
-        //format no urut
-        if($request->noUrut < 10){
-            $request->noUrut = '0'.$request->noUrut;
-        }
 
         // update alatuji_sn
         DB::table('erp_kalibrasi.alatuji_sn')->where('id_serial_number', $request->id_serial_number)->update([
@@ -281,13 +392,16 @@ class AlatujiController extends Controller
             'tgl_masuk' => $request->tgl_masuk,
             'kondisi_id' => $request->kondisi,
             'layout_id' => $request->lokasi,
-            'no_urut' => $request->noUrut
+            'no_urut' => $request->noUrut,
+            'tipe' => $request->tipe,
         ]);
 
         if($request->has('sop'))
         {
             $request->validate([
                 'sop' => 'mimes:doc,pdf,docx,zip|max:10000'
+            ], [
+                'mimes' => 'file berbeda format / melebihi ukuran upload'
             ]);
 
             $date = Carbon::now()->format('Y-m-d', 'Asia/Jakarta');
@@ -312,6 +426,8 @@ class AlatujiController extends Controller
         {
             $request->validate([
                 'manual' => 'mimes:doc,pdf,docx,zip|max:10000'
+            ], [
+                'mimes' => 'file berbeda format / melebihi ukuran upload'
             ]);
 
             $date = Carbon::now()->format('Y-m-d', 'Asia/Jakarta');
@@ -336,6 +452,8 @@ class AlatujiController extends Controller
         {
             $request->validate([
                 'gambar' => 'required|image|mimes:jpg,png,jpeg|max:2048'
+            ], [
+                'mimes' => 'file berbeda format / melebihi ukuran upload'
             ]);
 
             $date = Carbon::now()->format('Y-m-d', 'Asia/Jakarta');
@@ -557,7 +675,7 @@ class AlatujiController extends Controller
             ->select(
                 'p.tgl_perawatan', 'p.kelengkapan', 'p.fungsi',
                 'p.hasil_fisik', 'p.hasil_fungsi', 'p.tindak_lanjut',
-                'p.keterangan', 'u.nama'
+                'p.keterangan', 'p.penanggung_jawab', 'p.jadwal_perawatan'
             )
             ->leftjoin(DB::raw('erp_spa.users u'), 'u.id', '=', 'p.created_by')
             ->where('p.serial_number_id', '=', $id)
@@ -585,7 +703,9 @@ class AlatujiController extends Controller
                 <i class="fa fa-times-circle text-danger fa-lg" aria-hidden="true"></i>
                 </div>';
             })
-            ->addColumn('operator', 'nama_operator')
+            ->addColumn('operator', function($d){
+                return $d->penanggung_jawab;
+            })
             ->rawColumns(['hasil_fisik', 'hasil_fungsi'])
             ->make(true);
 
@@ -737,6 +857,7 @@ class AlatujiController extends Controller
         ->first();
 
         $x = 15;
+        $y = 9;
         if($request->kondisi_peminjaman == 10 or $request->status_peminjaman == 18)
         {
             $request->validate([
@@ -751,13 +872,14 @@ class AlatujiController extends Controller
                 $x = 16;
             }
             if($request->kondisi_peminjaman == 10){
-                $x = 10;
+                $y = 10;
             }
         }
+
         AlatSN::find($request->alatuji_konfirm_id)
         ->update([
             'status_pinjam_id' => $x,
-            'kondisi_id' => $x
+            'kondisi_id' => $y
         ]);
 
         Peminjaman::where('id_peminjaman', $request->peminjaman_konfirm_id)
@@ -896,6 +1018,8 @@ class AlatujiController extends Controller
         {
             $request->validate([
                 'manual_book' => 'mimes:doc,pdf,docx,zip|max:10000',
+            ], [
+                'mimes' => 'file berbeda format / melebihi ukuran upload'
             ]);
             $manual = $this->gantiNama($date, $request,'manual_book');
         }
@@ -903,6 +1027,8 @@ class AlatujiController extends Controller
         {
             $request->validate([
                 'sop' => 'mimes:doc,pdf,docx,zip|max:10000',
+            ], [
+                'mimes' => 'file berbeda format / melebihi ukuran upload'
             ]);
             $sop = $this->gantiNama($date, $request,'sop');
         }
@@ -910,6 +1036,8 @@ class AlatujiController extends Controller
         {
             $request->validate([
                 'gambar' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+            ], [
+                'mimes' => 'file berbeda format / melebihi ukuran upload'
             ]);
             $gambar = $this->gantiNama($date, $request,'gambar');
         }
@@ -961,19 +1089,65 @@ class AlatujiController extends Controller
 
     function store_tambahbarang(Request $request)
     {
+        // olah data informasi jenis alat uji
+        $date = Carbon::now()->format('Y-m-d', 'Asia/Jakarta');
+        //dd($request);
+        $manual = null;
+        $sop = null;
+        $gambar = null;
+        
+        if($request->has('manual_book'))
+        {
+            $request->validate([
+                'manual_book' => 'mimes:doc,pdf,docx,zip|max:10000',
+            ], [
+                'mimes' => 'file berbeda format / melebihi ukuran upload'
+            ]);
+            $manual = $this->gantiNama($date, $request,'manual_book');
+        }
+        if($request->has('sop'))
+        {
+            $request->validate([
+                'sop' => 'mimes:doc,pdf,docx,zip|max:10000',
+            ], [
+                'mimes' => 'file berbeda format / melebihi ukuran upload'
+            ]);
+            $sop = $this->gantiNama($date, $request,'sop');
+        }
+        if($request->has('gambar'))
+        {
+            $request->validate([
+                'gambar' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+            ], [
+                'mimes' => 'file berbeda format / melebihi ukuran upload'
+            ]);
+            $gambar = $this->gantiNama($date, $request,'gambar');
+        }
+
+        // oleh data
         $request->merk == 0 ? $request->merk = null : 'nothing';
         $request->validate([
-            'klasifikasi' => 'required',
-            'nama' => 'required',
-            'serial_number' => 'required',
-            'tipe' => 'required',
+            // data jenis alatuji
+            'klasifikasi'   => $request->jenisAlat == 'belumTerdaftar' ? 'required': 'nullable',
+            'satuan'        => $request->jenisAlat == 'belumTerdaftar' ? 'required': 'nullable',
+            'nama_alat'     => $request->jenisAlat == 'belumTerdaftar' ? 'required|unique:erp_kalibrasi.alatuji,nm_alatuji': 'nullable',
+            'fungsi_alat'   => $request->jenisAlat == 'belumTerdaftar' ? 'required': 'nullable',
+            'kode_alat'     => $request->jenisAlat == 'belumTerdaftar' ? 'required|unique:erp_kalibrasi.alatuji,kd_alatuji': 'nullable',
+
+            // data serial number (barang)
+            'nama'          => $request->jenisAlat == 'terdaftar' ? 'required': 'nullable',
+            'serial_number' => $request->serial_number == '-' ? 'nullable' : 'required|unique:erp_kalibrasi.alatuji_sn,serial_number',
+            'tipe'          => 'required',
             'tanggal_masuk' => 'required',
-            'kondisi' => 'required',
-            'lokasi' => 'required',
+            'kondisi'       => 'required',
+            'lokasi'        => $request->checklokasi == 'ada' ? 'required' : 'nullable',
+            'lokasibaru'    => $request->checklokasi == 'tidak' ? 'required' : 'nullable',
         ],[
-            'required' => 'Kolom :attribute harus di isi'
+            'required' => 'Kolom :attribute harus di isi',
+            'unique' => ':attribute telah terdaftar'
         ]);
 
+        // cek merek alat uji
         if($request->checkmerk == 'ada'){
             $request->validate([
                 'merk' => 'required'
@@ -1012,18 +1186,70 @@ class AlatujiController extends Controller
         {
             $date = Carbon::now()->format('Y-m-d', 'Asia/Jakarta');
             $request->validate([
-                'sert_kalibrasi' => 'required|image|mimes:jpg,png,jpeg|max:2048',
+                'sert_kalibrasi' => 'mimes:doc,pdf,docx,zip|max:10000',
+            ], [
+                'sert_kalibrasi.*' => 'file berbeda format / melebihi ukuran upload'
             ]);
             $sertif = $this->gantiNama($date, $request,'sert_kalibrasi');
         }
 
         // cek nomor urut serial number alat uji
-        $nourut = AlatSN::where('alatuji_id', $request->nama)->get()->count();//-->update untuk ambil nilai yang paling besar
-        $nourut++;
+        $nourut = $request->nomor_urut;
         if($nourut < 10){$nourut = '0'.$nourut;}
 
+        // insert query
+        if($request->jenisAlat == 'belumTerdaftar')
+        {
+            // insert query jenis alat uji
+            Alatuji::create([
+                'kd_alatuji' => $request->kode_alat,
+                'klasifikasi_id' => $request->klasifikasi,
+                'nm_alatuji' => $request->nama_alat,
+                'desk_alatuji' => $request->fungsi_alat,
+                'sop_alatuji' => $sop,
+                'manual_alatuji' => $manual,
+                'gbr_alatuji' => $gambar,
+                'satuan_alatuji' => $request->satuan,
+                'created_by' => auth()->user()->id,
+                'stok_alatuji' => '0', // untuk pengembangan kedepannya
+            ]);
+
+            $k = DB::table(DB::raw('erp_kalibrasi.klasifikasi'))->where('id_klasifikasi', $request->klasifikasi)->first();
+            // user log
+            $obj = [
+                'alat_uji' => $request->nama_alat,
+                'kode_alat' => $request->kode_alat,
+                'jenis_alat' => $k->nama_klasifikasi,
+            ];
+
+            DB::table('erp_spa.tbl_log')->insert([
+                'tipe' => 'QC',
+                'subjek' => 'Penambahan jenis alat uji - '.$request->nama_alat,
+                'response' => json_encode($obj),
+                'user_id' => auth()->user()->id,
+            ]);
+        }
+
+        // cek id jenis alat uji
+        if($request->jenisAlat == 'terdaftar')
+        {
+            $alatuji_id = $request->nama;
+        }else{
+            // ambil id alatuji yang di inputkan
+            $alatuji_id =  DB::table('erp_kalibrasi.alatuji')->select('id_alatuji')->latest('created_at')->first()->id_alatuji;
+        }
+
+        // cek id ruangan penyimpanan, jika ada ruangan baru
+        if($request->checklokasi == 'tidak')
+        {
+            DB::insert(
+                'insert into erp_spa.m_layout ( ruang, lantai, rak, jenis_id) values (?,?,?,?)',
+                [$request->lokasibaru, null, null, 6]);
+        }
+
+        // insert query serial number
         AlatSN::create([
-            'alatuji_id' => $request->nama,
+            'alatuji_id' => $alatuji_id,
             'no_urut' => $nourut,
             'tgl_masuk' => $request->tanggal_masuk,
             'serial_number' => $request->serial_number,
@@ -1046,7 +1272,16 @@ class AlatujiController extends Controller
 
         // klasifikasi+no urut+tahun masuk+kode
         // BC00119TOCO01 -> BC 001 2019 TOCO-01
-        $K = Klasifikasi::select('kd_klasifikasi')->where('id_klasifikasi', $request->klasifikasi)->first()->kd_klasifikasi;
+        $K = '';
+        if($request->jenisAlat == 'terdaftar')
+        {
+            $klasId = Alatuji::where('id_alatuji', $request->nama)->select('klasifikasi_id')->first()->klasifikasi_id;
+            $K = Klasifikasi::select('kd_klasifikasi')->where('id_klasifikasi', $klasId)->first()->kd_klasifikasi;
+        }else{
+            $K = Klasifikasi::select('kd_klasifikasi')->where('id_klasifikasi', $request->klasifikasi)->first()->kd_klasifikasi;
+        }
+        
+
         $N = $alat_new->id_serial_number;
         if((int)$N<10){
             $N = '00'.(int)$N;
@@ -1055,7 +1290,7 @@ class AlatujiController extends Controller
             $N = '0'.(int)$N;
         }
         $T = Carbon::parse($request->tanggal_masuk)->format('y');
-        $KD = Alatuji::where('id_alatuji', $request->nama)->select('kd_alatuji')->first()->kd_alatuji;
+        $KD = Alatuji::where('id_alatuji', $alatuji_id)->select('kd_alatuji')->first()->kd_alatuji;
         $barcode = $K.$N.$T.$KD.$nourut;
 
         AlatSN::where('id_serial_number', $alat_new->id_serial_number)->update([
@@ -1065,6 +1300,18 @@ class AlatujiController extends Controller
         if($request->has('sert_kalibrasi'))
         {
             $request->file('sert_kalibrasi')->storeAs('public/sert_kalibrasi/', $sertif);
+        }
+        if($request->has('manual_book'))
+        {
+            $request->file('manual_book')->storeAs('public/manual/', $manual);
+        }
+        if($request->has('sop'))
+        {
+            $request->file('sop')->storeAs('public/sop/', $sop);
+        }
+        if($request->has('gambar'))
+        {
+            $request->file('gambar')->storeAs('public/gambar/', $gambar);
         }
 
         // user log
@@ -1290,9 +1537,9 @@ class AlatujiController extends Controller
         ->make(true);
     }
 
-    function get_data_pj(){
+    function get_data_pj($x){
         $data =
-        DB::table(DB::raw('erp_kalibrasi.peminjaman p'))
+        DB::table(DB::raw('erp_kalibrasi.'.$x.' p'))
         ->select('p.penanggung_jawab')
         ->groupBy('p.penanggung_jawab')
         ->get();
@@ -1316,6 +1563,36 @@ class AlatujiController extends Controller
         });
 
         return $d;
+    }
+
+    function get_data_operator_perawatan(){
+        $data =
+        DB::table(DB::raw('erp_kalibrasi.perawatan p'))
+        ->select('p.penanggung_jawab')
+        ->groupBy('p.penanggung_jawab')
+        ->get();
+
+        $d = $data->map(function($item, $key){
+            return $item->penanggung_jawab;
+        });
+
+        return $d;
+    }
+
+    public function store_target(Request $request)
+    {
+        $request->validate([
+            'target'  => 'required',
+        ]);
+
+        Target::create([
+            'user_id' => auth()->user()->id,
+            'target' => $request->target,
+            'progress' => 0,
+            'created_by' => auth()->user()->id,
+        ]);
+
+        return redirect()->route('lab.dashboard');
     }
 
 }

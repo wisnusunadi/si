@@ -349,8 +349,8 @@ table tbody tr td i{
         <!-- bagian peminjaman alat uji end -->
 
         <!-- bagian grafik -->
+        <!-- card grafik peminjaman alat uji -->
         <div class="row">
-            <!-- card grafik peminjaman alat uji -->
             <div class="col p-1">
                 <div class="card mb-1">
                     <div class="card-body">
@@ -358,18 +358,69 @@ table tbody tr td i{
                     </div>
                 </div>
             </div>
-            <!-- card grafik peminjaman alat uji end -->
+        </div>
+        <!-- card grafik peminjaman alat uji end -->
 
-            <!-- card gafik target maintenance alat uji -->
-            <!-- <div class="col p-1">
+        <!-- form set target -->
+        <!--
+        <div class="row">
+            <div class="col">
                 <div class="card mb-1">
                     <div class="card-body">
-
+                        <div class="row">
+                            <div class="col-4">
+                                set target pada bulan ini
+                                @if(json_decode($data)->targetInput == 0)
+                                <form action="{{route('alatuji.target.store')}}" method="post">
+                                    @csrf
+                                    <div class="input-group input-group-sm mb-1">
+                                        <input type="number" name="target" class="form-control form-control-sm" placeholder="Masukkan jumlah target bulan ini" autocomplete="off">
+                                        <input type="submit" class="btn btn-primary btn-sm" name="submit" value="Set">
+                                    </div>
+                                </form>
+                                @else
+                                <div class="input-group input-group-sm mb-1">
+                                    <input type="number" class="form-control form-control-sm" placeholder="Target Telah di Set untuk bulan ini" disabled>
+                                    <input type="submit" class="btn btn-primary btn-sm" value="Set" disabled>
+                                </div>
+                                @endif
+                            </div>
+                            <div class="col">
+                                @if(json_decode($data)->progress != null)
+                                Prosses {{json_decode($data)->progress == null ? '0' : json_decode($data)->progress }} dari target {{json_decode($data)->target != null ? json_decode($data)->target->target : '0'}}
+                                <div class="progress mb-2">
+                                <div class="progress-bar" role="progressbar" aria-valuenow="{{ json_decode($data)->persenProgress }}"
+                                aria-valuemin="0" aria-valuemax="100" style="width:{{ json_decode($data)->persenProgress }}%">
+                                    {{json_decode($data)->progress}}
+                                </div>
+                                </div>
+                                @else
+                                <div class="alert alert-info text-center" role="alert">
+                                    Target Bulan Ini Belum Di Set
+                                </div>
+                                @endif
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div> -->
-            <!-- card gafik target maintenance alat uji end -->
+            </div>
         </div>
+        -->
+        <!-- form set target end -->
+
+        <!-- card gafik target maintenance alat uji -->
+        <!--
+        <div class="row">
+            <div class="col p-1">
+                <div class="card mb-1">
+                    <div class="card-body">
+                        <canvas id="chart_target" width="400" height="100"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+        -->
+        <!-- card gafik target maintenance alat uji end -->
         <!-- bagian grafik end -->
 
     {{-- </div> --}}
@@ -1025,6 +1076,46 @@ $(document).ready(function () {
             }
         }
     });
+
+    // var target = new Chart(document.getElementById("chart_target"),{
+    //     type: 'line',
+    //     data: {
+    //         labels: ['jan', 'feb', 'mar', 'april', 'mei', 'juni', 'juli', 'agust', 'sep', 'okt', 'nov', 'des'],
+    //         datasets: [{
+    //             data: [
+    //                 @for($i=0;$i<=11;$i++)
+    //                     @if(json_decode($data)->targetPerbulan[$i] != null)
+    //                         {{ json_decode($data)->targetPerbulan[$i] }},
+    //                     @else
+    //                         0,
+    //                     @endif
+    //                 @endfor
+    //             ],
+    //             label: 'target',
+    //             borderColor: "#3e95cd",
+    //             fill: false
+    //         },{
+    //             data: [
+    //                 @for($i=0;$i<=11;$i++)
+    //                     @if(json_decode($data)->progressPerbulan[$i] != null)
+    //                         {{ json_decode($data)->progressPerbulan[$i] }},
+    //                     @else
+    //                         0,
+    //                     @endif
+    //                 @endfor
+    //             ],
+    //             label: 'dilaksanakan',
+    //             borderColor: "#8e5ea2",
+    //             fill: false,
+    //         }]
+    //     },
+    //     options: {
+    //         title: {
+    //             display: true,
+    //             text: 'target Maintenance Perbulan',
+    //         }
+    //     }
+    // });
 
     var tabelMtSekarang_p = $('#tabel_mt_sekarang_p').DataTable({
         processing: true,
