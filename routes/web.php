@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\SparepartController;
@@ -44,7 +45,7 @@ Route::get("/test", function () {
     return view('test');
 });
 Route::view('/modul_dashboard/show', 'auth.dashboard');
-
+Route::view('/edit_pwd', 'page.setting.edit_pwd');
 Route::group(['prefix' => 'ppic', 'middleware' => 'auth'], function () {
     Route::view('/{any?}', 'spa.ppic.spa')->middleware('divisi:ppic');
     Route::group(['middleware' => ['divisi:jual,dirut,ppic']], function () {
