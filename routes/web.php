@@ -46,6 +46,8 @@ Route::get("/test", function () {
 });
 Route::view('/modul_dashboard/show', 'auth.dashboard');
 Route::view('/edit_pwd', 'page.setting.edit_pwd');
+Route::post('/edit_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'update_pwd'])->name('penjualan.produk.store');
+
 Route::group(['prefix' => 'ppic', 'middleware' => 'auth'], function () {
     Route::view('/{any?}', 'spa.ppic.spa')->middleware('divisi:ppic');
     Route::group(['middleware' => ['divisi:jual,dirut,ppic']], function () {

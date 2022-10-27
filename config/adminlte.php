@@ -1669,7 +1669,7 @@ return [
         ],
         [
             'text' => 'Ubah Password',
-            'icon' => 'fas fa-dolly fa-fw',
+            'icon' => 'fa-solid fa-gear',
             'url' => '/edit_pwd',
             'auth' => [26],
         ],

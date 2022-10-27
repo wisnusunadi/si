@@ -72,8 +72,8 @@
 @section('content')
     <section class="content">
         <div class="container-fluid">
-            <form id="update_pwd">
-                <input type="text" name="user_id" value={{ Auth::user()->id }}>
+            <form id="update_pwd" action="/edit_pwd">
+                <input type="hidden" name="user_id" value={{ Auth::user()->id }}>
                 <div class="row d-flex justify-content-center">
                     <div class="col-lg-10 co-md-12">
                         <div class="row">
@@ -90,8 +90,8 @@
                                                     <label for="nama_produk"
                                                         class="col-lg-4 col-md-12 col-form-label labelket">Password
                                                         Lama</label>
-                                                    <div class="col-lg-6 col-md-12">
-                                                        <input type="text"
+                                                    <div class="col-lg-2 col-md-12">
+                                                        <input type="password"
                                                             class="form-control col-form-label @error('pwd_lama') is-invalid @enderror"
                                                             placeholder="Password Lama" id="pwd_lama" name="pwd_lama" />
                                                         <div class="invalid-feedback" id="msgpwd_lama">
@@ -102,35 +102,35 @@
                                                     </div>
                                                 </div>
                                                 <div class="form-group row">
-                                                    <label for="pwd_baru"
+                                                    <label for="password"
                                                         class="col-lg-4 col-md-12 col-form-label labelket">Password
                                                         Baru</label>
-                                                    <div class="col-lg-5 col-md-12">
-                                                        <input type="text"
-                                                            class="form-control col-form-label @error('pwd_baru') is-invalid @enderror"
-                                                            value="" placeholder="Password Baru" id="pwd_baru"
-                                                            name="pwd_baru" />
-                                                        <div class="invalid-feedback" id="msgpwd_baru">
-                                                            @if ($errors->has('pwd_baru'))
-                                                                {{ $errors->first('pwd_baru') }}
+                                                    <div class="col-lg-2 col-md-12">
+                                                        <input type="password"
+                                                            class="form-control col-form-label @error('password') is-invalid @enderror"
+                                                            value="" placeholder="Password Baru" id="password"
+                                                            name="password" />
+                                                        <div class="invalid-feedback" id="msgpassword">
+                                                            @if ($errors->has('password'))
+                                                                {{ $errors->first('password') }}
                                                             @endif
                                                         </div>
                                                     </div>
                                                 </div>
 
                                                 <div class="form-group row">
-                                                    <label for="konfirmasi_pwd_baru"
+                                                    <label for="password_confirmation"
                                                         class="col-lg-4 col-md-12 col-form-label labelket">Konfirmasi
                                                         Password
                                                         Baru</label>
-                                                    <div class="col-lg-5 col-md-12">
-                                                        <input type="text"
-                                                            class="form-control col-form-label @error('konfirmasi_pwd_baru') is-invalid @enderror"
+                                                    <div class="col-lg-2 col-md-12">
+                                                        <input type="password"
+                                                            class="form-control col-form-label @error('password_confirmation') is-invalid @enderror"
                                                             value="" placeholder="Konfirmasi Password Baru"
-                                                            id="konfirmasi_pwd_baru" name="konfirmasi_pwd_baru" />
-                                                        <div class="invalid-feedback" id="msgkonfirmasi_pwd_baru">
-                                                            @if ($errors->has('konfirmasi_pwd_baru'))
-                                                                {{ $errors->first('konfirmasi_pwd_baru') }}
+                                                            id="password_confirmation" name="password_confirmation" />
+                                                        <div class="invalid-feedback" id="msgpassword_confirmation">
+                                                            @if ($errors->has('password_confirmation'))
+                                                                {{ $errors->first('password_confirmation') }}
                                                             @endif
                                                         </div>
                                                     </div>
@@ -153,7 +153,7 @@
 
                                     <span class="col-6">
                                         <button type="submit" class="btn btn-info float-right" id="btntambah">
-                                            Tambah
+                                            Update Password
                                         </button>
                                     </span>
                                 </div>
@@ -173,11 +173,59 @@
         $(function() {
 
             $(document).on('submit', '#update_pwd', function(e) {
-                swal.fire(
-                    'Gagal',
-                    'Lengkapi form',
-                    'warning'
-                );
+                e.preventDefault();
+                var $form = $(this);
+                var $inputs = $form.find("input, select, button, textarea");
+                var serializedData = $form.serialize();
+                console.log(serializedData);
+                var action = $(this).attr('action');
+
+                $.ajax({
+                    headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                    type: "POST",
+                    url: action,
+                    data: serializedData,
+                    dataType: 'JSON',
+                    success: function(response) {
+                        if (response['data'] == "success") {
+                            $('#pwd_lama').val('');
+                            $('#password').val('');
+                            $('#password_confirmation').val('');
+                            swal.fire(
+                                'Berhasil',
+                                'Password berhasil diupdate',
+                                'success'
+                            );
+
+                        } else if (response['data'] == "invalid") {
+                            swal.fire(
+                                'Error',
+                                'Password Lama Salah',
+                                'warning'
+                            );
+
+                        } else if (response['data'] == "same") {
+                            swal.fire(
+                                'Error',
+                                'Password baru tidak boleh sama dengan password lama',
+                                'warning'
+                            );
+
+                        } else {
+                            swal.fire(
+                                'Error',
+                                'Cek form kembali',
+                                'warning'
+                            );
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.log(xhr)
+                    }
+                });
+
             });
         });
     </script>
