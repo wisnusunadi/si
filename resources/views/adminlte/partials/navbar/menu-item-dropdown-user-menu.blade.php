@@ -22,7 +22,7 @@
                 alt="{{ Auth::user()->name }}">
         @endif
         <span @if (config('adminlte.usermenu_image')) class="d-none d-md-inline" @endif>
-            {{ Auth::user()->nama }}
+            {{ Auth::user()->Karyawan->nama }}
         </span>
     </a>
 
@@ -60,18 +60,25 @@
         @endif
 
         {{-- User menu footer --}}
-        <li class="user-footer">
-            @if ($profile_url)
-                <a href="/edit_pwd" class="btn btn-default btn-flat">
-                    <i class="fa-solid fa-gear"></i>
-                    Ubah Password
-                </a>
-            @endif
-            <a class="btn btn-default btn-flat float-right @if (!$profile_url) btn-block @endif"
-                href="#" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                <i class="fa fa-fw fa-power-off"></i>
-                {{ __('adminlte::adminlte.log_out') }}
-            </a>
+        <li class="user-footer ">
+            <div class="row">
+                <div class="col-8">
+                    @if ($profile_url)
+                        <a href="/edit_pwd" class="btn btn-info btn-flat">
+                            <i class="fa-solid fa-gear"></i>
+                            Ubah Password
+                        </a>
+                    @endif
+                </div>
+                <div class="col-4">
+                    <a class="btn btn-danger btn-flat float-right @if (!$profile_url) btn-block @endif"
+                        href="#"
+                        onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fa fa-fw fa-power-off"></i>
+                        {{ __('adminlte::adminlte.log_out') }}
+                    </a>
+                </div>
+            </div>
             <form id="logout-form" action="{{ $logout_url }}" method="POST" style="display: none;">
                 @if (config('adminlte.logout_method'))
                     {{ method_field(config('adminlte.logout_method')) }}
@@ -79,7 +86,5 @@
                 {{ csrf_field() }}
             </form>
         </li>
-
     </ul>
-
 </li>

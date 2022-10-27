@@ -2532,7 +2532,7 @@ class PenjualanController extends Controller
     }
     public function get_data_ekatalog($value)
     {
-        $divisi_id = Auth::user()->divisi->id;
+        $divisi_id = Auth::user()->Karyawan->divisi_id;
 
         $x = explode(',', $value);
         $data = "";
@@ -2876,7 +2876,7 @@ class PenjualanController extends Controller
     }
     public function get_data_spa($value)
     {
-        $divisi_id = Auth::user()->divisi->id;
+        $divisi_id = Auth::user()->Karyawan->divisi_id;
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
@@ -3048,7 +3048,7 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-                $divisi_id = Auth::user()->divisi->id;
+                $divisi_id = Auth::user()->Karyawan->divisi_id;
                 $return = "";
 
                 if ($divisi_id == "26") {
@@ -3140,7 +3140,7 @@ class PenjualanController extends Controller
     }
     public function get_data_spb($value)
     {
-        $divisi_id = Auth::user()->divisi->id;
+        $divisi_id = Auth::user()->Karyawan->divisi_id;
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
@@ -3306,7 +3306,7 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-                $divisi_id = Auth::user()->divisi->id;
+                $divisi_id = Auth::user()->Karyawan->divisi_id;
                 $return = "";
 
                 if ($divisi_id == "26") {

@@ -10,7 +10,7 @@
             </div><!-- /.col -->
             <div class="col-lg-6 col-md-8 col-sm-8">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->divisi_id == '26')
+                    @if (Auth::user()->Karyawan->divisi_id == '26')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Ubah Password</li>
                     @endif
