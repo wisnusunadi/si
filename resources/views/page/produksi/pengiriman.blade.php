@@ -41,8 +41,8 @@
         }
 
         /* .dataTables_filter{
-            display: none;
-        } */
+                    display: none;
+                } */
         #DataTables_Table_1_filter {
             display: none;
         }
@@ -653,7 +653,7 @@
                             let tgl = $('#tgl_perakitan').val();
                             let today = new Date();
                             let time = today.getHours() + ":" + today.getMinutes() + ":" + today
-                            .getSeconds();
+                                .getSeconds();
                             let datetime = tgl + ' ' + time;
                             $.ajax({
                                 url: "/api/prd/send",

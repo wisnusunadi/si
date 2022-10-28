@@ -63,12 +63,12 @@
         }
 
         /* .form-inline button {
-        padding: 10px 20px;
-        background-color: dodgerblue;
-        border: 1px solid #ddd;
-        color: white;
-        cursor: pointer;
-        } */
+            padding: 10px 20px;
+            background-color: dodgerblue;
+            border: 1px solid #ddd;
+            color: white;
+            cursor: pointer;
+            } */
 
         .form-inline button:hover {
             background-color: darkgrey;
