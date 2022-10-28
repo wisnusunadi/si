@@ -1064,7 +1064,7 @@ return [
         ],
         [
             'header' => 'ALAT UJI',
-            'auth' => [23, 34]
+            'auth' => [34]
         ],
 
 
@@ -1665,13 +1665,13 @@ return [
         ],
         [
             'header' => 'Setting',
-            'auth'   => [26]
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2]
         ],
         [
             'text' => 'Ubah Password',
             'icon' => 'fa-solid fa-gear',
             'url' => '/edit_pwd',
-            'auth' => [26],
+            'auth' => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2]
         ],
     ],
 

@@ -45,8 +45,7 @@ Route::get("/test", function () {
     return view('test');
 });
 Route::view('/modul_dashboard/show', 'auth.dashboard');
-
-Route::group(['middleware' => 'auth'], function () {
+Route::group(['middleware' => 'auth', 'middleware' => ['auth', 'divisi:jual,kes,prd,dc,gbj,qc,log,gk,mtc,mgrgdg,dirut']], function () {
     Route::view('/edit_pwd', 'page.setting.edit_pwd');
     Route::post('/edit_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'update_pwd'])->name('penjualan.produk.store');
 });

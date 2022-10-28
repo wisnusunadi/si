@@ -61,17 +61,18 @@
 
         {{-- User menu footer --}}
         <li class="user-footer ">
-            <div class="row">
-                <div class="col-8">
+            <div class="column">
+                <div class="col-12">
                     @if ($profile_url)
-                        <a href="/edit_pwd" class="btn btn-info btn-flat">
+                        <a href="/edit_pwd" class="dropdown-item">
                             <i class="fa-solid fa-gear"></i>
                             Ubah Password
                         </a>
                     @endif
                 </div>
-                <div class="col-4">
-                    <a class="btn btn-danger btn-flat float-right @if (!$profile_url) btn-block @endif"
+                <div class="dropdown-divider"></div>
+                <div class="col-12">
+                    <a class="dropdown-item float-right @if (!$profile_url) btn-block @endif"
                         href="#"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
                         <i class="fa fa-fw fa-power-off"></i>
