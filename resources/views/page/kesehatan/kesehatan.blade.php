@@ -128,7 +128,7 @@
                                         <table id="tabel"
                                             class="table table-hover styled-table table-striped align-center">
                                             <thead>
-                                                @if (Auth::user()->divisi_id == '28')
+                                                @if (Auth::user()->Karyawan->divisi_id == '28')
                                                     <tr>
                                                         <th colspan="14">
                                                             <a href="/kesehatan/tambah" style="color: white;"><button
@@ -400,7 +400,7 @@
                         <table class="table table-hover styled-table table-striped align-center" width="100%"
                             id="tabel_detail">
                             <thead>
-                                @if (Auth::user()->divisi_id == '28')
+                                @if (Auth::user()->Karyawan->divisi_id == '28')
                                     <tr>
                                         <th colspan="12">
                                             <button type="button" class="btn btn-block btn-success btn-sm"
@@ -547,7 +547,7 @@
                         <table class="table table-hover styled-table table-striped align-center" width="100%"
                             id="tabel_detail_penyakit">
                             <thead>
-                                @if (Auth::user()->divisi_id == '28')
+                                @if (Auth::user()->Karyawan->divisi_id == '28')
                                     <tr>
                                         <th colspan="12">
                                             <button type="button" class="btn btn-block btn-success btn-sm"
@@ -688,7 +688,7 @@
 @stop
 @section('adminlte_js')
     <script>
-        var divisi_id = '{{ Auth::user()->divisi_id }}';
+        var divisi_id = '{{ Auth::user()->Karyawan->divisi_id }}';
         $(function() {
             $('#tabel_detail_penyakit > tbody').on('click', '#delete', function() {
                 var data_id = $(this).attr('data-id');
