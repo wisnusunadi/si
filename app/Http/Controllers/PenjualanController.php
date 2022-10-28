@@ -2196,7 +2196,7 @@ class PenjualanController extends Controller
                             'jumlah' => $detailpart->jumlah,
                             'harga' => $detailpart->harga,
                             'jenis' => $jenis,
-                    
+
                         );
                     }
                 }
@@ -3773,7 +3773,7 @@ class PenjualanController extends Controller
         return view('page.penjualan.penjualan.edit_pesanan', ['data' => $data, 'id' => $id, 'jenis' => $jenis]);
     }
 
-    public function update_penjualan($id, $jenis)
+    public function update_penjualan()
     {
         if ($jenis == 'ekatalog') {
             $ekatalog = Ekatalog::find($id);

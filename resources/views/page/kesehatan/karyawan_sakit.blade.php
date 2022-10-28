@@ -112,11 +112,13 @@
                                 </li>
                             </ul>
                         </div>
+                        @if(Auth::user()->divisi_id == '28')
                         <div class="col-3">
                             <a href="/karyawan/sakit/tambah" style="color: white;"><button type="button"
                                     class="btn btn-md btn-success btn-sm float-right"><i class="fas fa-plus"></i>&nbsp;
                                     Tambah Karyawan Sakit</i></button></a>
                         </div>
+                        @endif
                     </div>
 
                     <div class="tab-content" id="pills-tabContent">
@@ -400,11 +402,34 @@
                         data: 'detail_button'
                     },
                     {
-                        data: 'keputusan',
-                        visible: false
+                        data: null,
+                        render: function(data, type, row){
+                            var btn = '';
+                            if (row.keputusan == "Lanjut bekerja") {
+                                btn += '<span class="badge green-text">';
+                            } else {
+                                btn += '<span class="badge red-text">';
+                            }
+                            btn += row.keputusan + '</span>';
+                            return btn;
+                        }
                     },
                     {
-                        data: 'cetak'
+                        data: null,
+                        render: function(data, type, row){
+                            var btn = '<div class="btn-group"><span><button type="button" id="detail_tindakan"  class="btn btn-xs btn-outline-info m-1"><i class="fas fa-eye"></i> Detail</button></span>';
+                            if (data.keputusan == 'Dipulangkan') {
+                                if(divisi_id == '28'){
+                                    btn += '<a href="/karyawan/sakit/cetak/' + row.id + '" target="_break"><button type="button" class="btn btn-xs btn-warning m-1" id="cetak_gcu"><i class="fas fa-print"></i> Cetak</button></a>';
+                                }
+                            }
+                            if(divisi_id == '28'){
+                                btn += '<span><button type="button" id="delete"  data-id="' + row.id + '" class="btn btn-xs btn-danger m-1"><i class="fas fa-trash"></i> Hapus</button></span>';
+                            }
+                            btn += '</div>';
+                            // btn = '<div class="inline-flex"><a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" id="cetak_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-print"></i></button></a></div>';
+                            return btn;
+                        }
                     }
                 ]
             });
@@ -451,7 +476,7 @@
                             },
                             {
                                 data: 'aksi',
-                                visible: divisi_id 
+                                visible: divisi_id == '28' ? true : false
                             },
                         ],
                     });
@@ -569,10 +594,34 @@
                         data: 'detail_button'
                     },
                     {
-                        data: 'keputusan',
+                        data: null,
+                        render: function(data, type, row){
+                            var btn = '';
+                            if (row.keputusan == "Lanjut bekerja") {
+                                btn += '<span class="badge green-text">';
+                            } else {
+                                btn += '<span class="badge red-text">';
+                            }
+                            btn += row.keputusan + '</span>';
+                            return btn;
+                        }
                     },
                     {
-                        data: 'cetak'
+                        data: null,
+                        render: function(data, type, row){
+                            var btn = '<div class="btn-group"><span><button type="button" id="detail_tindakan"  class="btn btn-xs btn-outline-info m-1"><i class="fas fa-eye"></i> Detail</button></span>';
+                            if (row.keputusan == 'Dipulangkan') {
+                                if(divisi_id == '28'){
+                                btn += '<a href="/karyawan/sakit/cetak/' + row.id + '" target="_break"><button type="button" class="btn btn-xs btn-warning m-1" id="cetak_gcu"><i class="fas fa-print"></i> Cetak</button></a>';
+                                }
+                            }
+                            if(divisi_id == '28'){
+                                btn += '<span><button type="button" id="delete"  data-id="' + row.id + '" class="btn btn-xs btn-danger m-1"><i class="fas fa-trash"></i> Hapus</button></span>';
+                            }
+                            btn += '</div>';
+                            // btn = '<div class="inline-flex"><a href="/karyawan/sakit/cetak/' . $data->id . '" target="_break"><button type="button" id="cetak_gcu"  class="btn btn-block btn-success karyawan-img-small" style="border-radius:50%;" ><i class="fas fa-print"></i></button></a></div>';
+                            return btn;
+                        }
                     }
                 ]
             });
@@ -620,6 +669,7 @@
                             },
                             {
                                 data: 'aksi',
+                                visible: divisi_id == '28' ? true : false
                             },
                         ],
                     });
