@@ -18,17 +18,19 @@
 @stop
 @section('adminlte_css')
     <style>
-        .equal{
+        .equal {
             display: flex;
             display: -webkit-flex;
             flex-wrap: wrap;
         }
+
         .minimizechar {
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
             max-width: 20ch !important;
         }
+
         table {
             border-collapse: collapse;
             empty-cells: show;
@@ -147,8 +149,7 @@
                         </div>
                         <div class="tab-pane fade" id="pills-sakit" role="tabpanel" aria-labelledby="pills-sakit-tab">
                             <div class='table-responsive'>
-                                <table id="tabel_sakit" class="table table-hover styled-table table-striped"
-                                    width="100%">
+                                <table id="tabel_sakit" class="table table-hover styled-table table-striped" width="100%">
                                     <thead style="text-align: center;">
                                         <tr>
                                             <th style="width:1%">No</th>
@@ -195,68 +196,68 @@
                                     <div class="card">
 
                                         <div class="card-body">
-                                        <dl>
-                                        <dt>Nama Pasien</dt>
-                                        <dd id="pasien"></dd>
-                                        <dt>Divisi</dt>
-                                        <dd id="divisi"></dd>
-                                        <dt>Tanggal</dt>
-                                        <dd id="tanggal"></dd>
-                                        <dt>Pemeriksa</dt>
-                                        <dd id="pemeriksa"></dd>
-                                        </dl>
+                                            <dl>
+                                                <dt>Nama Pasien</dt>
+                                                <dd id="pasien"></dd>
+                                                <dt>Divisi</dt>
+                                                <dd id="divisi"></dd>
+                                                <dt>Tanggal</dt>
+                                                <dd id="tanggal"></dd>
+                                                <dt>Pemeriksa</dt>
+                                                <dd id="pemeriksa"></dd>
+                                            </dl>
                                         </div>
 
-                                        </div>
+                                    </div>
                                 </div>
                                 <div class="col-lg-9">
 
-                                        <div class="row equal">
+                                    <div class="row equal">
                                         <div class="col-6">
                                             <div class="callout callout-warning" height="100%">
                                                 <h6>Analisa</h6>
                                                 <div id="analisa" class="font-weight-bold"></div>
                                             </div>
                                         </div>
-                                            <div class="col-6">
+                                        <div class="col-6">
                                             <div class="callout callout-danger" height="100%">
                                                 <h6>Diagnosa</h6>
                                                 <div id="diagnosa" class="font-weight-bold"></div>
                                             </div>
                                         </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <div class="card" id="detail_obat">
-                                                    <div class="card-header">
-                                                        <h6 class="card-title">Obat</h6>
-                                                    </div>
-                                                    <div class="card-body">
-                                                        <div class="table-responsive">
-                                                            <table class="table table-hover styled-table table-striped" width="100%"
-                                                            id="tabel_detail_obat">
-                                                                <thead>
-                                                                    <tr>
-                                                                        <th>No</th>
-                                                                        <th>Nama</th>
-                                                                        <th>Jumlah</th>
-                                                                        <th>Aturan</th>
-                                                                        <th>Konsumsi</th>
-                                                                        <th></th>
-                                                                    </tr>
-                                                                </thead>
-                                                                <tbody>
-                                                                </tbody>
-                                                            </table>
-                                                        </div>
-                                                    </div>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <div class="card" id="detail_obat">
+                                                <div class="card-header">
+                                                    <h6 class="card-title">Obat</h6>
                                                 </div>
-                                                <div class="callout callout-info" height="100%" id="detail_terapi">
-                                                    <h6>Terapi</h6>
-                                                    <div id="terapi" class="font-weight-bold"></div>
+                                                <div class="card-body">
+                                                    <div class="table-responsive">
+                                                        <table class="table table-hover styled-table table-striped"
+                                                            width="100%" id="tabel_detail_obat">
+                                                            <thead>
+                                                                <tr>
+                                                                    <th>No</th>
+                                                                    <th>Nama</th>
+                                                                    <th>Jumlah</th>
+                                                                    <th>Aturan</th>
+                                                                    <th>Konsumsi</th>
+                                                                    <th></th>
+                                                                </tr>
+                                                            </thead>
+                                                            <tbody>
+                                                            </tbody>
+                                                        </table>
+                                                    </div>
                                                 </div>
                                             </div>
+                                            <div class="callout callout-info" height="100%" id="detail_terapi">
+                                                <h6>Terapi</h6>
+                                                <div id="terapi" class="font-weight-bold"></div>
+                                            </div>
                                         </div>
+                                    </div>
                                 </div>
                             </div>
 
@@ -271,7 +272,7 @@
 @section('adminlte_js')
     <script>
         $(function() {
-            var divisi_id = '{{Auth::user()->divisi_id}}';
+            var divisi_id = '{{ Auth::user()->Karyawan->divisi_id }}';
             $('#tabel_obat > tbody').on('click', '#delete', function() {
                 var data_id = $(this).attr('data-id');
                 Swal.fire({
@@ -438,7 +439,8 @@
                 $('.data_detail_head').html(
                     "Karyawan Berobat"
                 );
-                var diagnosa = rows[0]['diagnosa'] != null ? rows[0]['diagnosa'] : '<i>Tidak Ada Diagnosa</i>';
+                var diagnosa = rows[0]['diagnosa'] != null ? rows[0]['diagnosa'] :
+                    '<i>Tidak Ada Diagnosa</i>';
                 var analisa = rows[0]['analisa'] != null ? rows[0]['analisa'] : '<i>Tidak Ada Analisa</i>';
                 $('#analisa').html(analisa);
                 $('#diagnosa').html(diagnosa);
@@ -446,7 +448,7 @@
                 $('#divisi').html(rows[0]['x']);
                 $('#pemeriksa').html(rows[0]['z']);
                 $('#tanggal').html(rows[0]['tgl_cek']);
-                if(rows[0]['tindakan'] == "Pengobatan"){
+                if (rows[0]['tindakan'] == "Pengobatan") {
                     $('#detail_obat').removeClass('d-none');
                     $('#detail_terapi').addClass('d-none');
                     $('#tabel_detail_obat').DataTable({
@@ -480,7 +482,7 @@
                             },
                         ],
                     });
-                }else{
+                } else {
                     $('#detail_obat').addClass('d-none');
                     $('#detail_terapi').removeClass('d-none');
                     $('#terapi').html(rows[0]['terapi']);
@@ -627,11 +629,13 @@
             });
             $('#tabel_sakit > tbody').on('click', '#detail_tindakan', function() {
                 var rows = tabel_sakit.rows($(this).parents('tr')).data();
-                var keputusan = rows[0]['tindakan'] == "Lanjut Bekerja" ? 'Karyawan Berobat' : 'Karyawan Sakit';
+                var keputusan = rows[0]['tindakan'] == "Lanjut Bekerja" ? 'Karyawan Berobat' :
+                    'Karyawan Sakit';
                 $('.data_detail_head').html(
                     "Karyawan Sakit"
                 );
-                var diagnosa = rows[0]['diagnosa'] != null ? rows[0]['diagnosa'] : '<i>Tidak Ada Diagnosa</i>';
+                var diagnosa = rows[0]['diagnosa'] != null ? rows[0]['diagnosa'] :
+                    '<i>Tidak Ada Diagnosa</i>';
                 var analisa = rows[0]['analisa'] != null ? rows[0]['analisa'] : '<i>Tidak Ada Analisa</i>'
                 $('#analisa').html(analisa);
                 $('#diagnosa').html(diagnosa);
@@ -639,7 +643,7 @@
                 $('#divisi').html(rows[0]['x']);
                 $('#pemeriksa').html(rows[0]['z']);
                 $('#tanggal').html(rows[0]['tgl_cek']);
-                if(rows[0]['tindakan'] == "Pengobatan"){
+                if (rows[0]['tindakan'] == "Pengobatan") {
                     $('#detail_obat').removeClass('d-none');
                     $('#detail_terapi').addClass('d-none');
                     $('#tabel_detail_obat').DataTable({
@@ -673,7 +677,7 @@
                             },
                         ],
                     });
-                }else{
+                } else {
                     $('#detail_obat').addClass('d-none');
                     $('#detail_terapi').removeClass('d-none');
                     $('#terapi').html(rows[0]['terapi']);

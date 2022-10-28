@@ -35,7 +35,7 @@
 
 
 
-    <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/all.min.css') }}" />
+    <link rel="stylesheet" href="{{ asset('assets/fontawesome-free/css/font-awesome.6.2.0.all.min.css') }}" />
     <link rel="stylesheet" href="{{ asset('vendor/datepicker/datepicker.css') }}">
     <link rel="stylesheet" href="{{ asset('vendor/jquery-ui/jquery-ui.css') }}">
 

@@ -45,8 +45,8 @@
                                                         <div class="input-group-append">
                                                             <span class="input-group-text">LAB-</span>
                                                         </div>
-                                                        <input type="text" class="form-control" value="{{$no }}" name="no_pendaftaran" id="no_pendaftaran">
-                                                        <input type="text" class="form-control d-none" value="{{$kalibrasi->id }}" id="kalibrasi_id">
+                                                        <input type="text" class="form-control" value="{{$no}}" name="no_pendaftaran" id="no_pendaftaran">
+                                                        <input type="text" class="form-control d-none" value="{{$kalibrasi->id}}" id="kalibrasi_id">
                                                     </div>
                                                 </div>
                                             </div>

@@ -9,6 +9,7 @@ use App\Models\DetailEkatalog;
 use App\Models\DetailPesanan;
 use App\Models\DetailPesananPart;
 use App\Models\DetailPesananProduk;
+use App\Models\DetailPesananProdukDsb;
 use App\Models\DetailRencanaPenjualan;
 use App\Models\DetailSpa;
 use App\Models\DetailSpb;
@@ -713,19 +714,19 @@ class PenjualanController extends Controller
                 $name = $data->getTable();
                 $progress = "";
                 $tes = $data->cjumlahprd + $data->cjumlahpart;
-                if  ($tes > 0)  {
+                if ($tes > 0) {
                     $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                    if  ($hitung > 0)  {
+                    if ($hitung > 0) {
                         $progress = $hitung;
-                    }  else  {
+                    } else {
                         $progress = $hitung;
                     }
                 }
 
-                if  ($name == "ekatalog")  {
-                    if  ($data->status == "batal" && ($data->Pesanan->log_id != "7"))  {
+                if ($name == "ekatalog") {
+                    if ($data->status == "batal" && ($data->Pesanan->log_id != "7")) {
                         return 'batal';
-                    }  else  {
+                    } else {
                         if ($data->Pesanan->log_id == "7") {
                             return strtolower($data->Pesanan->State->nama);
                         } else {
@@ -736,7 +737,7 @@ class PenjualanController extends Controller
                     if ($data->log == "batal") {
 
                         return 'batal';
-                    }  else  {
+                    } else {
                         if ($data->Pesanan->log_id == "7") {
                             return strtolower($data->Pesanan->State->nama);
                         } else {
@@ -747,7 +748,7 @@ class PenjualanController extends Controller
                     if ($data->log == "batal") {
 
                         return 'batal';
-                    }  else  {
+                    } else {
                         if ($data->Pesanan->log_id == "7") {
                             return strtolower($data->Pesanan->State->nama);
                         } else {
@@ -2185,9 +2186,9 @@ class PenjualanController extends Controller
 
                 if ($pesanan->DetailPesananPart) {
                     foreach ($pesanan->DetailPesananPart  as $key_detail => $detailpart) {
-                        if(strpos($detailpart->Sparepart->kode, 'JASA') === false){
+                        if (strpos($detailpart->Sparepart->kode, 'JASA') === false) {
                             $jenis = 'part';
-                        }else{
+                        } else {
                             $jenis = 'jasa';
                         }
                         $data['detail_pesanan'][$key_detail] = array(
@@ -2364,13 +2365,22 @@ class PenjualanController extends Controller
     }
     public function get_data_paket_pesanan_ekat($id)
     {
-        $data = DetailPesananProduk::whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($id) {
+        $produk = DetailPesananProduk::whereHas('DetailPesanan.Pesanan.Ekatalog', function ($q) use ($id) {
             $q->where('id', $id);
         })->get();
+        $produk_dsb = DetailPesananProdukDsb::whereHas('DetailPesananDsb.Pesanan.Ekatalog', function ($q) use ($id) {
+            $q->where('id', $id);
+        })->get();
+        $data = $produk->merge($produk_dsb);
         return datatables()->of($data)
             ->addIndexColumn()
             ->addColumn('paket_produk', function ($data) {
-                return $data->DetailPesanan->PenjualanProduk->nama . ' (' . $data->DetailPesanan->jumlah . ' unit)';
+                if ($data->DetailPesanan) {
+                    return $data->DetailPesanan->PenjualanProduk->nama . ' (' . $data->DetailPesanan->jumlah . ' unit)';
+                } else {
+                    return $data->DetailPesananDsb->PenjualanProduk->nama . ' (' . $data->DetailPesananDsb->jumlah . ' unit)' . ' <span class="badge info-text">Stok
+                    distributor</span>';
+                }
             })
             ->addColumn('nama_produk', function ($data) {
                 return $data->GudangBarangJadi->Produk->nama . ' ' . $data->GudangBarangJadi->nama;
@@ -2522,7 +2532,7 @@ class PenjualanController extends Controller
     }
     public function get_data_ekatalog($value)
     {
-        $divisi_id = Auth::user()->divisi->id;
+        $divisi_id = Auth::user()->Karyawan->divisi_id;
 
         $x = explode(',', $value);
         $data = "";
@@ -2866,7 +2876,7 @@ class PenjualanController extends Controller
     }
     public function get_data_spa($value)
     {
-        $divisi_id = Auth::user()->divisi->id;
+        $divisi_id = Auth::user()->Karyawan->divisi_id;
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
@@ -3011,12 +3021,12 @@ class PenjualanController extends Controller
                 $tes = $data->cjumlahprd + $data->cjumlahpart;
                 if ($tes > 0) {
                     $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                    if  ($data->log == "batal") {
+                    if ($data->log == "batal") {
                         $datas = 'batal';
-                    } else  {
-                        if  ($hitung > 0)  {
+                    } else {
+                        if ($hitung > 0) {
                             $datas = $hitung;
-                        }  else  {
+                        } else {
                             $datas = $hitung;
                         }
                     }
@@ -3038,7 +3048,7 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-                $divisi_id = Auth::user()->divisi->id;
+                $divisi_id = Auth::user()->Karyawan->divisi_id;
                 $return = "";
 
                 if ($divisi_id == "26") {
@@ -3130,7 +3140,7 @@ class PenjualanController extends Controller
     }
     public function get_data_spb($value)
     {
-        $divisi_id = Auth::user()->divisi->id;
+        $divisi_id = Auth::user()->Karyawan->divisi_id;
         $x = explode(',', $value);
         $data = "";
         if ($value == 'semua') {
@@ -3262,12 +3272,12 @@ class PenjualanController extends Controller
                 $tes = $data->cjumlahprd + $data->cjumlahpart;
                 if ($tes > 0) {
                     $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                    if  ($data->log == "batal") {
+                    if ($data->log == "batal") {
                         $datas = 'batal';
-                    } else  {
-                        if  ($hitung > 0)  {
+                    } else {
+                        if ($hitung > 0) {
                             $datas = $hitung;
-                        }  else  {
+                        } else {
                             $datas = $hitung;
                         }
                     }
@@ -3296,7 +3306,7 @@ class PenjualanController extends Controller
                 return $data->Customer->nama;
             })
             ->addColumn('button', function ($data) {
-                $divisi_id = Auth::user()->divisi->id;
+                $divisi_id = Auth::user()->Karyawan->divisi_id;
                 $return = "";
 
                 if ($divisi_id == "26") {
@@ -3421,6 +3431,7 @@ class PenjualanController extends Controller
     public function create_penjualan(Request $request)
     {
         if ($request->jenis_penjualan == 'ekatalog') {
+            //dd($request);
             // $this->validate(
             //     $request,
             //     [
@@ -3487,36 +3498,33 @@ class PenjualanController extends Controller
 
             $bool = true;
             if ($Ekatalog) {
-                if ($request->status != 'draft') {
-                    if ($request->status == 'batal' && !isset($request->penjualan_produk_id)) {
-                        $bool = true;
-                    } else {
-                        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                            if (empty($request->produk_ongkir[$i])) {
-                                $ongkir[$i] = 0;
-                            } else {
-                                $ongkir[$i] =  str_replace('.', "", $request->produk_ongkir[$i]);
-                            }
-                            $dekat = DetailPesanan::create([
-                                'pesanan_id' => $x,
-                                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                                'detail_rencana_penjualan_id' => $request->rencana_id[$i],
-                                'jumlah' => $request->produk_jumlah[$i],
-                                'harga' => str_replace('.', "", $request->produk_harga[$i]),
-                                'ongkir' => $ongkir[$i],
-                            ]);
+                if (($request->status == 'sepakat') || ($request->status == 'negosiasi')) {
 
-                            if (!$dekat) {
-                                $bool = false;
-                            } else {
-                                for ($j = 0; $j < count($request->variasi[$i]); $j++) {
-                                    $dekatp = DetailPesananProduk::create([
-                                        'detail_pesanan_id' => $dekat->id,
-                                        'gudang_barang_jadi_id' => $request->variasi[$i][$j]
-                                    ]);
-                                    if (!$dekatp) {
-                                        $bool = false;
-                                    }
+                    for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                        if (empty($request->produk_ongkir[$i])) {
+                            $ongkir[$i] = 0;
+                        } else {
+                            $ongkir[$i] =  str_replace('.', "", $request->produk_ongkir[$i]);
+                        }
+                        $dekat = DetailPesanan::create([
+                            'pesanan_id' => $x,
+                            'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                            'detail_rencana_penjualan_id' => $request->rencana_id[$i],
+                            'jumlah' => $request->produk_jumlah[$i],
+                            'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                            'ongkir' => $ongkir[$i],
+                        ]);
+
+                        if (!$dekat) {
+                            $bool = false;
+                        } else {
+                            for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                                $dekatp = DetailPesananProduk::create([
+                                    'detail_pesanan_id' => $dekat->id,
+                                    'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                                ]);
+                                if (!$dekatp) {
+                                    $bool = false;
                                 }
                             }
                         }
@@ -3788,6 +3796,8 @@ class PenjualanController extends Controller
     }
     public function update_ekatalog(Request $request, $id)
     {
+        //dd($request->no_urut);
+
         echo json_encode($request->all());
         if ($request->namadistributor == 'belum') {
             $c_id = '484';
@@ -3799,7 +3809,7 @@ class PenjualanController extends Controller
 
         $ekatalog = Ekatalog::find($id);
 
-        if ($request->status_akn == 'draft') {
+        if ($request->status_akn == 'draft' ||  $request->status_akn == 'batal') {
             if ($request->no_paket == '') {
                 $c_akn = NULL;
             } else {
@@ -3810,6 +3820,7 @@ class PenjualanController extends Controller
         } else {
             $akn = $ekatalog->no_paket;
         }
+
 
         $poid = $ekatalog->pesanan_id;
         $ekatalog->customer_id = $c_id;
@@ -3848,40 +3859,37 @@ class PenjualanController extends Controller
                 }
             }
             if ($bool == true) {
-                if ($request->status_akn != "draft") {
-                    if ($request->status_akn == "batal" && !isset($request->penjualan_produk_id)) {
-                        $bool = true;
-                    } else {
-                        for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
-                            if (empty($request->produk_ongkir[$i])) {
-                                $ongkir[$i] = 0;
-                            } else {
-                                $ongkir[$i] =  str_replace('.', "", $request->produk_ongkir[$i]);
-                            }
-                            $c = DetailPesanan::create([
-                                'pesanan_id' => $poid,
-                                'penjualan_produk_id' => $request->penjualan_produk_id[$i],
-                                'jumlah' => $request->produk_jumlah[$i],
-                                'harga' => str_replace('.', "", $request->produk_harga[$i]),
-                                'ongkir' => $ongkir[$i],
-                                'detail_rencana_penjualan_id' => $request->rencana_id[$i],
-                            ]);
-                            if ($c) {
-                                for ($j = 0; $j < count($request->variasi[$i]); $j++) {
-                                    $v = DetailPesananProduk::create([
-                                        'detail_pesanan_id' => $c->id,
-                                        'gudang_barang_jadi_id' => $request->variasi[$i][$j]
-                                    ]);
-                                    if (!$v) {
-                                        $bool = false;
-                                    }
+                if (($request->status_akn == "sepakat") || ($request->status_akn == "negosiasi")) {
+
+                    for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
+                        if (empty($request->produk_ongkir[$i])) {
+                            $ongkir[$i] = 0;
+                        } else {
+                            $ongkir[$i] =  str_replace('.', "", $request->produk_ongkir[$i]);
+                        }
+                        $c = DetailPesanan::create([
+                            'pesanan_id' => $poid,
+                            'penjualan_produk_id' => $request->penjualan_produk_id[$i],
+                            'jumlah' => $request->produk_jumlah[$i],
+                            'harga' => str_replace('.', "", $request->produk_harga[$i]),
+                            'ongkir' => $ongkir[$i],
+                            'detail_rencana_penjualan_id' => $request->rencana_id[$i],
+                        ]);
+                        if ($c) {
+                            for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                                $v = DetailPesananProduk::create([
+                                    'detail_pesanan_id' => $c->id,
+                                    'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                                ]);
+                                if (!$v) {
+                                    $bool = false;
                                 }
-                            } else {
-                                $bool = false;
                             }
+                        } else {
+                            $bool = false;
                         }
                     }
-                } elseif ($request->status_akn == "draft") {
+                } elseif (($request->status_akn == "draft") || ($request->status_akn == "batal")) {
                     if ($request->isi_produk == "isi") {
                         for ($i = 0; $i < count($request->penjualan_produk_id); $i++) {
                             if (empty($request->produk_ongkir[$i])) {
