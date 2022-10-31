@@ -3781,7 +3781,7 @@ class PenjualanController extends Controller
         return view('page.penjualan.penjualan.edit_pesanan', ['data' => $data, 'id' => $id, 'jenis' => $jenis]);
     }
 
-    public function update_penjualan()
+    public function update_penjualan($id, $jenis)
     {
         if ($jenis == 'ekatalog') {
             $ekatalog = Ekatalog::find($id);
