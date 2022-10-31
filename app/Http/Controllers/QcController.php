@@ -1975,7 +1975,7 @@ class QcController extends Controller
                 }
 
                 $param = "";
-
+                if($ds->tgl_kontrak != ""){
                 $tgl_sekarang = Carbon::now()->format('Y-m-d');
                 $tgl_parameter = $ds->tgl_kontrak;
 
@@ -1996,7 +1996,7 @@ class QcController extends Controller
                     $from = $tgl_parameter;
                     $hari = $to->diffInDays($from);
                     $param =  '<div class="urgent">' . Carbon::createFromFormat('Y-m-d', $tgl_parameter)->format('d-m-Y') . '</div><small class="invalid-feedback d-block"><i class="fa fa-exclamation-circle"></i> Lewat Batas ' . $hari . ' Hari</small>';
-                }
+                }}
             return view('page.qc.so.detail_ekatalog', ['id' => $id, 'data' => $data, 'detail_id' => $detail_id, 'param' => $param, 'status' => $status]);
         } elseif ($value == 'spa') {
             $data = Spa::whereHas('Pesanan', function ($q) use ($id) {

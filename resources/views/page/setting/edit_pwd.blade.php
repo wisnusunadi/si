@@ -88,9 +88,9 @@
                                             <div class="card-body">
                                                 <div class="form-group row">
                                                     <label for="nama_produk"
-                                                        class="col-lg-4 col-md-12 col-form-label labelket">Password
+                                                        class="col-lg-5 col-md-12 col-sm-12 col-form-label labelket">Password
                                                         Lama</label>
-                                                    <div class="col-lg-2 col-md-12">
+                                                    <div class="col-lg-3 col-md-8 col-sm-12">
                                                         <input type="password"
                                                             class="form-control col-form-label @error('pwd_lama') is-invalid @enderror"
                                                             placeholder="Password Lama" id="pwd_lama" name="pwd_lama" />
@@ -103,9 +103,9 @@
                                                 </div>
                                                 <div class="form-group row">
                                                     <label for="password"
-                                                        class="col-lg-4 col-md-12 col-form-label labelket">Password
+                                                        class="col-lg-5 col-md-12 col-sm-12 col-form-label labelket">Password
                                                         Baru</label>
-                                                    <div class="col-lg-2 col-md-12">
+                                                    <div class="col-lg-3 col-md-8 col-sm-12">
                                                         <input type="password"
                                                             class="form-control col-form-label @error('password') is-invalid @enderror"
                                                             value="" placeholder="Password Baru" id="password"
@@ -120,10 +120,10 @@
 
                                                 <div class="form-group row">
                                                     <label for="password_confirmation"
-                                                        class="col-lg-4 col-md-12 col-form-label labelket">Konfirmasi
+                                                        class="col-lg-5 col-md-12 col-sm-12 col-form-label labelket">Konfirmasi
                                                         Password
                                                         Baru</label>
-                                                    <div class="col-lg-2 col-md-12">
+                                                    <div class="col-lg-3 col-md-8 col-sm-12">
                                                         <input type="password"
                                                             class="form-control col-form-label @error('password_confirmation') is-invalid @enderror"
                                                             value="" placeholder="Konfirmasi Password Baru"

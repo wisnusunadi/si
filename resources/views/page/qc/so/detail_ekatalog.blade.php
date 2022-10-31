@@ -236,7 +236,9 @@
                                                 </div>
                                                 <div class="margin">
                                                     <div><small class="text-muted">Batas Uji</small></div>
+                                                    @if(!empty($param))
                                                     <div class="urgent"><b>{!! $param !!}</b></div>
+                                                    @endif
                                                 </div>
                                             </div>
                                             <div class="p-2">
