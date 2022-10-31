@@ -60,18 +60,18 @@
         @endif
 
         {{-- User menu footer --}}
-        <li class="user-footer ">
-            <div class="column">
-                <div class="col-12">
+        <li>
+            <div class="row">
+                <div class="col-12 pt-2">
                     @if ($profile_url)
                         <a href="/edit_pwd" class="dropdown-item">
-                            <i class="fa-solid fa-gear"></i>
+                            <i class="fa-solid fa-gear fa-fw"></i>
                             Ubah Password
                         </a>
                     @endif
                 </div>
                 <div class="dropdown-divider"></div>
-                <div class="col-12">
+                <div class="col-12 py-2">
                     <a class="dropdown-item float-right @if (!$profile_url) btn-block @endif"
                         href="#"
                         onclick="event.preventDefault(); document.getElementById('logout-form').submit();">

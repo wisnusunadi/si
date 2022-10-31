@@ -275,6 +275,30 @@
     </style>
 @stop
 @section('content')
+{{-- <div class="content">
+    <div class="row">
+        <div class="col-12">
+            <div class="row">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12">
+                                    <h4></h4>
+                                    <div class="btn-group float-right px-2">
+                                            <button type="button" class="btn bg-olive dropdown-toggle dropdown-icon" data-toggle="dropdown" data-display="static" aria-expanded="false" id="tahun_sakit">Pilih Tahun
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                            </button>
+                                            <ul class="dropdown-menu dropdown-menu-right" role="menu"  aria-labelledby="tahun_sakit">
+                                                <li role="presentation"><a class="dropdown-item tahun_sakit active" role="menuitem" tabindex="-1" value="{{ now()->year }}">{{ now()->year }}</a></li>
+                                                <li role="presentation"><a class="dropdown-item tahun_sakit" role="menuitem" tabindex="-1" value="{{ now()->year - 1 }}">{{ now()->year - 1 }}</a></li>
+                                                <li role="presentation"><a class="dropdown-item tahun_sakit" role="menuitem" tabindex="-1" value="{{ now()->year - 2 }}">{{ now()->year - 2 }}</a></li>
+                                                <li role="presentation"><a class="dropdown-item tahun_sakit" role="menuitem" tabindex="-1" value="{{ now()->year - 3 }}">{{ now()->year - 3 }}</a></li>
+                                                <li role="presentation"><a class="dropdown-item tahun_sakit" role="menuitem" tabindex="-1" value="{{ now()->year - 4 }}">{{ now()->year - 4 }}</a></li>
+                                            </ul>
+                                        </div>
+                                    <div class="chart" style="min-height: 300px; max-height: 300px; ">
+                                        <canvas id="chart_penjualan" style="max-width: 100%; min-height:100%; max-height:100%;"></canvas> --}}
     <div class="content">
         <div class="row">
             <div class="col-12">
