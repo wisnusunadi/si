@@ -6333,6 +6333,11 @@ class PenjualanController extends Controller
                 $po->save();
             }
 
+            if ($po->log_id == 7) {
+                $po->log_id = 9;
+                $po->save();
+            }
+
 
 
             $dekatp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($ekat) {
@@ -6993,12 +6998,17 @@ class PenjualanController extends Controller
     {
         $e = Ekatalog::where('no_paket', $akn)->first();
         if ($e) {
-            $dp = TFProduksi::where('pesanan_id', $e->pesanan_id)->count();
-
-            if ($dp > 0) {
-                return response()->json(['message'  => 'Sudah Proses']);
+            if ($e->customer_id == 484) {
+                return response()->json(['message'  => 'Tidak Ditemukan']);
             } else {
-                return response()->json(['message'  => 'Belum Proses']);
+                $dp = TFProduksi::where('pesanan_id', $e->pesanan_id)->count();
+
+
+                if ($dp > 0) {
+                    return response()->json(['message'  => 'Sudah Proses']);
+                } else {
+                    return response()->json(['message'  => 'Belum Proses']);
+                }
             }
         } else {
             return response()->json(['message'  => 'Tidak Ditemukan']);
