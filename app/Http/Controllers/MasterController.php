@@ -961,8 +961,13 @@ class MasterController extends Controller
                 'status' => $request->jenis_paket
             ]);
 
+            // for ($i = 0; $i < count($request->produk_id); $i++) {
+            //     array_push($sync_data, ['produk_id' => $request->produk_id[$i], 'jumlah' => $request->jumlah[$i]]);
+            // }
+
+
             for ($i = 0; $i < count($request->produk_id); $i++) {
-                array_push($sync_data, ['produk_id' => $request->produk_id[$i], 'jumlah' => $request->jumlah[$i]]);
+                $PenjualanProduk->Produk()->attach($request->produk_id[$i], ['jumlah' => $request->jumlah[$i]]);
             }
 
             $bool = true;
