@@ -419,8 +419,8 @@ class QcController extends Controller
                     'cqcpart' => function($q){
                         $q->selectRaw('coalesce(sum(outgoing_pesanan_part.jumlah_ok), 0)')
                         ->from('outgoing_pesanan_part')
-                        ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
-                        ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                        ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                        ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
                         ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
                     },'clogprd' => function($q){
@@ -478,8 +478,8 @@ class QcController extends Controller
             'cqcpart' => function($q){
                 $q->selectRaw('coalesce(sum(outgoing_pesanan_part.jumlah_ok), 0)')
                 ->from('outgoing_pesanan_part')
-                ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
-                ->join('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
+                ->leftJoin('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'outgoing_pesanan_part.detail_pesanan_part_id')
+                ->leftJoin('m_sparepart', 'm_sparepart.id', '=', 'detail_pesanan_part.m_sparepart_id')
                 ->whereRaw('m_sparepart.kode NOT LIKE "%JASA%"')
                 ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
             },'clogprd' => function($q){
