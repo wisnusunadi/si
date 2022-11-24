@@ -125,13 +125,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                .row {
-                                                    font-size: 12px;
-                                                }
+                                                            .row {
+                                                                font-size: 12px;
+                                                            }
 
-                                                h4 {
-                                                    font-size: 20px;
-                                                } */
+                                                            h4 {
+                                                                font-size: 20px;
+                                                            } */
             body {
                 font-size: 12px;
             }
@@ -148,13 +148,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                .row {
-                                                    font-size: 12px;
-                                                }
+                                                            .row {
+                                                                font-size: 12px;
+                                                            }
 
-                                                h4 {
-                                                    font-size: 20px;
-                                                } */
+                                                            h4 {
+                                                                font-size: 20px;
+                                                            } */
             section {
                 font-size: 12px;
             }
@@ -2544,10 +2544,17 @@
                             } else {
                                 for (var y = 0; y < res[0].produk[x].gudang_barang_jadi
                                     .length; y++) {
+
+                                    var nama_var = "";
+                                    if (res[0].produk[x].gudang_barang_jadi[y].nama != "") {
+                                        nama_var = res[0].produk[x].gudang_barang_jadi[y].nama;
+                                    } else {
+                                        nama_var = res[0].produk[x].nama;
+                                    }
+
                                     data.push({
                                         id: res[0].produk[x].gudang_barang_jadi[y].id,
-                                        text: res[0].produk[x].gudang_barang_jadi[y]
-                                            .nama,
+                                        text: nama_var,
                                         jumlah: res[0].produk[x].pivot.jumlah,
                                         qt: cek_stok(res[0].produk[x]
                                             .gudang_barang_jadi[y].id)
