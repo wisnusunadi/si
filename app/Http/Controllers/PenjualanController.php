@@ -3430,6 +3430,7 @@ class PenjualanController extends Controller
     // Create
     public function create_penjualan(Request $request)
     {
+        //  dd($request);
         if ($request->jenis_penjualan == 'ekatalog') {
             //dd($request);
             // $this->validate(
@@ -3549,7 +3550,7 @@ class PenjualanController extends Controller
                             if (!$dekat) {
                                 $bool = false;
                             } else {
-                                for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                                for ($j = 0; $j < count(array($request->variasi[$i])); $j++) {
                                     $dekatp = DetailPesananProduk::create([
                                         'detail_pesanan_id' => $dekat->id,
                                         'gudang_barang_jadi_id' => $request->variasi[$i][$j]
@@ -3620,17 +3621,14 @@ class PenjualanController extends Controller
                             'harga' => str_replace('.', "", $request->produk_harga[$i]),
                             'ongkir' => 0,
                         ]);
-                        if (!$dspa) {
-                            $bool = false;
-                        } else {
-                            for ($j = 0; $j < count(array($request->variasi[$i])); $j++) {
-                                $dspap = DetailPesananProduk::create([
-                                    'detail_pesanan_id' => $dspa->id,
-                                    'gudang_barang_jadi_id' => $request->variasi[$i][$j]
-                                ]);
-                                if (!$dspap) {
-                                    $bool = false;
-                                }
+
+                        for ($j = 0; $j < count($request->variasi[$i]); $j++) {
+                            $dspap = DetailPesananProduk::create([
+                                'detail_pesanan_id' => $dspa->id,
+                                'gudang_barang_jadi_id' => $request->variasi[$i][$j]
+                            ]);
+                            if (!$dspap) {
+                                $bool = false;
                             }
                         }
                     }
