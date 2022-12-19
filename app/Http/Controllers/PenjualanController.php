@@ -3459,12 +3459,39 @@ class PenjualanController extends Controller
             // $y = Carbon::now()->format('Y');
             // $m = Carbon::now()->format('m');
             // $filter = new IntToRoman();
-            $x = "";
+            $so = NULL;
+            $no_po = NULL;
+            $tgl_po = NULL;
+            $no_do = NULL;
+            $tgl_do = NULL;
+            $ket_po = NULL;
+            $log_id = "7";
+
+            if($request->no_po_ekat != ""){
+                $so = $this->createSO('EKAT');
+                $no_po = $request->no_po_ekat;
+                $tgl_po = $request->tanggal_po_ekat;
+                $no_do = $request->no_do_ekat;
+                $tgl_do = $request->tanggal_do_ekat;
+                $ket_po = $request->keterangan_po_ekat;
+                if ($request->status == 'sepakat'){
+                    $log_id = "9";
+                }
+
+            }
+
             $pesanan = Pesanan::create([
-                'log_id' => '7',
+                'so' => $so,
+                'no_po' => $no_po,
+                'tgl_po' => $tgl_po,
+                'no_do' => $no_do,
+                'tgl_do' => $tgl_do,
+                'ket' =>  $ket_po,
+                'log_id' => $log_id,
                 'created_at' => Carbon::now()->toDateTimeString(),
                 'updated_at' => Carbon::now()->toDateTimeString(),
             ]);
+
             $x = $pesanan->id;
             if ($request->namadistributor == 'belum') {
                 $c_id = '484';
@@ -3835,6 +3862,21 @@ class PenjualanController extends Controller
         $ekatalog->ket = $request->keterangan;
         $ekatalog->no_paket = $akn;
         $ekat = $ekatalog->save();
+
+        $p = Pesanan::find($poid);
+        if($p->so == NULL && ($request->status_akn != "draft" || $request->status_akn != "batal")){
+            $p->so = $this->createSO('EKAT');
+        }
+        $p->no_po = $request->no_po_ekat;
+        $p->tgl_po = $request->tanggal_po_ekat;
+        $p->no_do = $request->no_do_ekat;
+        $p->tgl_do = $request->tanggal_do_ekat;
+        $p->ket = $request->keterangan_po_ekat;
+        if($request->status_akn == "sepakat" && $request->no_po_ekat != NULL){
+            $p->log_id = "9";
+        }
+        $p->save();
+
         $bool = true;
         if ($ekat) {
             $dekatp = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($poid) {
