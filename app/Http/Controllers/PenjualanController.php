@@ -3864,7 +3864,7 @@ class PenjualanController extends Controller
         $ekat = $ekatalog->save();
 
         $p = Pesanan::find($poid);
-        if($p->so == NULL && ($request->status_akn != "draft" || $request->status_akn != "batal")){
+        if($p->so == NULL && $request->no_po_ekat != NULL && ($request->status_akn != "draft" || $request->status_akn != "batal")){
             $p->so = $this->createSO('EKAT');
         }
         $p->no_po = $request->no_po_ekat;
