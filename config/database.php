@@ -103,34 +103,14 @@ return [
             ]) : [],
         ],
 
-        'erp_kalibrasi' => [
+        'si_20' => [
             'driver' => 'mysql',
             'url' => env('DATABASE_URL'),
             'host' => env('DB_HOST_4', '192.168.13.2'),
             'port' => env('DB_PORT_4', '3306'),
-            'database' => env('DB_DATABASE_4', 'erp_kalibrasi'),
-            'username' => env('DB_USERNAME_4', 'root'),
+            'database' => env('DB_DATABASE_4', 'forge'),
+            'username' => env('DB_USERNAME_4', 'forge'),
             'password' => env('DB_PASSWORD_4', ''),
-            'unix_socket' => env('DB_SOCKET', ''),
-            'charset' => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix' => '',
-            'prefix_indexes' => true,
-            'strict' => false,
-            'engine' => null,
-            'options' => extension_loaded('pdo_mysql') ? array_filter([
-                PDO::MYSQL_ATTR_SSL_CA => env('MYSQL_ATTR_SSL_CA'),
-            ]) : [],
-        ],
-
-        'si_20' => [
-            'driver' => 'mysql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST_5', '192.168.13.2'),
-            'port' => env('DB_PORT_5', '3306'),
-            'database' => env('DB_DATABASE_5', 'forge'),
-            'username' => env('DB_USERNAME_5', 'forge'),
-            'password' => env('DB_PASSWORD_5', ''),
             'unix_socket' => env('DB_SOCKET', ''),
             'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_unicode_ci',

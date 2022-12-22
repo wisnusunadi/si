@@ -1011,7 +1011,6 @@ class PenjualanController extends Controller
             //     ->rawColumns(['log',  'nama_customer'])
             //     ->make(true);
         } else if ($parameter == 'no_akn') {
-            $val = str_replace("-",  "/",  $value);
             $si_ekat21 = DB::connection('si_21')->table('spa_on')
                 ->select(
                     'spa_on.noaks_on as no_paket',
@@ -1022,7 +1021,7 @@ class PenjualanController extends Controller
                     'distributor.pabrik as customer',
                 )
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_on.pabrik_on')
-                ->where('spa_on.noaks_on', 'LIKE', '%' . $val . '%')
+                ->where('spa_on.noaks_on', 'LIKE', '%' . $value . '%')
                 ->groupby('spa_on.noaks_on')
                 ->get();
 
@@ -1036,7 +1035,7 @@ class PenjualanController extends Controller
                     'distributor.pabrik as customer',
                 )
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_on.pabrik_on')
-                ->where('spa_on.noaks_on', 'LIKE', '%' . $val . '%')
+                ->where('spa_on.noaks_on', 'LIKE', '%' . $value . '%')
                 ->groupby('spa_on.noaks_on')
                 ->get();
 
@@ -1046,7 +1045,7 @@ class PenjualanController extends Controller
                     ->join('provinsi', 'provinsi.id', '=', 'e.provinsi_id')
                     ->whereColumn('e.id', 'ekatalog.id')
                     ->limit(1);
-            }])->where('no_paket', 'LIKE', '%' . $val . '%')
+            }])->where('no_paket', 'LIKE', '%' . $value . '%')
                 ->get();
             $data = $si_ekat20->merge($si_ekat21)->merge($spa);
 
@@ -3467,17 +3466,16 @@ class PenjualanController extends Controller
             $ket_po = NULL;
             $log_id = "7";
 
-            if($request->no_po_ekat != ""){
+            if ($request->no_po_ekat != "") {
                 $so = $this->createSO('EKAT');
                 $no_po = $request->no_po_ekat;
                 $tgl_po = $request->tanggal_po_ekat;
                 $no_do = $request->no_do_ekat;
                 $tgl_do = $request->tanggal_do_ekat;
                 $ket_po = $request->keterangan_po_ekat;
-                if ($request->status == 'sepakat'){
+                if ($request->status == 'sepakat') {
                     $log_id = "9";
                 }
-
             }
 
             $pesanan = Pesanan::create([
@@ -3864,7 +3862,7 @@ class PenjualanController extends Controller
         $ekat = $ekatalog->save();
 
         $p = Pesanan::find($poid);
-        if($p->so == NULL && $request->no_po_ekat != NULL && ($request->status_akn != "draft" || $request->status_akn != "batal")){
+        if ($p->so == NULL && $request->no_po_ekat != NULL && ($request->status_akn != "draft" || $request->status_akn != "batal")) {
             $p->so = $this->createSO('EKAT');
         }
         $p->no_po = $request->no_po_ekat;
@@ -3872,7 +3870,7 @@ class PenjualanController extends Controller
         $p->no_do = $request->no_do_ekat;
         $p->tgl_do = $request->tanggal_do_ekat;
         $p->ket = $request->keterangan_po_ekat;
-        if($request->status_akn == "sepakat" && $request->no_po_ekat != NULL){
+        if ($request->status_akn == "sepakat" && $request->no_po_ekat != NULL) {
             $p->log_id = "9";
         }
         $p->save();
