@@ -73,89 +73,89 @@ class AlatujiController extends Controller
         }
 
         //target
-        $target = 
-        DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
-        ->whereMonth('p.created_at', date('m'))->whereYear('p.created_at', date('Y'))
-        ->where('p.user_id', auth()->user()->id)
-        ->first();
+        // $target = 
+        // DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
+        // ->whereMonth('p.created_at', date('m'))->whereYear('p.created_at', date('Y'))
+        // ->where('p.user_id', auth()->user()->id)
+        // ->first();
         
-        $progress = null;
-        if($target != null){
-            $progress = $target->progres;
-        }
+        // $progress = null;
+        // if($target != null){
+        //     $progress = $target->progres;
+        // }
 
-        $persenProgress = '';
-        if($target != null){
-            $persenProgress = round(($target->progres/$target->target)*100, 0);
-        }
+        // $persenProgress = '';
+        // if($target != null){
+        //     $persenProgress = round(($target->progres/$target->target)*100, 0);
+        // }
 
-        //cek bulan tahun, untuk target satu bulan
-        $targetSekarang =
-        DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
-        ->where('p.user_id', auth()->user()->id)
-        ->latest('p.created_at')
-        ->first();
+        // //cek bulan tahun, untuk target satu bulan
+        // $targetSekarang =
+        // DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
+        // ->where('p.user_id', auth()->user()->id)
+        // ->latest('p.created_at')
+        // ->first();
 
-        $targetInput = 0;
-        if($targetSekarang != null)
-        {
-            $targetSekarang = $targetSekarang->created_at;
-            $target_b = date('m', strtotime($targetSekarang));
-            $target_t = date('Y', strtotime($targetSekarang));
+        // $targetInput = 0;
+        // if($targetSekarang != null)
+        // {
+        //     $targetSekarang = $targetSekarang->created_at;
+        //     $target_b = date('m', strtotime($targetSekarang));
+        //     $target_t = date('Y', strtotime($targetSekarang));
             
-            //cek tahun
-            if($target_t == date('Y')){
-                //cek bulan
-                if($target_b == date('m')){
-                    $targetInput = 1;
-                }
-            }
-        }
+        //     //cek tahun
+        //     if($target_t == date('Y')){
+        //         //cek bulan
+        //         if($target_b == date('m')){
+        //             $targetInput = 1;
+        //         }
+        //     }
+        // }
 
-        $targetLamaCari = 
-        DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
-        ->where('p.user_id', auth()->user()->id)
-        ->whereMonth('p.created_at', '<', date('m'))
-        ->get();
+        // $targetLamaCari = 
+        // DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
+        // ->where('p.user_id', auth()->user()->id)
+        // ->whereMonth('p.created_at', '<', date('m'))
+        // ->get();
 
-        $targetLama = null;
-        if($targetLamaCari->isNotEmpty())
-        {
-            $targetLamaTargetTotal = 0;
-            $targetLamaProgressTotal = 0;
-            $targetLamaPersen = 0;
-            foreach($targetLamaCari as $row){
-                if($row->target > $row->progress){
-                    $targetLamaTargetTotal = $targetLamaTargetTotal + $row->target;
-                    $targetLamaProgressTotal = $targetLamaProgressTotal + $row->progress;
-                }
-            }
+        // $targetLama = null;
+        // if($targetLamaCari->isNotEmpty())
+        // {
+        //     $targetLamaTargetTotal = 0;
+        //     $targetLamaProgressTotal = 0;
+        //     $targetLamaPersen = 0;
+        //     foreach($targetLamaCari as $row){
+        //         if($row->target > $row->progress){
+        //             $targetLamaTargetTotal = $targetLamaTargetTotal + $row->target;
+        //             $targetLamaProgressTotal = $targetLamaProgressTotal + $row->progress;
+        //         }
+        //     }
 
-            if($targetLamaTargetTotal != 0 ){
-                $targetLamaPersen = round(($targetLamaProgressTotal/$targetLamaTargetTotal)*100, 0);
-            }
+        //     if($targetLamaTargetTotal != 0 ){
+        //         $targetLamaPersen = round(($targetLamaProgressTotal/$targetLamaTargetTotal)*100, 0);
+        //     }
             
-            $targetLama = array($targetLamaTargetTotal, $targetLamaProgressTotal, $targetLamaPersen);
-        }
+        //     $targetLama = array($targetLamaTargetTotal, $targetLamaProgressTotal, $targetLamaPersen);
+        // }
 
-        //ambil data untuk chart target bulanan
-        $targetPerbulan = array();
-        $progressPerbulan = array();
-        for($i=1;$i<=12;$i++){
-            $a = 
-            DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
-            ->whereMonth('p.created_at', date($i))
-            ->whereYear('p.created_at', date('Y'))
-            ->get();
-            $b = 0;
-            $c = 0;
-            foreach($a as $a){
-            $b = $b + $a->target;
-            $c = $c + $a->progres;
-            }
-            array_push($targetPerbulan, $b);
-            array_push($progressPerbulan, $c);
-        }
+        // //ambil data untuk chart target bulanan
+        // $targetPerbulan = array();
+        // $progressPerbulan = array();
+        // for($i=1;$i<=12;$i++){
+        //     $a = 
+        //     DB::table(DB::raw('erp_kalibrasi.target_kalibrasi p'))
+        //     ->whereMonth('p.created_at', date($i))
+        //     ->whereYear('p.created_at', date('Y'))
+        //     ->get();
+        //     $b = 0;
+        //     $c = 0;
+        //     foreach($a as $a){
+        //     $b = $b + $a->target;
+        //     $c = $c + $a->progres;
+        //     }
+        //     array_push($targetPerbulan, $b);
+        //     array_push($progressPerbulan, $c);
+        // }
         //target end
 
         $data = [
@@ -173,14 +173,14 @@ class AlatujiController extends Controller
             'verifikasiNext' => $ve3[0]->total,
             'perawatanNext' => $pe3[0]->total,
             'total_peminjaman' => $totalPeminjaman,
-            'target' => $target,
-            'persenProgress' => $persenProgress,
-            'progress' => $progress,
-            'targetInput' => $targetInput,
-            'targetLama' => $targetLama,
-            'targetdebug' => $targetLamaCari,
-            'targetPerbulan' => $targetPerbulan,
-            'progressPerbulan' => $progressPerbulan,
+            // 'target' => $target,
+            // 'persenProgress' => $persenProgress,
+            // 'progress' => $progress,
+            // 'targetInput' => $targetInput,
+            // 'targetLama' => $targetLama,
+            // 'targetdebug' => $targetLamaCari,
+            // 'targetPerbulan' => $targetPerbulan,
+            // 'progressPerbulan' => $progressPerbulan,
         ];
         
         return view('page.lab.dashboard', [
@@ -740,7 +740,7 @@ class AlatujiController extends Controller
             ->leftJoin(DB::raw('erp_spa.users u'), 'u.id', '=', 'as2.dipinjam_oleh')
             ->where('as2.id_serial_number', '=', $id)
             ->first();
-
+            //dd($data->kondisi_id);
             $data->kondisi_id == 9 ?
             $data->kondisi = '<div data-bs-toggle="tooltip" data-bs-placement="top" title="Alat Dapat Di Gunakan">
                             <i class="fa fa-check-circle text-success fa-lg" aria-hidden="true"></i>
@@ -966,12 +966,14 @@ class AlatujiController extends Controller
         $total_waktu = $waktu_old + (int)$request->waktu_penggunaan;
 
         //update data talat uji sn
+        $y = 9;
+        if($request->kondisi_kembali == 10){$y = 10;}
         AlatSN::find($request->id_alat_uji)
         ->update([
             'total_penggunaan' => $total_penggunaan,
             'total_waktu' => $total_waktu,
             'status_pinjam_id' => $x,
-            'kondisi_id' => $x
+            'kondisi_id' => $y
         ]);
 
         // user log

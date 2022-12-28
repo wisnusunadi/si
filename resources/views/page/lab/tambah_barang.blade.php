@@ -292,7 +292,7 @@ max-height: 350px;
                         <div id="col_merkAda">
                         <select class="form-control form-control-sm" name="merk" id="selectMerk">
                             <option value="" disabled hidden {{ (old('merk') == null ? 'SELECTED' : '') }} >Pilih merk</option>
-                            <option value="0">Tidak di ketahui</option>
+                            <!-- <option value="0">Tidak di ketahui</option> -->
                             @foreach($merk as $sp)
                             <option value="{{ $sp->id_merk }}" {{ (old('merk') == $sp->id_merk ? "SELECTED" : '') }}>{{ $sp->nama_merk }}</option>
                             @endforeach
