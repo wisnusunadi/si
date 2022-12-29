@@ -11,7 +11,7 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->divisi_id == '26')
+                    @if (Auth::user()->Karyawan->divisi_id == '26')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.penjualan.show') }}">Penjualan</a></li>
                         <li class="breadcrumb-item active">Edit Ekatalog</li>
@@ -94,13 +94,13 @@
         @media screen and (max-width: 1219px) {
 
             /* label,
-                                                .row {
-                                                    font-size: 12px;
-                                                }
+                                                                                                                                                                                                                                                                                .row {
+                                                                                                                                                                                                                                                                                    font-size: 12px;
+                                                                                                                                                                                                                                                                                }
 
-                                                h4 {
-                                                    font-size: 20px;
-                                                } */
+                                                                                                                                                                                                                                                                                h4 {
+                                                                                                                                                                                                                                                                                    font-size: 20px;
+                                                                                                                                                                                                                                                                                } */
             body {
                 font-size: 12px;
             }
@@ -121,13 +121,13 @@
         @media screen and (max-width: 991px) {
 
             /* label,
-                                                .row {
-                                                    font-size: 12px;
-                                                }
+                                                                                                                                                                                                                                                                                .row {
+                                                                                                                                                                                                                                                                                    font-size: 12px;
+                                                                                                                                                                                                                                                                                }
 
-                                                h4 {
-                                                    font-size: 20px;
-                                                } */
+                                                                                                                                                                                                                                                                                h4 {
+                                                                                                                                                                                                                                                                                    font-size: 20px;
+                                                                                                                                                                                                                                                                                } */
             body {
                 font-size: 12px;
             }
@@ -445,6 +445,12 @@
                                                                 aria-selected="true">Deskripsi Ekatalog</a>
                                                         </li>
                                                         <li class="nav-item" role="presentation">
+                                                            <a class="nav-link" id="pills-po-ekat-tab"
+                                                                data-toggle="pill" href="#pills-po-ekat" role="tab"
+                                                                aria-controls="pills-po-ekat"
+                                                                aria-selected="false">Purchase Order</a>
+                                                        </li>
+                                                        <li class="nav-item" role="presentation">
                                                             <a class="nav-link" id="pills-instansi-tab"
                                                                 data-toggle="pill" href="#pills-instansi" role="tab"
                                                                 aria-controls="pills-instansi"
@@ -463,67 +469,72 @@
                                                             <div class="tab-pane fade show active" id="pills-penjualan"
                                                                 role="tabpanel" aria-labelledby="pills-penjualan-tab">
                                                                 <div class="card removeshadow">
+                                                                    <div class="card-header">
+                                                                        <h6>Deskripsi Ekatalog</h6>
+                                                                    </div>
                                                                     <div class="card-body">
-                                                                        @if ($e->status == 'draft' || $e->status == 'batal')
-                                                                            <div class="form-group row">
-                                                                                <label for=""
-                                                                                    class="col-form-label col-lg-5 col-md-12 labelket">No
-                                                                                    Paket</label>
-                                                                                <div
-                                                                                    class="col-lg-5 col-md-12 input-group">
-                                                                                    <div class="input-group-prepend">
-                                                                                        <select
-                                                                                            class="form-control jenis_paket"
-                                                                                            name="jenis_paket"
-                                                                                            id="jenis_paket">
-                                                                                            <option value="AK1-"
-                                                                                                @if (strpos($e->no_paket, 'AK1-') !== false) selected @endif>
-                                                                                                AK1-</option>
-                                                                                            <option value="FKS-"
-                                                                                                @if (strpos($e->no_paket, 'FKS-') !== false) selected @endif>
-                                                                                                FKS-</option>
-                                                                                        </select>
-                                                                                    </div>
-                                                                                    <input type="text"
-                                                                                        class="form-control col-form-label @error('no_paket') is-invalid @enderror"
-                                                                                        name="no_paket" id="no_paket"
-                                                                                        aria-label="ket_no_paket"
-                                                                                        @if (($e->status == 'draft' || $e->status == 'batal') && $e->no_paket == '') readonly="true" @endif
-                                                                                        @if ($e->no_paket != '') value="{{ str_replace(['AK1-', 'FKS-'], '', $e->no_paket) }}" @endif />
-                                                                                    <div class="input-group-append  @if ($e->status == 'sepakat' && $e->status == 'negosisasi' ) hide @endif"
-                                                                                        id="checkbox_nopaket">
-                                                                                        <span class="input-group-text">
-                                                                                            <div
-                                                                                                class="form-check form-check-inline">
-                                                                                                <input
-                                                                                                    class="form-check-input"
-                                                                                                    type="checkbox"
-                                                                                                    name="isi_nopaket"
-                                                                                                    id="isi_nopaket"
-                                                                                                    value="true"
-                                                                                                    @if ($e->no_paket != '') checked @endif />
-                                                                                                <label
-                                                                                                    class="form-check-label"
-                                                                                                    for="isi_nopaket"></label>
-                                                                                            </div>
-                                                                                        </span>
-                                                                                    </div>
-                                                                                    <div class="invalid-feedback"
-                                                                                        id="msgno_paket">
-                                                                                        @if ($errors->has('no_paket'))
-                                                                                            {{ $errors->first('no_paket') }}
-                                                                                        @endif
-                                                                                    </div>
+                                                                        {{-- @if ($e->status == 'draft' || $e->status == 'batal') --}}
+                                                                        <div class="form-group row">
+                                                                            <label for=""
+                                                                                class="col-form-label col-lg-5 col-md-12 labelket">No
+                                                                                Paket</label>
+                                                                            <div class="col-lg-5 col-md-12 input-group">
+                                                                                <div class="input-group-prepend">
+                                                                                    <select
+                                                                                        class="form-control jenis_paket"
+                                                                                        name="jenis_paket"
+                                                                                        id="jenis_paket">
+                                                                                        <option value="AK1-"
+                                                                                            @if (strpos($e->no_paket, 'AK1-') !== false) selected @endif>
+                                                                                            AK1-</option>
+                                                                                        <option value="FKS-"
+                                                                                            @if (strpos($e->no_paket, 'FKS-') !== false) selected @endif>
+                                                                                            FKS-</option>
+                                                                                    </select>
+                                                                                </div>
+                                                                                <input type="text"
+                                                                                    class="form-control col-form-label @error('no_paket') is-invalid @enderror"
+                                                                                    name="no_paket" id="no_paket"
+                                                                                    aria-label="ket_no_paket"
+                                                                                    @if ($e->status == 'draft' || $e->status == 'batal') @if ($e->no_paket == '')
+                                                                                    readonly @endif
+                                                                                @elseif ($e->status == 'sepakat' || $e->status == 'negosiasi')
+                                                                                readonly @else readonly @endif
+                                                                                @if ($e->no_paket != '') value="{{ str_replace(['AK1-', 'FKS-'], '', $e->no_paket) }}" @endif
+                                                                                />
+                                                                                <div class="input-group-append
+                                                                                    @if ($e->status == 'sepakat' || $e->status == 'negosiasi') hide @endif "
+                                                                                    id="checkbox_nopaket">
+                                                                                    <span class="input-group-text">
+                                                                                        <div
+                                                                                            class="form-check form-check-inline">
+                                                                                            <input class="form-check-input"
+                                                                                                type="checkbox"
+                                                                                                name="isi_nopaket"
+                                                                                                id="isi_nopaket"
+                                                                                                value="true"
+                                                                                                @if ($e->no_paket != '') checked @endif />
+                                                                                            <label class="form-check-label"
+                                                                                                for="isi_nopaket"></label>
+                                                                                        </div>
+                                                                                    </span>
+                                                                                </div>
+                                                                                <div class="invalid-feedback"
+                                                                                    id="msgno_paket">
+                                                                                    @if ($errors->has('no_paket'))
+                                                                                        {{ $errors->first('no_paket') }}
+                                                                                    @endif
                                                                                 </div>
                                                                             </div>
-                                                                        @endif
+                                                                        </div>
+                                                                        {{-- @endif --}}
                                                                         <div class="form-group row">
                                                                             <label for=""
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">No
                                                                                 Urut</label>
                                                                             <div class="col-lg-2 col-md-4">
                                                                                 <input type="number"
-                                                                                    class="form-control col-form-label @error('no_urut') is-invalid @enderror"
+                                                                                    class="form-control col-form-label   "
                                                                                     name="no_urut" id="no_urut"
                                                                                     value="{{ $e->no_urut }}" />
                                                                                 <div class="invalid-feedback"
@@ -534,14 +545,15 @@
                                                                                 </div>
                                                                             </div>
                                                                         </div>
+
                                                                         <div class="form-group row">
                                                                             <label for=""
                                                                                 class="col-form-label col-lg-5 col-md-12 labelket">Status</label>
                                                                             <div class="col-lg-5 col-md-12 col-form-label">
                                                                                 <!-- <div class="form-check form-check-inline">
-                                                                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
-                                                                                                                        <label class="form-check-label" for="status_akn4">Draft</label>
-                                                                                                                    </div> -->
+                                                                                                                                                                                                                                                                                                                                                        <input class="form-check-input" type="radio" name="status_akn" id="status_akn4" value="draft" />
+                                                                                                                                                                                                                                                                                                                                                        <label class="form-check-label" for="status_akn4">Draft</label>
+                                                                                                                                                                                                                                                                                                                                                    </div> -->
                                                                                 <div class="form-check form-check-inline">
                                                                                     <input class="form-check-input"
                                                                                         type="radio" name="status_akn"
@@ -652,11 +664,98 @@
                                                                     </div>
                                                                 </div>
                                                             </div>
+                                                            <div class="tab-pane fade show" id="pills-po-ekat" role="tabpanel" aria-labelledby="pills-po-ekat-tab">
+                                                                <div class="card removeshadow">
+                                                                    <div class="card-header">
+                                                                        <h6>Purchase Order</h6>
+                                                                    </div>
+                                                                    <div class="card-body">
+                                                                        <div class="form-group row">
+                                                                            <label for="no_po_ekat"
+                                                                                class="col-lg-5 col-md-12 col-form-label labelket">No
+                                                                                PO</label>
+                                                                            <div class="col-lg-5 col-md-12">
+                                                                                <input type="text"
+                                                                                    class="form-control @error('no_po_ekat') is-invalid @enderror"
+                                                                                    value="{{$e->Pesanan->no_po}}"
+                                                                                    placeholder="Masukkan Nomor Purchase Order"
+                                                                                    id="no_po_ekat" name="no_po_ekat" />
+                                                                                <div class="invalid-feedback" id="msgno_po_ekat">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group row">
+                                                                            <label for="tanggal_po_ekat"
+                                                                                class="col-lg-5 col-md-12 col-form-label labelket">Tanggal
+                                                                                PO</label>
+                                                                            <div class="col-lg-5 col-md-12">
+                                                                                <input type="date"
+                                                                                    class="form-control @error('tanggal_po_ekat') is-invalid @enderror"
+                                                                                    value="{{$e->Pesanan->tgl_po}}"
+                                                                                    placeholder="Masukkan Tanggal Purchase Order"
+                                                                                    id="tanggal_po_ekat" name="tanggal_po_ekat" />
+                                                                                <div class="invalid-feedback" id="msgtanggal_po_ekat">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group row">
+                                                                            <label for=""
+                                                                                class="col-form-label col-lg-5 col-md-12 labelket">Delivery
+                                                                                Order</label>
+                                                                            <div class="col-lg-5 col-md-12 col-form-label">
+                                                                                <div class="form-check form-check-inline">
+                                                                                    <input class="form-check-input" type="radio"
+                                                                                        name="do_ekat" id="yes" value="yes" @if($e->Pesanan->no_do != null) checked @endif/>
+                                                                                    <label class="form-check-label"
+                                                                                        for="yes">Tersedia</label>
+                                                                                </div>
+                                                                                <div class="form-check form-check-inline">
+                                                                                    <input class="form-check-input" type="radio"
+                                                                                        name="do_ekat" id="no" value="no" @if($e->Pesanan->no_do == null) checked @endif/>
+                                                                                    <label class="form-check-label" for="no">Tidak
+                                                                                        tersedia</label>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group row @if($e->Pesanan->no_do == null) hide @endif" id="do_detail_no_ekat">
+                                                                            <label for=""
+                                                                                class="col-form-label col-lg-5 col-md-12 labelket">Nomor
+                                                                                DO</label>
+                                                                            <div class="col-lg-5 col-md-12">
+                                                                                <input type="text"
+                                                                                    class="form-control col-form-label @error('no_do_ekat') is-invalid @enderror"
+                                                                                    id="no_do_ekat" name="no_do_ekat" value="{{$e->Pesanan->no_do}}"/>
+                                                                                <div class="invalid-feedback" id="msgno_do_ekat">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group row @if($e->Pesanan->tgl_do == null) checked @endif" id="do_detail_tgl_ekat">
+                                                                            <label for=""
+                                                                                class="col-form-label col-lg-5 col-md-12 labelket">Tanggal
+                                                                                DO</label>
+                                                                            <div class="col-lg-5 col-md-12">
+                                                                                <input type="date"
+                                                                                    class="form-control col-form-label @error('tanggal_do_ekat') is-invalid @enderror"
+                                                                                    id="tanggal_do_ekat" name="tanggal_do_ekat" value="{{$e->Pesanan->tgl_do}}"/>
+                                                                                <div class="invalid-feedback" id="msgtanggal_do_ekat">
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="form-group row">
+                                                                            <label for="keterangan_ekat"
+                                                                                class="col-lg-5 col-md-12 col-form-label labelket">Keterangan</label>
+                                                                            <div class="col-lg-5 col-md-12">
+                                                                                <textarea class="form-control" placeholder="Masukkan Keterangan" id="keterangan_ekat" name="keterangan_ekat">{{$e->Pesanan->ket}}</textarea>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
                                                             <div class="tab-pane fade show" id="pills-instansi"
                                                                 role="tabpanel" aria-labelledby="pills-instansi-tab">
                                                                 <div class="card removeshadow">
                                                                     <div class="card-header">
-                                                                        <h6>Rencana Penjualan</h6>
+                                                                        <h6>Instansi</h6>
                                                                     </div>
                                                                     <div class="card-body">
                                                                         <div class="form-group row">
@@ -1264,8 +1363,8 @@
                     if (penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga ==
                         true) {
                         if ($('#no_paket').val() != "" && $('#provinsi').val() != null && $('#tgl_buat').val() !=
-                            "" && $('#tgl_edit').val() != "" && $('#batas_kontrak').val() != "" && $('#no_urut')
-                            .val() != "" && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $(
+                            "" && $('#tgl_edit').val() != "" && $('#batas_kontrak').val() != "" && !$('#no_urut')
+                            .hasClass('is-invalid') && $('#instansi').val() != "" && $('#satuan_kerja').val() != "" && $(
                                 '#alamatinstansi').val() != "" && $('#deskripsi').val() != "") {
                             $("#btnsimpan").attr('disabled', false);
                         } else {
@@ -1278,7 +1377,7 @@
                     if (penjualan_produk_id == true && variasi == true && produk_jumlah == true && produk_harga ==
                         true) {
                         if ($('#no_paket').val() != "" && $('#tgl_buat').val() != "" && $('#tgl_edit').val() !=
-                            "" && $('#no_urut').val() != "" && $('#instansi').val() != "" && $('#satuan_kerja')
+                            "" && !$('#no_urut').hasClass('is-invalid') && $('#instansi').val() != "" && $('#satuan_kerja')
                             .val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi').val() != "") {
                             $("#btnsimpan").attr('disabled', false);
                         } else {
@@ -1292,7 +1391,7 @@
                     if ($('input[type="checkbox"][name="isi_produk"]:checked').length > 0) {
                         if (penjualan_produk_id == true && variasi == true && produk_jumlah == true &&
                             produk_harga == true) {
-                            if ($('#tgl_buat').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() !=
+                            if ($('#tgl_buat').val() != "" && !$('#no_urut').hasClass('is-invalid') && $('#instansi').val() !=
                                 "" && $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $(
                                     '#deskripsi').val() != "") {
                                 $("#btnsimpan").attr('disabled', false);
@@ -1303,7 +1402,7 @@
                             $("#btnsimpan").attr('disabled', true);
                         }
                     } else {
-                        if ($('#tgl_buat').val() != "" && $('#no_urut').val() != "" && $('#instansi').val() != "" &&
+                        if ($('#tgl_buat').val() != "" && !$('#no_urut').hasClass('is-invalid') && $('#instansi').val() != "" &&
                             $('#satuan_kerja').val() != "" && $('#alamatinstansi').val() != "" && $('#deskripsi')
                             .val() != "") {
                             $("#btnsimpan").attr('disabled', false);
@@ -1533,7 +1632,7 @@
                     if ($(this).val() == "sepakat") {
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
-                        $('#no_paket').attr('readonly', false);
+                        $('#no_paket').attr('readonly', true);
                         $("#dataproduk").removeClass("hide");
                         $("#batas_kontrak").attr('disabled', false);
                         $("#provinsi").attr('disabled', false);
@@ -1545,17 +1644,26 @@
                         }
                         if (jum_produk <= 0) {
                             $("#produktable tbody").empty();
-                            $('#produktable tbody').append(trproduktable());
+                            $('#produktablve tbody').append(trproduktable());
                         }
                         numberRowsProduk($("#produktable"));
                     } else if ($(this).val() == "draft" || $(this).val() == "batal") {
                         $('#isi_produk_input').removeClass('hide');
                         $('#checkbox_nopaket').removeClass('hide');
-                        $('#no_paket').val("");
-                        $('#no_paket').attr('readonly', true);
+                        // $('#no_paket').val("");
+                        // $('#no_paket').attr('readonly', true);
                         $("#batas_kontrak").attr('disabled', true);
                         $("#provinsi").attr('disabled', true);
-                        $("#provinsi").empty().trigger('change')
+                        $("#provinsi").empty().trigger('change');
+
+                        if ($('#no_paket').val() != '') {
+                            $('#no_paket').attr('readonly', false);
+                            $('#isi_nopaket').prop("checked", true);
+                        } else {
+                            $('#no_paket').attr('readonly', true);
+                        }
+
+
                         if (jum_produk <= 0) {
                             $('input[type="checkbox"][name="isi_produk"]').attr('checked', false);
                             $("#produktable tbody").empty();
@@ -1570,7 +1678,7 @@
                     } else if ($(this).val() == "negosiasi") {
                         $('#checkbox_nopaket').addClass('hide');
                         $('#isi_nopaket').prop("checked", false);
-                        $('#no_paket').attr('readonly', false);
+                        $('#no_paket').attr('readonly', true);
                         $("#batas_kontrak").val("");
                         $("#batas_kontrak").attr('disabled', true);
                         $("#dataproduk").removeClass("hide");
@@ -1728,9 +1836,8 @@
                         }
                     });
                 } else if ($(this).val() == "") {
-                    $("#msgno_urut").text("No Urut Harus diisi");
-                    $("#no_urut").addClass('is-invalid');
-                    $('#btntambah').attr("disabled", true);
+                    $("#msgno_urut").text("");
+                    $("#no_urut").removeClass('is-invalid');
                 }
                 checkvalidasi();
             });
@@ -2310,6 +2417,19 @@
                 var jumlah = $(this).closest('tr').find('#btntransfer').attr('data-jumlah');
                 var harga = $(this).closest('tr').find('#btntransfer').attr('data-harga');
                 transferproduk(id, nama_produk, produk_id, jumlah, harga);
+            });
+
+            $('input[type="radio"][name="do_ekat"]').on('change', function() {
+                $('#btntambah').attr("disabled", true);
+                $("#no_do_ekat").val("");
+                $("#tanggal_do_ekat").val("");
+                if ($(this).val() == "yes") {
+                    $("#do_detail_no_ekat").removeClass("hide");
+                    $("#do_detail_tgl_ekat").removeClass("hide");
+                } else if ($(this).val() == "no") {
+                    $("#do_detail_no_ekat").addClass("hide");
+                    $("#do_detail_tgl_ekat").addClass("hide");
+                }
             });
 
             function transferproduk(id, nama_produk, produk_id, jumlah, harga) {

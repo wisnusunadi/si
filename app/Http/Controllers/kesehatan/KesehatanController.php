@@ -942,15 +942,7 @@ class KesehatanController extends Controller
 
             })
             ->editColumn('keputusan', function ($data) {
-                $btn = '';
-                if ($data->keputusan == "Lanjut bekerja") {
-                    $btn = '<span class="badge green-text">';
-                } else {
-                    $btn = '<span class="badge red-text">';
-                }
-                $btn .= $data->keputusan . '</span>';
-
-                return $btn;
+                return $data->keputusan;
             })
             ->addColumn('button', function () {
 

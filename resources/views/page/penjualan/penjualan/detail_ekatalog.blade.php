@@ -186,10 +186,10 @@
                         ?>
                         @if (count($data->Pesanan->DetailPesanan) > 0)
                             <div class="row">
-                                <div class="card col-lg-4 col-md-12 removeshadow">
+                                <div class="card col-lg-4 col-md-12 col-sm-12 removeshadow">
                                     <div class="card-body">
                                         <div class="row">
-                                            <div class="col-lg-12 col-md-4">
+                                            <div class="col-lg-12 col-md-12 col-sm-12">
                                                 <canvas id="myChart" width="400" height="400"
                                                     class="mb-5"></canvas>
                                                 <div class="card card-secondary card-outline mt-3">
@@ -277,14 +277,16 @@
                                                                 <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
                                                                     class="nowraptxt">{{ $no_dsb }}
                                                                 </td>
-                                                                <td><b
-                                                                        class="wb">{{ $e->PenjualanProduk->nama }}</b>
+                                                                <td><div class="mb-1"><b
+                                                                        class="wb">{{ $e->PenjualanProduk->nama }}</b></div> <small class="badge info-text mx-1">Stok
+                                                                            distributor</small>
                                                                 </td>
-                                                                <td class="nowraptxt" rowspan="2"
-                                                                    style="vertical-align : middle;text-align:center;">
+                                                                <td class="nowraptxt"></td>
+                                                                {{-- <td class="nowraptxt" rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
+                                                                    style="text-align:center;">
                                                                     <span class="badge info-text">Stok
                                                                         distributor</span>
-                                                                </td>
+                                                                </td> --}}
                                                                 <td class="nowraptxt">{{ $e->jumlah }}
                                                                 </td>
                                                                 <td rowspan="{{ count($e->DetailPesananProdukDsb) + 1 }}"
@@ -308,6 +310,7 @@
                                                                                 @endif
                                                                             </span>
                                                                         </td>
+                                                                        <td class="nowraptxt"></td>
                                                                         <td>
                                                                             {{ $l->getJumlahPesanan() }}
                                                                         </td>
