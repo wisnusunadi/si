@@ -3409,7 +3409,7 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['button', 'status'])
             ->setRowClass(function ($data) {
-                if ($data->Pesaanan->log->nama == 'Batal') {
+                if ($data->Pesanan->log->nama == 'Batal') {
                     return 'text-danger font-weight-bold line-through';
                 }
             })
