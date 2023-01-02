@@ -194,6 +194,7 @@
                                             <th>No SO</th>
                                             <th>No PO</th>
                                             <th>Tanggal PO</th>
+                                            <th>SJ</th>
                                             <th>Customer</th>
                                             <th>Status</th>
                                         </tr>
@@ -374,76 +375,84 @@
                         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
                     columns: [{
-                        data: null,
-                    }, {
-                        data: null,
-                        className: 'nowraps align-center',
-                        render: function(data, type, row) {
-                            if (row.so != null) {
-                                return row.so;
-                            } else {
-                                return '-';
-                            }
-                        }
-                    }, {
-                        data: 'no_po',
-                        className: 'nowraps align-center'
-                    }, {
-                        data: 'tgl_po',
-                        className: 'nowraps align-center',
-                        render: function(data, type, row) {
-                            return moment(new Date(data).toString()).format('DD-MM-YYYY');
-                        }
-                    }, {
-                        data: null,
-                        className: 'nowraps align-center',
-                        render: function(data, type, row) {
-                            if (row.c_ekat_nama != null) {
-                                return row.c_ekat_nama;
-                            } else if (row.c_spa_nama != null) {
-                                return row.c_spa_nama;
-                            } else if (row.c_spb_nama != null) {
-                                return row.c_spb_nama;
-                            } else if (row.customer != null) {
-                                return row.customer;
-                            } else {
-                                return '-';
-                            }
-                        }
-                    }, {
-                        data: null,
-                        className: 'nowraps align-center',
-                        render: function(data, type, row) {
-                            if (row.state_nama != null || row.state_nama != undefined) {
-                                if (row.state_nama == "Penjualan") {
-                                    return '<span class="red-text badge">' + row.state_nama +
-                                        '</span>';
-                                } else if (row.state_nama == "PO") {
-                                    return '<span class="purple-text badge">' + row.state_nama +
-                                        '</span>';
-                                } else if (row.state_nama == "Gudang") {
-                                    return '<span class="orange-text badge">' + row.state_nama +
-                                        '</span>';
-                                } else if (row.state_nama == "QC") {
-                                    return '<span class="yellow-text badge">' + row.state_nama +
-                                        '</span>';
-                                } else if (row.state_nama == "Belum Terkirim") {
-                                    return '<span class="red-text badge">' + row.state_nama +
-                                        '</span>';
-                                } else if (row.state_nama == "Terkirim Sebagian") {
-                                    return '<span class="blue-text badge">' + row.state_nama +
-                                        '</span>';
-                                } else if (row.state_nama == "Kirim") {
-                                    return '<span class="green-text badge">' + row.state_nama +
-                                        '</span>';
+                            data: null,
+                        }, {
+                            data: null,
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                if (row.so != null) {
+                                    return row.so;
                                 } else {
                                     return '-';
                                 }
-                            } else {
-                                return "-";
+                            }
+                        }, {
+                            data: 'no_po',
+                            className: 'nowraps align-center'
+                        },
+
+                        {
+                            data: 'tgl_po',
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                return moment(new Date(data).toString()).format('DD-MM-YYYY');
+                            }
+                        }, {
+                            data: 'sj',
+                            className: 'nowraps align-center',
+                        },
+
+                        {
+                            data: null,
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                if (row.c_ekat_nama != null) {
+                                    return row.c_ekat_nama;
+                                } else if (row.c_spa_nama != null) {
+                                    return row.c_spa_nama;
+                                } else if (row.c_spb_nama != null) {
+                                    return row.c_spb_nama;
+                                } else if (row.customer != null) {
+                                    return row.customer;
+                                } else {
+                                    return '-';
+                                }
+                            }
+                        }, {
+                            data: null,
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                if (row.state_nama != null || row.state_nama != undefined) {
+                                    if (row.state_nama == "Penjualan") {
+                                        return '<span class="red-text badge">' + row.state_nama +
+                                            '</span>';
+                                    } else if (row.state_nama == "PO") {
+                                        return '<span class="purple-text badge">' + row.state_nama +
+                                            '</span>';
+                                    } else if (row.state_nama == "Gudang") {
+                                        return '<span class="orange-text badge">' + row.state_nama +
+                                            '</span>';
+                                    } else if (row.state_nama == "QC") {
+                                        return '<span class="yellow-text badge">' + row.state_nama +
+                                            '</span>';
+                                    } else if (row.state_nama == "Belum Terkirim") {
+                                        return '<span class="red-text badge">' + row.state_nama +
+                                            '</span>';
+                                    } else if (row.state_nama == "Terkirim Sebagian") {
+                                        return '<span class="blue-text badge">' + row.state_nama +
+                                            '</span>';
+                                    } else if (row.state_nama == "Kirim") {
+                                        return '<span class="green-text badge">' + row.state_nama +
+                                            '</span>';
+                                    } else {
+                                        return '-';
+                                    }
+                                } else {
+                                    return "-";
+                                }
                             }
                         }
-                    }],
+                    ],
                     columnDefs: [{
                         "searchable": false,
                         "orderable": false,
@@ -580,7 +589,8 @@
                                                 moment(new Date(row.tgl_kontrak_custom).toString())
                                                 .format('DD-MM-YYYY') +
                                                 `</div>
-                                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ` + Math
+                                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ` +
+                                                Math
                                                 .abs(hari) + ` Hari</div>`;
                                         }
                                     }

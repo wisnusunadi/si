@@ -204,9 +204,9 @@
         }
 
         /* .overflowcard {
-                            max-height:
-                            700px;
-                        } */
+                                max-height:
+                                700px;
+                            } */
 
         .bg-chart-light {
             background: rgba(192, 192, 192, 0.2);

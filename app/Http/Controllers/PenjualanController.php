@@ -800,6 +800,7 @@ class PenjualanController extends Controller
                     'admjual_on.tglpo_on as tgl_po',
                     'distributor.pabrik as customer',
                 )
+                ->addSelect(DB::raw("'-' as sj"))
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'admjual_on.pabrikadm_on')
                 ->where('admjual_on.nopo_on', 'LIKE', '%' . $val . '%')
                 ->groupby('admjual_on.nopo_on')
@@ -811,6 +812,7 @@ class PenjualanController extends Controller
                     'admjual_on.tglpo_on as tgl_po',
                     'distributor.pabrik as customer',
                 )
+                ->addSelect(DB::raw("'-' as sj"))
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'admjual_on.pabrikadm_on')
                 ->where('admjual_on.nopo_on', 'LIKE', '%' . $val . '%')
                 ->groupby('admjual_on.nopo_on')
@@ -823,6 +825,7 @@ class PenjualanController extends Controller
                     'admjual_off.tglpo_off as tgl_po',
                     'distributor.pabrik as customer',
                 )
+                ->addSelect(DB::raw("'-' as sj"))
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'admjual_off.pabrikadm_off')
                 ->where('admjual_off.nopo_off', 'LIKE', '%' . $val . '%')
                 ->groupby('admjual_off.nopo_off')
@@ -834,6 +837,7 @@ class PenjualanController extends Controller
                     'admjual_off.tglpo_off as tgl_po',
                     'distributor.pabrik as customer',
                 )
+                ->addSelect(DB::raw("'-' as sj"))
                 ->leftjoin('distributor', 'distributor.iddsb', '=', 'admjual_off.pabrikadm_off')
                 ->where('admjual_off.nopo_off', 'LIKE', '%' . $val . '%')
                 ->groupby('admjual_off.nopo_off')
@@ -846,6 +850,7 @@ class PenjualanController extends Controller
                     'admjual_spb.tglpo_spb as tgl_po',
                     'spb.pelanggan_spb as customer',
                 )
+                ->addSelect(DB::raw("'-' as sj"))
                 ->leftjoin('spb', 'spb.nospb', '=', 'admjual_spb.noadm_spb')
                 ->where('admjual_spb.nopo_spb', 'LIKE', '%' . $val . '%')
                 ->groupby('admjual_spb.nopo_spb')
@@ -857,33 +862,50 @@ class PenjualanController extends Controller
                     'admjual_spb.tglpo_spb as tgl_po',
                     'spb.pelanggan_spb as customer',
                 )
+                ->addSelect(DB::raw("'-' as sj"))
                 ->leftjoin('spb', 'spb.nospb', '=', 'admjual_spb.noadm_spb')
                 ->where('admjual_spb.nopo_spb', 'LIKE', '%' . $val . '%')
                 ->groupby('admjual_spb.nopo_spb')
                 ->get();
 
             $spa = Pesanan::select(
+                'pesanan.id',
                 'pesanan.no_po',
                 'pesanan.so',
                 'pesanan.tgl_po',
-                'm_state.nama as state_nama',
-                'c_ekat.nama as c_ekat_nama',
-                'c_spa.nama as c_spa_nama',
-                'c_spb.nama as c_spb_nama',
-                'ekatalog.satuan as satuan',
+                // 'm_state.nama as state_nama',
+                // 'c_ekat.nama as c_ekat_nama',
+                // 'c_spa.nama as c_spa_nama',
+                // 'c_spb.nama as c_spb_nama',
+                // 'ekatalog.satuan as satuan',
             )
-                ->leftJoin('ekatalog',  'ekatalog.pesanan_id',  '=',  'pesanan.id')
-                ->leftJoin('customer as c_ekat',  'c_ekat.id',  '=',  'ekatalog.customer_id')
-                ->leftJoin('spa',  'spa.pesanan_id',  '=',  'pesanan.id')
-                ->leftJoin('customer as c_spa',  'c_spa.id',  '=',  'spa.customer_id')
-                ->leftJoin('spb',  'spb.pesanan_id',  '=',  'pesanan.id')
-                ->leftJoin('customer as c_spb',  'c_spb.id',  '=',  'spb.customer_id')
-                ->leftJoin('m_state',  'm_state.id',  '=',  'pesanan.log_id')
+                ->leftJoin('detail_pesanan',  'detail_pesanan.pesanan_id',  '=',  'pesanan.id')
+                // ->leftJoin('ekatalog',  'ekatalog.pesanan_id',  '=',  'pesanan.id')
+                // ->leftJoin('customer as c_ekat',  'c_ekat.id',  '=',  'ekatalog.customer_id')
+                // ->leftJoin('spa',  'spa.pesanan_id',  '=',  'pesanan.id')
+                // ->leftJoin('customer as c_spa',  'c_spa.id',  '=',  'spa.customer_id')
+                // ->leftJoin('spb',  'spb.pesanan_id',  '=',  'pesanan.id')
+                // ->leftJoin('customer as c_spb',  'c_spb.id',  '=',  'spb.customer_id')
+                // ->leftJoin('m_state',  'm_state.id',  '=',  'pesanan.log_id')
+                // ->leftJoin('m_state',  'm_state.id',  '=',  'pesanan.log_id')
                 ->where('no_po', 'LIKE', '%' . $val . '%')
                 ->groupby('pesanan.no_po')
                 ->get();
 
-            $data = $si_ekat21->merge($si_ekat20)->merge($si_spa21)->merge($si_spa20)->merge($si_spb21)->merge($si_spb20)->merge($spa);
+            if (count($spa) > 0) {
+                foreach ($spa as $s) {
+                    $spa_data[] = array(
+                        'so' => $s->so,
+                        'no_po' => $s->no_po,
+                        'tgl_po' => $s->tgl_po,
+                        'sj' => $s->getSuratJalan()
+                    );
+                }
+                $data = $si_ekat21->merge($si_ekat20)->merge($si_spa21)->merge($si_spa20)->merge($si_spb21)->merge($si_spb20)->merge($spa_data);
+            } else {
+                $data = $si_ekat21->merge($si_ekat20)->merge($si_spa21)->merge($si_spa20)->merge($si_spb21)->merge($si_spb20);
+            }
+
 
             return response()->json(['data' => $data]);
             // $val = str_replace("-",  "/",  $value);
@@ -2867,7 +2889,7 @@ class PenjualanController extends Controller
 
             ->rawColumns(['button', 'status', 'tgl_kontrak', 'no_paket'])
             ->setRowClass(function ($data) {
-                if ($data->status == 'batal') {
+                if ($data->status == 'batal' || $data->Pesanan->log->nama == 'Batal') {
                     return 'text-danger font-weight-bold line-through';
                 }
             })
@@ -3131,7 +3153,7 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['button', 'status'])
             ->setRowClass(function ($data) {
-                if ($data->log == 'batal') {
+                if ($data->Pesanan->log->nama == 'Batal') {
                     return 'text-danger font-weight-bold line-through';
                 }
             })
@@ -3387,7 +3409,7 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['button', 'status'])
             ->setRowClass(function ($data) {
-                if ($data->log == 'batal') {
+                if ($data->Pesaanan->log->nama == 'Batal') {
                     return 'text-danger font-weight-bold line-through';
                 }
             })
