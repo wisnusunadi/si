@@ -2478,7 +2478,7 @@ class QcController extends Controller
                     left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
                     left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
                     where detail_pesanan.pesanan_id = pesanan.id)');
-        })->whereNotIn('log_id', ['7', '9', '10']);
+        })->whereNotIn('log_id', ['7', '9', '10', '20']);
 
         $terbaru_part = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
@@ -2496,7 +2496,7 @@ class QcController extends Controller
                         left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
                         where detail_pesanan_part.pesanan_id = pesanan.id)")
                 ->groupBy('pesanan.id');
-        })->whereNotIn('log_id', ['7', '10'])
+        })->whereNotIn('log_id', ['7', '10', '20'])
             ->where('tgl_po', '>=', Carbon::now()->subdays(7))
             ->union($terbaru_prd)
             ->orderBy('tgl_po', 'desc')
@@ -2538,7 +2538,7 @@ class QcController extends Controller
                         left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
                         left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
                         where detail_pesanan.pesanan_id = pesanan.id)');
-        })->whereNotIn('log_id', ['7', '9', '10']);
+        })->whereNotIn('log_id', ['7', '9', '10', '20']);
 
         $blm_uji_part = Pesanan::whereIn('id', function ($q) {
             $q->select('pesanan.id')
@@ -2551,7 +2551,7 @@ class QcController extends Controller
                 left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
                 where detail_pesanan_part.pesanan_id = pesanan.id)")
                 ->groupBy('pesanan.id');
-        })->whereNotIn('log_id', ['7', '10'])
+        })->whereNotIn('log_id', ['7', '10', '20'])
             ->union($blm_uji_prd)
             ->count();
 
@@ -2579,7 +2579,7 @@ class QcController extends Controller
             left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
             left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
             where detail_pesanan.pesanan_id = pesanan.id)');
-        })->whereNotIn('log_id', ['7', '9', '10'])->whereHas('Ekatalog.Provinsi', function ($q) {
+        })->whereNotIn('log_id', ['7', '9', '10', '20'])->whereHas('Ekatalog.Provinsi', function ($q) {
             $q->whereRaw('IF(provinsi.status = "2", SUBDATE(ekatalog.tgl_kontrak, INTERVAL 21 DAY) < CURDATE(), SUBDATE(ekatalog.tgl_kontrak, INTERVAL 28 DAY) < CURDATE())');
         })->count();
 
@@ -2626,7 +2626,7 @@ class QcController extends Controller
                 ->leftJoin('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                 ->leftJoin('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
                 ->whereColumn('t_gbj.pesanan_id', 'pesanan.id');
-        }])->whereNotIn('log_id', ['7'])->havingRaw('jumlah_produk > jumlah_gudang')->count();
+        }])->whereNotIn('log_id', ['7', '20'])->havingRaw('jumlah_produk > jumlah_gudang')->count();
 
         $clogistik = Pesanan::addSelect([
             'cqcprd' => function ($q) {
