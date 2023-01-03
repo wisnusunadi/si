@@ -2709,7 +2709,7 @@ class QcController extends Controller
                                     left join detail_pesanan_produk on detail_pesanan_produk.id = noseri_detail_pesanan.detail_pesanan_produk_id
                                     left join detail_pesanan on detail_pesanan.id = detail_pesanan_produk.detail_pesanan_id
                                     where detail_pesanan.pesanan_id = pesanan.id)');
-            })->whereNotIn('log_id', ['7', '9', '10'])
+            })->whereNotIn('log_id', ['7', '9', '10', '20'])
                 ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi']);
 
             $terbaru_part = Pesanan::addSelect([
@@ -2753,7 +2753,7 @@ class QcController extends Controller
                                     left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
                                     where detail_pesanan_part.pesanan_id = pesanan.id)")
                     ->groupBy('pesanan.id');
-            })->whereNotIn('log_id', ['7', '10'])
+            })->whereNotIn('log_id', ['7', '10', '20'])
                 ->where('tgl_po', '>=', Carbon::now()->subdays(7))
                 ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->union($terbaru_prd)
@@ -2911,7 +2911,7 @@ class QcController extends Controller
                         ->where('detail_pesanan_part.pesanan_id', 'pesanan.id')
                         ->limit(1);
                 }
-            ])->whereNotIn('log_id', ['7', '9', '10'])
+            ])->whereNotIn('log_id', ['7', '9', '10', '20'])
                 ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi']);
 
             $blm_uji_part = Pesanan::whereIn('id', function ($q) {
@@ -2925,7 +2925,7 @@ class QcController extends Controller
                                 left join m_sparepart on m_sparepart.id = detail_pesanan_part.m_sparepart_id AND m_sparepart.kode NOT LIKE '%JASA%'
                                 where detail_pesanan_part.pesanan_id = pesanan.id)")
                     ->groupBy('pesanan.id');
-            })->whereNotIn('log_id', ['7', '10'])
+            })->whereNotIn('log_id', ['7', '10', '20'])
                 ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->addSelect([
                     'tgl_kontrak' => function ($q) {
