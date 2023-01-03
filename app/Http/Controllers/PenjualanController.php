@@ -5410,7 +5410,8 @@ class PenjualanController extends Controller
 
     function createSO($value)
     {
-        $check = Pesanan::all('so');
+
+        $check = Pesanan::whereYear('created_at', $this->getYear())->get('so');
         $max_number = 0;
         foreach ($check as $c) {
             if ($c->so == NULL) {
@@ -5440,10 +5441,10 @@ class PenjualanController extends Controller
     public function check_no_urut($id, $val)
     {
         if ($id != "0") {
-            $e = Ekatalog::where('no_urut', $val)->whereNotIn('id', [$id])->count();
+            $e = Ekatalog::where('no_urut', $val)->whereNotIn('id', [$id])->whereYear('created_at', $this->getYear())->count();
             return $e;
         } else {
-            $e = Ekatalog::where('no_urut',  $val)->count();
+            $e = Ekatalog::where('no_urut',  $val)->whereYear('created_at', $this->getYear())->count();
             return $e;
         }
     }
