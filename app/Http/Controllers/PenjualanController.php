@@ -2586,7 +2586,7 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }
 
-            ])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
+            ])->orderBy('created_at', 'DESC')->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
         } else {
             $data  = Ekatalog::with(['Pesanan.State',  'Customer'])->addSelect([
 
@@ -2615,7 +2615,7 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }
 
-            ])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
+            ])->orderBy('created_at', 'DESC')->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
         }
 
         return datatables()->of($data)
@@ -2889,7 +2889,7 @@ class PenjualanController extends Controller
 
             ->rawColumns(['button', 'status', 'tgl_kontrak', 'no_paket'])
             ->setRowClass(function ($data) {
-                if ($data->status == 'batal' || $data->Pesanan->log->nama == 'Batal') {
+                if ($data->status == 'batal' || $data->Pesanan->State->nama == 'Batal') {
                     return 'text-danger font-weight-bold line-through';
                 }
             })
@@ -3153,7 +3153,7 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['button', 'status'])
             ->setRowClass(function ($data) {
-                if ($data->Pesanan->log->nama == 'Batal') {
+                if ($data->Pesanan->State->nama == 'Batal') {
                     return 'text-danger font-weight-bold line-through';
                 }
             })
@@ -3409,7 +3409,7 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['button', 'status'])
             ->setRowClass(function ($data) {
-                if ($data->Pesanan->log->nama == 'Batal') {
+                if ($data->Pesanan->State->nama == 'Batal') {
                     return 'text-danger font-weight-bold line-through';
                 }
             })
