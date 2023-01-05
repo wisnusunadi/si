@@ -2560,7 +2560,6 @@ class PenjualanController extends Controller
 
         if ($value == 'semua') {
             $data  = Ekatalog::with(['Pesanan.State',  'Customer', 'Provinsi'])->addSelect([
-
                 'tgl_kontrak_custom' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
                         ->from('ekatalog as e')
@@ -2586,7 +2585,7 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }
 
-            ])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
+            ])->orderBy('created_at', 'DESC')->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
         } else {
             $data  = Ekatalog::with(['Pesanan.State',  'Customer'])->addSelect([
 
@@ -2615,7 +2614,7 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }
 
-            ])->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
+            ])->orderBy('created_at', 'DESC')->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
         }
 
         return datatables()->of($data)
@@ -2889,7 +2888,7 @@ class PenjualanController extends Controller
 
             ->rawColumns(['button', 'status', 'tgl_kontrak', 'no_paket'])
             ->setRowClass(function ($data) {
-                if ($data->status == 'batal' || $data->Pesanan->log->nama == 'Batal') {
+                if ($data->status == 'batal' || $data->Pesanan->State->nama == 'Batal') {
                     return 'text-danger font-weight-bold line-through';
                 }
             })
@@ -3153,7 +3152,7 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['button', 'status'])
             ->setRowClass(function ($data) {
-                if ($data->Pesanan->log->nama == 'Batal') {
+                if ($data->Pesanan->State->nama == 'Batal') {
                     return 'text-danger font-weight-bold line-through';
                 }
             })
@@ -3409,7 +3408,7 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['button', 'status'])
             ->setRowClass(function ($data) {
-                if ($data->Pesanan->log->nama == 'Batal') {
+                if ($data->Pesanan->State->nama == 'Batal') {
                     return 'text-danger font-weight-bold line-through';
                 }
             })
@@ -5411,7 +5410,7 @@ class PenjualanController extends Controller
     function createSO($value)
     {
 
-        $check = Pesanan::whereYear('created_at', $this->getYear())->get('so');
+        $check = Pesanan::whereYear('created_at', $this->getYear())->where('so', 'like', '%' . $this->getYear() . '%')->get('so');
         $max_number = 0;
         foreach ($check as $c) {
             if ($c->so == NULL) {
