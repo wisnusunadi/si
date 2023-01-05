@@ -2560,7 +2560,6 @@ class PenjualanController extends Controller
 
         if ($value == 'semua') {
             $data  = Ekatalog::with(['Pesanan.State',  'Customer', 'Provinsi'])->addSelect([
-
                 'tgl_kontrak_custom' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
                         ->from('ekatalog as e')
