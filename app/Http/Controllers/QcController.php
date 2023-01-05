@@ -3138,7 +3138,7 @@ class QcController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                $hitung = floor(( (($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
 
                 if ($hitung > 0) {
                     $datas = '<div class="progress">
