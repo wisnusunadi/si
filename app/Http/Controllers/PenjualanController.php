@@ -5410,7 +5410,7 @@ class PenjualanController extends Controller
     function createSO($value)
     {
 
-        $check = Pesanan::whereYear('created_at', $this->getYear())->get('so');
+        $check = Pesanan::whereYear('created_at', $this->getYear())->where('so', 'like', '%' . $this->getYear() . '%')->get('so');
         $max_number = 0;
         foreach ($check as $c) {
             if ($c->so == NULL) {
