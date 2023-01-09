@@ -1760,17 +1760,7 @@ class PenjualanController extends Controller
             //     ->rawColumns(['status',  'nama_customer'])
             //     ->make(true);
         } else if ($parameter == 'no_so') {
-            // $val = str_replace("_","/",$value);
-            // $Ekatalog = collect(Ekatalog::whereHas('Pesanan', function ($q) use ($value) {
-            //     $q->where('so', 'LIKE', '%' . $value . '%');
-            // })->get());
-            // $Spa = collect(Spa::whereHas('Pesanan', function ($q) use ($value) {
-            //     $q->where('so', 'LIKE', '%' . $value . '%');
-            // })->get());
-            // $Spb = collect(Spb::whereHas('Pesanan', function ($q) use ($value) {
-            //     $q->where('so', 'LIKE', '%' . $value . '%');
-            // })->get());
-            //   $data = $Ekatalog->merge($Spa)->merge($Spb);
+            $val = str_replace("-",  "/",  $value);
             $data = Pesanan::select(
                 'pesanan.no_po',
                 'pesanan.so',
@@ -1788,7 +1778,7 @@ class PenjualanController extends Controller
                 ->leftJoin('spb', 'spb.pesanan_id', '=', 'pesanan.id')
                 ->leftJoin('customer as c_spb', 'c_spb.id', '=', 'spb.customer_id')
                 ->leftJoin('m_state', 'm_state.id', '=', 'pesanan.log_id')
-                ->where('so', 'LIKE', '%' . $value . '%')
+                ->where('so', 'LIKE', '%' . $val . '%')
                 ->get();
 
             return datatables()->of($data)
@@ -1833,44 +1823,10 @@ class PenjualanController extends Controller
                         return '-';
                     }
                 })
-
                 ->addColumn('log', function ($data) {
                     $progress = '';
                     $tes = $data->cjumlahprd + $data->cjumlahpart;
-                    // if($tes > 0){
-                    //     $hitung = floor(((($data->ckirimprd + $data->ckirimpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
-                    //     if($hitung > 0){
-                    //         $progress = '<div class="progress">
-                    //             <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
-                    //         </div>
-                    //         <small class="text-muted">Selesai</small>';
-                    //     }else{
-                    //         $progress = '<div class="progress">
-                    //             <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
-                    //         </div>
-                    //         <small class="text-muted">Selesai</small>';
-                    //     }
-                    // }
                     $datas = "";
-                    // if (!empty($data->state_nama)) {
-                    //     if ($data->state_nama == "penjualan") {
-                    //         $datas .= '<span class="red-text badge">'. ucfirst($data->state_nama) . '</span>';
-                    //     } else {
-                    //         if($data->ekat_log == "batal"){
-                    //             $datas .= '<span class="red-text badge">Batal</span>';
-                    //         }
-                    //         else if($data->spa_log == "batal"){
-                    //             $datas .= '<span class="red-text badge">Batal</span>';
-                    //         }
-                    //         else if($data->spb_log == "batal"){
-                    //             $datas .= '<span class="red-text badge">Batal</span>';
-                    //         }
-                    //         else{
-                    //             $datas .= $progress;
-                    //         }
-                    //     }
-                    // }
-
                     if (!empty($data->state_nama)) {
                         if ($data->state_nama == "Penjualan") {
                             $datas .= '<span class="red-text badge">';

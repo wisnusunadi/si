@@ -1078,8 +1078,8 @@
                 } else if ($('.pilih_data').val() == "no_so") {
                     var data = $('#data').val();
                     var p = 'O';
-                    var xxx = data.replace('/' + p + '/g', ':');
-                    so(data);
+                    var xxx = data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-');
+                    so(xxx);
                     // $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_so/' + data).load();
                     $('#customer').addClass('hide');
                     $('#noakn').addClass('hide');
