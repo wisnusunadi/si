@@ -1266,6 +1266,16 @@ class DcController extends Controller
         $data =  NoseriDetailLogistik::find($id);
         return view('page.dc.coo.tglkirim_edit', ['data' => $data]);
     }
+    function getYear()
+    {
+        return  Carbon::now()->format('Y');
+    }
+    function getYearTimeStamp($value)
+    {
+        $tahun = Carbon::createFromFormat('Y-m-d H:i:s', $value)->format('Y');
+        return  $tahun;
+    }
+    // $check = Pesanan::whereYear('created_at', $this->getYear())->where('so', 'like', '%' . $this->getYear() . '%')->get('so');
     public function store_coo(Request $request, $value)
     {
         if ($request->diketahui == 'spa') {
@@ -1298,7 +1308,9 @@ class DcController extends Controller
                     $bool = false;
                 }
             } else {
+                $max = NoseriCoo::whereYear('created_at', $this->getYear())->latest('id')->value('no_coo');
                 $c = NoseriCoo::create([
+                    'no_coo' => $max + 1,
                     'nama' => $nama,
                     'jabatan' => $jabatan,
                     'ket' => $ket,
