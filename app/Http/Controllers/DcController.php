@@ -1270,6 +1270,11 @@ class DcController extends Controller
     {
         return  Carbon::now()->format('Y');
     }
+    function getYearTimeStamp($value)
+    {
+        $tahun = Carbon::createFromFormat('Y-m-d H:i:s', $value)->format('Y');
+        return  $tahun;
+    }
     // $check = Pesanan::whereYear('created_at', $this->getYear())->where('so', 'like', '%' . $this->getYear() . '%')->get('so');
     public function store_coo(Request $request, $value)
     {

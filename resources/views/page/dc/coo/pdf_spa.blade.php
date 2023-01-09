@@ -107,7 +107,7 @@
                 <td style="width:52.3%;"></td>
                 <td class="veramd align-center" style="width:47.7%;">
                     <h3>{{ $data->no_coo }} / SKA / {{ $romawi }} / SPA /
-                        {{ App\Http\Controllers\DcController::getYear() }}</h3>
+                        {{ App\Http\Controllers\DcController::getYearTimeStamp($data->created_at) }}</h3>
                 </td>
             </tr>
         </tbody>
