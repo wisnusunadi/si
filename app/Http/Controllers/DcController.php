@@ -1266,13 +1266,10 @@ class DcController extends Controller
         $data =  NoseriDetailLogistik::find($id);
         return view('page.dc.coo.tglkirim_edit', ['data' => $data]);
     }
-    function getYear()
+
+    function getYear($value)
     {
-        return  Carbon::now()->format('Y');
-    }
-    function getYearTimeStamp($value)
-    {
-        $tahun = Carbon::createFromFormat('Y-m-d H:i:s', $value)->format('Y');
+        $tahun = Carbon::createFromFormat('Y-m-d', $value)->format('Y');
         return  $tahun;
     }
     // $check = Pesanan::whereYear('created_at', $this->getYear())->where('so', 'like', '%' . $this->getYear() . '%')->get('so');
@@ -1308,9 +1305,11 @@ class DcController extends Controller
                     $bool = false;
                 }
             } else {
-                $max = NoseriCoo::whereYear('created_at', $this->getYear())->latest('id')->value('no_coo');
+                $l = NoseriDetailLogistik::find($array_seri[$i]);
+                $max = NoseriCoo::where('tahun', $this->getYear($l->DetailLogistik->Logistik->tgl_kirim))->latest('id')->value('no_coo');
                 $c = NoseriCoo::create([
                     'no_coo' => $max + 1,
+                    'tahun' => $this->getYear($l->DetailLogistik->Logistik->tgl_kirim),
                     'nama' => $nama,
                     'jabatan' => $jabatan,
                     'ket' => $ket,

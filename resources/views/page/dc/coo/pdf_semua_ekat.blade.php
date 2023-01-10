@@ -132,7 +132,7 @@ $len = count($data);
                         <h3> {{ $d->no_coo }}/ SKA /
                             {{ App\Http\Controllers\DcController::bulan_romawi($d->NoseriDetailLogistik->DetailLogistik->logistik->tgl_kirim) }}
                             / SPA /
-                            {{ App\Http\Controllers\DcController::getYearTimeStamp($d->created_at) }}
+                            {{ $d->tahun }}
                         </h3>
                     </td>
                 </tr>
