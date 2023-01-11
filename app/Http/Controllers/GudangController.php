@@ -504,6 +504,7 @@ class GudangController extends Controller
                 'is_change' => 1,
                 'is_delete' => 0
             ])->get();
+
             $layout = Layout::where('jenis_id', 1)->get();
             return datatables()->of($data)
                 ->addIndexColumn()
@@ -517,7 +518,11 @@ class GudangController extends Controller
                     return $d->noseri;
                 })
                 ->addColumn('used', function ($d) {
-                    return $d->pesanan->so;
+                    if (isset($d->pesanan->so)){
+                        return $d->pesanan->so;
+                    }else{
+                        return '-';
+                    }
                 })
                 ->addColumn('aksi', function ($d) {
                     return '<a data-toggle="modal" data-target="#viewStock" class="viewStock" data-attr=""  data-id="' . $d->gdg_barang_jadi_id . '">
