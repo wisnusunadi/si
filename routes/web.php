@@ -239,7 +239,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/edit', 'page.penjualan.so.edit')->name('penjualan.so.edit');
     });
 
-    Route::group(['prefix' => '/lacak', 'middleware' => ['divisi:jual,qc,log,dc,asp,dirut']], function () {
+    Route::group(['prefix' => '/lacak', 'middleware' => ['divisi:jual,gbj,qc,log,dc,asp,dirut']], function () {
         Route::view('/show', 'page.penjualan.lacak.show')->name('penjualan.lacak.show');
     });
 

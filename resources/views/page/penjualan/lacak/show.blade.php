@@ -152,6 +152,7 @@
                                                     class="select2 select-info form-control custom-select col-form-label pilih_data"
                                                     placeholder="Pilih Data" disabled>
                                                     <option value=""></option>
+                                                    @if(Auth::user()->divisi->kode != "gbj")
                                                     <option value="produk">Produk</option>
                                                     <option value="customer">Distributor / Customer / Satuan Kerja /
                                                         Instansi</option>
@@ -160,6 +161,9 @@
                                                     <option value="no_seri">No Seri</option>
                                                     <option value="no_so">No Sales Order</option>
                                                     <option value="no_sj">No Surat Jalan</option>
+                                                    @else
+                                                    <option value="no_seri_gbj">No Seri</option>
+                                                    @endif
                                                 </select>
                                             </div>
                                         </div>
@@ -335,6 +339,26 @@
                                             <th>No Resi</th>
                                             <th>Customer</th>
                                             <th>Tanggal Kirim</th>
+                                            <th>Status</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card hide result" id="noserigbj">
+                        <div class="card-body">
+                            <h4>Hasil Pencarian No Seri</h4>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="noserigbjtable" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>No Seri</th>
+                                            <th>Nama Produk</th>
+                                            <th>Variasi</th>
                                             <th>Status</th>
                                         </tr>
                                     </thead>
@@ -992,6 +1016,65 @@
                 });
             }
 
+            function noserigbj(data) {
+                var noserigbjtable = $('#noserigbjtable').DataTable({
+                    destroy: true,
+                    processing: true,
+                    // serverSide: true,
+                    ajax: {
+                        'url': '/api/penjualan/lacak/data/no_seri_gbj/' + data,
+                        'dataType': 'json',
+                        'type': 'POST',
+                        'headers': {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    },
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                            data: null,
+                        },
+                        {
+                            data: 'noseri',
+                            className: 'nowraps align-center'
+                        },
+                        {
+                            data: 'nama_produk',
+                            className: 'nowraps align-center',
+                        },
+                        {
+                            data: 'variasi',
+                            className: 'nowraps align-center',
+                        },
+                        {
+                            name: null,
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                return '<span class="green-text badge">' + row.state_nama +'</span>';
+                            }
+                        }
+                    ],
+                    columnDefs: [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }, ],
+                    order: [
+                        [2, 'asc']
+                    ],
+                });
+
+                noserigbjtable.on('order.dt search.dt', function() {
+                    noserigbjtable.column(0, {
+                        search: 'applied',
+                        order: 'applied'
+                    }).nodes().each(function(cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
+
             $('#data').on('keyup change', function() {
                 if ($(this).val() != "") {
                     $('.pilih_data').removeAttr('disabled');
@@ -1023,6 +1106,7 @@
                     // $('#noseritable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
                     noseri(data);
                     $('#noseri').removeClass('hide');
+                    $('#noserigbj').addClass('hide');
                     $('#customer').addClass('hide');
                     $('#nopo').addClass('hide');
                     $('#noakn').addClass('hide');
@@ -1035,19 +1119,20 @@
                     //   $('#produktable').DataTable().ajax.url('/api/penjualan/lacak/data/produk/' + data).load();
                     $('#produk').removeClass('hide');
                     $('#nopo').addClass('hide');
-                    $('#nopo').addClass('hide');
                     $('#noakn').addClass('hide');
                     $('#noso').addClass('hide');
                     $('#nosj').addClass('hide');
                     $('#customer').addClass('hide');
-
+                    $('#noserigbj').addClass('hide');
+                    $('#noseri').addClass('hide');
                 } else if ($('.pilih_data').val() == "customer") {
                     var data = $('#data').val();
                     customer(data);
                     //  $('#customertable').DataTable().ajax.url('/api/penjualan/lacak/data/customer/' + data).load();
                     $('#customer').removeClass('hide');
                     $('#nopo').addClass('hide');
-                    $('#nopo').addClass('hide');
+                    $('#noseri').addClass('hide');
+                    $('#noserigbj').addClass('hide');
                     $('#noakn').addClass('hide');
                     $('#noso').addClass('hide');
                     $('#nosj').addClass('hide');
@@ -1059,6 +1144,7 @@
                     //  $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
                     $('#nopo').removeClass('hide');
                     $('#noseri').addClass('hide');
+                    $('#noserigbj').addClass('hide');
                     $('#noakn').addClass('hide');
                     $('#customer').addClass('hide');
                     $('#noso').addClass('hide');
@@ -1071,6 +1157,7 @@
                     $('#noakn').removeClass('hide');
                     $('#customer').addClass('hide');
                     $('#noseri').addClass('hide');
+                    $('#noserigbj').addClass('hide');
                     $('#nopo').addClass('hide');
                     $('#noso').addClass('hide');
                     $('#nosj').addClass('hide');
@@ -1081,11 +1168,12 @@
                     var xxx = data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-');
                     so(xxx);
                     // $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_so/' + data).load();
+                    $('#noso').removeClass('hide');
                     $('#customer').addClass('hide');
                     $('#noakn').addClass('hide');
                     $('#noseri').addClass('hide');
+                    $('#noserigbj').addClass('hide');
                     $('#nopo').addClass('hide');
-                    $('#noso').removeClass('hide');
                     $('#nosj').addClass('hide');
                     $('#produk').addClass('hide');
                 } else if ($('.pilih_data').val() == "no_sj") {
@@ -1093,6 +1181,19 @@
                     sj(data);
                     //$('#nosjtable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
                     $('#nosj').removeClass('hide');
+                    $('#customer').addClass('hide');
+                    $('#noseri').addClass('hide');
+                    $('#noserigbj').addClass('hide');
+                    $('#nopo').addClass('hide');
+                    $('#noso').addClass('hide');
+                    $('#noakn').addClass('hide');
+                    $('#produk').addClass('hide');
+                } else if ($('.pilih_data').val() == "no_seri_gbj") {
+                    var data = $('#data').val();
+                    noserigbj(data);
+                    //$('#nosjtable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
+                    $('#noserigbj').removeClass('hide');
+                    $('#nosj').addClass('hide');
                     $('#customer').addClass('hide');
                     $('#noseri').addClass('hide');
                     $('#nopo').addClass('hide');

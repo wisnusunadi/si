@@ -1849,7 +1849,7 @@ class PenjualanController extends Controller
                 })
                 ->rawColumns(['log', 'nama_customer'])
                 ->make(true);
-        } elseif ($parameter == 'no_sj') {
+        } else if ($parameter == 'no_sj') {
             $data = DB::connection('si_21')->table('gudang_on')
                 ->select(
                     // 'seri_on.noseri_on as noseri',
@@ -1968,6 +1968,22 @@ class PenjualanController extends Controller
             //     })
             //     ->rawColumns(['status', 'no_so',  'customer'])
             //     ->make(true);
+        } else if ($parameter == 'no_seri_gbj'){
+            $data = NoseriBarangJadi::where([
+                ['noseri', 'LIKE', '%'.$value.'%'],
+                ['is_aktif', '=', '1'],
+                ['is_ready', '=', '0'],
+                ['is_change', '=', '1'],
+                ['is_delete', '=', '0']
+            ])->with('gudang.produk')->get();
+            $arr = array();
+            foreach($data as $key => $i){
+                $arr[$key] = array('noseri' => $i->noseri,
+                'nama_produk' => $i->gudang->produk->nama,
+                'variasi' => $i->gudang->nama != NULL ? $i->gudang->nama : '-',
+                'state_nama' => 'Tersedia');
+            }
+            return response()->json(['data' => $arr]);
         }
     }
     public function get_data_detail_spa($value)

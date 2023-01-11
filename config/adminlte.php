@@ -1190,6 +1190,13 @@ return [
             'auth' => [13],
         ],
         [
+            'text' => 'Lacak',
+            'url'  => '/penjualan/lacak/show',
+            'icon' => 'fas fa-search',
+            'auth' => [13]
+        ],
+
+        [
             'header' => 'Penjualan',
             'auth' => [13, 17, 31]
         ],
