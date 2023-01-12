@@ -828,6 +828,7 @@
 
             $('.modal-scan').on('shown.bs.modal', function() {
                 $('#scan_filter').addClass('hidden');
+
             });
             // Switch Scan
             $('#switchScan').on('click', function() {
@@ -964,6 +965,7 @@
             });
         });
         $('.scan-produk').on('click', '.cb-child', function() {
+            mytable.rows().deselect();
             if ($(this).is(':checked')) {
                 if (prd1.length < 0 || prd1[dpp] == undefined) {
                     if (tmp.includes($(this).val())) {
