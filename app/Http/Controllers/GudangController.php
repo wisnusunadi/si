@@ -518,9 +518,9 @@ class GudangController extends Controller
                     return $d->noseri;
                 })
                 ->addColumn('used', function ($d) {
-                    if (isset($d->pesanan->so)){
+                    if (isset($d->pesanan->so)) {
                         return $d->pesanan->so;
-                    }else{
+                    } else {
                         return '-';
                     }
                 })

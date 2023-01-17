@@ -152,17 +152,17 @@
                                                     class="select2 select-info form-control custom-select col-form-label pilih_data"
                                                     placeholder="Pilih Data" disabled>
                                                     <option value=""></option>
-                                                    @if(Auth::user()->divisi->kode != "gbj")
-                                                    <option value="produk">Produk</option>
-                                                    <option value="customer">Distributor / Customer / Satuan Kerja /
-                                                        Instansi</option>
-                                                    <option value="no_po">No Purchase Order</option>
-                                                    <option value="no_akn">No Paket</option>
-                                                    <option value="no_seri">No Seri</option>
-                                                    <option value="no_so">No Sales Order</option>
-                                                    <option value="no_sj">No Surat Jalan</option>
+                                                    @if (Auth::user()->divisi->kode != 'gbj')
+                                                        <option value="produk">Produk</option>
+                                                        <option value="customer">Distributor / Customer / Satuan Kerja /
+                                                            Instansi</option>
+                                                        <option value="no_po">No Purchase Order</option>
+                                                        <option value="no_akn">No Paket</option>
+                                                        <option value="no_seri">No Seri</option>
+                                                        <option value="no_so">No Sales Order</option>
+                                                        <option value="no_sj">No Surat Jalan</option>
                                                     @else
-                                                    <option value="no_seri_gbj">No Seri</option>
+                                                        <option value="no_seri_gbj">No Seri</option>
                                                     @endif
                                                 </select>
                                             </div>
@@ -360,6 +360,7 @@
                                             <th>Nama Produk</th>
                                             <th>Variasi</th>
                                             <th>Status</th>
+                                            <th>Keterangan</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -1051,9 +1052,13 @@
                             name: null,
                             className: 'nowraps align-center',
                             render: function(data, type, row) {
-                                return '<span class="green-text badge">' + row.state_nama +'</span>';
+                                return '<span class="green-text badge">' + row.state_nama +
+                                    '</span>';
                             }
-                        }
+                        }, {
+                            data: 'keterangan',
+                            className: 'nowraps align-center',
+                        },
                     ],
                     columnDefs: [{
                         "searchable": false,
@@ -1141,31 +1146,31 @@
                 } else if ($('.pilih_data').val() == "no_po") {
                     var data = $('#data').val();
                     po(data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-'));
-                    //  $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
-                    $('#nopo').removeClass('hide');
-                    $('#noseri').addClass('hide');
-                    $('#noserigbj').addClass('hide');
-                    $('#noakn').addClass('hide');
-                    $('#customer').addClass('hide');
-                    $('#noso').addClass('hide');
-                    $('#nosj').addClass('hide');
-                    $('#produk').addClass('hide');
-                } else if ($('.pilih_data').val() == "no_akn") {
-                    var data = $('#data').val();
-                    // $('#noakntable').DataTable().ajax.url('/api/penjualan/lacak/data/no_akn/' + data).load();
-                    akn(data);
-                    $('#noakn').removeClass('hide');
-                    $('#customer').addClass('hide');
-                    $('#noseri').addClass('hide');
-                    $('#noserigbj').addClass('hide');
-                    $('#nopo').addClass('hide');
-                    $('#noso').addClass('hide');
-                    $('#nosj').addClass('hide');
-                    $('#produk').addClass('hide');
-                } else if ($('.pilih_data').val() == "no_so") {
-                    var data = $('#data').val();
-                    var p = 'O';
-                    var xxx = data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-');
+                //  $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
+                $('#nopo').removeClass('hide');
+                $('#noseri').addClass('hide');
+                $('#noserigbj').addClass('hide');
+                $('#noakn').addClass('hide');
+                $('#customer').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
+            } else if ($('.pilih_data').val() == "no_akn") {
+                var data = $('#data').val();
+                // $('#noakntable').DataTable().ajax.url('/api/penjualan/lacak/data/no_akn/' + data).load();
+                akn(data);
+                $('#noakn').removeClass('hide');
+                $('#customer').addClass('hide');
+                $('#noseri').addClass('hide');
+                $('#noserigbj').addClass('hide');
+                $('#nopo').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
+            } else if ($('.pilih_data').val() == "no_so") {
+                var data = $('#data').val();
+                var p = 'O';
+                var xxx = data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-');
                     so(xxx);
                     // $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_so/' + data).load();
                     $('#noso').removeClass('hide');
