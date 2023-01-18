@@ -828,6 +828,7 @@
 
             $('.modal-scan').on('shown.bs.modal', function() {
                 $('#scan_filter').addClass('hidden');
+
             });
             // Switch Scan
             $('#switchScan').on('click', function() {

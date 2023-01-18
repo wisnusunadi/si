@@ -1968,20 +1968,35 @@ class PenjualanController extends Controller
             //     })
             //     ->rawColumns(['status', 'no_so',  'customer'])
             //     ->make(true);
-        } else if ($parameter == 'no_seri_gbj'){
+        } else if ($parameter == 'no_seri_gbj') {
             $data = NoseriBarangJadi::where([
-                ['noseri', 'LIKE', '%'.$value.'%'],
-                ['is_aktif', '=', '1'],
-                ['is_ready', '=', '0'],
-                ['is_change', '=', '1'],
-                ['is_delete', '=', '0']
-            ])->with('gudang.produk')->get();
+                ['noseri', 'LIKE', '%' . $value . '%'],
+                // ['is_aktif', '=', '1'],
+                // ['is_ready', '=', '0'],
+                // ['is_change', '=', '1'],
+                // ['is_delete', '=', '0']
+            ])->get();
             $arr = array();
-            foreach($data as $key => $i){
-                $arr[$key] = array('noseri' => $i->noseri,
-                'nama_produk' => $i->gudang->produk->nama,
-                'variasi' => $i->gudang->nama != NULL ? $i->gudang->nama : '-',
-                'state_nama' => 'Tersedia');
+            foreach ($data as $key => $i) {
+
+                if ($i->is_ready != 0) {
+                    if ($i->NoseriTGbj->last()->detail->header->pesanan_id != NULL) {
+                        $detail = $i->NoseriTGbj->last()->detail->header->pesanan->no_po;
+                    } else {
+                        $detail = $i->NoseriTGbj->last()->detail->header->deskripsi;
+                    }
+                } else {
+                    $detail = 'Tersedia';
+                }
+
+                $arr[$key] = array(
+                    'noseri' => $i->noseri,
+                    'nama_produk' => $i->gudang->produk->nama,
+                    'variasi' => $i->gudang->nama != NULL ? $i->gudang->nama : '-',
+                    'state_nama' =>  $i->is_ready != 0 ? 'Terpakai' : 'Tersedia',
+                    'keterangan' => $i->is_ready != 0 ? $detail : '-'
+
+                );
             }
             return response()->json(['data' => $arr]);
         }
