@@ -1055,7 +1055,7 @@
                     icon: 'error',
                     title: 'Oops...',
                     text: 'Batas Maksimal ' + max + ' Barang!',
-                })
+                }) 
             } else {
                 Swal.fire({
                     position: 'center',
