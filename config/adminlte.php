@@ -1097,15 +1097,15 @@ return [
             'url'  => '/lab/alatuji/show',
             'auth' => [22],
         ],
+        // [
+        //     'icon' => 'fa fa-plus-circle',
+        //     'text' => 'Tambah Jenis Alat Uji',
+        //     'url'  => '/lab/alatuji/create',
+        //     'auth' => [22],
+        // ],
         [
             'icon' => 'fa fa-plus-circle',
-            'text' => 'Tambah Jenis Alat Uji',
-            'url'  => '/lab/alatuji/create',
-            'auth' => [22],
-        ],
-        [
-            'icon' => 'fa fa-plus-circle',
-            'text' => 'Tambah Serial Number',
+            'text' => 'Tambah Alat Uji',
             'url'  => '/lab/alatuji/barang/create',
             'auth' => [22],
         ],
