@@ -1145,7 +1145,7 @@
 
                 } else if ($('.pilih_data').val() == "no_po") {
                     var data = $('#data').val();
-                    po(data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-'));
+                    po(data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '_'));
                 //  $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
                 $('#nopo').removeClass('hide');
                 $('#noseri').addClass('hide');
@@ -1170,7 +1170,7 @@
             } else if ($('.pilih_data').val() == "no_so") {
                 var data = $('#data').val();
                 var p = 'O';
-                var xxx = data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-');
+                var xxx = data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '_');
                     so(xxx);
                     // $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_so/' + data).load();
                     $('#noso').removeClass('hide');
