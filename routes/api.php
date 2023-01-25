@@ -170,6 +170,10 @@ Route::prefix('/gbj')->group(function () {
     Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
     Route::post('data-so', [GudangController::class, 'getSODone']);
 
+    Route::get('/modal_data/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj']);
+    Route::get('/modal_data_non/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_non']);
+    Route::get('/modal_data_seri/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_seri']);
+    Route::get('/modal_data_seri_non/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_seri_non']);
     Route::get('/test', [App\Http\Controllers\GudangController::class, 'test']);
     // select
     Route::get('sel-product', [GudangController::class, 'select_product']);

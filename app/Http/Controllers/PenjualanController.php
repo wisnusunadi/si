@@ -793,7 +793,7 @@ class PenjualanController extends Controller
     public function get_lacak_penjualan($parameter, $value)
     {
         if ($parameter == 'no_po') {
-            $val = str_replace("-",  "/",  $value);
+            $val = str_replace("@",  "/",  $value);
             $si_ekat21 = DB::connection('si_21')->table('admjual_on')
                 ->select(
                     'admjual_on.nopo_on as no_po',
