@@ -793,7 +793,7 @@ class PenjualanController extends Controller
     public function get_lacak_penjualan($parameter, $value)
     {
         if ($parameter == 'no_po') {
-            $val = str_replace("@",  "/",  $value);
+            $val = str_replace("_",  "/",  $value);
             $si_ekat21 = DB::connection('si_21')->table('admjual_on')
                 ->select(
                     'admjual_on.nopo_on as no_po',
@@ -1205,7 +1205,7 @@ class PenjualanController extends Controller
             //     ->rawColumns(['status', 'log', 'instansi',  'tgl_kontrak'])
             //     ->make(true);
         } else if ($parameter == 'customer') {
-            $val = str_replace("-",  "/",  $value);
+            $val = str_replace("_",  "/",  $value);
             // $ekatalog = NoseriTGbj::whereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($value) {
             //     $q->where('satuan', 'LIKE', '%' . $value . '%');
             // })->orwhereHas('NoseriDetailPesanan.DetailPesananProduk.DetailPesanan.Pesanan.Ekatalog', function ($q) use ($value) {
@@ -1760,7 +1760,7 @@ class PenjualanController extends Controller
             //     ->rawColumns(['status',  'nama_customer'])
             //     ->make(true);
         } else if ($parameter == 'no_so') {
-            $val = str_replace("-",  "/",  $value);
+            $val = str_replace("_",  "/",  $value);
             $data = Pesanan::select(
                 'pesanan.no_po',
                 'pesanan.so',
