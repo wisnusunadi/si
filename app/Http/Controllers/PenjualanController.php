@@ -49,7 +49,7 @@ class PenjualanController extends Controller
         return empty(array_diff($needles, $haystack));
     }
     //Get Data Table
-    public function penjualan_data($jenis, $status)
+    public function penjualan_data($jenis, $status, $tahun)
     {
         $x = explode(',', $jenis);
         $y = explode(',', $status);
@@ -90,7 +90,7 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'ekatalog.pesanan_id');
                 }
 
-            ])->orderBy('id', 'DESC')->get());
+            ])->whereYear('created_at',  $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get());
 
             $Spa = collect(Spa::addSelect([
 
@@ -121,7 +121,7 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
                 }
 
-            ])->with(['Pesanan.State',  'Customer'])->orderBy('id', 'DESC')->get());
+            ])->with(['Pesanan.State',  'Customer'])->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get());
 
             $Spb = collect(Spb::addSelect([
 
@@ -152,7 +152,7 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
                 }
 
-            ])->with(['Pesanan.State',  'Customer'])->orderBy('id', 'DESC')->get());
+            ])->with(['Pesanan.State',  'Customer'])->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get());
 
             $data = $Ekatalog->merge($Spa)->merge($Spb);
         } else if ($jenis != "semua" && $status == "semua") {
@@ -2538,7 +2538,7 @@ class PenjualanController extends Controller
             ->rawColumns(['batas_kontrak', 'button', 'status'])
             ->make(true);
     }
-    public function get_data_ekatalog($value)
+    public function get_data_ekatalog($value, $tahun)
     {
         $divisi_id = Auth::user()->Karyawan->divisi_id;
 
@@ -2572,7 +2572,7 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }
 
-            ])->orderBy('created_at', 'DESC')->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
+            ])->whereYear('created_at',  $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->get();
         } else {
             $data  = Ekatalog::with(['Pesanan.State',  'Customer'])->addSelect([
 
@@ -2601,7 +2601,8 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan.pesanan_id', 'ekatalog.pesanan_id');
                 }
 
-            ])->orderBy('created_at', 'DESC')->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
+            ])->whereYear('created_at', $tahun)->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
+            // ])->orderBy('created_at', 'DESC')->orderByRaw('CONVERT(no_urut, SIGNED) desc')->whereIN('status', $x)->get();
         }
 
         return datatables()->of($data)
@@ -2881,7 +2882,7 @@ class PenjualanController extends Controller
             })
             ->make(true);
     }
-    public function get_data_spa($value)
+    public function get_data_spa($value, $tahun)
     {
         $divisi_id = Auth::user()->Karyawan->divisi_id;
         $x = explode(',', $value);
@@ -2915,7 +2916,7 @@ class PenjualanController extends Controller
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'spa.pesanan_id');
                 }
 
-            ])->orderBy('id', 'DESC')->get();
+            ])->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         } else {
             $data  = Spa::with(['Pesanan.State',  'Customer'])->addSelect([
                 'ckirimprd' => function ($q) {
@@ -2947,7 +2948,7 @@ class PenjualanController extends Controller
 
             ])->whereHas('pesanan', function ($q) use ($x) {
                 $q->whereIN('log_id', $x);
-            })->orderBy('id', 'DESC')->get();
+            })->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         }
 
         return datatables()->of($data)
@@ -3145,7 +3146,7 @@ class PenjualanController extends Controller
             })
             ->make(true);
     }
-    public function get_data_spb($value)
+    public function get_data_spb($value, $tahun)
     {
         $divisi_id = Auth::user()->Karyawan->divisi_id;
         $x = explode(',', $value);
@@ -3178,7 +3179,7 @@ class PenjualanController extends Controller
                         ->from('detail_pesanan_part')
                         ->whereColumn('detail_pesanan_part.pesanan_id', 'spb.pesanan_id');
                 }
-            ])->orderBy('id', 'DESC')->get();
+            ])->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         } else {
             $data  = Spb::with(['Pesanan.State',  'Customer'])->addSelect([
                 'ckirimprd' => function ($q) {
@@ -3209,7 +3210,7 @@ class PenjualanController extends Controller
                 }
             ])->whereHas('pesanan', function ($q) use ($x) {
                 $q->whereIN('log_id', $x);
-            })->orderBy('id', 'DESC')->get();
+            })->whereYear('created_at',  $tahun)->orderBy('id', 'DESC')->get();
         }
         return datatables()->of($data)
             ->addIndexColumn()
