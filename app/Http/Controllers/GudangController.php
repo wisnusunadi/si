@@ -691,7 +691,7 @@ class GudangController extends Controller
                 ->leftjoin('divisi as d', 'd.id', '=', 'h.dari')
                 ->leftjoin('divisi as dd', 'dd.id', '=', 'h.ke')
                 // ->select('p.so', 'p.no_po', 'p.log_id', 'h.tgl_masuk', 'h.tgl_keluar', 'h.jenis', 'h.deskripsi', 't_gbj_detail.qty', 'stt.nama', 'd.nama as dari', 'dd.nama as ke', DB::raw('concat(prd.nama, " ", g.nama) as produkk'), 't_gbj_detail.id')
-                ->select('h.tgl_keluar', 'h.tgl_masuk', 'h.jenis', 't_gbj_detail.qty', 'dd.nama as ke', 'd.nama as dari', DB::raw('concat(prd.nama, " ", g.nama) as produkk'), 't_gbj_detail.id')
+                ->select('p.no_po as po', 'h.tgl_keluar', 'h.pesanan_id as p_id', 'h.tgl_masuk', 'h.jenis', 't_gbj_detail.qty', 'dd.nama as ke', 'd.nama as dari', DB::raw('concat(prd.nama, " ", g.nama) as produkk'), 't_gbj_detail.id')
                 // ->where('h.jenis', '=', 'keluar')
                 ->orderByDesc('h.created_at')
                 ->get();
@@ -732,6 +732,9 @@ class GudangController extends Controller
                 //         return '-';
                 //     }
                 // })
+                ->addColumn('po', function ($d) {
+                    return $d->p_id != NULL ? $d->po : '-';
+                })
                 ->addColumn('date_in', function ($d) {
                     if (isset($d->tgl_masuk)) {
                         return Carbon::parse($d->tgl_masuk)->isoFormat('D MMMM Y');
