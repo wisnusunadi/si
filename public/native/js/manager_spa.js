@@ -20171,8 +20171,10 @@ __webpack_require__.r(__webpack_exports__);
       });
     },
     events: function events() {
-      var data = _mixins__WEBPACK_IMPORTED_MODULE_4__["default"].convertJadwal(this.$store.state.jadwal);
-      return data;
+      if (this.$store.state.jadwal.length > 0) {
+        var data = _mixins__WEBPACK_IMPORTED_MODULE_4__["default"].convertJadwal(this.$store.state.jadwal);
+        return data;
+      }
     }
   },
   updated: function updated() {
@@ -20356,7 +20358,7 @@ function _asyncToGenerator(fn) { return function () { var self = this, args = ar
                     Authorization: 'Bearer ' + localStorage.getItem('lokal_token')
                   }
                 }).then(function (response) {
-                  _this.$store.commit("setJadwal", response.data);
+                  _this.$store.commit("setJadwal", response.data.data);
                 });
 
               case 3:
