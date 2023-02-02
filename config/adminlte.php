@@ -583,47 +583,59 @@ return [
         //         ],
         //     ],
         // ],
+        // [
+        //     'text'    => 'Inventory',
+        //     'icon'    => 'fas fa-boxes',
+        //     'auth' => [14],
+        //     'submenu' => [
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Master Inventory',
+        //             'auth' => [14],
+        //             'url'  => '/inventory/divisi',
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Inventory',
+        //             'url'  => '/inventory',
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Permintaan Peminjaman',
+        //             'url'  => '/inventory/peminjaman',
+        //         ],
+        //     ],
+        // ],
         [
-            'text'    => 'Inventory',
+            'text'    => 'User',
             'icon'    => 'fas fa-boxes',
             'auth' => [14],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Master Inventory',
-                    'auth' => [14],
-                    'url'  => '/inventory/divisi',
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Inventory',
-                    'url'  => '/inventory',
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Permintaan Peminjaman',
-                    'url'  => '/inventory/peminjaman',
-                ],
-            ],
+            'url'  => '/administrator/user',
         ],
-        [
-            'text'    => 'Peminjaman',
-            'icon'    => 'fas fa-boxes',
-            'auth' => [14],
-            'submenu' => [
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Alat',
-                    'url'  => '/peminjaman/alat',
-                ],
-                [
-                    'icon' => 'far fa-circle',
-                    'text' => 'Karyawan',
-                    'url'  => '/peminjaman/karyawan',
-                ],
+        // [
+        //     'text'    => 'Part',
+        //     'icon'    => 'fas fa-boxes',
+        //     'auth' => [14],
+        //     'url'  => '/administrator/part',
+        // ],
+        // [
+        //     'text'    => 'Peminjaman',
+        //     'icon'    => 'fas fa-boxes',
+        //     'auth' => [14],
+        //     'submenu' => [
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Alat',
+        //             'url'  => '/peminjaman/alat',
+        //         ],
+        //         [
+        //             'icon' => 'far fa-circle',
+        //             'text' => 'Karyawan',
+        //             'url'  => '/peminjaman/karyawan',
+        //         ],
 
-            ],
-        ],
+        //     ],
+        // ],
         // kesehatan (28)
         //Kesehatan
         [
@@ -1064,7 +1076,7 @@ return [
         ],
         [
             'header' => 'ALAT UJI',
-            'auth' => [23, 34]
+            'auth' => [34]
         ],
 
 
@@ -1085,15 +1097,15 @@ return [
             'url'  => '/lab/alatuji/show',
             'auth' => [22],
         ],
+        // [
+        //     'icon' => 'fa fa-plus-circle',
+        //     'text' => 'Tambah Jenis Alat Uji',
+        //     'url'  => '/lab/alatuji/create',
+        //     'auth' => [22],
+        // ],
         [
             'icon' => 'fa fa-plus-circle',
-            'text' => 'Tambah Jenis Alat Uji',
-            'url'  => '/lab/alatuji/create',
-            'auth' => [22],
-        ],
-        [
-            'icon' => 'fa fa-plus-circle',
-            'text' => 'Tambah Serial Number',
+            'text' => 'Tambah Alat Uji',
             'url'  => '/lab/alatuji/barang/create',
             'auth' => [22],
         ],
@@ -1177,6 +1189,13 @@ return [
             'icon' => 'fas fa-box-open',
             'auth' => [13],
         ],
+        [
+            'text' => 'Lacak',
+            'url'  => '/penjualan/lacak/show',
+            'icon' => 'fas fa-search',
+            'auth' => [13]
+        ],
+
         [
             'header' => 'Penjualan',
             'auth' => [13, 17, 31]
@@ -1575,44 +1594,44 @@ return [
 
         [
             'header' => 'AIR',
-            'auth' => [16,10]
+            'auth' => [16, 10]
         ],
 
         [
             'text'    => 'Grafik Air',
             'icon'    => 'fas fa-tint fa-fw',
-            'auth' => [16,10],
+            'auth' => [16, 10],
             'url' => '/mtc/air/masuk',
-                // [
-                //     'text' => 'Air Keluar',
-                //     'icon' => 'far fa-circle',
-                //     'url' => '/mtc/air/masuk',
-                //     'auth' => [16,10],
-                // ],
+            // [
+            //     'text' => 'Air Keluar',
+            //     'icon' => 'far fa-circle',
+            //     'url' => '/mtc/air/masuk',
+            //     'auth' => [16,10],
+            // ],
         ],
 
         [
             'header' => 'LISTRIK',
-            'auth' => [16,10]
+            'auth' => [16, 10]
         ],
 
         [
             'text' => 'Panel Listrik',
             'icon' => 'fas fa-bolt fa-fw',
             'url' => '/mtc/listrik/panel',
-            'auth' => [16,10],
+            'auth' => [16, 10],
         ],
         [
             'text' => 'Data Monitoring',
             'icon' => 'fas fa-database fa-fw',
             'url' => '/mtc/listrik/monitoring/table',
-            'auth' => [16,10],
+            'auth' => [16, 10],
         ],
         [
             'text' => 'Grafik Monitoring',
             'icon' => 'far fa-chart-bar fa-fw',
             'url' => '/mtc/listrik/monitoring/grafik',
-            'auth' => [16,10],
+            'auth' => [16, 10],
         ],
 
         // [
@@ -1662,6 +1681,16 @@ return [
             'icon' => 'fas fa-dolly fa-fw',
             'url' => '/manager/logistik/show',
             'auth' => [32],
+        ],
+        [
+            'header' => 'Setting',
+            'auth'   => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2]
+        ],
+        [
+            'text' => 'Ubah Password',
+            'icon' => 'fa-solid fa-gear',
+            'url' => '/edit_pwd',
+            'auth' => [26, 28,  17, 9, 13, 23, 15, 12, 16, 31, 2, 14]
         ],
     ],
 

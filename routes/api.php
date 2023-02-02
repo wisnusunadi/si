@@ -21,7 +21,11 @@ use Illuminate\Support\Facades\Route;
 
 Route::post('/login', [App\Http\Controllers\ApiController::class, 'authenticate']);
 Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+    return response()->json([
+        'username' => $request->user()->karyawan->nama,
+        'divisi_id' =>  $request->user()->divisi_id,
+        'foto' => $request->user()->foto,
+    ]);
 });
 
 Route::prefix('/master')->group(function () {
@@ -107,7 +111,7 @@ Route::prefix('/penjualan_produk')->group(function () {
 
 Route::prefix('/penjualan')->group(function () {
     // Route::post('create', [App\Http\Controllers\PenjualanController::class, 'create_penjualan']);
-    Route::post('/penjualan/data/{jenis}/{status}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
+    Route::post('/penjualan/data/{jenis}/{status}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'penjualan_data']);
     Route::get('/ekatalog_data/{akn}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog_emindo']);
     Route::get('/spa_data/{po}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa_emindo']);
     Route::get('check_ekatalog/{akn}', [App\Http\Controllers\PenjualanController::class, 'cek_paket']);
@@ -166,6 +170,10 @@ Route::prefix('/gbj')->group(function () {
     Route::post('/get', [App\Http\Controllers\GudangController::class, 'GetBarangJadiByID']);
     Route::post('data-so', [GudangController::class, 'getSODone']);
 
+    Route::get('/modal_data/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj']);
+    Route::get('/modal_data_non/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_non']);
+    Route::get('/modal_data_seri/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_seri']);
+    Route::get('/modal_data_seri_non/{id}', [App\Http\Controllers\GudangController::class, 'history_modal_gbj_seri_non']);
     Route::get('/test', [App\Http\Controllers\GudangController::class, 'test']);
     // select
     Route::get('sel-product', [GudangController::class, 'select_product']);

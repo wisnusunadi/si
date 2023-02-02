@@ -3099,7 +3099,7 @@ class LogistikController extends Controller
                 }
             }else{
 
-                if ($prd_id != '0' && $part_id == '0') {
+                if (isset($request->produk_id) && !isset($request->part_id)) {
                     if ($Logistik) {
                         for ($i = 0; $i < count($request->produk_id); $i++) {
                             $c = DetailLogistik::create([
@@ -3129,7 +3129,7 @@ class LogistikController extends Controller
                         $iddp = DetailPesananProduk::find($ids);
                         $poid = $iddp->DetailPesanan->pesanan_id;
                     }
-                }else if ($prd_id == '0' && $part_id != '0') {
+                }if (!isset($request->produk_id) && isset($request->part_id)) {
                     if ($Logistik) {
                         for ($i = 0; $i < count($request->part_id); $i++) {
                             $c = DetailLogistikPart::create([
@@ -3145,7 +3145,7 @@ class LogistikController extends Controller
                     } else {
                         return response()->json(['data' =>  $Logistik]);
                     }
-                }else if ($prd_id != '0' && $part_id != '0') {
+                }if (isset($request->produk_id) && isset($request->part_id)) {
                     if ($Logistik) {
                         for ($i = 0; $i < count($request->produk_id); $i++) {
                             $c = DetailLogistik::create([
@@ -4179,9 +4179,9 @@ class LogistikController extends Controller
     {
         $e = "";
         if ($id != "0") {
-            $e = Logistik::where([['id', '!=', $id], ['nosurat', '=', $val]])->count();
+            $e = Logistik::where([['id', '!=', $id], ['nosurat', '=', $val]])->whereYear('created_at', $this->getYear())->count();
         } else {
-            $e = Logistik::where('nosurat', $val)->count();
+            $e = Logistik::where('nosurat', $val)->whereYear('created_at', $this->getYear())->count();
         }
         return $e;
     }
@@ -4189,7 +4189,7 @@ class LogistikController extends Controller
     public function check_no_resi($val)
     {
         $vals = str_replace("_", "/", $val);
-        $e = Logistik::where([['noresi', '!=', '-'], ['noresi', '=', $vals]])->count();
+        $e = Logistik::where([['noresi', '!=', '-'], ['noresi', '=', $vals]])->whereYear('created_at', $this->getYear())->count();
         return $e;
     }
 
@@ -4208,5 +4208,10 @@ class LogistikController extends Controller
     //MANAGER
     public function manager_logistik_show(){
         return view('manager.logistik.so.show');
+    }
+
+    function getYear()
+    {
+        return  Carbon::now()->format('Y');
     }
 }

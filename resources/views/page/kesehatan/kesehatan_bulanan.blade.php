@@ -140,6 +140,7 @@
                                 <table id="berat_tabel_data" class="table table-hover styled-table table-striped"
                                     style="display:none">
                                     <thead style="text-align: center;">
+                                        @if(Auth::user()->divisi_id == '28')
                                         <tr>
                                             <th colspan="16">
                                                 <a href="/kesehatan/bulanan/berat/tambah" style="color: white;"><button
@@ -148,6 +149,7 @@
                                                         Tambah</i></button></a>
                                             </th>
                                         </tr>
+                                        @endif
                                         <tr>
                                             <th>No</th>
                                             <th>Tgl Cek</th>
@@ -173,6 +175,7 @@
                                 <table id="gcu_tabel_data" class="table table-hover styled-table table-striped"
                                     style="display:none">
                                     <thead style="text-align: center;">
+                                        @if(Auth::user()->divisi_id == '28')
                                         <tr>
                                             <th colspan="12">
                                                 <a href="/kesehatan/bulanan/gcu/tambah" style="color: white;"><button
@@ -181,6 +184,7 @@
                                                         Tambah</i></button></a>
                                             </th>
                                         </tr>
+                                        @endif
                                         <tr>
                                             <th>No</th>
                                             <th>Tanggal</th>
@@ -606,6 +610,7 @@
 @stop
 @section('adminlte_js')
     <script>
+        var divisi_id = '{{Auth::user()->divisi_id}}';
         $(function() {
             $('#berat_tabel_data > tbody').on('click', '#delete', function() {
                 var data_id = $(this).attr('data-id');
@@ -809,7 +814,8 @@
                             searchable: true,
                         },
                         {
-                            data: 'button'
+                            data: 'button',
+                            visible: divisi_id == '28' ? true : false
                         },
                     ]
                 });
@@ -939,7 +945,8 @@
                                 data: 'keterangan'
                             },
                             {
-                                data: 'button'
+                                data: 'button',
+                                visible: divisi_id == '28' ? true : false
                             },
                         ]
                     });
@@ -1113,7 +1120,8 @@
                         data: 'keterangan'
                     },
                     {
-                        data: 'aksi'
+                        data: 'aksi',
+                        visible: divisi_id == '28' ? true : false
                     },
                 ]
             });
@@ -1166,7 +1174,8 @@
                         data: 'keterangan'
                     },
                     {
-                        data: 'aksi'
+                        data: 'aksi',
+                        visible: divisi_id == '28' ? true : false
                     },
                 ]
             });

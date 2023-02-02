@@ -1,4 +1,5 @@
 <?php
+
 use App\Http\Controllers\GudangController;
 use App\Http\Controllers\ProduksiController;
 use App\Http\Controllers\SparepartController;
@@ -31,8 +32,8 @@ Route::group(['middleware' => 'guest'], function () {
 });
 
 // Route::get('/', function () {
-//     if (auth()->user()->divisi->id == 24) return redirect('/ppic');
-//     else if (auth()->user()->divisi->id == 3) return redirect('/manager-teknik');
+//     if (auth()->user()->Karyawan->divisi_id == 24) return redirect('/ppic');
+//     else if (auth()->user()->Karyawan->divisi_id == 3) return redirect('/manager-teknik');
 //     else return view('home');
 // })->middleware('auth');
 
@@ -44,7 +45,26 @@ Route::get("/test", function () {
     return view('test');
 });
 Route::view('/modul_dashboard/show', 'auth.dashboard');
-
+Route::group(['middleware' => 'auth', 'middleware' => ['auth', 'divisi:jual,kes,prd,dc,gbj,qc,log,gk,mtc,mgrgdg,dirut,it']], function () {
+    Route::view('/edit_pwd', 'page.setting.edit_pwd');
+    Route::post('/edit_pwd', [App\Http\Controllers\Auth\ResetPasswordController::class, 'update_pwd'])->name('penjualan.produk.store');
+});
+Route::group(['prefix' => 'administrator', 'middleware' => 'auth'], function () {
+    Route::view('/dashboard', 'page.administrator.dashboard');
+    Route::group(['prefix' => 'user', 'middleware' => 'auth'], function () {
+        Route::view('/', 'page.administrator.user.show');
+        Route::post('/data', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_data_user']);
+        Route::post('/ubah_status', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_change_status_user'])->name('user.status');
+        Route::get('/ubah_data/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_data_user_modal']);
+        Route::get('/tambah', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_create_user_modal']);
+        Route::post('/store', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_store_user']);
+        Route::post('/update/{jenis}/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'get_update_user']);
+        Route::post('/reset_pwd/{id}', [App\Http\Controllers\Administrator\AdministratorController::class, 'reset_pwd_user'])->name('user.resetpwd');
+    });
+    Route::group(['prefix' => 'part', 'middleware' => 'auth'], function () {
+        Route::view('/', 'page.administrator.part.show');
+    });
+});
 Route::group(['prefix' => 'ppic', 'middleware' => 'auth'], function () {
     Route::view('/{any?}', 'spa.ppic.spa')->middleware('divisi:ppic');
     Route::group(['middleware' => ['divisi:jual,dirut,ppic']], function () {
@@ -186,9 +206,9 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
 
         Route::group(['middleware' => ['divisi:jual,dirut,ppic']], function () {
             Route::view('/show', 'page.penjualan.penjualan.show')->name('penjualan.penjualan.show');
-            Route::post('/ekatalog/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
-            Route::post('/spa/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
-            Route::post('/spb/data/{value}', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
+            Route::post('/ekatalog/data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_ekatalog']);
+            Route::post('/spa/data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_spa']);
+            Route::post('/spb/data/{value}/{tahun}', [App\Http\Controllers\PenjualanController::class, 'get_data_spb']);
         });
         Route::group(['middleware' => ['divisi:jual,ppic']], function () {
             Route::get('/export/{jenis}/{customer_id}/{tgl_awal}/{tgl_akhir}/{seri}/{tampilan}', [App\Http\Controllers\PenjualanController::class, 'export_laporan'])->name('penjualan.penjualan.export');
@@ -219,7 +239,7 @@ Route::group(['prefix' => 'penjualan', 'middleware' => 'auth'], function () {
         Route::view('/edit', 'page.penjualan.so.edit')->name('penjualan.so.edit');
     });
 
-    Route::group(['prefix' => '/lacak', 'middleware' => ['divisi:jual,qc,log,dc,asp,dirut']], function () {
+    Route::group(['prefix' => '/lacak', 'middleware' => ['divisi:jual,gbj,qc,log,dc,asp,dirut']], function () {
         Route::view('/show', 'page.penjualan.lacak.show')->name('penjualan.lacak.show');
     });
 

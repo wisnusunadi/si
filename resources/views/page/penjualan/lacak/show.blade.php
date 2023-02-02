@@ -10,13 +10,13 @@
             </div><!-- /.col -->
             <div class="col-sm-6">
                 <ol class="breadcrumb float-sm-right">
-                    @if (Auth::user()->divisi_id == '26' || Auth::user()->divisi_id == '8')
+                    @if (Auth::user()->Karyawan->divisi_id == '26' || Auth::user()->Karyawan->divisi_id == '8')
                         <li class="breadcrumb-item"><a href="{{ route('penjualan.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Lacak</li>
-                    @elseif(Auth::user()->divisi_id == '15')
+                    @elseif(Auth::user()->Karyawan->divisi_id == '15')
                         <li class="breadcrumb-item"><a href="{{ route('logistik.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Lacak</li>
-                    @elseif(Auth::user()->divisi_id == '2')
+                    @elseif(Auth::user()->Karyawan->divisi_id == '2')
                         <li class="breadcrumb-item"><a href="{{ route('direksi.dashboard') }}">Beranda</a></li>
                         <li class="breadcrumb-item active">Lacak</li>
                     @endif
@@ -152,14 +152,18 @@
                                                     class="select2 select-info form-control custom-select col-form-label pilih_data"
                                                     placeholder="Pilih Data" disabled>
                                                     <option value=""></option>
-                                                    <option value="produk">Produk</option>
-                                                    <option value="customer">Distributor / Customer / Satuan Kerja /
-                                                        Instansi</option>
-                                                    <option value="no_po">No Purchase Order</option>
-                                                    <option value="no_akn">No Paket</option>
-                                                    <option value="no_seri">No Seri</option>
-                                                    <option value="no_so">No Sales Order</option>
-                                                    <option value="no_sj">No Surat Jalan</option>
+                                                    @if (Auth::user()->divisi->kode != 'gbj')
+                                                        <option value="produk">Produk</option>
+                                                        <option value="customer">Distributor / Customer / Satuan Kerja /
+                                                            Instansi</option>
+                                                        <option value="no_po">No Purchase Order</option>
+                                                        <option value="no_akn">No Paket</option>
+                                                        <option value="no_seri">No Seri</option>
+                                                        <option value="no_so">No Sales Order</option>
+                                                        <option value="no_sj">No Surat Jalan</option>
+                                                    @else
+                                                        <option value="no_seri_gbj">No Seri</option>
+                                                    @endif
                                                 </select>
                                             </div>
                                         </div>
@@ -194,6 +198,7 @@
                                             <th>No SO</th>
                                             <th>No PO</th>
                                             <th>Tanggal PO</th>
+                                            <th>SJ</th>
                                             <th>Customer</th>
                                             <th>Status</th>
                                         </tr>
@@ -343,6 +348,27 @@
                             </div>
                         </div>
                     </div>
+                    <div class="card hide result" id="noserigbj">
+                        <div class="card-body">
+                            <h4>Hasil Pencarian No Seri</h4>
+                            <div class="table-responsive">
+                                <table class="table table-hover" id="noserigbjtable" style="width:100%">
+                                    <thead>
+                                        <tr>
+                                            <th>No</th>
+                                            <th>No Seri</th>
+                                            <th>Nama Produk</th>
+                                            <th>Variasi</th>
+                                            <th>Status</th>
+                                            <th>Keterangan</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -357,117 +383,132 @@
                 allowClear: true
             });
 
-            function po(data){
+            function po(data) {
                 var potable = $('#potable').DataTable({
                     destroy: true,
                     processing: true,
                     // serverSide: true,
                     ajax: {
-                        'url': '/api/penjualan/lacak/data/no_po/'+data,
+                        'url': '/api/penjualan/lacak/data/no_po/' + data,
                         'dataType': 'json',
                         'type': 'POST',
                         'headers': {
-                            'X-CSRF-TOKEN': '{{csrf_token()}}'
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
                     },
                     language: {
                         processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
                     },
-                    columns: [
-                        {
+                    columns: [{
                             data: null,
                         }, {
                             data: null,
                             className: 'nowraps align-center',
-                            render: function (data, type, row) {
+                            render: function(data, type, row) {
                                 if (row.so != null) {
                                     return row.so;
-                                } else{
+                                } else {
                                     return '-';
                                 }
                             }
                         }, {
                             data: 'no_po',
                             className: 'nowraps align-center'
-                        }, {
+                        },
+
+                        {
                             data: 'tgl_po',
                             className: 'nowraps align-center',
-                            render: function (data, type, row){
+                            render: function(data, type, row) {
                                 return moment(new Date(data).toString()).format('DD-MM-YYYY');
                             }
                         }, {
+                            data: 'sj',
+                            className: 'nowraps align-center',
+                        },
+
+                        {
                             data: null,
                             className: 'nowraps align-center',
-                            render: function (data, type, row) {
+                            render: function(data, type, row) {
                                 if (row.c_ekat_nama != null) {
                                     return row.c_ekat_nama;
-                                }else if (row.c_spa_nama != null) {
+                                } else if (row.c_spa_nama != null) {
                                     return row.c_spa_nama;
-                                }else if (row.c_spb_nama != null) {
+                                } else if (row.c_spb_nama != null) {
                                     return row.c_spb_nama;
-                                }else if (row.customer != null) {
+                                } else if (row.customer != null) {
                                     return row.customer;
-                                }else{
+                                } else {
                                     return '-';
                                 }
                             }
                         }, {
                             data: null,
                             className: 'nowraps align-center',
-                            render: function(data, type, row){
+                            render: function(data, type, row) {
                                 if (row.state_nama != null || row.state_nama != undefined) {
                                     if (row.state_nama == "Penjualan") {
-                                        return '<span class="red-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="red-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "PO") {
-                                        return '<span class="purple-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="purple-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "Gudang") {
-                                        return '<span class="orange-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="orange-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "QC") {
-                                        return '<span class="yellow-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="yellow-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "Belum Terkirim") {
-                                        return '<span class="red-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="red-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "Terkirim Sebagian") {
-                                        return '<span class="blue-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="blue-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "Kirim") {
-                                        return '<span class="green-text badge">'+row.state_nama + '</span>';
-                                    }else{
+                                        return '<span class="green-text badge">' + row.state_nama +
+                                            '</span>';
+                                    } else {
                                         return '-';
                                     }
-                                }
-                                else{
+                                } else {
                                     return "-";
                                 }
                             }
                         }
                     ],
-                    columnDefs : [
-                        {
-                            "searchable": false,
-                            "orderable": false,
-                            "targets": 0
-                        },
+                    columnDefs: [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }, ],
+                    order: [
+                        [2, 'asc']
                     ],
-                    order: [[2, 'asc']],
                 });
 
-                potable.on('order.dt search.dt', function () {
-                    potable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
+                potable.on('order.dt search.dt', function() {
+                    potable.column(0, {
+                        search: 'applied',
+                        order: 'applied'
+                    }).nodes().each(function(cell, i) {
                         cell.innerHTML = i + 1;
                     });
                 }).draw();
             }
 
-            function so(data){
+            function so(data) {
                 $('#nosotable').DataTable({
                     destroy: true,
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        'url': '/api/penjualan/lacak/data/no_so/'+ data,
+                        'url': '/api/penjualan/lacak/data/no_so/' + data,
                         'dataType': 'json',
                         'type': 'POST',
                         'headers': {
-                            'X-CSRF-TOKEN': '{{csrf_token()}}'
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
                     },
                     language: {
@@ -497,25 +538,25 @@
                 });
             }
 
-            function akn(data){
+            function akn(data) {
                 var d = new Date();
-                var month = d.getMonth()+1;
+                var month = d.getMonth() + 1;
                 var day = d.getDate();
 
                 var output = d.getFullYear() + '-' +
-                    (month<10 ? '0' : '') + month + '-' +
-                    (day<10 ? '0' : '') + day;
+                    (month < 10 ? '0' : '') + month + '-' +
+                    (day < 10 ? '0' : '') + day;
 
                 var akntable = $('#noakntable').DataTable({
                     destroy: true,
                     processing: true,
                     // serverSide: true,
                     ajax: {
-                        'url': '/api/penjualan/lacak/data/no_akn/'+data,
+                        'url': '/api/penjualan/lacak/data/no_akn/' + data,
                         'dataType': 'json',
                         'type': 'POST',
                         'headers': {
-                            'X-CSRF-TOKEN': '{{csrf_token()}}'
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
                     },
                     language: {
@@ -531,59 +572,70 @@
                         {
                             data: null,
                             className: 'nowraps align-center',
-                            render: function(data, type, row){
+                            render: function(data, type, row) {
                                 if (row.pesanan != null) {
                                     return row.pesanan.so
-                                }  else {
-                                    return  '-';
+                                } else {
+                                    return '-';
                                 }
                             }
                         },
                         {
                             data: 'tgl_buat',
                             className: 'nowraps align-center',
-                            render: function(data, type, row){
+                            render: function(data, type, row) {
                                 return moment(new Date(data).toString()).format('DD-MM-YYYY')
                             }
                         },
                         {
                             data: null,
                             className: 'nowraps align-center',
-                            render: function(data, type, row){
+                            render: function(data, type, row) {
                                 if (row.tgl_kontrak_custom != null) {
-                                    if(row.pesanan.state.nama == "Kirim"){
-                                        return moment(new Date(row.tgl_kontrak_custom).toString()).format('DD-MM-YYYY');
+                                    if (row.pesanan.state.nama == "Kirim") {
+                                        return moment(new Date(row.tgl_kontrak_custom).toString())
+                                            .format('DD-MM-YYYY');
                                     } else {
-                                        var hari = (new Date(row.tgl_kontrak_custom) - new Date(output)) / (1000 * 3600 * 24);
+                                        var hari = (new Date(row.tgl_kontrak_custom) - new Date(
+                                            output)) / (1000 * 3600 * 24);
                                         if (hari > 7) {
-                                            return  `<div>`+ moment(new Date(row.tgl_kontrak_custom).toString()).format('DD-MM-YYYY') + `</div>
-                                            <div><small><i class="fas fa-clock" id="info"></i> `+ hari+ ` Hari Lagi</small></div>`;
+                                            return `<div>` + moment(new Date(row.tgl_kontrak_custom)
+                                                    .toString()).format('DD-MM-YYYY') + `</div>
+                                            <div><small><i class="fas fa-clock" id="info"></i> ` + hari +
+                                                ` Hari Lagi</small></div>`;
                                         } else if (hari > 0 && hari <= 7) {
-                                            return  `<div id="warning">`+ moment(new Date(row.tgl_kontrak_custom).toString()).format('DD-MM-YYYY') + `</div>
-                                            <div><small><i class="fas fa-exclamation-circle" id="warning"></i> `+ hari + ` Hari Lagi</small></div>`;
+                                            return `<div id="warning">` + moment(new Date(row
+                                                    .tgl_kontrak_custom).toString()).format(
+                                                    'DD-MM-YYYY') + `</div>
+                                            <div><small><i class="fas fa-exclamation-circle" id="warning"></i> ` +
+                                                hari + ` Hari Lagi</small></div>`;
                                         } else {
-                                            return  `<div class="text-danger font-weight-bold">` + moment(new Date(row.tgl_kontrak_custom).toString()).format('DD-MM-YYYY') + `</div>
-                                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi `+Math.abs(hari)+` Hari</div>`;
+                                            return `<div class="text-danger font-weight-bold">` +
+                                                moment(new Date(row.tgl_kontrak_custom).toString())
+                                                .format('DD-MM-YYYY') +
+                                                `</div>
+                                            <div class="invalid-feedback d-block"><i class="fas fa-exclamation-circle"></i> Melebihi ` +
+                                                Math
+                                                .abs(hari) + ` Hari</div>`;
                                         }
                                     }
-                                }  else {
-                                    return  '-';
+                                } else {
+                                    return '-';
                                 }
                             }
                         },
                         {
                             data: null,
                             className: 'align-center',
-                            render: function(data, type, row){
+                            render: function(data, type, row) {
                                 if (row.customer != null) {
-                                    if($.type(row.customer) != "string"){
+                                    if ($.type(row.customer) != "string") {
                                         return row.customer.nama;
-                                    }
-                                    else{
+                                    } else {
                                         return row.customer;
                                     }
-                                }  else {
-                                    return  '-';
+                                } else {
+                                    return '-';
                                 }
                             }
                         },
@@ -594,27 +646,33 @@
                         {
                             data: null,
                             className: 'nowraps align-center',
-                            render: function(data, type, row){
+                            render: function(data, type, row) {
                                 if (row.pesanan != null) {
                                     if (row.pesanan.state.nama == "Penjualan") {
-                                        return '<span class="red-text badge">'+row.pesanan.state.nama + '</span>';
+                                        return '<span class="red-text badge">' + row.pesanan.state
+                                            .nama + '</span>';
                                     } else if (row.pesanan.state.nama == "PO") {
-                                        return '<span class="purple-text badge">'+row.pesanan.state.nama + '</span>';
+                                        return '<span class="purple-text badge">' + row.pesanan
+                                            .state.nama + '</span>';
                                     } else if (row.pesanan.state.nama == "Gudang") {
-                                        return '<span class="orange-text badge">'+row.pesanan.state.nama + '</span>';
+                                        return '<span class="orange-text badge">' + row.pesanan
+                                            .state.nama + '</span>';
                                     } else if (row.pesanan.state.nama == "QC") {
-                                        return '<span class="yellow-text badge">'+row.pesanan.state.nama + '</span>';
+                                        return '<span class="yellow-text badge">' + row.pesanan
+                                            .state.nama + '</span>';
                                     } else if (row.pesanan.state.nama == "Belum Terkirim") {
-                                        return '<span class="red-text badge">'+row.pesanan.state.nama + '</span>';
+                                        return '<span class="red-text badge">' + row.pesanan.state
+                                            .nama + '</span>';
                                     } else if (row.pesanan.state.nama == "Terkirim Sebagian") {
-                                        return '<span class="blue-text badge">'+row.pesanan.state.nama + '</span>';
+                                        return '<span class="blue-text badge">' + row.pesanan.state
+                                            .nama + '</span>';
                                     } else if (row.pesanan.state.nama == "Kirim") {
-                                        return '<span class="green-text badge">'+row.pesanan.state.nama + '</span>';
-                                    } else{
+                                        return '<span class="green-text badge">' + row.pesanan.state
+                                            .nama + '</span>';
+                                    } else {
                                         return '-'
                                     }
-                                }
-                                else{
+                                } else {
                                     return '-'
                                 }
                             }
@@ -622,47 +680,51 @@
                         {
                             data: 'status',
                             className: 'nowraps align-center',
-                            render: function(data, type, row){
+                            render: function(data, type, row) {
                                 if (row.status == "draft") {
                                     return '<span class="badge blue-text">Draft</span>';
                                 } else if (row.status == "sepakat") {
                                     return '<span class="green-text badge">Sepakat</span>';
                                 } else if (row.status == "negosiasi") {
-                                    return  '<span class="yellow-text badge">Negosiasi</span>';
+                                    return '<span class="yellow-text badge">Negosiasi</span>';
                                 } else {
-                                    return  '<span class="red-text badge">Batal</span>';
+                                    return '<span class="red-text badge">Batal</span>';
                                 }
                             }
                         }
-                    ], columnDefs : [
-                        {
-                            "searchable": false,
-                            "orderable": false,
-                            "targets": 0
-                        },
                     ],
-                    order: [[1, 'asc']],
+                    columnDefs: [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }, ],
+                    order: [
+                        [1, 'asc']
+                    ],
                 });
 
-                akntable.on('order.dt search.dt', function () {
-                        akntable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                            cell.innerHTML = i + 1;
-                        });
-                    }).draw();
+                akntable.on('order.dt search.dt', function() {
+                    akntable.column(0, {
+                        search: 'applied',
+                        order: 'applied'
+                    }).nodes().each(function(cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
 
             }
 
-            function noseri(data){
+            function noseri(data) {
                 var noseritable = $('#noseritable').DataTable({
                     destroy: true,
                     processing: true,
                     // serverSide: true,
                     ajax: {
-                        'url': '/api/penjualan/lacak/data/no_seri/'+ data,
+                        'url': '/api/penjualan/lacak/data/no_seri/' + data,
                         'dataType': 'json',
                         'type': 'POST',
                         'headers': {
-                            'X-CSRF-TOKEN': '{{csrf_token()}}'
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
                     },
                     language: {
@@ -683,14 +745,14 @@
                         {
                             data: null,
                             className: 'nowraps align-center',
-                            render: function (data, type, row) {
+                            render: function(data, type, row) {
                                 if (row.c_ekat_nama != null) {
                                     return row.c_ekat_nama;
-                                }else if (row.c_spa_nama != null) {
+                                } else if (row.c_spa_nama != null) {
                                     return row.c_spa_nama;
-                                }else if (row.c_spb_nama != null) {
+                                } else if (row.c_spb_nama != null) {
                                     return row.c_spb_nama;
-                                }else{
+                                } else {
                                     return '-'
                                 }
                             }
@@ -702,16 +764,20 @@
                         {
                             data: null,
                             className: 'nowraps align-center',
-                            render: function (data, type, row) {
+                            render: function(data, type, row) {
                                 if (row.tgl_uji != null) {
-                                    return moment(new Date(row.tgl_uji).toString()).format('DD-MM-YYYY');
-                                }else if (row.tglserah_on != null) {
-                                    return moment(new Date(row.tglserah_on).toString()).format('DD-MM-YYYY');
-                                }else if (row.tglserah_off != null) {
-                                    return moment(new Date(row.tglserah_off).toString()).format('DD-MM-YYYY');
-                                }else if (row.tglserah_spb != null) {
-                                    return moment(new Date(row.tglserah_spb).toString()).format('DD-MM-YYYY');
-                                }else{
+                                    return moment(new Date(row.tgl_uji).toString()).format(
+                                        'DD-MM-YYYY');
+                                } else if (row.tglserah_on != null) {
+                                    return moment(new Date(row.tglserah_on).toString()).format(
+                                        'DD-MM-YYYY');
+                                } else if (row.tglserah_off != null) {
+                                    return moment(new Date(row.tglserah_off).toString()).format(
+                                        'DD-MM-YYYY');
+                                } else if (row.tglserah_spb != null) {
+                                    return moment(new Date(row.tglserah_spb).toString()).format(
+                                        'DD-MM-YYYY');
+                                } else {
                                     return '-'
                                 }
                             }
@@ -723,12 +789,14 @@
                         {
                             data: null,
                             className: 'nowraps align-center',
-                            render: function (data, type, row) {
+                            render: function(data, type, row) {
                                 if (row.tgl_sj != null) {
-                                    return moment(new Date(row.tgl_sj).toString()).format('DD-MM-YYYY');
-                                }else if (row.tgl_kirim != null) {
-                                    return moment(new Date(row.tgl_kirim).toString()).format('DD-MM-YYYY');
-                                }else{
+                                    return moment(new Date(row.tgl_sj).toString()).format(
+                                        'DD-MM-YYYY');
+                                } else if (row.tgl_kirim != null) {
+                                    return moment(new Date(row.tgl_kirim).toString()).format(
+                                        'DD-MM-YYYY');
+                                } else {
                                     return '-'
                                 }
                             }
@@ -736,59 +804,68 @@
                         {
                             name: null,
                             className: 'nowraps align-center',
-                            render: function(data, type, row){
+                            render: function(data, type, row) {
 
                                 if (row.state_nama != null) {
                                     if (row.state_nama == "Penjualan") {
-                                        return '<span class="red-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="red-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "PO") {
-                                        return '<span class="purple-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="purple-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "Gudang") {
-                                        return '<span class="orange-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="orange-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "QC") {
-                                        return '<span class="yellow-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="yellow-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "Belum Terkirim") {
-                                        return '<span class="red-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="red-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "Terkirim Sebagian") {
-                                        return '<span class="blue-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="blue-text badge">' + row.state_nama +
+                                            '</span>';
                                     } else if (row.state_nama == "Kirim") {
-                                        return '<span class="green-text badge">'+row.state_nama + '</span>';
+                                        return '<span class="green-text badge">' + row.state_nama +
+                                            '</span>';
                                     }
-                                }
-                                else{
+                                } else {
                                     return '<span class="green-text badge">Kirim</span>'
                                 }
                             }
                         }
                     ],
-                    columnDefs : [
-                        {
-                            "searchable": false,
-                            "orderable": false,
-                            "targets": 0
-                        },
+                    columnDefs: [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }, ],
+                    order: [
+                        [7, 'asc']
                     ],
-                    order: [[7, 'asc']],
                 });
 
-                noseritable.on('order.dt search.dt', function () {
-                        noseritable.column(0, { search: 'applied', order: 'applied' }).nodes().each(function (cell, i) {
-                            cell.innerHTML = i + 1;
-                        });
-                    }).draw();
+                noseritable.on('order.dt search.dt', function() {
+                    noseritable.column(0, {
+                        search: 'applied',
+                        order: 'applied'
+                    }).nodes().each(function(cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
             }
 
-            function customer(data){
+            function customer(data) {
                 $('#customertable').DataTable({
                     destroy: true,
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        'url': '/api/penjualan/lacak/data/customer/'+data,
+                        'url': '/api/penjualan/lacak/data/customer/' + data,
                         'dataType': 'json',
                         'type': 'POST',
                         'headers': {
-                            'X-CSRF-TOKEN': '{{csrf_token()}}'
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
                     },
                     language: {
@@ -836,17 +913,17 @@
 
             }
 
-            function produk(data){
+            function produk(data) {
                 $('#produktable').DataTable({
                     destroy: true,
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        'url': '/api/penjualan/lacak/data/produk/'+data,
+                        'url': '/api/penjualan/lacak/data/produk/' + data,
                         'dataType': 'json',
                         'type': 'POST',
                         'headers': {
-                            'X-CSRF-TOKEN': '{{csrf_token()}}'
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
                     },
                     language: {
@@ -893,17 +970,17 @@
                 });
             }
 
-            function sj(data){
+            function sj(data) {
                 $('#nosjtable').DataTable({
                     destroy: true,
                     processing: true,
                     serverSide: true,
                     ajax: {
-                        'url': '/api/penjualan/lacak/data/no_sj/'+data,
+                        'url': '/api/penjualan/lacak/data/no_sj/' + data,
                         'dataType': 'json',
                         'type': 'POST',
                         'headers': {
-                            'X-CSRF-TOKEN': '{{csrf_token()}}'
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
                         }
                     },
                     language: {
@@ -940,6 +1017,69 @@
                 });
             }
 
+            function noserigbj(data) {
+                var noserigbjtable = $('#noserigbjtable').DataTable({
+                    destroy: true,
+                    processing: true,
+                    // serverSide: true,
+                    ajax: {
+                        'url': '/api/penjualan/lacak/data/no_seri_gbj/' + data,
+                        'dataType': 'json',
+                        'type': 'POST',
+                        'headers': {
+                            'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                        }
+                    },
+                    language: {
+                        processing: '<i class="fa fa-spinner fa-spin"></i> Tunggu Sebentar'
+                    },
+                    columns: [{
+                            data: null,
+                        },
+                        {
+                            data: 'noseri',
+                            className: 'nowraps align-center'
+                        },
+                        {
+                            data: 'nama_produk',
+                            className: 'nowraps align-center',
+                        },
+                        {
+                            data: 'variasi',
+                            className: 'nowraps align-center',
+                        },
+                        {
+                            name: null,
+                            className: 'nowraps align-center',
+                            render: function(data, type, row) {
+                                return '<span class="green-text badge">' + row.state_nama +
+                                    '</span>';
+                            }
+                        }, {
+                            data: 'keterangan',
+                            className: 'nowraps align-center',
+                        },
+                    ],
+                    columnDefs: [{
+                        "searchable": false,
+                        "orderable": false,
+                        "targets": 0
+                    }, ],
+                    order: [
+                        [2, 'asc']
+                    ],
+                });
+
+                noserigbjtable.on('order.dt search.dt', function() {
+                    noserigbjtable.column(0, {
+                        search: 'applied',
+                        order: 'applied'
+                    }).nodes().each(function(cell, i) {
+                        cell.innerHTML = i + 1;
+                    });
+                }).draw();
+            }
+
             $('#data').on('keyup change', function() {
                 if ($(this).val() != "") {
                     $('.pilih_data').removeAttr('disabled');
@@ -971,6 +1111,7 @@
                     // $('#noseritable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
                     noseri(data);
                     $('#noseri').removeClass('hide');
+                    $('#noserigbj').addClass('hide');
                     $('#customer').addClass('hide');
                     $('#nopo').addClass('hide');
                     $('#noakn').addClass('hide');
@@ -983,19 +1124,20 @@
                     //   $('#produktable').DataTable().ajax.url('/api/penjualan/lacak/data/produk/' + data).load();
                     $('#produk').removeClass('hide');
                     $('#nopo').addClass('hide');
-                    $('#nopo').addClass('hide');
                     $('#noakn').addClass('hide');
                     $('#noso').addClass('hide');
                     $('#nosj').addClass('hide');
                     $('#customer').addClass('hide');
-
+                    $('#noserigbj').addClass('hide');
+                    $('#noseri').addClass('hide');
                 } else if ($('.pilih_data').val() == "customer") {
                     var data = $('#data').val();
                     customer(data);
                     //  $('#customertable').DataTable().ajax.url('/api/penjualan/lacak/data/customer/' + data).load();
                     $('#customer').removeClass('hide');
                     $('#nopo').addClass('hide');
-                    $('#nopo').addClass('hide');
+                    $('#noseri').addClass('hide');
+                    $('#noserigbj').addClass('hide');
                     $('#noakn').addClass('hide');
                     $('#noso').addClass('hide');
                     $('#nosj').addClass('hide');
@@ -1003,37 +1145,40 @@
 
                 } else if ($('.pilih_data').val() == "no_po") {
                     var data = $('#data').val();
-                    po(data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '-'));
-                    //  $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
-                    $('#nopo').removeClass('hide');
-                    $('#noseri').addClass('hide');
-                    $('#noakn').addClass('hide');
-                    $('#customer').addClass('hide');
-                    $('#noso').addClass('hide');
-                    $('#nosj').addClass('hide');
-                    $('#produk').addClass('hide');
-                } else if ($('.pilih_data').val() == "no_akn") {
-                    var data = $('#data').val();
-                    // $('#noakntable').DataTable().ajax.url('/api/penjualan/lacak/data/no_akn/' + data).load();
-                    akn(data);
-                    $('#noakn').removeClass('hide');
-                    $('#customer').addClass('hide');
-                    $('#noseri').addClass('hide');
-                    $('#nopo').addClass('hide');
-                    $('#noso').addClass('hide');
-                    $('#nosj').addClass('hide');
-                    $('#produk').addClass('hide');
-                } else if ($('.pilih_data').val() == "no_so") {
-                    var data = $('#data').val();
-                    var p = 'O';
-                    var xxx = data.replace('/' + p + '/g', ':');
-                    so(data);
+                    po(data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '_'));
+                //  $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
+                $('#nopo').removeClass('hide');
+                $('#noseri').addClass('hide');
+                $('#noserigbj').addClass('hide');
+                $('#noakn').addClass('hide');
+                $('#customer').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
+            } else if ($('.pilih_data').val() == "no_akn") {
+                var data = $('#data').val();
+                // $('#noakntable').DataTable().ajax.url('/api/penjualan/lacak/data/no_akn/' + data).load();
+                akn(data);
+                $('#noakn').removeClass('hide');
+                $('#customer').addClass('hide');
+                $('#noseri').addClass('hide');
+                $('#noserigbj').addClass('hide');
+                $('#nopo').addClass('hide');
+                $('#noso').addClass('hide');
+                $('#nosj').addClass('hide');
+                $('#produk').addClass('hide');
+            } else if ($('.pilih_data').val() == "no_so") {
+                var data = $('#data').val();
+                var p = 'O';
+                var xxx = data.replace(/([~!@#$%^&*()_+=`{}\[\]\|\\:;'<>,.\/? ])+/g, '_');
+                    so(xxx);
                     // $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_so/' + data).load();
+                    $('#noso').removeClass('hide');
                     $('#customer').addClass('hide');
                     $('#noakn').addClass('hide');
                     $('#noseri').addClass('hide');
+                    $('#noserigbj').addClass('hide');
                     $('#nopo').addClass('hide');
-                    $('#noso').removeClass('hide');
                     $('#nosj').addClass('hide');
                     $('#produk').addClass('hide');
                 } else if ($('.pilih_data').val() == "no_sj") {
@@ -1041,6 +1186,19 @@
                     sj(data);
                     //$('#nosjtable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
                     $('#nosj').removeClass('hide');
+                    $('#customer').addClass('hide');
+                    $('#noseri').addClass('hide');
+                    $('#noserigbj').addClass('hide');
+                    $('#nopo').addClass('hide');
+                    $('#noso').addClass('hide');
+                    $('#noakn').addClass('hide');
+                    $('#produk').addClass('hide');
+                } else if ($('.pilih_data').val() == "no_seri_gbj") {
+                    var data = $('#data').val();
+                    noserigbj(data);
+                    //$('#nosjtable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
+                    $('#noserigbj').removeClass('hide');
+                    $('#nosj').addClass('hide');
                     $('#customer').addClass('hide');
                     $('#noseri').addClass('hide');
                     $('#nopo').addClass('hide');
@@ -1061,106 +1219,106 @@
                 $('#btncari').attr('disabled', true);
             });
 
-        // $('#btncari').on('click', function() {
-        //     if ($('.pilih_data').val() == "no_seri") {
-        //         var data = $('#data').val();
-        //         console.log(data);
-        //        // $('#noseritable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
-        //         noseri(data);
-        //         $('#noseri').removeClass('hide');
-        //         $('#customer').addClass('hide');
-        //         $('#nopo').addClass('hide');
-        //         $('#noakn').addClass('hide');
-        //         $('#noso').addClass('hide');
-        //         $('#nosj').addClass('hide');
-        //         $('#produk').addClass('hide');
-        //     } else if ($('.pilih_data').val() == "produk") {
-        //         var data = $('#data').val();
-        //         produk(data);
-        //      //   $('#produktable').DataTable().ajax.url('/api/penjualan/lacak/data/produk/' + data).load();
-        //         $('#produk').removeClass('hide');
-        //         $('#nopo').addClass('hide');
-        //         $('#nopo').addClass('hide');
-        //         $('#noakn').addClass('hide');
-        //         $('#noso').addClass('hide');
-        //         $('#nosj').addClass('hide');
-        //         $('#customer').addClass('hide');
+            // $('#btncari').on('click', function() {
+            //     if ($('.pilih_data').val() == "no_seri") {
+            //         var data = $('#data').val();
+            //         console.log(data);
+            //        // $('#noseritable').DataTable().ajax.url('/api/penjualan/lacak/data/no_seri/' + data).load();
+            //         noseri(data);
+            //         $('#noseri').removeClass('hide');
+            //         $('#customer').addClass('hide');
+            //         $('#nopo').addClass('hide');
+            //         $('#noakn').addClass('hide');
+            //         $('#noso').addClass('hide');
+            //         $('#nosj').addClass('hide');
+            //         $('#produk').addClass('hide');
+            //     } else if ($('.pilih_data').val() == "produk") {
+            //         var data = $('#data').val();
+            //         produk(data);
+            //      //   $('#produktable').DataTable().ajax.url('/api/penjualan/lacak/data/produk/' + data).load();
+            //         $('#produk').removeClass('hide');
+            //         $('#nopo').addClass('hide');
+            //         $('#nopo').addClass('hide');
+            //         $('#noakn').addClass('hide');
+            //         $('#noso').addClass('hide');
+            //         $('#nosj').addClass('hide');
+            //         $('#customer').addClass('hide');
 
-        //     } else if ($('.pilih_data').val() == "customer") {
-        //         var data = $('#data').val();
-        //         customer(data);
-        //       //  $('#customertable').DataTable().ajax.url('/api/penjualan/lacak/data/customer/' + data).load();
-        //         $('#customer').removeClass('hide');
-        //         $('#nopo').addClass('hide');
-        //         $('#nopo').addClass('hide');
-        //         $('#noakn').addClass('hide');
-        //         $('#noso').addClass('hide');
-        //         $('#nosj').addClass('hide');
-        //         $('#produk').addClass('hide');
+            //     } else if ($('.pilih_data').val() == "customer") {
+            //         var data = $('#data').val();
+            //         customer(data);
+            //       //  $('#customertable').DataTable().ajax.url('/api/penjualan/lacak/data/customer/' + data).load();
+            //         $('#customer').removeClass('hide');
+            //         $('#nopo').addClass('hide');
+            //         $('#nopo').addClass('hide');
+            //         $('#noakn').addClass('hide');
+            //         $('#noso').addClass('hide');
+            //         $('#nosj').addClass('hide');
+            //         $('#produk').addClass('hide');
 
-        //     } else if ($('.pilih_data').val() == "no_po") {
-        //         var data = $('#data').val();
-        //         po(data.replace('/', '_'));
-        //       //  $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
-        //         $('#nopo').removeClass('hide');
-        //         $('#noseri').addClass('hide');
-        //         $('#noakn').addClass('hide');
-        //         $('#customer').addClass('hide');
-        //         $('#noso').addClass('hide');
-        //         $('#nosj').addClass('hide');
-        //         $('#produk').addClass('hide');
-        //     } else if ($('.pilih_data').val() == "no_akn") {
-        //         var data = $('#data').val();
-        //        // $('#noakntable').DataTable().ajax.url('/api/penjualan/lacak/data/no_akn/' + data).load();
-        //        akn(data);
-        //        $('#noakn').removeClass('hide');
-        //         $('#customer').addClass('hide');
-        //         $('#noseri').addClass('hide');
-        //         $('#nopo').addClass('hide');
-        //         $('#noso').addClass('hide');
-        //         $('#nosj').addClass('hide');
-        //         $('#produk').addClass('hide');
-        //     } else if ($('.pilih_data').val() == "no_so") {
-        //         var data = $('#data').val();
-        //         // var p = 'O';
-        //         // var xxx = data.replace('/' + p + '/g', ':');
-        //         so(data.replace('/', '_'));
-        //        // $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_so/' + data).load();
-        //         $('#customer').addClass('hide');
-        //         $('#noakn').addClass('hide');
-        //         $('#noseri').addClass('hide');
-        //         $('#nopo').addClass('hide');
-        //         $('#noso').removeClass('hide');
-        //         $('#nosj').addClass('hide');
-        //         $('#produk').addClass('hide');
-        //     } else if ($('.pilih_data').val() == "no_sj") {
-        //         var data = $('#data').val();
-        //         sj(data);
-        //         //$('#nosjtable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
-        //         $('#nosj').removeClass('hide');
-        //         $('#customer').addClass('hide');
-        //         $('#noseri').addClass('hide');
-        //         $('#nopo').addClass('hide');
-        //         $('#noso').addClass('hide');
-        //         $('#noakn').addClass('hide');
-        //         $('#produk').addClass('hide');
-        //     }
-        //     // $('#btncari').attr("disabled", true);
-        //     // $('.pilih_data').attr("disabled", true);
-        //     // $('#data').attr('disabled', true);
-        // });
+            //     } else if ($('.pilih_data').val() == "no_po") {
+            //         var data = $('#data').val();
+            //         po(data.replace('/', '_'));
+            //       //  $('#potable').DataTable().ajax.url('/api/penjualan/lacak/data/no_po/' + data).load();
+            //         $('#nopo').removeClass('hide');
+            //         $('#noseri').addClass('hide');
+            //         $('#noakn').addClass('hide');
+            //         $('#customer').addClass('hide');
+            //         $('#noso').addClass('hide');
+            //         $('#nosj').addClass('hide');
+            //         $('#produk').addClass('hide');
+            //     } else if ($('.pilih_data').val() == "no_akn") {
+            //         var data = $('#data').val();
+            //        // $('#noakntable').DataTable().ajax.url('/api/penjualan/lacak/data/no_akn/' + data).load();
+            //        akn(data);
+            //        $('#noakn').removeClass('hide');
+            //         $('#customer').addClass('hide');
+            //         $('#noseri').addClass('hide');
+            //         $('#nopo').addClass('hide');
+            //         $('#noso').addClass('hide');
+            //         $('#nosj').addClass('hide');
+            //         $('#produk').addClass('hide');
+            //     } else if ($('.pilih_data').val() == "no_so") {
+            //         var data = $('#data').val();
+            //         // var p = 'O';
+            //         // var xxx = data.replace('/' + p + '/g', ':');
+            //         so(data.replace('/', '_'));
+            //        // $('#nosotable').DataTable().ajax.url('/api/penjualan/lacak/data/no_so/' + data).load();
+            //         $('#customer').addClass('hide');
+            //         $('#noakn').addClass('hide');
+            //         $('#noseri').addClass('hide');
+            //         $('#nopo').addClass('hide');
+            //         $('#noso').removeClass('hide');
+            //         $('#nosj').addClass('hide');
+            //         $('#produk').addClass('hide');
+            //     } else if ($('.pilih_data').val() == "no_sj") {
+            //         var data = $('#data').val();
+            //         sj(data);
+            //         //$('#nosjtable').DataTable().ajax.url('/api/penjualan/lacak/data/no_sj/' + data).load();
+            //         $('#nosj').removeClass('hide');
+            //         $('#customer').addClass('hide');
+            //         $('#noseri').addClass('hide');
+            //         $('#nopo').addClass('hide');
+            //         $('#noso').addClass('hide');
+            //         $('#noakn').addClass('hide');
+            //         $('#produk').addClass('hide');
+            //     }
+            //     // $('#btncari').attr("disabled", true);
+            //     // $('.pilih_data').attr("disabled", true);
+            //     // $('#data').attr('disabled', true);
+            // });
 
-        // $('#btnbatal').on('click', function() {
-        //     $('.pilih_data').val(null).trigger('change');
-        //     $('#data').val('');
-        //     $('#data').removeAttr('disabled');
-        //     $('#pilih_data').attr('disabled', true);
-        //     $('#btncari').attr('disabled', true);
-        //     $('#noseri').addClass('hide');
-        //     $('#nopo').addClass('hide');
-        //     $('#noso').addClass('hide');
-        //     $('.result').addClass('hide');
-        // });
+            // $('#btnbatal').on('click', function() {
+            //     $('.pilih_data').val(null).trigger('change');
+            //     $('#data').val('');
+            //     $('#data').removeAttr('disabled');
+            //     $('#pilih_data').attr('disabled', true);
+            //     $('#btncari').attr('disabled', true);
+            //     $('#noseri').addClass('hide');
+            //     $('#nopo').addClass('hide');
+            //     $('#noso').addClass('hide');
+            //     $('.result').addClass('hide');
+            // });
 
 
         })
