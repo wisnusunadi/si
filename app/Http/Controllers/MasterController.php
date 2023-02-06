@@ -37,6 +37,7 @@ use Illuminate\Support\Arr;
 use App\Models\GudangKarantinaDetail;
 use App\Models\GudangKarantinaNoseri;
 use App\Models\JalurEkspedisi;
+use App\Models\kesehatan\Karyawan;
 use App\Models\Sparepart;
 use App\Models\SparepartGudang;
 use App\Models\SystemLog;
@@ -49,8 +50,105 @@ use function PHPUnit\Framework\returnValueMap;
 
 class MasterController extends Controller
 {
+    public function get_all_past_no_seri(Request $r){
+        $si_ekat21 = DB::connection('si_21')->table('seri_on')
+                ->select(
+                    'seri_on.noseri_on as noseri'
+                )
+                ->leftjoin('gudang_on', 'gudang_on.nolkppgdg_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('admjual_on', 'admjual_on.nolkppadm_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('qc_on', 'qc_on.nolkppqc_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('spa_on', 'spa_on.nolkpp_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_on.pabrik_on')
+                ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_on.idprod_on')
+                ->where('seri_on.noseri_on', 'LIKE', '%' . $r->input('term', '') . '%')
+                ->whereNotNull('gudang_on.tglsj_on')
+                ->groupby('seri_on.noseri_on')
+                ->limit(10)->get();
+
+            $si_ekat20 = DB::connection('si_20')->table('seri_on')
+                ->select(
+                    'seri_on.noseri_on as noseri'
+                )
+                ->leftjoin('gudang_on', 'gudang_on.nolkppgdg_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('admjual_on', 'admjual_on.nolkppadm_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('qc_on', 'qc_on.nolkppqc_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('spa_on', 'spa_on.nolkpp_on', '=', 'seri_on.lkppfk_on')
+                ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_on.pabrik_on')
+                ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_on.idprod_on')
+                ->where('seri_on.noseri_on', 'LIKE', '%' . $r->input('term', '') . '%')
+                ->whereNotNull('gudang_on.tglsj_on')
+                ->groupby('seri_on.noseri_on')
+                ->get();
+
+
+            $si_spa21 = DB::connection('si_21')->table('seri_off')
+                ->select(
+                    'seri_off.noseri_off as noseri'
+                )
+                ->leftjoin('gudang_off', 'gudang_off.idordergdg_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('admjual_off', 'admjual_off.idorderadm_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('qc_off', 'qc_off.idorderqc_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('spa_off', 'spa_off.idorder_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_off.pabrik_off')
+                ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_off.idprod_off')
+                ->where('seri_off.noseri_off', 'LIKE', '%' . $r->input('term', '') . '%')
+                ->whereNotNull('gudang_off.tglsj_off')
+                ->groupby('seri_off.noseri_off')
+                ->get();
+
+            $si_spa20 = DB::connection('si_20')->table('seri_off')
+                ->select(
+                    'seri_off.noseri_off as noseri'
+                )
+                ->leftjoin('gudang_off', 'gudang_off.idordergdg_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('admjual_off', 'admjual_off.idorderadm_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('qc_off', 'qc_off.idorderqc_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('spa_off', 'spa_off.idorder_off', '=', 'seri_off.idorderfk_off')
+                ->leftjoin('distributor', 'distributor.iddsb', '=', 'spa_off.pabrik_off')
+                ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spa_off.idprod_off')
+                ->where('seri_off.noseri_off', 'LIKE', '%' . $r->input('term', '') . '%')
+                ->whereNotNull('gudang_off.tglsj_off')
+                ->groupby('seri_off.noseri_off')
+                ->get();
+
+            $si_spb21 = DB::connection('si_21')->table('seri_spb')
+                ->select(
+                    'seri_spb.noseri_spb as noseri'
+                )
+                ->leftjoin('gudang_spb', 'gudang_spb.nogdg_spb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('admjual_spb', 'admjual_spb.noadm_spb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('qc_spb', 'qc_spb.noqc_spb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('spb', 'spb.nospb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spb.idprod_spb')
+                ->where('seri_spb.noseri_spb', 'LIKE', '%' . $r->input('term', '') . '%')
+                ->whereNotNull('gudang_spb.tglsjgdg_spb')
+                ->groupby('seri_spb.noseri_spb')
+                ->get();
+
+            $si_spb20 = DB::connection('si_20')->table('seri_spb')
+                ->select(
+                    'seri_spb.noseri_spb as noseri'
+                )
+                ->leftjoin('gudang_spb', 'gudang_spb.nogdg_spb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('admjual_spb', 'admjual_spb.noadm_spb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('qc_spb', 'qc_spb.noqc_spb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('spb', 'spb.nospb', '=', 'seri_spb.nogdgfk')
+                ->leftjoin('produk_master', 'produk_master.id_prod', '=', 'spb.idprod_spb')
+                ->where('seri_spb.noseri_spb', 'LIKE', '%' . $r->input('term', '') . '%')
+                ->whereNotNull('gudang_spb.tglsjgdg_spb')
+                ->groupby('seri_spb.noseri_spb')
+                ->get();
+
+            $data = $si_spa21->merge($si_spa20)->merge($si_spb20)->merge($si_spb21)->merge($si_ekat20)->merge($si_ekat21);
+            return response()->json($data);
+    }
+    public function get_divisi_karyawan($id, Request $r){
+        $data = Karyawan::where([['divisi_id', '=', $id], ['nama', 'LIKE', '%'.$r->input('term', '').'%']])->select('nama', 'id')->get();
+        return response()->json($data);
+    }
     //Get Data Table
-    public function  get_data_detail_ekspedisi($id)
+    public function get_data_detail_ekspedisi($id)
     {
         $data = Logistik::where('ekspedisi_id', $id)->get();
         return datatables()->of($data)
@@ -255,6 +353,21 @@ class MasterController extends Controller
     public function get_data_produk()
     {
         return datatables()->of(Produk::with('KelompokProduk'))->toJson();
+    }
+    public function get_data_produk_variasi(Request $r){
+        $prd = GudangBarangJadi::with('Produk')->whereHas('Produk', function($q) use($r){
+            $q->where('nama', 'LIKE', '%' . $r->input('term', '') . '%');
+        })->get();
+        $data = array();
+
+        foreach($prd as $key_prd => $p){
+            $data[$key_prd] = array(
+                'id' => $p->id,
+                'nama' => $p->Produk->nama." ".$p->nama
+            );
+        }
+
+        return response()->json($data);
     }
     public function get_data_customer($divisi_id, $value)
     {
