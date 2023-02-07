@@ -13,7 +13,7 @@ class TFProduksi extends Model
     protected $connection = 'erp';
     protected $table = 't_gbj';
 
-    protected $fillable = ['ke', 'deskripsi', 'status_id', 'pesanan_id', 'tgl_keluar', 'state_id', 'jenis', 'created_by', 'created_at'];
+    protected $fillable = ['ke', 'dari', 'deskripsi', 'status_id', 'pesanan_id', 'retur_penjualan_id', 'tgl_keluar', 'tgl_masuk', 'state_id', 'jenis', 'created_by', 'created_at'];
 
     function detail()
     {
@@ -53,5 +53,9 @@ class TFProduksi extends Model
             $jumlah += $d->qty;
         }
         return $jumlah;
+    }
+
+    function ReturPenjualan(){
+        return $this->belongsTo(ReturPenjualan::class);
     }
 }

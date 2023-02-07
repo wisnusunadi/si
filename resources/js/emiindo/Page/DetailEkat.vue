@@ -1765,7 +1765,7 @@
                         }
                     });
                 }
-                setTimeout(() => {
+                this.$nextTick(() => {
                     if (this.po != null) {
                         DO.filter((item) => {
                             if (item.purchaseorder.pono == this.po.pono) {
@@ -1773,7 +1773,7 @@
                             }
                         });
                     }
-                }, 100);
+                });
                 try {
                     if (jenis == "nonekatpo") {
                         await axios
@@ -1791,7 +1791,7 @@
                 } catch (error) {
                     console.log(error);
                 }
-                setTimeout(() => {
+                this.$nextTick(() => {
                     if (jenis == "ekatso") {
                         this.infoakn();
                         this.updateekatalog(akn);
@@ -1805,7 +1805,7 @@
                     }
                     this.infopenjualan();
                     this.loading = false;
-                }, 800);
+                });
             },
             async checkAlamat(e) {
                 if (this.forminfoakn.instansi.dataalamat == null) {

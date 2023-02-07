@@ -252,9 +252,9 @@ export default {
                 .get("/api/ppic/data/so/detail/" + id)
                 .then((response) => {
                     this.detail = response.data.data;
-                    setTimeout(() => {
+                    this.$nextTick(() => {
                         $("#detailtable").DataTable();
-                    }, 100);
+                    });
                 });
             this.$store.commit("setIsLoading", false);
 
@@ -272,9 +272,8 @@ export default {
                     .then((response) => {
                         this.detailSO = response.data.data;
 
-
-                        setTimeout(() => {
-                                        $("#detailtableSO").DataTable({
+                        window.requestAnimationFrame(() => {
+                            $("#detailtableSO").DataTable({
                 autoWidth: false,
                 drawCallback: function (settings) {
                     var api = this.api();
@@ -300,7 +299,7 @@ export default {
                 },
                 columnDefs: [{ targets: [0], visible: false }],
             });
-                        }, 100);
+                        });
                     });
             } catch (error) {
                 console.log(error);
