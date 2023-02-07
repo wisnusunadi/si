@@ -802,9 +802,9 @@
                 this.tabModal = 'informasi'
                 this.detailModalSO = this.dataSO.find(item => item.epurno == id);
                 this.modalSO = true;
-                setTimeout(() => {
+                this.$nextTick(() => {
                     $('.modalSO').modal('show');
-                }, 100);
+                });
             },
             detailPOEkat(id) {
                 this.tabModal1 = 'informasi'
@@ -815,24 +815,24 @@
                     'perusahaan': dataPerusahaanPO
                 };
                 this.modalPOEkat = true;
-                setTimeout(() => {
+                this.$nextTick(() => {
                     $('.modalPOEkat').modal('show');
-                }, 100);
+                });
             },
             detailPONonEkat(id) {
                 this.tabModal2 = 'informasi'
                 this.detailModalPONonEkat = this.dataPONonEkat.find(item => item.poid == id);
                 this.modalPONonEkat = true;
-                setTimeout(() => {
+                this.$nextTick(() => {
                     $('.modalPONonEkat').modal('show');
-                }, 100);
+                });
             },
             detailDO(id) {
                 this.detailModalDO = this.dataDO.find(item => item.purchaseorder.poid == id);
                 this.modalDO = true;
-                setTimeout(() => {
+                this.$nextTick(() => {
                     $('.modalDO').modal('show');
-                }, 100);
+                });
             },
             poNonEkat() {
                 this.tabPO = 'nonekat'
