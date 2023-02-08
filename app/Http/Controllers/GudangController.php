@@ -505,6 +505,7 @@ class GudangController extends Controller
                 'is_delete' => 0
             ])->get();
 
+
             $layout = Layout::where('jenis_id', 1)->get();
             return datatables()->of($data)
                 ->addIndexColumn()
