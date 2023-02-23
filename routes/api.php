@@ -275,7 +275,7 @@ Route::prefix('/tfp')->group(function () {
     Route::get('detail-so/{id}/{value}', [ProduksiController::class, 'getDetailSO']);
     Route::get('edit-so/{id}/{value}', [ProduksiController::class, 'getEditSO']);
     Route::get('header-so/{id}/{value}', [ProduksiController::class, 'headerSo']);
-    Route::get('rakit', [GudangController::class, 'getRakit'])->middleware('jwt.verify');
+    Route::get('rakit', [GudangController::class, 'getRakit']);
     Route::get('rakit-noseri/{id}/{value}', [GudangController::class, 'getRakitNoseri']);
     Route::get('rakit-terima/{id}/{value}', [GudangController::class, 'getTerimaRakit']);
     Route::post('/seri-so', [ProduksiController::class, 'getNoseriSO']);

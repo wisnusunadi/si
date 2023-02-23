@@ -1498,7 +1498,7 @@ class GudangController extends Controller
             return datatables()->of($datax)
                 ->addIndexColumn()
                 ->addColumn('bppb', function ($d) {
-                    // return '-';
+
                     $seri_done = NoseriTGbj::whereHas('detail', function ($q) use ($d) {
                         $q->where('gdg_brg_jadi_id', $d->gdg_brg_jadi_id);
                         $q->whereHas('header', function ($a) use ($d) {
@@ -1507,7 +1507,12 @@ class GudangController extends Controller
                     })->where('jenis', 'masuk')->first();
 
                     $nobppb = JadwalRakitNoseri::with('header')->where('noseri', $seri_done->seri->noseri)->first();
-                    return $nobppb->header->no_bppb == '-' ? '-' : $nobppb->header->no_bppb;
+                    if ($nobppb == '-' || $nobppb == NULL) {
+                        return '-';
+                    } else {
+                        return  $nobppb->header->no_bppb;
+                    }
+                    //     return $nobppb->header->no_bppb == '-' ? '-' : $nobppb->header->no_bppb;
                 })
                 ->addColumn('tgl_masuk', function ($d) {
                     if (isset($d->tgl_masuk)) {
