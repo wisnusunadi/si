@@ -443,7 +443,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Ekatalog.Customer.provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->havingRaw('(cqcprd < ctfprd AND ctfprd > 0) OR (cqcpart < ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
@@ -504,7 +504,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi'])
+                ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi'])
                 ->doesntHave('Spb')
                 ->havingRaw('(cqcprd < ctfprd AND ctfprd > 0) OR (cqcpart < ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
@@ -566,7 +566,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Ekatalog.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->doesntHave('Spa')
                 ->havingRaw('(cqcprd < ctfprd AND ctfprd > 0) OR (cqcpart < ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
@@ -628,7 +628,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->doesntHave('ekatalog')
                 ->havingRaw('(cqcprd < ctfprd AND ctfprd > 0) OR (cqcpart < ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
@@ -879,7 +879,7 @@ class QcController extends Controller
                         ->limit(1);
                 }
             ])
-                ->with(['ekatalog.customer.provinsi', 'spa.customer.provinsi', 'spb.customer.provinsi'])
+                ->with(['Ekatalog.Customer.Provinsi', 'Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])
                 ->havingRaw('(cqcprd < ctfprd AND ctfprd > 0) OR (cqcpart < ctfpart AND ctfpart > 0)')
                 ->orderBy('tgl_kontrak', 'asc')
                 ->get();
@@ -3117,7 +3117,7 @@ class QcController extends Controller
                     ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id')
                     ->limit(1);
             }
-        ])
+        ])->with(['Ekatalog.Customer', 'Spa.Customer', 'Spb.Customer'])
             ->whereNotIn('log_id', ['7', '20'])
             ->havingRaw('cjumlahprd > clogprd OR cjumlahpart > clogpart')
             ->get();
@@ -3138,7 +3138,7 @@ class QcController extends Controller
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
-                $hitung = floor(( (($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
+                $hitung = floor(((($data->clogprd + $data->clogpart) / ($data->cjumlahprd + $data->cjumlahpart)) * 100));
 
                 if ($hitung > 0) {
                     $datas = '<div class="progress">
