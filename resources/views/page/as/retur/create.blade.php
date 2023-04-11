@@ -136,12 +136,12 @@
                 <div class="col-12">
                     <div class="card" style="box-shadow:none;">
                         @if (Session::has('error') || count($errors) > 0)
-                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                            <strong>{{ Session::get('error') }}</strong>
-                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                <strong>{{ Session::get('error') }}</strong>
+                                <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
+                            </div>
                         @elseif(Session::has('success'))
                             <div class="alert alert-success alert-dismissible fade show" role="alert">
                                 <strong>{{ Session::get('success') }}</strong>,
@@ -175,7 +175,8 @@
                                                 </div>
                                             </div>
                                             <div class="form-group row" id="pilih_jenis_retur_input">
-                                                <label for="pilih_jenis_retur" class="col-lg-5 col-md-12 col-form-label labelket">Jenis Retur</label>
+                                                <label for="pilih_jenis_retur"
+                                                    class="col-lg-5 col-md-12 col-form-label labelket">Jenis Retur</label>
                                                 <div class="col-lg-4 col-md-12 d-flex justify-content-between">
                                                     <div class="form-check form-check-inline col-form-label">
                                                         <input class="form-check-input" type="radio"
@@ -201,9 +202,9 @@
                                                     <div class="form-check form-check-inline col-form-label">
                                                         <input class="form-check-input" type="radio"
                                                             name="pilih_jenis_retur" id="pilih_jenis_retur4"
-                                                            value="none"/>
-                                                        <label class="form-check-label"
-                                                            for="pilih_jenis_retur4">Tanpa Status</label>
+                                                            value="none" />
+                                                        <label class="form-check-label" for="pilih_jenis_retur4">Tanpa
+                                                            Status</label>
                                                     </div>
                                                     <div class="invalid-feedback" id="msgpilih_jenis_retur"></div>
                                                 </div>
@@ -240,53 +241,58 @@
                                                                 id="divisi_id" name="divisi_id">
                                                             </select>
                                                         </div> --}}
-                                                        <input type="text" name="pic_peminjaman" id="pic_peminjaman" class="form-control col-form-label pic_peminjaman  @error('pic_peminjaman') is-invalid @enderror"/>
+                                                    <input type="text" name="pic_peminjaman" id="pic_peminjaman"
+                                                        class="form-control col-form-label pic_peminjaman  @error('pic_peminjaman') is-invalid @enderror" />
                                                     {{-- </div> --}}
-                                                    <small class="text-success mt-1" id="infono_transaksi">* Pilih PIC / isi jika tidak tersedia</small>
+                                                    <small class="text-success mt-1" id="infono_transaksi">* Pilih PIC /
+                                                        isi jika tidak tersedia</small>
                                                     <div class="invalid-feedback" id="msgpic_peminjaman"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group row">
-                                                <label for="telp_pic" class="col-lg-5 col-md-12 col-form-label labelket">Telepon PIC</label>
+                                                <label for="telp_pic"
+                                                    class="col-lg-5 col-md-12 col-form-label labelket">Telepon PIC</label>
                                                 <div class="col-lg-2 col-md-6">
-                                                    <input type="text" name="telp_pic" id="telp_pic" class="form-control col-form-label telp_pic  @error('telp_pic') is-invalid @enderror"/>
+                                                    <input type="text" name="telp_pic" id="telp_pic"
+                                                        class="form-control col-form-label telp_pic  @error('telp_pic') is-invalid @enderror" />
                                                     <div class="invalid-feedback" id="msgtelp_pic"></div>
                                                 </div>
                                             </div>
                                             <div class="form-group row hide">
                                                 <input type="text" name="karyawan_id" id="karyawan_id"
-                                                            class="form-control col-form-label karyawan_id  @error('karyawan_id') is-invalid @enderror"
-                                                            width="60%" />
+                                                    class="form-control col-form-label karyawan_id  @error('karyawan_id') is-invalid @enderror"
+                                                    width="60%" />
                                             </div>
                                             <div class="form-group row" id="no_transaksi_input">
                                                 <label for="no_transaksi"
                                                     class="col-lg-5 col-md-12 col-form-label labelket">No Transaksi
-                                                    </label>
+                                                </label>
                                                 <div class="col-lg-3 col-md-6">
-                                                        <div class="input-group">
-                                                            <div class="input-group-prepend">
-                                                                <select
-                                                                    class="form-control custom-select select2 no_transaksi_ref"
-                                                                    id="no_transaksi_ref" name="no_transaksi_ref">
-                                                                    <option value="po">No PO</option>
-                                                                    <option value="so">No SO</option>
-                                                                    <option value="no_akn">No AKN</option>
-                                                                    <option value="no_retur">No Retur</option>
-                                                                    <option value="no_sj">No SJ</option>
-                                                                    <option value="sj_retur">No SJ (Retur)</option>
-                                                                </select>
-                                                            </div>
-                                                            <input type="text" name="no_transaksi" id="no_transaksi"
-                                                                class="form-control col-form-label no_transaksi  @error('no_transaksi') is-invalid @enderror" />
+                                                    <div class="input-group">
+                                                        <div class="input-group-prepend">
+                                                            <select
+                                                                class="form-control custom-select select2 no_transaksi_ref"
+                                                                id="no_transaksi_ref" name="no_transaksi_ref">
+                                                                <option value="po">No PO</option>
+                                                                <option value="so">No SO</option>
+                                                                <option value="no_akn">No AKN</option>
+                                                                <option value="no_retur">No Retur</option>
+                                                                <option value="no_sj">No SJ</option>
+                                                                <option value="sj_retur">No SJ (Retur)</option>
+                                                            </select>
                                                         </div>
-                                                        <small class="text-success mt-1" id="infono_transaksi">* Pilih Nomor Referensi yang akan dipakai</small>
-                                                        <div class="invalid-feedback mt-1" id="msgno_transaksi"></div>
+                                                        <input type="text" name="no_transaksi" id="no_transaksi"
+                                                            class="form-control col-form-label no_transaksi  @error('no_transaksi') is-invalid @enderror" />
                                                     </div>
+                                                    <small class="text-success mt-1" id="infono_transaksi">* Pilih Nomor
+                                                        Referensi yang akan dipakai</small>
+                                                    <div class="invalid-feedback mt-1" id="msgno_transaksi"></div>
+                                                </div>
                                             </div>
                                             <div class="form-group row hide">
                                                 <input type="text" name="pesanan_id" id="pesanan_id"
-                                                            class="form-control col-form-label pesanan_id  @error('pesanan_id') is-invalid @enderror"
-                                                            width="60%" />
+                                                    class="form-control col-form-label pesanan_id  @error('pesanan_id') is-invalid @enderror"
+                                                    width="60%" />
                                             </div>
 
                                             <div class="form-group row" id="customer_nama_input">
@@ -374,17 +380,32 @@
                                                                 <tbody>
                                                                     <tr>
                                                                         <td>1</td>
-                                                                        <td><select name="produk_id[0]" id="produk_id0" class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select></td>
-                                                                        <td>
-                                                                            <input type="number" class="form-control jumlah_produk" name="jumlah_produk[0]" id="jumlah_produk0"/>
-                                                                            <small class="text-danger" id="msg_jumlah_produk"></small>
+                                                                        <td><select name="produk_id[0]" id="produk_id0"
+                                                                                class="form-control custom-select produk_id  @error('produk_id') is-invalid @enderror"></select>
                                                                         </td>
                                                                         <td>
-                                                                            <button type="button" class="btn btn-sm btn-outline btn-info btn_seri" id="btn_seri" disabled="true" name="btn_seri[0]"><i class="fas fa-plus"></i> Tambah</button>
+                                                                            <input type="number"
+                                                                                class="form-control jumlah_produk"
+                                                                                name="jumlah_produk[0]"
+                                                                                id="jumlah_produk0" />
+                                                                            <small class="text-danger"
+                                                                                id="msg_jumlah_produk"></small>
+                                                                        </td>
+                                                                        <td>
+                                                                            <button type="button"
+                                                                                class="btn btn-sm btn-outline btn-info btn_seri"
+                                                                                id="btn_seri" disabled="true"
+                                                                                name="btn_seri[0]"><i
+                                                                                    class="fas fa-plus"></i>
+                                                                                Tambah</button>
                                                                             {{-- <select name="no_seri_select[0][]" id="no_seri_select0" class="form-control custom-select no_seri @error('no_seri') is-invalid @enderror" multiple="true"></select> --}}
                                                                         </td>
-                                                                        <td hidden="true"><input type="text" name="no_seri_select[0]" id="no_seri_select0" class="form-control no_seri_select"></td>
-                                                                        <td><a href="#" id="tambah_paket_produk"><i class="fa fa-plus text-success"></i></a>
+                                                                        <td hidden="true"><input type="text"
+                                                                                name="no_seri_select[0]"
+                                                                                id="no_seri_select0"
+                                                                                class="form-control no_seri_select"></td>
+                                                                        <td><a href="#" id="tambah_paket_produk"><i
+                                                                                    class="fa fa-plus text-success"></i></a>
                                                                         </td>
                                                                     </tr>
                                                                 </tbody>
@@ -453,7 +474,8 @@
                             </div>
                         </form>
 
-                        <div class="modal fade" id="detail_modal" role="dialog" aria-labelledby="detail_modal" aria-hidden="true">
+                        <div class="modal fade" id="detail_modal" role="dialog" aria-labelledby="detail_modal"
+                            aria-hidden="true">
                             <div class="modal-dialog modal-xl" role="document">
                                 <div class="modal-content" style="margin: 10px">
                                     <div class="modal-header">
@@ -465,7 +487,8 @@
                                     <div class="modal-body" id="detail">
                                         <div class="row">
                                             <div class="col-12">
-                                                <input type="hidden" class="form-control index_table" id="index_table" name="index_table">
+                                                <input type="hidden" class="form-control index_table" id="index_table"
+                                                    name="index_table">
                                                 <div class="table-responsive">
                                                     <table id="seri_table" class="table table-hover">
                                                         <thead>
@@ -475,7 +498,12 @@
                                                         </thead>
                                                         <tbody>
                                                             <tr>
-                                                                <td><select class="form-control no_seri" name="no_seri[]" id="no_seri0"></select></td>
+                                                                <td>
+                                                                    {{-- <select class="form-control no_seri" name="no_seri[]"
+                                                                        id="no_seri0"></select> --}}
+                                                                    <input type="text" class="form-control no_seri"
+                                                                        name="no_seri[]" id="noseri0">
+                                                                </td>
                                                             </tr>
                                                         </tbody>
                                                     </table>
@@ -485,7 +513,8 @@
                                     </div>
                                     <div class="modal-footer">
                                         <button type="button" class="btn btn-danger" data-dismiss="modal">Batal</button>
-                                        <button type="button" class="btn btn-info float-right" id="btntambahseri">Tambah</button>
+                                        <button type="button" class="btn btn-info float-right"
+                                            id="btntambahseri">Tambah</button>
                                     </div>
                                 </div>
                             </div>
@@ -583,7 +612,8 @@
                 }
 
                 if ($('#tgl_retur').val() != "" && $(
-                        'input[name="pilih_jenis_retur"]:checked').length > 0 && $('#customer_nama').val() != "" && $(
+                        'input[name="pilih_jenis_retur"]:checked').length > 0 && $('#customer_nama').val() != "" &&
+                    $(
                         '#alamat').val() && $('input[name="pilih_jenis_barang[]"]:checked').length > 0 &&
                     inputproduk == true && inputno_seri == true && inputpart == true && inputjumpart == true) {
                     $('#btnsubmit').attr('disabled', false);
@@ -626,10 +656,10 @@
                 validasi();
             })
 
-            function get_jenis_trans(){
-                if($('#no_transaksi_ref').val() == "no_retur" || $('#no_transaksi_ref').val() == "sj_retur"){
+            function get_jenis_trans() {
+                if ($('#no_transaksi_ref').val() == "no_retur" || $('#no_transaksi_ref').val() == "sj_retur") {
                     return "retur";
-                }else{
+                } else {
                     return "jual";
                 }
             }
@@ -668,7 +698,8 @@
                 if (produktr > 0) {
                     data += `<a id="remove_paket_produk"><i class="fas fa-minus" style="color: red"></i></a>`;
                 } else {
-                    data += `<a href="#" id="tambah_paket_produk"><i class="fa-solid fa-plus text-success"></i></a>`;
+                    data +=
+                        `<a href="#" id="tambah_paket_produk"><i class="fa-solid fa-plus text-success"></i></a>`;
                 }
                 data += `</td>
                 </tr>`;
@@ -696,17 +727,32 @@
 
             function trseriproduk(i, obj) {
                 var seritr = ``;
-                if(obj != undefined){
+                // if (obj != undefined) {
+                //     var idx = 0;
+                //     obj.forEach(object => {
+                //         seritr += `<tr><td><select class="form-control no_seri" name="no_seri[` + idx +
+                //             `]" id="no_seri` + idx + `">
+            //              <option value="` + object['id'] + `" selected="true">` + object['text'] + `</option>
+            //         </select></td></tr>`;
+                //         idx++;
+                //     });
+                // } else {
+                //     for (var j = 0; j < i; j++) {
+                //         seritr += `<tr><td><select class="form-control no_seri" name="no_seri[` + j +
+                //             `]" id="no_seri` + j + `"></select></td></tr>`;
+                //     }
+                // }
+                if (obj != undefined) {
                     var idx = 0;
                     obj.forEach(object => {
-                        seritr += `<tr><td><select class="form-control no_seri" name="no_seri[`+idx+`]" id="no_seri`+idx+`">
-                             <option value="`+object['id']+`" selected="true">`+object['text']+`</option>
-                        </select></td></tr>`;
+                        seritr +=
+                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"></td></tr>`;
                         idx++;
-                    });
-                }else{
-                    for(var j=0; j < i; j++){
-                        seritr += `<tr><td><select class="form-control no_seri" name="no_seri[`+j+`]" id="no_seri`+j+`"></select></td></tr>`;
+                    });
+                } else {
+                    for (var j = 0; j < i; j++) {
+                        seritr +=
+                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"></td></tr>`;
                     }
                 }
 
@@ -719,7 +765,7 @@
             function produk(table) {
                 $('.no_seri').select2();
                 var pesanan_id = $('#pesanan_id').val();
-                if(pesanan_id != ""){
+                if (pesanan_id != "") {
                     $('#produktable .no_seri_input').addClass('hide');
                     produk_penjualan_tersedia(pesanan_id, table);
                     part_tersedia(pesanan_id);
@@ -734,7 +780,7 @@
             $('.divisi_id').select2({
                 placeholder: "Pilih Divisi",
                 width: 'auto',
-		        dropdownAutoWidth: true,
+                dropdownAutoWidth: true,
                 allowClear: true,
                 ajax: {
                     minimumResultsForSearch: 20,
@@ -743,7 +789,7 @@
                     delay: 250,
                     type: 'GET',
                     url: '/api/gbj/sel-divisi',
-                    beforeSend : function(xhr){
+                    beforeSend: function(xhr) {
                         xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
                     },
                     processResults: function(data) {
@@ -759,7 +805,7 @@
                 }
             });
 
-            function no_seri_arr(no_seri){
+            function no_seri_arr(no_seri) {
                 $('.no_seri').select2({
                     placeholder: "Pilih No Seri",
                     allowClear: true,
@@ -767,44 +813,74 @@
                 });
             }
 
-            function no_seri_lama(){
-                $('.no_seri').select2({
-                    placeholder: "Pilih No Seri",
-                    language: {
-                        inputTooShort: function (args) {
-                            return "Minimal 10 karakter atau lebih";
-                        },
-                        noResults: function () {
-                            return "Not Found.";
-                        },
-                        searching: function () {
-                            return "Searching...";
-                        }
-                    },
-                    minimumInputLength: 10,
-                    ajax: {
-                        dataType: 'json',
-                        theme: "bootstrap",
-                        delay: 250,
-                        type: 'POST',
-                        url: '/api/as/list/no_seri_lama',
-                        data: function(params) {
-                            return {
-                                term: params.term
-                            }
-                        },
-                        processResults: function(data) {
-                            return {
-                                results: $.map(data, function(obj) {
+            function no_seri_lama() {
+                // $('.no_seri').select2({
+                //     placeholder: "Pilih No Seri",
+                //     language: {
+                //         inputTooShort: function(args) {
+                //             return "Minimal 10 karakter atau lebih";
+                //         },
+                //         noResults: function() {
+                //             return "Not Found.";
+                //         },
+                //         searching: function() {
+                //             return "Searching...";
+                //         }
+                //     },
+                //     minimumInputLength: 10,
+                //     ajax: {
+                //         dataType: 'json',
+                //         theme: "bootstrap",
+                //         delay: 250,
+                //         type: 'POST',
+                //         url: '/api/as/list/no_seri_lama',
+                //         data: function(params) {
+                //             return {
+                //                 term: params.term
+                //             }
+                //         },
+                //         processResults: function(data) {
+                //             return {
+                //                 results: $.map(data, function(obj) {
+                //                     return {
+                //                         id: obj.noseri,
+                //                         text: obj.noseri
+                //                     };
+                //                 })
+                //             };
+                //         },
+                //     }
+                // })
+
+                $(".no_seri").autocomplete({
+                    source: function(request, response) {
+                        $.ajax({
+                            dataType: 'json',
+                            url: '/api/customer/select',
+                            data: {
+                                term: request.term
+                            },
+                            success: function(data) {
+
+                                var transformed = $.map(data, function(el) {
                                     return {
-                                        id: obj.noseri,
-                                        text: obj.noseri
+                                        label: el.nama,
+                                        value: el.id
                                     };
-                                })
-                            };
-                        },
+                                });
+                                response(transformed.slice(0, 10));
+                            },
+                            error: function() {
+                                response([]);
+                            }
+                        });
+                    },
+                    focus: function(event, ui) {
+                        $(this).val(ui.item.label);
+                        return false;
                     }
-                })
+                });
+
             }
 
             $(document).on('change', '#produktable .produk_id', function() {
@@ -812,30 +888,29 @@
                 var jumlah_produk = $(this).closest('tr').find('.jumlah_produk');
                 var no_seri_select = $(this).closest('tr').find('.no_seri_select');
                 var msg = $(this).closest('tr').find('#msg_jumlah_produk');
-                if(no_seri_select != ""){
+                if (no_seri_select != "") {
                     no_seri_select.val('');
                     btn_seri.removeClass('btn-warning');
                     btn_seri.addClass('btn-info');
                     btn_seri.html('<i class="fas fa-plus"></i> Tambah');
                 }
 
-                if($(this).val() != ""){
-                    if(jumlah_produk.val() != ""){
-                        if($(this).select2('data')[0]['noseri'] != undefined){
+                if ($(this).val() != "") {
+                    if (jumlah_produk.val() != "") {
+                        if ($(this).select2('data')[0]['noseri'] != undefined) {
                             var seri_prd = Object.keys($(this).select2('data')[0]['noseri']).length;
-                            if(seri_prd >= jumlah_produk.val()){
+                            if (seri_prd >= jumlah_produk.val()) {
                                 btn_seri.attr('disabled', false);
                                 msg.html('');
-                            }else{
+                            } else {
                                 btn_seri.attr('disabled', true);
-                                msg.html('Jumlah No Seri hanya ada '+seri_prd);
+                                msg.html('Jumlah No Seri hanya ada ' + seri_prd);
                             }
-                        }else{
+                        } else {
                             btn_seri.attr('disabled', false);
                         }
                     }
-                }
-                else{
+                } else {
                     btn_seri.attr('disabled', true);
                 }
                 validasi();
@@ -847,30 +922,29 @@
                 var no_seri_select = $(this).closest('tr').find('.no_seri_select');
                 var msg = $(this).closest('tr').find('#msg_jumlah_produk');
 
-                if(no_seri_select.val() != ""){
+                if (no_seri_select.val() != "") {
                     no_seri_select.val('');
                     btn_seri.removeClass('btn-warning');
                     btn_seri.addClass('btn-info');
                     btn_seri.html('<i class="fas fa-plus"></i> Tambah');
                 }
 
-                if($(this).val() != ""){
-                    if(produk_id.val() != ""){
-                        if(produk_id.select2('data')[0]['noseri'] != undefined){
+                if ($(this).val() != "") {
+                    if (produk_id.val() != "") {
+                        if (produk_id.select2('data')[0]['noseri'] != undefined) {
                             var seri_prd = Object.keys(produk_id.select2('data')[0]['noseri']).length;
-                            if(seri_prd >= $(this).val()){
+                            if (seri_prd >= $(this).val()) {
                                 btn_seri.attr('disabled', false);
                                 msg.html('');
-                            }else{
+                            } else {
                                 btn_seri.attr('disabled', true);
-                                msg.html('Jumlah No Seri hanya ada '+seri_prd);
+                                msg.html('Jumlah No Seri hanya ada ' + seri_prd);
                             }
-                        }else{
+                        } else {
                             btn_seri.attr('disabled', false);
                         }
                     }
-                }
-                else{
+                } else {
                     btn_seri.attr('disabled', true);
                 }
                 validasi();
@@ -882,27 +956,26 @@
                 var no_seri_select = $(this).closest('tr').find('.no_seri_select');
                 var number = $(this).closest('tr').find("td:eq(0)").html() - 1;
                 $('#detail_modal').modal("show");
-                if(no_seri_select.val() != ""){
+                if (no_seri_select.val() != "") {
                     var obj = JSON.parse(no_seri_select.val());
                     $('#seri_table tbody').empty();
                     $('#seri_table tbody').append(trseriproduk(jumlah.val(), obj));
 
                     $('#index_table').val(number);
-                    if(produk_id.select2('data')[0]['noseri'] != undefined){
+                    if (produk_id.select2('data')[0]['noseri'] != undefined) {
                         no_seri_arr(produk_id.select2('data')[0]['noseri']);
-                    }
-                    else{
+                    } else {
                         no_seri_lama();
                     }
-                }else{
+                } else {
+                    console.log('tes')
                     $('#seri_table tbody').empty();
                     $('#seri_table tbody').append(trseriproduk(jumlah.val(), undefined));
 
                     $('#index_table').val(number);
-                    if(produk_id.select2('data')[0]['noseri'] != undefined){
+                    if (produk_id.select2('data')[0]['noseri'] != undefined) {
                         no_seri_arr(produk_id.select2('data')[0]['noseri']);
-                    }
-                    else{
+                    } else {
                         no_seri_lama();
                     }
                 }
@@ -914,28 +987,28 @@
                 var idx = $('#index_table').val();
                 var inputseri = false;
                 $('#seri_table').find('.no_seri').each(function() {
-                    if($(this).val() != null){
+                    if ($(this).val() != null) {
                         inputseri = true;
                         var obj = {};
                         obj.id = $(this).val();
                         obj.text = $(this).select2('data')[0]['text'];
                         noseri_arr.push(obj);
-                    }else{
+                    } else {
                         inputseri = false;
                         return false;
                     }
                 });
 
-                if(inputseri == true){
+                if (inputseri == true) {
                     $('#detail_modal').modal("hide");
-                    $('#no_seri_select'+idx).val( JSON.stringify(noseri_arr));
-                    console.log($('#no_seri_select'+idx).val());
+                    $('#no_seri_select' + idx).val(JSON.stringify(noseri_arr));
+                    console.log($('#no_seri_select' + idx).val());
 
-                    $('#produktable').find('button[name="btn_seri['+idx+']"]').removeClass('btn-info');
-                    $('#produktable').find('button[name="btn_seri['+idx+']"]').addClass('btn-warning');
-                    $('#produktable').find('button[name="btn_seri['+idx+']"]').html('<i class="fas fa-pencil-alt"></i> Edit');
-                }
-                else{
+                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').removeClass('btn-info');
+                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').addClass('btn-warning');
+                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').html(
+                        '<i class="fas fa-pencil-alt"></i> Edit');
+                } else {
                     swal.fire(
                         'Form Kosong',
                         'Ada Form yang belum diinput, Silahkan input ulang',
@@ -946,8 +1019,8 @@
             })
 
             $(document).on('change', '#parttable .part_id', function() {
-                if(typeof($(this).select2('data')[0]['jumlah']) != 'undefined'){
-                    $(this).closest('tr').find('.part_jumlah').val($(this).select2('data')[0]['jumlah'] );
+                if (typeof($(this).select2('data')[0]['jumlah']) != 'undefined') {
+                    $(this).closest('tr').find('.part_jumlah').val($(this).select2('data')[0]['jumlah']);
                 }
                 validasi();
             });
@@ -1067,12 +1140,12 @@
                     $(el).find('.no_seri_select').attr('name', 'no_seri_select[' + j + ']');
                     $(el).find('.no_seri_select').attr('id', 'no_seri_select' + j);
 
-                    $(el).find('.btn_seri').attr('name', 'btn_seri['+j+']');
+                    $(el).find('.btn_seri').attr('name', 'btn_seri[' + j + ']');
 
-                    if($(el).find('.produk_id').val() == null){
-                        if($('#pesanan_id').val() != ''){
+                    if ($(el).find('.produk_id').val() == null) {
+                        if ($('#pesanan_id').val() != '') {
                             produk_penjualan_tersedia($('#pesanan_id').val(), $(el).find('.produk_id'));
-                        }else{
+                        } else {
                             produk_penjualan_tidak_tersedia($(el).find('.produk_id'));
                         }
                     }
@@ -1105,10 +1178,10 @@
                     $(el).find('.part_jumlah').attr('name', 'part_jumlah[' + j + ']');
                     $(el).find('.part_jumlah').attr('id', 'part_jumlah' + j);
 
-                    if($(el).find('.part_id').val() == null){
-                        if($('#pesanan_id').val() != ''){
+                    if ($(el).find('.part_id').val() == null) {
+                        if ($('#pesanan_id').val() != '') {
                             part_tersedia($('#pesanan_id').val());
-                        }else{
+                        } else {
                             part_tidak_tersedia();
                         }
                     }
@@ -1277,7 +1350,7 @@
                 }).trigger('change');
             }
 
-            function part_tersedia(id){
+            function part_tersedia(id) {
                 var jenis = get_jenis_trans();
                 $('.part_id').select2({
                     placeholder: "Pilih Part",
@@ -1339,7 +1412,7 @@
 
             }
 
-            function part_tidak_tersedia(){
+            function part_tidak_tersedia() {
                 $('.part_id').select2({
                     placeholder: "Pilih Part",
                     minimumResultsForSearch: 2,
@@ -1417,8 +1490,8 @@
                     validasi();
                     return false;
                 },
-                change: function(event, ui){
-                    if(ui.item == null){
+                change: function(event, ui) {
+                    if (ui.item == null) {
                         $('#customer_id').val('');
                         $('#alamat').val("");
                         $('#telepon').val("");
@@ -1474,7 +1547,7 @@
                         produk_penjualan_tersedia(id, $('.produk_id'));
                         part_tersedia(id);
                         $.ajax({
-                            url: '/api/as/detail/so_retur/' + id +'/'+jenis,
+                            url: '/api/as/detail/so_retur/' + id + '/' + jenis,
                             type: 'GET',
                             dataType: 'json',
                             success: function(data) {
@@ -1489,8 +1562,9 @@
                     }
                     validasi();
                     return false;
-                }, change: function (event, ui) {
-                    if(ui.item == null){
+                },
+                change: function(event, ui) {
+                    if (ui.item == null) {
                         $('.no_seri_select').val('');
                         $('.btn_seri').attr('disabled', true);
                         $('.jumlah_produk').val('');
@@ -1521,56 +1595,56 @@
             //     // get_karyawan(divisi_id);
             // });
 
-            $(document).on('keyup change', '.no_seri', function(){
+            $(document).on('keyup change', '.no_seri', function() {
                 validasi();
             })
 
-                $("#pic_peminjaman").autocomplete({
-                    source: function(request, response) {
-                        $.ajax({
-                            dataType: 'json',
-                            type: 'GET',
-                            url: '/api/karyawan_all',
-                            data: {
-                                term: request.term
-                            },
-                            beforeSend : function(xhr){
-                                xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
-                            },
-                            success: function(data) {
-                                var transformed = $.map(data, function(el) {
-                                    return {
-                                        label: el.nama,
-                                        value: el.id
-                                    };
-                                });
-                                response(transformed.slice(0, 10));
-                            },
-                            error: function() {
-                                response([]);
-                            }
-                        });
-                    },
-                    focus: function(event, ui) {
-                        $(this).val(ui.item.label);
-                        return false;
-                    },
-                    select: function(event, ui) {
-                        var id = ui.item.value;
-                        $(this).val(ui.item.label);
+            $("#pic_peminjaman").autocomplete({
+                source: function(request, response) {
+                    $.ajax({
+                        dataType: 'json',
+                        type: 'GET',
+                        url: '/api/karyawan_all',
+                        data: {
+                            term: request.term
+                        },
+                        beforeSend: function(xhr) {
+                            xhr.setRequestHeader('Authorization', 'Bearer ' + access_token);
+                        },
+                        success: function(data) {
+                            var transformed = $.map(data, function(el) {
+                                return {
+                                    label: el.nama,
+                                    value: el.id
+                                };
+                            });
+                            response(transformed.slice(0, 10));
+                        },
+                        error: function() {
+                            response([]);
+                        }
+                    });
+                },
+                focus: function(event, ui) {
+                    $(this).val(ui.item.label);
+                    return false;
+                },
+                select: function(event, ui) {
+                    var id = ui.item.value;
+                    $(this).val(ui.item.label);
 
-                        if (id != "") {
-                            $('#karyawan_id').val(id);
-                        }
-                        return false;
-                    },
-                    change: function(event, ui) {
-                        if(ui.item == null){
-                            $('#karyawan_id').val('');
-                        }
-                        return false;
-                    },
-                });
+                    if (id != "") {
+                        $('#karyawan_id').val(id);
+                    }
+                    return false;
+                },
+                change: function(event, ui) {
+                    if (ui.item == null) {
+                        $('#karyawan_id').val('');
+                    }
+                    return false;
+                },
+            });
 
 
 
