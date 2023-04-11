@@ -867,10 +867,10 @@
                                 term: request.term
                             },
                             success: function(data) {
-                                var transformed = $.map(data, function(el) {
+                                var transformed = $.map(data, function(obj) {
                                     return {
-                                        id: obj.noseri,
-                                        text: obj.noseri
+                                        label: obj.noseri,
+                                        value: obj.noseri
                                     }
                                 });
                                 response(transformed.slice(0, 10));
