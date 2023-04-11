@@ -746,13 +746,17 @@
                     var idx = 0;
                     obj.forEach(object => {
                         seritr +=
-                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"></td></tr>`;
+                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri">
+                                <div class="suggestion-box"></div>
+                                </td></tr>`;
                         idx++;
                     });
                 } else {
                     for (var j = 0; j < i; j++) {
                         seritr +=
-                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"></td></tr>`;
+                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri">
+                                <div class="suggestion-box"></div>
+                                </td></tr>`;
                     }
                 }
 
@@ -853,20 +857,21 @@
                 // })
 
                 $(".no_seri").autocomplete({
+                    appendTo: ".suggestion-box",
                     source: function(request, response) {
                         $.ajax({
                             dataType: 'json',
-                            url: '/api/customer/select',
+                            url: '/api/as/list/no_seri_lama',
+                            method: 'POST',
                             data: {
                                 term: request.term
                             },
                             success: function(data) {
-
                                 var transformed = $.map(data, function(el) {
                                     return {
-                                        label: el.nama,
-                                        value: el.id
-                                    };
+                                        id: obj.noseri,
+                                        text: obj.noseri
+                                    }
                                 });
                                 response(transformed.slice(0, 10));
                             },
@@ -875,10 +880,10 @@
                             }
                         });
                     },
-                    focus: function(event, ui) {
-                        $(this).val(ui.item.label);
-                        return false;
-                    }
+                    // focus: function(event, ui) {
+                    //     $(this).val(ui.item.label);
+                    //     return false;
+                    // }
                 });
 
             }
