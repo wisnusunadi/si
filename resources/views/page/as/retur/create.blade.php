@@ -746,7 +746,10 @@
                     var idx = 0;
                     obj.forEach(object => {
                         seritr +=
-                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri">
+                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"
+                                name="no_seri[` + idx + `]" id="no_seri` + idx + `"
+                                id="no_seri` + idx + `" value="` + object + `"
+                                >
                                 <div class="suggestion-box"></div>
                                 </td></tr>`;
                         idx++;
@@ -754,7 +757,9 @@
                 } else {
                     for (var j = 0; j < i; j++) {
                         seritr +=
-                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri">
+                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"
+                                name="no_seri[` + j + `]" id="no_seri` + j + `"
+                                id="no_seri` + j + `">
                                 <div class="suggestion-box"></div>
                                 </td></tr>`;
                     }
@@ -810,11 +815,7 @@
             });
 
             function no_seri_arr(no_seri) {
-                $('.no_seri').select2({
-                    placeholder: "Pilih No Seri",
-                    allowClear: true,
-                    data: no_seri
-                });
+                console.log("no_seri_arr", no_seri);
             }
 
             function no_seri_lama() {
@@ -963,6 +964,7 @@
                 $('#detail_modal').modal("show");
                 if (no_seri_select.val() != "") {
                     var obj = JSON.parse(no_seri_select.val());
+                    console.log("obj", obj)
                     $('#seri_table tbody').empty();
                     $('#seri_table tbody').append(trseriproduk(jumlah.val(), obj));
 
@@ -994,9 +996,7 @@
                 $('#seri_table').find('.no_seri').each(function() {
                     if ($(this).val() != null) {
                         inputseri = true;
-                        var obj = {};
-                        obj.id = $(this).val();
-                        obj.text = $(this).select2('data')[0]['text'];
+                        let obj = $(this).val();
                         noseri_arr.push(obj);
                     } else {
                         inputseri = false;

@@ -124,7 +124,7 @@ class MasterController extends Controller
                 ->where('seri_spb.noseri_spb', 'LIKE', '%' . $r->input('term', '') . '%')
                 ->whereNotNull('gudang_spb.tglsjgdg_spb')
                 ->groupby('seri_spb.noseri_spb')
-                ->get();
+                ->get();    
 
             $si_spb20 = DB::connection('si_20')->table('seri_spb')
                 ->select(
