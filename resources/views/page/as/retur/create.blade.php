@@ -151,7 +151,7 @@
                                 </button>
                             </div>
                         @endif
-                        <form method="POST" action="{{ route('as.retur.store') }}" id="formtambahretur">
+                        <form action="{{ route('as.retur.store') }}" id="formtambahretur">
                             @csrf
                             <div class="card-body">
                                 <div class="form-horizontal">
@@ -528,6 +528,18 @@
 
 @section('adminlte_js')
     <script>
+        $(document).on('submit', '#formtambahretur', function(event) {
+            event.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                url: action,
+                type: 'POST',
+                data: $('#formtambahretur').serialize(),
+                success: function(result) {
+                    console.log(result)
+                }
+            });
+        })
         $(function() {
             var access_token = localStorage.getItem('lokal_token');
 
