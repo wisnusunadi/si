@@ -701,6 +701,7 @@ class AfterSalesController extends Controller
 
     public function store_retur(Request $r)
     {
+        dd($r->all());
         $validator = Validator::make($r->all(), [
             'tgl_retur' => 'required',
             'pilih_jenis_retur' => 'required'

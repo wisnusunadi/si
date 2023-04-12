@@ -1139,8 +1139,8 @@
                     $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                     $(el).find('.produk_id').attr('id', 'produk_id' + j);
 
-                    $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
-                    $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
+                    $(el).find('.jumlah_produk').attr('name', 'jumlah_produk[' + j + ']');
+                    $(el).find('.jumlah_produk').attr('id', 'jumlah_produk' + j);
 
                     $(el).find('.no_seri_select').attr('name', 'no_seri_select[' + j + ']');
                     $(el).find('.no_seri_select').attr('id', 'no_seri_select' + j);
