@@ -1006,7 +1006,7 @@
                 var idx = $('#index_table').val();
                 var inputseri = false;
                 $('#seri_table').find('.no_seri').each(function() {
-                    if ($(this).val() != null) {
+                    if ($(this).val() != '') {
                         inputseri = true;
                         let obj = $(this).val();
                         noseri_arr.push(obj);
@@ -1512,7 +1512,6 @@
                         $('#customer_id').val('');
                         $('#alamat').val("");
                         $('#telepon').val("");
-
                         $('#alamat').attr('readonly', false);
                         $('#telepon').attr('readonly', false);
                         validasi();
