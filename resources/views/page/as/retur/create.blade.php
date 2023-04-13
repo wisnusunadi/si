@@ -151,7 +151,7 @@
                                 </button>
                             </div>
                         @endif
-                        <form method="POST" action="{{ route('as.retur.store') }}" id="formtambahretur">
+                        <form action="{{ route('as.retur.store') }}" id="formtambahretur">
                             @csrf
                             <div class="card-body">
                                 <div class="form-horizontal">
@@ -528,6 +528,18 @@
 
 @section('adminlte_js')
     <script>
+        $(document).on('submit', '#formtambahretur', function(event) {
+            event.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                url: action,
+                type: 'POST',
+                data: $('#formtambahretur').serialize(),
+                success: function(result) {
+                    console.log(result)
+                }
+            });
+        })
         $(function() {
             var access_token = localStorage.getItem('lokal_token');
 
@@ -994,7 +1006,7 @@
                 var idx = $('#index_table').val();
                 var inputseri = false;
                 $('#seri_table').find('.no_seri').each(function() {
-                    if ($(this).val() != null) {
+                    if ($(this).val() != '') {
                         inputseri = true;
                         let obj = $(this).val();
                         noseri_arr.push(obj);
@@ -1520,7 +1532,6 @@
                         $('#customer_id').val('');
                         $('#alamat').val("");
                         $('#telepon').val("");
-
                         $('#alamat').attr('readonly', false);
                         $('#telepon').attr('readonly', false);
                         validasi();
