@@ -768,6 +768,18 @@ class AfterSalesController extends Controller
             //     'telp_pic' => $r->telp_pic,
             //     'state_id' => '4'
             // ]);
+            // $no_seri_all = array();
+            for ($i = 0; $i < count($r->produk_id); $i++) {
+                $no_seri = json_decode($r->no_seri_select[$i]);
+                for ($j = 0; $j < count($no_seri); $j++) {
+                    $no_seri_all[] = $no_seri[$j];
+                }
+            }
+            if (count($no_seri_all) != count(array_unique($no_seri_all))) {
+                dd('duplicate');
+            } else {
+                dd('ok');
+            }
 
             //Contoh
             for ($i = 0; $i < count($r->produk_id); $i++) {
