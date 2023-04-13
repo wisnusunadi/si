@@ -1005,14 +1005,22 @@
                 });
 
                 if (inputseri == true) {
-                    $('#detail_modal').modal("hide");
-                    $('#no_seri_select' + idx).val(JSON.stringify(noseri_arr));
-                    console.log($('#no_seri_select' + idx).val());
+                    if (uniqueCheck(JSON.stringify(noseri_arr))){
+                        $('#detail_modal').modal("hide");
+                        $('#no_seri_select' + idx).val(JSON.stringify(noseri_arr));
+                        console.log($('#no_seri_select' + idx).val());
 
-                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').removeClass('btn-info');
-                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').addClass('btn-warning');
-                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').html(
-                        '<i class="fas fa-pencil-alt"></i> Edit');
+                        $('#produktable').find('button[name="btn_seri[' + idx + ']"]').removeClass('btn-info');
+                        $('#produktable').find('button[name="btn_seri[' + idx + ']"]').addClass('btn-warning');
+                        $('#produktable').find('button[name="btn_seri[' + idx + ']"]').html(
+                            '<i class="fas fa-pencil-alt"></i> Edit');
+                    }else {
+                        swal.fire(
+                            'No Seri Tidak Boleh Sama',
+                            'No Seri yang anda inputkan tidak boleh sama',
+                            'error'
+                        );
+                    }
                 } else {
                     swal.fire(
                         'Form Kosong',
@@ -1022,6 +1030,18 @@
                 }
                 validasi();
             })
+
+            function uniqueCheck(noseri_arr){
+                noseri_arr = JSON.parse(noseri_arr);
+                var unique = noseri_arr.filter(function(elem, index, self) {
+                    return index == self.indexOf(elem);
+                })
+                if (unique.length == noseri_arr.length){
+                    return true;
+                }else {
+                    return false;
+                }
+            }
 
             $(document).on('change', '#parttable .part_id', function() {
                 if (typeof($(this).select2('data')[0]['jumlah']) != 'undefined') {
