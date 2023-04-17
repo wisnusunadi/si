@@ -548,7 +548,11 @@
                             'Berhasil',
                             result.messages,
                             'success'
-                        );
+                        ).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        })
                     } else {
 
                     }
@@ -1025,23 +1029,13 @@
                         return false;
                     }
                 });
-
                 if (inputseri == true) {
                     $('#detail_modal').modal("hide");
                     $('#no_seri_select' + idx).val(JSON.stringify(noseri_arr));
-
-
-                        $('#produktable').find('button[name="btn_seri[' + idx + ']"]').removeClass('btn-info');
-                        $('#produktable').find('button[name="btn_seri[' + idx + ']"]').addClass('btn-warning');
-                        $('#produktable').find('button[name="btn_seri[' + idx + ']"]').html(
-                            '<i class="fas fa-pencil-alt"></i> Edit');
-                    }else {
-                        swal.fire(
-                            'No Seri Tidak Boleh Sama',
-                            'No Seri yang anda inputkan tidak boleh sama',
-                            'error'
-                        );
-                    }
+                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').removeClass('btn-info');
+                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').addClass('btn-warning');
+                    $('#produktable').find('button[name="btn_seri[' + idx + ']"]').html(
+                        '<i class="fas fa-pencil-alt"></i> Edit');
                 } else {
                     swal.fire(
                         'Form Kosong',
