@@ -536,7 +536,22 @@
                 type: 'POST',
                 data: $('#formtambahretur').serialize(),
                 success: function(result) {
-                    console.log(result)
+
+                    if (result.status === 'duplicate') {
+                        swal.fire(
+                            'Noseri Sama',
+                            result.messages,
+                            'error'
+                        );
+                    } else if (result.status === 'success') {
+                        swal.fire(
+                            'Berhasil',
+                            result.messages,
+                            'success'
+                        );
+                    } else {
+
+                    }
                 }
             });
         })
@@ -758,7 +773,7 @@
                     var idx = 0;
                     obj.forEach(object => {
                         seritr +=
-                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"
+                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seriz"
                                 name="no_seri[` + idx + `]" id="no_seri` + idx + `"
                                 id="no_seri` + idx + `" value="` + object + `"
                                 >
@@ -776,7 +791,6 @@
                                 </td></tr>`;
                     }
                 }
-
                 return seritr;
             }
 
@@ -826,9 +840,7 @@
                 }
             });
 
-            function no_seri_arr(no_seri) {
-                console.log("no_seri_arr", no_seri);
-            }
+
 
             function no_seri_lama() {
                 // $('.no_seri').select2({
@@ -976,24 +988,22 @@
                 $('#detail_modal').modal("show");
                 if (no_seri_select.val() != "") {
                     var obj = JSON.parse(no_seri_select.val());
-                    console.log("obj", obj)
+
                     $('#seri_table tbody').empty();
                     $('#seri_table tbody').append(trseriproduk(jumlah.val(), obj));
 
                     $('#index_table').val(number);
-                    if (produk_id.select2('data')[0]['noseri'] != undefined) {
-                        no_seri_arr(produk_id.select2('data')[0]['noseri']);
-                    } else {
-                        no_seri_lama();
-                    }
+
+                    no_seri_lama();
+
                 } else {
-                    console.log('tes')
+
                     $('#seri_table tbody').empty();
                     $('#seri_table tbody').append(trseriproduk(jumlah.val(), undefined));
 
                     $('#index_table').val(number);
                     if (produk_id.select2('data')[0]['noseri'] != undefined) {
-                        no_seri_arr(produk_id.select2('data')[0]['noseri']);
+                        no_seri_lama();
                     } else {
                         no_seri_lama();
                     }
@@ -1019,7 +1029,7 @@
                 if (inputseri == true) {
                     $('#detail_modal').modal("hide");
                     $('#no_seri_select' + idx).val(JSON.stringify(noseri_arr));
-                    console.log($('#no_seri_select' + idx).val());
+
 
                     $('#produktable').find('button[name="btn_seri[' + idx + ']"]').removeClass('btn-info');
                     $('#produktable').find('button[name="btn_seri[' + idx + ']"]').addClass('btn-warning');
