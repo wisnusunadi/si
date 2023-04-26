@@ -556,7 +556,7 @@
                     type: 'POST',
                     data: $('#formtambahretur').serialize(),
                     success: function(result) {
-                        console.log(result)
+                        console.log(result);
                         // if (result.status === 'duplicate') {
                         //     swal.fire(
                         //         'Noseri Sama',
@@ -832,18 +832,12 @@
                         var noseri_all = [];
 
                         object['seri'].forEach(seri => {
-                            var obj = {};
-                            obj.id = seri['id'];
-                            obj.text = seri['text'];
-                            noseri_arr.push(obj);
+                            noseri_arr.push(seri['text']);
                         });
 
                         if (object['allseri'].length > 0) {
                             object['allseri'].forEach(noseri => {
-                                var obj = {};
-                                obj.id = noseri['id'];
-                                obj.text = noseri['noseri'];
-                                noseri_all.push(obj);
+                                noseri_all.push(noseri['noseri']);
                             });
                         }
                         var datatable = `<tr>
@@ -1013,7 +1007,7 @@
                         seritr +=
                             `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"
                                 name="no_seri[` + idx + `]" id="no_seri` + idx + `"
-                                id="no_seri` + idx + `" value="` + object['text'] + `"
+                                id="no_seri` + idx + `" value="` + object + `"
                                 >
                                 <div class="suggestion-box"></div>
                                 </td></tr>`;
@@ -1216,6 +1210,7 @@
                 var jumlah = $(this).closest('tr').find('.jumlah_produk');
                 var no_seri_select = $(this).closest('tr').find('.no_seri_select');
                 var number = $(this).closest('tr').find("td:eq(0)").html() - 1;
+
                 $('#detail_modal').modal("show");
                 if (no_seri_select.val() != "") {
                     var obj = JSON.parse(no_seri_select.val());
@@ -1224,11 +1219,14 @@
 
                     $('#index_table').val(number);
                     if (produk_id.select2('data')[0]['noseri'] != undefined) {
-                        no_seri_arr(produk_id.select2('data')[0]['noseri']);
+                        // no_seri_arr(produk_id.select2('data')[0]['noseri']);
+                        no_seri_lama();
+
                     } else {
                         if ($('#pesanan_id') != "") {
-                            var noseri_res = JSON.parse(produk_id.find('option:selected').attr(
-                                'data-noseri'));
+
+                            // var noseri_res = JSON.parse(produk_id.find('option:selected').attr(
+                            //     'data-noseri'));
                             // no_seri_arr(noseri_res)
                             no_seri_lama();
                         } else {
@@ -1242,9 +1240,9 @@
                     if (produk_id.select2('data')[0]['noseri'] != undefined) {
                         // no_seri_arr(produk_id.select2('data')[0]['noseri']);
                         no_seri_lama();
-                        console.log('nok');
+
                     } else {
-                        console.log('ok');
+
                         no_seri_lama();
                     }
                 }
@@ -1282,6 +1280,7 @@
                         'error'
                     );
                 }
+
                 validasi();
 
             })

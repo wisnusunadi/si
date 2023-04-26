@@ -1043,17 +1043,18 @@
                         'error'
                     );
                 }
+                console.log(noseri_arr);
                 validasi();
             })
 
-            function uniqueCheck(noseri_arr){
+            function uniqueCheck(noseri_arr) {
                 noseri_arr = JSON.parse(noseri_arr);
                 var unique = noseri_arr.filter(function(elem, index, self) {
                     return index == self.indexOf(elem);
                 })
-                if (unique.length == noseri_arr.length){
+                if (unique.length == noseri_arr.length) {
                     return true;
-                }else {
+                } else {
                     return false;
                 }
             }

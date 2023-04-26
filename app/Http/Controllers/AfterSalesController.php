@@ -693,7 +693,7 @@ class AfterSalesController extends Controller
 
     public function store_retur(Request $r)
     {
-        dd($r->all());
+
         $validator = Validator::make($r->all(), [
             'tgl_retur' => 'required',
             'pilih_jenis_retur' => 'required'
@@ -966,64 +966,87 @@ class AfterSalesController extends Controller
         if ($validator->fails()) {
             return redirect()->back()->with('error', 'Periksa Kembali Form Anda');
         } else {
-            $customer_id = "";
-            $pesanan_id = NULL;
-            $retur_id = NULL;
-            $no_pesanan = NULL;
-            $karyawan_id = NULL;
-            $pic = NULL;
 
-            if ($r->karyawan_id != "") {
-                $karyawan_id = $r->karyawan_id;
-                $pic = NULL;
+            if (in_array('produk', $r->pilih_jenis_barang)) {
+                //Cek Duplikasi Nomer Seri
+                for ($i = 0; $i < count($r->produk_id); $i++) {
+                    $no_seri = json_decode($r->no_seri_select[$i]);
+                    for ($j = 0; $j < count($no_seri); $j++) {
+                        $no_seri_all[] = $no_seri[$j];
+                    }
+                }
+
+                if (count($no_seri_all) != count(array_unique($no_seri_all))) {
+                    $response = 'nok';
+                } else {
+                    $response = 'ok';
+                }
             } else {
-                $pic = $r->pic_peminjaman;
+                $response = 'ok';
+            }
+
+            if ($response == 'nok') {
+                return response()->json(['status' => 'duplicate', 'messages' => 'Noseri Tidak Boleh Sama']);
+            } else {
+
+                $customer_id = "";
+                $pesanan_id = NULL;
+                $retur_id = NULL;
+                $no_pesanan = NULL;
                 $karyawan_id = NULL;
-            }
-            if ($r->customer_id != "") {
-                $customer_id = $r->customer_id;
-            } else {
-                $c = Customer::create([
-                    'id_provinsi' => '35',
-                    'nama' => $r->customer_nama,
-                    'alamat' => $r->alamat,
-                    'telp' => $r->telepon
-                ]);
-                if ($c) {
-                    $customer_id = $c->id;
-                }
-            }
+                $pic = NULL;
 
-            if ($r->no_transaksi_ref != "no_retur" && $r->no_transaksi_ref != "sj_retur") {
-                if ($r->pesanan_id != "") {
-                    $pesanan_id = $r->pesanan_id;
+                if ($r->karyawan_id != "") {
+                    $karyawan_id = $r->karyawan_id;
+                    $pic = NULL;
                 } else {
-                    $no_pesanan = $r->no_transaksi;
+                    $pic = $r->pic_peminjaman;
+                    $karyawan_id = NULL;
                 }
-            } else {
-                if ($r->pesanan_id != "") {
-                    $retur_id = $r->pesanan_id;
+                if ($r->customer_id != "") {
+                    $customer_id = $r->customer_id;
                 } else {
-                    $no_pesanan = $r->no_transaksi;
+                    $c = Customer::create([
+                        'id_provinsi' => '35',
+                        'nama' => $r->customer_nama,
+                        'alamat' => $r->alamat,
+                        'telp' => $r->telepon
+                    ]);
+                    if ($c) {
+                        $customer_id = $c->id;
+                    }
                 }
-            }
 
-            $u = ReturPenjualan::find($id);
-            $u->tgl_retur = $r->tgl_retur;
-            $u->jenis = $r->pilih_jenis_retur;
-            $u->keterangan = $r->keterangan;
-            $u->pesanan_id = $pesanan_id;
-            $u->retur_penjualan_id = $retur_id;
-            $u->no_pesanan = $no_pesanan;
-            $u->customer_id = $customer_id;
-            $u->karyawan_id = $karyawan_id;
-            $u->pic = $pic;
-            $u->telp_pic = $r->telp_pic;
-            $up = $u->save();
+                if ($r->no_transaksi_ref != "no_retur" && $r->no_transaksi_ref != "sj_retur") {
+                    if ($r->pesanan_id != "") {
+                        $pesanan_id = $r->pesanan_id;
+                    } else {
+                        $no_pesanan = $r->no_transaksi;
+                    }
+                } else {
+                    if ($r->pesanan_id != "") {
+                        $retur_id = $r->pesanan_id;
+                    } else {
+                        $no_pesanan = $r->no_transaksi;
+                    }
+                }
 
-            $bool = true;
-            $tes = NULL;
-            if ($up) {
+                $u = ReturPenjualan::find($id);
+                $u->tgl_retur = $r->tgl_retur;
+                $u->jenis = $r->pilih_jenis_retur;
+                $u->keterangan = $r->keterangan;
+                $u->pesanan_id = $pesanan_id;
+                $u->retur_penjualan_id = $retur_id;
+                $u->no_pesanan = $no_pesanan;
+                $u->customer_id = $customer_id;
+                $u->karyawan_id = $karyawan_id;
+                $u->pic = $pic;
+                $u->telp_pic = $r->telp_pic;
+                $up = $u->save();
+
+                $bool = true;
+                $tes = NULL;
+
                 $deltgn = NoseriTGbj::whereHas('detail.header', function ($q) use ($id) {
                     $q->where('retur_penjualan_id', '=', $id);
                 })->count();
@@ -1055,166 +1078,139 @@ class AfterSalesController extends Controller
                     })->delete();
                 }
                 $tg = TFProduksi::where('retur_penjualan_id', '=', $id)->first();
+
+
+
+                //Pengecekan, jika ada karyawan pic kosong
+                //jika ada pic karyawan kosong
+                if ($r->karyawan_id != "") {
+                    $karyawan_id = $r->karyawan_id;
+                    $pic = NULL;
+                } else {
+                    $pic = $r->pic_peminjaman;
+                    $karyawan_id = NULL;
+                }
+
+                //Jika Customer ada di dalam database tambahkan foreign key
+                //Jika Tidak ada, Create Baru Customer dan get idnya sebagai foreign key
+                if ($r->customer_id != "") {
+                    $customer_id = $r->customer_id;
+                } else {
+                    $c = Customer::create([
+                        'id_provinsi' => '35',
+                        'nama' => $r->customer_nama,
+                        'alamat' => $r->alamat,
+                        'telp' => $r->telepon
+                    ]);
+                    if ($c) {
+                        $customer_id = $c->id;
+                    }
+                }
+
+
+                //Jika tipe transaksi bukan no retur dan sj retur jalankan fungsi dibawah
+                if ($r->no_transaksi_ref != "no_retur" && $r->no_transaksi_ref != "sj_retur") {
+                    if ($r->pesanan_id != "") {
+                        $pesanan_id = $r->pesanan_id;
+                    } else {
+                        $no_pesanan = $r->no_transaksi;
+                    }
+                }
+                //Jika tipe transaksi meruopakan no retur dan sj retur jalankan fungsi dibawah
+                else {
+                    if ($r->pesanan_id != "") {
+                        $retur_id = $r->pesanan_id;
+                    } else {
+                        $no_pesanan = $r->no_transaksi;
+                    }
+                }
+            }
+
+            $bool = true;
+            $tes = NULL;
+            if ($u) {
+                $tg = TFProduksi::create([
+                    'dari' => Auth::user()->Karyawan->divisi_id,
+                    'ke' => '13',
+                    'deskripsi' => NULL,
+                    'status_id' => NULL,
+                    'pesanan_id' => NULL,
+                    'retur_penjualan_id' => $u->id,
+                    'tgl_keluar' => NULL,
+                    'tgl_masuk' => $r->tgl_retur,
+                    'state_id' => NULL,
+                    'jenis' => 'masuk',
+                    'created_by' => Auth::user()->id
+                ]);
+
                 if (in_array('produk', $r->pilih_jenis_barang)) {
-                    //Cek Duplikasi Nomer Seri
+                    $no_seri_all = array();
                     for ($i = 0; $i < count($r->produk_id); $i++) {
                         $no_seri = json_decode($r->no_seri_select[$i]);
-                        for ($j = 0; $j < count($no_seri); $j++) {
-                            $no_seri_all[] = $no_seri[$j];
-                        }
-                    }
 
-                    if (count($no_seri_all) != count(array_unique($no_seri_all))) {
-                        $response = 'nok';
-                    } else {
-                        $response = 'ok';
-                    }
-                } else {
-                    $response = 'ok';
-                }
-
-                if ($response == 'nok') {
-                    return response()->json(['status' => 'duplicate', 'messages' => 'Noseri Tidak Boleh Sama']);
-                } else {
-                    //Set Variabel Kosong dan NULL
-                    $customer_id = "";
-                    $pesanan_id = NULL;
-                    $no_pesanan = NULL;
-                    $retur_id = NULL;
-                    $karyawan_id = NULL;
-                    $pic = NULL;
-
-                    //Pengecekan, jika ada karyawan pic kosong
-                    //jika ada pic karyawan kosong
-                    if ($r->karyawan_id != "") {
-                        $karyawan_id = $r->karyawan_id;
-                        $pic = NULL;
-                    } else {
-                        $pic = $r->pic_peminjaman;
-                        $karyawan_id = NULL;
-                    }
-
-                    //Jika Customer ada di dalam database tambahkan foreign key
-                    //Jika Tidak ada, Create Baru Customer dan get idnya sebagai foreign key
-                    if ($r->customer_id != "") {
-                        $customer_id = $r->customer_id;
-                    } else {
-                        $c = Customer::create([
-                            'id_provinsi' => '35',
-                            'nama' => $r->customer_nama,
-                            'alamat' => $r->alamat,
-                            'telp' => $r->telepon
+                        $tgd = TFProduksiDetail::create([
+                            't_gbj_id' => $tg->id,
+                            'detail_pesanan_produk_id' => NULL,
+                            'gdg_brg_jadi_id' => $r->produk_id[$i],
+                            'qty' => $r->jumlah_produk[$i],
+                            'jenis' => 'masuk',
+                            'status_id' => NULL,
+                            'state_id' => NULL,
+                            'created_by' => Auth::user()->id,
                         ]);
-                        if ($c) {
-                            $customer_id = $c->id;
-                        }
-                    }
 
-
-                    //Jika tipe transaksi bukan no retur dan sj retur jalankan fungsi dibawah
-                    if ($r->no_transaksi_ref != "no_retur" && $r->no_transaksi_ref != "sj_retur") {
-                        if ($r->pesanan_id != "") {
-                            $pesanan_id = $r->pesanan_id;
-                        } else {
-                            $no_pesanan = $r->no_transaksi;
-                        }
-                    }
-                    //Jika tipe transaksi meruopakan no retur dan sj retur jalankan fungsi dibawah
-                    else {
-                        if ($r->pesanan_id != "") {
-                            $retur_id = $r->pesanan_id;
-                        } else {
-                            $no_pesanan = $r->no_transaksi;
-                        }
-                    }
-                }
-
-                $bool = true;
-                $tes = NULL;
-                if ($u) {
-                    $tg = TFProduksi::create([
-                        'dari' => Auth::user()->Karyawan->divisi_id,
-                        'ke' => '13',
-                        'deskripsi' => NULL,
-                        'status_id' => NULL,
-                        'pesanan_id' => NULL,
-                        'retur_penjualan_id' => $u->id,
-                        'tgl_keluar' => NULL,
-                        'tgl_masuk' => $r->tgl_retur,
-                        'state_id' => NULL,
-                        'jenis' => 'masuk',
-                        'created_by' => Auth::user()->id
-                    ]);
-
-                    if (in_array('produk', $r->pilih_jenis_barang)) {
-                        $no_seri_all = array();
-                        for ($i = 0; $i < count($r->produk_id); $i++) {
-                            $no_seri = json_decode($r->no_seri_select[$i]);
-
-                            $tgd = TFProduksiDetail::create([
-                                't_gbj_id' => $tg->id,
-                                'detail_pesanan_produk_id' => NULL,
-                                'gdg_brg_jadi_id' => $r->produk_id[$i],
-                                'qty' => $r->jumlah_produk[$i],
-                                'jenis' => 'masuk',
-                                'status_id' => NULL,
-                                'state_id' => NULL,
-                                'created_by' => Auth::user()->id,
-                            ]);
-
-                            for ($j = 0; $j < count($no_seri); $j++) {
-                                $cek = NoseriBarangJadi::where('noseri', $no_seri[$j])->count();
-                                if ($cek == 0) {
-                                    NoseriBarangJadi::create([
-                                        'is_aktif' => 1,
-                                        'is_ready' => 0,
-                                        'is_delete' => 0,
-                                        'used_by' => NULL,
-                                        'layout_id' => NULL,
-                                        'gdg_barang_jadi_id' => $r->produk_id[$i],
-                                        'dari' => 8,
-                                        'noseri' => $no_seri[$j],
-                                        'jenis' => 'MASUK',
-                                        'created_by' => Auth::user()->id,
-                                        'is_change' => 1
-                                    ]);
-                                }
-
-                                $noseri = NoseriBarangJadi::where('noseri', $no_seri[$j])->first();
-                                NoseriTGbj::create([
-                                    't_gbj_detail_id' => $tgd->id,
-                                    'noseri_id' => $noseri->id,
+                        for ($j = 0; $j < count($no_seri); $j++) {
+                            $cek = NoseriBarangJadi::where('noseri', $no_seri[$j])->count();
+                            if ($cek == 0) {
+                                NoseriBarangJadi::create([
+                                    'is_aktif' => 1,
+                                    'is_ready' => 0,
+                                    'is_delete' => 0,
+                                    'used_by' => NULL,
                                     'layout_id' => NULL,
-                                    'status_id' => NULL,
-                                    'state_id' => NULL,
-                                    'jenis' => 'masuk',
-                                    'created_by' => Auth::user()->id
+                                    'gdg_barang_jadi_id' => $r->produk_id[$i],
+                                    'dari' => 8,
+                                    'noseri' => $no_seri[$j],
+                                    'jenis' => 'MASUK',
+                                    'created_by' => Auth::user()->id,
+                                    'is_change' => 1
                                 ]);
                             }
-                        }
-                    }
 
-                    if (in_array('part', $r->pilih_jenis_barang)) {
-                        for ($i = 0; $i < count($r->part_id); $i++) {
-                            $tgd = TFProduksiDetail::create([
-                                't_gbj_id' => $tg->id,
-                                'detail_pesanan_produk_id' => NULL,
-                                'gdg_brg_jadi_id' => NULL,
-                                'm_sparepart_id' => $r->part_id[$i],
-                                'qty' => $r->part_jumlah[$i],
-                                'jenis' => 'masuk',
+                            $noseri = NoseriBarangJadi::where('noseri', $no_seri[$j])->first();
+                            NoseriTGbj::create([
+                                't_gbj_detail_id' => $tgd->id,
+                                'noseri_id' => $noseri->id,
+                                'layout_id' => NULL,
                                 'status_id' => NULL,
                                 'state_id' => NULL,
-                                'created_by' => Auth::user()->id,
+                                'jenis' => 'masuk',
+                                'created_by' => Auth::user()->id
                             ]);
                         }
                     }
+                }
 
-                    if ($bool == true) {
-                        return response()->json(['status' => 'success', 'messages' => 'Data berhasil di tambahkan']);
-                    } else if ($bool == false) {
-                        return response()->json(['status' => 'error', 'messages' => 'Gagal menambahkan Retur']);
+                if (in_array('part', $r->pilih_jenis_barang)) {
+                    for ($i = 0; $i < count($r->part_id); $i++) {
+                        $tgd = TFProduksiDetail::create([
+                            't_gbj_id' => $tg->id,
+                            'detail_pesanan_produk_id' => NULL,
+                            'gdg_brg_jadi_id' => NULL,
+                            'm_sparepart_id' => $r->part_id[$i],
+                            'qty' => $r->part_jumlah[$i],
+                            'jenis' => 'masuk',
+                            'status_id' => NULL,
+                            'state_id' => NULL,
+                            'created_by' => Auth::user()->id,
+                        ]);
                     }
+                }
+
+                if ($bool == true) {
+                    return response()->json(['status' => 'success', 'messages' => 'Data berhasil di tambahkan']);
+                } else if ($bool == false) {
+                    return response()->json(['status' => 'error', 'messages' => 'Gagal menambahkan Retur']);
                 }
             }
         }
@@ -1250,6 +1246,7 @@ class AfterSalesController extends Controller
                 ->selectRaw('pesanan.id as id, logistik.nosurat as nama')->get();
 
             $data = $dataproduk->merge($datapart);
+
             // Logistik::where('logistik.nosurat', 'LIKE', '%'.$r->term.'%')->addSelect(['id' => function($q){
             //     $q->selectRaw('pesanan.id')
             //     ->from('pesanan')
@@ -1267,7 +1264,6 @@ class AfterSalesController extends Controller
             //     ->limit(1);
             // }])->selectRaw('nosurat as nama')->get();
         }
-
 
         echo json_encode($data);
     }
