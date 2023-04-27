@@ -958,7 +958,7 @@ class AfterSalesController extends Controller
 
     public function update_retur(Request $r, $id)
     {
-        dd($r->all());
+        // dd($r->all());
         $validator = Validator::make($r->all(), [
             'tgl_retur' => ['required'],
             'pilih_jenis_retur' => ['required']
@@ -1042,7 +1042,7 @@ class AfterSalesController extends Controller
                 $u->karyawan_id = $karyawan_id;
                 $u->pic = $pic;
                 $u->telp_pic = $r->telp_pic;
-                $up = $u->save();
+                $u->save();
 
                 $bool = true;
                 $tes = NULL;
@@ -1129,19 +1129,26 @@ class AfterSalesController extends Controller
             $bool = true;
             $tes = NULL;
             if ($u) {
-                $tg = TFProduksi::create([
-                    'dari' => Auth::user()->Karyawan->divisi_id,
-                    'ke' => '13',
-                    'deskripsi' => NULL,
-                    'status_id' => NULL,
-                    'pesanan_id' => NULL,
-                    'retur_penjualan_id' => $u->id,
-                    'tgl_keluar' => NULL,
-                    'tgl_masuk' => $r->tgl_retur,
-                    'state_id' => NULL,
-                    'jenis' => 'masuk',
-                    'created_by' => Auth::user()->id
-                ]);
+                $tfp = TFProduksi::find($tg->id);
+                $tfp->dari = Auth::user()->Karyawan->divisi_id;
+                $tfp->ke = 13;
+                $tfp->jenis = 'masuk';
+                $tfp->tgl_masuk = $r->tgl_retur;
+                $tfp->created_by = Auth::user()->id;
+                $tfp->save();
+                // $tg = TFProduksi::create([
+                //     'dari' => Auth::user()->Karyawan->divisi_id,
+                //     'ke' => '13',
+                //     'deskripsi' => NULL,
+                //     'status_id' => NULL,
+                //     'pesanan_id' => NULL,
+                //     'retur_penjualan_id' => $u->id,
+                //     'tgl_keluar' => NULL,
+                //     'tgl_masuk' => $r->tgl_retur,
+                //     'state_id' => NULL,
+                //     'jenis' => 'masuk',
+                //     'created_by' => Auth::user()->id
+                // ]);
 
                 if (in_array('produk', $r->pilih_jenis_barang)) {
                     $no_seri_all = array();
@@ -1208,7 +1215,7 @@ class AfterSalesController extends Controller
                 }
 
                 if ($bool == true) {
-                    return response()->json(['status' => 'success', 'messages' => 'Data berhasil di tambahkan']);
+                    return response()->json(['status' => 'success', 'messages' => 'Data berhasil di ubah']);
                 } else if ($bool == false) {
                     return response()->json(['status' => 'error', 'messages' => 'Gagal menambahkan Retur']);
                 }

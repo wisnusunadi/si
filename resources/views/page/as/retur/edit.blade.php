@@ -556,26 +556,25 @@
                     type: 'POST',
                     data: $('#formtambahretur').serialize(),
                     success: function(result) {
-                        console.log(result);
-                        // if (result.status === 'duplicate') {
-                        //     swal.fire(
-                        //         'Noseri Sama',
-                        //         result.messages,
-                        //         'error'
-                        //     );
-                        // } else if (result.status === 'success') {
-                        //     swal.fire(
-                        //         'Berhasil',
-                        //         result.messages,
-                        //         'success'
-                        //     ).then((result) => {
-                        //         if (result.isConfirmed) {
-                        //             window.location.reload();
-                        //         }
-                        //     })
-                        // } else {
+                        if (result.status === 'duplicate') {
+                            swal.fire(
+                                'Noseri Sama',
+                                result.messages,
+                                'error'
+                            );
+                        } else if (result.status === 'success') {
+                            swal.fire(
+                                'Berhasil',
+                                result.messages,
+                                'success'
+                            ).then((result) => {
+                                if (result.isConfirmed) {
+                                    window.location.reload();
+                                }
+                            })
+                        } else {
 
-                        // }
+                        }
                     }
                 });
             })
@@ -809,14 +808,14 @@
                     $('#btnsubmit').attr('disabled', true);
                 }
 
-                // if ($('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $(
-                //         '#customer_nama').val() != "" && $('#alamat').val() && $(
-                //         'input[name="pilih_jenis_barang[]"]:checked').length > 0 &&
-                //     inputproduk == true && inputno_seri == true && inputpart == true && inputjumpart == true) {
-                //     $('#btnsubmit').attr('disabled', false);
-                // } else {
-                //     $('#btnsubmit').attr('disabled', true);
-                // }
+                if ($('#tgl_retur').val() != "" && $('input[name="pilih_jenis_retur"]:checked').length > 0 && $(
+                        '#customer_nama').val() != "" && $('#alamat').val() && $(
+                        'input[name="pilih_jenis_barang[]"]:checked').length > 0 &&
+                    inputproduk == true && inputno_seri == true && inputpart == true && inputjumpart == true) {
+                    $('#btnsubmit').attr('disabled', false);
+                } else {
+                    $('#btnsubmit').attr('disabled', true);
+                }
                 // $('#btnsubmit').attr('disabled', false);
             }
 
