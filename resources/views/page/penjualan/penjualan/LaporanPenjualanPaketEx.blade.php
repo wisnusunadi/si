@@ -193,16 +193,31 @@
                     <td>{{ $e->Pesanan->no_po }}</td>
                     <td>{{ date('d-m-Y', strtotime($e->Pesanan->tgl_po)) }}</td>
                     <td>
-                        @if ($d->getSuratJalanProduk($d->DetailPesananUnique()[0]->penjualan_produk_id)->count() > 0)
-                            @foreach ($d->getSuratJalanProduk($d->DetailPesananUnique()[0]->penjualan_produk_id) as $f)
-                                {{ $f->Logistik->nosurat }}({{ date('d-m-Y', strtotime($f->Logistik->tgl_kirim)) }})
-                                @if (!$loop->last)
-                                    ,
-                                @endif
-                            @endforeach
-                        @else
-                            -
+                        @if ($e->Sparepart)
+                            @if ($d->getSuratJalanPart($d->DetailPesananUnique()[0]->m_sparepart_id)->count() > 0)
+                                @foreach ($d->getSuratJalanPart($d->DetailPesananUnique()[0]->m_sparepart_id) as $f)
+                                    {{ $f->Logistik->nosurat }}({{ date('d-m-Y', strtotime($f->Logistik->tgl_kirim)) }})
+                                    @if (!$loop->last)
+                                        ,
+                                    @endif
+                                @endforeach
+                            @else
+                                -
+                            @endif
                         @endif
+                        @if ($e->PenjualanProduk)
+                            @if ($d->getSuratJalanProduk($d->DetailPesananUnique()[0]->penjualan_produk_id)->count() > 0)
+                                @foreach ($d->getSuratJalanProduk($d->DetailPesananUnique()[0]->penjualan_produk_id) as $f)
+                                    {{ $f->Logistik->nosurat }}({{ date('d-m-Y', strtotime($f->Logistik->tgl_kirim)) }})
+                                    @if (!$loop->last)
+                                        ,
+                                    @endif
+                                @endforeach
+                            @else
+                                -
+                            @endif
+                        @endif
+
                     </td>
                     <td>
                         @if ($e->Pesanan->Ekatalog)

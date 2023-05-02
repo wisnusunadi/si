@@ -613,6 +613,20 @@ class Pesanan extends Model
         $data = DetailPesananDsb::groupby('penjualan_produk_id')->where(['pesanan_id' => $id, 'penjualan_produk_id' => $id_penjualan_produk])->sum('ongkir');
         return $data;
     }
+    public function getSuratJalanPart($id_sparepart)
+    {
+        $id = $this->id;
+        $detail_pesanan_part = DetailPesananPart::where(['pesanan_id' => $id, 'm_sparepart_id' => $id_sparepart])->get();
+        $detail_pesanan_part_id = [];
+
+        foreach ($detail_pesanan_part as $d) {
+            $detail_pesanan_part_id[] = $d->id;
+        }
+
+
+        $logistik = DetailLogistikPart::groupby('logistik_id')->whereIN('detail_pesanan_part_id', $detail_pesanan_part_id)->get();
+        return $logistik;
+    }
     public function getSuratJalanProduk($id_penjualan_produk)
     {
         $id = $this->id;
