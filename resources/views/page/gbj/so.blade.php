@@ -193,7 +193,7 @@
                                                             </tr>
                                                         </thead>
                                                         <tbody>
-                                                            <tr>
+                                                            {{-- <tr>
                                                                 <td>1</td>
                                                                 <td>SO-00001</td>
                                                                 <td>PO-00001</td>
@@ -204,7 +204,7 @@
                                                                         class="btn btn-sm btn-outline-success button_batal"><i
                                                                             class="fas fa-eye"></i> Detail</button>
                                                                 </td>
-                                                            </tr>
+                                                            </tr> --}}
                                                         </tbody>
                                                     </table>
                                                 </div>
@@ -734,8 +734,8 @@
                             "language": {
                                 // url: "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json",
                                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                    </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
                             },
                             "columnDefs": [{
                                     "targets": [6],
@@ -789,8 +789,8 @@
                             "language": {
                                 // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                                 processing: "<span class='fa-stack fa-md'>\n\
-                                                                                            <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                    </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                    <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                            </span>&emsp;Mohon Tunggu ...",
                             },
                             "columnDefs": [{
                                     "targets": [6],
@@ -839,8 +839,8 @@
                         "language": {
                             // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                             processing: "<span class='fa-stack fa-md'>\n\
-                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
                         }
                     });
 
@@ -1344,8 +1344,8 @@
                         "language": {
                             // "url": "https://cdn.datatables.net/plug-ins/1.10.20/i18n/Indonesian.json"
                             processing: "<span class='fa-stack fa-md'>\n\
-                                                                                        <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
-                                                                                </span>&emsp;Mohon Tunggu ...",
+                                                                                                                                                                <i class='fa fa-spinner fa-spin fa-stack-2x fa-fw'></i>\n\
+                                                                                                                                                        </span>&emsp;Mohon Tunggu ...",
                         },
                         "order": [
                             [5, 'asc']
