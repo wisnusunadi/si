@@ -1,6 +1,7 @@
 <?php
 
 namespace App\Http\Controllers;
+
 use App\Exports\LaporanAfterSalesRetur;
 use App\Models\Pesanan;
 use App\Models\Logistik;
@@ -43,47 +44,47 @@ class AfterSalesController extends Controller
     public function get_data_so()
     {
         $datas = DetailPesanan::with(['Pesanan.Ekatalog.Customer.Provinsi', 'Pesanan.Spa.Customer.Provinsi', 'Pesanan.Spb.Customer.Provinsi', 'PenjualanProduk'])->orderBy('id', 'desc')
-        ->addSelect(['tgl_kirim' => function($q){
-            $q->selectRaw('logistik.tgl_kirim')
-            ->from('logistik')
-            ->leftJoin('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
-            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
-            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
-            ->limit(1);
-        }, 'count_qc' => function($q){
-            $q->selectRaw('count(noseri_detail_pesanan.id)')
-            ->from('noseri_detail_pesanan')
-            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
-            ->where('noseri_detail_pesanan.status', '=', 'ok')
-            ->limit(1);
-        }, 'count_log' => function($q){
-            $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
-            ->from('noseri_logistik')
-            ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
-            ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
-            ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
-            ->limit(1);
-        }])->havingRaw('count_log > 0')->get();
+            ->addSelect(['tgl_kirim' => function ($q) {
+                $q->selectRaw('logistik.tgl_kirim')
+                    ->from('logistik')
+                    ->leftJoin('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
+                    ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                    ->limit(1);
+            }, 'count_qc' => function ($q) {
+                $q->selectRaw('count(noseri_detail_pesanan.id)')
+                    ->from('noseri_detail_pesanan')
+                    ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                    ->where('noseri_detail_pesanan.status', '=', 'ok')
+                    ->limit(1);
+            }, 'count_log' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_logistik.id),0)')
+                    ->from('noseri_logistik')
+                    ->leftJoin('noseri_detail_pesanan', 'noseri_detail_pesanan.id', '=', 'noseri_logistik.noseri_detail_pesanan_id')
+                    ->leftJoin('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'noseri_detail_pesanan.detail_pesanan_produk_id')
+                    ->whereColumn('detail_pesanan_produk.detail_pesanan_id', 'detail_pesanan.id')
+                    ->limit(1);
+            }])->havingRaw('count_log > 0')->get();
 
         $datas1 = DetailPesananPart::with(['Pesanan.Ekatalog.Customer.Provinsi', 'Pesanan.Spa.Customer.Provinsi', 'Pesanan.Spb.Customer.Provinsi', 'Sparepart'])->orderBy('id', 'desc')
-        ->addSelect(['tgl_kirim' => function($q){
-            $q->selectRaw('logistik.tgl_kirim')
-            ->from('logistik')
-            ->leftJoin('detail_logistik_part', 'detail_logistik_part.logistik_id', '=', 'logistik.id')
-            ->whereColumn('detail_logistik_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
-            ->limit(1);
-        }, 'count_qc' => function($q){
-            $q->selectRaw('sum(outgoing_pesanan_part.jumlah_ok)')
-            ->from('outgoing_pesanan_part')
-            ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
-            ->limit(1);
-        }, 'count_log' => function($q){
-            $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
-            ->from('detail_logistik_part')
-            ->whereColumn('detail_logistik_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
-            ->limit(1);
-        }])->havingRaw('count_log > 0')->get();
+            ->addSelect(['tgl_kirim' => function ($q) {
+                $q->selectRaw('logistik.tgl_kirim')
+                    ->from('logistik')
+                    ->leftJoin('detail_logistik_part', 'detail_logistik_part.logistik_id', '=', 'logistik.id')
+                    ->whereColumn('detail_logistik_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
+                    ->limit(1);
+            }, 'count_qc' => function ($q) {
+                $q->selectRaw('sum(outgoing_pesanan_part.jumlah_ok)')
+                    ->from('outgoing_pesanan_part')
+                    ->whereColumn('outgoing_pesanan_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
+                    ->limit(1);
+            }, 'count_log' => function ($q) {
+                $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
+                    ->from('detail_logistik_part')
+                    ->whereColumn('detail_logistik_part.detail_pesanan_part_id', 'detail_pesanan_part.id')
+                    ->limit(1);
+            }])->havingRaw('count_log > 0')->get();
 
         $data = $datas->merge($datas1);
         return datatables()->of($data)
@@ -172,17 +173,17 @@ class AfterSalesController extends Controller
             ->addColumn('status', function ($data) {
                 $datas = "";
                 $hitung = floor((($data->count_log / $data->count_qc) * 100));
-                            if($hitung > 0){
-                                $datas = '<div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                if ($hitung > 0) {
+                    $datas = '<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="' . $hitung . '"  style="width: ' . $hitung . '%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
                                 </div>
                                 <small class="text-muted">Selesai</small>';
-                            } else {
-                                $datas = '<div class="progress">
-                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                } else {
+                    $datas = '<div class="progress">
+                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
                                 </div>
                                 <small class="text-muted">Selesai</small>';
-                            }
+                }
                 return $datas;
             })
             ->addColumn('keterangan', function ($data) {
@@ -404,15 +405,15 @@ class AfterSalesController extends Controller
 
     public function get_data_so_belum_kirim()
     {
-        $data = Pesanan::addSelect(['cjumlahpart' => function($q){
+        $data = Pesanan::addSelect(['cjumlahpart' => function ($q) {
             $q->selectRaw('sum(detail_pesanan_part.jumlah)')
-            ->from('detail_pesanan_part')
-            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
-        }, 'cjumlahkirim' => function($q){
+                ->from('detail_pesanan_part')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+        }, 'cjumlahkirim' => function ($q) {
             $q->selectRaw('coalesce(sum(detail_logistik_part.jumlah),0)')
-            ->from('detail_logistik_part')
-            ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+                ->from('detail_logistik_part')
+                ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
         }])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->orderBy('tgl_po', 'desc')->havingRaw('cjumlahpart > 0 AND cjumlahkirim <= 0')->get();
 
         return datatables()->of($data)
@@ -420,42 +421,40 @@ class AfterSalesController extends Controller
             ->addColumn('jenis', function ($data) {
                 if (isset($data->Spa)) {
                     return '<span class="orange-text badge">SPA</span>';
-                }
-                else if (isset($data->Spb)) {
+                } else if (isset($data->Spb)) {
                     return '<span class="blue-text badge">SPB</span>';
                 }
             })
             ->addColumn('so', function ($data) {
 
                 if (!empty($data->so)) {
-                        return $data->so;
-                    } else {
-                        return '-';
-                    }
+                    return $data->so;
+                } else {
+                    return '-';
+                }
             })
             ->addColumn('nopo', function ($data) {
-                    if (!empty($data->no_po)) {
-                        return $data->no_po;
-                    } else {
-                        return '-';
-                    }
+                if (!empty($data->no_po)) {
+                    return $data->no_po;
+                } else {
+                    return '-';
+                }
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
                 $hitung = floor((($data->cjumlahkirim / $data->cjumlahpart) * 100));
-                            if($hitung > 0){
-                                $datas = '<div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                if ($hitung > 0) {
+                    $datas = '<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="' . $hitung . '"  style="width: ' . $hitung . '%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
                                 </div>
                                 <small class="text-muted">Selesai</small>';
-                            }else{
-                                $datas = '<div class="progress">
-                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                } else {
+                    $datas = '<div class="progress">
+                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
                                 </div>
                                 <small class="text-muted">Selesai</small>';
-                            }
+                }
                 return $datas;
-
             })
             ->addColumn('tglpo', function ($data) {
                 return Carbon::createFromFormat('Y-m-d', $data->tgl_po)->format('d-m-Y');
@@ -463,8 +462,7 @@ class AfterSalesController extends Controller
             ->addColumn('nama_customer', function ($data) {
                 if (isset($data->Spa)) {
                     return $data->Spa->Customer->nama;
-                }
-                else if (isset($data->Spb)) {
+                } else if (isset($data->Spb)) {
                     return $data->Spb->Customer->nama;
                 }
             })
@@ -477,8 +475,7 @@ class AfterSalesController extends Controller
                         Detail
                         </button>
                     </a>';
-                }
-                else if (isset($data->Spb)) {
+                } else if (isset($data->Spb)) {
                     $return .= '<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '" >
                     <button class="btn btn-outline-primary btn-sm" type="button">
                         <i class="fas fa-eye"></i>
@@ -494,15 +491,15 @@ class AfterSalesController extends Controller
 
     public function get_data_so_selesai_kirim()
     {
-        $data = Pesanan::addSelect(['cjumlahpart' => function($q){
+        $data = Pesanan::addSelect(['cjumlahpart' => function ($q) {
             $q->selectRaw('sum(detail_pesanan_part.jumlah)')
-            ->from('detail_pesanan_part')
-            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
-        }, 'cjumlahkirim' => function($q){
+                ->from('detail_pesanan_part')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+        }, 'cjumlahkirim' => function ($q) {
             $q->selectRaw('sum(detail_logistik_part.jumlah)')
-            ->from('detail_logistik_part')
-            ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-            ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
+                ->from('detail_logistik_part')
+                ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                ->whereColumn('detail_pesanan_part.pesanan_id', 'pesanan.id');
         }])->with(['Spa.Customer.Provinsi', 'Spb.Customer.Provinsi'])->havingRaw('cjumlahkirim > 0')->orderBy('tgl_po', 'desc')->get();
 
         return datatables()->of($data)
@@ -510,39 +507,38 @@ class AfterSalesController extends Controller
             ->addColumn('jenis', function ($data) {
                 if (isset($data->Spa)) {
                     return '<span class="orange-text badge">SPA</span>';
-                }
-                else if (isset($data->Spb)) {
+                } else if (isset($data->Spb)) {
                     return '<span class="blue-text badge">SPB</span>';
                 }
             })
             ->addColumn('so', function ($data) {
                 if (!empty($data->so)) {
-                        return $data->so;
-                    } else {
-                        return '-';
-                    }
+                    return $data->so;
+                } else {
+                    return '-';
+                }
             })
             ->addColumn('nopo', function ($data) {
-                    if (!empty($data->no_po)) {
-                        return $data->no_po;
-                    } else {
-                        return '-';
-                    }
+                if (!empty($data->no_po)) {
+                    return $data->no_po;
+                } else {
+                    return '-';
+                }
             })
             ->addColumn('status', function ($data) {
                 $datas = "";
                 $hitung = floor((($data->cjumlahkirim / $data->cjumlahpart) * 100));
-                            if($hitung > 0){
-                                $datas = '<div class="progress">
-                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="'.$hitung.'"  style="width: '.$hitung.'%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                if ($hitung > 0) {
+                    $datas = '<div class="progress">
+                                    <div class="progress-bar bg-success" role="progressbar" aria-valuenow="' . $hitung . '"  style="width: ' . $hitung . '%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
                                 </div>
                                 <small class="text-muted">Selesai</small>';
-                            }else{
-                                $datas = '<div class="progress">
-                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">'.$hitung.'%</div>
+                } else {
+                    $datas = '<div class="progress">
+                                    <div class="progress-bar bg-light" role="progressbar" aria-valuenow="0"  style="width: 100%" aria-valuemin="0" aria-valuemax="100">' . $hitung . '%</div>
                                 </div>
                                 <small class="text-muted">Selesai</small>';
-                            }
+                }
                 return $datas;
             })
             ->addColumn('tglpo', function ($data) {
@@ -551,8 +547,7 @@ class AfterSalesController extends Controller
             ->addColumn('nama_customer', function ($data) {
                 if (isset($data->Spa)) {
                     return $data->Spa->Customer->nama;
-                }
-                else if (isset($data->Spb)) {
+                } else if (isset($data->Spb)) {
                     return $data->Spb->Customer->nama;
                 }
             })
@@ -565,8 +560,7 @@ class AfterSalesController extends Controller
                         Detail
                         </button>
                     </a>';
-                }
-                else if (isset($data->Spb)) {
+                } else if (isset($data->Spb)) {
                     $return .= '<a data-toggle="modal" data-target="spb" class="detailmodal" data-label data-attr="' . route('penjualan.penjualan.detail.spb',  $data->Spb->id) . '"  data-id="' . $data->Spb->id . '" >
                     <button class="btn btn-outline-primary btn-sm" type="button">
                         <i class="fas fa-eye"></i>
@@ -589,45 +583,45 @@ class AfterSalesController extends Controller
     public function get_data_retur()
     {
         $data = ReturPenjualan::with('Pesanan', 'Customer', 'Karyawan', 'State', 'ReturPenjualanChild')
-        ->addSelect(['count_noseri' => function($q){
-            $q->selectRaw('count(t_gbj_noseri.id)')
-            ->from('t_gbj_noseri')
-            ->join('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-            ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->where('t_gbj.jenis', '=', 'masuk')
-            ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
-         }, 'count_perbaikan' => function($q){
-            $q->selectRaw('coalesce(count(noseri_perbaikan.id), 0)')
-            ->from('noseri_perbaikan')
-            ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
-            ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
-         }, 'count_part' => function($q){
-            $q->selectRaw('coalesce(SUM(t_gbj_detail.qty), 0)')
-            ->from('t_gbj_detail')
-            ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->where('t_gbj.jenis', 'masuk')
-            ->whereNotNull('t_gbj_detail.m_sparepart_id')
-            ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
-        }, 'count_kirim_part' => function($q){
-            $q->selectRaw('coalesce(SUM(pengiriman_part.jumlah), 0)')
-            ->from('pengiriman_part')
-            ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_part.pengiriman_id')
-            ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
-        }, 'count_perbaikan_karantina' => function($q){
-            $q->selectRaw('coalesce(count("noseri_perbaikan.id"), 0)')
-            ->from('noseri_perbaikan')
-            ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
-            ->where('noseri_perbaikan.m_status_id', '=', '2')
-            ->whereNull('noseri_perbaikan.noseri_pengganti_id')
-            ->whereIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
-            ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
-        }, 'count_pengiriman' => function($q){
-            $q->selectRaw('coalesce(count("pengiriman_noseri.id"),0)')
-            ->from('pengiriman_noseri')
-            ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
-            ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
-        }])
-        ->get();
+            ->addSelect(['count_noseri' => function ($q) {
+                $q->selectRaw('count(t_gbj_noseri.id)')
+                    ->from('t_gbj_noseri')
+                    ->join('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->where('t_gbj.jenis', '=', 'masuk')
+                    ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
+            }, 'count_perbaikan' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_perbaikan.id), 0)')
+                    ->from('noseri_perbaikan')
+                    ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
+                    ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
+            }, 'count_part' => function ($q) {
+                $q->selectRaw('coalesce(SUM(t_gbj_detail.qty), 0)')
+                    ->from('t_gbj_detail')
+                    ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->where('t_gbj.jenis', 'masuk')
+                    ->whereNotNull('t_gbj_detail.m_sparepart_id')
+                    ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
+            }, 'count_kirim_part' => function ($q) {
+                $q->selectRaw('coalesce(SUM(pengiriman_part.jumlah), 0)')
+                    ->from('pengiriman_part')
+                    ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_part.pengiriman_id')
+                    ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
+            }, 'count_perbaikan_karantina' => function ($q) {
+                $q->selectRaw('coalesce(count("noseri_perbaikan.id"), 0)')
+                    ->from('noseri_perbaikan')
+                    ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
+                    ->where('noseri_perbaikan.m_status_id', '=', '2')
+                    ->whereNull('noseri_perbaikan.noseri_pengganti_id')
+                    ->whereIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
+                    ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
+            }, 'count_pengiriman' => function ($q) {
+                $q->selectRaw('coalesce(count("pengiriman_noseri.id"),0)')
+                    ->from('pengiriman_noseri')
+                    ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
+                    ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
+            }])
+            ->get();
         return response()->json(['data' => $data]);
     }
 
@@ -636,17 +630,15 @@ class AfterSalesController extends Controller
         $d = ReturPenjualan::where('id', $r->id)->with('Pesanan', 'TFProduksi.detail.noseri')->first();
         $data = array();
         $data['id'] = $d->id;
-        if($d->pesanan_id != null) {
+        if ($d->pesanan_id != null) {
             $data['no_pesanan'] = $d->Pesanan->no_po;
-        }
-        else if($d->retur_penjualan_id != null) {
+        } else if ($d->retur_penjualan_id != null) {
             $data['no_pesanan'] = $d->ReturPenjualanChild->no_retur;
-        }
-        else {
+        } else {
             $data['no_pesanan'] = $d->no_pesanan;
         }
         $data['karyawan_id'] = $d->karyawan_id != null ? $d->Karyawan->nama : $d->pic;
-        $data['telp_pic'] = $d->telp_pic != null ? '('.$d->telp_pic.')' : "";
+        $data['telp_pic'] = $d->telp_pic != null ? '(' . $d->telp_pic . ')' : "";
         $data['customer'] = $d->Customer->nama;
         $data['alamat'] = $d->Customer->alamat;
         $data['telp'] = $d->Customer->telp;
@@ -657,17 +649,17 @@ class AfterSalesController extends Controller
         $data['status'] = $d->State->nama;
         $data['produk'] = array();
         $id = $r->id;
-        if($d->TFProduksi != null || $d->ReturPenjualanProduk != null){
-            $produk = TFProduksiDetail::whereHas('header', function($q) use($id){
+        if ($d->TFProduksi != null || $d->ReturPenjualanProduk != null) {
+            $produk = TFProduksiDetail::whereHas('header', function ($q) use ($id) {
                 $q->where([['retur_penjualan_id', '=', $id], ['jenis', '=', 'masuk']]);
             })->get();
-            foreach($produk as $key => $prd){
-                $data['produk'][$key]['nama'] = $prd->gdg_brg_jadi_id != null ? $prd->produk->Produk->nama." ".$prd->produk->nama : $prd->Sparepart->nama;
+            foreach ($produk as $key => $prd) {
+                $data['produk'][$key]['nama'] = $prd->gdg_brg_jadi_id != null ? $prd->produk->Produk->nama . " " . $prd->produk->nama : $prd->Sparepart->nama;
                 $data['produk'][$key]['jenis'] = $prd->gdg_brg_jadi_id != null ? 'Produk' : 'Part';
                 $data['produk'][$key]['jumlah'] = $prd->qty;
                 $data['produk'][$key]['no_seri'] = array();
-                if($prd->noseri != null){
-                    foreach($prd->noseri as $keys => $noseri){
+                if ($prd->noseri != null) {
+                    foreach ($prd->noseri as $keys => $noseri) {
                         $data['produk'][$key]['no_seri'][$keys] = $noseri->seri->noseri;
                     }
                 }
@@ -680,9 +672,9 @@ class AfterSalesController extends Controller
     public function get_no_retur_exist(Request $r)
     {
         $data = NULL;
-        if($r->id != "0"){
+        if ($r->id != "0") {
             $data = ReturPenjualan::where('no_retur', $r->no_retur)->whereNotIn('id', [$r->id])->count();
-        }else{
+        } else {
             $data = ReturPenjualan::where('no_retur', '=', $r->no_retur)->count();
         }
 
@@ -701,77 +693,110 @@ class AfterSalesController extends Controller
 
     public function store_retur(Request $r)
     {
+
         $validator = Validator::make($r->all(), [
             'tgl_retur' => 'required',
             'pilih_jenis_retur' => 'required'
         ]);
         if ($validator->fails()) {
-            return redirect()->back()->with('error', 'Periksa Kembali Form Anda');
-        }else{
-            $customer_id = "";
-            $pesanan_id = NULL;
-            $no_pesanan = NULL;
-            $retur_id = NULL;
+            return response()->json(['status' => 'error', 'messages' => 'Periksa Kembali Form Anda']);
+        } else {
+            $response = 'nok';
 
-            $karyawan_id = NULL;
-            $pic = NULL;
+            if (in_array('produk', $r->pilih_jenis_barang)) {
+                //Cek Duplikasi Nomer Seri
+                for ($i = 0; $i < count($r->produk_id); $i++) {
+                    $no_seri = json_decode($r->no_seri_select[$i]);
+                    for ($j = 0; $j < count($no_seri); $j++) {
+                        $no_seri_all[] = $no_seri[$j];
+                    }
+                }
 
-            if($r->karyawan_id != ""){
-                $karyawan_id = $r->karyawan_id;
-                $pic = NULL;
+                if (count($no_seri_all) != count(array_unique($no_seri_all))) {
+                    $response = 'nok';
+                } else {
+                    $response = 'ok';
+                }
+            } else {
+                $response = 'ok';
             }
-            else{
-                $pic = $r->pic_peminjaman;
+
+            if ($response == 'nok') {
+                return response()->json(['status' => 'duplicate', 'messages' => 'Noseri Tidak Boleh Sama']);
+            } else {
+                //Set Variabel Kosong dan NULL
+                $customer_id = "";
+                $pesanan_id = NULL;
+                $no_pesanan = NULL;
+                $retur_id = NULL;
                 $karyawan_id = NULL;
-            }
+                $pic = NULL;
 
-            if($r->customer_id != ""){
-                $customer_id = $r->customer_id;
-            }
-            else{
-                $c = Customer::create([
-                    'id_provinsi' => '35',
-                    'nama' => $r->customer_nama,
-                    'alamat' => $r->alamat,
-                    'telp' => $r->telepon
+                //Pengecekan, jika ada karyawan pic kosong
+                //jika ada pic karyawan kosong
+                if ($r->karyawan_id != "") {
+                    $karyawan_id = $r->karyawan_id;
+                    $pic = NULL;
+                } else {
+                    $pic = $r->pic_peminjaman;
+                    $karyawan_id = NULL;
+                }
+
+                //Jika Customer ada di dalam database tambahkan foreign key
+                //Jika Tidak ada, Create Baru Customer dan get idnya sebagai foreign key
+                if ($r->customer_id != "") {
+                    $customer_id = $r->customer_id;
+                } else {
+                    $c = Customer::create([
+                        'id_provinsi' => '35',
+                        'nama' => $r->customer_nama,
+                        'alamat' => $r->alamat,
+                        'telp' => $r->telepon
+                    ]);
+                    if ($c) {
+                        $customer_id = $c->id;
+                    }
+                }
+
+
+                //Jika tipe transaksi bukan no retur dan sj retur jalankan fungsi dibawah
+                if ($r->no_transaksi_ref != "no_retur" && $r->no_transaksi_ref != "sj_retur") {
+                    if ($r->pesanan_id != "") {
+                        $pesanan_id = $r->pesanan_id;
+                    } else {
+                        $no_pesanan = $r->no_transaksi;
+                    }
+                }
+                //Jika tipe transaksi meruopakan no retur dan sj retur jalankan fungsi dibawah
+                else {
+                    if ($r->pesanan_id != "") {
+                        $retur_id = $r->pesanan_id;
+                    } else {
+                        $no_pesanan = $r->no_transaksi;
+                    }
+                }
+
+                $retur = $this->no_bm($r->tgl_retur);
+                // $cr = 'tes';
+                $cr = ReturPenjualan::create([
+                    'no_retur' => $retur,
+                    'tgl_retur' => $r->tgl_retur,
+                    'jenis' => $r->pilih_jenis_retur,
+                    'keterangan' => $r->keterangan,
+                    'pesanan_id' => $pesanan_id,
+                    'retur_penjualan_id' => $retur_id,
+                    'no_pesanan' => $no_pesanan,
+                    'customer_id' => $customer_id,
+                    'karyawan_id' => $karyawan_id,
+                    'pic' => $pic,
+                    'telp_pic' => $r->telp_pic,
+                    'state_id' => '4'
                 ]);
-                if($c){
-                    $customer_id = $c->id;
-                }
             }
-            if($r->no_transaksi_ref != "no_retur" && $r->no_transaksi_ref != "sj_retur"){
-                if($r->pesanan_id != ""){
-                    $pesanan_id = $r->pesanan_id;
-                }else{
-                    $no_pesanan = $r->no_transaksi;
-                }
-            }
-            else{
-                if($r->pesanan_id != ""){
-                    $retur_id = $r->pesanan_id;
-                }else{
-                    $no_pesanan = $r->no_transaksi;
-                }
-            }
-            $retur = $this->no_bm($r->tgl_retur);
-            $cr = ReturPenjualan::create([
-                'no_retur' => $retur,
-                'tgl_retur' => $r->tgl_retur,
-                'jenis' => $r->pilih_jenis_retur,
-                'keterangan' => $r->keterangan,
-                'pesanan_id' => $pesanan_id,
-                'retur_penjualan_id' => $retur_id,
-                'no_pesanan' => $no_pesanan,
-                'customer_id' => $customer_id,
-                'karyawan_id' => $karyawan_id,
-                'pic' => $pic,
-                'telp_pic' => $r->telp_pic,
-                'state_id' => '4'
-            ]);
 
             $bool = true;
             $tes = NULL;
-            if($cr){
+            if ($cr) {
                 $tg = TFProduksi::create([
                     'dari' => Auth::user()->Karyawan->divisi_id,
                     'ke' => '13',
@@ -785,170 +810,95 @@ class AfterSalesController extends Controller
                     'jenis' => 'masuk',
                     'created_by' => Auth::user()->id
                 ]);
-                if(in_array('produk', $r->pilih_jenis_barang)){
-                    if($pesanan_id != NULL || $retur_id != NULL){
-                        if($tg){
-                            foreach($r->produk_id as $key => $produk){
-                                $no_seri = json_decode($r->no_seri_select[$key]);
-                                $tgd = TFProduksiDetail::create([
-                                    't_gbj_id' => $tg->id,
-                                    'detail_pesanan_produk_id' => NULL,
-                                    'gdg_brg_jadi_id' => $produk,
-                                    'qty' => count($no_seri),
-                                    'jenis' => 'masuk',
-                                    'status_id' => NULL,
-                                    'state_id' => NULL,
-                                    'created_by' => Auth::user()->id,
-                                ]);
-                                if($tgd){
-                                    foreach($no_seri as $keys => $noseri){
 
-                                        $tgn = NoseriTGbj::create([
-                                            't_gbj_detail_id' => $tgd->id,
-                                            'noseri_id' => $noseri->id,
-                                            'layout_id' => NULL,
-                                            'status_id' => NULL,
-                                            'state_id' => NULL,
-                                            'jenis' => 'masuk',
-                                            'created_by' => Auth::user()->id,
-                                        ]);
-                                        if(!$tgn){
-                                            $bool = false;
-                                        }
-                                        else{
-                                            $noseri_retur = NoseriBarangJadi::find($noseri->id);
-                                            $noseri_retur->used_by = NULL;
-                                            $noseri_retur->is_ready = '0';
-                                            $noseri_retur->is_aktif = '0';
-                                            $noseri_retur->jenis = 'MASUK';
-                                            $u = $noseri_retur->save();
-                                            if(!$u){
-                                                $bool = false;
-                                            }
-                                        }
-                                    }
-                                }
-                                else{
-                                    $bool = false;
-                                }
-                            }
-                        }
-                        else{
-                            $bool = false;
-                        }
+                if (in_array('produk', $r->pilih_jenis_barang)) {
+                    $no_seri_all = array();
+                    for ($i = 0; $i < count($r->produk_id); $i++) {
+                        $no_seri = json_decode($r->no_seri_select[$i]);
 
-                    } else if($no_pesanan != NULL){
-
-                        foreach($r->produk_id as $key => $produk){
-                            $no_seri = json_decode($r->no_seri_select[$key]);
-                            $tgd = TFProduksiDetail::create([
-                                't_gbj_id' => $tg->id,
-                                'detail_pesanan_produk_id' => NULL,
-                                'gdg_brg_jadi_id' => $produk,
-                                'qty' => count($r->no_seri_select[$key]),
-                                'jenis' => 'masuk',
-                                'status_id' => NULL,
-                                'state_id' => NULL,
-                                'created_by' => Auth::user()->id,
-                            ]);
-
-                            if($tgd){
-                                foreach($no_seri as $keys => $noseri){
-                                    $snoseri = NoseriBarangJadi::where('noseri', $noseri->id)->first();
-                                    if($snoseri != null){
-                                        $tgn = NoseriTGbj::create([
-                                            't_gbj_detail_id' => $tgd->id,
-                                            'noseri_id' => $snoseri->id,
-                                            'layout_id' => NULL,
-                                            'status_id' => NULL,
-                                            'state_id' => NULL,
-                                            'jenis' => 'masuk',
-                                            'created_by' => Auth::user()->id,
-                                        ]);
-
-
-                                        if(!$tgn){
-                                            $bool = false;
-                                        }
-                                        else{
-                                            $noseri_retur = NoseriBarangJadi::find($snoseri->id);
-                                            $noseri_retur->used_by = NULL;
-                                            $noseri_retur->is_ready = '0';
-                                            $noseri_retur->is_aktif = '0';
-                                            $noseri_retur->jenis = 'MASUK';
-                                            $u = $noseri_retur->save();
-                                            if(!$u){
-                                                $bool = false;
-                                            }
-                                        }
-                                    }else{
-                                        $nbj = NoseriBarangJadi::create([
-                                            'gdg_barang_jadi_id' => $produk,
-                                            'dari' => Auth::user()->Karyawan->divisi_id,
-                                            'noseri' => $noseri,
-                                            'layout_id' => NULL,
-                                            'jenis' => 'MASUK',
-                                            'is_ready' => '0',
-                                            'used_by' => NULL,
-                                            'is_aktif' => '0',
-                                            'keterangan' => NULL,
-                                            'created_by' => Auth::user()->Karyawan->id,
-                                            'is_change' => 1,
-                                            'is_delete' => 0
-                                        ]);
-                                        if($nbj){
-                                            $tgn = NoseriTGbj::create([
-                                                't_gbj_detail_id' => $tgd->id,
-                                                'noseri_id' => $nbj->id,
-                                                'layout_id' => NULL,
-                                                'status_id' => NULL,
-                                                'state_id' => NULL,
-                                                'jenis' => 'masuk',
-                                                'created_by' => Auth::user()->id
-                                            ]);
-                                            if(!$tgn){
-                                                $bool = false;
-                                            }
-                                        }else{
-                                            $bool = false;
-                                        }
-                                    }
-                                }
-                            }
-                            else{
-                                $bool = false;
-                            }
-                        }
-                    }
-                }
-
-                if(in_array('part', $r->pilih_jenis_barang)){
-                    foreach($r->part_id as $key => $part){
                         $tgd = TFProduksiDetail::create([
                             't_gbj_id' => $tg->id,
                             'detail_pesanan_produk_id' => NULL,
-                            'gdg_brg_jadi_id' => NULL,
-                            'm_sparepart_id' => $part,
-                            'qty' => $r->part_jumlah[$key],
+                            'gdg_brg_jadi_id' => $r->produk_id[$i],
+                            'qty' => $r->jumlah_produk[$i],
                             'jenis' => 'masuk',
                             'status_id' => NULL,
                             'state_id' => NULL,
                             'created_by' => Auth::user()->id,
                         ]);
 
-                        if(!$tgd){
-                            $bool = false;
+                        for ($j = 0; $j < count($no_seri); $j++) {
+                            $cek = NoseriBarangJadi::where('noseri', $no_seri[$j])->count();
+                            if ($cek == 0) {
+                                NoseriBarangJadi::create([
+                                    'is_aktif' => 1,
+                                    'is_ready' => 0,
+                                    'is_delete' => 0,
+                                    'used_by' => NULL,
+                                    'layout_id' => NULL,
+                                    'gdg_barang_jadi_id' => $r->produk_id[$i],
+                                    'dari' => 8,
+                                    'noseri' => $no_seri[$j],
+                                    'jenis' => 'MASUK',
+                                    'created_by' => Auth::user()->id,
+                                    'is_change' => 1
+                                ]);
+                            }
+
+                            $noseri = NoseriBarangJadi::where('noseri', $no_seri[$j])->first();
+                            NoseriTGbj::create([
+                                't_gbj_detail_id' => $tgd->id,
+                                'noseri_id' => $noseri->id,
+                                'layout_id' => NULL,
+                                'status_id' => NULL,
+                                'state_id' => NULL,
+                                'jenis' => 'masuk',
+                                'created_by' => Auth::user()->id
+                            ]);
                         }
                     }
                 }
 
-                if ($bool == true) {
-                    return redirect()->back()->with('success', 'Berhasil menambahkan Retur');
-                } else if ($bool == false) {
-                    return redirect()->back()->with('error', 'Gagal menambahkan Retur');
+                if (in_array('part', $r->pilih_jenis_barang)) {
+                    for ($i = 0; $i < count($r->part_id); $i++) {
+                        $tgd = TFProduksiDetail::create([
+                            't_gbj_id' => $tg->id,
+                            'detail_pesanan_produk_id' => NULL,
+                            'gdg_brg_jadi_id' => NULL,
+                            'm_sparepart_id' => $r->part_id[$i],
+                            'qty' => $r->part_jumlah[$i],
+                            'jenis' => 'masuk',
+                            'status_id' => NULL,
+                            'state_id' => NULL,
+                            'created_by' => Auth::user()->id,
+                        ]);
+                    }
+                    // foreach ($r->part_id as $key => $part) {
+                    //     $tgd = TFProduksiDetail::create([
+                    //         't_gbj_id' => $tg->id,
+                    //         'detail_pesanan_produk_id' => NULL,
+                    //         'gdg_brg_jadi_id' => NULL,
+                    //         'm_sparepart_id' => $part,
+                    //         'qty' => $r->part_jumlah[$key],
+                    //         'jenis' => 'masuk',
+                    //         'status_id' => NULL,
+                    //         'state_id' => NULL,
+                    //         'created_by' => Auth::user()->id,
+                    //     ]);
+
+                    //     if (!$tgd) {
+                    //         $bool = false;
+                    //     }
+                    // }
                 }
-            }else{
-                return redirect()->back()->with('error', 'Gagal menambahkan Retur');
+
+                if ($bool == true) {
+                    return response()->json(['status' => 'success', 'messages' => 'Data berhasil di tambahkan']);
+                } else if ($bool == false) {
+                    return response()->json(['status' => 'error', 'messages' => 'Gagal menambahkan Retur']);
+                }
+            } else {
+                return response()->json(['status' => 'error', 'messages' => 'Gagal menambahkan Retur']);
             }
         }
     }
@@ -956,49 +906,50 @@ class AfterSalesController extends Controller
     public function edit_retur($id)
     {
         $data = ReturPenjualan::find($id);
-        $tesproduk = TFProduksiDetail::whereNotNull('gdg_brg_jadi_id')->whereHas('header', function($q) use($id){
+        $tesproduk = TFProduksiDetail::whereNotNull('gdg_brg_jadi_id')->whereHas('header', function ($q) use ($id) {
             $q->where([['retur_penjualan_id', '=', $id], ['jenis', '=', 'masuk']]);
         })->get();
         $produk = array();
 
-        foreach($tesproduk as $key => $c){
-            $produk[$key] = array('id' => $c->gdg_brg_jadi_id,
-                'produk' => $c->produk->produk->nama ." ". $c->produk->nama,
+        foreach ($tesproduk as $key => $c) {
+            $produk[$key] = array(
+                'id' => $c->gdg_brg_jadi_id,
+                'produk' => $c->produk->produk->nama . " " . $c->produk->nama,
                 'jumlah' => count($c->seri),
                 'seri' => array(),
                 'allseri' => array()
             );
 
-            foreach($c->seri as $keys => $d){
+            foreach ($c->seri as $keys => $d) {
                 $produk[$key]['seri'][$keys] = array('id' => $data->pesanan_id != NULL || $data->retur_penjualan_id != NULL ? $d->NoseriBarangJadi->id : $d->NoseriBarangJadi->noseri, 'text' => $d->NoseriBarangJadi->noseri);
             }
 
-            if($data->pesanan_id != NULL){
+            if ($data->pesanan_id != NULL) {
                 $pesanan_id = $data->pesanan_id;
                 $gdg_brg_id = $c->gdg_brg_jadi_id;
-                $arr = NoseriTGbj::whereHas('detail.header', function($q) use($pesanan_id){
+                $arr = NoseriTGbj::whereHas('detail.header', function ($q) use ($pesanan_id) {
                     $q->where('pesanan_id', '=', $pesanan_id);
-                })->whereHas('detail', function($q) use($gdg_brg_id){
+                })->whereHas('detail', function ($q) use ($gdg_brg_id) {
                     $q->where('gdg_brg_jadi_id', $gdg_brg_id);
                 })->get();
-                foreach($arr as $keyz => $arrs){
+                foreach ($arr as $keyz => $arrs) {
                     $produk[$key]['allseri'][$keyz] = array('id' => $arrs->noseri_id, 'noseri' => $arrs->NoseriBarangJadi->noseri);
                 }
-            }else if($data->retur_penjualan_id != NULL){
+            } else if ($data->retur_penjualan_id != NULL) {
                 $retur_id = $data->retur_penjualan_id;
                 $gdg_brg_id = $c->gdg_brg_jadi_id;
-                $arr = NoseriTGbj::whereHas('detail.header', function($q) use($retur_id){
+                $arr = NoseriTGbj::whereHas('detail.header', function ($q) use ($retur_id) {
                     $q->where('retur_penjualan_id', '=', $retur_id);
-                })->whereHas('detail', function($q) use($gdg_brg_id){
+                })->whereHas('detail', function ($q) use ($gdg_brg_id) {
                     $q->where('gdg_brg_jadi_id', $gdg_brg_id);
                 })->get();
-                foreach($arr as $keyz => $arrs){
+                foreach ($arr as $keyz => $arrs) {
                     $produk[$key]['allseri'][$keyz] = array('id' => $arrs->noseri_id, 'noseri' => $arrs->NoseriBarangJadi->noseri);
                 }
             }
         }
 
-        $part = TFProduksiDetail::whereNotNull('m_sparepart_id')->whereHas('header', function($q) use($id){
+        $part = TFProduksiDetail::whereNotNull('m_sparepart_id')->whereHas('header', function ($q) use ($id) {
             $q->where([['retur_penjualan_id', '=', $id], ['jenis', '=', 'masuk']]);
         })->get();
         $prd = json_encode($produk);
@@ -1007,85 +958,105 @@ class AfterSalesController extends Controller
 
     public function update_retur(Request $r, $id)
     {
+        // dd($r->all());
         $validator = Validator::make($r->all(), [
             'tgl_retur' => ['required'],
             'pilih_jenis_retur' => ['required']
         ]);
         if ($validator->fails()) {
             return redirect()->back()->with('error', 'Periksa Kembali Form Anda');
-        }else{
-            $customer_id = "";
-            $pesanan_id = NULL;
-            $retur_id = NULL;
-            $no_pesanan = NULL;
-            $karyawan_id = NULL;
-            $pic = NULL;
+        } else {
 
-            if($r->karyawan_id != ""){
-                $karyawan_id = $r->karyawan_id;
-                $pic = NULL;
+            if (in_array('produk', $r->pilih_jenis_barang)) {
+                //Cek Duplikasi Nomer Seri
+                for ($i = 0; $i < count($r->produk_id); $i++) {
+                    $no_seri = json_decode($r->no_seri_select[$i]);
+                    for ($j = 0; $j < count($no_seri); $j++) {
+                        $no_seri_all[] = $no_seri[$j];
+                    }
+                }
+
+                if (count($no_seri_all) != count(array_unique($no_seri_all))) {
+                    $response = 'nok';
+                } else {
+                    $response = 'ok';
+                }
+            } else {
+                $response = 'ok';
             }
-            else{
-                $pic = $r->pic_peminjaman;
+
+            if ($response == 'nok') {
+                return response()->json(['status' => 'duplicate', 'messages' => 'Noseri Tidak Boleh Sama']);
+            } else {
+
+                $customer_id = "";
+                $pesanan_id = NULL;
+                $retur_id = NULL;
+                $no_pesanan = NULL;
                 $karyawan_id = NULL;
-            }
-            if($r->customer_id != ""){
-                $customer_id = $r->customer_id;
-            }
-            else{
-                $c = Customer::create([
-                    'id_provinsi' => '35',
-                    'nama' => $r->customer_nama,
-                    'alamat' => $r->alamat,
-                    'telp' => $r->telepon
-                ]);
-                if($c){
-                    $customer_id = $c->id;
+                $pic = NULL;
+
+                if ($r->karyawan_id != "") {
+                    $karyawan_id = $r->karyawan_id;
+                    $pic = NULL;
+                } else {
+                    $pic = $r->pic_peminjaman;
+                    $karyawan_id = NULL;
                 }
-            }
-
-            if($r->no_transaksi_ref != "no_retur" && $r->no_transaksi_ref != "sj_retur"){
-                if($r->pesanan_id != ""){
-                    $pesanan_id = $r->pesanan_id;
-                }else{
-                    $no_pesanan = $r->no_transaksi;
+                if ($r->customer_id != "") {
+                    $customer_id = $r->customer_id;
+                } else {
+                    $c = Customer::create([
+                        'id_provinsi' => '35',
+                        'nama' => $r->customer_nama,
+                        'alamat' => $r->alamat,
+                        'telp' => $r->telepon
+                    ]);
+                    if ($c) {
+                        $customer_id = $c->id;
+                    }
                 }
-            }
-            else{
-                if($r->pesanan_id != ""){
-                    $retur_id = $r->pesanan_id;
-                }else{
-                    $no_pesanan = $r->no_transaksi;
+
+                if ($r->no_transaksi_ref != "no_retur" && $r->no_transaksi_ref != "sj_retur") {
+                    if ($r->pesanan_id != "") {
+                        $pesanan_id = $r->pesanan_id;
+                    } else {
+                        $no_pesanan = $r->no_transaksi;
+                    }
+                } else {
+                    if ($r->pesanan_id != "") {
+                        $retur_id = $r->pesanan_id;
+                    } else {
+                        $no_pesanan = $r->no_transaksi;
+                    }
                 }
-            }
 
-            $u = ReturPenjualan::find($id);
-            $u->tgl_retur = $r->tgl_retur;
-            $u->jenis = $r->pilih_jenis_retur;
-            $u->keterangan = $r->keterangan;
-            $u->pesanan_id = $pesanan_id;
-            $u->retur_penjualan_id = $retur_id;
-            $u->no_pesanan = $no_pesanan;
-            $u->customer_id = $customer_id;
-            $u->karyawan_id = $karyawan_id;
-            $u->pic = $pic;
-            $u->telp_pic = $r->telp_pic;
-            $up = $u->save();
+                $u = ReturPenjualan::find($id);
+                $u->tgl_retur = $r->tgl_retur;
+                $u->jenis = $r->pilih_jenis_retur;
+                $u->keterangan = $r->keterangan;
+                $u->pesanan_id = $pesanan_id;
+                $u->retur_penjualan_id = $retur_id;
+                $u->no_pesanan = $no_pesanan;
+                $u->customer_id = $customer_id;
+                $u->karyawan_id = $karyawan_id;
+                $u->pic = $pic;
+                $u->telp_pic = $r->telp_pic;
+                $u->save();
 
+                $bool = true;
+                $tes = NULL;
 
-            $bool = true;
-            $tes = NULL;
-            if($up){
-                $deltgn = NoseriTGbj::whereHas('detail.header', function($q) use($id){
+                $deltgn = NoseriTGbj::whereHas('detail.header', function ($q) use ($id) {
                     $q->where('retur_penjualan_id', '=', $id);
                 })->count();
-                if($deltgn > 0){
+                if ($deltgn > 0) {
 
-                    $noseri_tg = NoseriTGbj::whereHas('detail.header', function($q) use($id){
+                    $noseri_tg = NoseriTGbj::whereHas('detail.header', function ($q) use ($id) {
                         $q->where('retur_penjualan_id', '=', $id);
                     })->get();
 
-                    foreach($noseri_tg as $i){
+                    foreach ($noseri_tg as $i) {
                         $un = NoseriBarangJadi::find($i->noseri_id);
                         $un->is_ready = '1';
                         $un->is_aktif = '0';
@@ -1094,209 +1065,195 @@ class AfterSalesController extends Controller
                         $un->save();
                     }
 
-                    NoseriTGbj::whereHas('detail.header', function($q) use($id){
+                    NoseriTGbj::whereHas('detail.header', function ($q) use ($id) {
                         $q->where('retur_penjualan_id', '=', $id);
                     })->delete();
                 }
-
-                $deltgd = TFProduksiDetail::whereHas('header', function($q) use($id){
+                $deltgd = TFProduksiDetail::whereHas('header', function ($q) use ($id) {
                     $q->where('retur_penjualan_id', '=', $id);
                 })->count();
-                if($deltgd > 0){
-                    TFProduksiDetail::whereHas('header', function($q) use($id){
+                if ($deltgd > 0) {
+                    TFProduksiDetail::whereHas('header', function ($q) use ($id) {
                         $q->where('retur_penjualan_id', '=', $id);
                     })->delete();
                 }
                 $tg = TFProduksi::where('retur_penjualan_id', '=', $id)->first();
-                if(in_array('produk', $r->pilih_jenis_barang)){
-                    if($pesanan_id != NULL || $retur_id != NULL){
-                        if($tg){
-                            foreach($r->produk_id as $key => $produk){
 
-                                $no_seri = json_decode($r->no_seri_select[$key]);
-                                $tgd = TFProduksiDetail::create([
-                                    't_gbj_id' => $tg->id,
-                                    'detail_pesanan_produk_id' => NULL,
-                                    'gdg_brg_jadi_id' => $produk,
-                                    'qty' => count($no_seri),
-                                    'jenis' => 'masuk',
-                                    'status_id' => NULL,
-                                    'state_id' => NULL,
-                                    'created_by' => Auth::user()->id,
-                                ]);
 
-                                if($tgd){
-                                    foreach($no_seri as $keys => $noseri){
-                                        $tgn = NoseriTGbj::create([
-                                            't_gbj_detail_id' => $tgd->id,
-                                            'noseri_id' => $noseri->id,
-                                            'layout_id' => NULL,
-                                            'status_id' => NULL,
-                                            'state_id' => NULL,
-                                            'jenis' => 'masuk',
-                                            'created_by' => Auth::user()->id,
-                                        ]);
-                                        if(!$tgn){
-                                            $bool = false;
-                                        }else{
-                                            $noseri_retur = NoseriBarangJadi::find($noseri->id);
-                                            $noseri_retur->used_by = NULL;
-                                            $noseri_retur->is_ready = '0';
-                                            $noseri_retur->is_aktif = '0';
-                                            $noseri_retur->jenis = 'MASUK';
-                                            $u = $noseri_retur->save();
-                                            if(!$u){
-                                                $bool = false;
-                                            }
-                                        }
-                                    }
-                                }
-                                else{
-                                    $bool = false;
-                                }
-                            }
-                        }
-                        else{
-                            $bool = false;
-                        }
 
-                    } else if($no_pesanan != NULL) {
-                        foreach($r->produk_id as $key => $produk){
-                            $no_seri = json_decode($r->no_seri_select[$key]);
-                            $tgd = TFProduksiDetail::create([
-                                't_gbj_id' => $tg->id,
-                                'detail_pesanan_produk_id' => NULL,
-                                'gdg_brg_jadi_id' => $produk,
-                                'qty' => count($no_seri),
-                                'jenis' => 'masuk',
-                                'status_id' => NULL,
-                                'state_id' => NULL,
-                                'created_by' => Auth::user()->id,
-                            ]);
+                //Pengecekan, jika ada karyawan pic kosong
+                //jika ada pic karyawan kosong
+                if ($r->karyawan_id != "") {
+                    $karyawan_id = $r->karyawan_id;
+                    $pic = NULL;
+                } else {
+                    $pic = $r->pic_peminjaman;
+                    $karyawan_id = NULL;
+                }
 
-                            if($tgd){
-                                foreach($no_seri as $keys => $noseri){
-                                    $snoseri = NoseriBarangJadi::where('noseri', $noseri->id)->first();
-                                    if($snoseri != null){
-                                        $tgn = NoseriTGbj::create([
-                                            't_gbj_detail_id' => $tgd->id,
-                                            'noseri_id' => $snoseri->id,
-                                            'layout_id' => NULL,
-                                            'status_id' => NULL,
-                                            'state_id' => NULL,
-                                            'jenis' => 'masuk',
-                                            'created_by' => Auth::user()->id,
-                                        ]);
-                                        if(!$tgn){
-                                            $bool = false;
-                                        }
-                                    }else{
-                                        $nbj = NoseriBarangJadi::create([
-                                            'gdg_barang_jadi_id' => $produk,
-                                            'dari' => Auth::user()->Karyawan->divisi_id,
-                                            'noseri' => $noseri,
-                                            'layout_id' => NULL,
-                                            'jenis' => 'MASUK',
-                                            'is_ready' => 0,
-                                            'used_by' => NULL,
-                                            'is_aktif' => 0,
-                                            'keterangan' => NULL,
-                                            'created_by' => Auth::user()->Karyawan->id,
-                                            'is_change' => 1,
-                                            'is_delete' => 0
-                                        ]);
-                                        if($nbj){
-                                            $tgn = NoseriTGbj::create([
-                                                't_gbj_detail_id' => $tgd->id,
-                                                'noseri_id' => $nbj->id,
-                                                'layout_id' => NULL,
-                                                'status_id' => NULL,
-                                                'state_id' => NULL,
-                                                'jenis' => 'masuk',
-                                                'created_by' => Auth::user()->id,
-                                            ]);
-                                            if(!$tgn){
-                                                $bool = false;
-                                            }
-                                        }else{
-                                            $bool = false;
-                                        }
-                                    }
-                                }
-                            }
-                            else{
-                                $bool = false;
-                            }
-                        }
+                //Jika Customer ada di dalam database tambahkan foreign key
+                //Jika Tidak ada, Create Baru Customer dan get idnya sebagai foreign key
+                if ($r->customer_id != "") {
+                    $customer_id = $r->customer_id;
+                } else {
+                    $c = Customer::create([
+                        'id_provinsi' => '35',
+                        'nama' => $r->customer_nama,
+                        'alamat' => $r->alamat,
+                        'telp' => $r->telepon
+                    ]);
+                    if ($c) {
+                        $customer_id = $c->id;
                     }
                 }
 
-                if(in_array('part', $r->pilih_jenis_barang)){
-                    foreach($r->part_id as $key => $part){
+
+                //Jika tipe transaksi bukan no retur dan sj retur jalankan fungsi dibawah
+                if ($r->no_transaksi_ref != "no_retur" && $r->no_transaksi_ref != "sj_retur") {
+                    if ($r->pesanan_id != "") {
+                        $pesanan_id = $r->pesanan_id;
+                    } else {
+                        $no_pesanan = $r->no_transaksi;
+                    }
+                }
+                //Jika tipe transaksi meruopakan no retur dan sj retur jalankan fungsi dibawah
+                else {
+                    if ($r->pesanan_id != "") {
+                        $retur_id = $r->pesanan_id;
+                    } else {
+                        $no_pesanan = $r->no_transaksi;
+                    }
+                }
+            }
+
+            $bool = true;
+            $tes = NULL;
+            if ($u) {
+                $tfp = TFProduksi::find($tg->id);
+                $tfp->dari = Auth::user()->Karyawan->divisi_id;
+                $tfp->ke = 13;
+                $tfp->jenis = 'masuk';
+                $tfp->tgl_masuk = $r->tgl_retur;
+                $tfp->created_by = Auth::user()->id;
+                $tfp->save();
+                // $tg = TFProduksi::create([
+                //     'dari' => Auth::user()->Karyawan->divisi_id,
+                //     'ke' => '13',
+                //     'deskripsi' => NULL,
+                //     'status_id' => NULL,
+                //     'pesanan_id' => NULL,
+                //     'retur_penjualan_id' => $u->id,
+                //     'tgl_keluar' => NULL,
+                //     'tgl_masuk' => $r->tgl_retur,
+                //     'state_id' => NULL,
+                //     'jenis' => 'masuk',
+                //     'created_by' => Auth::user()->id
+                // ]);
+
+                if (in_array('produk', $r->pilih_jenis_barang)) {
+                    $no_seri_all = array();
+                    for ($i = 0; $i < count($r->produk_id); $i++) {
+                        $no_seri = json_decode($r->no_seri_select[$i]);
+
                         $tgd = TFProduksiDetail::create([
                             't_gbj_id' => $tg->id,
                             'detail_pesanan_produk_id' => NULL,
-                            'gdg_brg_jadi_id' => NULL,
-                            'm_sparepart_id' => $part,
-                            'qty' => $r->part_jumlah[$key],
+                            'gdg_brg_jadi_id' => $r->produk_id[$i],
+                            'qty' => $r->jumlah_produk[$i],
                             'jenis' => 'masuk',
                             'status_id' => NULL,
                             'state_id' => NULL,
                             'created_by' => Auth::user()->id,
                         ]);
 
-                        if(!$tgd){
-                            $bool = false;
+                        for ($j = 0; $j < count($no_seri); $j++) {
+                            $cek = NoseriBarangJadi::where('noseri', $no_seri[$j])->count();
+                            if ($cek == 0) {
+                                NoseriBarangJadi::create([
+                                    'is_aktif' => 1,
+                                    'is_ready' => 0,
+                                    'is_delete' => 0,
+                                    'used_by' => NULL,
+                                    'layout_id' => NULL,
+                                    'gdg_barang_jadi_id' => $r->produk_id[$i],
+                                    'dari' => 8,
+                                    'noseri' => $no_seri[$j],
+                                    'jenis' => 'MASUK',
+                                    'created_by' => Auth::user()->id,
+                                    'is_change' => 1
+                                ]);
+                            }
+
+                            $noseri = NoseriBarangJadi::where('noseri', $no_seri[$j])->first();
+                            NoseriTGbj::create([
+                                't_gbj_detail_id' => $tgd->id,
+                                'noseri_id' => $noseri->id,
+                                'layout_id' => NULL,
+                                'status_id' => NULL,
+                                'state_id' => NULL,
+                                'jenis' => 'masuk',
+                                'created_by' => Auth::user()->id
+                            ]);
                         }
                     }
                 }
 
-                if ($bool == true) {
-                    return redirect()->back()->with('success', 'Berhasil mengubah data Retur');
-                } else if ($bool == false) {
-                    return redirect()->back()->with('error', 'Gagal mengubah data Retur');
+                if (in_array('part', $r->pilih_jenis_barang)) {
+                    for ($i = 0; $i < count($r->part_id); $i++) {
+                        $tgd = TFProduksiDetail::create([
+                            't_gbj_id' => $tg->id,
+                            'detail_pesanan_produk_id' => NULL,
+                            'gdg_brg_jadi_id' => NULL,
+                            'm_sparepart_id' => $r->part_id[$i],
+                            'qty' => $r->part_jumlah[$i],
+                            'jenis' => 'masuk',
+                            'status_id' => NULL,
+                            'state_id' => NULL,
+                            'created_by' => Auth::user()->id,
+                        ]);
+                    }
                 }
-            }else{
-                // return redirect()->back()->with('error', "no: ".$r->no_retur.", tgl: ".$r->tgl_retur.", jenis: ".$r->pilih_jenis_retur.", pesanan: ".$pesanan_id.", no_pesanan: ".$no_pesanan.", customer_id: ".$customer_id." karyawan_id: ".$r->karyawan_id);
-                return redirect()->back()->with('error', "Gagal melakukan pembaruan Data");
+
+                if ($bool == true) {
+                    return response()->json(['status' => 'success', 'messages' => 'Data berhasil di ubah']);
+                } else if ($bool == false) {
+                    return response()->json(['status' => 'error', 'messages' => 'Gagal menambahkan Retur']);
+                }
             }
         }
     }
 
-    public function get_list_so_selesai($jenis, Request $r){
+    public function get_list_so_selesai($jenis, Request $r)
+    {
         $data = NULL;
-        if($jenis == "so"){
-            $a = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->with(['Ekatalog', 'Spa', 'Spb'])->where('so', 'LIKE', '%'.$r->term.'%')->selectRaw('id, so as nama');
-            $data = Pesanan::has('DetailPesananPart.DetailLogistikPart')->with(['Ekatalog', 'Spa', 'Spb'])->where('so', 'LIKE', '%'.$r->term.'%')->selectRaw('id, so as nama')->union($a)->get();
-        }
-        else if($jenis == "po"){
-            $a = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->with(['Ekatalog', 'Spa', 'Spb'])->where('no_po', 'LIKE', '%'.$r->term.'%')->selectRaw('id, no_po as nama');
-            $data = Pesanan::has('DetailPesananPart.DetailLogistikPart')->with(['Ekatalog', 'Spa', 'Spb'])->where('no_po', 'LIKE', '%'.$r->term.'%')->selectRaw('id, no_po as nama')->union($a)->get();
-        }
-        else if($jenis == "no_akn"){
-            $data = Ekatalog::has('Pesanan.DetailPesanan.DetailPesananProduk.DetailLogistik')->where('no_paket', 'LIKE', '%'.$r->term.'%')->selectRaw('pesanan_id as id, no_paket as nama')->get();
-        }
-        else if($jenis == "no_retur"){
-            $data = ReturPenjualan::has('Pengiriman')->where('no_retur', 'LIKE', '%'.$r->term.'%')->whereIn('state_id', ['10'])->selectRaw('id as id, no_retur as nama')->get();
-        }
-        else if($jenis == "sj_retur"){
-            $data = Pengiriman::whereNotNull('no_pengiriman')->where('no_pengiriman', 'LIKE', '%'.$r->term.'%')->whereIn('m_state_id', ['10'])->selectRaw('retur_penjualan_id as id, no_pengiriman as nama')->get();
-        }
-        else{
+        if ($jenis == "so") {
+            $a = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->with(['Ekatalog', 'Spa', 'Spb'])->where('so', 'LIKE', '%' . $r->term . '%')->selectRaw('id, so as nama');
+            $data = Pesanan::has('DetailPesananPart.DetailLogistikPart')->with(['Ekatalog', 'Spa', 'Spb'])->where('so', 'LIKE', '%' . $r->term . '%')->selectRaw('id, so as nama')->union($a)->get();
+        } else if ($jenis == "po") {
+            $a = Pesanan::has('DetailPesanan.DetailPesananProduk.DetailLogistik')->with(['Ekatalog', 'Spa', 'Spb'])->where('no_po', 'LIKE', '%' . $r->term . '%')->selectRaw('id, no_po as nama');
+            $data = Pesanan::has('DetailPesananPart.DetailLogistikPart')->with(['Ekatalog', 'Spa', 'Spb'])->where('no_po', 'LIKE', '%' . $r->term . '%')->selectRaw('id, no_po as nama')->union($a)->get();
+        } else if ($jenis == "no_akn") {
+            $data = Ekatalog::has('Pesanan.DetailPesanan.DetailPesananProduk.DetailLogistik')->where('no_paket', 'LIKE', '%' . $r->term . '%')->selectRaw('pesanan_id as id, no_paket as nama')->get();
+        } else if ($jenis == "no_retur") {
+            $data = ReturPenjualan::has('Pengiriman')->where('no_retur', 'LIKE', '%' . $r->term . '%')->whereIn('state_id', ['10'])->selectRaw('id as id, no_retur as nama')->get();
+        } else if ($jenis == "sj_retur") {
+            $data = Pengiriman::whereNotNull('no_pengiriman')->where('no_pengiriman', 'LIKE', '%' . $r->term . '%')->whereIn('m_state_id', ['10'])->selectRaw('retur_penjualan_id as id, no_pengiriman as nama')->get();
+        } else {
             $dataproduk = Logistik::join('detail_logistik', 'detail_logistik.logistik_id', '=', 'logistik.id')
-            ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
-            ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
-            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
-            ->where('logistik.nosurat', 'LIKE', '%'.$r->term.'%')
-            ->selectRaw('pesanan.id as id, logistik.nosurat as nama')->get();
+                ->join('detail_pesanan_produk', 'detail_pesanan_produk.id', '=', 'detail_logistik.detail_pesanan_produk_id')
+                ->join('detail_pesanan', 'detail_pesanan.id', '=', 'detail_pesanan_produk.detail_pesanan_id')
+                ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan.pesanan_id')
+                ->where('logistik.nosurat', 'LIKE', '%' . $r->term . '%')
+                ->selectRaw('pesanan.id as id, logistik.nosurat as nama')->get();
 
             $datapart = Logistik::join('detail_logistik_part', 'detail_logistik_part.logistik_id', '=', 'logistik.id')
-            ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
-            ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan_part.pesanan_id')
-            ->where('nosurat', 'LIKE', '%'.$r->term.'%')
-            ->selectRaw('pesanan.id as id, logistik.nosurat as nama')->get();
+                ->join('detail_pesanan_part', 'detail_pesanan_part.id', '=', 'detail_logistik_part.detail_pesanan_part_id')
+                ->join('pesanan', 'pesanan.id', '=', 'detail_pesanan_part.pesanan_id')
+                ->where('nosurat', 'LIKE', '%' . $r->term . '%')
+                ->selectRaw('pesanan.id as id, logistik.nosurat as nama')->get();
 
             $data = $dataproduk->merge($datapart);
+
             // Logistik::where('logistik.nosurat', 'LIKE', '%'.$r->term.'%')->addSelect(['id' => function($q){
             //     $q->selectRaw('pesanan.id')
             //     ->from('pesanan')
@@ -1315,27 +1272,28 @@ class AfterSalesController extends Controller
             // }])->selectRaw('nosurat as nama')->get();
         }
 
-
         echo json_encode($data);
     }
 
-    public function get_list_so_selesai_paket($id, $jenis, Request $r){
+    public function get_list_so_selesai_paket($id, $jenis, Request $r)
+    {
         $data_produk = array();
         $data_part = array();
-        if($jenis == "jual"){
-            $datas = DetailPesananProduk::whereHas('DetailPesanan', function($q)use($id){
+        if ($jenis == "jual") {
+            $datas = DetailPesananProduk::whereHas('DetailPesanan', function ($q) use ($id) {
                 $q->where('pesanan_id', $id);
-            })->has('DetailLogistik')->with('GudangBarangJadi.Produk')->whereHas('GudangBarangJadi.Produk', function($q) use($r){
-                $q->where('nama', 'LIKE', '%'.$r->term.'%');
+            })->has('DetailLogistik')->with('GudangBarangJadi.Produk')->whereHas('GudangBarangJadi.Produk', function ($q) use ($r) {
+                $q->where('nama', 'LIKE', '%' . $r->term . '%');
             })->get();
 
 
-            foreach($datas as $key_produk => $produk){
+            foreach ($datas as $key_produk => $produk) {
                 $data_produk[$key_produk] = array(
-                'id' => $produk->GudangBarangJadi->id,
-                'nama' => $produk->GudangBarangJadi->Produk->nama." ".$produk->GudangBarangJadi->nama,
-                'no_seri' => array());
-                foreach($produk->NoseriDetailPesanan as $key_no_seri => $noseri){
+                    'id' => $produk->GudangBarangJadi->id,
+                    'nama' => $produk->GudangBarangJadi->Produk->nama . " " . $produk->GudangBarangJadi->nama,
+                    'no_seri' => array()
+                );
+                foreach ($produk->NoseriDetailPesanan as $key_no_seri => $noseri) {
                     $data_produk[$key_produk]['no_seri'][$key_no_seri] = array(
                         'id' => $noseri->NoseriTGbj->NoseriBarangJadi->id,
                         'text' => $noseri->NoseriTGbj->NoseriBarangJadi->noseri
@@ -1343,38 +1301,38 @@ class AfterSalesController extends Controller
                 }
             }
 
-            $datap = DetailPesananPart::where('pesanan_id', $id)->with('Sparepart')->whereHas('Sparepart', function($q) use($r){
-                $q->where('nama', 'LIKE', '%'.$r->term.'%');
+            $datap = DetailPesananPart::where('pesanan_id', $id)->with('Sparepart')->whereHas('Sparepart', function ($q) use ($r) {
+                $q->where('nama', 'LIKE', '%' . $r->term . '%');
             })->get();
 
-            foreach($datap as $key_part => $part){
+            foreach ($datap as $key_part => $part) {
                 $data_part[$key_part] = array(
                     'id' => $part->Sparepart->id,
                     'nama' => $part->Sparepart->nama,
                     'jumlah' => $part->jumlah
                 );
             }
-        }
-        else{
-            $datas = GudangBarangJadi::whereHas('noseri.PengirimanNoseri.Pengiriman', function($q) use($id){
+        } else {
+            $datas = GudangBarangJadi::whereHas('noseri.PengirimanNoseri.Pengiriman', function ($q) use ($id) {
                 $q->where('retur_penjualan_id', $id);
-            })->whereHas('Produk', function($q) use($r){
-                $q->where('nama', 'LIKE', '%'.$r->term.'%');
+            })->whereHas('Produk', function ($q) use ($r) {
+                $q->where('nama', 'LIKE', '%' . $r->term . '%');
             })->get();
 
-            foreach($datas as $key_produk => $produk){
+            foreach ($datas as $key_produk => $produk) {
                 $data_produk[$key_produk] = array(
-                'id' => $produk->id,
-                'nama' => $produk->Produk->nama." ".$produk->nama,
-                'no_seri' => array());
+                    'id' => $produk->id,
+                    'nama' => $produk->Produk->nama . " " . $produk->nama,
+                    'no_seri' => array()
+                );
 
-                $no_seri = PengirimanNoseri::whereHas('Pengiriman', function($q) use($id){
+                $no_seri = PengirimanNoseri::whereHas('Pengiriman', function ($q) use ($id) {
                     $q->where('retur_penjualan_id', $id);
-                })->whereHas('NoseriBarangJadi', function($q) use($produk){
+                })->whereHas('NoseriBarangJadi', function ($q) use ($produk) {
                     $q->where('gdg_barang_jadi_id', $produk->id);
                 })->get();
 
-                foreach($no_seri as $key_no_seri => $noseri){
+                foreach ($no_seri as $key_no_seri => $noseri) {
                     $data_produk[$key_produk]['no_seri'][$key_no_seri] = array(
                         'id' => $noseri->NoseriBarangJadi->id,
                         'text' => $noseri->NoseriBarangJadi->noseri
@@ -1382,13 +1340,13 @@ class AfterSalesController extends Controller
                 }
             }
 
-            $datap = PengirimanPart::whereHas('Pengiriman', function($q) use($id){
+            $datap = PengirimanPart::whereHas('Pengiriman', function ($q) use ($id) {
                 $q->where('retur_penjualan_id', $id);
-            })->with('Sparepart')->whereHas('Sparepart', function($q) use($r){
-                $q->where('nama', 'LIKE', '%'.$r->term.'%');
+            })->with('Sparepart')->whereHas('Sparepart', function ($q) use ($r) {
+                $q->where('nama', 'LIKE', '%' . $r->term . '%');
             })->get();
 
-            foreach($datap as $key_part => $part){
+            foreach ($datap as $key_part => $part) {
                 $data_part[$key_part] = array(
                     'id' => $part->Sparepart->id,
                     'nama' => $part->Sparepart->nama,
@@ -1400,66 +1358,67 @@ class AfterSalesController extends Controller
         return response()->json(['produk' => $data_produk, 'part' => $data_part]);
     }
 
-    public function get_list_so_selesai_paket_produk($id, $jenis, Request $r){
-        $data = DetailPesananProduk::where('detail_pesanan_id', $id)->has('DetailLogistik')->with('GudangBarangJadi.Produk')->whereHas('GudangBarangJadi.Produk', function($q) use($r){
-            $q->where('nama', 'LIKE', '%'.$r->term.'%');
+    public function get_list_so_selesai_paket_produk($id, $jenis, Request $r)
+    {
+        $data = DetailPesananProduk::where('detail_pesanan_id', $id)->has('DetailLogistik')->with('GudangBarangJadi.Produk')->whereHas('GudangBarangJadi.Produk', function ($q) use ($r) {
+            $q->where('nama', 'LIKE', '%' . $r->term . '%');
         })->get();
         echo json_encode($data);
     }
 
-    public function get_detail_so_retur($id, $jenis){
+    public function get_detail_so_retur($id, $jenis)
+    {
         $data = NULL;
-        if($jenis == "jual"){
+        if ($jenis == "jual") {
             $ekat = Ekatalog::where('pesanan_id', $id)->with(['Pesanan', 'Customer.Provinsi'])->first();
             $spa = Spa::where('pesanan_id', $id)->with(['Pesanan', 'Customer.Provinsi'])->first();
             $spb = Spb::where('pesanan_id', $id)->with(['Pesanan', 'Customer.Provinsi'])->first();
 
-            if($ekat){
+            if ($ekat) {
                 $data = $ekat;
             }
-            if($spa){
+            if ($spa) {
                 $data = $spa;
             }
-            if($spb){
+            if ($spb) {
                 $data = $spb;
             }
-        }else{
+        } else {
             $data = ReturPenjualan::where('id', $id)->with(['Customer.Provinsi'])->first();
         }
 
         echo json_encode($data);
     }
-    public function get_all_retur(Request $r){
-        $d = ReturPenjualan::where('no_retur', 'LIKE', '%'.$r->input('term', '').'%')
-             ->whereNotIn('state_id', ['10'])
-             ->whereNotIn('jenis', ['none'])
-             ->has('TFProduksi.detail.produk')
-             ->with('TFProduksi.detail.produk', 'Customer')
-             ->addSelect(['count_noseri' => function($q){
+    public function get_all_retur(Request $r)
+    {
+        $d = ReturPenjualan::where('no_retur', 'LIKE', '%' . $r->input('term', '') . '%')
+            ->whereNotIn('state_id', ['10'])
+            ->whereNotIn('jenis', ['none'])
+            ->has('TFProduksi.detail.produk')
+            ->with('TFProduksi.detail.produk', 'Customer')
+            ->addSelect(['count_noseri' => function ($q) {
                 $q->selectRaw('count(t_gbj_noseri.id)')
-                ->from('t_gbj_noseri')
-                ->join('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-                ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-                ->where('t_gbj.jenis', '=', 'masuk')
-                ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
-             }, 'count_perbaikan' => function($q){
+                    ->from('t_gbj_noseri')
+                    ->join('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->where('t_gbj.jenis', '=', 'masuk')
+                    ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
+            }, 'count_perbaikan' => function ($q) {
                 $q->selectRaw('coalesce(count(noseri_perbaikan.id), 0)')
-                ->from('noseri_perbaikan')
-                ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
-                ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
-             }])
-             ->havingRaw('count_perbaikan < count_noseri')
-             ->get();
+                    ->from('noseri_perbaikan')
+                    ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
+                    ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
+            }])
+            ->havingRaw('count_perbaikan < count_noseri')
+            ->get();
         $data = array();
-        foreach($d as $key => $i){
+        foreach ($d as $key => $i) {
             $pesanan = NULL;
-            if($i->pesanan_id != null) {
+            if ($i->pesanan_id != null) {
                 $pesanan = $i->Pesanan->no_po;
-            }
-            else if($i->retur_penjualan_id != null){
+            } else if ($i->retur_penjualan_id != null) {
                 $pesanan = $i->ReturPenjualanChild->no_retur;
-            }
-            else{
+            } else {
                 $pesanan = $i->no_pesanan;
             }
             $data[$key] = array(
@@ -1477,23 +1436,23 @@ class AfterSalesController extends Controller
                 'produk' => array()
             );
             $id = $i->id;
-            $p = TFProduksiDetail::whereHas('header', function($q) use($id){
+            $p = TFProduksiDetail::whereHas('header', function ($q) use ($id) {
                 $q->where([['retur_penjualan_id', '=', $id], ['jenis', '=', 'masuk']]);
-            })->addSelect(['count_noseri' => function($q){
+            })->addSelect(['count_noseri' => function ($q) {
                 $q->selectRaw('count(t_gbj_noseri.id)')
-                ->from('t_gbj_noseri')
-                ->whereColumn('t_gbj_noseri.t_gbj_detail_id', 't_gbj_detail.id');
-            }, 'count_perbaikan' => function($q) use($id){
+                    ->from('t_gbj_noseri')
+                    ->whereColumn('t_gbj_noseri.t_gbj_detail_id', 't_gbj_detail.id');
+            }, 'count_perbaikan' => function ($q) use ($id) {
                 $q->selectRaw('coalesce(count(noseri_perbaikan.id),0)')
-                ->from('noseri_perbaikan')
-                ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
-                ->where('perbaikan.retur_id', $id)
-                ->whereColumn('perbaikan.gdg_barang_jadi_id', 't_gbj_detail.gdg_brg_jadi_id');
+                    ->from('noseri_perbaikan')
+                    ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
+                    ->where('perbaikan.retur_id', $id)
+                    ->whereColumn('perbaikan.gdg_barang_jadi_id', 't_gbj_detail.gdg_brg_jadi_id');
             }])->havingRaw('count_perbaikan < count_noseri')->get();
-            foreach($p as $keys => $j){
+            foreach ($p as $keys => $j) {
                 $data[$key]['produk'][$keys] = array(
                     'id' => $j->gdg_brg_jadi_id,
-                    'nama_produk' => $j->produk->Produk->nama.' '.$j->produk->nama,
+                    'nama_produk' => $j->produk->Produk->nama . ' ' . $j->produk->nama,
                 );
             }
         }
@@ -1503,48 +1462,48 @@ class AfterSalesController extends Controller
 
     public function data_perbaikan()
     {
-        $p = Perbaikan::addSelect(['count_perbaikan' => function($q){
+        $p = Perbaikan::addSelect(['count_perbaikan' => function ($q) {
             $q->selectRaw('coalesce(count("noseri_perbaikan.id"), 0)')
-            ->from('noseri_perbaikan')
-            ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id');
-        }, 'count_perbaikan_karantina' => function($q){
+                ->from('noseri_perbaikan')
+                ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id');
+        }, 'count_perbaikan_karantina' => function ($q) {
             $q->selectRaw('coalesce(count("noseri_perbaikan.id"), 0)')
-            ->from('noseri_perbaikan')
-            ->where('noseri_perbaikan.m_status_id', '=', '2')
-            ->whereNull('noseri_pengganti_id')
-            ->whereIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
-            ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id');
-        }, 'count_perbaikan_non_karantina' => function($q){
+                ->from('noseri_perbaikan')
+                ->where('noseri_perbaikan.m_status_id', '=', '2')
+                ->whereNull('noseri_pengganti_id')
+                ->whereIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
+                ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id');
+        }, 'count_perbaikan_non_karantina' => function ($q) {
             $q->selectRaw('coalesce(count("noseri_perbaikan.id"), 0)')
-            ->from('noseri_perbaikan')
-            ->where('noseri_perbaikan.m_status_id', '=', '2')
-            ->whereNotIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
-            ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id');
-        }, 'count_perbaikan_pengganti' => function($q){
+                ->from('noseri_perbaikan')
+                ->where('noseri_perbaikan.m_status_id', '=', '2')
+                ->whereNotIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
+                ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id');
+        }, 'count_perbaikan_pengganti' => function ($q) {
             $q->selectRaw('coalesce(count("noseri_perbaikan.id"), 0)')
-            ->from('noseri_perbaikan')
-            ->where('noseri_perbaikan.m_status_id', '=', '2')
-            ->whereNotNull('noseri_pengganti_id')
-            ->whereIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
-            ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id');
-        }, 'count_pengiriman' => function($q){
+                ->from('noseri_perbaikan')
+                ->where('noseri_perbaikan.m_status_id', '=', '2')
+                ->whereNotNull('noseri_pengganti_id')
+                ->whereIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
+                ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id');
+        }, 'count_pengiriman' => function ($q) {
             $q->selectRaw('coalesce(count("pengiriman_noseri.id"),0)')
-            ->from('pengiriman_noseri')
-            ->join('noseri_perbaikan', 'noseri_perbaikan.noseri_barang_jadi_id', '=', 'pengiriman_noseri.noseri_barang_jadi_id')
-            ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
-            ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id')
-            ->whereColumn('pengiriman.retur_penjualan_id', 'perbaikan.retur_id');
-        }, 'count_pengiriman_pengganti' => function($q){
+                ->from('pengiriman_noseri')
+                ->join('noseri_perbaikan', 'noseri_perbaikan.noseri_barang_jadi_id', '=', 'pengiriman_noseri.noseri_barang_jadi_id')
+                ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
+                ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id')
+                ->whereColumn('pengiriman.retur_penjualan_id', 'perbaikan.retur_id');
+        }, 'count_pengiriman_pengganti' => function ($q) {
             $q->selectRaw('coalesce(count("pengiriman_noseri.id"),0)')
-            ->from('pengiriman_noseri')
-            ->join('noseri_perbaikan', 'noseri_perbaikan.noseri_pengganti_id', '=', 'pengiriman_noseri.noseri_barang_jadi_id')
-            ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
-            ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id')
-            ->whereColumn('pengiriman.retur_penjualan_id', 'perbaikan.retur_id');
+                ->from('pengiriman_noseri')
+                ->join('noseri_perbaikan', 'noseri_perbaikan.noseri_pengganti_id', '=', 'pengiriman_noseri.noseri_barang_jadi_id')
+                ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
+                ->whereColumn('noseri_perbaikan.perbaikan_id', 'perbaikan.id')
+                ->whereColumn('pengiriman.retur_penjualan_id', 'perbaikan.retur_id');
         }])->get();
         $data = array();
 
-        foreach($p as $key => $res){
+        foreach ($p as $key => $res) {
             $data[$key] = array(
                 'id' => $res->id,
                 'no_perbaikan' => $res->no_perbaikan,
@@ -1557,7 +1516,7 @@ class AfterSalesController extends Controller
                 'count_pengiriman' => $res->count_pengiriman,
                 'count_pengiriman_pengganti' => $res->count_pengiriman_pengganti,
                 'produk_id' => $res->GudangBarangJadi->id,
-                'produk' => $res->GudangBarangJadi->Produk->nama." ".$res->GudangBarangJadi->nama,
+                'produk' => $res->GudangBarangJadi->Produk->nama . " " . $res->GudangBarangJadi->nama,
                 'karyawan' => array(),
                 'customer' => array(
                     'nama' => $res->ReturPenjualan->Customer->nama,
@@ -1572,7 +1531,7 @@ class AfterSalesController extends Controller
                 ),
                 'status' => $res->State->nama,
             );
-            foreach($res->KaryawanPerbaikan as $keys => $r){
+            foreach ($res->KaryawanPerbaikan as $keys => $r) {
                 $data[$key]['karyawan'][$keys] = $r->Karyawan->nama;
             }
         }
@@ -1585,7 +1544,7 @@ class AfterSalesController extends Controller
         $n = NoseriPerbaikan::where('perbaikan_id', $id)->get();
         $data = array();
 
-        foreach($n as $key => $r){
+        foreach ($n as $key => $r) {
             $data[$key] = array(
                 'id' => $r->id,
                 'perbaikan_id' => $id,
@@ -1599,11 +1558,12 @@ class AfterSalesController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function detail_part_pengganti($id){
+    public function detail_part_pengganti($id)
+    {
         $p = PartPenggantiPerbaikan::where('perbaikan_id', $id)->get();
         $data = array();
 
-        foreach($p as $key => $r){
+        foreach ($p as $key => $r) {
             $data[$key] = array(
                 'id' => $r->id,
                 'part' => $r->Sparepart->nama,
@@ -1614,7 +1574,8 @@ class AfterSalesController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function store_perbaikan(Request $r){
+    public function store_perbaikan(Request $r)
+    {
         $validator = Validator::make($r->all(), [
             'tgl_perbaikan' => 'required',
             'no_retur' => 'required'
@@ -1635,9 +1596,9 @@ class AfterSalesController extends Controller
             $tgbj_id = NULL;
             $tgbj = TFProduksi::where([['retur_penjualan_id', '=', $r->no_retur], ['jenis', '=', 'keluar']])->first();
 
-            if($tgbj != NULL){
+            if ($tgbj != NULL) {
                 $tgbj_id = $tgbj->id;
-            }else{
+            } else {
                 $ct = TFProduksi::create([
                     'dari' => '13',
                     'ke' => Auth::user()->Karyawan->divisi_id,
@@ -1657,9 +1618,9 @@ class AfterSalesController extends Controller
             $tgbjdetail_id = NULL;
             $tgbjdetail = TFProduksiDetail::where([['t_gbj_id', '=', $tgbj_id], ['gdg_brg_jadi_id', '=', $r->produk_id]])->first();
 
-            if($tgbjdetail != NULL){
+            if ($tgbjdetail != NULL) {
                 $tgbjdetail_id = $tgbjdetail->id;
-            }else{
+            } else {
                 $ctd = TFProduksiDetail::create([
                     't_gbj_id' => $tgbj_id,
                     'detail_pesanan_produk_id' => NULL,
@@ -1673,19 +1634,19 @@ class AfterSalesController extends Controller
                 $tgbjdetail_id = $ctd->id;
             }
 
-            if($c){
-                foreach($r->operator as $key => $kary){
+            if ($c) {
+                foreach ($r->operator as $key => $kary) {
                     $k = KaryawanPerbaikan::create([
                         'perbaikan_id' => $c->id,
                         'karyawan_id' => $kary
                     ]);
 
-                    if(!$k){
+                    if (!$k) {
                         $bool = false;
                     }
                 }
 
-                foreach($r->no_seri_id as $key => $noseri){
+                foreach ($r->no_seri_id as $key => $noseri) {
                     $n = NoseriPerbaikan::create([
                         'noseri_barang_jadi_id' => $noseri,
                         'perbaikan_id' => $c->id,
@@ -1694,12 +1655,10 @@ class AfterSalesController extends Controller
                         'noseri_pengganti_id' => NULL
                     ]);
 
-                    if(!$n){
+                    if (!$n) {
                         $bool = false;
-                    }
-                    else
-                    {
-                        if($r->tindak_lanjut[$key] != "karantina"){
+                    } else {
+                        if ($r->tindak_lanjut[$key] != "karantina") {
                             NoseriPerbaikan::where('id', $n->id)->update([
                                 'm_status_id' => '2'
                             ]);
@@ -1712,18 +1671,18 @@ class AfterSalesController extends Controller
                                 'jenis' => 'keluar',
                                 'created_by' => Auth::user()->id,
                             ]);
-                            if(!$tgn){
+                            if (!$tgn) {
                                 $bool = false;
-                            }else{
+                            } else {
                                 $un = NoseriBarangJadi::find($noseri);
                                 $un->is_ready = '1';
                                 $un->dari = '8';
                                 $un->ke = '15';
                                 $un->jenis = 'KELUAR';
-                                $un->used_by = "ReturID: ".$r->no_retur;
+                                $un->used_by = "ReturID: " . $r->no_retur;
                                 $un->save();
                             }
-                        }else{
+                        } else {
                             NoseriPerbaikan::where('id', $n->id)->update([
                                 'm_status_id' => '1'
                             ]);
@@ -1731,16 +1690,16 @@ class AfterSalesController extends Controller
                     }
                 }
 
-                if($r->part_id != null){
-                    foreach($r->part_id as $key => $part){
+                if ($r->part_id != null) {
+                    foreach ($r->part_id as $key => $part) {
                         $p = PartPenggantiPerbaikan::create([
                             'm_sparepart_id' => $part,
                             'perbaikan_id' => $c->id,
                             'jumlah' => $r->part_jumlah[$key]
                         ]);
-                        if(!$p){
+                        if (!$p) {
                             $bool = false;
-                        }else{
+                        } else {
                             $ctd = TFProduksiDetail::create([
                                 't_gbj_id' => $tgbj_id,
                                 'detail_pesanan_produk_id' => NULL,
@@ -1763,13 +1722,14 @@ class AfterSalesController extends Controller
         }
     }
 
-    public function get_noseri_pengganti($id){
-        $noseri = NoseriBarangJadi::where([['gdg_barang_jadi_id', '=', $id], ['jenis', '=', 'MASUK']])->whereHas('NoseriTGbj.detail.header', function($q){
+    public function get_noseri_pengganti($id)
+    {
+        $noseri = NoseriBarangJadi::where([['gdg_barang_jadi_id', '=', $id], ['jenis', '=', 'MASUK']])->whereHas('NoseriTGbj.detail.header', function ($q) {
             $q->where('ke', '=', '8')->whereNull('retur_penjualan_id');
         })->get();
 
         $data = array();
-        foreach($noseri as $key => $r){
+        foreach ($noseri as $key => $r) {
             $data[$key] = array(
                 'id' => $r->id,
                 'noseri' => $r->noseri
@@ -1779,7 +1739,8 @@ class AfterSalesController extends Controller
         return response()->json($data);
     }
 
-    public function save_switch_noseri(Request $r){
+    public function save_switch_noseri(Request $r)
+    {
         $bool = true;
 
         $n = NoseriPerbaikan::find($r->noseri_perbaikan_id);
@@ -1790,8 +1751,8 @@ class AfterSalesController extends Controller
         $retur_id = $n->Perbaikan->retur_id;
         $gdg_barang_jadi_id = $n->Perbaikan->gdg_barang_jadi_id;
         $tg = TFProduksi::where([
-            ['retur_penjualan_id','=',$retur_id],
-            ['jenis','=','keluar']
+            ['retur_penjualan_id', '=', $retur_id],
+            ['jenis', '=', 'keluar']
         ])->first();
 
         $tgd = NULL;
@@ -1800,12 +1761,12 @@ class AfterSalesController extends Controller
             ['gdg_brg_jadi_id', '=', $gdg_barang_jadi_id]
         ])->count();
 
-        if($tgdc > 0){
+        if ($tgdc > 0) {
             $tgd = TFProduksiDetail::where([
                 ['t_gbj_id', '=', $tg->id],
                 ['gdg_brg_jadi_id', '=', $gdg_barang_jadi_id]
             ])->first();
-        }else{
+        } else {
             $tgd = TFProduksiDetail::create([
                 't_gbj_id' => $tg->id,
                 'detail_pesanan_produk_id' => NULL,
@@ -1829,14 +1790,14 @@ class AfterSalesController extends Controller
             'created_by' => Auth::user()->id,
         ]);
 
-        if($tgn){
+        if ($tgn) {
             $un = NoseriBarangJadi::find($r->noseri_id);
             $un->is_ready = '1';
             $un->is_aktif = '0';
             $un->dari = '8';
             $un->ke = '15';
             $un->jenis = 'KELUAR';
-            $un->used_by = "ReturID: ".$retur_id;
+            $un->used_by = "ReturID: " . $retur_id;
             $un->save();
 
             $uk = NoseriBarangJadi::find($n->noseri_barang_jadi_id);
@@ -1847,7 +1808,7 @@ class AfterSalesController extends Controller
             $uk->jenis = 'MASUK';
             $uk->used_by = NULL;
             $uk->save();
-        }else{
+        } else {
             $bool = false;
         }
 
@@ -1858,7 +1819,8 @@ class AfterSalesController extends Controller
         }
     }
 
-    public function done_karantina_noseri(Request $r){
+    public function done_karantina_noseri(Request $r)
+    {
         $n = NoseriPerbaikan::find($r->id);
         $n->m_status_id = '2';
         $u = $n->save();
@@ -1872,96 +1834,96 @@ class AfterSalesController extends Controller
         $uk->used_by = NULL;
         $uk->save();
 
-        $krm = ReturPenjualan::where('id', $n->Perbaikan->retur_id)->addSelect(['count_noseri' => function($q){
+        $krm = ReturPenjualan::where('id', $n->Perbaikan->retur_id)->addSelect(['count_noseri' => function ($q) {
             $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
-            ->from('t_gbj_noseri')
-            ->join('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-            ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->where('t_gbj.jenis', '=', 'masuk')
-            ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
-        },'count_perbaikan_karantina' => function($q){
+                ->from('t_gbj_noseri')
+                ->join('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->where('t_gbj.jenis', '=', 'masuk')
+                ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
+        }, 'count_perbaikan_karantina' => function ($q) {
             $q->selectRaw('coalesce(count(noseri_perbaikan.id),0)')
-            ->from('noseri_perbaikan')
-            ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
-            ->where('noseri_perbaikan.m_status_id', '=', '2')
-            ->where('noseri_perbaikan.noseri_pengganti_id', '=', NULL)
-            ->where('noseri_perbaikan.tindak_lanjut', '=', 'karantina')
-            ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
-        }, 'count_kirim_noseri' => function($q){
+                ->from('noseri_perbaikan')
+                ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
+                ->where('noseri_perbaikan.m_status_id', '=', '2')
+                ->where('noseri_perbaikan.noseri_pengganti_id', '=', NULL)
+                ->where('noseri_perbaikan.tindak_lanjut', '=', 'karantina')
+                ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
+        }, 'count_kirim_noseri' => function ($q) {
             $q->selectRaw('coalesce(COUNT(pengiriman_noseri.id), 0)')
-            ->from('pengiriman_noseri')
-            ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
-            ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
-        }, 'count_part' => function($q){
+                ->from('pengiriman_noseri')
+                ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
+                ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
+        }, 'count_part' => function ($q) {
             $q->selectRaw('coalesce(SUM(t_gbj_detail.qty), 0)')
-            ->from('t_gbj_detail')
-            ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->where('t_gbj.jenis', 'masuk')
-            ->whereNotNull('t_gbj_detail.m_sparepart_id')
-            ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
-        }, 'count_kirim_part' => function($q){
+                ->from('t_gbj_detail')
+                ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                ->where('t_gbj.jenis', 'masuk')
+                ->whereNotNull('t_gbj_detail.m_sparepart_id')
+                ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
+        }, 'count_kirim_part' => function ($q) {
             $q->selectRaw('coalesce(SUM(pengiriman_part.jumlah), 0)')
-            ->from('pengiriman_part')
-            ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_part.pengiriman_id')
-            ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
+                ->from('pengiriman_part')
+                ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_part.pengiriman_id')
+                ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
         }])->first();
 
-        if($krm){
-            if($krm->count_noseri > 0 && $krm->count_part > 0){
+        if ($krm) {
+            if ($krm->count_noseri > 0 && $krm->count_part > 0) {
                 $count_all = $krm->count_kirim_noseri + $krm->count_perbaikan_karantina;
-                if($krm->count_noseri <= $count_all && $krm->count_part <= $krm->count_kirim_part){
+                if ($krm->count_noseri <= $count_all && $krm->count_part <= $krm->count_kirim_part) {
                     $retur = ReturPenjualan::find($n->Perbaikan->retur_id);
                     $retur->state_id = '10';
                     $retur->save();
                 }
-            }else{
-                if($krm->count_noseri > 0){
+            } else {
+                if ($krm->count_noseri > 0) {
                     $count_all = $krm->count_kirim_noseri + $krm->count_perbaikan_karantina;
-                    if($krm->count_noseri <= $count_all){
+                    if ($krm->count_noseri <= $count_all) {
                         $retur = ReturPenjualan::find($n->Perbaikan->retur_id);
                         $retur->state_id = '10';
                         $retur->save();
                     }
-                }else{
-                    if($krm->count_part <= $krm->count_kirim_part){
+                } else {
+                    if ($krm->count_part <= $krm->count_kirim_part) {
                         $retur = ReturPenjualan::find($n->Perbaikan->retur_id);
                         $retur->state_id = '10';
                         $retur->save();
                     }
                 }
             }
-        }
-        else{
+        } else {
             $bool = false;
         }
 
-        if($u){
+        if ($u) {
             return response()->json(['res' => 'success', 'msg' => 'Berhasil dikirim ke karantina']);
-        }else{
+        } else {
             return response()->json(['res' => 'error', 'msg' => 'Gagal dikirim ke karantina']);
         }
     }
 
-    public function get_no_perbaikan(Request $r){
+    public function get_no_perbaikan(Request $r)
+    {
         $data = 0;
-        if($r->id == "0"){
+        if ($r->id == "0") {
             $data = Perbaikan::where('no_perbaikan', $r->nomor)->count();
-        }
-        else{
+        } else {
             $data = Perbaikan::where('no_perbaikan', $r->nomor)->whereNotIn('id', [$r->id])->count();
         }
         return response()->json($data);
     }
 
-    public function edit_perbaikan($id){
+    public function edit_perbaikan($id)
+    {
         $data = Perbaikan::find($id);
         $retur = $data->retur_id;
-        $n = NoseriPerbaikan::where('perbaikan_id', $id)->whereDoesntHave('NoseriBarangJadi.PengirimanNoseri.Pengiriman', function($q) use($retur){
+        $n = NoseriPerbaikan::where('perbaikan_id', $id)->whereDoesntHave('NoseriBarangJadi.PengirimanNoseri.Pengiriman', function ($q) use ($retur) {
             $q->where('retur_penjualan_id', '=', $retur);
         })->get();
         $noseri = array();
 
-        foreach($n as $key => $r){
+        foreach ($n as $key => $r) {
             $noseri[$key] = array(
                 'id' => $r->noseri_barang_jadi_id,
                 'no_seri' => $r->NoseriBarangJadi->noseri,
@@ -1975,7 +1937,8 @@ class AfterSalesController extends Controller
         return view('page.as.perbaikan.edit', ['id' => $id, 'data' => $data, 'k' => $kar, 'karyawan' => $karyawan, 'noseri' => $noseri]);
     }
 
-    public function update_perbaikan(Request $r, $id){
+    public function update_perbaikan(Request $r, $id)
+    {
         $validator = Validator::make($r->all(), [
             'tgl_perbaikan' => ['required'],
         ]);
@@ -1987,16 +1950,16 @@ class AfterSalesController extends Controller
             $retur = $p->retur_id;
 
             $dk = KaryawanPerbaikan::where('perbaikan_id', '=', $id)->count();
-            if($dk > 0){
+            if ($dk > 0) {
                 $deletek = KaryawanPerbaikan::where('perbaikan_id', '=', $id)->delete();
             }
 
-            $dn = NoseriPerbaikan::where('perbaikan_id', '=', $id)->whereDoesntHave('NoseriBarangJadi.PengirimanNoseri.Pengiriman', function($q) use($retur){
+            $dn = NoseriPerbaikan::where('perbaikan_id', '=', $id)->whereDoesntHave('NoseriBarangJadi.PengirimanNoseri.Pengiriman', function ($q) use ($retur) {
                 $q->where('retur_penjualan_id', '=', $retur);
             })->get();
-            if(count($dn) > 0){
+            if (count($dn) > 0) {
                 $arraynoseri = array();
-                foreach($dn as $key => $i){
+                foreach ($dn as $key => $i) {
                     $arraynoseri[$key] = $i->noseri_barang_jadi_id;
                     $un = NoseriBarangJadi::find($i->noseri_barang_jadi_id);
                     $un->is_ready = '0';
@@ -2005,18 +1968,18 @@ class AfterSalesController extends Controller
                     $un->used_by = NULL;
                     $un->save();
                 }
-                $del_tgbj_noseri = NoseriTGbj::whereIn('noseri_id', $arraynoseri)->whereHas('detail.header', function($q) use($retur){
+                $del_tgbj_noseri = NoseriTGbj::whereIn('noseri_id', $arraynoseri)->whereHas('detail.header', function ($q) use ($retur) {
                     $q->where([['retur_penjualan_id', '=', $retur], ['jenis', '=', 'keluar']]);
                 })->delete();
-                $deleten = NoseriPerbaikan::where('perbaikan_id', '=', $id)->whereDoesntHave('NoseriBarangJadi.PengirimanNoseri.Pengiriman', function($q) use($retur){
+                $deleten = NoseriPerbaikan::where('perbaikan_id', '=', $id)->whereDoesntHave('NoseriBarangJadi.PengirimanNoseri.Pengiriman', function ($q) use ($retur) {
                     $q->where('retur_penjualan_id', '=', $retur);
                 })->delete();
             }
 
             $dp = PartPenggantiPerbaikan::where('perbaikan_id', '=', $id)->get();
-            if(count($dp) > 0){
-                foreach($dp as $key => $i){
-                    $del_tgbj_detail = TFProduksiDetail::where([['m_sparepart_id', '=', $i->m_sparepart_id], ['qty', '=', $i->jumlah]])->whereHas('header', function($q) use($retur){
+            if (count($dp) > 0) {
+                foreach ($dp as $key => $i) {
+                    $del_tgbj_detail = TFProduksiDetail::where([['m_sparepart_id', '=', $i->m_sparepart_id], ['qty', '=', $i->jumlah]])->whereHas('header', function ($q) use ($retur) {
                         $q->where([['retur_penjualan_id', '=', $retur], ['jenis', '=', 'keluar']]);
                     })->delete();
                 }
@@ -2029,15 +1992,15 @@ class AfterSalesController extends Controller
             $p->keterangan = $r->keterangan;
             $u = $p->save();
 
-            if($u){
+            if ($u) {
                 $tgbj = TFProduksi::where([['retur_penjualan_id', '=', $retur], ['jenis', '=', 'keluar']])->first();
                 $tgbj_id = $tgbj->id;
                 $tgbjdetail_id = NULL;
                 $tgbjdetail = TFProduksiDetail::where([['t_gbj_id', '=', $tgbj_id], ['gdg_brg_jadi_id', '=', $r->produk_id]])->first();
 
-                if($tgbjdetail != NULL){
+                if ($tgbjdetail != NULL) {
                     $tgbjdetail_id = $tgbjdetail->id;
-                }else{
+                } else {
                     $ctd = TFProduksiDetail::create([
                         't_gbj_id' => $tgbj_id,
                         'detail_pesanan_produk_id' => NULL,
@@ -2050,18 +2013,18 @@ class AfterSalesController extends Controller
                     ]);
                     $tgbjdetail_id = $ctd->id;
                 }
-                foreach($r->operator as $key => $kary){
+                foreach ($r->operator as $key => $kary) {
                     $k = KaryawanPerbaikan::create([
                         'perbaikan_id' => $id,
                         'karyawan_id' => $kary
                     ]);
 
-                    if(!$k){
+                    if (!$k) {
                         $bool = false;
                     }
                 }
 
-                foreach($r->no_seri_id as $key => $noseri){
+                foreach ($r->no_seri_id as $key => $noseri) {
                     $n = NoseriPerbaikan::create([
                         'noseri_barang_jadi_id' => $noseri,
                         'perbaikan_id' => $id,
@@ -2070,12 +2033,10 @@ class AfterSalesController extends Controller
                         'noseri_pengganti_id' => NULL
                     ]);
 
-                    if(!$n){
+                    if (!$n) {
                         $bool = false;
-                    }
-                    else
-                    {
-                        if($r->tindak_lanjut[$key] != "karantina"){
+                    } else {
+                        if ($r->tindak_lanjut[$key] != "karantina") {
                             NoseriPerbaikan::where('id', $n->id)->update([
                                 'm_status_id' => '2'
                             ]);
@@ -2088,16 +2049,16 @@ class AfterSalesController extends Controller
                                 'jenis' => 'keluar',
                                 'created_by' => Auth::user()->id,
                             ]);
-                            if(!$tgn){
+                            if (!$tgn) {
                                 $bool = false;
-                            } else{
+                            } else {
                                 $un = NoseriBarangJadi::find($noseri);
                                 $un->is_ready = '1';
                                 $un->jenis = 'KELUAR';
-                                $un->used_by = "ReturID: ".$p->retur_id;
+                                $un->used_by = "ReturID: " . $p->retur_id;
                                 $un->save();
                             }
-                        }else{
+                        } else {
                             NoseriPerbaikan::where('id', $n->id)->update([
                                 'm_status_id' => '1'
                             ]);
@@ -2105,16 +2066,16 @@ class AfterSalesController extends Controller
                     }
                 }
 
-                if($r->part_id != null){
-                    foreach($r->part_id as $key => $part){
+                if ($r->part_id != null) {
+                    foreach ($r->part_id as $key => $part) {
                         $p = PartPenggantiPerbaikan::create([
                             'm_sparepart_id' => $part,
                             'perbaikan_id' => $id,
                             'jumlah' => $r->part_jumlah[$key]
                         ]);
-                        if(!$p){
+                        if (!$p) {
                             $bool = false;
-                        }else{
+                        } else {
                             $ctd = TFProduksiDetail::create([
                                 't_gbj_id' => $tgbj_id,
                                 'detail_pesanan_produk_id' => NULL,
@@ -2138,55 +2099,62 @@ class AfterSalesController extends Controller
         }
     }
 
-    public function produk_noseri_retur(Request $r){
+    public function produk_noseri_retur(Request $r)
+    {
         $data = array();
         $produk = $r->produk_id;
         $retur = $r->retur_id;
         $perbaikan = $r->id;
 
-        $res = NoseriBarangJadi::whereHas('NoseriTGbj.detail', function($q) use($produk){
+        $res = NoseriBarangJadi::whereHas('NoseriTGbj.detail', function ($q) use ($produk) {
             $q->where('gdg_brg_jadi_id', $produk);
-        })->whereHas('NoseriTGbj.detail.header', function($q) use($retur){
+        })->whereHas('NoseriTGbj.detail.header', function ($q) use ($retur) {
             $q->where('retur_penjualan_id', $retur);
-        })->whereDoesntHave('PengirimanNoseri.Pengiriman', function($q) use($retur){
+        })->whereDoesntHave('PengirimanNoseri.Pengiriman', function ($q) use ($retur) {
             $q->where('retur_penjualan_id', $retur);
-        })->whereDoesntHave('NoseriPerbaikan', function($q) use($perbaikan){
+        })->whereDoesntHave('NoseriPerbaikan', function ($q) use ($perbaikan) {
             $q->where('perbaikan_id', '!=', $perbaikan);
         })->get();
 
-        foreach($res as $key => $i){
-            $data[$key] = array('id' => $i->id,
-            'noseri' => $i->noseri);
+        foreach ($res as $key => $i) {
+            $data[$key] = array(
+                'id' => $i->id,
+                'noseri' => $i->noseri
+            );
         }
 
         return response()->json($data);
     }
 
-    public function produk_noseri_non_perbaikan(Request $r){
+    public function produk_noseri_non_perbaikan(Request $r)
+    {
         $data = array();
         $produk = $r->produk_id;
         $retur = $r->retur_id;
 
-        $res = NoseriBarangJadi::whereHas('NoseriTGbj.detail', function($q) use($produk){
+        $res = NoseriBarangJadi::whereHas('NoseriTGbj.detail', function ($q) use ($produk) {
             $q->where('gdg_brg_jadi_id', $produk);
-        })->whereHas('NoseriTGbj.detail.header', function($q) use($retur){
+        })->whereHas('NoseriTGbj.detail.header', function ($q) use ($retur) {
             $q->where('retur_penjualan_id', $retur);
-        })->whereDoesntHave('NoseriPerbaikan.Perbaikan', function($q) use($retur){
+        })->whereDoesntHave('NoseriPerbaikan.Perbaikan', function ($q) use ($retur) {
             $q->where('retur_id', $retur);
         })->get();
 
-        foreach($res as $key => $i){
-            $data[$key] = array('id' => $i->id,
-            'noseri' => $i->noseri);
+        foreach ($res as $key => $i) {
+            $data[$key] = array(
+                'id' => $i->id,
+                'noseri' => $i->noseri
+            );
         }
 
         return response()->json($data);
     }
 
-    public function data_pengiriman(){
+    public function data_pengiriman()
+    {
         $p = Pengiriman::all();
         $data = array();
-        foreach($p as $key => $i){
+        foreach ($p as $key => $i) {
             $data[$key] = array(
                 'id' => $i->id,
                 'no_pengiriman' => $i->no_pengiriman != NULL ? $i->no_pengiriman : NULL,
@@ -2202,10 +2170,11 @@ class AfterSalesController extends Controller
         return response()->json(['data' => $data]);
     }
 
-    public function detail_pengiriman(Request $r){
+    public function detail_pengiriman(Request $r)
+    {
         $p = Pengiriman::where('id', $r->id)->get();
         $data = array();
-        foreach($p as $key => $i){
+        foreach ($p as $key => $i) {
             $data = array(
                 'id' => $i->id,
                 'no_pengiriman' => $i->no_pengiriman != NULL ? $i->no_pengiriman : '-',
@@ -2235,17 +2204,17 @@ class AfterSalesController extends Controller
                 'produk' => array(),
                 'part' => array(),
             );
-            if($i->PengirimanNoseri != null){
-                foreach($i->PengirimanNoseri as $keys => $prd){
+            if ($i->PengirimanNoseri != null) {
+                foreach ($i->PengirimanNoseri as $keys => $prd) {
                     $data['produk'][$keys] = array(
                         'id' => $prd->id,
-                        'nama' => $prd->NoseriBarangJadi->gudang->produk->nama.' '.$prd->NoseriBarangJadi->gudang->nama,
+                        'nama' => $prd->NoseriBarangJadi->gudang->produk->nama . ' ' . $prd->NoseriBarangJadi->gudang->nama,
                         'noseri' => $prd->NoseriBarangJadi->noseri
                     );
                 }
             }
-            if($i->PengirimanPart != null){
-                foreach($i->PengirimanPart as $keys => $part){
+            if ($i->PengirimanPart != null) {
+                foreach ($i->PengirimanPart as $keys => $part) {
                     $data['part'][$keys] = array(
                         'id' => $part->id,
                         'nama' => $part->Sparepart->nama,
@@ -2258,50 +2227,51 @@ class AfterSalesController extends Controller
         return response()->json($data);
     }
 
-    public function retur_siap_kirim(Request $r){
-        $res = ReturPenjualan::where('no_retur', 'LIKE', '%'.$r->input('term', '').'%')->whereNotIN('state_id', ['10'])
-        ->addSelect(['count_perbaikan_non_karantina' => function($q){
-            $q->selectRaw('coalesce(count(noseri_perbaikan.id),0)')
-            ->from('noseri_perbaikan')
-            ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
-            ->where('noseri_perbaikan.m_status_id', '=', '2')
-            ->where('noseri_perbaikan.tindak_lanjut', '!=', 'karantina')
-            ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
-        }, 'count_perbaikan_karantina' => function($q){
-            $q->selectRaw('coalesce(count(noseri_perbaikan.id),0)')
-            ->from('noseri_perbaikan')
-            ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
-            ->where('noseri_perbaikan.m_status_id', '=', '2')
-            ->where('noseri_perbaikan.noseri_pengganti_id', '!=', NULL)
-            ->where('noseri_perbaikan.tindak_lanjut', '=', 'karantina')
-            ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
-        }, 'count_kirim_noseri' => function($q){
-            $q->selectRaw('coalesce(COUNT(pengiriman_noseri.id), 0)')
-            ->from('pengiriman_noseri')
-            ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
-            ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
-        }, 'count_part' => function($q){
-            $q->selectRaw('coalesce(SUM(t_gbj_detail.qty), 0)')
-            ->from('t_gbj_detail')
-            ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-            ->where('t_gbj.jenis', 'masuk')
-            ->whereNotNull('t_gbj_detail.m_sparepart_id')
-            ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
-        }, 'count_kirim_part' => function($q){
-            $q->selectRaw('coalesce(SUM(pengiriman_part.jumlah), 0)')
-            ->from('pengiriman_part')
-            ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_part.pengiriman_id')
-            ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
-        }])->havingRaw('(count_perbaikan_non_karantina + count_perbaikan_karantina) > count_kirim_noseri OR count_part > count_kirim_part')->get();
+    public function retur_siap_kirim(Request $r)
+    {
+        $res = ReturPenjualan::where('no_retur', 'LIKE', '%' . $r->input('term', '') . '%')->whereNotIN('state_id', ['10'])
+            ->addSelect(['count_perbaikan_non_karantina' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_perbaikan.id),0)')
+                    ->from('noseri_perbaikan')
+                    ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
+                    ->where('noseri_perbaikan.m_status_id', '=', '2')
+                    ->where('noseri_perbaikan.tindak_lanjut', '!=', 'karantina')
+                    ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
+            }, 'count_perbaikan_karantina' => function ($q) {
+                $q->selectRaw('coalesce(count(noseri_perbaikan.id),0)')
+                    ->from('noseri_perbaikan')
+                    ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
+                    ->where('noseri_perbaikan.m_status_id', '=', '2')
+                    ->where('noseri_perbaikan.noseri_pengganti_id', '!=', NULL)
+                    ->where('noseri_perbaikan.tindak_lanjut', '=', 'karantina')
+                    ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
+            }, 'count_kirim_noseri' => function ($q) {
+                $q->selectRaw('coalesce(COUNT(pengiriman_noseri.id), 0)')
+                    ->from('pengiriman_noseri')
+                    ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
+                    ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
+            }, 'count_part' => function ($q) {
+                $q->selectRaw('coalesce(SUM(t_gbj_detail.qty), 0)')
+                    ->from('t_gbj_detail')
+                    ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->where('t_gbj.jenis', 'masuk')
+                    ->whereNotNull('t_gbj_detail.m_sparepart_id')
+                    ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
+            }, 'count_kirim_part' => function ($q) {
+                $q->selectRaw('coalesce(SUM(pengiriman_part.jumlah), 0)')
+                    ->from('pengiriman_part')
+                    ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_part.pengiriman_id')
+                    ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
+            }])->havingRaw('(count_perbaikan_non_karantina + count_perbaikan_karantina) > count_kirim_noseri OR count_part > count_kirim_part')->get();
 
         $data = array();
-        foreach($res as $key => $i){
+        foreach ($res as $key => $i) {
             $pesanan = NULL;
-            if($i->pesanan_id != null){
+            if ($i->pesanan_id != null) {
                 $pesanan = $i->Pesanan->no_po;
-            }else if($i->retur_penjualan_id != null){
+            } else if ($i->retur_penjualan_id != null) {
                 $pesanan = $i->ReturPenjualanChild->no_retur;
-            }else{
+            } else {
                 $pesanan = $i->no_pesanan;
             }
             $data[$key] = array(
@@ -2323,63 +2293,65 @@ class AfterSalesController extends Controller
     }
 
 
-    public function barang_siap_kirim_retur(Request $r){
+    public function barang_siap_kirim_retur(Request $r)
+    {
         $retur_id = $r->id;
 
-        $resproduknonkarantina = NoseriPerbaikan::whereHas('Perbaikan.ReturPenjualan', function($q) use($retur_id){
+        $resproduknonkarantina = NoseriPerbaikan::whereHas('Perbaikan.ReturPenjualan', function ($q) use ($retur_id) {
             $q->where('id', $retur_id)->whereNotIn('state_id', ['10']);
         })
-        ->where('noseri_perbaikan.m_status_id', '=', '2')
-        ->whereNotIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
-        ->whereDoesntHave('NoseriBarangJadi.PengirimanNoseri.Pengiriman', function($q) use($retur_id){
-            $q->where('retur_penjualan_id', $retur_id);
-        })->get();
-        $resprodukkarantina = NoseriPerbaikan::whereHas('Perbaikan.ReturPenjualan', function($q) use($retur_id){
+            ->where('noseri_perbaikan.m_status_id', '=', '2')
+            ->whereNotIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
+            ->whereDoesntHave('NoseriBarangJadi.PengirimanNoseri.Pengiriman', function ($q) use ($retur_id) {
+                $q->where('retur_penjualan_id', $retur_id);
+            })->get();
+        $resprodukkarantina = NoseriPerbaikan::whereHas('Perbaikan.ReturPenjualan', function ($q) use ($retur_id) {
             $q->where('retur_id', $retur_id)->whereNotIn('state_id', ['10']);
         })
-        ->where('noseri_perbaikan.m_status_id', '=', '2')
-        ->whereNotNull('noseri_pengganti_id')
-        ->whereIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
-        ->whereDoesntHave('NoseriBarangJadi.PengirimanNoseri.Pengiriman', function($q) use($retur_id){
-            $q->where('retur_penjualan_id', $retur_id);
-        })->get();
+            ->where('noseri_perbaikan.m_status_id', '=', '2')
+            ->whereNotNull('noseri_pengganti_id')
+            ->whereIn('noseri_perbaikan.tindak_lanjut', ['karantina'])
+            ->whereDoesntHave('NoseriBarangJadi.PengirimanNoseri.Pengiriman', function ($q) use ($retur_id) {
+                $q->where('retur_penjualan_id', $retur_id);
+            })->get();
         $resproduk = $resproduknonkarantina->merge($resprodukkarantina);
 
-        $respart = TFProduksiDetail::whereHas('header', function($q) use($retur_id){
+        $respart = TFProduksiDetail::whereHas('header', function ($q) use ($retur_id) {
             $q->where([['retur_penjualan_id', '=', $retur_id], ['jenis', '=', 'masuk']]);
-        })->whereHas('header.ReturPenjualan', function($q){
+        })->whereHas('header.ReturPenjualan', function ($q) {
             $q->whereNotIn('state_id', ['10']);
         })->whereNotNull('m_sparepart_id')->get();
 
         $produk = array();
         $part = array();
 
-            foreach($resproduk as $key => $i){
-                $produk[$key] = array(
-                    'id' => $i->tindak_lanjut != 'karantina' ? $i->noseri_barang_jadi_id : $i->noseri_pengganti_id,
-                    'nama_produk' => $i->Perbaikan->GudangBarangJadi->produk->nama.' '.$i->Perbaikan->GudangBarangJadi->nama,
-                    'noseri' => $i->tindak_lanjut != 'karantina' ? $i->NoseriBarangJadi->noseri : $i->NoseriPengganti->noseri
-                );
-            }
+        foreach ($resproduk as $key => $i) {
+            $produk[$key] = array(
+                'id' => $i->tindak_lanjut != 'karantina' ? $i->noseri_barang_jadi_id : $i->noseri_pengganti_id,
+                'nama_produk' => $i->Perbaikan->GudangBarangJadi->produk->nama . ' ' . $i->Perbaikan->GudangBarangJadi->nama,
+                'noseri' => $i->tindak_lanjut != 'karantina' ? $i->NoseriBarangJadi->noseri : $i->NoseriPengganti->noseri
+            );
+        }
 
-            foreach($respart as $key => $i){
-                $part[$key] = array(
-                    'id' => $i->Sparepart->id,
-                    'nama_part' => $i->Sparepart->nama,
-                    'jumlah' => $i->qty,
-                );
-            }
+        foreach ($respart as $key => $i) {
+            $part[$key] = array(
+                'id' => $i->Sparepart->id,
+                'nama_part' => $i->Sparepart->nama,
+                'jumlah' => $i->qty,
+            );
+        }
 
         return response()->json(['produk' => $produk, 'part' => $part]);
     }
 
-    public function store_pengiriman(Request $r){
+    public function store_pengiriman(Request $r)
+    {
         $validator = NULL;
-        if($r->customer_id != NULL){
+        if ($r->customer_id != NULL) {
             $validator = Validator::make($r->all(), [
                 'customer_id' => 'required'
             ]);
-        }else{
+        } else {
             $validator = Validator::make($r->all(), [
                 'nama_penerima' => 'required',
                 'alamat_penerima' => 'required'
@@ -2393,10 +2365,9 @@ class AfterSalesController extends Controller
             $nama_penerima = NULL;
             $alamat_penerima = NULL;
             $telp_penerima = NULL;
-            if($r->customer_id != NULL){
+            if ($r->customer_id != NULL) {
                 $customer_id = $r->customer_id;
-            }
-            else{
+            } else {
                 $nama_penerima = $r->nama_penerima;
                 $alamat_penerima = $r->alamat_penerima;
                 $telp_penerima = $r->telp_penerima;
@@ -2411,32 +2382,32 @@ class AfterSalesController extends Controller
                 'created_by' => Auth::user()->id
             ]);
 
-            if($c){
-                if(isset($r->no_seri_id) && $r->no_seri_id != null){
-                    foreach($r->no_seri_id as $key => $i){
+            if ($c) {
+                if (isset($r->no_seri_id) && $r->no_seri_id != null) {
+                    foreach ($r->no_seri_id as $key => $i) {
                         $pn = PengirimanNoseri::create([
                             'pengiriman_id' => $c->id,
                             'noseri_barang_jadi_id' => $i
                         ]);
-                        if(!$pn){
+                        if (!$pn) {
                             $bool = false;
-                        } else{
+                        } else {
                             $un = NoseriBarangJadi::find($i);
                             $un->is_ready = '1';
                             $un->jenis = 'KELUAR';
-                            $un->used_by = "ReturID: ".$r->no_retur;
+                            $un->used_by = "ReturID: " . $r->no_retur;
                         }
                     }
                 }
 
-                if(isset($r->part_id) && $r->part_id != null){
-                    foreach($r->part_id as $key => $i){
+                if (isset($r->part_id) && $r->part_id != null) {
+                    foreach ($r->part_id as $key => $i) {
                         $pp = PengirimanPart::create([
                             'pengiriman_id' => $c->id,
                             'm_sparepart_id' => $i,
                             'jumlah' => $r->part_jumlah[$key],
                         ]);
-                        if(!$pp){
+                        if (!$pp) {
                             $bool = false;
                         }
                     }
@@ -2450,18 +2421,20 @@ class AfterSalesController extends Controller
         }
     }
 
-    public function edit_pengiriman($id){
+    public function edit_pengiriman($id)
+    {
         $data = Pengiriman::find($id);
         return view('page.as.pengiriman.edit', ['id' => $id, 'i' => $data]);
     }
 
-    public function update_pengiriman(Request $r, $id){
+    public function update_pengiriman(Request $r, $id)
+    {
         $validator = NULL;
-        if($r->customer_id != NULL){
+        if ($r->customer_id != NULL) {
             $validator = Validator::make($r->all(), [
                 'customer_id' => 'required'
             ]);
-        }else{
+        } else {
             $validator = Validator::make($r->all(), [
                 'nama_penerima' => 'required',
                 'alamat_penerima' => 'required'
@@ -2474,10 +2447,9 @@ class AfterSalesController extends Controller
             $nama_penerima = NULL;
             $alamat_penerima = NULL;
             $telp_penerima = NULL;
-            if($r->customer_id != NULL){
+            if ($r->customer_id != NULL) {
                 $customer_id = $r->customer_id;
-            }
-            else{
+            } else {
                 $nama_penerima = $r->nama_penerima;
                 $alamat_penerima = $r->alamat_penerima;
                 $telp_penerima = $r->telp_penerima;
@@ -2497,9 +2469,10 @@ class AfterSalesController extends Controller
         }
     }
 
-    public function send_pengiriman(Request $r){
+    public function send_pengiriman(Request $r)
+    {
         $p = Pengiriman::find($r->id);
-        if(isset($r->resi)){
+        if (isset($r->resi)) {
             $p->resi = $r->resi;
         }
         $p->m_state_id = '10';
@@ -2507,146 +2480,148 @@ class AfterSalesController extends Controller
 
         $bool = true;
         $krm = null;
-        if($u){
-            $krm = ReturPenjualan::where('id', $p->retur_penjualan_id)->addSelect(['count_noseri' => function($q){
+        if ($u) {
+            $krm = ReturPenjualan::where('id', $p->retur_penjualan_id)->addSelect(['count_noseri' => function ($q) {
                 $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
-                ->from('t_gbj_noseri')
-                ->join('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
-                ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-                ->where('t_gbj.jenis', '=', 'masuk')
-                ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
-            },'count_perbaikan_karantina' => function($q){
+                    ->from('t_gbj_noseri')
+                    ->join('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
+                    ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->where('t_gbj.jenis', '=', 'masuk')
+                    ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
+            }, 'count_perbaikan_karantina' => function ($q) {
                 $q->selectRaw('coalesce(count(noseri_perbaikan.id),0)')
-                ->from('noseri_perbaikan')
-                ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
-                ->where('noseri_perbaikan.m_status_id', '=', '2')
-                ->where('noseri_perbaikan.noseri_pengganti_id', '=', NULL)
-                ->where('noseri_perbaikan.tindak_lanjut', '=', 'karantina')
-                ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
-            }, 'count_kirim_noseri' => function($q){
+                    ->from('noseri_perbaikan')
+                    ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
+                    ->where('noseri_perbaikan.m_status_id', '=', '2')
+                    ->where('noseri_perbaikan.noseri_pengganti_id', '=', NULL)
+                    ->where('noseri_perbaikan.tindak_lanjut', '=', 'karantina')
+                    ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
+            }, 'count_kirim_noseri' => function ($q) {
                 $q->selectRaw('coalesce(COUNT(pengiriman_noseri.id), 0)')
-                ->from('pengiriman_noseri')
-                ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
-                ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
-            }, 'count_part' => function($q){
+                    ->from('pengiriman_noseri')
+                    ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
+                    ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
+            }, 'count_part' => function ($q) {
                 $q->selectRaw('coalesce(SUM(t_gbj_detail.qty), 0)')
-                ->from('t_gbj_detail')
-                ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
-                ->where('t_gbj.jenis', 'masuk')
-                ->whereNotNull('t_gbj_detail.m_sparepart_id')
-                ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
-            }, 'count_kirim_part' => function($q){
+                    ->from('t_gbj_detail')
+                    ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
+                    ->where('t_gbj.jenis', 'masuk')
+                    ->whereNotNull('t_gbj_detail.m_sparepart_id')
+                    ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
+            }, 'count_kirim_part' => function ($q) {
                 $q->selectRaw('coalesce(SUM(pengiriman_part.jumlah), 0)')
-                ->from('pengiriman_part')
-                ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_part.pengiriman_id')
-                ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
+                    ->from('pengiriman_part')
+                    ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_part.pengiriman_id')
+                    ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
             }])->first();
 
-            if($krm){
-                if($krm->count_noseri > 0 && $krm->count_part > 0){
+            if ($krm) {
+                if ($krm->count_noseri > 0 && $krm->count_part > 0) {
                     $count_all = $krm->count_kirim_noseri + $krm->count_perbaikan_karantina;
-                    if($krm->count_noseri <= $count_all && $krm->count_part <= $krm->count_kirim_part){
+                    if ($krm->count_noseri <= $count_all && $krm->count_part <= $krm->count_kirim_part) {
                         $retur = ReturPenjualan::find($p->retur_penjualan_id);
                         $retur->state_id = '10';
                         $retur->save();
                     }
-                }else{
-                    if($krm->count_noseri > 0){
+                } else {
+                    if ($krm->count_noseri > 0) {
                         $count_all = $krm->count_kirim_noseri + $krm->count_perbaikan_karantina;
-                        if($krm->count_noseri <= $count_all){
+                        if ($krm->count_noseri <= $count_all) {
                             $retur = ReturPenjualan::find($p->retur_penjualan_id);
                             $retur->state_id = '10';
                             $retur->save();
                         }
-                    }else{
-                        if($krm->count_part <= $krm->count_kirim_part){
+                    } else {
+                        if ($krm->count_part <= $krm->count_kirim_part) {
                             $retur = ReturPenjualan::find($p->retur_penjualan_id);
                             $retur->state_id = '10';
                             $retur->save();
                         }
                     }
                 }
-            }
-            else{
+            } else {
                 $bool = false;
             }
         }
 
-        if($bool == true){
+        if ($bool == true) {
             return response()->json(['res' => 'success', 'msg' => 'Berhasil dikirim']);
-        }else{
+        } else {
             return response()->json(['res' => 'error', 'msg' => 'Gagal dikirim']);
         }
     }
 
-    public function laporan_retur($tgl_awal, $tgl_akhir){
+    public function laporan_retur($tgl_awal, $tgl_akhir)
+    {
         return Excel::download(new LaporanAfterSalesRetur($tgl_awal, $tgl_akhir), 'Laporan After Sales Retur Penjualan.xlsx');
     }
 
-    public function data_laporan($tgl_awal, $tgl_akhir){
+    public function data_laporan($tgl_awal, $tgl_akhir)
+    {
         $from = date($tgl_awal);
         $to = date($tgl_akhir);
         $array = array();
-        $data = ReturPenjualan::whereBetween('tgl_retur', [$from, $to])->whereHas('TFProduksi', function($q){
+        $data = ReturPenjualan::whereBetween('tgl_retur', [$from, $to])->whereHas('TFProduksi', function ($q) {
             $q->where('jenis', 'masuk');
-            })->addSelect(['count_noseri' => function($q){
-                $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
+        })->addSelect(['count_noseri' => function ($q) {
+            $q->selectRaw('coalesce(count(t_gbj_noseri.id), 0)')
                 ->from('t_gbj_noseri')
                 ->join('t_gbj_detail', 't_gbj_detail.id', '=', 't_gbj_noseri.t_gbj_detail_id')
                 ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
                 ->where('t_gbj.jenis', '=', 'masuk')
                 ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
-            },'count_perbaikan_karantina' => function($q){
-                $q->selectRaw('coalesce(count(noseri_perbaikan.id),0)')
+        }, 'count_perbaikan_karantina' => function ($q) {
+            $q->selectRaw('coalesce(count(noseri_perbaikan.id),0)')
                 ->from('noseri_perbaikan')
                 ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
                 ->where('noseri_perbaikan.m_status_id', '=', '2')
                 ->where('noseri_perbaikan.noseri_pengganti_id', '=', NULL)
                 ->where('noseri_perbaikan.tindak_lanjut', '=', 'karantina')
                 ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
-            },'count_perbaikan' => function($q){
-                $q->selectRaw('coalesce(count(noseri_perbaikan.id),0)')
+        }, 'count_perbaikan' => function ($q) {
+            $q->selectRaw('coalesce(count(noseri_perbaikan.id),0)')
                 ->from('noseri_perbaikan')
                 ->join('perbaikan', 'perbaikan.id', '=', 'noseri_perbaikan.perbaikan_id')
                 ->where('noseri_perbaikan.m_status_id', '=', '2')
                 ->where('noseri_perbaikan.tindak_lanjut', '!=', 'karantina')
                 ->whereColumn('perbaikan.retur_id', 'retur_penjualan.id');
-            }, 'count_kirim_noseri' => function($q){
-                $q->selectRaw('coalesce(COUNT(pengiriman_noseri.id), 0)')
+        }, 'count_kirim_noseri' => function ($q) {
+            $q->selectRaw('coalesce(COUNT(pengiriman_noseri.id), 0)')
                 ->from('pengiriman_noseri')
                 ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_noseri.pengiriman_id')
                 ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
-            }, 'count_part' => function($q){
-                $q->selectRaw('coalesce(SUM(t_gbj_detail.qty), 0)')
+        }, 'count_part' => function ($q) {
+            $q->selectRaw('coalesce(SUM(t_gbj_detail.qty), 0)')
                 ->from('t_gbj_detail')
                 ->join('t_gbj', 't_gbj.id', '=', 't_gbj_detail.t_gbj_id')
                 ->where('t_gbj.jenis', 'masuk')
                 ->whereNotNull('t_gbj_detail.m_sparepart_id')
                 ->whereColumn('t_gbj.retur_penjualan_id', 'retur_penjualan.id');
-            }, 'count_kirim_part' => function($q){
-                $q->selectRaw('coalesce(SUM(pengiriman_part.jumlah), 0)')
+        }, 'count_kirim_part' => function ($q) {
+            $q->selectRaw('coalesce(SUM(pengiriman_part.jumlah), 0)')
                 ->from('pengiriman_part')
                 ->join('pengiriman', 'pengiriman.id', '=', 'pengiriman_part.pengiriman_id')
                 ->whereColumn('pengiriman.retur_penjualan_id', 'retur_penjualan.id');
         }])->get();
 
-        foreach($data as $key => $i){
+        foreach ($data as $key => $i) {
 
             $perbaikan = 100;
-            if($i->count_noseri > 0){
+            if ($i->count_noseri > 0) {
                 $perbaikan = floor((($i->count_perbaikan + $i->count_perbaikan_karantina) / $i->count_noseri) * 100);
             }
 
-            $pengiriman = floor ((($i->count_perbaikan_karantina + $i->count_kirim_noseri + $i->count_kirim_part) / ($i->count_part + $i->count_noseri)) * 100);
+            $pengiriman = floor((($i->count_perbaikan_karantina + $i->count_kirim_noseri + $i->count_kirim_part) / ($i->count_part + $i->count_noseri)) * 100);
 
-            $array[$key] = array('id' => $i->id,
+            $array[$key] = array(
+                'id' => $i->id,
                 'produk' => array(),
                 'no_retur' => $i->no_retur,
                 'tgl_retur' => \Carbon\Carbon::createFromFormat('Y-m-d', $i->tgl_retur)->format('d-m-Y'),
                 'jumlah' => count($i->TFProduksi->detail),
                 'ket' => $i->keterangan,
                 'pic' => $i->karyawan_id != NULL ? $i->karyawan->nama : $i->pic,
-                'telp_pic' => $i->telp_pic != NULL ? "(".$i->telp_pic.")" : '',
+                'telp_pic' => $i->telp_pic != NULL ? "(" . $i->telp_pic . ")" : '',
                 'customer' => $i->Customer->nama,
                 'jenis' => $i->jenis != "none" ? $i->jenis : 'tanpa status',
                 'prog_pengiriman' => $i->state_id != "10" ? $pengiriman : 100,
@@ -2654,20 +2629,20 @@ class AfterSalesController extends Controller
                 'row' => 0
             );
             $row = 0;
-            foreach($i->TFProduksi->detail as $keys => $j){
-                if($j->gdg_brg_jadi_id != NULL){
+            foreach ($i->TFProduksi->detail as $keys => $j) {
+                if ($j->gdg_brg_jadi_id != NULL) {
                     $row = $row + (count($j->seri) > 0 ? count($j->seri) : 1);
                     $array[$key]['produk'][$keys] = array(
                         'id' => $j->gdg_brg_jadi_id,
                         'jumlah_unit' => count($j->seri) > 0 ? count($j->seri) : 1,
                         'noseri' => array(),
-                        'produk' => $j->produk->produk->nama.' '.$j->produk->nama
+                        'produk' => $j->produk->produk->nama . ' ' . $j->produk->nama
                     );
 
-                    foreach($j->seri as $keyz => $k){
+                    foreach ($j->seri as $keyz => $k) {
                         $gbj = $j->gdg_brg_jadi_id;
                         $ret = $i->id;
-                        $p = NoseriPerbaikan::whereHas('Perbaikan', function($q) use($gbj, $ret){
+                        $p = NoseriPerbaikan::whereHas('Perbaikan', function ($q) use ($gbj, $ret) {
                             $q->where([['gdg_barang_jadi_id', '=', $gbj], ['retur_id', '=', $ret]]);
                         })->where('noseri_barang_jadi_id', $k->seri->id)->first();
                         $array[$key]['produk'][$keys]['noseri'][$keyz] = array(
@@ -2681,20 +2656,19 @@ class AfterSalesController extends Controller
                             'tgl_kirim' => NULL
                         );
                         $currseri = $p != NULL ? ($p->noseri_pengganti_id != NULL ? $p->noseri_pengganti_id : $k->seri->id) : $k->seri->id;
-                        $l = PengirimanNoseri::whereHas('Pengiriman', function($q) use($ret){
+                        $l = PengirimanNoseri::whereHas('Pengiriman', function ($q) use ($ret) {
                             $q->where('retur_penjualan_id', '=', $ret);
                         })->where('noseri_barang_jadi_id', $currseri)->first();
                         $array[$key]['produk'][$keys]['noseri'][$keyz]['no_sj'] = $l != NULL ? $l->Pengiriman->no_pengiriman : '';
                         $array[$key]['produk'][$keys]['noseri'][$keyz]['tgl_kirim'] = $l != NULL ? $l->Pengiriman->tanggal : '';
                     }
-                }
-                else{
+                } else {
                     $row = $row + 1;
                     $array[$key]['produk'][$keys] = array(
                         'id' => $j->m_sparepart_id,
                         'jumlah_unit' => 1,
                         'noseri' => array(),
-                        'produk' => $j->Sparepart->nama." ".$j->qty
+                        'produk' => $j->Sparepart->nama . " " . $j->qty
                     );
 
                     $part = $j->m_sparepart_id;
@@ -2709,7 +2683,7 @@ class AfterSalesController extends Controller
                         'no_sj' => NULL,
                         'tgl_kirim' => NULL
                     );
-                    $l = PengirimanPart::whereHas('Pengiriman', function($q) use($ret){
+                    $l = PengirimanPart::whereHas('Pengiriman', function ($q) use ($ret) {
                         $q->where('retur_penjualan_id', '=', $ret);
                     })->where('m_sparepart_id', $part)->first();
                     $array[$key]['produk'][$keys]['noseri'][0]['no_sj'] = $l != NULL ? $l->Pengiriman->no_pengiriman : '';
@@ -2757,12 +2731,11 @@ class AfterSalesController extends Controller
         $res = NULL;
 
         $k = ReturPenjualan::whereYear('tgl_retur', $tahun)->selectRaw("max(CAST(SUBSTRING(`no_retur`,1,4) as DECIMAL)) as nomor")->first();
-        if($k != NULL){
+        if ($k != NULL) {
             $nomor = $k->nomor + 1;
-            $res = str_pad($nomor, 4,"0",STR_PAD_LEFT).'/BM-'.$bulan.'/'.$tahun;
-        }
-        else{
-            $res = str_pad("1", 4,"0",STR_PAD_LEFT).'/BM-'.$bulan.'/'.$tahun;
+            $res = str_pad($nomor, 4, "0", STR_PAD_LEFT) . '/BM-' . $bulan . '/' . $tahun;
+        } else {
+            $res = str_pad("1", 4, "0", STR_PAD_LEFT) . '/BM-' . $bulan . '/' . $tahun;
         }
         return $res;
     }
@@ -2775,12 +2748,11 @@ class AfterSalesController extends Controller
         $res = NULL;
 
         $k = Perbaikan::whereYear('tanggal', $tahun)->selectRaw("max(CAST(SUBSTRING(`no_perbaikan`,1,4) as DECIMAL)) as nomor")->first();
-        if($k != NULL){
+        if ($k != NULL) {
             $nomor = $k->nomor + 1;
-            $res = str_pad($nomor, 4,"0",STR_PAD_LEFT).'/PBK-'.$bulan.'/'.$tahun;
-        }
-        else{
-            $res = str_pad("1", 4,"0",STR_PAD_LEFT).'/PBK-'.$bulan.'/'.$tahun;
+            $res = str_pad($nomor, 4, "0", STR_PAD_LEFT) . '/PBK-' . $bulan . '/' . $tahun;
+        } else {
+            $res = str_pad("1", 4, "0", STR_PAD_LEFT) . '/PBK-' . $bulan . '/' . $tahun;
         }
         return $res;
     }

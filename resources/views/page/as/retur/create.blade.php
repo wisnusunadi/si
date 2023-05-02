@@ -151,7 +151,7 @@
                                 </button>
                             </div>
                         @endif
-                        <form method="POST" action="{{ route('as.retur.store') }}" id="formtambahretur">
+                        <form action="{{ route('as.retur.store') }}" id="formtambahretur">
                             @csrf
                             <div class="card-body">
                                 <div class="form-horizontal">
@@ -528,6 +528,37 @@
 
 @section('adminlte_js')
     <script>
+        $(document).on('submit', '#formtambahretur', function(event) {
+            event.preventDefault();
+            var action = $(this).attr('action');
+            $.ajax({
+                url: action,
+                type: 'POST',
+                data: $('#formtambahretur').serialize(),
+                success: function(result) {
+
+                    if (result.status === 'duplicate') {
+                        swal.fire(
+                            'Noseri Sama',
+                            result.messages,
+                            'error'
+                        );
+                    } else if (result.status === 'success') {
+                        swal.fire(
+                            'Berhasil',
+                            result.messages,
+                            'success'
+                        ).then((result) => {
+                            if (result.isConfirmed) {
+                                window.location.reload();
+                            }
+                        })
+                    } else {
+
+                    }
+                }
+            });
+        })
         $(function() {
             var access_token = localStorage.getItem('lokal_token');
 
@@ -746,16 +777,24 @@
                     var idx = 0;
                     obj.forEach(object => {
                         seritr +=
-                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"></td></tr>`;
+                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seriz"
+                                name="no_seri[` + idx + `]" id="no_seri` + idx + `"
+                                id="no_seri` + idx + `" value="` + object + `"
+                                >
+                                <div class="suggestion-box"></div>
+                                </td></tr>`;
                         idx++;
                     });
                 } else {
                     for (var j = 0; j < i; j++) {
                         seritr +=
-                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"></td></tr>`;
+                            `<tr><td><input type="text" class="form-control no_seri" placeholder="Masukkan No Seri"
+                                name="no_seri[` + j + `]" id="no_seri` + j + `"
+                                id="no_seri` + j + `">
+                                <div class="suggestion-box"></div>
+                                </td></tr>`;
                     }
                 }
-
                 return seritr;
             }
 
@@ -805,13 +844,7 @@
                 }
             });
 
-            function no_seri_arr(no_seri) {
-                $('.no_seri').select2({
-                    placeholder: "Pilih No Seri",
-                    allowClear: true,
-                    data: no_seri
-                });
-            }
+
 
             function no_seri_lama() {
                 // $('.no_seri').select2({
@@ -853,20 +886,21 @@
                 // })
 
                 $(".no_seri").autocomplete({
+                    appendTo: ".suggestion-box",
                     source: function(request, response) {
                         $.ajax({
                             dataType: 'json',
-                            url: '/api/customer/select',
+                            url: '/api/as/list/no_seri_lama',
+                            method: 'POST',
                             data: {
                                 term: request.term
                             },
                             success: function(data) {
-
-                                var transformed = $.map(data, function(el) {
+                                var transformed = $.map(data, function(obj) {
                                     return {
-                                        label: el.nama,
-                                        value: el.id
-                                    };
+                                        label: obj.noseri,
+                                        value: obj.noseri
+                                    }
                                 });
                                 response(transformed.slice(0, 10));
                             },
@@ -875,10 +909,10 @@
                             }
                         });
                     },
-                    focus: function(event, ui) {
-                        $(this).val(ui.item.label);
-                        return false;
-                    }
+                    // focus: function(event, ui) {
+                    //     $(this).val(ui.item.label);
+                    //     return false;
+                    // }
                 });
 
             }
@@ -958,23 +992,22 @@
                 $('#detail_modal').modal("show");
                 if (no_seri_select.val() != "") {
                     var obj = JSON.parse(no_seri_select.val());
+
                     $('#seri_table tbody').empty();
                     $('#seri_table tbody').append(trseriproduk(jumlah.val(), obj));
 
                     $('#index_table').val(number);
-                    if (produk_id.select2('data')[0]['noseri'] != undefined) {
-                        no_seri_arr(produk_id.select2('data')[0]['noseri']);
-                    } else {
-                        no_seri_lama();
-                    }
+
+                    no_seri_lama();
+
                 } else {
-                    console.log('tes')
+
                     $('#seri_table tbody').empty();
                     $('#seri_table tbody').append(trseriproduk(jumlah.val(), undefined));
 
                     $('#index_table').val(number);
                     if (produk_id.select2('data')[0]['noseri'] != undefined) {
-                        no_seri_arr(produk_id.select2('data')[0]['noseri']);
+                        no_seri_lama();
                     } else {
                         no_seri_lama();
                     }
@@ -987,23 +1020,18 @@
                 var idx = $('#index_table').val();
                 var inputseri = false;
                 $('#seri_table').find('.no_seri').each(function() {
-                    if ($(this).val() != null) {
+                    if ($(this).val() != '') {
                         inputseri = true;
-                        var obj = {};
-                        obj.id = $(this).val();
-                        obj.text = $(this).select2('data')[0]['text'];
+                        let obj = $(this).val();
                         noseri_arr.push(obj);
                     } else {
                         inputseri = false;
                         return false;
                     }
                 });
-
                 if (inputseri == true) {
                     $('#detail_modal').modal("hide");
                     $('#no_seri_select' + idx).val(JSON.stringify(noseri_arr));
-                    console.log($('#no_seri_select' + idx).val());
-
                     $('#produktable').find('button[name="btn_seri[' + idx + ']"]').removeClass('btn-info');
                     $('#produktable').find('button[name="btn_seri[' + idx + ']"]').addClass('btn-warning');
                     $('#produktable').find('button[name="btn_seri[' + idx + ']"]').html(
@@ -1015,8 +1043,21 @@
                         'error'
                     );
                 }
+                console.log(noseri_arr);
                 validasi();
             })
+
+            function uniqueCheck(noseri_arr) {
+                noseri_arr = JSON.parse(noseri_arr);
+                var unique = noseri_arr.filter(function(elem, index, self) {
+                    return index == self.indexOf(elem);
+                })
+                if (unique.length == noseri_arr.length) {
+                    return true;
+                } else {
+                    return false;
+                }
+            }
 
             $(document).on('change', '#parttable .part_id', function() {
                 if (typeof($(this).select2('data')[0]['jumlah']) != 'undefined') {
@@ -1134,8 +1175,8 @@
                     $(el).find('.produk_id').attr('name', 'produk_id[' + j + ']');
                     $(el).find('.produk_id').attr('id', 'produk_id' + j);
 
-                    $(el).find('.produk_jumlah').attr('name', 'produk_jumlah[' + j + ']');
-                    $(el).find('.produk_jumlah').attr('id', 'produk_jumlah' + j);
+                    $(el).find('.jumlah_produk').attr('name', 'jumlah_produk[' + j + ']');
+                    $(el).find('.jumlah_produk').attr('id', 'jumlah_produk' + j);
 
                     $(el).find('.no_seri_select').attr('name', 'no_seri_select[' + j + ']');
                     $(el).find('.no_seri_select').attr('id', 'no_seri_select' + j);
@@ -1495,7 +1536,6 @@
                         $('#customer_id').val('');
                         $('#alamat').val("");
                         $('#telepon').val("");
-
                         $('#alamat').attr('readonly', false);
                         $('#telepon').attr('readonly', false);
                         validasi();
