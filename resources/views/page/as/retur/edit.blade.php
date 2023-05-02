@@ -1256,6 +1256,8 @@
                     if ($(this).val() != '') {
                         inputseri = true;
                         let obj = $(this).val();
+                        // remove spacing
+                        obj = obj.replace(/\s/g, '');
                         noseri_arr.push(obj);
                     } else {
                         inputseri = false;
