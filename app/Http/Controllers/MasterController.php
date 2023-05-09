@@ -1051,6 +1051,7 @@ class MasterController extends Controller
     }
     public function create_penjualan_produk(Request $request)
     {
+
         // $this->validate(
         //     $request,
         //     [
@@ -1080,7 +1081,8 @@ class MasterController extends Controller
                 'nama' => $request->nama_paket,
                 'nama_alias' => $request->nama_alias,
                 'harga' => $harga_convert,
-                'status' => $request->jenis_paket
+                'status' => $request->jenis_paket,
+                'is_aktif' => $request->is_aktif
             ]);
 
             // for ($i = 0; $i < count($request->produk_id); $i++) {
