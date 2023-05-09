@@ -2364,6 +2364,7 @@ class GudangController extends Controller
             $no_seri = [];
             $sheet1 = $sheet->toArray(null, true, true, true);
             $numrow = 1;
+            $haserror = false;
             $html = "<input type='hidden' name='namafile' value='" . $filename . "'>";
             $html .= "<table class='table table-bordered table-striped table-hover tableImport'>
                     <thead>
@@ -2384,6 +2385,7 @@ class GudangController extends Controller
                 $e = $row['E'];
                 if ($numrow > 1) {
                     $nis_td = (!empty($c)) ? "" : " style='background: #E07171;'";
+                    $nis_td = (!empty($d)) ? "" : " style='background: #E07171;'" . $haserror = true;
                     $html .= "<tr>";
                     $html .= "<td" . $nis_td . ">" . $a . "</td>";
                     $html .= "<td" . $nis_td . ">" . $b . "</td>";
@@ -2395,6 +2397,10 @@ class GudangController extends Controller
                 $numrow++;
             }
             $html .= "</tbody></table>";
+
+            if ($haserror) {
+                return response()->json(['msg' => 'Ada data yang kosong, Silahkan lengkapi data', 'error' => true, 'data' => $html]);
+            }
 
             $a = Pesanan::where('id', $request->soid1)->first();
             if ($a->so == implode("", array_unique($so))) {
