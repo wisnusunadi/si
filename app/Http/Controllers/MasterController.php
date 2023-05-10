@@ -1106,6 +1106,8 @@ class MasterController extends Controller
 
         // for ($i = 0; $i < count($request->produk_id); $i++) {
         //     DetailPenjualanProduk::create([
+        // 'penjualan_produk_id' => $request->select_produk_id
+        // 'paket_id
         //         'produk_id' => $request->produk_id[$i],
         //         'penjualan_produk_id' => $PenjualanProduk->id,
         //         'jumlah' => $request->jumlah[$i],
