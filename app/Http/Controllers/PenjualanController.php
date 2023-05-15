@@ -25,6 +25,7 @@ use App\Models\Spa;
 use App\Models\Spb;
 use App\Models\Provinsi;
 use App\Models\SaveResponse;
+use App\Models\SystemLog;
 use App\Models\TFProduksi;
 use Carbon\Doctrine\CarbonType;
 use Illuminate\Http\Request;
@@ -56,7 +57,6 @@ class PenjualanController extends Controller
         $data = "";
         if ($jenis == "semua" && $status == "semua") {
             $Ekatalog = collect(Ekatalog::with(['Pesanan.State',  'Customer'])->addSelect([
-
                 'tgl_kontrak_custom' => function ($q) {
                     $q->selectRaw('IF(provinsi.status = "2", SUBDATE(e.tgl_kontrak, INTERVAL 14 DAY), SUBDATE(e.tgl_kontrak, INTERVAL 21 DAY))')
                         ->from('ekatalog as e')
@@ -1631,8 +1631,8 @@ class PenjualanController extends Controller
                 ->orderBy('noseri_barang_jadi.noseri', 'ASC')
                 ->get();
 
-                $noseriretur = NoseriBarangJadi::selectRaw(
-                    'noseri_barang_jadi.noseri,
+            $noseriretur = NoseriBarangJadi::selectRaw(
+                'noseri_barang_jadi.noseri,
                     retur_penjualan.no_retur as no_po,
                     pengiriman.tanggal as tgl_sj,
                     retur_penjualan.tgl_retur as tgl_uji,
@@ -1640,7 +1640,7 @@ class PenjualanController extends Controller
                     produk.nama as p_nama,
                     customer.nama as c_ekat_nama,
                     m_state.nama as state_nama'
-                )
+            )
                 ->leftjoin('gdg_barang_jadi', 'gdg_barang_jadi.id', '=', 'noseri_barang_jadi.gdg_barang_jadi_id')
                 ->leftjoin('produk', 'produk.id', '=', 'gdg_barang_jadi.produk_id')
                 ->leftjoin('t_gbj_noseri', 't_gbj_noseri.noseri_id', '=', 'noseri_barang_jadi.id')
@@ -4348,7 +4348,9 @@ class PenjualanController extends Controller
                 $bool = false;
             }
         }
+
         if ($bool == true) {
+
             $d = $e->delete();
             if ($d) {
                 if (!empty($poid)) {
