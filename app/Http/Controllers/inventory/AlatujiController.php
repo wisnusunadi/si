@@ -546,7 +546,6 @@ class AlatujiController extends Controller
 
     function store_pinjam(Request $request)
     {
-
         $request->validate([
             'serial_number_id' => 'required',
             'tgl_peminjaman' => 'required',
