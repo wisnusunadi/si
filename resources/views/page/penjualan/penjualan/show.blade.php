@@ -204,9 +204,9 @@
         }
 
         /* .overflowcard {
-                                                                                                                                                                                                                                                                                                                        max-height:
-                                                                                                                                                                                                                                                                                                                        700px;
-                                                                                                                                                                                                                                                                                                                    } */
+                                                                                                                                                                                                                                                                                                                                                                                                                    max-height:
+                                                                                                                                                                                                                                                                                                                                                                                                                    700px;
+                                                                                                                                                                                                                                                                                                                                                                                                                } */
 
         .bg-chart-light {
             background: rgba(192, 192, 192, 0.2);
@@ -939,6 +939,7 @@
                                     <div class="col-12">Apakah Anda yakin ingin menghapus data ini?
                                     </div>
                                 </div>
+
                             </div>
                             <div class="modal-footer">
                                 <span class="float-left">
@@ -1671,13 +1672,22 @@
                                 'Berhasil melakukan Hapus Data',
                                 'success'
                             );
-                            $('#penjualantable').DataTable().ajax.reload();
+                            // $('#penjualantable').DataTable().ajax.url(
+                            //         '/api/penjualan/penjualan/data/semua/semua/' +
+                            //         {{ \Carbon\Carbon::now()->year }})
+                            //     .load();
                             if (label == 'ekatalog') {
-                                $('#ekatalogtable').DataTable().ajax.reload();
+                                $('#ekatalogtable').DataTable().ajax.url(
+                                    '/penjualan/penjualan/ekatalog/data/semua/' +
+                                    {{ \Carbon\Carbon::now()->year }}).load();
                             } else if (label == 'spa') {
-                                $('#spatable').DataTable().ajax.reload();
+                                $('#spatable').DataTable().ajax.url(
+                                    '/penjualan/penjualan/spa/data/semua/' +
+                                    {{ \Carbon\Carbon::now()->year }}).load();
                             } else if (label == 'spb') {
-                                $('#spbtable').DataTable().ajax.reload();
+                                $('#spatable').DataTable().ajax.url(
+                                    '/penjualan/penjualan/spb/data/semua/' +
+                                    {{ \Carbon\Carbon::now()->year }}).load();
                             }
                             $("#deletemodal").modal('hide');
                         } else if (response['data'] == "error") {
@@ -2037,9 +2047,6 @@
                     data_tahun).load();
                 return false;
             });
-
-
-
 
             $(document).on('click', '#tabledetailpesan #lihatstok', function() {
                 var id = $(this).attr('data-id');
