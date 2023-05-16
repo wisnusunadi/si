@@ -48,7 +48,7 @@ Route::prefix('/ppic')->group(function () {
     Route::get('/data/so/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_data_so_detail']);
     Route::get('/data/master_pengiriman_for_ppic/detail/{id}', [App\Http\Controllers\PpicController::class, 'get_detail_pengiriman_for_ppic']);
     Route::get('/data/gk/sparepart', [App\Http\Controllers\PpicController::class, 'get_data_sparepart_gk'])->middleware('jwt.verify');
-    Route::get('/data/gk/unit', [App\Http\Controllers\PpicController::class, 'get_data_unit_gk'])->middleware('jwt.verify');
+    Route::get('/data/gk/unit', [App\Http\Controllers\PpicController::class, 'get_data_unit_gk']);
     Route::get('/data/komentar', [App\Http\Controllers\PpicController::class, 'get_komentar_jadwal_perakitan']);
     Route::post('/create/perakitan', [App\Http\Controllers\PpicController::class, 'create_data_perakitan']);
     Route::post('/update/perakitan/{id}', [App\Http\Controllers\PpicController::class, 'update_data_perakitan']);
