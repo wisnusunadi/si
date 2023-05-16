@@ -136,7 +136,14 @@ class PpicController extends Controller
      */
     public function get_datatables_data_perakitan()
     {
-        $data = JadwalPerakitan::where('status', '!=', $this->change_status('penyusunan'))->orderBy('tanggal_mulai', 'desc')->get();
+        $data = JadwalPerakitan::with(['Produk.produk'])->addSelect([
+            'noseri_count' => function ($q) {
+                $q->selectRaw('count(id)')
+                    ->from('jadwal_rakit_noseri as e')
+                    ->whereColumn('e.jadwal_id', 'jadwal_perakitan.id')
+                    ->limit(1);
+            }
+        ])->where('status', '!=', $this->change_status('penyusunan'))->orderBy('tanggal_mulai', 'desc')->get();
         return datatables($data)
             ->addIndexColumn()
             ->addColumn('periode', function ($d) {
@@ -185,7 +192,7 @@ class PpicController extends Controller
             })
             ->addColumn('progres', function ($data) {
                 $max_value = $data->jumlah;
-                $progres = count($data->noseri);
+                $progres =  $data->noseri_count;
                 $percentage = $progres * 100 / $max_value;
                 $color = $data->status == $this->change_status('pelaksanaan') ? 'is-warning' : 'is-success';
                 return
